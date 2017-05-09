@@ -1,0 +1,8 @@
+    <!-- PrinterOutputTypeLookup -->
+    <action    path="/jaffa_printing_printerOutputTypeLookup"
+               type="org.jaffa.modules.printing.components.printeroutputtypelookup.ui.PrinterOutputTypeLookupAction"
+               name="jaffa_printing_printerOutputTypeLookupForm"
+               validate="false"
+               scope="request">
+    </action>
+

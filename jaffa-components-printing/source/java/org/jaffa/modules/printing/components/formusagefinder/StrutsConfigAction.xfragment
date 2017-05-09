@@ -1,0 +1,8 @@
+    <!-- FormUsageFinder -->
+    <action    path="/jaffa_printing_formUsageFinder"
+               type="org.jaffa.modules.printing.components.formusagefinder.ui.FormUsageFinderAction"
+               name="jaffa_printing_formUsageFinderForm"
+               validate="false"
+               scope="request">
+    </action>
+

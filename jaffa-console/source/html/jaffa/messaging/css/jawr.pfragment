@@ -1,0 +1,14 @@
+#---------------------------------------------
+# This defines the CSS bundle that can be used to
+# load the product specific CSS stuff
+#---------------------------------------------
+
+jawr.css.bundle.jaffaMessaging.id=/bundles/jaffa/messaging-base.css
+jawr.css.bundle.jaffaMessaging.mappings=\
+        /jaffa/messaging/css/main-core.css, \
+        /jaffa/messaging/css/main-override.css
+
+# Now define a full bundle of jaffaRia+product1+requisitioning/purchase
+jawr.css.bundle.jaffaMessagingAll.id=/bundles/jaffa/messaging.css
+jawr.css.bundle.jaffaMessagingAll.composite=true
+jawr.css.bundle.jaffaMessagingAll.child.names=jaffaRia,product1,jaffaMessaging

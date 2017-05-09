@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="US-ASCII" ?>
+<bean-mapping>
+  <graph-data-object class="org.jaffa.components.audit.apis.data.AuditTransactionObjectGraph"/>
+  <domain-object class="org.jaffa.components.audit.domain.AuditTransactionObject"/>
+  <map-key-fields>
+    <field gdo="objectId"/>
+  </map-key-fields>
+  <map-fields>
+    <field gdo="objectName"/>
+    <field gdo="changeType"/>
+  </map-fields>
+  <map-aggregate-objects>
+     <field gdo="auditTransactionFields" do="auditTransactionFieldArray"/>
+  </map-aggregate-objects>
+</bean-mapping>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.modules.printing.domain.FormDefinition">
+        <map-to table="J_FORM_DEFINITIONS" />
+
+        <field name="FormId" use-member="m_formId" type="java.lang.Long" primary-key="true" autogen-key="true">
+            <sql name="FORM_ID" type="INTEGER" dirty="ignore"/>
+        </field>
+
+        <field name="FormName" use-member="m_formName" type="java.lang.String">
+            <sql name="FORM_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="FormAlternate" use-member="m_formAlternate" type="java.lang.String">
+            <sql name="FORM_ALTERNATE" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="FormVariation" use-member="m_formVariation" type="java.lang.String">
+            <sql name="FORM_VARIATION" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="OutputType" use-member="m_outputType" type="java.lang.String">
+            <sql name="OUTPUT_TYPE" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="FormTemplate" use-member="m_formTemplate" type="java.lang.String">
+            <sql name="FORM_TEMPLATE" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="FieldLayout" use-member="m_fieldLayout" type="java.lang.String">
+            <sql name="FIELD_LAYOUT" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Description" use-member="m_description" type="java.lang.String">
+            <sql name="DESCRIPTION" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Remarks" use-member="m_remarks" type="java.lang.String">
+            <sql name="REMARKS" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="DomFactory" use-member="m_domFactory" type="java.lang.String">
+            <sql name="DOM_FACTORY" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="DomClass" use-member="m_domClass" type="java.lang.String">
+            <sql name="DOM_CLASS" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="DomKey1" use-member="m_domKey1" type="java.lang.String">
+            <sql name="DOM_KEY1" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="DomKey2" use-member="m_domKey2" type="java.lang.String">
+            <sql name="DOM_KEY2" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="DomKey3" use-member="m_domKey3" type="java.lang.String">
+            <sql name="DOM_KEY3" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="DomKey4" use-member="m_domKey4" type="java.lang.String">
+            <sql name="DOM_KEY4" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="DomKey5" use-member="m_domKey5" type="java.lang.String">
+            <sql name="DOM_KEY5" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="DomKey6" use-member="m_domKey6" type="java.lang.String">
+            <sql name="DOM_KEY6" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="AdditionalDataComponent" use-member="m_additionalDataComponent" type="java.lang.String">
+            <sql name="ADDITIONAL_DATA_COMPONENT" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="FollowOnFormName" use-member="m_followOnFormName" type="java.lang.String">
+            <sql name="FOLLOW_ON_FORM_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="FollowOnFormAlternate" use-member="m_followOnFormAlternate" type="java.lang.String">
+            <sql name="FOLLOW_ON_FORM_ALTERNATE" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="CreatedOn" use-member="m_createdOn" type="org.jaffa.datatypes.DateTime">
+            <sql name="CREATED_ON" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+        <field name="CreatedBy" use-member="m_createdBy" type="java.lang.String">
+            <sql name="CREATED_BY" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="LastChangedOn" use-member="m_lastChangedOn" type="org.jaffa.datatypes.DateTime">
+            <sql name="LAST_CHANGED_ON" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+        <field name="LastChangedBy" use-member="m_lastChangedBy" type="java.lang.String">
+            <sql name="LAST_CHANGED_BY" type="STRING" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

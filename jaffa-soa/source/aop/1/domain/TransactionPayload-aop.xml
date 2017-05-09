@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+  <!-- ================================================= -->
+  <!-- Rules for Domain Object TransactionPayload -->
+  <!-- ================================================= -->
+
+  <metadata tag="jaffa.rules" class="org.jaffa.transaction.domain.TransactionPayload">
+
+    <label>[label.Jaffa.Transaction.TransactionPayload]</label>
+
+    <property name="id">
+      <label>[label.Jaffa.Transaction.TransactionPayload.Id]</label>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="externalMessage">
+      <label>[label.Jaffa.Transaction.TransactionPayload.ExternalMessage]</label>
+    </property>
+
+    <property name="internalMessage">
+      <label>[label.Jaffa.Transaction.TransactionPayload.InternalMessage]</label>
+    </property>
+
+    <property name="internalMessageClass">
+      <label>[label.Jaffa.Transaction.TransactionPayload.InternalMessageClass]</label>
+      <max-length>2000</max-length>
+    </property>
+
+  </metadata>
+</aop>

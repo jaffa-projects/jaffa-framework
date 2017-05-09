@@ -1,0 +1,67 @@
+Form Printing Module To Do List
+
+-----------------------
+Done
+-----------------------
+- Modify Factory so Engine can be specified
+- Create Sample Invoice
+    - PDFlib Template
+    - iText Template
+- Create Domain Objects
+    - PrinterDefinition
+    - FormUsage
+    - FormDefinition
+    - FormTemplate
+- Create Sample Invoice
+    - Include special fields: row#, currentPage#, totalPage#
+    - Include Barcodes: 3 of 9, PDF417, custom paramters like barHeight etc
+    - Include Styles: Bold, Italics, Strikethru, Color
+    - Include Alignment: left, right, centered, clip, noclip
+- Generate Finder/Maintenance Screens for all tables
+- Added DocumentPrintedListener, so we can have callback in the IDataBean when the document has been printed. This can be used to update database information if needed
+- Allow the IDataBean to return and object array and treat each entry in the array as an individual DOM, and generate a document for each one
+- Built a velocity engine for templating
+- All fields be passed through the Jaffa 'Formatter'
+- Any formatting rules applied through JaffaRules/AOP should be applied
+- Added a factory to allow Domain Objects to be used as a DOM. There is a unit-test example using the FormGroup to generate a form. This has been tested via form selection in Example2
+- Allow a field on a databean to return an Image. The field can return raw image data (java.awt.Image) or a String,File,URL object to point to a jpg/gif. Only supported initially by the iText implementation, and is based on specifying a font name of "Image".
+- No longer uses the alternate form name from the DataBean a second time, as this breaks follow-on forms that re-use the same databean, and specific a follow-on alternate to use
+
+-----------------------
+To Do
+-----------------------
+- Velocity templates and generated forms come out with a .pdf extension, should probabally default to .txt or nothing.
+
+- Turn on AOP for unit test using java 1.5 custom class loader
+    - set JAVA_OPTS=%JAVA_OPTS% -javaagent:C:\JavaExtras\jboss-aop_1.5.0.GA\lib-50\pluggable-instrumentor.jar 
+
+- Turn on EMMA for code coverage of tests
+
+- Create sample label
+    - velocity macro template 
+    - scripting template
+
+- Review the Scaling, sizing, clipping when adding images to the page
+	- need to develop test cases for this
+
+- FormPrintEngine can't support the same field name twice on the same page.
+    - Work arround is to add a '|' to the end
+
+- Add filters to format values
+	- Date Only / DateTime (locale specfic), Numbers, Currency, String patterns
+	- Is this needed above what AOP supports as this now uses the rules engine
+
+- Implement the Print/Copy/Modify security setting for PDF documents
+    - This should probably be moved to be document properties, not a seperate method on the Interface, and these only apply to PDF generation
+
+- Make sure that the document properties (Author, Title, etc) are maintained when documents are merged by the MultiFormPrintEngine
+
+- Implement a way via the user interface such that the document properties can be populated on a FormPrintRequest. This is only available programatically right now
+
+- Implement a fully working form and intergrate the FormSelection screen into Example2 to allow this sample form to be printed.
+
+- Implement MessageDrivenBean and JMS queues for submitting FormRequests.
+
+- Need to address/test the embedding of non-standard PDF fonts (ie Arial) and make sure they are embedded correctlty if used.
+	- Typically these may be a problem for GhostPrint/View
+	

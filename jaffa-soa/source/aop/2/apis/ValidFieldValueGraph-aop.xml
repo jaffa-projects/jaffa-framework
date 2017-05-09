@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+   <!-- ================================================= -->
+   <!-- Rules for Valid Field Value Graph                 -->
+   <!-- ================================================= -->
+  <metadata tag="jaffa.rules" class="org.jaffa.modules.setup.apis.data.ValidFieldValueGraph" 
+  extends-class="org.jaffa.modules.setup.domain.ValidFieldValue">
+    <super/>
+  </metadata>
+
+  <metadata tag="jaffa.rules" class="org.jaffa.modules.setup.apis.data.ValidFieldValueCriteria" 
+  extends-class="org.jaffa.modules.setup.domain.ValidFieldValue">
+    <super/>
+  </metadata>
+
+</aop>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Object Viewer Meta 2.1//EN" "http://jaffa.sourceforge.net/DTD/object-viewer-meta_2_1.dtd">
+<Root>
+  <PatternTemplate>patterns/library/object_viewer_2_1/ObjectViewerPattern.xml</PatternTemplate>
+  <Application>Jaffa</Application>
+  <Module>Printing</Module>
+  <Component>FormTemplateViewer</Component>
+  <BasePackage>org.jaffa.modules.printing</BasePackage>
+  <DomainObject>FormTemplate</DomainObject>
+  <DomainPackage>org.jaffa.modules.printing.domain</DomainPackage>
+  <Title>[title.Modules.Printing.FormTemplateViewer.view]</Title>
+  <CriteriaFields>
+    <CriteriaField>
+      <Name>FormId</Name>
+      <DataType>INTEGER</DataType>
+      <DomainField>FormId</DomainField>
+    </CriteriaField>
+  </CriteriaFields>
+  <ResultsFields>
+    <ResultsField>
+      <Name>FormId</Name>
+      <DataType>INTEGER</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Printing.FormDefinition.FormId]</Label>
+      <DomainField>FormId</DomainField>
+    </ResultsField>
+    <ResultsField>
+      <Name>TemplateData</Name>
+      <DataType>RAW</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Printing.FormTemplate.TemplateData]</Label>
+      <DomainField>TemplateData</DomainField>
+    </ResultsField>
+    <ResultsField>
+      <Name>LayoutData</Name>
+      <DataType>RAW</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Printing.FormTemplate.LayoutData]</Label>
+      <DomainField>LayoutData</DomainField>
+    </ResultsField>
+  </ResultsFields>
+  <Updator>
+    <ComponentName>Jaffa.Printing.FormTemplateMaintenance</ComponentName>
+    <ClassName>FormTemplateMaintenanceComponent</ClassName>
+    <Package>org.jaffa.modules.printing.components.formtemplatemaintenance.ui</Package>
+  </Updator>
+  <Deletor>
+    <ComponentName>Jaffa.Printing.FormTemplateMaintenance</ComponentName>
+    <ClassName>FormTemplateMaintenanceComponent</ClassName>
+    <Package>org.jaffa.modules.printing.components.formtemplatemaintenance.ui</Package>
+  </Deletor>
+</Root>

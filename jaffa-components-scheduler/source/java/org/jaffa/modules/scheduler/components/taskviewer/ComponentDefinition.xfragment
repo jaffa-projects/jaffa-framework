@@ -1,0 +1,4 @@
+    <component id="Jaffa.Scheduler.TaskViewer">
+        <class>org.jaffa.modules.scheduler.components.taskviewer.ui.TaskViewerComponent</class>
+        <type>ObjectViewer</type>
+    </component>

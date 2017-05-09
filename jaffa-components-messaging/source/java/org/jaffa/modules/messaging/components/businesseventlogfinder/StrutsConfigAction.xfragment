@@ -1,0 +1,8 @@
+    <!-- BusinessEventLogFinder -->
+    <action    path="/jaffa_messaging_businessEventLogFinder"
+               type="org.jaffa.modules.messaging.components.businesseventlogfinder.ui.BusinessEventLogFinderAction"
+               name="jaffa_messaging_businessEventLogFinderForm"
+               validate="false"
+               scope="request">
+    </action>
+

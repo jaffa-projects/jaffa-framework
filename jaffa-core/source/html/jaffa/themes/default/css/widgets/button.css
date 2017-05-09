@@ -1,0 +1,353 @@
+/* 
+  File name:  button.css
+  Author:     paule  
+
+  Description:
+    StyleSheet that controls the display of the button widget
+    This is part of the 'color' skin for Jaffa
+*/
+
+/* Button Width - 4 Characters */
+a.WidgetButton4 {
+	color: #3B3969;
+	font-family: Helvetica;
+	font-size: x-small;
+	font-weight : bold;
+	vertical-align : bottom;
+	height: 20px;
+	line-height : normal;
+	text-align : center;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 25px;
+	padding-right: 25px;
+	letter-spacing: 0px;
+	text-decoration: underline;
+}
+a.WidgetButton4:hover {
+	color: #003399;
+	font-family: Helvetica;
+	font-size: x-small;
+	font-weight : bold;
+	vertical-align : bottom;
+	height: 20px;
+	line-height : normal;
+	text-align : center;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 25px;
+	padding-right: 25px;
+	letter-spacing: 0px;
+	text-decoration: underline;
+}
+a.WidgetButton4Submit {
+	color: black;
+	font-family: Helvetica;
+	font-size: x-small;
+	font-weight : bold;
+	vertical-align : bottom;
+	height: 20px;
+	line-height : normal;
+	text-align : center;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 30px;
+	padding-right: 30px;
+	letter-spacing: 0px;
+	word-spacing : normal;
+		text-decoration: underline;
+}
+a.WidgetButton4Submit:hover {
+	color: #5A5965;
+	font-family: Helvetica;
+	font-size: x-small;
+	font-weight : bold;
+	vertical-align : bottom;
+	height: 20px;
+	line-height : normal;
+	text-align : center nowrap;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 30px;
+	padding-right: 30px;
+	letter-spacing: 0px;
+	text-decoration: underline;
+}
+				
+
+
+
+/* Button Width - 8 Characters */
+a.WidgetButton8 {
+	color: #3B3969;
+	font-family: Helvetica;
+	font-size: x-small;
+	font-weight : bold;
+	vertical-align : bottom;
+	height: 20px;
+	line-height : normal;
+	text-align : center;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 25px;
+	padding-right: 25px;
+	letter-spacing: 0px;
+	text-decoration: underline;
+}
+a.WidgetButton8:hover {
+	color: #003399;
+	font-family: Helvetica;
+	font-size: x-small;
+	font-weight : bold;
+	vertical-align : bottom;
+	height: 20px;
+	line-height : normal;
+	text-align : center;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 25px;
+	padding-right: 25px;
+	letter-spacing: 0px;
+	text-decoration: underline;
+}
+a.WidgetButton8Submit {
+	color: black;
+	font-family: Helvetica;
+	font-size: x-small;
+	font-weight : bold;
+	vertical-align : bottom;
+	height: 20px;
+	line-height : normal;
+	text-align : center nowrap;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 30px;
+	padding-right: 30px;
+	letter-spacing: 0px;
+	text-decoration: underline;
+}
+a.WidgetButton8Submit:hover {
+	color: #5A5965;
+	font-family: Helvetica;
+	font-size: x-small;
+	font-weight : bold;
+	vertical-align : bottom;
+	height: 20px;
+	line-height : normal;
+	text-align : center nowrap;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 30px;
+	padding-right: 30px;
+	letter-spacing: 0px;
+	text-decoration: underline;
+}
+				
+
+
+/* Button Width - 12 Characters */
+a.WidgetButton12 {
+	color: #3B3969;
+	font-family: Helvetica;
+	font-size: x-small;
+	font-weight : bold;
+	vertical-align : bottom;
+	height: 20px;
+	line-height : normal;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 25px;
+	padding-right: 25px;
+	letter-spacing: 0px;
+	text-decoration: underline;
+}
+a.WidgetButton12:hover {
+	color: #003399;
+	font-family: Helvetica;
+	font-size: x-small;
+	font-weight : bold;
+	vertical-align : bottom;
+	height: 20px;
+	line-height : normal;
+	text-align : center;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 25px;
+	padding-right: 25px;
+	letter-spacing: 0px;
+	text-decoration: underline;
+}
+a.WidgetButton12Submit {
+	color: black;
+	font-family: Helvetica;
+	font-size: x-small;
+	font-weight : bold;
+	vertical-align : bottom;
+	height: 20px;
+	line-height : normal;
+	text-align : center nowrap;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 30px;
+	padding-right: 30px;
+	letter-spacing: 0px;
+	text-decoration: underline;
+}
+
+a.WidgetButton12Submit:hover {
+	color: #5A5965;
+	font-family: Helvetica;
+	font-size: x-small;
+	font-weight : bold;
+	vertical-align : bottom;
+	height: 20px;
+	line-height : normal;
+	text-align : center nowrap;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 30px;
+	padding-right: 30px;
+	letter-spacing: 0px;
+	text-decoration: underline;
+}
+				
+
+
+/* Button Width - 16 Characters */
+a.WidgetButton16 {
+	color: #3B3969;
+	font-family: Helvetica;
+	font-size: x-small;
+	font-weight : bold;
+	vertical-align : bottom;
+	height: 20px;
+	line-height : normal;
+	text-align : center;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 25px;
+	padding-right: 25px;
+	letter-spacing: 0px;
+	text-decoration: underline;
+}
+a.WidgetButton16:hover {
+	color: #003399;
+	font-family: Helvetica;
+	font-size: x-small;
+	font-weight : bold;
+	vertical-align : bottom;
+	height: 20px;
+	line-height : normal;
+	text-align : center;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 25px;
+	padding-right: 25px;
+	letter-spacing: 0px;
+	text-decoration: underline;
+}
+a.WidgetButton16Submit {
+	color: black;
+	font-family: Helvetica;
+	font-size: x-small;
+	font-weight : bold;
+	vertical-align : bottom;
+	height: 20px;
+	line-height : normal;
+	text-align : center nowrap;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 30px;
+	padding-right: 30px;
+	letter-spacing: 0px;
+	text-decoration: underline;
+}
+
+a.WidgetButton16Submit:hover {
+	color: #5A5965;
+	font-family: Helvetica;
+	font-size: x-small;
+	font-weight : bold;
+	vertical-align : bottom;
+	height: 20px;
+	line-height : normal;
+	text-align : center nowrap;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 30px;
+	padding-right: 30px;
+	letter-spacing: 0px;
+	text-decoration: underline;
+}
+
+
+
+/* Button Width - 20 Characters */
+a.WidgetButton20 {
+	color: #3B3969;
+	font-family: Helvetica;
+	font-size: x-small;
+	font-weight : bold;
+	vertical-align : bottom;
+	height: 20px;
+	line-height : normal;
+	text-align : center;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 25px;
+	padding-right: 25px;
+	letter-spacing: 0px;
+	text-decoration: underline;
+}
+a.WidgetButton20:hover {
+	color: #003399;
+	font-family: Helvetica;
+	font-size: x-small;
+	font-weight : bold;
+	vertical-align : bottom;
+	height: 20px;
+	line-height : normal;
+	text-align : center;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 25px;
+	padding-right: 25px;
+	letter-spacing: 0px;
+	text-decoration: underline;
+}
+a.WidgetButton20Submit {
+	color: black;
+	font-family: Helvetica;
+	font-size: x-small;
+	font-weight : bold;
+	vertical-align : bottom;
+	height: 20px;
+	line-height : normal;
+	text-align : center nowrap;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 30px;
+	padding-right: 30px;
+	letter-spacing: 0px;
+	text-decoration: underline;
+}
+a.WidgetButton20Submit:hover {
+	color: #5A5965;
+	font-family: Helvetica;
+	font-size: x-small;
+	font-weight : bold;
+	vertical-align : bottom;
+	height: 20px;
+	line-height : normal;
+	text-align : center nowrap;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 30px;
+	padding-right: 30px;
+	letter-spacing: 0px;
+	text-decoration: underline;
+}
+
+
+
+

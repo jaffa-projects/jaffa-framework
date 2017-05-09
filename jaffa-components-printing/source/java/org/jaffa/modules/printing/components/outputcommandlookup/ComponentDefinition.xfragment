@@ -1,0 +1,4 @@
+    <component id="Jaffa.Printing.OutputCommandLookup">
+        <class>org.jaffa.modules.printing.components.outputcommandlookup.ui.OutputCommandLookupComponent</class>
+        <type>ObjectLookup</type>
+    </component>

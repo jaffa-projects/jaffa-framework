@@ -1,0 +1,8 @@
+    <!-- FormEventLookup -->
+    <action    path="/jaffa_printing_formEventLookup"
+               type="org.jaffa.modules.printing.components.formeventlookup.ui.FormEventLookupAction"
+               name="jaffa_printing_formEventLookupForm"
+               validate="false"
+               scope="request">
+    </action>
+

@@ -1,0 +1,103 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the JAFFA 2.2.0 Release (Since v2.1.0). For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+- Added new 'PropertyEditor' as a supported breakup type to the Maintenance pattern. This is used if a string field is being used to store a Java style properties string. This can be used for 'normal' properties with just name=value pairs, or can also include the comments. This uses the custom jaffa 'org.jaffa.util.ListProperties' implementation 
+- Added rpad() and lpad() methods to the StringHelper
+- Added support for CHAR fields in the persistence engine
+    - Created a new DTD 'jdbc-engine-mapping_1_0.dtd' for mapping file.
+    - Added an attribute 'rpad' in the mapping file for indicating the characters to pad to CHAR fields.
+    - Modified MoldingService.getInstanceValue() to always pad CHAR fields. This will ensure that the prepared statements will work even with CHAR key fields.
+    - Trimmed CHAR fields when the table join is between VARCHAR and CHAR fields. Could've used the rpad (or lpad) function on the VARCHAR field. But its not there in MS-SQL-SERVER, while trim() is a standard SQL function.
+    - Trimmed CHAR fields when using the RELATIONAL_ENDS_WITH in queries
+    - Modified the IS_NULL and IS_NOT_NULL queries for CHAR fields to also consider blank strings
+- Added the 'lockable' attribute to the domain-pattern_1_1 and the mapping files of the persistence engine.
+    - By default, the persistence engine will lock a table's row(s) before performing updates/deletes.
+    - However, it is quite possible that the table may actually be a complex view, which may not support the 'Select... FOR UPDATE NOWAIT' construct.
+    - For such cases, specify lockable='false' in the mapping file and put the appropriate locking code in the INSTEAD-OF triggers for the view.
+- Created v2_1 of the object_finder, object_lookup, object_maintenance, object_viewer and skeleton_component patterns
+- Created version 2.1 of the Finder,Viewer,Maintenance,Lookup and Skeleton patterns
+    - These support the new 3 part naming convention of {AppName}.{ModuleName}.{ComponentName}, which previously didn't include the {AppName}. This convention was applied not just the ComponentName, but all configuration files that only used 2 parts (i.e. Struts, Tiles, etc).
+    - The AppBuilder was also modified to create V2.1 XML files if that version is specified in the root tag.
+    - JSP's modified to use the new <Portlet:Property> widget to wrap complete label and field tags so they can be integrated with the Jaffa Rules Engine.
+- Added a custom ant selector for finding classes that implement a particular interface.
+
+What's Changed / Improvements
+=====================================================
+- Enhanced the ApplicationExceptions class to print the stack trace for the source ApplicationException objects via the printStackTrace() methods.Also provided a convenience constructor which takes in an ApplicationException object.
+- Added new tiles attribute to maintenance template, so the form can be set to a mixed mime type for file upload support. This is an optional attribute
+    Example of how this is set in the tiles.xml. 
+      <definition name="jaffa.example.usermaintenance.MaintenanceLayout.main"  extends="jaffa.MaintenanceLayout">
+        <put name="body" value="/jaffa/example/usermaintenance/main.jsp"/>
+        <put name="action" value="/jaffa_example_userMaintenance"/>
+        <put name="enctype" value="multipart/form-data"/>
+        <put name="currentScreenCounter" value="0"/>
+        <put name="createModeTitle" value="[title.Jaffa.Example.UserMaintenance.maintenance]"/>
+        <put name="updateModeTitle" value="[title.Jaffa.Example.UserMaintenance.maintenance]"/>
+      </definition>
+- Fixed builder so that relationships defined in both directions does not come up as a related AND foreign object!
+- Added the flush() method to the UOW for flushing the add/update/delete queues of the persistence engine
+- Modified the isRefreshActionAvailable() method in MaintForm to always return a true in the 'update' mode. I'll no longer be restricted by the 'refreshData' property.
+- The UnifaceSchemaReader has been enhanced to rename database fields as per the rules specified in an external file.
+    - The external file has to conform to the new DTD file 'domain-field-rename-rules_1_0.dtd'
+    - The 'domainMetaInfoGenerator_1_0.dtd' has been modified to include the optional 'DomainFieldRenameRulesFile' element
+- Added a convenience method 'getJavaStyle()' to the StringHelper, which will translate an input String to a Java styled property name.
+- Created a new Ant task 'patterngenerator'. It supports nested FileSet element(s). It can be used to invoke the PatternGenerator for each included file.
+- The Jaffa widgets (EditBox, CheckBox, DropDown, RadioButton, DateTime, Text) have been refactored to work with any Jaffa model. The following changes were made:
+    - Created a SimpleWidgetModel class which consolidates the requirements of the models for the various tags
+    - The existing models (EditBoxModel, CheckBoxModel, DropDownModel, RadioButtonModel, DateTimeModel) were refactored to simply extend the SimpleWidgetModel
+    - The handlers for the Jaffa widgets (EditBoxTag, CheckBoxTag, DropDownTag, RadioButtonTag, DateTimeTag, TextTag) were refactored to work with the SimpleWidgetModel.
+    - There is zero impact on existing application code.
+    - It should now be possible to change the tags in a JSP, from say an EditBox to a DropDown, without modifying the underlying JAVA code
+    - NOTE: The Jaffa widgets will not work with any data. They still need to be supported by some Jaffa model
+- Created a DataTypeMapper to transform an object to the desired type. The BeanHelper and PersistentHelper were refactored to use this new feature.
+- Added CSS theme support for Jaffa.
+- Added complete support for Mozilla Browsers.
+- Removed TableSort.css dependance for UserGrid, now it works off whatever is defined in Jaffa.css.
+- Usergrid now supports label tokens.
+- Menu's now support tokens and the ability to link to the labels screen with real time update of new values.
+- Added the comments-append (LIFO/FIFO) feature in the domain-creator pattern (similar to the maintenance pattern). The AppBuilder was modified to generate the 'Comment' element for such fields in the Maintenance pattern.
+- Added the Userid/DateTime Created/LastUpdated stamp feature in the domain-creator_1_1 pattern (similar to the maintenance pattern). The AppBuilder was modified to apply the StampType for such fields in the Maintenance pattern.
+- Enhanced the ConfigFileUpdate utility to not merge a file into itself
+- Modified the FindFiles utility to treat its filter as a regex
+- Added a validate() method in the base Persistent class. The preAdd() and preUpdate() will call this method. This will allow us to specify only one rule for both adds and updates. The main reason for adding this rule is to support CandidateKeyObjectRule and MandatoryPropertyRule, since they can be bound to a validate() method only
+- Replaced the references to the deprecated class LookupComponent with LookupComponent2 in lookup.jsp
+- Moved to latest version of JDOM (v1.0)
+- Allow persistence layer connection pool to specify multiple connection parameters. This can be done by setting the new "driverProperties" which will then be used to create database connections in the pool. This has been only implemented on the DbcpDataSourceConnectionFactory as the DbConnectionBroker does not support this feature. Using the 'driverProperty' settings supercedes using the regular 'user' and 'password' properties. Below is an example of how to use this for setting extra values for the stock Microsoft SQLServer JDBC Driver...
+  <connection-factory class="org.jaffa.persistence.engines.jdbcengine.datasource.DbcpDataSourceConnectionFactory">
+    <param name="url" value="jdbc:microsoft:sqlserver://localhost:1433;databasename=MyInstance;SelectMethod=cursor"/>
+    <param name="driverClass" value="com.microsoft.jdbc.sqlserver.SQLServerDriver"/>
+    <param name="driverProperties.user"         value="jaffa"/>
+    <param name="driverProperties.password"     value="jaffa"/>
+    <param name="driverProperties.ProgramName"  value="Jaffa Connection Pool"/>
+    <param name="driverProperties.HostProcess"  value="666"/>
+
+
+
+What's Deleted/Deprecated
+=====================================================
+- Removed functionality to created linked viewers for foreign keys in Viewer 2.0 pattern. Foreign key viewers can now be added globally through a config file in Jaffa v2.x
+- The BeanHelper.convertDataType() method is now deprecated. Instead, use the DataTypeMapper to transform an object to the desired type
+- Depreciated the jaffa/css/jaffa.css style sheet. Now it is Theme based.
+
+Bug Fixes
+=====================================================
+- Fixed <button submit=true> JavaScript which was performing a upper case conversion on all editbox contents when the trapEnterKey code was executed
+- Fixed db connection caching in JDBCEncryptionRealm, as well as adding various synchronization blocks.
+- Fixed the Tx template of the object_maintenance_2_0 pattern to stamp the join-fields on a related ONE object, only if its a non-database occurrence
+- Fixed the ComponentController and ComponentTx templates of the object_viewer_2_0 pattern, such that no unnecessary whitespace is introduced when clearing the scratch pad
+- Corrected the Tx template in the object_maintenance_2_0 pattern, so that it does not stamp a NULL userid in the Created/LastUpdated fields
+- Corrected the The LoggerHelper to obtain the initialization information from framework.properties file, making it consistent with the InitApp servlet
+- Refactored EditBoxTag moving the case-conversion code from the 'onBlur()' handler to the 'field_validate' javascript-function. This was done since the onBlur() is not fired when submitting a Form with the 'Enter' key. In such a case, the preprocess javascript is invoked, which in turn invokes the field_validate method, and which will now perform the case-conversion more reliably
+- Enhanced the findLocale() logic in the MessageHelper to obtain the Locale from Struts or the Request stream or the LocaleContext
+- Modified the 'printStackTrace(PrintStream s)' method in ApplicationExceptions to directly print the stack trace, instead of invoking the 'printStackTrace(PrintWriter s)' method. This was done, since the creation of the PrintWriter from a PrintStream was not working in the JUnit environment.
+- Fixed the appbuilder to generate inline field definitions in Maintenance/Viewer patterns for a related object in 1-to-0..1 relationship
+- A SecurityException is thrown when instantiating a component which has no mandatory functions. This problem occurs only if mandatory-functions are defined for any other component.
+    - Modified ComponentManager.getComponentRequirements() to put a NULL entry for a component with no mandatory-functions.
+    - Modified PolicyManager.getRolesForComponent() to return a NULL for a component with no mandatory-functions.
+- Fixed for correct translation of the 'byte[]' in the Defaults.getDataType() method. This was causing errors in the code generator for any field defined as byte[], and it couldn't figure out is logical type.
+- Fixed SyncSchema.java so it table/field name comparisons ignore case. Also flag a change when default values differ.

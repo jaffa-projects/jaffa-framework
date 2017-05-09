@@ -1,0 +1,917 @@
+/*
+ File name:  jaffa-ext.css
+ Created on: 18-Jul-08
+ Author:     Sean
+ 
+ Description:
+ Look-and-feel in Web 2.0 screens
+ */
+
+/*************************************************************
+ * Override some stuff in ext-all.css that we don't agree with
+ *************************************************************/
+.ext-ie .x-form-text {
+    margin: 0;
+}
+
+/*************************************************************
+ * Part of scrolling menu extension. See ExtJS forum post
+ * http://extjs.com/forum/showthread.php?p=207974#post207974
+ *************************************************************/
+.menu-scroll-bottom {
+    background-image: url(../images/default/layout/mini-bottom.gif);
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 7px;
+    cursor: pointer
+}
+
+.menu-scroll-top {
+    background-image: url(../images/default/layout/mini-top.gif);
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 7px;
+    cursor: pointer
+}
+
+.x-menu-list {
+    overflow: hidden
+}
+
+.menu-scroll-over {
+    height: 5px;
+}
+
+/*************************************************************
+ * Setup basic page display
+ *************************************************************/
+html, body {
+    font: normal 12px tahoma, arial, verdana, sans-serif;
+    margin: 0px;
+    padding: 0px;
+    border: 0px none;
+    overflow: hidden;
+    height: 100%;
+}
+
+/***********************************************************************
+ * Used to create a outline table for displaying data with a TableLayout
+ * The panel with a table layout should use
+ *   cls: 'line-table'
+ *   defaults.cellCls: 'line-table-cell'
+ ************************************************************************/
+div.line-table table {
+    border-collapse: collapse;
+    border-top: 1px solid #B5B8C8;
+    border-right: 1px solid #B5B8C8;
+    border-left: 0px;
+    border-bottom: 0px;
+    padding: 0px;
+    margin: 0px;
+}
+
+td.line-table-cell {
+    border-left: 1px solid #B5B8C8;
+    border-bottom: 1px solid #B5B8C8;
+    border-top: 0px;
+    border-right: 0px;
+    border-collapse: collapse;
+    padding: 1px;
+    margin: 0px;
+}
+
+td.line-table-cell .x-form-text {
+    border-width: 0 0 0 0;
+    background: none;
+    padding: 3px;
+    margin: 0px;
+    font-size: 11px;
+}
+
+.ext-ie6 td.line-table-cell .x-form-text {
+    padding: 0px 3px 3px 3px;
+}
+
+.ext-ie7 td.line-table-cell .x-form-text {
+    padding: 0px 3px 3px 3px;
+}
+
+.ext-gecko td.line-table-cell .x-form-text {
+    padding: 0px 3px 3px 3px;
+}
+
+/*************************************************************
+ * Default Settings for Masks in Jaffa
+ *************************************************************/
+.x-mask-hide {
+    z-index: 20000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    -moz-opacity: 1;
+    opacity: 1;
+    filter: alpha(opacity=50);
+    background-color: #DFE8F6;
+    width: 100%;
+    height: 100%;
+    zoom: 1;
+}
+
+.ext-el-mask {
+    background: #dadadb;
+    opacity: 0.25;
+    z-index: 100; /* Fixes the the issue in Firefox3, wherein the popup from the findercombogrid widget is hidden behind a window's mask. The solution is based on the discussion at http://extjs.com/forum/showthread.php?t=39250&page=2 */
+}
+
+.mask-closed {
+    background-color: #00ff00;
+    opacity: 0.6;
+}
+
+.mask-deleted {
+    background-color: #ffffff;
+    opacity: 0.6;
+}
+
+/*************************************************************
+ * Default Settings for Trees used in Jaffa
+ *************************************************************/
+
+/** A normal tree will have a white background */
+.x-tree {
+    background: #fff !important;
+}
+
+.x-layout-split {
+    background-color: transparent !important;
+}
+
+.x-tree-selected {
+    /* border:1px dotted #a3bae9; having a boarder causes a selected row in ColumnTree to be wrapped arround, SZ */
+    background: #DFE8F6;
+}
+
+.x-tree-node .x-tree-selected a span {
+    background: transparent;
+    color: #15428b;
+    font-weight: bold;
+}
+
+.x-tree-node div.step-node-add {
+    background: #eee;
+}
+
+/********************************************************
+ * Common form panel style
+ ********************************************************/
+.x-form-gold input {
+    float: left;
+}
+
+.x-form-item-adj {
+    float: left;
+    padding-left: 0px;
+    position: relative;
+}
+
+.ext-ie .x-form-item-adj {
+    padding-bottom: 2px;
+}
+
+.x-form-element-adj {
+    float: left;
+    padding-left: 0px;
+    position: relative;
+}
+
+.x-form-label-adj {
+    float: left;
+    width: 5px;
+}
+
+.x-form-item-description {
+    display: block;
+    float: left;
+    clear: none; /*padding:3px 3px 3px 0px;*/
+    z-index: 2;
+    position: relative;
+    text-align: left;
+}
+
+.ext-gecko .x-form-item-description {
+    padding: 3px 3px 3px 0px;
+}
+
+.x-form-textonly {
+    padding: 3px 3px 3px 0px;
+}
+
+/* Make linespacing smaller on forms, default was 4px */
+.x-form-item {
+    margin-bottom: 2px;
+}
+
+/** Makes checkboxes align better with form labels, as label have a
+ *  similar setting in ".x-form-item label"
+ */
+.x-form-check-wrap {
+    padding: 3px 0px 0px 0px;
+}
+
+/** Mandatory label flag css */
+.x-mand-flag {
+    color: red;
+}
+
+/*************************************************
+ * Column tree widget css
+ *************************************************/
+
+.x-column-tree .x-tree-node {
+    zoom: 1;
+}
+
+.x-column-tree .x-tree-node-el {
+    /*border-bottom:1px solid #eee; borders? */
+    zoom: 1;
+}
+
+.x-column-tree .x-tree-selected {
+    background: #d9e8fb;
+}
+
+.x-column-tree .x-tree-node a {
+    line-height: 18px;
+    vertical-align: middle;
+}
+
+.x-column-tree .x-tree-node a span {
+}
+
+.x-column-tree .x-tree-node .x-tree-selected a span {
+    background: transparent;
+    color: #000;
+}
+
+.x-tree-col {
+    float: left;
+    overflow: hidden;
+    padding: 0px 1px;
+    zoom: 1;
+}
+
+.x-tree-col-text, .x-tree-hd-text {
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    padding: 3px 3px 3px 5px;
+    white-space: nowrap;
+    font: normal 11px arial, tahoma, helvetica, sans-serif;
+}
+
+.x-tree-headers {
+    background: #f9f9f9 url(../images/default/grid/grid3-hrow.gif) repeat-x 0 bottom;
+    cursor: default;
+    zoom: 1;
+}
+
+.x-tree-append {
+    background-image: url(../images/default/tree/append.gif) !important;
+}
+
+.x-tree-add {
+    background-image: url(../images/default/tree/drop-add.gif) !important;
+}
+
+.x-tree-hd {
+    float: left;
+    overflow: hidden;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #d0d0d0;
+}
+
+/***********************************
+ * Group Summary styles
+ ***********************************/
+.x-grid3-summary-row {
+    border-left: 1px solid #fff;
+    border-right: 1px solid #fff;
+    color: #333;
+    background: #f1f2f4;
+}
+
+.x-grid3-summary-row .x-grid3-cell-inner {
+    font-weight: bold;
+    padding-bottom: 4px;
+}
+
+.x-grid3-cell-first .x-grid3-cell-inner {
+    padding-left: 16px;
+}
+
+.x-grid-hide-summary .x-grid3-summary-row {
+    display: none;
+}
+
+.x-grid3-summary-msg {
+    padding: 4px 16px;
+    font-weight: bold;
+}
+
+/*************************************************************
+ Settings for menu items in the toolbar
+ *************************************************************/
+.x-btn-text-icon .x-menu-list-item .x-menu-item {
+    background-position: 0 2px;
+    background-repeat: no-repeat;
+    padding-left: 18px;
+    padding-top: 3px;
+    padding-bottom: 2px;
+    padding-right: 0px;
+    color: blue;
+}
+
+/*************************************************************
+ * Default Settings for Grids used in in Jaffa
+ *************************************************************/
+table.x-grid3 {
+    width: 100%;
+    background: #eeeeee;
+    border: 0px;
+    padding: 0px;
+    margin: 0px
+}
+
+table.x-grid3 td {
+    border-left: 1px black solid;
+    border-top: 1px black solid;
+    border-collapse: true;
+    padding: 2px;
+    margin: 0px
+}
+
+table.x-grid3 thead td {
+    border-top: 0px black solid;
+}
+
+table.x-grid3 tbody td.col {
+    border-left: 0px;
+}
+
+table.x-grid3 thead td.col {
+    border-left: 0px;
+}
+
+/** By default text in an empty grid will be centered */
+.x-grid-empty {
+    text-align: center;
+}
+
+/* used for filters in grids */
+.x-grid3-hd-row td.ux-filtered-column {
+    font-style: italic;
+    font-weight: bold;
+}
+
+/*************************************************************
+ * Settings for custom layouts provided in Jaffa
+ *************************************************************/
+.jaffa-action-panel {
+    margin-left: 10px;
+    margin-top: 30px;
+}
+
+.ext-el-mask-msg div {
+    cursor: default;
+}
+
+/*************************************************************
+ * Settings for LovCombo
+ *************************************************************/
+.ux-lovcombo-icon {
+    width: 16px;
+    height: 16px;
+    float: left;
+    background-position: -1px -1px ! important;
+    background-repeat: no-repeat ! important;
+}
+
+.ux-lovcombo-icon-checked {
+    background: transparent url(../images/default/menu/checked.gif);
+}
+
+.ux-lovcombo-icon-unchecked {
+    background: transparent url(../images/default/menu/unchecked.gif);
+}
+
+/**********************************************
+ * Controls for Jaffa.maintenance.HeaderPanel *
+ **********************************************/
+
+/* Icon to use in the header background */
+.tb-logoIcon {
+    background-image: url(ToolbarLogo.png) !important;
+    height: 29px;
+    padding-left: 106px;
+    background-repeat: no-repeat;
+}
+
+/* Standard Jaffa Header Toolbar Options */
+.tb-refresh {
+    background-image: url(../../../../jaffa/imgs/icons/refresh.gif) !important;
+}
+
+.tb-close {
+    background-image: url(../../../../jaffa/imgs/icons/close.gif) !important;
+}
+
+.excel {
+    background-image: url(../../../../jaffa/imgs/icons/excel.gif) !important;
+}
+
+.tb-refresh-start {
+    background-image: url(../../../../jaffa/imgs/icons/refresh-start.gif) !important;
+}
+
+.tb-refresh-stop {
+    background-image: url(../../../../jaffa/imgs/icons/refresh-stop.gif) !important;
+}
+
+/*************************************************************
+ * Re-use ExtJS images, that are will not be sprites
+ *************************************************************/
+.tb-refresh {
+    background-image: url(../images/default/grid/refresh.gif) !important;
+}
+
+div.headerTitle {
+    text-align: center;
+    whitespace: no-wrap;
+}
+
+.jaffa-header-body {
+    text-align: center;
+    background-color: #DFE8F6;
+}
+
+span.headerTitle-text {
+    font-family: tahoma, arial, helvetica;
+    font-size: 18px;
+    font-size-adjust: none;
+    font-stretch: normal;
+    font-style: normal;
+    font-variant: normal;
+    color: #15428B;
+}
+
+/**********************************************
+ * Controls for Jaffa Maintenance Pattern
+ **********************************************/
+
+/* Sets the background color of panels to be consistent with panels having frame=true.
+ * Without this setting, the panel would appear white.
+ * The background-color should match the definition for .x-panel-mc (ExtJS default skin uses #DFE8F6)
+ */
+.x-panel-body-noheader.x-panel-body-noborder {
+    background-color: #DFE8F6;
+    padding: 0px;
+}
+
+/* Sets the background color of the panel to be white. Without this setting, the panel would inherit the previous definition.
+ * To utilize this, specify 'bodyCfg: {cls: 'nocolor'}' in the panel configuration.
+ *
+ * This needs to be important, as in FireFox, this rule ".x-panel-body-noheader.x-panel-body-noborder" was overriding this.
+ */
+.nocolor {
+    background-color: white !important;
+}
+
+/* Applies an indentation to the fields of a panel. For example, it is used to indent the field of the maintenance panel.
+ * To utilize this, specify "bodyCfg: {cls: 'indent'}" in the panel configuration.
+ * In can also be used to indent the whole panel (including header, etc) if used like "cls :'indent'" on the panel
+ *
+ * This needs to be important, as in FireFox, this rule ".x-panel-body-noheader.x-panel-body-noborder" was overriding this.
+ */
+.indent {
+    padding: 5px !important;
+}
+
+/* NOTE on weird bug....
+When we had these to styles defined as 
+    .nocolor.x-panel-body-noheader.x-panel-body-noborder
+    .indent.x-panel-body-noheader.x-panel-body-noborder
+The .indent one was being applied when cls:'nocolor' was used, only in IE6, it was fine in IE7 & FF2/3 so
+the additional qualifier of .x-panel-body-noheader.x-panel-body-noborder was removed and now IE6 works OK!!!
+*/
+
+/**
+ * When a panel is in the accordion nav, we want it to have a light grey background
+ * On the panel set -> cls:'nav-panel',
+ */
+.nav-panel .x-panel-body,
+.indent .x-tree .x-panel-body,
+.nav-panel .x-tree {
+    background-color: #EEEEEE;
+    border: 0px none;
+}
+
+/**
+ * When a panel is in an accordion nav, we want it to use a slightly smaller font
+ * On the panel set -> cls:'nav-panel',
+ */
+.nav-panel .x-form-item,
+.indent .x-form-item {
+    font-size: 11px;
+}
+
+/**
+ * When a panel is in an accordion nav, we want it to have a grey toolbar, so the toolbar and the 
+ * accordion sections don't look the same
+ */
+.nav-panel .x-toolbar {
+    background: #f9f9f9 url(../images/default/grid/grid3-hrow.gif) repeat-x 0 bottom;
+}
+
+/**********************************************
+ * Other Misc Stuff
+ **********************************************/
+
+.x-panel-bbar {
+    position: relative;
+}
+
+.x-tree-italic-node {
+    font-style: italic;
+}
+
+.x-grid3-cell-editable {
+    background-color: papayawhip;
+}
+
+.x-grid3-row-selected .x-grid3-cell-editable {
+    background-color: #DFD0D0 !important;
+}
+
+/************************
+ * Header Panel Styles
+ ************************/
+.headerTitle {
+    text-align: center;
+    padding-left: 120px;
+    whitespace: no-wrap;
+}
+
+.headerTitle span {
+    font-family: tahoma, arial, helvetica;
+    font-size: 18px;
+    font-size-adjust: none;
+    font-stretch: normal;
+    font-style: normal;
+    font-variant: normal;
+    color: #15428B;
+}
+
+/************************
+ * Used in Ext.Button.linkButtonTemplate  
+ see (JaffaRIA\source\html\js\extjs\jaffa\layout\Button.js)
+ ************************/
+
+.x-menu-list-item .x-btn-text {
+    border: none;
+    padding-left: 16px;
+    color: blue;
+    font: 11px tahoma, verdana, helvetica;
+    text-decoration: underline;
+}
+
+.x-grid-row-strike-italic .x-grid3-cell-inner {
+    font-style: italic;
+    color: gray;
+    text-decoration: line-through;
+}
+
+/*************************************************************
+ Settings for masking a page, while it is being loaded
+ *************************************************************/
+#jaffa-page-loading-mask {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 8000;
+    background-color: #DFE8F6;
+}
+
+#jaffa-page-loading-container {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 8001;
+    border: 1px solid;
+    border-color: #6593cf;
+    padding: 1px 1px 1px 1px;
+}
+
+#jaffa-page-loading-container .jaffa-page-loading-indicator {
+    border: 1px solid;
+    border-color: #6593cf;
+    padding: 5px 10px 5px 25px;
+    cursor: wait;
+    background: no-repeat 5px 5px;
+    background-color: #fbfbfb;
+    background-image: url(../images/default/grid/loading.gif);
+    font: normal 11px tahoma, arial, helvetica, sans-serif;
+    color: #222;
+}
+
+/****************************
+ Stuff for the the label editor icon
+*****************************/
+a.edit-label, a.edit-label:hover {
+    background-image: url(../../../../../jaffa/imgs/label/editLabel2.gif);
+    background-position: left center;
+    background-repeat: no-repeat;
+    color: black;
+    font-size: 9pt;
+    font-style: normal;
+    font-weight: normal;
+    padding-right: 10px;
+    text-decoration: none;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 7px;
+    cursor: pointer;
+}
+
+/****************************
+ Stuff to get the label editor icon on a tab
+*****************************/
+.x-tab-strip-editable {
+    position: relative;
+}
+
+.x-tab-strip-editable .x-tab-left {
+    padding-right: 12px;
+}
+
+.x-tab-strip .x-tab-strip-edit {
+    display: none;
+}
+
+.x-tab-strip a.x-tab-strip-edit {
+    opacity: .6;
+    -moz-opacity: .6;
+    background-repeat: no-repeat;
+    display: block;
+    width: 12px;
+    height: 16px;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.x-tab-strip .x-tab-strip-active a.x-tab-strip-edit {
+    opacity: .8;
+    -moz-opacity: .8;
+}
+
+.x-tab-strip a.x-tab-strip-edit:hover {
+    opacity: 1;
+    -moz-opacity: 1;
+}
+
+.x-tab-strip a.x-tab-strip-edit,
+.x-tab-strip a.x-tab-strip-edit:hover {
+    background-image: url(../../../../../jaffa/imgs/label/editLabel2.gif);
+}
+
+.ext-ie8 .x-tab-strip a.x-tab-strip-edit {
+    top: 4px;
+}
+
+/* Extra stuff if the tab is closable and has the label editor */
+.x-tab-strip-editable.x-tab-strip-closable .x-tab-left {
+    padding-right: 24px;
+}
+
+.x-tab-strip .x-tab-strip-editable.x-tab-strip-closable a.x-tab-strip-edit {
+    right: 15px;
+}
+
+/*Icon combobox*/
+.ux-icon-combo-icon {
+    width: 18px;
+    height: 14px;
+    padding-bottom: 4px;
+}
+
+.x-form-field-wrap .ux-icon-combo-icon {
+    top: 3px;
+    left: 5px;
+}
+
+.ux-icon-combo-item {
+    display: inline;
+    width: 10px;
+    padding-bottom: 2px;
+    padding-left: 24px ! important;
+}
+
+/* Icons for column selection menu when export to excel plugin is enabled*/
+.x-menu-excel-yes .x-menu-item-text {
+    background: url("../images/default/menu/excel-yes.gif") no-repeat;
+    padding: 0px 0px 0px 20px;
+}
+
+.x-menu-excel-no .x-menu-item-text {
+    padding-left: 20px;
+}
+
+.x-menu-excel-rend .x-menu-item-text {
+    background: url("../images/default/menu/excel-rend.gif") no-repeat;
+    background-size: 12px 12px;
+    padding-left: 20px;
+}
+
+.x-no-bg {
+    background-image: none;
+}
+
+.x-sf-beginswith {
+    background-image: url(../images/default/menu/flt-beginswith.png) !important;
+}
+
+.x-sf-endwith {
+    background-image: url(../images/default/menu/flt-endwith.png) !important;
+}
+
+.x-sf-like {
+    background-image: url(../images/default/menu/flt-like.png) !important;
+}
+
+.x-sf-equals {
+    background-image: url(../images/default/menu/flt-equals.png) !important;
+}
+
+.x-rangemenu-gt {
+    background-image: url(../images/default/menu/flt_greater_than.png) !important;
+}
+
+.x-rangemenu-lt {
+    background-image: url(../images/default/menu/flt_less_than.png) !important;
+}
+
+/* css for menu scroller */
+.x-tab-scroller-right-over {
+    background-position: -18px 0;
+}
+
+.x-tab-tabmenu-right {
+    background: transparent url(../images/default/menu/tab-scroller-menu.gif) no-repeat 0 0;
+    border-bottom: 1px solid #8db2e3;
+    width: 18px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 10;
+    cursor: pointer;
+}
+
+.x-tab-tabmenu-over {
+    background-position: -18px 0;
+}
+
+.x-tab-tabmenu-disabled {
+    background-position: 0 0;
+    opacity: .5;
+    -moz-opacity: .5;
+    filter: alpha(opacity=50);
+    cursor: default;
+}
+
+/*****************************************************************************************************
+* Start style overrides for IE10 with Sencha version 3.4.1.1
+*****************************************************************************************************/
+
+/* the "collapse" button on an expanded border panel */
+.ext-ie10 .x-panel-expanded .x-tool-toggle {
+    background-position: 0 -59px;
+    height: 16px;
+}
+
+/* the hover state of a "collapse" button on an expanded border panel */
+.ext-ie10 .x-panel-expanded .x-tool-toggle-over {
+    background-position: -15px -59px;
+    height: 16px;
+}
+
+/* the "expand" button on a collapsed border panel */
+.ext-ie10 .x-panel-collapsed .x-tool-toggle {
+    background-position: 0 -74px;
+    height: 16px;
+}
+
+/* the hover state of a "expand" button on a collapsed border panel */
+.ext-ie10 .x-panel-collapsed .x-tool-toggle-over {
+    background-position: -15px -74px;
+    height: 16px;
+}
+
+/* the "collapse" button on an expanded accordion panel */
+.ext-ie10 .x-panel-expanded .x-accordion-hd .x-tool-toggle {
+    background-position: 0 -255px;
+    height: 15px;
+}
+
+/* the hover state of a "collapse" button on an expanded accordion panel */
+.ext-ie10 .x-panel-expanded .x-accordion-hd .x-tool-toggle-over {
+    background-position: -15px -255px;
+    height: 15px;
+}
+
+/* the "expand" button on a collapsed accordion panel */
+.ext-ie10 .x-panel-collapsed .x-accordion-hd .x-tool-toggle {
+    background-position: 0 -240px;
+    height: 15px;
+}
+
+/* the hover state of a "expand" button on a collapsed accordion panel */
+.ext-ie10 .x-panel-collapsed .x-accordion-hd .x-tool-toggle-over {
+    background-position: -15px -240px;
+    height: 15px;
+}
+
+/* the "collapse north" button on an expanded panel */
+.ext-ie10 .x-panel-expanded .x-tool-collapse-north {
+    background-position: 0 -210px;
+    height: 15px;
+}
+
+/* the hover state of a "collapse north" button on an expanded panel */
+.ext-ie10 .x-panel-expanded .x-tool-collapse-north-over {
+    background-position: -15px -210px;
+    height: 15px;
+}
+
+/* the "collapse south" button on an expanded panel */
+.ext-ie10 .x-panel-expanded .x-tool-collapse-south {
+    background-position: 0 -195px;
+    height: 15px;
+}
+
+/* the hover state of a "collapse south" button on an expanded panel */
+.ext-ie10 .x-panel-expanded .x-tool-collapse-south-over {
+    background-position: -15px -195px;
+    height: 15px;
+}
+
+/* the "collapse east" button on an expanded panel */
+.ext-ie10 .x-panel-expanded .x-tool-collapse-east {
+    background-position: 0 -165px;
+    height: 15px;
+}
+
+/* the hover state of a "collapse east" button on an expanded panel */
+.ext-ie10 .x-panel-expanded .x-tool-collapse-east-over {
+    background-position: -15px -165px;
+    height: 15px;
+}
+
+/* the "collapse west" button on an expanded panel */
+.ext-ie10 .x-panel-expanded .x-tool-collapse-west {
+    background-position: 0 -180px;
+    height: 15px;
+}
+
+/* the hover state of a "collapse west" button on an expanded panel */
+.ext-ie10 .x-panel-expanded .x-tool-collapse-west-over {
+    background-position: -15px -180px;
+    height: 15px;
+}
+
+/* the menu item icons in the start menu */
+.ext-ie10 .x-menu-list-item .x-btn-text {
+    padding-left: 3px;
+}
+
+/* the numbers in the calendar of a date picker */
+.x-date-inner a {
+    text-align: center;
+}
+
+/* brings the message box that is shown on timeouts to the front */
+.ext-timeout-messageBox-toFront {
+    z-index: 9999999 !important;
+}
+
+/* this removes the X clear icon on IE10. */
+input::-ms-clear {
+    display: none;
+}
+
+/*****************************************************************************************************
+* End style overrides for IE10 with Sencha version 3.4.1.1
+*****************************************************************************************************/

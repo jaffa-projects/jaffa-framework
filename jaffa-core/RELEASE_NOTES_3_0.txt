@@ -1,0 +1,200 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the JAFFA 3.0.0 Release (Since v2.1.0). For more information visit us at http://jaffa.sourceforge.net
+
+Note: There was a internal 2.2.0 release, this document includes those changes too.
+
+What's New
+=====================================================
+Presentation 
+------------
+- Made all the raiseError related method on FormBase static, so form error can be raised with only a handle to the current 'request', without the need for a FormBase object.
+- Moved to latest Struts release 1.27
+  - New JARs: antlr.jar, commons-fileupload.jar
+  - Added new Struts controller to support file uploads with Jaffa
+    - org.jaffa.presentation.portlet.CustomRequestProcessor
+- Refactored error popup for popup blockers
+- Move function exportType() to finder.js
+- Fixed javascript focus but when first field is not visible
+- Posting form before page has loaded all hidden fields now throws an error
+- Refactored all browser detection code to be common
+- Added info logging for component lifecycle
+
+Widgets
+-------
+- The 'confirm' attribute of the ButtonTag has been enhanced to support multiple semi-colon separated messages. Arguments can also be passed to those messages.
+  - Check docs/design/Multiple_PopUp_Messages.doc for more information
+- Enhanced the TextTag to generate hyperlinks based on the <hyperlink> rules defined for a property
+- Removed the '_ColumnX' from the HTML id's for all widgets inside Grid/UserGrids which reduced the amount of generated HTML.
+  - This now allows a lookup on a row to return values to editbox on the same row but in different columns
+  - This required a change in grid.js and usergrid.js as well
+- Added support for the RadioButton widget, when embedded in a Grid/UserGrid.
+  - Needs to use a unique, but common 'name' atribute to group the Radio options. Typically enclosed widgets (inside Grids) don't use the 'name' as we don't want them to post data to teh server. As this is not an option, the 'name' causes superfluous data to be posted, which is then ignored by Struts
+  - Radio options can also span columns in the grid, as the '_ColumnX' has been removed from the name
+  - Modified the Grid Controllers and the widget packing JavaScript to include the RadioGroup widget
+- Merged the Grid/UserGrid and GridColumn/UserGridColum
+  - Tree based grids can now be user defined
+  - Grids can now sort on columns, unless its a tree
+  - Refactored and merged javascript for the grid, tree and usergrid
+     - new files gridConfigure.js, gridMain.js, gridPopupHints.js, gridSort.js, gridSort_gb.js, gridSort_us.js, gridTree.js
+  - UserGrid is now deprecated, but as it points at the Grid, it too has new attributes: columnCssClasses, cssClass, displayOnly, headerCssClass, rowCssClasses, style
+  - UserGridColumn is now deprecated, but as it points at the GridColumn, it too has new attributes: columnCssClass, required, style, treeField
+- GridModelRow now Implements the Map interface for simple use with JSTL and -expression languges
+  - Deprecated IModelMap, and change all references to Map
+  - Removed base class WidgetModel and replaced it with the IWidgetModel interface so GridModelRow can implement the interface and extend HashMap at the same time
+- WidgetControllers no-longer decode HTML entities as this is done by the browser during the post. The bug was that when a textarea was used to display XML (the navigation.xml and log4j editors), any embedded &amp; was converted to & when reposted and hence written back to the XML file as & not the original &amp;
+- Can make a column required so user can't hide it (this is defaulted for any Tree column)  
+- Added new Tag GridRow for changing the look and feel of a grid row
+- Added following attributes to FormTag: useBean
+- Added following attributes to GridTag: columnCssClasses, headerCssClass, outputType, popupHints, rowCssClasses, style, target, userGridId
+- Added following attributes to GridColumnTag: columnCssClass, key, required, style
+- removed use of "javascript:" from generated widget code for html events
+- refactored widgets to make use of code is CustomTag and CustomModelTag base classes
+- Changed algorithm for calcualting size of editbox for numeric numbers, as it was too high.
+- FormTag added ${form} to access the form bean via expression language
+- FormTag added useBean for use with url to allow any exsiting bean to be scoped and used with the Jaffa widgets, this allows it to bypass using a Struts Action.
+- Addition configuration control over the names used for Id's and form names to help reduce byte count if generated HTML. In some cases this can reduce generated page by up to 20% 
+- Removed unnecessary TD id attribues from Grid widget, and refactored id's and names used for customizing the grid.
+- GridTag added ${row} to access the current GridModelRow(Map) via expression language. This is not set if the Grid has no rows.
+
+Components & Patterns
+---------------------
+- The Lookup component has been enhanced to support modal invocations. This was currently possible in multi-select mode only. The new enhancement allows single-select as well.
+  - Created a new event SelectLookupEvent which will encapsulate the select row
+  - Created a new interface ISelectLookupListener with method public void rowSelected(SelectLookupEvent event) 
+  - Added a new method addSelectLookupListener on LookupComponent2
+- Added 2 new features to the LookupComponent
+  - autoSelect
+    - For multiSelectMode, this will simulate the selection of all records.
+    - For singleSelectMode, this will simulate the selection of a record, if the query returned only one record.
+    - For non-modal mode and if the 'request' is available in the context, this will simulate the selection of a record, if the query returned only one record.
+  - errorIfNoRows: If no rows are retrieved by a query.
+    - In modal mode, null data will be passed to the registered listener, and the FormKey of the calling component will be returned
+    - In non-modal mode, an ApplicationException will be thrown.
+- Lookup handler can now throw ApplicationExceptions or FrameworkException, this will either propergated back via the display() method, or if caught in the LookupAction, will display the error and quit the lookup.
+- Added FileExplorer functionality 
+  - FileExplorerFilter
+  - FileExplorerBean
+  - FileExplorer.jsp
+- Added Saved queries for finder pattern (See docs/design/Saving_queries.doc)
+
+
+Persistence
+-----------
+- Support for SQL Functions have been added to the Persistence Engine. Check docs/design/SQL_Functions.doc for more information.
+- Enhanced the Jdbc Engine to invoke StoredProcedures that return cursors
+- Created PreparedStatementProxyForDebugging, which is used by the JDBC Engine to log SQL statements with actual values, instead of ?
+- A primary-key field can have spaces. Modified the TypeDefs class of the jdbcengine to return a space from the getDml() method for such fields if they are null.
+- Enhanced the Persistence Engine to throw an ApplicationException if an SQLException gets thrown during creates/updates/deletes/retrieves, and the SQL ErrorCode for which has been designated as Custom
+  - Typically in custom code for views, triggers, stored procs we may want to do a raise_appliction_error(-20000,"My Custom Error"); and have the text of this error return back to the end user as a type of ApplicationException
+  - The range of custom SQL ErrorCodes can be defined for the global-rule 'jaffa.persistence.jdbcengine.customSqlErrorCodeRange'
+
+General
+-------
+- Created org.jaffa.util.OsScriptingBean to make it easier to invoke an OS command in an OS independent way when various environment variables and related setup/teardown scripts are also needed.
+  - Added control over the UNIX shell to use in the OsScriptingBean, and added special code for generating code for 'csh' (c-shell). Also now preserves and returns correct status code for UNIX.
+- Jaffa can now be compiled with jdk1.5
+- Added 'request' to the thread in the context manager
+- Fixed to javadoc generation
+- Added documentation and examples to TLD for use with tlddoc
+
+
+Bug Fixes
+=====================================================
+Presentation
+------------
+- Error PopUp Window: Fixed a bug where on Win2K if the pop-up was not closed and another window raised the error, it would not overwrite the original content of the first error.
+- Error PopUp Window: Fixed bug where in Firefox, if the window was not closed the second time an error was raised, the error text was being appended to windows current error text.
+- Fixed the HistoryNav to remove dead components from its List
+- Fixed MM_findObj() method in header.js to return the first element from a NodeList, instead of the NodeList itself
+
+Widgets
+-------
+- Corrected the ComponentGuard tag to consume the SecurityException thrown for invalid component-names and treat it the same as a no-access component
+- Corrected the JavaScript generated by the UserGridTag to do a 'return' after the doClick() invocation, since the mouse-click wasn't working in Firefox
+- Turned on the editbox trim rule by default in Javascript
+- Re-implemented the custom Javascript validation with the new rules engine, as it was not working
+  - Example <Editbox field="dummy" onValidate="if(field.value!='AAA') error='Must be AAA';"/>
+  - Basic rules are
+    - JavaScript must not contain any " chars (EditboxTag with throw runtime exception if has one)
+    - To raise an error set the 'error' variable to a error message to be displayed. If this is not set, no error is raised 
+    - The script has access to the 'field' variable which is the <input> element being validated. The value can be accessed via 'field.value'
+    - If the script throws an exception then an error box is displayed and the field fails validation.
+- Fixed the DateOnly/DateTime validation rule for the EN_UK locale
+- Fixed the CalenderTag to inherit layout information from its related field, and also hide the widget if the related field is hidden or read-only
+- Fixed Mandatory Override for widget Models. In v2.1 if you did a model.setMadatory(false) even if the underlying FieldMetaData object was mandatory, this overwrote it. In 2.2 with the new rules engine this was broken, so a non-mandatory field could be overridden and made mandatory, but a mandatory field could not be made non-mandatory. There are many times in the UI where we what a field that is mandatory in the domain object to be optional in the form, this may be because we default a value into the field prior to uow.add() as part of the business logic. This feature has now been added back in.
+- Corrected the GridTag to generate a well-formed Table around the rows
+- Fixed more unquoted HTML attributes
+- Fixed the TextTag to utilize the URLEncoder when generating the hyperlinks to Viewer components. This allows it to handle characters like '#'.
+- Fixed the LookupTag to utilize the URLEncoder when generating the hyperlinks to Lookup components. This allows it to handle characters like '#'.
+- Fixed the GridController/UserGridController to replace %23 with # since header.js does the reverse change when packaging the data
+
+Components & Patterns
+---------------------
+- Corrected the logic in domain_creator_1_1 pattern for obtaining related self-domain-objects, to ignore the current-object
+- Fixed the Lookup component to correctly set the checkboxes on the calling screen
+- Fixed the ComponentCriteriaJSP template of the Finder/Lookup patterns to correctly set the StaticParameters for a lookup
+
+
+Persistence
+-----------
+
+General
+-------
+
+
+What's Deleted/Deprecated
+=====================================================
+- Deprecated Classes
+  - org.jaffa.presentation.portlet.widgets.controller.UserGridController
+  - org.jaffa.beans.moulding.mapping.DataTypeMapping, replaced by org.jaffa.datatypes.DataTypeMapper 
+
+- Deprecated Methods
+  - Since the GridModelRow now implements the Map interface the follow have been deprecated
+    - getElementNames(), use keySet()
+    - hasElement(String id), use containsKey(String)
+
+- Deprecated Tags
+  - The DateTime widget has been deprecated, please use an Editbox with a Calendar instead (the patterns already generate this for you)
+  - The UserGrid and UserGridColumn have been deprecated, the Grid and GridColumn are direct replacements for this. In the TLD UserGrid and UserGridColumn now point to the same implementation classes as Grid and GridColumn, so right now you could add the new GridRow into a UserGrid. The plan is to eventually remove this mapping from the TLD
+
+- Removed Classes
+  - org.jaffa.components.finder.FinderComponent.java
+  - org.jaffa.components.finder.FinderCriteriaForm.java
+  - org.jaffa.components.finder.IFinderListener.java
+  - org.jaffa.components.lookup.LookupComponent.java
+  - org.jaffa.components.maint.MaintComponent.java
+  - org.jaffa.presentation.portlet.widgets.model.IModelMap
+  - org.jaffa.presentation.portlet.widgets.model.WidgetMap
+  - org.jaffa.presentation.portlet.widgets.taglib.UserGridColumnTag.java
+
+- Removed Libraries
+  - The move to Struts 1.27 has allowed the following to be removed
+    - commons-collections.jar
+    - commons-lang.jar
+    - struts-legacy.jar
+
+- Removed JavaScript
+  - jaffa\js\widgets\grid.js
+  - jaffa\js\widgets\tooltip.js
+  - jaffa\js\widgets\treeWidget.js
+  - jaffa\js\widgets\usergrid.js
+  - jaffa\js\widgets\usergridsettings.js
+  - jaffa\js\widgets\usergridtooltip.js
+
+- Removed Tags
+  - Tree and TreeNodeType were never really implemented and have now been removed. The GridTag now supports a Tree View
+  - Removed attributes from ButtonTag
+    - color, fontname, fontsize, height, width (can be achieved via CSS)
+    - detail, text
+  - Removed attributes from FormTag
+    - name, onsubmit, scope, styleId, type
+  - Removed attributes from GridTag
+    - cssUrl, width (can be achieved with style="width:..")
+  - Removed attributes from GridColumnTag
+    - width, height (can be achieved with style="width:..;height:..")
+  - Removed attribute from UserGridTag
+    - width (can be achieved with style="width:..")
+  - Removed attributes from UserGridColumnTag
+    - width, height (can be achieved with style="width:..;height:..")

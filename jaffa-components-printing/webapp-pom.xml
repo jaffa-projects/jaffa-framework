@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.jaffa.parent</groupId>
+    <artifactId>jaffa-parent</artifactId>
+    <version>6.0</version>
+  </parent>
+
+  <groupId>org.jaffa.components.printing</groupId>
+  <artifactId>jaffa-components-printing-webapp</artifactId>
+  <version>6.0</version>
+  <packaging>war</packaging>
+
+  <name>JAFFA Components Printing WEB Application</name>
+
+  <scm>
+    <connection>scm:svn:http://jaffa.mirotechnologies.com/svnroot/jaffa/trunk/JaffaComponentsPrinting</connection>
+    <developerConnection>scm:svn:http://jaffa.mirotechnologies.com/svnroot/jaffa/trunk/</developerConnection>
+    <url>http://jaffa.mirotechnologies.com/svnroot/jaffa/trunk/JaffaComponentsPrinting/</url>
+  </scm>
+
+  <properties>
+    <manifest.specification.title>JAFFA Components Printing WEB Application</manifest.specification.title>
+    <manifest.specification.version>6.0</manifest.specification.version>
+    <manifest.implementation.title>${project.artifactId}-${project.version}</manifest.implementation.title>
+    <manifest.implementation.version>${project.version}</manifest.implementation.version>
+    <manifest.bundle.title>org.jaffa.components.printing.webapp</manifest.bundle.title>
+    <manifest.bundle.name>org.jaffa.components.printing.webapp</manifest.bundle.name>
+    <manifest.bundle.symbolic.name>org.jaffa.components.printing.webapp</manifest.bundle.symbolic.name>
+    <manifest.bundle.description>JAFFA Components Printing WEB Application</manifest.bundle.description>
+    <manifest.bundle.version>${project.version}</manifest.bundle.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.jaffa.components.printing</groupId>
+      <artifactId>jaffa-components-printing-api</artifactId>
+      <version>6.0</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <sourceDirectory>${project.basedir}/source/html</sourceDirectory>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <configuration>
+          <webappDirectory>${project.basedir}/source/html</webappDirectory>
+          <warSourceExcludes>**/*.java,**/*.pfragment,**/*.xfragment</warSourceExcludes>
+          <failOnMissingWebXml>false</failOnMissingWebXml>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

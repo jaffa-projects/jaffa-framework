@@ -1,0 +1,70 @@
+    <!-- FormSelectionMaintenance Criteria -->
+    <definition name="jaffa.printing.formselectionmaintenance.FinderLayout.criteria"  extends="jaffa.FinderLayout">
+        <put name="body1" value="/jaffa/printing/formselectionmaintenance/criteria.jsp"/>
+        <put name="body2" value=""/>
+        <put name="action" value="/jaffa_printing_formSelectionMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.printing.formselectionmaintenance.criteria"  extends="jaffa.MainLayout">
+        <put name="body" value="jaffa.printing.formselectionmaintenance.FinderLayout.criteria"/>
+    </definition>
+
+    <!-- FormSelectionMaintenance Results -->
+    <definition name="jaffa.printing.formselectionmaintenance.FinderLayout.results"  extends="jaffa.FinderLayout">
+        <put name="body1" value=""/>
+        <put name="body2" value="/jaffa/printing/formselectionmaintenance/results.jsp"/>
+        <put name="action" value="/jaffa_printing_formSelectionMaintenance"/>
+        <put name="contextNav" value="/jaffa/printing/formselectionmaintenance/contextNav.jsp"/>        
+        <put name="defaultNav" value="/jaffa/printing/formselectionmaintenance/defaultNav.jsp"/>        
+        <putList name="contextNavLinks">
+            <add value="CancelResult"/>
+            <add value="Print"/>
+            <add value="Finish"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Finish"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.printing.formselectionmaintenance.results"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.FormSelectionMaintenance.results]"/>
+        <put name="body" value="jaffa.printing.formselectionmaintenance.FinderLayout.results"/>
+    </definition>
+
+    <!-- FormSelectionMaintenance ConsolidatedCriteriaAndResults -->
+    <definition name="jaffa.printing.formselectionmaintenance.FinderLayout.consolidatedCriteriaAndResults"  extends="jaffa.FinderLayout">
+        <put name="body1" value="/jaffa/printing/formselectionmaintenance/criteria.jsp"/>
+        <put name="body2" value="/jaffa/printing/formselectionmaintenance/results.jsp"/>
+        <put name="action" value="/jaffa_printing_formSelectionMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.printing.formselectionmaintenance.consolidatedCriteriaAndResults"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.FormSelectionMaintenance.consolidated]"/>
+        <put name="body" value="jaffa.printing.formselectionmaintenance.FinderLayout.consolidatedCriteriaAndResults"/>
+    </definition>
+
+    <!-- FormSelectionMaintenance Results as Excel -->
+    <definition name="jaffa.printing.formselectionmaintenance.FinderExcelLayout"  extends="jaffa.FinderExcelLayout">
+        <put name="body" value="/jaffa/printing/formselectionmaintenance/results.jsp"/>
+        <put name="action" value="/jaffa_printing_formSelectionMaintenance"/>
+    </definition>
+
+    <!-- FormSelectionMaintenance Results as Xml -->
+    <definition name="jaffa.printing.formselectionmaintenance.FinderXmlLayout"  extends="jaffa.FinderXmlLayout">
+    </definition>
+

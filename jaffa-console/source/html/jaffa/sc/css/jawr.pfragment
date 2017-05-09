@@ -1,0 +1,14 @@
+#---------------------------------------------
+# This defines the CSS bundle that can be used to
+# load the product specific CSS stuff
+#---------------------------------------------
+
+jawr.css.bundle.jaffaSc.id=/bundles/jaffa/sc-base.css
+jawr.css.bundle.jaffaSc.mappings=\
+        /jaffa/sc/css/main-core.css, \
+        /jaffa/sc/css/main-override.css
+
+# Now define a full bundle of jaffaRia+product1+jaffa/sc
+jawr.css.bundle.jaffaScAll.id=/bundles/jaffa/sc.css
+jawr.css.bundle.jaffaScAll.composite=true
+jawr.css.bundle.jaffaScAll.child.names=jaffaRia,product1,jaffaSc

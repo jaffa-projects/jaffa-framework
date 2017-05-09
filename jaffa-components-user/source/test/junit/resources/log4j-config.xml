@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration debug="true">
+
+    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <!--
+            <param name="ConversionPattern" 
+                   value="%-5p [%t] (%c:%L) - %m%n"/>
+            -->
+            <param name="ConversionPattern"
+                   value="%d %-5p [%t] %C{2} (%F:%L) - %m%n"/>
+        </layout>
+    </appender>
+
+    <!-- Debug for all the context stuff -->
+    <category name="org.jaffa.security">
+        <priority value="debug" />
+    </category>
+    <category name="org.jaffa.session">
+        <priority value="debug" />
+    </category>
+    <category name="org.jaffa.presentation.portlet.session">
+        <priority value="debug" />
+    </category>
+    
+    <!-- DEBUG for the user stuff -->
+    <category name="org.jaffa.modules.user">
+        <priority value="debug" />
+    </category>
+
+    <!-- Error Only for the UserGridManager -->
+    <category name="org.jaffa.presentation.portlet.widgets.controller.UserGridManager">
+        <priority value="error" />
+    </category>
+
+        
+    <!-- Info Only Stuff of the Framework -->
+    <category name="org.jaffa">
+        <priority value="info" />
+    </category>
+
+    <!-- Info Level for all the other stuff -->
+    <root>
+        <priority value="debug"/>
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</log4j:configuration>

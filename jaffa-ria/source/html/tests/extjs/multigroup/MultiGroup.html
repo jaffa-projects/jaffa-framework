@@ -1,0 +1,124 @@
+<!--
+/**********************************************************************************************
+ * JAFFA - Java Application Framework For All - Copyright (C) 2008 JAFFA Development Group
+ *
+ * This library is free software; you can redistribute it and/or modify it under the terms
+ * of the GNU Lesser General Public License (version 2.1 any later).
+ *
+ * See http://jaffa.sourceforge.net/site/legal.html for more details.
+ *********************************************************************************************/
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>ExtJS extension - Multiple Field Grouping Grid</title>
+
+    <script type="text/javascript" src="../../../js/extjs/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="../../../js/extjs/ext-all-debug.js"></script>
+
+    <script type="text/javascript">
+    // Firebug hack
+    if(!console) var console={debug:Ext.emptyFn,info:Ext.emptyFn,warn:Ext.emptyFn,error:Ext.emptyFn,trace:Ext.emptyFn,dir:Ext.emptyFn};
+    // Stop ref's to ExtJS site
+    Ext.BLANK_IMAGE_URL = "../../../js/extjs/resources/images/default/s.gif";
+    </script>
+
+    <script type="text/javascript" src="../../../js/extjs/ux/utils/DeepClone.js"></script>
+    <script type="text/javascript" src="../../../js/extjs/ux/grid/MultiGroupingStore.js"></script>
+    <script type="text/javascript" src="../../../js/extjs/ux/grid/MultiGroupingView.js"></script>
+    <script type="text/javascript" src="../../../js/extjs/ux/grid/MultiGroupingPanel.js"></script>
+    <script type="text/javascript" src="MultiGroup.js"></script>
+
+    <!-- Include Ext stylesheets here: -->
+    <link rel="stylesheet" type="text/css" href="../../../js/extjs/resources/css/ext-all.css" />
+    
+    <style>
+      body {
+        font-family:helvetica,tahoma,verdana,sans-serif;
+        padding:20px;
+        padding-top:32px;
+        font-size:12px;
+      }
+      p {
+        margin-bottom:10px;
+      }
+      h1 {
+        font-size:large;
+        margin-bottom:15px;
+      }
+      h2 {
+        font-size:12px;
+        color:#333;
+        font-weight:bold;
+        margin:10px 0;
+      }
+      ul {
+        margin-left:20px;
+        list-style-type: disc;
+        list-style-position: inside;
+      }
+    </style>
+  </head>
+  <body>
+
+    <h1>Mult-Grouping Grid Extension</h1>
+    <p>This is an example of the Multiple Grid Extention as discussed on the <a href="http://extjs.com/forum/showthread.php?t=42454" target='_blank'>ExtJS Forum Thread</a></p>
+    <h2>Below is a working Example...</h2>
+    <p><b>Note: </b>Must be deployed on a server to work as is (i.e. it won't run locally from a file:/// link)<p>
+
+    <hr/>
+    <div id="multiGroupEx1"></div>
+    <hr/>
+
+    <p>This example is based on the JaffaRIA deployment bundle which includes the full version of ExtJS 2.x, along
+    with the many extensions that have been added as part of JaffaRIA.</p>
+    <p>JaffaRIA can be downloaded and built from the CVS source,
+    or daily builds can found at <a href="http://jaffa.sf.net/repository/" target='_blank'>http://jaffa.sf.net/repository/</a><p>
+
+    <h2>Source code for the "Core Classes" can be found here</h2>
+    <ul>
+      <li><a href="http://jaffa.cvs.sourceforge.net/jaffa/JaffaRIA/source/html/js/extjs/ux/grid/MultiGroupingStore.js?view=markup" target='_blank'>js/extjs/ux/grid/MultiGroupingStore.js</a></li>
+      <li><a href="http://jaffa.cvs.sourceforge.net/jaffa/JaffaRIA/source/html/js/extjs/ux/grid/MultiGroupingView.js?view=markup" target='_blank'>js/extjs/ux/grid/MultiGroupingView.js</a></li>
+      <li><a href="http://jaffa.cvs.sourceforge.net/jaffa/JaffaRIA/source/html/js/extjs/ux/grid/MultiGroupingPanel.js?view=markup" target='_blank'>js/extjs/ux/grid/MultiGroupingPanel.js</a></li>
+    </ul>
+    <h2>Example source code can be found here</h2>
+    <ul>
+      <li><a href="http://jaffa.cvs.sourceforge.net/jaffa/JaffaRIA/source/html/tests/extjs/multigroup/MultiGroup.html?view=markup" target='_blank'>tests/extjs/multigroup/MultiGroup.html</a></li>
+      <li><a href="http://jaffa.cvs.sourceforge.net/jaffa/JaffaRIA/source/html/tests/extjs/multigroup/MultiGroup.js?view=markup" target='_blank'>tests/extjs/multigroup/MultiGroup.js</a></li>
+    </ul>
+    <h2>Change Log</h2>
+    <ul type="1">
+      <li>support for IE as well as FF (tested on IE6, FF2)
+      <li>to use the column headers, not the dataIndex names in the Group Text and on the toolbar
+      <li>to make sure all groups had "rs" set (not just the final group) so i could see at the higher levels total record counts
+      <li>add cache response in getRows() as it is internally called many times and is an expensive routine - i welcome feedback as to whether this is a good idea
+      <li>created the MultiGroupingGrid, to try and hide all the dropdown/toolbar stuff
+      <li>use the rendered if present on the column to provide the column value to the grouping template (very useful for Date fields)
+      <li>added example that uses "groupTpl" to do totaling of other columns in grid
+      <li>fixed header name changing issue (<a href="http://extjs.com/forum/showthread.php?p=206878#post206878" target='_blank'>st_gross : #27</a>)
+      <li>fixed grouping on Date objects (<a href="http://extjs.com/forum/showthread.php?p=207914#post207914" target='_blank'>DamienValentine : #28</a>)
+      <li>added support for passing in an array to set store.groupBy() fields, also added store.removeGroup() (<a href="http://extjs.com/forum/showthread.php?p=208449#post208449" target='_blank'>tchitani : #32</a>)
+      <li>Integrates per group type templated (in the view, not the store!) (<a href="http://extjs.com/forum/showthread.php?p=214000#post214000" target='_blank'>#63</a>)
+      <li>Implemented a paging grid with live data that will test the server-side sorting and re-grouping (See <a href="MultiGroupingLive.html" target='_blank'>MultiGroupingLive.html</a> for more details) 
+      <li>Full state management intergration so it remembers what you were grouping by last time (as per issue <a href="http://extjs.com/forum/showthread.php?p=220867#post220867" target='_blank'>#69</a>). The state is added to the grid's state as the property 'groupField'
+      <li>Fixed row caching issue, which caused row events to fail (as per issue <a href="http://extjs.com/forum/showthread.php?p=221335#post221335" target='_blank'>#72</a>)
+      <li>Fixed sorting issue, which is why the sort direction arrows were missing (as per issue <a href="http://extjs.com/forum/showthread.php?p=231965#post231965" target='_blank'>#98</a>)
+      <li>Added example of custom template for a date to show Today/Yesterday (as per issue <a href="http://extjs.com/forum/showthread.php?p=216145#post216145" target='_blank'>#66</a> - groupby datetime field, but show values like today, yesterday, etc.)
+    </ul>  
+    <h2>Known Issues</h2>
+    <ul>
+      <li>Column Drag Icons (Blue Arrows) don't dissapear when column is dragged to top
+      <li>Width of grouping lines is not correct, extends beyond width of columns but not completely across grid
+      <li>If hideGroupedColumn==true, then you can still manually make the column visible again through configuring the columns and selecting this one. It will dissappear again as soon as you make a change to the group. We should probably prevent making it visible again if hideGroupedColumn==true. 
+    </ul>  
+    <h2>Planned/Requested Features</h2>
+    <ul>
+      <li>Allow Ascending/Decending sorting on groups, currently there are all Ascending, as we don't have a way to specify the order.
+      <li>Provide an option to indent the rows so the first column is nested under the start of the inner most group. This give it the more natural look of a tree
+      <li>Working Example the filter plug-in (how can you filter on a grouped column if it has been hidden) should there be a dropdown against the column name in the toolbar too?
+      <li>Drag and Drop on toolbar to re-order grouping columns
+      <li>Allow multiple columns to be in a single group header, in example data group by "Contract, Part/CAGE" instead of "Contract, Part, CAGE"
+      <li>Grouping based partial data in a column, for example group by first character of decription, group by year/month on a date, group by date only on values that include both date and time (<a href="http://extjs.com/forum/showthread.php?p=216145#post216145" target='_blank'>#66</a>). Thoughts are to add a grouping renderer to the column model of the grid, this renderer would be a function that returns the value to be group, instead of the actual valid. For example groupRenderer: function(x) { return x?x.substr(0,1):x} could be applied to a Name field so that names are grouped based on their first letter.
+      
+    </ul>  
+  </body>
+</html>

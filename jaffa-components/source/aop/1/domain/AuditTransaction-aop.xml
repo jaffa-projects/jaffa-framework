@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+  <!-- ================================================= -->
+  <!-- Rules for Domain Object AuditTransaction -->
+  <!-- ================================================= -->
+
+  <metadata tag="jaffa.rules" class="org.jaffa.components.audit.domain.AuditTransaction">
+
+    <label>[label.Jaffa.Audit.AuditTransaction]</label>
+
+    <property name="transactionId">
+      <label>[label.Jaffa.Audit.AuditTransaction.TransactionId]</label>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="processName">
+      <label>[label.Jaffa.Audit.AuditTransaction.ProcessName]</label>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="subProcessName">
+      <label>[label.Jaffa.Audit.AuditTransaction.SubProcessName]</label>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="reason">
+      <label>[label.Jaffa.Audit.AuditTransaction.Reason]</label>
+      <max-length>250</max-length>
+    </property>
+
+    <property name="createdBy">
+      <label>[label.Jaffa.Audit.AuditTransaction.CreatedBy]</label>
+      <max-length>20</max-length>
+      <case-type>Upper</case-type>
+    </property>
+
+    <property name="createdOn">
+      <label>[label.Jaffa.Audit.AuditTransaction.CreatedOn]</label>
+    </property>
+
+  </metadata>
+</aop>

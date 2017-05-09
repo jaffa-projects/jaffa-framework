@@ -1,0 +1,70 @@
+
+/********************************/
+/** System Config Desktop CSS   */
+/********************************/
+.x-grid3-col-0 {margin-left:3px;}
+
+.ux-treegrid-icon{background-position:center;  background-repeat:no-repeat;  border:0 none;  height:18px;
+  margin:0px;  padding:0px;  position: absolute;  vertical-align:top;  width:16px;}
+
+.x-grid3-row-expanded .x-grid3-row-body {
+    background-color: #EEEEEE;
+    padding: 5px;
+}
+
+.editable {
+    background-color: papayawhip;
+}
+
+.field {
+    background: url("../imgs/field.png") no-repeat transparent;
+}
+
+.field-cond {
+    background: url("../imgs/field-cond.png") no-repeat transparent;
+}
+
+.rule {
+    background: url("../imgs/rule.png") no-repeat transparent;
+}
+
+.rule-cond {
+    background: url("../imgs/rule-cond.png") no-repeat transparent;
+}
+
+.icon-sub {
+    background-image: url(../imgs/subscribe.png) !important;
+    vertical-align: left;
+}
+
+.icon-unsub {
+    background-image: url(../imgs/unsubscribe.png) !important;
+    vertical-align: left;
+}
+
+.icon-show {
+    background-image: url(../imgs/show_messages.gif) !important;
+    vertical-align: left;
+}
+
+.icon-consume {
+    background-image: url(../imgs/consume_messages.gif) !important;
+    vertical-align: left;
+}
+
+.icon-summary {
+    background-image: url(../imgs/event_summary.gif) !important;
+}
+
+.intro-img {
+    vertical-align:top;
+    float: left;
+    padding: 5px;
+}
+.intro-list {
+    list-style: circle inside none;
+    padding: 0px 0px 0px 20px;
+}
+.clearboth {
+    clear: both;
+}

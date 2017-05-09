@@ -1,0 +1,3 @@
+exception.org.jaffa.soa.events.ProcessEventHandler.noEventLocationFile=Event property file {0} not found
+exception.org.jaffa.soa.events.ProcessEventHandler.cannotFindProperty=Cannot find property {0}
+exception.org.jaffa.soa.events.PendingEventException.pendingEventsFound=Pending events found for event {0}

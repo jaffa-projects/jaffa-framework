@@ -1,0 +1,7 @@
+    <!-- QueueViewer Form -->
+    <action    path="/jaffa_messaging_queueViewer"
+               type="org.jaffa.modules.messaging.components.queueviewer.ui.QueueViewerAction"
+               name="jaffa_messaging_queueViewerForm"
+               validate="false"
+               scope="request">
+    </action>

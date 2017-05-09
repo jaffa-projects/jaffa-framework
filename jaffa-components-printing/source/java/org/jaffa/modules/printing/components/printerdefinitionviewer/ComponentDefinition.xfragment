@@ -1,0 +1,4 @@
+    <component id="Jaffa.Printing.PrinterDefinitionViewer">
+        <class>org.jaffa.modules.printing.components.printerdefinitionviewer.ui.PrinterDefinitionViewerComponent</class>
+        <type>ObjectViewer</type>
+    </component>

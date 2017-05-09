@@ -1,0 +1,3 @@
+        <!-- Jaffa FileExplorer Config -->
+        <form-bean      name="jaffa_admin_fileExplorerForm"
+                        type="org.jaffa.applications.jaffa.modules.admin.components.fileexplorer.ui.FileExplorerForm"/>

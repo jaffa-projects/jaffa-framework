@@ -1,0 +1,7 @@
+    <!-- Jaffa Roles Editor -->
+    <action    path="/admin_rolesEditor"
+               type="org.jaffa.applications.jaffa.modules.admin.components.roleseditor.ui.RolesEditorAction"
+               name="admin_rolesEditorForm"
+               validate="false"
+               scope="request">
+    </action>

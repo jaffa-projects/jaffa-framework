@@ -1,0 +1,12 @@
+    <!-- OutputCommandViewer -->
+    <definition name="jaffa.printing.outputcommandviewer.ViewerLayout"  extends="jaffa.ViewerLayout">
+        <put name="body" value="/jaffa/printing/outputcommandviewer/view.jsp"/>
+        <put name="action" value="/jaffa_printing_outputCommandViewer"/>
+        <put name="updateComponent" value="Jaffa.Printing.OutputCommandMaintenance"/>
+        <put name="deleteComponent" value="Jaffa.Printing.OutputCommandMaintenance"/>
+    </definition>
+    <definition name="jaffa.printing.outputcommandviewer"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.OutputCommandViewer.view]"/>
+        <put name="body" value="jaffa.printing.outputcommandviewer.ViewerLayout"/>
+    </definition>
+

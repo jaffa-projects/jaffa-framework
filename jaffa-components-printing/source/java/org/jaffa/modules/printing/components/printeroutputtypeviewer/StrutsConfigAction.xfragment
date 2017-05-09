@@ -1,0 +1,7 @@
+    <!-- PrinterOutputTypeViewer Form -->
+    <action    path="/jaffa_printing_printerOutputTypeViewer"
+               type="org.jaffa.modules.printing.components.printeroutputtypeviewer.ui.PrinterOutputTypeViewerAction"
+               name="jaffa_printing_printerOutputTypeViewerForm"
+               validate="false"
+               scope="request">
+    </action>

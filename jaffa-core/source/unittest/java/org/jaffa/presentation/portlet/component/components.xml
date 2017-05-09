@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE components PUBLIC "-//JAFFA//DTD Component Definitions 1.0//EN" "http://jaffa.sourceforge.net/DTD/component-definitions_1_0.dtd">
+
+<components>
+    <component id="Unit.Test.Component1">
+	<class>org.jaffa.presentation.portlet.widgets.tests.EditBoxComponent</class>
+    </component>
+    
+    <component id="Unit.Test.Component2">
+        <description>This is a description of this components and what it is uesd for</description>
+	<class>org.jaffa.presentation.portlet.widgets.tests.EditBoxComponent</class>
+        <type>Custom</type>
+    </component>
+
+    <component id="Unit.Test.Component3">
+	<class>org.jaffa.presentation.portlet.widgets.tests.EditBoxComponent</class>
+        <type>Custom</type>
+        <mandatory-function name="Function1"/>
+        <mandatory-function name="Function2"/>
+        <mandatory-function name="Function3"/>
+        <optional-function name="FunctionA"/>
+        <optional-function name="FunctionB"/>
+        <optional-function name="FunctionC"/>
+    </component>
+
+    <component id="Unit.Test.Component4">
+	<class>dummy.data</class>
+        <type>Custom</type>
+        <mandatory-function name="Function1"/>
+        <optional-function name="FunctionA"/>
+    </component>
+    
+    <component id="Unit.Test.Component5">
+        <description>No Role Should Have access to the functions below</description>
+	<class>dummy.data</class>
+        <type>Custom</type>
+        <mandatory-function name="FunctionNoAccess"/>
+    </component>
+
+    <component id="Unit.Test.Component6">
+        <description>All Roles Should Have access to the functions below</description>
+	<class>dummy.data2</class>
+        <mandatory-function name="FunctionAll"/>
+    </component>
+    
+</components>

@@ -1,0 +1,1 @@
+    <form-bean name="user_userRequestFinderForm" type="org.jaffa.applications.jaffa.modules.user.components.userrequestfinder.ui.UserRequestFinderForm"/>

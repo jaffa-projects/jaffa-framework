@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<!DOCTYPE aop PUBLIC "-//JBoss//DTD JBOSS AOP 1.0//EN" "http://www.jboss.org/aop/dtd/jboss-aop_1_0.dtd">-->
+
+<!-- Declare the Realms and the default class mappings for each Realm -->
+<aop>
+  <metadata-loader tag="jaffa.realms" class="org.jaffa.rules.jbossaop.RealmLoader"/>
+
+  <metadata tag="jaffa.realms" class="dummy">
+    <realm name='business'>
+      <class regex='org.jaffa.persistence.IPersistent'/>
+      <class regex='org.jaffa.flexfields.FlexBean'/>
+    </realm>
+
+    <realm name='criteria'>
+      <class regex='org.jaffa.components.finder.FinderComponent2'/>
+      <class regex='org.jaffa.components.finder.FinderForm'/>
+      <class regex='org.jaffa.components.finder.FinderInDto'/>
+      <class regex='org.jaffa.components.finder.FinderOutDto'/>
+      <class regex='.+FinderOutRowDto'/>
+      <class regex='.+LookupOutRowDto'/>
+      <class regex='.+ViewerComponent'/>
+      <class regex='.+ViewerForm'/>
+      <class regex='.+ViewerInDto'/>
+      <class regex='.+ViewerOutDto'/>
+      <class regex='org.jaffa.soa.graph.GraphCriteria'/>
+
+      <inheritance-rule-filter includes='candidate-key,case-type,comment,data-type,in-list,flex-fields,flex-field,foreign-key,generic-foreign-key,hidden,hyperlink,label,layout,primary-key,read-only,lookup'/>
+      <!--<inheritance-rule-filter excludes='initialize,mandatory,max-length,max-value,min-length,min-value,not-in-list,pattern,script'/>-->
+    </realm>
+
+    <realm name='web'>
+      <class regex='org.apache.struts.action.ActionForm'/>
+      <class regex='org.jaffa.presentation.portlet.component.IComponent'/>
+    </realm>
+
+    <realm name='graph'>
+      <class regex='org.jaffa.soa.graph.GraphDataObject'/>
+	  <inheritance-rule-filter excludes='initialize'/>
+    </realm>
+  </metadata>
+</aop>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.soa.domain.SOAEvent">
+        <map-to table="J_SOA_EVENTS" lockable="false"/>
+
+        <field name="EventId" use-member="m_eventId" type="java.lang.String" primary-key="true">
+            <sql name="EVENT_ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="EventName" use-member="m_eventName" type="java.lang.String">
+            <sql name="EVENT_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Description" use-member="m_description" type="java.lang.String">
+            <sql name="DESCRIPTION" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="CreatedOn" use-member="m_createdOn" type="org.jaffa.datatypes.DateTime">
+            <sql name="CREATED_ON" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+        <field name="CreatedBy" use-member="m_createdBy" type="java.lang.String">
+            <sql name="CREATED_BY" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="LocalId" use-member="m_localId" type="java.lang.String">
+            <sql name="LOCAL_ID" type="STRING" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

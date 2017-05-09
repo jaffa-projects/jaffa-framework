@@ -1,0 +1,4 @@
+    <component id="Jaffa.Printing.FormGroupViewer">
+        <class>org.jaffa.modules.printing.components.formgroupviewer.ui.FormGroupViewerComponent</class>
+        <type>ObjectViewer</type>
+    </component>

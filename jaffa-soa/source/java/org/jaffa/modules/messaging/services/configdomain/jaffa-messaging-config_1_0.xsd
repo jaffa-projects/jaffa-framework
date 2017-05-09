@@ -1,0 +1,304 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+            jxb:version="1.0">
+
+  <xsd:annotation>
+    <xsd:appinfo>
+      <jxb:schemaBindings>
+        <jxb:package name="org.jaffa.modules.messaging.services.configdomain"/>
+      </jxb:schemaBindings>
+    </xsd:appinfo>
+  </xsd:annotation>
+
+  <xsd:annotation>
+    <xsd:documentation>
+      This is the schema for the configuration file used by JaffaComponentsMessaging. The following are the main configuration elements
+      <ul>
+        <li><b>message</b>: maps a POJO to a Queue/Topic, and declares the Message handler</li>
+        <li><b>queue</b>: provides additional information for a Queue</li>
+        <li><b>topic</b>: provides additional information for a Topic</li>
+        <li><b>message-filter</b>: provides a mechanism to filter messages</li>
+      </ul>
+    </xsd:documentation>
+  </xsd:annotation>
+
+<!-- **************************************************** -->
+
+  <xsd:element name="config">
+    <xsd:annotation>
+      <xsd:documentation>
+        config is the root element of the configuration file
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:choice minOccurs="0" maxOccurs="unbounded">
+          <xsd:element name="message" type="messageInfo"/>
+          <xsd:element name="queue" type="queueInfo"/>
+          <xsd:element name="topic" type="topicInfo"/>
+          <xsd:element name="message-filter" type="message-filter"/>
+        </xsd:choice>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name="messageInfo">
+    <xsd:annotation>
+      <xsd:documentation>
+        messageInfo maps a POJO to a Queue/Topic, and declares the Message handler
+        <ul>
+          <li><b>lock-check</b>: lists the elements to check in the Headers of existing Messages, the presence of which would result in a LockingServiceException. The check is performed before writing the Message. NOTE that this feature is not applicable for a Topic.</li>
+          <li><b>header</b>: lists the elements to add to the Message header</li>
+          <li><b>dataBean</b>: the fully qualified class name of the POJO</li>
+          <li><b>queueName</b>: the queue name. Either the queueName or the topicName should be provided</li>
+          <li><b>topicName</b>: the topic name. Either the queueName or the topicName should be provided</li>
+          <li><b>toClass</b>: the fully qualified class name of the handler. Need not be specified, if the corresponding Queue/Topic has no consumers attached to it</li>
+          <li><b>toMethod</b>: the handler method, which gets invoked by the JaffaMessageBean, which consumes the Message. The method signature should have the POJO as an input argument. Need not be specified, if the corresponding Queue/Topic has no consumers attached to it</li>
+        </ul>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="lock-check" type="lock-check" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="header" type="header" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+    <xsd:attribute name="dataBean" type="xsd:string" use="required"/>
+    <xsd:attribute name="queueName" type="xsd:string"/>
+    <xsd:attribute name="topicName" type="xsd:string"/>
+    <xsd:attribute name="toClass" type="xsd:string"/>
+    <xsd:attribute name="toMethod" type="xsd:string"/>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name="queueInfo">
+    <xsd:annotation>
+      <xsd:documentation>
+        queueInfo provides additional information for a Queue
+        <ul>
+          <li><b>display-param</b>: lists the header elements to display when viewing the Messages in this Queue</li>
+          <li><b>security</b>: controls access to viewing and maintaining messages in a queue</li>
+          <li><b>name</b>: the name of this queue</li>
+          <li><b>consumerPolicy</b>: a flag to indicate if multiple consumers are registered to this Queue. Defaults to 'single'</li>
+          <li><b>errorQueue</b>: a flag to indicate if this Queue is an ERROR queue One and only one queue can be so designated</li>
+        </ul>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="display-param" type="display-param" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="security" type="security" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+    <xsd:attribute name="name" type="xsd:string" use="required"/>
+    <xsd:attribute name="consumerPolicy" type="consumerPolicy" default="single"/>
+    <xsd:attribute name="errorQueue" type="xsd:boolean" default="false"/>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name="topicInfo">
+    <xsd:annotation>
+      <xsd:documentation>
+        topicInfo provides additional information for a Topic
+        <ul>
+          <li><b>name</b>: the name of this topic</li>
+          <li><b>consumerPolicy</b>: a flag to indicate if a consumer is subscribed to this Topic. Defaults to 'single'. Select 'none' if this feature is not required</li>
+        </ul>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="name" type="xsd:string" use="required"/>
+    <xsd:attribute name="consumerPolicy" type="consumerPolicy" default="single"/>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name="message-filter">
+    <xsd:annotation>
+      <xsd:documentation>
+        message-filter provides a mechanism to filter messages.
+        An IMessageFilter implementation may inspect the input payloads.
+        It may choose to leave them as-is, modify them, add new payload(s), or replace some of them with new payload(s).
+        It may even choose to empty the List, thereby stopping the submission of any message to the messaging system.
+        <ul>
+          <li><b>filter-name</b>: the name of this message-filter</li>
+          <li><b>filter-class</b>: fully qualified name of a class that implements the IMessageFilter interface</li>
+        </ul>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="filter-name" type="xsd:string" use="required"/>
+    <xsd:attribute name="filter-class" type="xsd:string" use="required"/>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name="lock-check">
+    <xsd:annotation>
+      <xsd:documentation>
+        lock-check lists the elements to check in the Headers of existing Messages, the presence of which would result in a LockingServiceException. The check is performed before writing the Message. Specify either param(s) or the filter
+        <ul>
+          <li><b>param</b>: Contains the list of header elements</li>
+          <li><b>filter</b>: In case of complex checks, specify a filter. The syntax for the filter will be based on a subset of the SQL92 conditional expression syntax. Check the latest JMS specification for more details</li>
+        </ul>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:choice>
+      <xsd:element name="param" type="param" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element name="filter" type="filter" minOccurs="0" maxOccurs="1"/>
+    </xsd:choice>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name="header">
+    <xsd:annotation>
+      <xsd:documentation>
+        header lists the elements to add to the Message header
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="param" type="param" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name="param">
+    <xsd:annotation>
+      <xsd:documentation>
+        param declares a name-value pair, and is used in various elements of this schema
+        <ul>
+          <li><b>name</b>: the name of the parameter</li>
+          <li><b>value</b>: the value of the parameter. It could be a literal. Or it could be expression, which gets evaluated at runtime. JaffaMessaging utilizes the Bean Scripting Framework (BSF) for evaluating expressions. It sets up a context for BSF with the following elements
+            <ul>
+              <li><b>context</b>: contains the global context</li>
+              <li><b>bean</b>: contains the POJO</li>
+            </ul>
+          </li>
+          <li><b>loggingName</b>: the name to use, if this element is to be added to the Map Diagnostoc Context (MDC) of Log4J. It can then be used for writing BusinessEventLog records</li>
+          <li><b>expression</b>: a flag to indicate if the value contains a literal, or an expression that should evaluated at runtime</li>
+          <li><b>language</b>: indicates the scripting language used for writing the expression, if any. It should be compatible with BSF. It defaults to beanshell</li>
+        </ul>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="expression" type="xsd:boolean" default="false"/>
+        <xsd:attribute name="language" type="xsd:string" default="beanshell"/>
+        <xsd:attribute name="loggingName" type="loggingName"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name="filter">
+    <xsd:annotation>
+      <xsd:documentation>
+        The syntax for the filter will be based on a subset of the SQL92 conditional expression syntax. Check the latest JMS specification for more details
+        <ul>
+          <li><b>value</b>: the filter to apply. It could be a literal. Or it could be expression, which gets evaluated at runtime. JaffaMessaging utilizes the Bean Scripting Framework (BSF) for evaluating expressions. It sets up a context for BSF with the following elements
+            <ul>
+              <li><b>context</b>: contains the global context</li>
+              <li><b>bean</b>: contains the POJO</li>
+            </ul>
+          </li>
+          <li><b>expression</b>: a flag to indicate if the value contains a literal, or an expression that should evaluated at runtime</li>
+          <li><b>language</b>: indicates the scripting language used for writing the expression, if any. It should be compatible with BSF. It defaults to beanshell</li>
+        </ul>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="expression" type="xsd:boolean" default="false"/>
+        <xsd:attribute name="language" type="xsd:string" default="beanshell"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name="display-param">
+    <xsd:annotation>
+      <xsd:documentation>
+        display-param lists the header elements to display when viewing the Messages in a Queue
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="name" type="xsd:string" use="required"/>
+    <xsd:attribute name="label" type="xsd:string" use="required"/>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name="security">
+    <xsd:annotation>
+      <xsd:documentation>
+        security controls access to viewing and maintaining messages in a queue
+        <ul>
+          <li><b>browseQueue</b>: contains the business-function for controlling access to a queue
+            <ul>
+              <li><b>attribute absent</b>: All users have access to the queue</li>
+              <li><b>attribute empty</b>: No user will have access to the queue</li>
+            </ul>
+          </li>
+          <li><b>browseAllMessages</b>: contains the business-function for controlling access the messages within an accessible queue. All messages are available if the user has access to the business-function, else the user can view its own Messages only
+            <ul>
+              <li><b>attribute absent</b>: All Messages are visible</li>
+              <li><b>attribute empty</b>: A user can view its own Messages only</li>
+            </ul>
+          </li>
+          <li><b>adminMessage</b>: contains the business-function for controlling access to the delete and resubmit actions on the accessible Messages within an accessible queue
+            <ul>
+              <li><b>attribute absent</b>: All users can Delete and Resubmit</li>
+              <li><b>attribute empty</b>: No user can Delete and Resubmit</li>
+            </ul>
+          </li>
+          <li><b>changePriority</b>: contains the business-function for controlling access to the changePriority action on the accessible Messages within an accessible queue
+            <ul>
+              <li><b>attribute absent</b>: All users can change Priority</li>
+              <li><b>attribute empty</b>: No user can change Priority</li>
+            </ul>
+          </li>
+        </ul>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="browseQueue" type="xsd:string"/>
+    <xsd:attribute name="browseAllMessages" type="xsd:string"/>
+    <xsd:attribute name="adminMessage" type="xsd:string"/>
+    <xsd:attribute name="changePriority" type="xsd:string"/>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:simpleType name="loggingName">
+    <xsd:annotation>
+      <xsd:documentation>
+        An enumeration of allowed values for the loggingName attribute
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="CorrelationType"/>
+      <xsd:enumeration value="CorrelationKey1"/>
+      <xsd:enumeration value="CorrelationKey2"/>
+      <xsd:enumeration value="CorrelationKey3"/>
+      <xsd:enumeration value="ProcessName"/>
+      <xsd:enumeration value="SubProcessName"/>
+   </xsd:restriction>
+  </xsd:simpleType>
+
+<!-- **************************************************** -->
+
+  <xsd:simpleType name="consumerPolicy">
+    <xsd:annotation>
+      <xsd:documentation>
+        An enumeration of allowed values for the consumerPolicy attribute
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="none"/>
+      <xsd:enumeration value="single"/>
+      <xsd:enumeration value="multi"/>
+   </xsd:restriction>
+  </xsd:simpleType>
+
+</xsd:schema>

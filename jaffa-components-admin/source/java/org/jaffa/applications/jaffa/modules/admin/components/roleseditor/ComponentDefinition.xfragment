@@ -1,0 +1,5 @@
+    <component id="Jaffa.Admin.RolesEditor">
+	<class>org.jaffa.applications.jaffa.modules.admin.components.roleseditor.ui.RolesEditorComponent</class>
+	<type>Custom</type>
+        <mandatory-function name="Jaffa.Admin.EditRoles"/>
+    </component>

@@ -1,0 +1,91 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+            jxb:version="1.0">
+
+    <xsd:annotation>
+        <xsd:appinfo>
+            <jxb:schemaBindings>
+                <jxb:package name="org.jaffa.persistence.engines.jdbcengine.configservice.initdomain"/>
+            </jxb:schemaBindings>
+        </xsd:appinfo>
+    </xsd:annotation>
+
+    <xsd:element name="init">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="database" type="database" minOccurs="1" maxOccurs="unbounded"/>
+                <xsd:element name="preload" type="preload" minOccurs="0"/>
+                <xsd:element name="conf-location" type="conf-location"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:complexType name="database">
+        <xsd:sequence>
+            <xsd:element name="connection-factory" type="connection-factory"/>
+            <xsd:element name="hitlistSize" type="hitlistSize"/>
+            <xsd:element name="jdbcSecurityPlugin" type="jdbcSecurityPlugin" minOccurs="0"/>
+            <xsd:element name="usePreparedStatement" type="usePreparedStatement" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="engine" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="connection-factory">
+        <xsd:sequence>
+            <xsd:element name="param" type="param" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute name="class" type="xsd:string" use="required">
+            <xsd:annotation>
+                <xsd:appinfo>
+                    <jxb:property name="className"/>
+                </xsd:appinfo>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="param">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="value" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="hitlistSize">
+        <xsd:attribute name="value" type="xsd:int" use="required"/>
+    </xsd:complexType>
+    
+    <xsd:complexType name="jdbcSecurityPlugin">
+        <xsd:attribute name="value" type="xsd:string" use="required"/>
+    </xsd:complexType>
+    
+    <xsd:complexType name="usePreparedStatement">
+        <xsd:attribute name="value" type="xsd:boolean" use="required"/>
+    </xsd:complexType>
+    
+    <xsd:complexType name="preload">
+        <xsd:sequence>
+            <xsd:element name="class" type="preloadClass" minOccurs="0" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <jxb:property name="preloadClass"/>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="preloadClass">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    
+    <xsd:complexType name="conf-location">
+        <xsd:sequence>
+            <xsd:element name="dir-loc" type="dir-loc" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="dir-loc">
+        <xsd:attribute name="dir" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+</xsd:schema>

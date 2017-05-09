@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+  <!-- ================================================= -->
+  <!-- Rules for Domain Object AttachmentData -->
+  <!-- ================================================= -->
+
+  <metadata tag="jaffa.rules" class="org.jaffa.components.attachment.domain.AttachmentData">
+
+
+    <label>[label.Jaffa.Attachment.AttachmentData]</label>
+
+    <property name="documentReferenceId">
+      <label>[label.Jaffa.Attachment.AttachmentData.DocumentReferenceId]</label>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="data">
+      <label>[label.Jaffa.Attachment.AttachmentData.Data]</label>
+    </property>
+
+  </metadata>
+</aop>

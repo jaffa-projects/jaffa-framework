@@ -1,0 +1,3 @@
+    <!-- UserTimeEntryViewer Form -->
+    <form-bean      name="usertimeentry_userTimeEntryViewerForm"
+                    type="org.jaffa.applications.test.modules.time.components.usertimeentryviewer.ui.UserTimeEntryViewerForm"/>

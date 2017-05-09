@@ -1,0 +1,2 @@
+    <form-bean      name="jaffa_attachment_attachmentMaintenanceForm"
+                    type="org.jaffa.components.attachment.components.attachmentmaintenance.ui.AttachmentMaintenanceForm"/>

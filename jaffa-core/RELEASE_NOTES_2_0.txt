@@ -1,0 +1,167 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the JAFFA 2.0 Release. For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New in Version 2.0
+=====================================================
+- Enabled the support for Tiles by adding the TilePlugin in struts-config.xml
+- MainLayout.jsp which can be used as the JSP common to all pages in an application
+- FinderLayout.jsp which can be used by all Finders
+- finder.js, which is used to perform some finder related tasks when posting a form
+- The build script HttpUnitTestApp.xml was enhanced to merge tiles definitions
+- SourceDecomposerUtils.java, which has a useful utility to list the customizations in code generated files
+- The Uniface DomainMeta Tool was provided with the 'DoNotOverwriteExistingRelationships' feature. If set to 'true', then relationships will not be over-written in an existing DomainCreator file
+- The object_finder_2_0 pattern for generating object finder components. It has the following features:
+    * Uses Tiles to render the criteria and results screens
+    * Has the property 'consolidatedCriteriaAndResults' which will display the criteria and results JSPs in one page
+    * New base classes FinderComponent2, FinderAction and FinderForm
+    * This uses just one Form class to support both the criteria and results JSPs
+    * This uses just one Action class to handle the events raised by the criteria and results JSPs
+    * Displays 'NumberOfRecords' below the UserGrid on the results jsp. Added the message 'label.Jaffa.Inquiry.numberOfRecords={0} records were retrieved'
+    * Uses the object-finder-meta_2_0.dtd, which has the new attributes - ConsolidatedCriteriaAndResultsTitle, MainLayout, FinderLayout, FinderExcelLayout, FinderXmlLayout
+    * The Excel and XML contents are brought up in a new browser
+    * Added the attributes - ConsolidatedCriteriaAndResultsTitle, MainLayout, FinderLayout, FinderExcelLayout, FinderXmlLayout - to object-finder-meta_2_0.xsd and generated the JAXB bindings
+- The object_lookup_2_0 pattern for generating object lookup components. It has the following features:
+    * Uses Tiles to render the criteria and results screens
+    * Has the property 'consolidatedCriteriaAndResults' which will display the criteria and results JSPs in one page
+    * New base classes LookupComponent2, LookupAction and LookupForm
+    * This uses just one Form class to support both the criteria and results JSPs
+    * This uses just one Action class to handle the events raised by the criteria and results JSPs
+    * Displays 'NumberOfRecords' below the UserGrid on the results jsp. Added the message 'label.Jaffa.Inquiry.numberOfRecords={0} records were retrieved'
+    * Uses the object-lookup-meta_2_0.dtd, which has the new attributes - ConsolidatedCriteriaAndResultsTitle, MainLayout, LookupLayout
+    * Added the attributes - ConsolidatedCriteriaAndResultsTitle, MainLayout, LookupLayout - to object-lookup-meta_2_0.xsd and generated the JAXB bindings
+    * Supports multi-selects. For this to work, the client component will need to register IMultiSelectLookupListener with the Lookup component and render it in the same screen
+- The object_viewer_2_0 pattern for generating object viewer components. It has the following features:
+    * Uses Tiles to render the JSP
+    * Uses the object-viewer-meta_2_0.dtd, which has the new attributes - MainLayout, ViewerLayout, Updator
+    * Can invoke the Update component, if specified
+- The object_maintenance_2_0 pattern for generating object maintenance components. It has the following features:
+    * Uses Tiles to render the JSP
+    * Can create wizard-type screens having previous/next/finish buttons
+    * Suppors RELATED objects
+    * Supports the Delete constraints - restricted, cascading - for RELATED objects.
+    * Addresses the dirty read issue (Feature Request#727176) by introducing the 'UseForDirtyReadCheck' element in a field definition
+    * Supports leave-field triggers through use of ValidateFieldHandler
+    * Supports the StampType feature to stamp the following on a field - CreatedUserId, CreatedDateTime, LastUpdatedUserId, LastUpdatedDateTime
+    * Created a voucher generator interface and its default implementation. Allows a field to be labeled as voucher. The Tx will use the specified implementation to generate a voucher for the field
+    * Supports default values by using a properties file local to a component. Removed the <InitialValue> element
+    * Supports the ability to specify 'DisplayOnly' fields on a component
+    * New base classes MaintComponent2, MaintAction, MaintForm
+- The object_skeleton_2_0 pattern for generating skeleton components. It has the following features:
+    * Uses Tiles to render the JSP
+    * Uses the object-maintenance-meta_2_0.dtd, which has the new attributes - Title, MainLayout
+    * Added the wizard feature (previous/next buttons)
+    * The attribute 'ScreenName' is now mandatory
+    * Creates one Form class and one Action class for the component
+- Added the ability to embed components within a screen. The following were the changes -
+    * Created the classes - FormKeyChangeEvent and FormKeyChangeListener
+    * Added the property 'containerFormKey' to IComponent and Component
+    * Added the methods addFormKeyChangeListener(), removeFormKeyChangeListener(), getFormKeyChangeListeners() to IComponent and Component
+    * Modified the ActionBase, so that it always intercepts the returned FormKey for a component having a ContainerFormKey. In case the ContainerFormKey is found, it fires FormKeyChangeEvents on the registered FormKeyChangeListeners passing the FormKey and finally returns the ContainerFormKey
+    * Modified the Component so that it fires FormKeyChangeEvents on the registered FormKeyChangeListeners during a quit(), passing the ReturnToFormKey
+- Added 2 new answers for the <Override> question in all patterns.
+    * OverrideIfMarkerPresent - This will overwrite an existing file only if the '//JAFFA-OVERWRITE' marker is present.
+    * OverrideIfMarkerPresentOrCreateTempFileIfMarkerAbsent - Similar to the above option. In case, the marker is absent in an existing file, a temporary file with the '.new' suffix will be generated.
+    * These new options allow us to regenerate non-mergable files which have not been customized.
+- Introduced the HistoryNav. This gets initialized whenever a component is created from the startComponent.do action. Just include the historyNav.jsp as a tile in a layout to view the list of links for all the screens visited upto the current screen. Some of the changes involved are:
+    * Added the GlobalForward 'jaffa_home' For the Home page to struts-config.xml
+    * Created a new class HistoryNav with helper routines for the process
+    * Modified StartComponentAction and ActionBase to support the HistoryNav
+    * Refer to JaffaCore/docs/Design_v2.0_History_Nav.txt for more details
+- Added the ability to implicitly create hyperlinks to Viewer components from the Text widget. This involved:
+    * Added 2 new properties - framework.DomainFieldViewerComponentMappingFile and framework.KeyFieldPerViewerComponentFile to framework.properties
+    * Add an attribute 'disableHyperlink' (default value is 'false') to TextTag to control the generation of hyperlinks
+    * Enhanced the TextTag lookup the 2 new properties files to determine a Viewer component for the given domain field
+- It is now possible to generate the ApplicationResources.properties file from a default value which can have some of its values overridden by values from the override file. This involved:
+    * Added the dynamic properties to Config - PROP_APPLICATION_RESOURCES_LOCATION, PROP_APPLICATION_RESOURCES_DEFAULT_LOCATION, PROP_APPLICATION_RESOURCES_OVERRIDE_LOCATION
+    * Added optional parameters to the InitApp servlet - framework.ApplicationResourcesLocation, framework.ApplicationResourcesDefaultLocation, framework.ApplicationResourcesOverrideLocation
+    * If the values are provided for the InitApp parameters, then
+        - InitApp will combine the ApplicationResources.default and ApplicationResources.override files to generate the ApplicationResources.properties file.
+        - Additionally, the servlet will set the appropriate dynamic properties in the org.jaffa.config.Config class.
+    * Refer to the design document Design_v2.0_Label_Editor.txt for more info
+- Created the class PropertyMessageResources, which is based on the struts class org.apache.struts.util.PropertyMessageResources. It has the following features
+    * Loads the properties file using File I/O. This allows us to view the changes to the file, without having to reload the webapp.
+    * Supports the flushing of the message-resource cache
+    * To use the above file, specify the following parameter in struts-config.xml
+        <message-resources parameter="ApplicationResources" null="false" factory="org.jaffa.util.PropertyMessageResourcesFactory"/>
+    * Refer to the design document Design_v2.0_Label_Editor.txt for more info
+- The following jaffa widgets/components will have an anchor generated next to them for editing a label (via the LabelEditor component created in the JaffaComponents module):
+    * Label, UserGridColumn, GridColumn, TableColumn, Button (not of type Image), FoldingSection, RaiseErrors, Nav History
+    * Refer to the design document Design_v2.0_Label_Editor.txt for more info
+- Added a new variation of the getUrl() method to the URLHelper. This method can load a file from the filesystem as opposed to the classloader. This allows the application to pick up changes made to a file without having to restart the JVM, since the classloaders typically cache any loaded file.
+- Created a utility class 'ListProperties'. This class combines the utility of the Properties class with a List. Features are:
+    * Maintains the order of properties when loading them from an InputStream and when the properties are added manually.
+    * Provides a sort capability for the properties
+    * Provides a 'comments' attribute for each property
+    * Stores the properties in an OutputStream, maintaining the order of the properties and the comments
+
+
+What's Changed
+=====================================================
+- Modifed ActionBase by adding a handler 'do_refresh()' which gets invoked whenever a user changes the settings on a UserGrid. This allows a sub-class to provide a different implementation for the 'refresh' event.
+- Changed the Defaults.getClassString() method to return a "byte[]" instead of "[B" for byte[].class. Consequently the UnifaceSchemaReader was refactored
+- The Uniface DomainMeta Tool will no longer generate Relationship info for tables not defined in the tableInfo.xml file
+- Moved the FindFiles class from 'org.jaffa.tools.build' to the 'org.jaffa.util' package
+- Changed the default jaffa icons, and added them to the 'contextNav' sections of the default object patterns
+- Refactored the basic pattern layouts, and modified sectionNav to support auto generation when used prior to the body being displayed (it was assuming the body was being rendered first)
+
+
+What's Deleted/Deprecated
+=====================================================
+- Deleted the previously deprecated Config constants - PROP_PORTLET_SECURITY_ENABLED, PROP_PORTLET_SECURITY_MGR, PROP_PORTLET_SECURITY_BYPASS_ACTION_LIST
+- Deleted the previously deprecated PortletServlet
+- Deleted the previously deprecated package org.jaffa.presentation.portlet.security
+- Deleted the previously deprecated UserSessionFilter
+- Deleted the previously deprecated logon.jsp
+- Deprecated FinderComponent, FinderCriteriaForm and IFinderListener, which are used by the older object_finder_1_0 pattern.
+- Deprecated LookupComponent which is used by the older object_lookup_1_0 pattern.
+- Deprecated MaintComponent which is used by the older object_maintenance_1_0 pattern.
+
+Bug Fixes
+=====================================================
+- 
+
+Improvements
+=====================================================
+- Refactored the new version2.0 patterns to use the new attributes of the DomParser.ValueObject class - JavaDataType, GridColumnDataType, CriteriaFieldType, MetaFieldType, WidgetType, WidgetTypeInCriteriaScreen, WidgetTypeBasedOnBreakup, BooleanValue, CriteriaFieldTypeThrowsException, DataTypeDateOnly, DataTypeDateTime, DataTypeBoolean, DataTypeString, DataTypeNumeric, ParserMethod
+- Enhanced the PatternGenerator to support attributes in the input XML files
+- Added the property 'code' to the CodeHelper component. This allows us to obtain codes from the same domainClass for different fields using differing criteria
+- The Persistent class now implements Cloneable
+- The FormName in a FormKey can now have parameters. The resulting string should be encoded in the UTF-8 charset. You can use the utility class java.net.URLEncoder for encoding. The ActioBase class was suitably enhanced to parse the formName and set the attributes on the request stream for each paramter.
+- Added the ability to check for minimum characters in String fields. This involved
+    * Created the TooLittleDataException class
+    * Added the validation to check for minimum characters in a String field in the FieldValidator class
+    * Added the minLength attribute to the StringFieldMetaData class
+    * Added the minLength attribute to the string fieldvalidator in rules_1_0.dtd
+    * Added the minLength attribute to the StringFieldValidator
+- Editbox widget now auto-adjusts its column size to a factor of (widthFromFieldMetaData + 2) to the nearest 10 columns. The column attribute overrides this. The default value is 50, if no meta data is present. The auto-adjusted value will not exceed the limit of 50. Made the following changes:
+    * Fixed EditBoxTag to make the appropriate adjustment
+    * Fixed EditBoxModel to set its maxLen, only if the FieldMetaData is passed in the constructor
+- Refactored the Uniface domain meta tool. The following features were introduced:
+    * Made the Uniface domain meta tool like the appbuilder
+    * Allows us to specify the application name and the package style in tableinfo.xml
+    * Allows us to specify the module for each table in tableinfo.xml
+    * Uses the application name and module name to generate the correct label
+    * Uses the application name and module name to generate the domain package
+    * The DomainPackage element is now optional. If specified, it overrides the auto-determination of the domain package
+- Enhanced the TypeDefs class to create oracle-specific CLOB/BLOB objects when dealing with LOB data. This was done to get around the oracle error of not storing more than 4000 characters in such fields
+- Added a helper routine to the StringHelper readLine(), to read a line from an input Reader.
+    * This method returns a StringHelper.Line object which contains the line contents and the EOL character.
+    * This is supposed to be more useful than the BufferedReader.readLine() method, which cannot indicate if the last line in the file has an EOL character.
+    * Fixed the SourceDecomposer to use the StringHelper.readLine() for reading lines from a file
+    * The SourceMerge and ConfigFileUpdate were appropriately modified to not add EOLs, since the SourceDecomposer output will have them
+- The names for the fragment files, generated by the different patterns, have been standardized
+    * All property fragments will have the extension 'pfragment'.
+    * All XML fragments will have the extension 'xfragment'.
+
+
+Compatibilty Notes
+==================
+- Jaffa has been tested with JWSDP-1.3 without any problems. But we've decided to stick with JWSDP-1.1 for the moment. The following are steps involved in case you need to upgrade.
+    * Remove the JWSDP-1.1 JARs - jaxb-api_1_1.jar, jaxb-libs_1_1.jar, jaxb-ri_1_1.jar
+    * Add the JWSDP-1.3 JARs - jaxb-api.jar, jaxb-impl.jar, jaxb-libs.jar, xsdlib.jar, namespace.jar, relaxngDatatype.jar and jax-qname.jar
+    * There should be no problems in running an existing application, since JWSDP-1.3 is backwards compatible with JWSDP-1.1
+    * If you regenerate the JAXB bindings using the targets in JaffaCore/build/Generate.xml, JWSDP-1.3 will generate a different set of files compared to the previous version, which will not work with the older libraries
+    

@@ -1,0 +1,14 @@
+# Global Settings
+jaffa.printing.formPrintEngines.iText=org.jaffa.modules.printing.services.FormPrintEngineIText
+jaffa.printing.formPrintEngines.PDFlib=org.jaffa.modules.printing.services.FormPrintEnginePdfLib
+jaffa.printing.formPrintEngines.Velocity=org.jaffa.modules.printing.services.FormPrintEngineVelocity
+
+
+jaffa.email.smtpHost=<<JUNIT.MAIL.SERVER>>
+jaffa.email.smtpLocalHost=<<JUNIT.MAIL.SERVER.LOCALHOST>>
+jaffa.email.smtpUser=<<JUNIT.MAIL.SERVER.USER>>
+jaffa.email.smtpPassword=<<JUNIT.MAIL.SERVER.PASS>>
+jaffa.email.administrator=junit@jaffa.sf.net
+
+
+jaffa.printing.defaultLogo=resources/PoweredByJaffa.jpg

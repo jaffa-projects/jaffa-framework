@@ -1,0 +1,3 @@
+    <!-- FormUsageViewer Form -->
+    <form-bean      name="jaffa_printing_formUsageViewerForm"
+                    type="org.jaffa.modules.printing.components.formusageviewer.ui.FormUsageViewerForm"/>

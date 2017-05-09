@@ -1,0 +1,3 @@
+    <business-function name="Jaffa.Admin.EditViewerHyperlinkConfig">
+        <description>Able to run the ViewerHyperlinkConfig component</description>
+    </business-function>

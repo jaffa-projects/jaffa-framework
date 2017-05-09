@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<!DOCTYPE aop PUBLIC "-//JBoss//DTD JBOSS AOP 1.0//EN" "http://www.jboss.org/aop/dtd/jboss-aop_1_0.dtd">-->
+
+<!-- Map metdata URIs with Variations -->
+<aop>
+  <metadata-loader tag="jaffa.variations" class="org.jaffa.rules.jbossaop.VariationLoader"/>
+  
+  <!-- An example of mapping metadata URIs with a comma-separated list of variations
+  <metadata tag="jaffa.variations" class="dummy">
+    <uri regex='.*/DEF/.*' variation='DEF'/>
+    <uri regex='.*/XYZ/.*' variation='XYZ'/>
+    <uri regex='.*/DEF_XYZ/.*' variation='DEF,XYZ'/>
+  </metadata>
+  -->
+</aop>

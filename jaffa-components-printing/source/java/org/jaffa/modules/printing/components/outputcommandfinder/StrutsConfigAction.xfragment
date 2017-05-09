@@ -1,0 +1,8 @@
+    <!-- OutputCommandFinder -->
+    <action    path="/jaffa_printing_outputCommandFinder"
+               type="org.jaffa.modules.printing.components.outputcommandfinder.ui.OutputCommandFinderAction"
+               name="jaffa_printing_outputCommandFinderForm"
+               validate="false"
+               scope="request">
+    </action>
+

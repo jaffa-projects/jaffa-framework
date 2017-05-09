@@ -1,0 +1,4 @@
+    <component id="Jaffa.Printing.FormTemplateFinder">
+        <class>org.jaffa.modules.printing.components.formtemplatefinder.ui.FormTemplateFinderComponent</class>
+        <type>ObjectFinder</type>
+    </component>

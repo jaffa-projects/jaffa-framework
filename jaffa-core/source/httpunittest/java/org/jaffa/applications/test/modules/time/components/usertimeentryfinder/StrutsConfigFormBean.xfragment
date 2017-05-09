@@ -1,0 +1,1 @@
+    <form-bean name="usertimeentry_userTimeEntryFinderForm" type="org.jaffa.applications.test.modules.time.components.usertimeentryfinder.ui.UserTimeEntryFinderForm"/>

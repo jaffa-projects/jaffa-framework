@@ -1,0 +1,29 @@
+td.line {
+  vertical-align: middle;
+  background-repeat: repeat-x;
+  background-image: url(../../imgs/rules/line.gif);
+  background-position : center;
+  font-family: trebuchet MS 8pt;
+}
+
+td.singleLeft {
+  background-image : url(../../imgs/rules/singleleft.gif); 
+  background-repeat : no-repeat; 
+  background-position : 100% 50%;
+  font-family: trebuchet MS 8pt;
+}
+
+td.singleRight {
+  background-image : url(../../imgs/rules/singleright.gif); 
+  background-repeat : no-repeat; 
+  background-position : 100% 50%; 
+  font-family: trebuchet MS 8pt;
+} 
+
+td.mainError {
+  background-image : url(../../imgs/rules/lineback.gif); 
+  background-repeat : repeat-x; 
+  background-position : 100% 50%;
+  height : 20px;
+  color : Black;
+} 

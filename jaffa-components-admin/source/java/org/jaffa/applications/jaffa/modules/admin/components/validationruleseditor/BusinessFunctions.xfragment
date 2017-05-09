@@ -1,0 +1,3 @@
+    <business-function name="Jaffa.Admin.EditValidationRules">
+        <description>Able to run the ValidationRulesEditor component</description>
+    </business-function>

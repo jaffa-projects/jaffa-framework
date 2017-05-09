@@ -1,0 +1,4 @@
+    <component id="Jaffa.Nonsecure.UserRequestMaintenance">
+        <class>org.jaffa.applications.jaffa.modules.user.components.userrequestmaintenanceunsecured.ui.UserRequestMaintenanceComponent</class>
+        <type>ObjectMaintenance</type>
+    </component>

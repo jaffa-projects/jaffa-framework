@@ -1,0 +1,4 @@
+    <component id="Jaffa.Printing.FormEventLookup">
+        <class>org.jaffa.modules.printing.components.formeventlookup.ui.FormEventLookupComponent</class>
+        <type>ObjectLookup</type>
+    </component>

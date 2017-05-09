@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.persistence.domainobjects.CategoryOfInstrument">
+        <map-to table="ZZ_JUT_INSTRUMENT" />
+
+        <field name="CategoryInstrument" use-member="m_categoryInstrument" type="java.lang.String" primary-key="true">
+            <sql name="CATEGORY_INSTRUMENT" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Description" use-member="m_description" type="java.lang.String">
+            <sql name="DESCRIPTION" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="SupportEquip" use-member="m_supportEquip" type="java.lang.Boolean">
+            <sql name="SUPPORT_EQUIP_B" type="BOOLEAN_BIT" dirty="ignore"/>
+        </field>
+
+        <field name="CalculateMtbf" use-member="m_calculateMtbf" type="java.lang.Boolean">
+            <sql name="CALCULATE_MTBF_B" type="BOOLEAN_TF" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

@@ -1,0 +1,75 @@
+    <!-- UserFinder Criteria -->
+    <definition name="jaffa.admin.userfinder.FinderLayout.criteria"  extends="jaffa.FinderLayout">
+        <put name="body1" value="/jaffa/admin/userfinder/criteria.jsp"/>
+        <put name="body2" value=""/>
+        <put name="action" value="/admin_userFinder"/>
+        <put name="createComponent" value="Jaffa.Admin.UserMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+            <add value="CreateFromCriteria"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.admin.userfinder.criteria"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Admin.UserFinder.criteria]"/>
+        <put name="body" value="jaffa.admin.userfinder.FinderLayout.criteria"/>
+    </definition>
+
+    <!-- UserFinder Results -->
+    <definition name="jaffa.admin.userfinder.FinderLayout.results"  extends="jaffa.FinderLayout">
+        <put name="body1" value=""/>
+        <put name="body2" value="/jaffa/admin/userfinder/results.jsp"/>
+        <put name="action" value="/admin_userFinder"/>
+        <put name="createComponent" value="Jaffa.Admin.UserMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="ModifySearch"/>
+            <add value="Refresh"/>
+            <add value="CreateFromResults"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="ModifySearch"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.admin.userfinder.results"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Admin.UserFinder.results]"/>
+        <put name="body" value="jaffa.admin.userfinder.FinderLayout.results"/>
+    </definition>
+
+    <!-- UserFinder ConsolidatedCriteriaAndResults -->
+    <definition name="jaffa.admin.userfinder.FinderLayout.consolidatedCriteriaAndResults"  extends="jaffa.FinderLayout">
+        <put name="body1" value="/jaffa/admin/userfinder/criteria.jsp"/>
+        <put name="body2" value="/jaffa/admin/userfinder/results.jsp"/>
+        <put name="action" value="/admin_userFinder"/>
+        <put name="createComponent" value="Jaffa.Admin.UserMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+            <add value="CreateFromResults"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.admin.userfinder.consolidatedCriteriaAndResults"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Admin.UserFinder.consolidated]"/>
+        <put name="body" value="jaffa.admin.userfinder.FinderLayout.consolidatedCriteriaAndResults"/>
+    </definition>
+
+    <!-- UserFinder Results as Excel -->
+    <definition name="jaffa.admin.userfinder.FinderExcelLayout"  extends="jaffa.FinderExcelLayout">
+        <put name="body" value="/jaffa/admin/userfinder/results.jsp"/>
+        <put name="action" value="/admin_userFinder"/>
+    </definition>
+
+    <!-- UserFinder Results as Xml -->
+    <definition name="jaffa.admin.userfinder.FinderXmlLayout"  extends="jaffa.FinderXmlLayout">
+    </definition>
+

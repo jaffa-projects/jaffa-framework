@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Domain Creator Meta 1.1//EN" "http://jaffa.sourceforge.net/DTD/domain-creator-meta_1_1.dtd">
+<Root>
+  <DomainObject>FlexField</DomainObject>
+  <DomainPackage>org.jaffa.flexfields.domain</DomainPackage>
+  <DatabaseTable>J_FLEX_FIELDS</DatabaseTable>
+  <MappingPackage>resources/jdbcengine/jaffa</MappingPackage>
+  <PatternTemplate>patterns/library/domain_creator_1_1/DomainCreatorPattern.xml</PatternTemplate>
+  <DeleteDomainObject>FlexFieldDelete</DeleteDomainObject>
+  <DeleteDomainPackage>org.jaffa.flexfields.domain</DeleteDomainPackage>
+  <Description>Holds FlexField data</Description>
+  <LabelToken>[label.Jaffa.FlexFields.FlexField]</LabelToken>
+  <Fields>
+    <Field>
+      <Name>FlexFieldId</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>FLEX_FIELD_ID</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <PrimaryKey>T</PrimaryKey>
+      <Description>Technical Key</Description>
+      <LabelToken>[label.Jaffa.FlexFields.FlexField.FlexFieldId]</LabelToken>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>ObjectName</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>OBJECT_NAME</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Object Name</Description>
+      <LabelToken>[label.Jaffa.FlexFields.FlexField.ObjectName]</LabelToken>
+      <Mandatory>T</Mandatory>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>Key1</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>KEY1</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Value of Key1</Description>
+      <LabelToken>[label.Jaffa.FlexFields.FlexField.Key1]</LabelToken>
+      <Mandatory>T</Mandatory>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>Key2</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>KEY2</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Value of Key2</Description>
+      <LabelToken>[label.Jaffa.FlexFields.FlexField.Key2]</LabelToken>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>Key3</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>KEY3</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Value of Key3</Description>
+      <LabelToken>[label.Jaffa.FlexFields.FlexField.Key3]</LabelToken>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>FieldName</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>FIELD_NAME</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Field Name</Description>
+      <LabelToken>[label.Jaffa.FlexFields.FlexField.FieldName]</LabelToken>
+      <Mandatory>T</Mandatory>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>Value</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>VALUE</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Value for the field</Description>
+      <LabelToken>[label.Jaffa.FlexFields.FlexField.Value]</LabelToken>
+      <IntSize>2000</IntSize>
+    </Field>
+    <Field>
+      <Name>VersionNumber</Name>
+      <DataType>java.lang.Long</DataType>
+      <DatabaseFieldName>VERSION_NUMBER</DatabaseFieldName>
+      <DatabaseDataType>INTEGER</DatabaseDataType>
+      <LabelToken>[label.Jaffa.Attachment.AttachmentDelete.VersionNumber]</LabelToken>
+      <IntSize>10</IntSize>
+      <Ignore>false</Ignore>
+    </Field>
+  </Fields>
+</Root>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+This dtd is used for validating the init.xml used by the JDBC Engine.
+It is in sync with the XML schema 'init_1_0.xsd' used for binding XML and Java.
+
+Heres an example of the init.xml conforming to this DTD
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE init PUBLIC "-//JAFFA//DTD JDBC Engine Init 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-init_1_0.dtd">
+<init>
+    <database name="default" engine="oracle">
+        <connection-factory class="[IConnectionFactoryImplementation]">
+	    <param name="param1" value="value1"/>
+	    ....
+        </connection-factory>
+        <hitlistSize value="10"/>
+        <jdbcSecurityPlugin value="org.jaffa.security.JDBCSecurityPlugin"/>
+        <usePreparedStatement value="true"/>
+    </database>
+
+    <database name="name1" engine="mysql">
+    ...
+    </database>
+
+
+    <preload>
+        <class name="org.jaffa.persistence.domainobjects.CategoryOfInstrument"/>
+        <class name="org.jaffa.persistence.domainobjects.Condition"/>
+    </preload>
+
+    <conf-location>
+        <dir-loc dir="classpath:///jdbcengine"/>
+        <dir-loc dir="classpath:///org.jaffa.persistence.mappingfiles"/>
+    </conf-location>
+</init>
+ -->
+<!ELEMENT init (database+,preload?,conf-location)>
+
+
+<!--
+There can be multiple databases defined.
+But currently only the  database element with the name "default" is used.
+In the future, we intend to support multiple databases.
+The 'engine' attribute is used by the JDBC Engine to utilize database specific constructs. The following engine types have been tested - oracle, mssqlserver, mysql, postgresql.
+-->
+<!ELEMENT database (connection-factory,hitlistSize,jdbcSecurityPlugin?,usePreparedStatement?)>
+<!ATTLIST database name CDATA #REQUIRED engine CDATA #REQUIRED >
+
+
+<!--
+A connection-factory is used by the JDBC Engine to obtain Connections.
+The connection-factory class should implement the org.jaffa.persistence.engines.jdbcengine.datasource.IConnectionFactory interface.
+
+The following IConnectionFactory implementations have been provided.
+A) DbConnectionBrokerConnectionFactory
+        <connection-factory class="org.jaffa.persistence.engines.jdbcengine.datasource.DbConnectionBrokerConnectionFactory">
+	    <param name="url" value="jdbc:oracle:thin:@[host]:[port]:[database]"/>
+	    <param name="driverClass" value="oracle.jdbc.driver.OracleDriver"/>
+            <param name="user" value="[user]"/>
+            <param name="password" value="[password]"/>
+            <param name="minimumConnections" value="5"/>
+            <param name="maximumConnections" value="25"/>
+            
+            <param name="debugLevel" value="2"/>
+            <param name="logFileName" value="c:/dbConnectionBroker.log"/>
+            <param name="logAppend" value="true"/>
+            <param name="maxConnTime" value="1"/>
+            <param name="maxCheckoutSeconds" value="0"/>
+        </connection-factory>
+This uses DbConnectionBroker for pooling connections.
+Refer to http://www.javaexchange.com/api/index.html for more information on the required parameters.
+If a connection is in use, then it will wait 2 seconds and try again, up to ten times to obtain a connection.
+
+
+B) DbcpDataSourceConnectionFactory
+        <connection-factory class="org.jaffa.persistence.engines.jdbcengine.datasource.DbcpDataSourceConnectionFactory">
+	    <param name="url" value="jdbc:oracle:thin:@[host]:[port]:[database]"/>
+	    <param name="driverClass" value="oracle.jdbc.driver.OracleDriver"/>
+            <param name="user" value="[user]"/>
+            <param name="password" value="[password]"/>
+            <param name="minimumConnections" value="5"/>
+            <param name="maximumConnections" value="25"/>
+            
+            <param name="maxWait" value="100"/>
+            <param name="testOnBorrow" value="true"/>
+            <param name="testOnReturn" value="true"/>
+            <param name="validationQuery" value="select 1 from dual"/>
+        </connection-factory>
+This uses the DBCP component of the Jakarta Commons project for connection pooling.
+Please refer to http://jakarta.apache.org/commons/dbcp/ for more information.
+If a connection is in use, then it will wait [maxWait] milliseconds and try again, up to ten times to obtain a connection.
+
+
+C) JndiDataSourceConnectionFactory
+        <connection-factory class="org.jaffa.persistence.engines.jdbcengine.datasource.JndiDataSourceConnectionFactory">
+            <param name="jndiDataSourceName" value="java:/comp/env/[jndiName]"/>
+            <param name="maxWait" value="100"/>
+        </connection-factory>
+This will use the DataSource available via JNDI for connection pooling.
+If a connection is in use, then it will wait [maxWait] milliseconds and try again, up to ten times to obtain a connection.
+For eg. a DataSource may be defined for use by Tomcat and its webapplications, in which case this class will simply perform a lookup() on an InitialContext for the 'jndiDataSourceName'.
+
+
+NOTE:
+You can also use your own custom implementation of the IConnectionFactory interface.
+The JDBC Engine uses reflection to set all the specified parameters on the implemenation class.
+-->
+<!ELEMENT connection-factory (param*)>
+<!ATTLIST connection-factory class CDATA #REQUIRED >
+<!ELEMENT param EMPTY>
+<!ATTLIST param name CDATA #REQUIRED value CDATA #REQUIRED >
+
+
+<!--
+This is a mandatory element and determines the number records retrieved from the database on a fetch.
+For eg. if the hitlistSize was set to 10 and if a database query were to return 100 rows, the the data would be fetched in batches of 10 from the database.
+The invocation of the size() method on the Collection returned by UOW.query() will return a negative value until all the data has been fetched.
+-->
+<!ELEMENT hitlistSize EMPTY>
+<!ATTLIST hitlistSize value CDATA #REQUIRED >
+
+
+<!--
+This is optional. Specify an implementation of org.jaffa.persistence.engines.jdbcengine.security.IJdbcSecurityPlugin interface.
+It can be used to perform desired processing on the Connection object being returned from and to a pool.
+It is typically used to set/un-set the security context on a Connection object.
+-->
+<!ELEMENT jdbcSecurityPlugin EMPTY>
+<!ATTLIST jdbcSecurityPlugin value CDATA #REQUIRED >
+
+
+<!--
+This should typically be set to true. In that case, we'll use PreparedStatements for updates/inserts/deletes/locks.
+However, the PreparedStatements fail when delaing with CHAR fields, in which case its best to set this to 'false'
+-->
+<!ELEMENT usePreparedStatement EMPTY>
+<!ATTLIST usePreparedStatement value CDATA #REQUIRED >
+
+
+<!--
+Use this to preload the most commonly used domain classes. This will help in performance.
+-->
+<!ELEMENT preload (class*)>
+<!ELEMENT class EMPTY>
+<!ATTLIST class name CDATA #REQUIRED >
+
+
+<!--
+Use this to specify the locations to search for the mapping files
+-->
+<!ELEMENT conf-location (dir-loc+)>
+<!ELEMENT dir-loc EMPTY>
+<!ATTLIST dir-loc dir CDATA #REQUIRED >

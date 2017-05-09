@@ -1,0 +1,8 @@
+    <!-- PrinterDefinitionFinder -->
+    <action    path="/jaffa_printing_printerDefinitionFinder"
+               type="org.jaffa.modules.printing.components.printerdefinitionfinder.ui.PrinterDefinitionFinderAction"
+               name="jaffa_printing_printerDefinitionFinderForm"
+               validate="false"
+               scope="request">
+    </action>
+

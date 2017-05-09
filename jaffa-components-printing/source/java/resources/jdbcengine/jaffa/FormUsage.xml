@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.modules.printing.domain.FormUsage">
+        <map-to table="J_FORM_USAGES" />
+
+        <field name="FormName" use-member="m_formName" type="java.lang.String" primary-key="true">
+            <sql name="FORM_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="EventName" use-member="m_eventName" type="java.lang.String" primary-key="true">
+            <sql name="EVENT_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="FormAlternate" use-member="m_formAlternate" type="java.lang.String">
+            <sql name="FORM_ALTERNATE" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Copies" use-member="m_copies" type="java.lang.Long">
+            <sql name="COPIES" type="INTEGER" dirty="ignore"/>
+        </field>
+
+        <field name="CreatedOn" use-member="m_createdOn" type="org.jaffa.datatypes.DateTime">
+            <sql name="CREATED_ON" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+        <field name="CreatedBy" use-member="m_createdBy" type="java.lang.String">
+            <sql name="CREATED_BY" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="LastChangedOn" use-member="m_lastChangedOn" type="org.jaffa.datatypes.DateTime">
+            <sql name="LAST_CHANGED_ON" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+        <field name="LastChangedBy" use-member="m_lastChangedBy" type="java.lang.String">
+            <sql name="LAST_CHANGED_BY" type="STRING" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

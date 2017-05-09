@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Object Maintenance Meta 2.0//EN" "http://jaffa.sourceforge.net/DTD/object-maintenance-meta_2_0.dtd">
+<Root>
+  <PatternTemplate>patterns/library/object_maintenance_2_1/ObjectMaintenancePattern.xml</PatternTemplate>
+  <Application>Jaffa</Application>
+  <Module>Printing</Module>
+  <Component>FormDefinitionMaintenance</Component>
+  <BasePackage>org.jaffa.modules.printing</BasePackage>
+  <DomainObject>FormDefinition</DomainObject>
+  <DomainPackage>org.jaffa.modules.printing.domain</DomainPackage>
+  <Title>[title.Modules.Printing.FormDefinitionMaintenance.maintenance]</Title>
+  <KeyFields>
+    <KeyField>
+      <Name>FormId</Name>
+      <DataType>INTEGER</DataType>
+      <DomainField>FormId</DomainField>
+    </KeyField>
+  </KeyFields>
+  <Fields>
+    <Field>
+      <Name>FormId</Name>
+      <DataType>INTEGER</DataType>
+      <Display>false</Display>
+      <DomainField>FormId</DomainField>
+    </Field>
+    <Field>
+      <Name>FormName</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>FormName</DomainField>
+    </Field>
+    <Field>
+      <Name>FormAlternate</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>FormAlternate</DomainField>
+    </Field>
+    <Field>
+      <Name>FormVariation</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>FormVariation</DomainField>
+    </Field>
+    <Field>
+      <Name>OutputType</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Mandatory>true</Mandatory>
+      <DomainField>OutputType</DomainField>
+    </Field>
+    <Field>
+      <Name>FormTemplate</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>FormTemplate</DomainField>
+    </Field>
+    <Field>
+      <Name>FieldLayout</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>FieldLayout</DomainField>
+    </Field>
+    <Field>
+      <Name>Description</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>Description</DomainField>
+    </Field>
+    <Field>
+      <Name>Remarks</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>Remarks</DomainField>
+    </Field>
+    <Field>
+      <Name>DomFactory</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Mandatory>true</Mandatory>
+      <DomainField>DomFactory</DomainField>
+    </Field>
+    <Field>
+      <Name>DomClass</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Mandatory>true</Mandatory>
+      <DomainField>DomClass</DomainField>
+    </Field>
+    <Field>
+      <Name>DomKey1</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Mandatory>true</Mandatory>
+      <DomainField>DomKey1</DomainField>
+    </Field>
+    <Field>
+      <Name>DomKey2</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>DomKey2</DomainField>
+    </Field>
+    <Field>
+      <Name>DomKey3</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>DomKey3</DomainField>
+    </Field>
+    <Field>
+      <Name>DomKey4</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>DomKey4</DomainField>
+    </Field>
+    <Field>
+      <Name>DomKey5</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>DomKey5</DomainField>
+    </Field>
+    <Field>
+      <Name>DomKey6</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>DomKey6</DomainField>
+    </Field>    
+    <Field>
+      <Name>AdditionalDataComponent</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>AdditionalDataComponent</DomainField>
+    </Field>
+    <Field>
+      <Name>FollowOnFormName</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>FollowOnFormName</DomainField>
+    </Field>
+    <Field>
+      <Name>FollowOnFormAlternate</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>FollowOnFormAlternate</DomainField>
+    </Field>
+    <Field>
+      <Name>CreatedOn</Name>
+      <DataType>DATE_TIME</DataType>
+      <Display>true</Display>
+      <DomainField>CreatedOn</DomainField>
+      <StampType>CreatedDateTime</StampType>
+    </Field>
+    <Field>
+      <Name>CreatedBy</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>CreatedBy</DomainField>
+      <StampType>CreatedUserId</StampType>
+    </Field>
+    <Field>
+      <Name>LastChangedOn</Name>
+      <DataType>DATE_TIME</DataType>
+      <Display>true</Display>
+      <DomainField>LastChangedOn</DomainField>
+      <StampType>LastUpdatedDateTime</StampType>
+      <UseForDirtyReadCheck>true</UseForDirtyReadCheck>
+    </Field>
+    <Field>
+      <Name>LastChangedBy</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>LastChangedBy</DomainField>
+      <StampType>LastUpdatedUserId</StampType>
+    </Field>
+<!--
+<Field>
+<Name>TemplateData</Name>
+<DataType>RAW</DataType>
+<Display>true</Display>
+<DomainField>TemplateData</DomainField>
+<RelatedObjectName>FormTemplate</RelatedObjectName>
+</Field>
+<Field>
+<Name>LayoutData</Name>
+<DataType>RAW</DataType>
+<Display>true</Display>
+<DomainField>LayoutData</DomainField>
+<RelatedObjectName>FormTemplate</RelatedObjectName>
+</Field>
+-->
+  </Fields>
+<!--
+<ForeignObjects>
+<ForeignObject>
+<Name>FormGroup</Name>
+<Object>FormGroup</Object>
+<Package>org.jaffa.modules.printing.domain</Package>
+<ForeignFields>
+<ForeignField>
+<Name>FormName</Name>
+<DataType>STRING</DataType>
+<Display>true</Display>
+<Mandatory>true</Mandatory>
+<DomainField>FormName</DomainField>
+<DomainFieldInForeignObject>FormName</DomainFieldInForeignObject>
+<KeyType>Primary</KeyType>
+</ForeignField>
+</ForeignFields>
+<Lookup>
+<Component>Jaffa.Printing.FormGroupLookup</Component>
+<TargetFields>formName=formName</TargetFields>
+<BypassCriteriaScreen>true</BypassCriteriaScreen>
+<StaticParameters></StaticParameters>
+<DynamicParameters>formName=formName</DynamicParameters>
+</Lookup>
+</ForeignObject>
+</ForeignObjects>
+-->
+  <RelatedObjects>
+    <RelatedObject>
+      <Name>FormTemplate</Name>
+      <ObjectName>FormTemplate</ObjectName>
+      <Package>org.jaffa.modules.printing.domain</Package>
+      <RelationshipToDomainObject>One</RelationshipToDomainObject>
+      <DeleteConstraint>Cascading</DeleteConstraint>
+      <RelatedObjectJoinFields>
+        <RelatedObjectJoinBetween>
+          <Name>FormId</Name>
+          <DomainField>FormId</DomainField>
+          <RelatedObjectFieldName>FormId</RelatedObjectFieldName>
+          <RelatedObjectDomainField>FormId</RelatedObjectDomainField>
+        </RelatedObjectJoinBetween>
+      </RelatedObjectJoinFields>
+      <RelatedObjectKeyFields>
+        <RelatedObjectKeyField>
+          <RelatedObjectFieldName>FormId</RelatedObjectFieldName>
+          <DataType>INTEGER</DataType>
+          <FieldNameInTargetComponent>FormId</FieldNameInTargetComponent>
+        </RelatedObjectKeyField>
+      </RelatedObjectKeyFields>
+    </RelatedObject>
+  </RelatedObjects>
+  <Screens>
+    <Screen SaveActionAvailableInCreateMode="true" PerformTxValidationOnNextAction="true" AvailableInUpdateMode="true" AvailableInCreateMode="true" Name="main">
+      <References>
+        <FieldReference Name="FormId"/>
+        <FieldReference Name="FormName"/>
+<!-- <ForeignObjectReference 
+ForeignObjectName="FormGroup"></ForeignObjectReference>  -->
+        <FieldReference Name="FormAlternate"/>
+        <FieldReference Name="FormVariation"/>
+        <FieldReference Name="OutputType"/>
+        <FieldReference Name="Description"/>
+        <FieldReference Name="Remarks"/>
+        <FieldReference Name="FollowOnFormName"/>
+<!--<ForeignObjectReference ForeignObjectName="FormTemplate"></ForeignObjectReference> 
+<ForeignObjectReference ForeignObjectName="FieldLayout"></ForeignObjectReference>  -->
+        <FieldReference Name="FormTemplate"/>
+        <FieldReference Name="FieldLayout"/>
+        <FieldReference Name="DomClass"/>
+        <FieldReference Name="DomKey1"/>
+        <FieldReference Name="DomKey2"/>
+        <FieldReference Name="DomKey3"/>
+        <FieldReference Name="DomKey4"/>
+        <FieldReference Name="DomKey5"/>
+        <FieldReference Name="DomKey6"/>
+        <FieldReference Name="DomFactory"/>
+        <FieldReference Name="AdditionalDataComponent"/>
+<!--<FieldReference Name="FollowOnFormAlternate"></FieldReference>  
+<FieldReference Name="CreatedOn"></FieldReference>
+<FieldReference Name="CreatedBy"></FieldReference>
+<FieldReference Name="LastChangedOn"></FieldReference>
+<FieldReference Name="LastChangedBy"></FieldReference>
+<FieldReference Name="TemplateData"></FieldReference>
+<FieldReference Name="LayoutData"></FieldReference>  -->
+      </References>
+    </Screen>
+  </Screens>
+</Root>

@@ -1,0 +1,2 @@
+    <!-- user_userSelfUpdate -->
+    <forward name="admin_userSelfUpdate_main" path="jaffa.admin.userselfupdate.main"/>

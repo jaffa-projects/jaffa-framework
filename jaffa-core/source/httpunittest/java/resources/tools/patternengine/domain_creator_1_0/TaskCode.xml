@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Domain Creator Meta 1.1//EN" "http://jaffa.sourceforge.net/DTD/domain-creator-meta_1_1.dtd">
+<Root>
+  <DomainObject>TaskCode</DomainObject>
+  <DomainPackage>org.jaffa.applications.test.modules.time.domain</DomainPackage>
+  <DatabaseTable>TaskCode</DatabaseTable>
+  <MappingPackage>jdbcengine</MappingPackage>
+  <PatternTemplate>patterns/library/domain_creator_1_1/DomainCreatorPattern.xml</PatternTemplate>
+  <Description>This is a test for Dependant UserGrid</Description>
+  <LabelToken>[label.Jaffa.Time.TaskCode]</LabelToken>
+  <Fields>
+    <Field>
+       <Name>Task</Name>
+       <DataType>java.lang.String</DataType>
+       <DatabaseFieldName>TASK_CODE</DatabaseFieldName>
+       <DatabaseDataType>STRING</DatabaseDataType>
+       <PrimaryKey>T</PrimaryKey>
+       <Description>TaskCode</Description>
+       <LabelToken>[label.Jaffa.Admin.Time.TaskCode.Task]</LabelToken>
+       <Mandatory>T</Mandatory>
+       <Width/>
+       <IntSize>50</IntSize>
+       <CaseType>MixedCase</CaseType>
+       <Ignore>false</Ignore>
+    </Field>
+    <Field>
+       <Name>Activity</Name>
+       <DataType>java.lang.String</DataType>
+       <DatabaseFieldName>ACTIVITY_CODE</DatabaseFieldName>
+       <DatabaseDataType>STRING</DatabaseDataType>
+       <PrimaryKey>F</PrimaryKey>
+       <Description>Activity Code</Description>
+       <LabelToken>[label.Jaffa.Admin.Time.ActivityCode.Activity]</LabelToken>
+       <Mandatory>T</Mandatory>
+       <Width/>
+       <IntSize>50</IntSize>
+       <CaseType>MixedCase</CaseType>
+       <Ignore>false</Ignore>
+    </Field>      
+    <Field>
+      <Name>Description</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>DESCRIPTION</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <PrimaryKey>F</PrimaryKey>
+      <Description>TaskCode Description</Description>
+      <LabelToken>[label.Jaffa.Admin.Time.TaskCode.Description]</LabelToken>
+      <Mandatory>T</Mandatory>
+      <Width/>
+      <IntSize>50</IntSize>
+      <CaseType>MixedCase</CaseType>
+      <Ignore>false</Ignore>
+    </Field>
+  </Fields>
+</Root>

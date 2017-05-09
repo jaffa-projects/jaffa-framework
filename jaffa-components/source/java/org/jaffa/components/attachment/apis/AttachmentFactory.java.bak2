@@ -1,0 +1,28 @@
+package org.jaffa.components.attachment.apis;
+
+
+/**
+ * Created by stuta on 1/5/2017.
+ */
+public class AttachmentFactory {
+
+    private static IAttachmentData attachmentData;
+
+    /**
+     * Sets the instance of the attachment data implementation to use.
+     *
+     * @param attachmentData the attachment implementation instance to use.
+     */
+    public static void setAttachmentDataImpl(IAttachmentData attachmentData) {
+        AttachmentFactory.attachmentData = attachmentData;
+    }
+
+
+    /**
+     * Returns AttachmentData Implementation instance
+     * @return
+     */
+    public static IAttachmentData getAttachmentDataImpl(){
+        return AttachmentFactory.attachmentData;
+    }
+}

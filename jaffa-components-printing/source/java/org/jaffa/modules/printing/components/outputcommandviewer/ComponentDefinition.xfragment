@@ -1,0 +1,4 @@
+    <component id="Jaffa.Printing.OutputCommandViewer">
+        <class>org.jaffa.modules.printing.components.outputcommandviewer.ui.OutputCommandViewerComponent</class>
+        <type>ObjectViewer</type>
+    </component>

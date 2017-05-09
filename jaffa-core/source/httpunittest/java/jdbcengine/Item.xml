@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.applications.test.modules.material.domain.Item">
+        <map-to table="ITEM" />
+
+        <field name="ItemId" type="java.lang.String" primary-key="true">
+            <sql name="ITEM_ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Sc" type="java.lang.String">
+            <sql name="SC" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Part" type="java.lang.String">
+            <sql name="PART" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Serial" type="java.lang.String">
+            <sql name="SERIAL" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Qty" type="java.lang.Double">
+            <sql name="QTY" type="DECIMAL" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

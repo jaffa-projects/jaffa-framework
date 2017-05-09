@@ -1,0 +1,5 @@
+    <forward name="jaffa_messaging_businessEventLogFinderCriteria" path="jaffa.messaging.businesseventlogfinder.criteria"/>
+    <forward name="jaffa_messaging_businessEventLogFinderResults" path="jaffa.messaging.businesseventlogfinder.results"/>
+    <forward name="jaffa_messaging_businessEventLogFinderConsolidatedCriteriaAndResults" path="jaffa.messaging.businesseventlogfinder.consolidatedCriteriaAndResults"/>
+    <forward name="jaffa_messaging_businessEventLogFinderExcelResults" path="jaffa.messaging.businesseventlogfinder.FinderExcelLayout"/>
+    <forward name="jaffa_messaging_businessEventLogFinderXmlResults" path="jaffa.messaging.businesseventlogfinder.FinderXmlLayout"/>

@@ -1,0 +1,128 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:jxb="http://java.sun.com/xml/ns/jaxb" jxb:version="1.0">
+
+  <xsd:annotation>
+    <xsd:appinfo>
+      <jxb:schemaBindings>
+        <jxb:package name="org.jaffa.presentation.portlet.component.componentdomain" />
+      </jxb:schemaBindings>
+    </xsd:appinfo>
+  </xsd:annotation>
+
+  <xsd:element name="components">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="component" type="component" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:complexType name="component">
+    <xsd:sequence>
+    
+      <xsd:element name="description" type="xsd:string" minOccurs="0" />
+        
+      <xsd:element name="class" type="xsd:string">
+        <xsd:annotation>
+          <xsd:appinfo>
+            <jxb:property name="className" />
+          </xsd:appinfo>
+        </xsd:annotation>
+      </xsd:element>
+      
+      <xsd:element name="url-action" type="xsd:string" minOccurs="0" />
+      <xsd:element name="type" type="xsd:string" minOccurs="0" />
+      <xsd:element name="license-ref" type="xsd:string" minOccurs="0" />
+      <xsd:element name="default-navigation" type="xsd:string" minOccurs="0" />
+      <xsd:element name="mandatory-function" type="mandatory-function" minOccurs="0" maxOccurs="unbounded" />
+      <xsd:element name="optional-function" type="optional-function" minOccurs="0" maxOccurs="unbounded" />
+      <xsd:element name="dependent-component" type="dependent-component" minOccurs="0" maxOccurs="unbounded" />
+      <xsd:element name="use-design-pattern" type="use-design-pattern" minOccurs="0" maxOccurs="unbounded" />
+      
+      <xsd:element name="params" minOccurs="0">
+        <xsd:complexType>
+          <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+              <xsd:choice>
+                <xsd:element name="param-string" type="stringTypeParam"/>
+                <xsd:element name="param-int" type="intTypeParam"/>
+                <xsd:element name="param-boolean" type="booleanTypeParam"/>
+                <xsd:element name="param-object" type="objectTypeParam"/>
+              </xsd:choice>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+        
+    </xsd:sequence>
+    <xsd:attribute name="id" type="xsd:string" use="required" />
+  </xsd:complexType>
+
+  <xsd:complexType name="mandatory-function">
+    <xsd:attribute name="name" type="xsd:string" use="required" />
+    <xsd:attribute name="ref" type="xsd:string" />
+  </xsd:complexType>
+
+  <xsd:complexType name="optional-function">
+    <xsd:attribute name="name" type="xsd:string" use="required" />
+    <xsd:attribute name="ref" type="xsd:string" />
+  </xsd:complexType>
+
+  <xsd:complexType name="dependent-component">
+    <xsd:attribute name="name" type="xsd:string" use="required" />
+    <xsd:attribute name="ref" type="xsd:string" />
+  </xsd:complexType>
+
+  <xsd:complexType name="use-design-pattern">
+    <xsd:sequence>
+      <xsd:element name="use-design-extension" type="use-design-extension" minOccurs="0" maxOccurs="unbounded" />
+    </xsd:sequence>
+    <xsd:attribute name="name" type="xsd:string" use="required" />
+  </xsd:complexType>
+
+  <xsd:complexType name="use-design-extension">
+    <xsd:attribute name="name" type="xsd:string" use="required" />
+  </xsd:complexType>
+
+  <xsd:complexType name="booleanTypeParam">
+    <xsd:simpleContent>
+      <xsd:extension base='booleanEnum'>
+        <xsd:attribute name="name" type="xsd:string" use="required" />
+        <xsd:attribute name="required" type="xsd:boolean" />
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  
+  <xsd:complexType name="intTypeParam">
+    <xsd:simpleContent>
+      <xsd:extension base='xsd:integer'>
+        <xsd:attribute name="name" type="xsd:string" use="required" />
+        <xsd:attribute name="required" type="xsd:boolean" />
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  
+  <xsd:complexType name="stringTypeParam">
+    <xsd:simpleContent>
+      <xsd:extension base='xsd:string'>
+        <xsd:attribute name="name" type="xsd:string" use="required" />
+        <xsd:attribute name="required" type="xsd:boolean" />
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+  
+  <xsd:complexType name="objectTypeParam">
+    <xsd:complexContent>
+      <xsd:extension base="stringTypeParam">
+        <xsd:attribute name="className" type="xsd:string" use="required" />
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  
+  <xsd:simpleType name="booleanEnum">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value=""/>
+      <xsd:enumeration value="false"/>
+      <xsd:enumeration value="true"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+</xsd:schema>

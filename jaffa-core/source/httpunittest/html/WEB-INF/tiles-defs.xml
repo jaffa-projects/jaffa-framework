@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+ <!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+       "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+
+    <!-- =======================================================  -->
+    <!-- Layout definitions                                       -->
+    <!-- =======================================================  -->
+
+    <definition name="jaffa.MainLayout" path="/jaffa/jsp/tiles/MainLayout.jsp">
+        <!-- JSPs to be included -->
+        <put name="header"      value="/jaffa/jsp/tiles/header.jsp"/>
+        <put name="globalNav"   value="/jaffa/jsp/tiles/globalNav.jsp"/>
+        <put name="body"        value="${BODY}"/>
+        <put name="footer"      value="/jaffa/jsp/tiles/footer.jsp"/>
+        
+        <!-- Parameters used by the JSPs -->
+        <put name="title"       value="${TITLE}"/>
+    </definition>
+    
+   <definition name="jaffa.DesktopLayout" path="/jaffa/jsp/tiles/DesktopLayout.jsp">
+        <!-- JSPs to be included -->
+        <put name="header"      value="/jaffa/jsp/tiles/header.jsp"/>
+        <put name="globalNav"   value="/jaffa/jsp/tiles/globalNav.jsp"/>
+        <put name="body"        value="${BODY}"/>
+        <put name="footer"      value="/jaffa/jsp/tiles/footer.jsp"/>
+        
+        <!-- Parameters used by the JSPs -->
+        <put name="title"       value="${TITLE}"/>
+        <put name="desktopId"       value="${DESKTOPID}"/>
+    </definition>
+        
+    <definition name="jaffa.FinderLayout"  path="/jaffa/jsp/tiles/object_finder_2_0/FinderLayout.jsp">
+        <!-- JSPs to be included -->
+        <put name="contextNav"  value="/jaffa/jsp/tiles/object_finder_2_0/contextNav.jsp"/>
+        <put name="defaultNav"  value="/jaffa/jsp/tiles/object_finder_2_0/defaultNav.jsp"/>
+        <put name="historyNav"  value="/jaffa/jsp/tiles/historyNav.jsp"/>
+        <put name="body1"       value="${BODY1}"/>
+        <put name="body2"       value="${BODY2}"/>
+        
+        <!-- Parameters used by the JSPs -->
+        <put name="action"      value="${ACTION}"/>
+        <put name="createComponent" value="${CREATE_COMPONENT}"/>
+        <putList name="contextNavLinks"/>
+        <putList name="defaultNavLinks"/>
+    </definition>
+
+    <definition name="jaffa.FinderExcelLayout"  path="/jaffa/jsp/tiles/object_finder_2_0/FinderExcelLayout.jsp">
+        <!-- JSPs to be included -->
+        <put name="body"       value="${BODY}"/>
+        
+        <!-- Parameters used by the JSPs -->
+        <put name="action"      value="${ACTION}"/>
+    </definition>
+
+    <definition name="jaffa.FinderXmlLayout"  path="/jaffa/jsp/tiles/object_finder_2_0/FinderXmlLayout.jsp">
+    </definition>
+
+    <definition name="jaffa.LookupLayout"  path="/jaffa/jsp/tiles/object_lookup_2_0/LookupLayout.jsp">
+        <!-- JSPs to be included -->
+        <put name="contextNav"  value="/jaffa/jsp/tiles/object_lookup_2_0/contextNav.jsp"/>
+        <put name="defaultNav"  value="/jaffa/jsp/tiles/object_lookup_2_0/defaultNav.jsp"/>
+        <put name="historyNav"  value="/jaffa/jsp/tiles/historyNav.jsp"/>
+        <put name="body1"       value="${BODY1}"/>
+        <put name="body2"       value="${BODY2}"/>
+        
+        <!-- Parameters used by the JSPs -->
+        <put name="action"      value="${ACTION}"/>
+        <put name="createComponent" value="${CREATE_COMPONENT}"/>
+        <putList name="contextNavLinks"/>
+        <putList name="defaultNavLinks"/>
+    </definition>
+
+    <definition name="jaffa.ViewerLayout"  path="/jaffa/jsp/tiles/object_viewer_2_0/ViewerLayout.jsp">
+        <!-- JSPs to be included -->
+        <put name="contextNav"  value="/jaffa/jsp/tiles/object_viewer_2_0/contextNav.jsp"/>
+        <put name="defaultNav"  value="/jaffa/jsp/tiles/object_viewer_2_0/defaultNav.jsp"/>
+        <put name="historyNav"  value="/jaffa/jsp/tiles/historyNav.jsp"/>
+        <put name="body"       value="${BODY}"/>
+        
+        <!-- Parameters used by the JSPs -->
+        <put name="action"      value="${ACTION}"/>
+        <put name="updateComponent" value=""/>
+        <putList name="contextNavLinks"/>
+    </definition>
+
+    <definition name="jaffa.MaintenanceLayout"  path="/jaffa/jsp/tiles/object_maintenance_2_0/MaintenanceLayout.jsp">
+        <!-- JSPs to be included -->
+        <put name="contextNav"  value="/jaffa/jsp/tiles/object_maintenance_2_0/contextNav.jsp"/>
+        <put name="defaultNav"  value="/jaffa/jsp/tiles/object_maintenance_2_0/defaultNav.jsp"/>
+        <put name="historyNav"  value="/jaffa/jsp/tiles/historyNav.jsp"/>
+        <put name="body"       value="${BODY}"/>
+        
+        <!-- Parameters used by the JSPs -->
+        <put name="action"                value="${ACTION}"/>
+        <put name="currentScreenCounter"  value="${CURRENT_SCREEN_COUNTER}"/>
+        <put name="createModeTitle"       value="${CREATE_MODE_TITLE}"/>
+        <put name="updateModeTitle"       value="${UPDATE_MODE_TITLE}"/>
+        <putList name="contextNavLinks"/>
+    </definition>
+
+  
+    
+  
+    <!-- =======================================================  -->
+    <!-- Component definitions                                    -->
+    <!-- =======================================================  -->
+
+    <definition name="httpunittest.index"  extends="jaffa.MainLayout">
+        <put name="title" value="HTTP Unit Test application"/>
+        <put name="body" value="/index.html"/>
+    </definition>
+
+    <definition name="httpunittest.desktop"  extends="jaffa.MainLayout">
+        <put name="title" value="HTTP Unit Test application"/>
+        <put name="body" value="/jaffa/jsp/tiles/desktopNav.jsp"/>
+    </definition>
+
+
+     <!-- Code Generated Tiles Definitions //GEN-BEGIN:ComponentTilesDefinitions.xfragment -->
+
+
+     <!-- //GEN-END:ComponentTilesDefinitions.xfragment -->
+    
+</tiles-definitions>

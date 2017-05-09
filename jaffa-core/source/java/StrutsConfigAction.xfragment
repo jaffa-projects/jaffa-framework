@@ -1,0 +1,2 @@
+    <!--  Standard framework action for initializing and executing a component directly --> 
+    <action path="/startComponent" type="org.jaffa.presentation.portlet.StartComponentAction" /> 

@@ -1,0 +1,2 @@
+    <!-- Jaffa Business Function -->
+    <forward name="admin_businessFunction" path="jaffa.admin.businessfunction"/>

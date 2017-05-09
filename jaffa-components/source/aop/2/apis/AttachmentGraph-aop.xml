@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+  <metadata tag="jaffa.rules"
+            class="org.jaffa.components.attachment.apis.data.AttachmentGraph"
+            extends-class="org.jaffa.components.attachment.domain.Attachment">
+    <super/>
+  </metadata>
+</aop>

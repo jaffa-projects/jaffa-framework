@@ -1,0 +1,5 @@
+    <component id="Jaffa.Admin.ValidationRulesEditor">
+        <class>org.jaffa.applications.jaffa.modules.admin.components.validationruleseditor.ui.ValidationRulesEditorComponent</class>
+        <type>Skeleton</type>
+        <mandatory-function name="Jaffa.Admin.EditValidationRules"/>
+    </component>

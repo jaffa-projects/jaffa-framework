@@ -1,0 +1,20 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the JaffaComponentsAdmin 2.0.0 Release (Since v1.0.0). For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+- Consolidated the release numbers for JaffaComponents (Admin,User,Printing). All three modules will be released at the same time going forward
+- The LabelEditor component has been enhanced with labelFilter and displayOverridesOnly properties. This will improve the usability of the component
+
+What's Changed / Improvements
+=====================================================
+- Refactored as per the recent changes to DateTime and DateOnly classes, where the get* methods have been renamed to *
+
+What's Deleted/Deprecated
+=====================================================
+
+Bug Fixes
+=====================================================

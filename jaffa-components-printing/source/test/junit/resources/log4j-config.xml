@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration debug="true">
+
+    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <!--
+            <param name="ConversionPattern" 
+                   value="%-5p [%t] (%c:%L) - %m%n"/>
+            -->
+            <param name="ConversionPattern"
+                   value="%d %-5p [%t] %C{2} (%F:%L) - %m%n"/>
+        </layout>
+    </appender>
+
+    <!--
+    <category name="org.jaffa.persistence.engines.jdbcengine.configservice.ConfigurationService">
+        <priority value="debug" />
+    </category>
+    -->
+    
+    <!-- Error Only for the UserGridManager -->
+    <category name="org.jaffa.presentation.portlet.widgets.controller.UserGridManager">
+        <priority value="error" />
+    </category>
+
+    <category name="org.apache.velocity">
+        <priority value="info" />
+    </category>
+
+    <!-- Info for the form printing architecture -->
+    <category name="org.jaffa.modules.printing">
+        <priority value="debug" />
+    </category>
+        
+    <!-- Info Only Stuff of the Framework -->
+    <category name="org.jaffa">
+        <priority value="info" />
+    </category>
+
+    <!-- Info Level for all the other stuff -->
+    <root>
+        <priority value="debug"/>
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</log4j:configuration>

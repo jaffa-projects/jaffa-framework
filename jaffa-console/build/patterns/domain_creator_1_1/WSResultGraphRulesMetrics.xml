@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Domain Creator Meta 1.1//EN" "http://jaffa.sourceforge.net/DTD/domain-creator-meta_1_1.dtd">
+<Root>
+  <DomainObject>WSResultGraphRulesMetrics</DomainObject>
+  <DomainPackage>org.jaffa.wsapi.domain</DomainPackage>
+  <DatabaseTable>J_WS_RULES_METRICS</DatabaseTable>
+  <MappingPackage>resources/jdbcengine/jaffa</MappingPackage>
+  <PatternTemplate>patterns/library/domain_creator_1_1/DomainCreatorPattern.xml</PatternTemplate>
+  <Description>Holds Web Service Result Graph Rules metrics data capture by application</Description>
+  <LabelToken>[label.Jaffa.Console.WSResultGraphRulesMetrics]</LabelToken>
+  <Fields>
+    <Field>
+      <Name>Id</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>ID</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <PrimaryKey>T</PrimaryKey>
+      <LabelToken>[label.Jaffa.Console.WSResultGraphRulesMetrics.Id]</LabelToken>
+      <IntSize>80</IntSize>
+    </Field>  
+    <Field>
+      <Name>WebServiceName</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>WEB_SERVICE_NAME</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>web service name</Description>
+      <LabelToken>[label.Jaffa.Console.WSResultGraphRulesMetrics.WebServiceName]</LabelToken>
+      <IntSize>300</IntSize>
+    </Field>
+    <Field>
+      <Name>ResultGraphRules</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>RESULT_GRAPH_RULE</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Web Service Result Graph Rule</Description>
+      <LabelToken>[label.Jaffa.Console.WSResultGraphRulesMetrics.ResultGraphRule]</LabelToken>
+      <IntSize>4000</IntSize>
+    </Field>    
+    <Field>
+      <Name>CreatedOn</Name>
+      <DataType>org.jaffa.datatypes.DateTime</DataType>
+      <DatabaseFieldName>CREATED_ON</DatabaseFieldName>
+      <DatabaseDataType>DATE_TIME</DatabaseDataType>
+      <LabelToken>[label.Common.CreatedOn]</LabelToken>
+      <StampType>CreatedDateTime</StampType>
+    </Field>
+  </Fields>
+</Root>

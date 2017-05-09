@@ -1,0 +1,11 @@
+    <!-- Label Editor -->
+    <definition name="jaffa.admin.fileexplorer.Layout"  extends="jaffa.ViewerLayout">
+        <put name="contextNav"  value="/jaffa/admin/fileexplorer/contextNav.jsp"/>
+        <put name="defaultNav"  value="/jaffa/admin/fileexplorer/defaultNav.jsp"/>
+        <put name="body"        value="/jaffa/admin/fileexplorer/main.jsp"/>
+        <put name="action"      value="/jaffa_admin_fileExplorer"/>
+    </definition>
+    <definition name="jaffa.admin.fileexplorer"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Admin.FileExplorer]"/>
+        <put name="body" value="jaffa.admin.fileexplorer.Layout"/>
+    </definition>

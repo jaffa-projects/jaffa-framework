@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.persistence.domainobjects.Item">
+        <map-to table="ZZ_JUT_ITEM" />
+
+        <field name="ItemId" use-member="m_itemId" type="java.lang.String" primary-key="true">
+            <sql name="ITEM_ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="ReceivedItemId" use-member="m_receivedItemId" type="java.lang.String">
+            <sql name="RECEIVED_ITEM_ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Part" use-member="m_part" type="java.lang.String">
+            <sql name="PART" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Prime" use-member="m_prime" type="java.lang.String">
+            <sql name="PRIME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Sc" use-member="m_sc" type="java.lang.String">
+            <sql name="SC" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Condition" use-member="m_condition" type="java.lang.String">
+            <sql name="CONDITION" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="CreatedDatetime" use-member="m_createdDatetime" type="org.jaffa.datatypes.DateTime">
+            <sql name="CREATED_DATETIME" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+        <field name="Qty" use-member="m_qty" type="java.lang.Long">
+            <sql name="QTY" type="INTEGER" dirty="ignore"/>
+        </field>
+
+        <field name="KeyRef" use-member="m_keyRef" type="java.lang.String">
+            <sql name="KEY_REF" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Status1" use-member="m_status1" type="java.lang.String">
+            <sql name="STATUS_1" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Status2" use-member="m_status2" type="java.lang.String">
+            <sql name="STATUS_2" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Status3" use-member="m_status3" type="java.lang.String">
+            <sql name="STATUS_3" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Price" use-member="m_price" type="java.lang.Double">
+            <sql name="PRICE" type="DECIMAL" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

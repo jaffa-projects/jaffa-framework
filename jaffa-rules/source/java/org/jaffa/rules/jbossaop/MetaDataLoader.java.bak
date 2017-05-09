@@ -1,0 +1,171 @@
+/*
+ * ====================================================================
+ * JAFFA - Java Application Framework For All
+ *
+ * Copyright (C) 2002 JAFFA Development Group
+ *
+ *     This library is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU Lesser General Public
+ *     License as published by the Free Software Foundation; either
+ *     version 2.1 of the License, or (at your option) any later version.
+ *
+ *     This library is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *     Lesser General Public License for more details.
+ *
+ *     You should have received a copy of the GNU Lesser General Public
+ *     License along with this library; if not, write to the Free Software
+ *     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * Redistribution and use of this software and associated documentation ("Software"),
+ * with or without modification, are permitted provided that the following conditions are met:
+ * 1.   Redistributions of source code must retain copyright statements and notices.
+ *         Redistributions must also contain a copy of this document.
+ * 2.   Redistributions in binary form must reproduce the above copyright notice,
+ *  this list of conditions and the following disclaimer in the documentation
+ *  and/or other materials provided with the distribution.
+ * 3.   The name "JAFFA" must not be used to endorse or promote products derived from
+ *  this Software without prior written permission. For written permission,
+ *  please contact mail to: jaffagroup@yahoo.com.
+ * 4.   Products derived from this Software may not be called "JAFFA" nor may "JAFFA"
+ *  appear in their names without prior written permission.
+ * 5.   Due credit should be given to the JAFFA Project (http://jaffa.sourceforge.net).
+ *
+ * THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESSED OR IMPLIED
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
+ * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
+ * USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+ * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ * ====================================================================
+ */
+
+package org.jaffa.rules.jbossaop;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javassist.CtConstructor;
+import javassist.CtField;
+import javassist.CtMethod;
+import org.apache.log4j.Logger;
+import org.jaffa.rules.meta.MetaDataRepository;
+import org.jboss.aop.Advisor;
+import org.jboss.aop.AspectManager;
+import org.jboss.aop.metadata.ClassMetaDataBinding;
+import org.jboss.aop.metadata.ClassMetaDataLoader;
+import org.w3c.dom.Element;
+
+
+/** This class is used to import the meta data and to bind the JBossAOP-specific interceptors to the application.
+ */
+public class MetaDataLoader implements ClassMetaDataLoader {
+
+    private static Logger log = Logger.getLogger(MetaDataLoader.class);
+
+    private static ClassMetaDataBinding c_classMetaDataBinding = null;
+
+    /** JBossAOP creates unique fileNames for each <metadata> element in an AOP file. For example
+     * file://xyz.xml1, file://xyz.xml2 and so on.
+     * The following pattern is used to extract the actual fileName, since JaffaRules monitors changes to a file, and not its individual elements.
+     */
+    private static Pattern c_fileNamePattern = Pattern.compile("(.+\\.xml)[0-9]*");
+
+
+    /** Imports metadata into the MetaDataRepository.
+     * This method is invoked by the AopC task during preapplication of aspects.
+     * It is also called at runtime during application startup.
+     * @param element the element we are processing within an aop file.
+     * @param fileName the fileName of the aop file.
+     * @param tagName the tagName that this element belongs to.
+     * @param className this will typically contain the classname for which we've defined the rules.
+     * @return an instance of DummyClassMetaDataBinding.
+     * @throws Exception if any error occurs.
+     */
+    public ClassMetaDataBinding importMetaData(Element element, String fileName, String tagName, String className)
+    throws Exception {
+        if (log.isDebugEnabled())
+            log.debug("Load metadata for " + fileName + " / " + tagName + " / " + className);
+
+        // Extract the actual fileName
+        fileName = extractFileName(fileName);
+
+        // Delegate the loading of metadata to MetaDataRepository
+        MetaDataRepository.instance().load(element, fileName);
+
+        // Add to aspect manager to include this class for transformation
+        // This step is necessary in DynamicAOP-mode, and is of little use in PreappliedAOP-mode
+        // It is important to create a new ArrayList instance, since the AspectManager.setInclude() clears its internal ArrayList before adding the input.
+        // Hence the two ArrayList instances need to be different
+        ArrayList includes = AspectManager.instance().getInclude();
+        includes = includes == null ? new ArrayList() : new ArrayList(includes);
+        includes.add(className);
+        AspectManager.instance().setInclude(includes);
+
+        // Return a singleton instance of ClassMetaDataBinding
+        if (c_classMetaDataBinding == null) {
+            synchronized(this.getClass()) {
+                // Create an anonymous binding which merely extends ClassMetaDataBinding
+                if (c_classMetaDataBinding == null)
+                    c_classMetaDataBinding = new ClassMetaDataBinding(this, fileName, tagName, className) {};
+            }
+        }
+        return c_classMetaDataBinding;
+    }
+
+    /** This method is used to prepare the required pointcuts, so that Interceptors can be bound to them.
+     * It is invoked by the AopC task during preapplication of aspects, after loading the metadata.
+     * It is called at runtime only in DynamicAOP-mode, when loading the class.
+     * @param classAdvisor The class advisor.
+     * @param data the meta data.
+     * @param ctMethod the advised methods.
+     * @param ctField the advised fields.
+     * @param ctConstructor the advised constructors.
+     * @throws Exception if any error occurs.
+     */
+    public void bind(Advisor classAdvisor, ClassMetaDataBinding data,
+            CtMethod[] ctMethod, CtField[] ctField, CtConstructor[] ctConstructor)
+            throws java.lang.Exception {
+        // Do nothing
+    }
+
+    /** This method can be used to bind Interceptors to the pointcuts.
+     * It is method is invoked only at runtime, when the class is loaded.
+     * In DynamicAOP-mode, it is called after the prebind stage.
+     * @param classAdvisor The class advisor.
+     * @param data the meta data.
+     * @param methods the advised methods.
+     * @param fields the advised fields.
+     * @param constructors the advised constructors.
+     * @throws Exception if any error occurs.
+     */
+    public void bind(Advisor classAdvisor, ClassMetaDataBinding data,
+            Method[] methods, Field[] fields, Constructor[] constructors)
+            throws Exception {
+        // Do nothing, since JBossAOP-specific artifacts would have been created in the prebind stage.
+    }
+
+
+    /** JBossAOP creates unique fileNames for each <metadata> element in an AOP file. For example
+     * file://xyz.xml1, file://xyz.xml2 and so on.
+     * The following method is used to extract the actual fileName, since JaffaRules monitors changes to a file, and not its individual elements.
+     * @param input the String from which the actual fileName is to be extracted.
+     * @return the actual file name.
+     */
+    static String extractFileName(String input) {
+        Matcher m = c_fileNamePattern.matcher(input);
+        return m.matches() ? m.group(1) : input;
+
+    }
+
+}

@@ -1,0 +1,98 @@
+<xsd:schema xmlns:xsd='http://www.w3.org/2001/XMLSchema'
+            xmlns:jxb='http://java.sun.com/xml/ns/jaxb'
+            jxb:version='1.0'>
+
+  <xsd:annotation>
+    <xsd:appinfo>
+      <jxb:schemaBindings>
+        <jxb:package name='org.jaffa.soa.services.configdomain'/>
+      </jxb:schemaBindings>
+    </xsd:appinfo>
+  </xsd:annotation>
+
+  <xsd:annotation>
+    <xsd:documentation>
+      This is the schema for the configuration file used by JaffaSOA for loading information about SOA Events. The following are the main configuration elements
+      <ul>
+        <li><b>soa-event</b>: describes a SOA Event and lists the parameters, if any, for that event</li>
+      </ul>
+    </xsd:documentation>
+  </xsd:annotation>
+
+<!-- **************************************************** -->
+
+  <xsd:element name='soa-events'>
+    <xsd:annotation>
+      <xsd:documentation>
+        The root element of the configuration file
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name='soa-event' type='soa-event-info' minOccurs='0' maxOccurs='unbounded'/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name='soa-event-info'>
+    <xsd:annotation>
+      <xsd:documentation>
+        Describes a SOA Event
+        <ul>
+          <li><b>name</b>: Name of a SOA Event</li>
+          <li><b>label</b>: Label for the SOA Event</li>
+          <li><b>description</b>: Describes the SOA Event</li>
+          <li><b>param</b>: Collection of SOA Event Parameters</li>
+          <li><b>inject-domain-fact</b>: Collection of domain objects to be added as Facts into the Drools context during the processing of a SOA Event</li>
+        </ul>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name='param' type='param' minOccurs='0' maxOccurs='unbounded'/>
+      <xsd:element name='inject-domain-fact' type='inject-domain-fact' minOccurs='0' maxOccurs='unbounded'/>
+    </xsd:sequence>
+    <xsd:attribute name='name' type='xsd:string' use='required'/>
+    <xsd:attribute name='label' type='xsd:string'/>
+    <xsd:attribute name='description' type='xsd:string'/>
+    <xsd:attribute name='category' type='xsd:string'/>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name='param'>
+    <xsd:annotation>
+      <xsd:documentation>
+        Describes a SOA Event Parameter
+        <ul>
+          <li><b>name</b>: Name of a SOA Event Parameter</li>
+          <li><b>data-type</b>: DataType of a SOA Event Parameter</li>
+          <li><b>description</b>: Describes the SOA Event Parameter</li>
+        </ul>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name='name' type='xsd:string' use='required'/>
+    <xsd:attribute name='data-type' type='xsd:string'/>
+    <xsd:attribute name='description' type='xsd:string'/>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name='inject-domain-fact'>
+    <xsd:annotation>
+      <xsd:documentation>
+        Describes a domain object to be added as a Fact into the Drools context during the processing of a SOA Event
+        <ul>
+          <li><b>domain-class</b>: The domain class</li>
+          <li><b>domain-key</b>: Collection of key fields for the domain class</li>
+        </ul>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name='domain-key' type='xsd:string' minOccurs='1' maxOccurs='unbounded'/>
+    </xsd:sequence>
+    <xsd:attribute name='domain-class' type='xsd:string' use='required'/>
+  </xsd:complexType>
+
+</xsd:schema>

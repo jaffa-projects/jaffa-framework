@@ -1,0 +1,58 @@
+Objective
+=========
+Modify the Text widget to automatically generate hyperlinks to the appropriate Viewer component
+
+
+Limitation
+==========
+This implementation will only work for Viewer components having a single key-field.
+
+
+Implementation
+==============
+The application will map the required {FullyQualifiedDomainObject}.{DomainField} with an appropriate Viewer component in a properties file
+There will be an additional properties file which will contain the key-field for each Viewer component
+The TextTag will use the above properties files to determine if a field needs to be hyperlinked and to which component
+
+
+domainfield-viewercomponent-mapping.properties (new)
+==================================================
+# Map domain fields to Viewer components
+org.example.applications.app1.modules.mod1.domain.DomainObjectX.SomeField=Mod1.DomainObjectYViewer
+
+
+keyfield-per-viewercomponent.properties (new)
+===========================================
+# Associate Viewer components with key fields
+Mod1.SomeDomainObjectYViewer=SomeField
+
+
+framework.properties
+====================
+Introduce 2 new properties in framework.properties to point to the 2 new properties files
+
+# The TextTag uses this properties file to determine if a hyperlink to a Viewer component should be generated for a field
+# Absence of this property or a blank value will disable the hyperlink feature in TextTag
+# The value for this property, if any, should point a properties file relative to the classpath
+# Eg. 'resources.domainfield-viewercomponent-mapping'
+framework.DomainFieldViewerComponentMappingFile=resources.domainfield-viewercomponent-mapping
+
+# The TextTag uses this properties file to determine the key-field of a Viewer component for which it has generated a hyperlink
+# Absence of this property or a blank value will disable the hyperlink feature in TextTag
+# The value for this property, if any, should point a properties file relative to the classpath
+# Eg. 'resources.keyfield-per-viewercomponent'
+framework.KeyFieldPerViewerComponentFile=resources.keyfield-per-viewercomponent
+
+
+Config.java
+===========
+Introduce constants for the 2 new properties in framework.properties to point to the 2 new properties files
+PROP_DOMAIN_FIELD_VIEWER_COMPONENT_MAPPING_FILE
+PROP_KEY_FIELD_PER_VIEWER_COMPONENT_FILE
+
+
+TextWidget
+==========
+Add an attribute 'disableHyperlink' (default value is 'false') to control the generation of hyperlinks
+Enhance to lookup the 2 new properties files to determine a Viewer component for the given domain field
+Use the appropriate CSS reference (class='PKLink') for the hyperlink

@@ -1,0 +1,4 @@
+    <component id="Jaffa.Printing.PrinterDefinitionLookup">
+        <class>org.jaffa.modules.printing.components.printerdefinitionlookup.ui.PrinterDefinitionLookupComponent</class>
+        <type>ObjectLookup</type>
+    </component>

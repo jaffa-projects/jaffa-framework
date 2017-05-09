@@ -1,0 +1,75 @@
+    <!-- FormGroupFinder Criteria -->
+    <definition name="jaffa.printing.formgroupfinder.FinderLayout.criteria"  extends="jaffa.FinderLayout">
+        <put name="body1" value="/jaffa/printing/formgroupfinder/criteria.jsp"/>
+        <put name="body2" value=""/>
+        <put name="action" value="/jaffa_printing_formGroupFinder"/>
+        <put name="createComponent" value="Jaffa.Printing.FormGroupMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+            <add value="CreateFromCriteria"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.printing.formgroupfinder.criteria"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.FormGroupFinder.criteria]"/>
+        <put name="body" value="jaffa.printing.formgroupfinder.FinderLayout.criteria"/>
+    </definition>
+
+    <!-- FormGroupFinder Results -->
+    <definition name="jaffa.printing.formgroupfinder.FinderLayout.results"  extends="jaffa.FinderLayout">
+        <put name="body1" value=""/>
+        <put name="body2" value="/jaffa/printing/formgroupfinder/results.jsp"/>
+        <put name="action" value="/jaffa_printing_formGroupFinder"/>
+        <put name="createComponent" value="Jaffa.Printing.FormGroupMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="ModifySearch"/>
+            <add value="Refresh"/>
+            <add value="CreateFromResults"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="ModifySearch"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.printing.formgroupfinder.results"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.FormGroupFinder.results]"/>
+        <put name="body" value="jaffa.printing.formgroupfinder.FinderLayout.results"/>
+    </definition>
+
+    <!-- FormGroupFinder ConsolidatedCriteriaAndResults -->
+    <definition name="jaffa.printing.formgroupfinder.FinderLayout.consolidatedCriteriaAndResults"  extends="jaffa.FinderLayout">
+        <put name="body1" value="/jaffa/printing/formgroupfinder/criteria.jsp"/>
+        <put name="body2" value="/jaffa/printing/formgroupfinder/results.jsp"/>
+        <put name="action" value="/jaffa_printing_formGroupFinder"/>
+        <put name="createComponent" value="Jaffa.Printing.FormGroupMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+            <add value="CreateFromResults"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.printing.formgroupfinder.consolidatedCriteriaAndResults"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.FormGroupFinder.consolidated]"/>
+        <put name="body" value="jaffa.printing.formgroupfinder.FinderLayout.consolidatedCriteriaAndResults"/>
+    </definition>
+
+    <!-- FormGroupFinder Results as Excel -->
+    <definition name="jaffa.printing.formgroupfinder.FinderExcelLayout"  extends="jaffa.FinderExcelLayout">
+        <put name="body" value="/jaffa/printing/formgroupfinder/results.jsp"/>
+        <put name="action" value="/jaffa_printing_formGroupFinder"/>
+    </definition>
+
+    <!-- FormGroupFinder Results as Xml -->
+    <definition name="jaffa.printing.formgroupfinder.FinderXmlLayout"  extends="jaffa.FinderXmlLayout">
+    </definition>
+

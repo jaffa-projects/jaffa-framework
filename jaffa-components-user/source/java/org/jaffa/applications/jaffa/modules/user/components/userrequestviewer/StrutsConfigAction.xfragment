@@ -1,0 +1,7 @@
+    <!-- UserRequestViewer Form -->
+    <action    path="/user_userRequestViewer"
+               type="org.jaffa.applications.jaffa.modules.user.components.userrequestviewer.ui.UserRequestViewerAction"
+               name="user_userRequestViewerForm"
+               validate="false"
+               scope="request">
+    </action>

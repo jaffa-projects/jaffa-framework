@@ -1,0 +1,61 @@
+HOWTO CREATE AN 'ExampleScreen' in STRUTS:
+There will be two Action classes, a Form class and a JSP
+The struts-config file will have two action definitions, both using the same form definition (can be session-scoped or request-scoped)
+The first Action object will be responsible for initializing the form bean
+The second Action object will be responsible for handling the events on the maintenance screen and persisting data
+
+Eg.
+There will be EditExamleScreenAction, SaveExampleScreenAction, ExamleScreenForm classes and exampleScreen.jsp
+The struts-config file will have the actions /editExampleScreen and /saveExampleScreen
+The screen will be invoked by the url http:/localhost:8080/exampleapp/editExampleScreen.do
+This will invoke the execute() method of EditExamleScreenAction, which may utilize the business classes to initialize the data in the instance of ExampleScreenForm. It will then forward to the 'exampleScreen.jsp'.
+The 'exampleScreen.jsp' will be tied to the action '/saveExampleScreen' and utilize the initialized instance of ExampleScreenForm to display the initial data.
+The events on the JSP will invoke the execute() method of SaveExampleScreenAction class, which may utilize the business classes to persist the data from the form bean.
+
+
+
+
+HOWTO CREATE AN 'ExampleScreen' in JAFFA:
+There will be a Component class, an  Action class, a Form class and a JSP
+The struts-config will have only one action definition and a request-scoped form definition.
+The components.xml file will have one component definiton.
+The component will get the initial data for the maintenance screen.
+The form bean will get the data from the component
+The Action object will be responsible for handling the events on the maintenance screen and persisting data
+
+Eg.
+There will be ExampleScreenComponent, ExamleScreenAction, ExamleScreenForm classes and exampleScreen.jsp
+The struts-config file will have the action /exampleScreen
+The components.xml file will have the component defintion for 'ExampleScreen'        .
+The screen will be invoked by the url http:/localhost:8080/exampleapp/startComponent.do?component=ExampleScreen
+This will invoke the display() method of ExamleScreenComponent, which may utilize the business classes to initialize the data for the screen. It will then forward to the 'exampleScreen.jsp'.
+The 'exampleScreen.jsp' will be tied to the action '/exampleScreen' and utilize the instance of ExampleScreenForm to display the initial data. The ExampleScreenForm instance in turn will get the initial data from the component.
+The events on the JSP will invoke the execute() method of ExampleScreenAction class, which may utilize the business classes to persist the data from the form bean.
+
+
+
+
+WHY THE DIFFERENCE?
+To be able to run multiple instances of the example screen simultaneously, and in the same session, will require the use of request-scoped form bean.
+In the real world, dozens of fields are involved in a business function. Which means multiple JSPs will be involved in a business function.
+So if we are to use request-scoped form bean, then each JSP will have to have all the fields painted on them, which can quickly turn into a maintenance nightmare.
+However, the Jaffa approach of using components, allows us to easily run multiple instances of the example screen simultaneously.
+
+
+
+
+
+THE FOLLOWING ARE SOME OF THE MAJOR FEATURES INTRODUCED IN STRUTS 1.1
+1- DynaBeans: This is a great new feature which can replace a form class with a simple XML definition in the struts-config file. However, there are a couple of issues:
+    a- The Jaffa widgets rely on Model objects. The form beans have getXxxWM() methods, which return the widget models. However, the Dynabeans are documented to work with only simple datatypes.
+    b- Jaffa uses the components to initialize the data. However, with Dynabeans, the component will have to instantiate a Dynabean and invoke its setters to pass the initial data set. The Dynabean documentation recommends that dynabean creation be left to Struts only.
+    So to use Dynabeans in Jaffa would ivolve the redesign of the widgets to work with simple datatypes. Also the component architecture will have to be redesigned and replaced by "componet-scoped" (this is a new concept and no implenentation is planned yet!!) form beans.
+2- Validators: This could be a replacement for the Jaffa Rules Engine. However, it lacks the 'variation' and 'extends' features of the Jaffa Rules Engine. If one can live without those features, then the following steps will be involved in using the Validators:
+    a- Will require the Forms to extend (Dyna)ValidtorForm or (Dyna)ValidatorActionForm.
+    b- Will need to modify the Action classes to pass values from the form bean to the component.
+    c- Will need to rip the code from the CancelButton and provide for buttons which do not invoke validations, like the clear and quit buttons.
+    d- Will need to turn on validations in the 'action' definitions.
+3- Modules: This has been introduced to make the struts-config file more manageable. However, Jaffa has always created the struts-config file from fragments. So there is really no need for switching to modules as yet. We also use fragments to make the 'ApplicationResources.properties' more manageable as we can have fragments per module, domain, component, etc
+4- Role-based access to Actions: The component-based security architecture in Jaffa is still far superior to this new feature. We use 'business function' to guard access, which is abstracted from roles. The developer uses business functions, the analyst models roles, actors and use-cases to business-functions, and therefore the analyst can reconfigure the application very simply.
+5- Declarative Exception Handling: This is good if we want different error-handlings for the various components/modules. Otherwise, the web.xml approach to application-wide exception handling is good enough.
+6- RequestProcessor: This can be sub-classed and used instead of PortletServlet/Filters. It will need to be declared in struts-config.xml

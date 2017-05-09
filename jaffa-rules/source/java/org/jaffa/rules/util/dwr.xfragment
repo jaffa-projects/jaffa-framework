@@ -1,0 +1,14 @@
+    <!-- Jaffa Rules Meta Data Helper Service -->
+    <create creator="new" javascript="Jaffa_Rules_MetaDataReader">
+        <param name="class" value="org.jaffa.rules.util.MetaDataReader" />
+        <include method="getFlexClass"/>
+        <include method="getClassMetaData"/>
+        <include method="getMetaData"/>
+    </create>
+    <create creator="new" javascript="Jaffa_Rules_MetaDataWriter">
+        <param name="class" value="org.jaffa.rules.util.MetaDataWriter" />
+        <include method="write"/>
+    </create>
+    <convert converter="nnBean" match="org.jaffa.rules.commons.*" />
+    <convert converter="nnBean" match="org.jaffa.rules.dto.*" />
+    <convert converter="nnBean" match="org.jaffa.rules.rulemeta.*" />

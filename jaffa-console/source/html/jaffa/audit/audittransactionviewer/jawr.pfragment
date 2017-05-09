@@ -1,0 +1,10 @@
+#----------------------------------------------
+# Jaffa \ Audit \ AuditTransactionViewer
+#----------------------------------------------
+
+# Allowed Dependencies: Material,ContractWarehouse,CatalogVendor,Commons,UserSecurity,Structure
+jawr.js.bundle.AuditTransactionAudittransactionviewer.id=/bundles/jaffa/audit/audittransactionviewer/auditTransactionViewer.js
+jawr.js.bundle.AuditTransactionAudittransactionviewer.mappings=\
+        dwr:Jaffa_Audit_AuditTransactionService, \
+        /jaffa/audit/audittransactionviewer/main.js, \
+        /jaffa/audit/audittransactionviewer/AuditTransactionViewerDetail.js

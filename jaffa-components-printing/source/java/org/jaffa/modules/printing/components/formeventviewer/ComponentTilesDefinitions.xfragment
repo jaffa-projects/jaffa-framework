@@ -1,0 +1,12 @@
+    <!-- FormEventViewer -->
+    <definition name="jaffa.printing.formeventviewer.ViewerLayout"  extends="jaffa.ViewerLayout">
+        <put name="body" value="/jaffa/printing/formeventviewer/view.jsp"/>
+        <put name="action" value="/jaffa_printing_formEventViewer"/>
+        <put name="updateComponent" value="Jaffa.Printing.FormEventMaintenance"/>
+        <put name="deleteComponent" value="Jaffa.Printing.FormEventMaintenance"/>
+    </definition>
+    <definition name="jaffa.printing.formeventviewer"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.FormEventViewer.view]"/>
+        <put name="body" value="jaffa.printing.formeventviewer.ViewerLayout"/>
+    </definition>
+

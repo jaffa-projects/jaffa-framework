@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Domain Creator Meta 1.0//EN" "http://jaffa.sourceforge.net/DTD/domainCreatorMeta_1_0.dtd">
+
+<!--
+Non-null values for the following elements will be retained, the next time this file is regenerated, provided the merge option is set in the TableInfo file.
+1- Table Level: Description, LabelToken
+2- Field Level: Description, LabelToken, Layout, Pattern, Ignore
+-->
+
+<Root>
+    <DomainObject>Condition</DomainObject>
+    <DomainPackage>org.jaffa.persistence.domainobjects</DomainPackage>
+    <DatabaseTable>ZZ_JUT_CONDITION</DatabaseTable>
+    <MappingPackage>org.jaffa.persistence.mappingfiles</MappingPackage>
+    <PatternTemplate>patterns/library/domain_creator_1_0/DomainCreatorPattern.xml</PatternTemplate>
+    <Description></Description>
+    <LabelToken>[label.App1.Material.Condition]</LabelToken>
+    <Fields>
+        <Field>
+            <Name>Condition</Name>
+            <DataType>java.lang.String</DataType>
+            <DatabaseFieldName>CONDITION</DatabaseFieldName>
+            <DatabaseDataType>STRING</DatabaseDataType>
+            <PrimaryKey>T</PrimaryKey>
+            <Description></Description>
+            <LabelToken>[label.App1.Material.Condition.Condition]</LabelToken>
+            <Mandatory>T</Mandatory>
+            <Width></Width>
+            <IntSize>20</IntSize>
+            <FracSize></FracSize>
+            <MinValue></MinValue>
+            <MaxValue></MaxValue>
+            <Layout></Layout>
+            <Pattern></Pattern>
+            <CaseType>UpperCase</CaseType>
+            <Ignore>false</Ignore>
+        </Field>
+        <Field>
+            <Name>Description</Name>
+            <DataType>java.lang.String</DataType>
+            <DatabaseFieldName>DESCRIPTION</DatabaseFieldName>
+            <DatabaseDataType>STRING</DatabaseDataType>
+            <PrimaryKey>F</PrimaryKey>
+            <Description></Description>
+            <LabelToken>[label.App1.Material.Condition.Description]</LabelToken>
+            <Mandatory>F</Mandatory>
+            <Width></Width>
+            <IntSize>20</IntSize>
+            <FracSize></FracSize>
+            <MinValue></MinValue>
+            <MaxValue></MaxValue>
+            <Layout></Layout>
+            <Pattern></Pattern>
+            <CaseType>MixedCase</CaseType>
+            <Ignore>false</Ignore>
+        </Field>
+    </Fields>
+</Root>

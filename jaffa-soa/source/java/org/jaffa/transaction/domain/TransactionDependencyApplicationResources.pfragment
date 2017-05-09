@@ -1,0 +1,7 @@
+label.Jaffa.Transaction.TransactionDependency=Transaction Dependency
+label.Jaffa.Transaction.TransactionDependency.TransactionId=Transaction ID
+label.Jaffa.Transaction.TransactionDependency.DependsOnId=Depends on ID
+label.Jaffa.Transaction.TransactionDependency.Status=Status
+
+label.Jaffa.Transaction.TransactionDependency.Status.O=Open
+label.Jaffa.Transaction.TransactionDependency.Status.S=Satisfied

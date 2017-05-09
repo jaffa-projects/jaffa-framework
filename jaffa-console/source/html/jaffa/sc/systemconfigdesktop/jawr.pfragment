@@ -1,0 +1,21 @@
+#----------------------------------------------
+# Jaffa \ SC \ System Config Desktop
+#----------------------------------------------
+
+jawr.js.bundle.ScDoc.id=/bundles/jaffa/sc/systemconfigdesktop/main.js
+jawr.js.bundle.ScDoc.mappings=\
+        dwr:DomainModelDocService, \
+        dwr:SOAEventMetaDataService, \
+        dwr:Jaffa_Rules_MetaDataReader, \
+        dwr:Jaffa_Rules_MetaDataWriter, \
+        /jaffa/sc/systemconfigdesktop/FlexTree.js, \
+        /jaffa/sc/systemconfigdesktop/FlexDetailPanel.js, \
+        /jaffa/sc/systemconfigdesktop/FlexDetailGridPanel.js, \
+        /jaffa/sc/systemconfigdesktop/FlexFieldDetailPanel.js, \
+        /jaffa/sc/systemconfigdesktop/SoaEventTree.js, \
+        /jaffa/sc/systemconfigdesktop/SoaEventDetailPanel.js, \
+        /jaffa/sc/systemconfigdesktop/SoaEventTestPanel.js, \
+        /jaffa/sc/systemconfigdesktop/SoaEventSummaryPanel.js, \
+        /jaffa/sc/systemconfigdesktop/RulesTree.js, \
+        /jaffa/sc/systemconfigdesktop/RulesDetailPanel.js, \
+        /jaffa/sc/systemconfigdesktop/main.js

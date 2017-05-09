@@ -1,0 +1,21 @@
+# titles
+title.Jaffa.Admin.FileExplorer=File Explorer
+
+# labels
+label.Jaffa.Admin.FileExplorer.Select=Select
+label.Jaffa.Admin.FileExplorer.Name=Name
+label.Jaffa.Admin.FileExplorer.LastModified=Modified On
+label.Jaffa.Admin.FileExplorer.Size=Size
+
+# error messages
+exception.org.jaffa.applications.jaffa.modules.admin.components.fileexplorer.ui.exceptions.FileExplorerException.illegalAccess=Illegal Access to a file outside of this path. File={0}
+exception.org.jaffa.applications.jaffa.modules.admin.components.fileexplorer.ui.exceptions.FileExplorerException.invalidRoot=Invalid Root Folder "{0}"
+exception.org.jaffa.applications.jaffa.modules.admin.components.fileexplorer.ui.exceptions.FileExplorerException.rootNotFolder=Root "{0}" is not a folder
+
+# messages
+message.Jaffa.Admin.FileExplorer.noFilesSelected=No files selected for deletion
+message.Jaffa.Admin.FileExplorer.deleteOK=Deleted {0} file(s)
+message.Jaffa.Admin.FileExplorer.deleteErrors=Deleted {1} of {0} file(s). See icons below for errors
+message.Jaffa.Admin.FileExplorer.fileNotFound=File no longer available
+message.Jaffa.Admin.FileExplorer.fileNotDeleted=Could not delete this file
+message.Jaffa.Admin.FileExplorer.deleteError=Delete Failed, {0}

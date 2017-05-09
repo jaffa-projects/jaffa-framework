@@ -1,0 +1,14 @@
+<classmap>
+    <class name="org.jaffa.applications.jaffa.modules.admin.domain.UserRole">
+        <map-to table="USER_ROLE" />
+
+        <field name="UserName" use-member="m_userName" type="java.lang.String" primary-key="true">
+            <sql name="USER_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="RoleName" use-member="m_roleName" type="java.lang.String" primary-key="true">
+            <sql name="ROLE_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

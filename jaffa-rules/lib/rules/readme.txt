@@ -1,0 +1,2 @@
+- The JARs in this folder are part of the jboss-aop_1.5.6.GA distribution (See http://downloads.sourceforge.net/jboss/jboss-aop_1.5.6.GA.zip?modtime=1191257392&big_mirror=1)
+- Additonally, bsf.jar and bsh-2.0b2.jar have been added to support scripting

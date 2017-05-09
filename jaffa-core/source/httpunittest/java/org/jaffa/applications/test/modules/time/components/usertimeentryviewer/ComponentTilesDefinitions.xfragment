@@ -1,0 +1,11 @@
+    <!-- UserTimeEntryViewer -->
+    <definition name="jaffa.usertimeentry.usertimeentryviewer.ViewerLayout"  extends="jaffa.ViewerLayout">
+        <put name="body" value="/jaffa/usertimeentry/usertimeentryviewer/view.jsp"/>
+        <put name="action" value="/usertimeentry_userTimeEntryViewer"/>
+        <put name="updateComponent" value="UserTimeEntry.UserTimeEntryMaintenance"/>
+    </definition>
+    <definition name="jaffa.usertimeentry.usertimeentryviewer"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.UserTimeEntry.UserTimeEntryViewer.view]"/>
+        <put name="body" value="jaffa.usertimeentry.usertimeentryviewer.ViewerLayout"/>
+    </definition>
+

@@ -1,0 +1,4 @@
+label.Jaffa.SOA.SOAEventParam=[label.Jaffa.SOA.SOAEvent] Parameter
+label.Jaffa.SOA.SOAEventParam.EventId=[label.Jaffa.SOA.SOAEvent.EventId]
+label.Jaffa.SOA.SOAEventParam.Name=Name
+label.Jaffa.SOA.SOAEventParam.Value=Value

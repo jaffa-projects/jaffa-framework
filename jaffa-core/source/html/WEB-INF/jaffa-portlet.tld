@@ -1,0 +1,2144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
+                        "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
+<taglib>
+  <tlib-version>1.0</tlib-version>
+  <jsp-version>1.2</jsp-version>
+  <short-name>jaffa</short-name>
+  <uri>WEB-INF/jaffa-portlet.tld</uri>
+  <display-name>jaffa</display-name>
+  <description>JAFFA Widgets. These provide Rich Widgets with Javascript,DHTML and CSS support to complement the rest of 
+  the JAFFA architecture (See http://</description>
+
+  <!-- ================================================== -->
+  <!-- Page Level Tags : Header, Form, RaiseError, Footer -->
+  <!-- ================================================== -->
+    
+  <tag>
+    <name>Header</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.HeaderTag</tag-class>
+    <body-content>empty</body-content>
+    <display-name/>
+    <description>This is for including default stuff in the &lt;head&gt; tag of a JSP.
+    This tag is very important as many of the Widgets utilise this tag for writing out necessary
+    Javascript and CSS code for the page. It also handles some behind the scenes javascript
+    code necessary for information gathering on the page and writes in the base ref,
+    that all the files are relative to.    
+    </description>
+    <attribute>
+      <name>errorBoxInSameWindow</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+      <description>
+       This is an option to allow the use to have the error box displayed in a new
+       window or as a DIV in the same window.By default it is false.
+      </description>
+    </attribute>
+    <attribute>
+      <name>noCache</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+      <description>
+       Allows control of page caching. By default it is false as dynamic content 
+       of pages should not be cached by the browser
+      </description>
+    </attribute>
+    <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+<html>
+  <head>
+    <j:Header/>
+    <title>My Test</title>
+  </head>
+  
+The following is and example of the code the tag will generate...
+
+<base href="http://localhost:8080/SampleApp/"/>
+<SCRIPT type="text/javascript" src="jaffa/js/panels/header.js"/></SCRIPT>
+<SCRIPT type="text/javascript" src="jaffa/js/panels/errorpopup.js"/></SCRIPT>
+<script> var windowType = "true" </script>
+      
+    ]]></example>
+  </tag>
+  
+  
+  <tag>
+    <name>Footer</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.FooterTag</tag-class>
+    <body-content>empty</body-content>
+    <display-name/>
+    <description>This is for including default stuff just before the &lt;/body&gt; tag of a JSP</description>
+    <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+<body>
+  <j:Form ...>
+    ...
+  </j:Form>  
+  <j:Footer/>
+</body>
+    ]]></example>
+  </tag>
+  
+  
+  <tag>
+    <name>Form</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.FormTag</tag-class>
+    <body-content>JSP</body-content>
+    <display-name/>
+    <description>
+       This tag extends the &lt;struts-html:form&gt; tag but with the following additions.
+       It has a powerful event handling capability allowing mutiple actions to be handled by
+       the same post. It provide guarding the form with a replacement page, so re-posting is
+       limited. It links into the advanced javascript validation rule engine to validate the form
+       prior to posting.
+    </description>
+    <attribute>
+      <name>action</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Action to be perform on form post and should refer to a definition defined in the the struts config file</description>
+    </attribute>
+    <attribute>
+      <name>enctype</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>
+        This specified the encoding type for the form. If you have
+        any file uploads then this should be set to "multipart/form-data"
+      </description>
+    </attribute>
+    <attribute>
+      <name>focus</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Field to focus on page load</description>
+    </attribute>
+    <attribute>
+      <name>method</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>The request method used when submitting this form. i.e. POST or GET. Default is POST</description>
+    </attribute>
+    <attribute>
+      <name>useBean</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description><![CDATA[
+        The 'useBean' can be used in conjunction with a 'url' as an alternate to the 'action' attribute.
+        This allows the FormTag to bypass using a struts action, and allow all the inner widgets to bind
+        to an existing formbean. The bean must already exist in the either as a request or session scoped
+        attribute. If the formbean does not exist you need to have the JSP create it before the FormTag.
+        You should use a <jsp:useBean id='xxx' class='yyy' scope='request'/> tag to construct the 
+        formbean specifying the class and scope of the bean.
+      ]]></description>
+    </attribute>
+    <attribute>
+      <name>onreset</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>The onReset event script</description>
+    </attribute>
+    <attribute>
+      <name>style</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>The style attribute associated with this tag</description>
+    </attribute>
+    <attribute>
+      <name>styleClass</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>The style class associated with this tag</description>
+    </attribute>
+    <attribute>
+      <name>target</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>The window target to post the response to. i.e. _blank, _self</description>
+    </attribute>
+    <attribute>
+      <name>url</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>
+        Allows a new the jsp to invoke an action that lies outside the scope of
+        the current context. Should be used in conjunction with the 'useBean' attribute
+      </description>
+    </attribute>
+    <attribute>
+      <name>guardedHtmlLocation</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>
+       This is the location of the HTML file to use as the transition screen.
+       This file must be available in the classpath, and can only contain HTML 
+       markup (no JSP code). It will be display when the form is posted if the
+       ButtonTag used to post the page has the property guarded='true'
+       </description>
+    </attribute>
+    <attribute>
+      <name>htmlName</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>
+         Allows to specify a name and it will be used as id as well. This is especially
+         usefull in AJAX, where new page fragments are generated with new forms inside.
+       </description>
+    </attribute>
+    <example><![CDATA[
+Using a Struts Action
+    
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+<j:Form action="/user_maintenance" guardedHtmlLocation="search.htm" >
+   User Name = <j:Text field="userName"/>
+</j:Form>
+
+Using a custom bean
+
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+<jsp:useBean name='userinfo' class='org.example.user.UserInfo' scope='request'>
+<j:Form url="userInfo.jsp" useBean="userinfo" >
+   User Name = <j:Text field="userName"/>
+</j:Form>
+
+    ]]></example>
+  </tag>
+
+  <tag>
+    <name>RaiseErrors</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.RaiseErrorsTag</tag-class>
+    <body-content>empty</body-content>
+    <display-name/>
+    <description>@todo</description>
+    <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+<j:Form ... >
+   ...
+   ...
+   <j:RaiseErrors/>
+</j:Form>   
+
+    ]]></example>
+  </tag>
+
+  <!-- ================================================== -->
+  <!-- Simple Widget Tags : Comment, EditBox, ... -->
+  <!-- ================================================== -->
+  <tag>
+    <name>Property</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.PropertyTag</tag-class>
+    <body-content>JSP</body-content>
+    <display-name/>
+    <description>
+      This is a wrapper for all the simple widgets, which can now inherit attributes
+      from this widget. If a property is defined as 'hidden' in the rules engine, then
+      this widget will ensure that the inner widgets are not rendered.
+    </description>
+    <attribute>
+      <name>field</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>propertyClass</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>propertyName</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+    ]]></example>
+  </tag>
+  
+  
+  <tag>
+    <name>Calendar</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.CalendarTag</tag-class>
+    <body-content>JSP</body-content>
+    <display-name/>
+    <description>This is a calendar tag that can be associated with a field</description>
+    <attribute>
+      <name>field</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>date</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <attribute>
+      <name>time</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <attribute>
+      <name>layout</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+    ]]></example>
+  </tag>
+
+  
+  <!-- This has been removed as it will be consolidated with the Editbox Tag
+  <tag>
+    <name>Comment</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.CommentTag</tag-class>
+    <body-content>empty</body-content>
+    <display-name/>
+    <description>@todo</description>
+    <attribute>
+      <name>field</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>columns</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>int</type>
+    </attribute>
+    <attribute>
+      <name>password</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <attribute>
+      <name>rows</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>int</type>
+    </attribute>
+    <attribute>
+      <name>fontname</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>fontsize</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>italics</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <attribute>
+      <name>bold</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <attribute>
+      <name>width</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>height</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>lookup</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <attribute>
+      <name>validate</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <attribute>
+      <name>trim</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <attribute>
+      <name>autoTabTo</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>onValidate</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>verticalSizePercentage</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>horizontalSizePercentage</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>horizontalAbsolutePixelSize</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>verticalAbsolutePixelSize</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>verticalOffset</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>horizontalOffset</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+    ]]></example>
+  </tag>
+-->
+    
+  <tag>
+    <name>EditBox</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.EditBoxTag</tag-class>
+    <body-content>empty</body-content>
+    <display-name/>
+    <description>Generates an Editbox for data entry on the page. 
+        
+    NOTE: all data in the value='' attribute is HTML escaped to prevent javascript injection attacks
+    </description>
+    <attribute>
+      <name>field</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>columns</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>int</type>
+    </attribute>
+    <attribute>
+      <name>password</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <attribute>
+      <name>rows</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>int</type>
+    </attribute>
+    <attribute>
+      <name>fontname</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>fontsize</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>italics</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <attribute>
+      <name>bold</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <attribute>
+      <name>width</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>height</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>lookup</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <attribute>
+      <name>validate</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <attribute>
+      <name>trim</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <attribute>
+      <name>autoTabTo</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>onValidate</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>verticalSizePercentage</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>horizontalSizePercentage</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>horizontalAbsolutePixelSize</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>verticalAbsolutePixelSize</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>verticalOffset</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>horizontalOffset</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>ignoreDefaultColumnLimit</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+<j:Form ...>
+  <j:EditBox field="user" validate="true"/>
+  <br>
+  <j:EditBox field="password" password="true" columns="20" trim="false"/>
+  <br>
+  <j:EditBox field="reason" rows="10"/>
+  <br>
+  
+Events:
+  do_{field}_Validate() - This event is a server side leave field validation
+                          it is fired when the user leave the field if the   
+                          validate="true" attribute is set.
+    ]]></example>
+  </tag>
+
+  
+  <tag>
+    <name>Text</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.TextTag</tag-class>
+    <body-content>empty</body-content>
+    <display-name/>
+    <description>This outputs the value of a field, with some additional control of how it is processed.
+    By default it will escape text for HTML formatting to avoid javascript code injection</description>
+    <attribute>
+      <name>field</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>type</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>
+      By default the text is html encodes so things like &lt; are converted to &amp;lt;, newlines
+      are converted to hard breaks &lt;BR&gt; and spaces are made non-breaking. If your text contains
+      HTML markup you can specify the type to be 'HTML' in which escape it assumes the contents of
+      the field can be written out as HTML. In this case you are responsible for protecting the output
+      from rogue javascript injection attacks.
+      </description>
+    </attribute>
+    <attribute>
+      <name>domain</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Used in conjunction with domainField to specify if the layout for this field should
+      be inherited from the layout of a field on an domain object. This functionality has been superceeded by
+      the use of a surrounding &lt;j:Property&gt; tag which can also redirect this field to another field's layout
+      </description>
+    </attribute>
+    <attribute>
+      <name>domainField</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Used in conjunction with domain to specify another object sto get the layout from.
+      If domain is specified and this value is not it assume the value from the 'field' attribute instead
+      </description>
+    </attribute>
+    <attribute>
+      <name>layout</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Manually specify a layout for this field. Jaffa's layout manager is based on the standard
+      java layout syntax. For dates see java.text.SimpleDateFormat, for numbers see java.text.DecimalFormat,
+      for boolean we use '{true},{false}' display strings. There is no layout for Strings.
+      </description>
+    </attribute>
+    <attribute>
+      <name>maxLength</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Integer</type>
+      <description>This limits the text to a maximum number of characters (including whitespace). If this 
+      limit is exceeded, the string will have '...' added to end</description>
+    </attribute>
+    <attribute>
+      <name>popUp</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+      <description>This is used in conjunction with the maxLength, and if true will provide a formatted popup
+      windows of the full text if the user clicks on the ... at the end of the string. By default popUps as disabled
+      </description>
+    </attribute>
+    <attribute>
+      <name>disableHyperlink</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+
+<j:Property field="description" propertyClass="an.other.domainObject"/>
+  <j:Text maxLength="100" popUp="true"/>
+</j:Property>  
+    ]]></example>
+  </tag>
+  
+  
+  <tag>
+    <name>Button</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.ButtonTag</tag-class>
+    <body-content>empty</body-content>
+    <display-name/>
+    <description>@todo</description>
+    <attribute>
+      <name>field</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>The name of the field / event that this button is tied to. The name of the event method in the Action class that will be invoked when the button is pressed will be 'do_{field}_Clicked()'</description>
+    </attribute>
+    <attribute>
+      <name>type</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>This must be one of the following values 'default','image','link','sized'. If no type is specified then if an image attribute is supplied it assumes the type is 'image', if no image attribute is specified then it assumes that type is 'default'. See below for full expalnation of the different types</description>
+    </attribute>
+    <attribute>
+      <name>label</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>In the case of 'default', 'link' and sized type buttons the label is the text that is displayed on the screen. In the case of the image button, the label text is displayed as a floating hint when you hover over the image. The label string supports token substitution where tokens are specified in the format [token.key].</description>
+    </attribute>
+    <attribute>
+      <name>image</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>rolloverImage</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>submit</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+      <description>This flag indicates that this is the default button on the page that will be used to submit the form. This option impacts the CSS class name used so that you can give the submit buttons a different look In the case of the 'default' and 'image' button types, this flag will also make this button submit the page if the 'Return' key is pressed. This functionality is not yet available for the 'link' and 'sized' types.</description>
+    </attribute>
+    <attribute>
+      <name>guarded</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+      <description>(Default=false) Show transition page when pressed, while the form is posting. (also see &lt;j:Form guardedHtmlLocation='x'&gt; for controlling the guard page to be used)</description>
+    </attribute>
+    <attribute>
+      <name>confirm</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>
+        If provided this string is used to confirm with the user that they want this action to be executed.
+        Useful for 'Delete' buttons where you want to ask "Are you sure you want to delete this record".
+        The buttons on the dialogue box that is prompted are always "OK" and "Cancel". If "OK" is selected
+        the action is processes as normal, "Cancel" will return to the form, aborting the action.
+        If multiple confirmations are required the messages can be delimitered with a ';'.
+        For example "Delete Record?;Are You Really Sure?" 
+        </description>
+    </attribute>
+    <attribute>
+      <name>preprocess</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+      <description>(Default = true) This is used for performance optimization such that any form pre-processing can be suppressed. The pre-processing is normally to evaluate any 'lazy-widgets' like Grids, UserGrids, etc. In the case of a 'Cancel' button on a form, there is no need to process any widget to post back, as the cancel event will quit the form anyhow. Use this with caution, and only on complex forms that post back large data sets where the button doesn't need that data set posting back. Not posting back all data on a form, if you intent that form to re-render, may cause some widget values to be lost. If you intend to re-render the JSP, don't suppress the pre-processing.</description>
+    </attribute>
+    <attribute>
+      <name>target</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>This is the target window the resulting action should be directed to. If not provided it will default from the target attribute specified in the &lt;j:Form target='x'&gt; attribute. If nothing is specified at the form level, it will target the current window (i.e. target='_self')</description>
+    </attribute>
+    <attribute>
+      <name>widthFactor</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>classOverride</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>This allows a given CSS class name to be used. This overrides all class name attributes and passes the class name straight through to the HTML.</description>
+    </attribute>
+    <attribute>
+      <name>classExtn</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>This is an extra string that is added to the generated CSS class name. This allows for groups of buttons to extend the basic style, while still having the button size and submit properties remain as part of the name. (See the CSS section below for more details)</description>
+    </attribute>
+    <attribute>
+      <name>arg0</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>If the button's label is a token in the resource file, this will be substituted as parameter {0} in the translated token</description>
+    </attribute>
+    <attribute>
+      <name>arg1</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Same as arg0 but for parameter {1}</description>
+    </attribute>
+    <attribute>
+      <name>arg2</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Same as arg0 but for parameter {2}</description>
+    </attribute>
+    <attribute>
+      <name>arg3</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Same as arg0 but for parameter {3}</description>
+    </attribute>
+    <attribute>
+      <name>arg4</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Same as arg0 but for parameter {4}</description>
+    </attribute>
+    <example><![CDATA[
+Regular HTML Buttons
+
+    <j:Button label="Clear"/>
+    <j:Button type="default" label="Cancel"/>
+    <j:Button type="default" label="Save" submit="true" />
+    
+Image Buttons (with Rollover option)    
+    <j:Button label="Clear" image="../imgs/clear.gif"/>
+    <j:Button type="image" label="Cancel" image="../imgs/cancel.gif"/>
+    <j:Button type="image" label="Save" image="../imgs/save_up.gif" rolloverImage="../imgs/save_down.gif"/>        
+
+Links    
+    <j:Button type="link" label="Google"/>
+    
+CSS Controlled Image Buttons    
+    <j:Button type="sized" label="[label.logout.button]" arg0="<%=request.getPrincipal().getName()%>"/>
+    
+How CSS Classes for different buttons types work
+    - Standard button uses WidgetButton
+    - Image button uses WidgetButtonImage
+    - The link button uses WidgetButtonLink
+    - The CSS button uses WidgetButton(N).
+         (N) represents the size of the button based on the length of the label on
+         the button. As with the CSS the image behind the text is fixed, for different
+         lengths of text you may want to pull in different size images. By default the
+         (N) is rounded up to the nearest 4 characters, so in the case of a label
+          "Search" N=8, in the case of "Search Again" N=12 and so on.
+ 
+    In addition to the above basic class name, any button that is flagged as 'Submit'
+    will have the word "Submit" appended to the class name. All buttons support the
+    attribute "classExtn" which stands for 'CSS Class Extension', which will be added
+    to the end of the auto-generated class names.    
+    ]]></example>
+  </tag>
+  
+  
+  <tag>
+    <name>DateTime</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.DateTimeTag</tag-class>
+    <body-content>empty</body-content>
+    <display-name/>
+    <description>DEPRICATED. Use the EditBox combined with the Calendar tags instead.</description>
+    <attribute>
+      <name>field</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>bold</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <attribute>
+      <name>columns</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>int</type>
+    </attribute>
+    <attribute>
+      <name>minInterval</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>int</type>
+    </attribute>
+    <attribute>
+      <name>validate</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <attribute>
+      <name>dateOnly</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <example><![CDATA[
+The old way
+   <j:DateTime field="fieldWithCachedModel" dateOnly="true"/>
+The new way
+   <j:Property field="startedOn">
+      <j:Editbox/> <j:Calender/>
+   </j:Property>
+   
+    ]]></example>
+  </tag>
+  
+  
+  <tag>
+    <name>CheckBox</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.CheckBoxTag</tag-class>
+    <body-content>empty</body-content>
+    <display-name/>
+    <description>This is for displaying a CheckBox Web Control</description>
+    <attribute>
+      <name>field</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>type</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>imageOn</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>imageOff</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>displayOnly</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <attribute>
+      <name>tooltip</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+<j:CheckBox field="canRead" type="html"/>
+<j:CheckBox field="canWrite" type="image"/>
+<j:CheckBox field="canDelete" type="custom" displayOnly="true"
+            imageOn="widgets/tests/testimage2_up.gif"
+            imageOff="widgets/tests/testimage2_down.gif"
+            tooltip="label of the checkbox" />
+    ]]></example>
+  </tag>
+  
+  
+  <tag>
+    <name>Image</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.ImageTag</tag-class>
+    <body-content>empty</body-content>
+    <display-name/>
+    <description>@todo</description>
+    <attribute>
+      <name>field</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>defImage</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+<j:Image field="image" default="defaultImage.jpg" />
+
+    ]]></example>
+  </tag>
+  
+  
+  <tag>
+    <name>RadioButton</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.RadioButtonTag</tag-class>
+    <body-content>empty</body-content>
+    <display-name/>
+    <description>This is for displaying a RadioButton Web Control.</description>
+    <attribute>
+      <name>field</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>selectValue</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>displayOnly</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+    ]]></example>
+  </tag>
+  
+  
+  <tag>
+    <name>DropDown</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.DropDownTag</tag-class>
+    <body-content>JSP</body-content>
+    <display-name/>
+    <description>@todo</description>
+    <attribute>
+      <name>field</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>displayOnly</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <attribute>
+      <name>dependant1</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>dependant2</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>dependant3</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>key1</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>key2</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>key3</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>domain</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>dropdownValueField</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>dropdownDescField</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+      <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+<table>
+  <tr>
+    <td class='radiolabel'>
+      <j:RadioButton field="exportType" selectValue="<%= FinderComponent2.EXPORT_TYPE_WEB_PAGE %>"/>
+      <span class="radiolabel"><j:Label key="label.Jaffa.Inquiry.exporttype.webPage"/></span>
+    </td>
+    <td class='radiolabel'>
+      <j:RadioButton field="exportType" selectValue="<%= FinderComponent2.EXPORT_TYPE_EXCEL %>"/>
+      <span class="radiolabel"><j:Label key="label.Jaffa.Inquiry.exporttype.excel"/></span>
+    </td>
+    <td class='radiolabel'>
+      <j:RadioButton field="exportType" selectValue="<%= FinderComponent2.EXPORT_TYPE_XML %>"/>
+      <span class="radiolabel"><j:Label key="label.Jaffa.Inquiry.exporttype.xml"/></span>
+    </td>
+  </tr>
+</table>
+    ]]></example>
+</tag>
+  
+  
+  <tag>
+    <name>DropDownOption</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.DropDownOptionTag</tag-class>
+    <body-content>empty</body-content>
+    <display-name/>
+    <description>This is the drop down select attribute (ie user populated values)</description>
+    <attribute>
+      <name>label</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>value</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+      <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+<j:DropDown field="make">
+  <j:DropDownOption value="1" label="Audi"/>
+  <j:DropDownOption value="2" label="BMW"/>
+  <j:DropDownOption value="1" label="VW"/>
+</j:DropDown>
+    ]]></example>
+</tag>
+
+  <tag>
+    <name>Lookup</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.LookupTag</tag-class>
+    <body-content>JSP</body-content>
+    <display-name/>
+    <description>This widget will generate an anchor tag, which will bring up the specified component in a new window</description>
+    <attribute>
+      <name>component</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Name of the lookup component to invoke</description>
+    </attribute>
+    <attribute>
+      <name>bypassCriteriaScreen</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Boolean</type>
+      <description>Should the criteria screen be bypassed</description>
+    </attribute>
+    <attribute>
+      <name>dynamicParameters</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>
+      List of parameters that should be taken from the current page values and passed into the lookup.
+      This is a target=source ; seperated list of values. Where source is the field name on the page, and
+      target is one of the properties on the lookup component to be set.
+      </description>
+    </attribute>
+    <attribute>
+      <name>returnStyle</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>
+        By default the target fields are overriden by the selected value. ReturnStyle allow this behaviour to be modified.
+        The format of this field is based on CSS style "id {key:value;...}". In this case the id is the name of the return field. Key is 
+        one of the following replace,prefix,suffix. 'replace' values can be 'true'(default) for replacing the current contents,
+        'insert' to insert the new contents at the cursor position and 'append' to append it to the end of the current contents.
+        'prefix' and 'suffix' will add extra content at the start and end of the inserted text when in inser or append mode. In append mode
+        the prefix is suppressed when the field is empty. The following example allow a comma seperated list to be built as values are selected... 
+        returnStyle="part{replace:append;prefix:,}"
+      </description>
+    </attribute>
+    <attribute>
+      <name>staticParameters</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>
+      List of static parameters that should be passed into the lookup.
+      This is a target=value ; seperated list of values. Where target is one of the properties on the lookup
+      component to be set.
+      </description>
+    </attribute>
+    <attribute>
+      <name>targetFields</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>
+      List of return values from the lookup. This is a target=source ; seperated list of values.
+      Where target is field on the page that should be updated on return, and source is the name of a field in the 
+      results page on the lookup that should be passed back to the target field.
+      </description>
+    </attribute>
+      <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+<j:Lookup component="Widget.Test.Lookup"
+          dynamicParameters="partNo=field1;segCode=field2"
+          staticParameters="status=O;condition=New"
+          targetFields="field1=partNo;field2=segCode"
+          returnStyle="partNo{replace:append;prefix:,}"
+          >
+  <img src="lookup.png">
+</j:Lookup>
+    ]]></example>
+  </tag>
+  
+  
+  <tag>
+    <name>Label</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.LabelTag</tag-class>
+    <body-content>empty</body-content>
+    <display-name/>
+    <description>This tag should be used for displaying labels/messages. It will use the attributes 'field' and 'domain'  to determines the meta object to use for getting the label-token. This label-token will be used for retrieving the appropriate message from the resource-bundle. If the meta object, is not known, then provide the 'key'</description>
+    <attribute>
+      <name>domain</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>field</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>key</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>arg0</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>arg1</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>arg2</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>arg3</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>arg4</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+<td class="label">
+  <j:Label key="label.Jaffa.Inquiry.maxRecords"/>:
+</td>
+    ]]></example>
+  </tag>
+    
+  <!-- ================================================== -->
+  <!-- Layout Widget Tags : Layout Section FoldingSection, Grid, UserGrid, ... -->
+  <!-- ================================================== -->
+  
+  <tag>
+    <name>Layout</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.LayoutTag</tag-class>
+    <body-content>JSP</body-content>
+    <display-name/>
+    <description>Creates Tabs according to the SectionTag nested inside or creates folding section</description>
+    <attribute>
+      <name>id</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Unique Identifier for this widget</description>
+    </attribute>
+    <attribute>
+      <name>type</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Type of layout "folding","tabs" or "tabStrip", defaults to "tabs"</description>
+    </attribute>
+    <attribute>
+      <name>sections</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Order list of section ID's for display</description>
+    </attribute>
+    
+    <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+<j:Layout id="open" key="label.Jaffa.Widgets.Test.Key">
+   ... HTML content ...
+</j:Layout>
+    ]]></example>
+  </tag>
+
+  <tag>
+    <name>Section</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.SectionTag</tag-class>
+    <body-content>JSP</body-content>
+    <display-name/>
+    <description>Defines the Tab inside of LayoutTag</description>
+    <attribute>
+      <name>id</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Unique Identifier for this widget, used for cookies, etc</description>
+    </attribute>
+    <attribute>
+      <name>label</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Label to be used, for tokes use the [xxx] notation</description>
+    </attribute>
+    <attribute>
+      <name>closed</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+      <description>If a folding section, this is the initial state, defaults to false, ie open.</description>
+    </attribute>
+    <attribute>
+      <name>jaffaDataUrl</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>If this is a tab, this is the URL used to lazyload the contents with</description>
+    </attribute>
+    <attribute>
+      <name>dataForward</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>If this is a tab being used with AJAX, this is Struts forward to use to generate the response</description>
+    </attribute>
+    <attribute>
+      <name>onload</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Additional javascript to be executed when this tab page is loaded via AJAX</description>
+    </attribute>
+    <attribute>
+      <name>onclick</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Additional javascript executed a tab is selected</description>
+    </attribute>
+    <attribute>
+      <name>styleId</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>css style id when used in tabstrip</description>
+    </attribute>
+    <attribute>
+      <name>hideIfNoWidgets</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+      <description>used in folding section</description>
+    </attribute>
+    <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+<j:Section id="open" key="label.Jaffa.Widgets.Test.Key">
+   ... HTML content ...
+</j:Section>
+    ]]></example>
+  </tag>
+
+  
+  <tag>
+    <name>FoldingSection</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.FoldingSectionTag</tag-class>
+    <body-content>JSP</body-content>
+    <display-name/>
+    <description>wraps inner tags inside folding sections</description>
+    <attribute>
+      <name>key</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>label</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>id</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>closed</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <attribute>
+      <name>hideIfNoWidgets</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+<j:FoldingSection id="open" key="label.Jaffa.Widgets.Test.Key">
+   ... HTML content ...
+</j:FoldingSection>
+    ]]></example>
+  </tag>
+  
+  <tag>
+    <name>Grid</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.GridTag</tag-class>
+    <body-content>JSP</body-content>
+    <display-name/>
+    <description>
+      This can display a grid of data. If this grid should work like the user grid, then you should
+      provide a 'userGridId' which will be the name used to save these settings. This widget can also be used for
+      pure layout if 'displayOnly' is set. This widget also superceeds the original tree widget, for this to
+      work on column must represent the tree. Column sorting is not available in tree mode.
+    </description>
+    <attribute>
+      <name>field</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Name of the field/property on the formbean that contains the GridModel that this widget will bind to</description>
+    </attribute>
+    <attribute>
+      <name>cssClass</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>If provided this CSS class attribute will be applied to the outer HTML table</description>
+    </attribute>
+    <attribute>
+      <name>headerCssClass</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>If provided this CSS class attribute will be applied to the HTML tr tag for the header row</description>
+    </attribute>
+    <attribute>
+      <name>rowCssClasses</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>This can be a comma seperate list of CSS class names. If provided they will be applied to the HTML tr tag for each row repeatedly</description>
+    </attribute>
+    <attribute>
+      <name>columnCssClasses</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>This can be a comma seperate list of CSS class names. If provided they will be applied to the HTML td tag for each column repeatedly</description>
+    </attribute>
+    <attribute>
+      <name>detail</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>If true it enables the double-click event on the row. Make sure there is a handler for this event in your Action class</description>
+    </attribute>
+    <attribute>
+      <name>displayOnly</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Writes out a plain table with no default CSS styles or Classes except those specifically passed in. It also will not display a header. This will honor the layout and ordering of columns if a userGridId is specified, but won't allow customization or popupHints</description>
+    </attribute>
+    <attribute>
+      <name>noRecordsKey</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Override the default label token key that is used for displaying the 'No Records Found' message when there are no rows. The default token is [label.Jaffa.Widgets.UserGrid.NoRecordsKey],  if this token is not defined the text "No Records Found" is used</description>
+    </attribute>
+    <attribute>
+      <name>outputType</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Must be WebPage,Excel or Xml. Default is WebPage. If Excel is specified a simple table is rendered with special Excel markup based on the xmlns:x="urn:schemas-microsoft-com:office:excel" namespace.</description>
+    </attribute>
+    <attribute>
+      <name>popupHints</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Will display a popup box over the grid showing the column name and all the key fields. The key fields must be visible columns, and they must be flagged as key='true'. Its default value is true for a user grid, false for other grids. This default is overriden for the user grids from the Context property 'jaffa.widgets.usergrid.showtips', and from 'jaffa.widgets.grid.showtips' for the others</description>
+    </attribute>
+    <attribute>
+      <name>target</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Specify a html window target for the double-click action. For example to cause the result of a double click to appear in a new window use '_blank'</description>
+    </attribute>
+    <attribute>
+      <name>userGridId</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>This is the name of the user grid. This name will be used when persisting the grid. It should be unique thoughout your application, but can be reused on multiple grids if they are showing data with the same column names</description>
+    </attribute>
+    <attribute>
+      <name>style</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>If provided this style attribute will be applied to the outer HTML &lt;table&gt; tag</description>
+    </attribute>
+    <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+Simple Example with Various Widgets
+
+<j:Grid field="model1">
+    <j:GridColumn label="EditBox" >
+        <j:EditBox field="field1"/>
+    </j:GridColumn>
+    <j:GridColumn label="HTML Text">
+        Plain Text
+    </j:GridColumn>
+    <j:GridColumn label="CheckBox">
+        <j:CheckBox field="field4"/>
+    </j:GridColumn>
+    <j:GridColumn label="DropDown">
+        <j:DropDown field="field6">
+            <j:DropDownOption value="Value1" label="Value1"/>
+            <j:DropDownOption value="Value2" label="Value2"/>
+        </j:DropDown>
+    </j:GridColumn>
+</j:Grid>
+
+Example use of a Grid as a tree
+
+<j:Grid field="model3" detail="true">
+    <j:GridColumn label="tree" treeField="level" >
+      <img src="jaffa/imgs/tree/childNode.gif" border="0" valign="middle">
+    </j:GridColumn>
+    <j:GridColumn label="EditBox-es" >
+        <j:EditBox field="field1"/>
+    </j:GridColumn>
+    <j:GridColumn label="CheckBox">
+        <j:CheckBox field="field4"/>
+    </j:GridColumn>
+</j:Grid>
+
+    ]]></example>
+  </tag>
+ 
+  <tag>
+    <name>GridRow</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.GridRowTag</tag-class>
+    <body-content>JSP</body-content>
+    <display-name/>
+    <description>
+        This allows properties to be set for the row in each iteration. It was originally introduced
+        so the look-and-feel could be changed for each row, ie a different CSS class may be used based on specific
+        data in each row.
+    </description>
+    <attribute>
+      <name>rowCssClass</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>If provided and not null/blank, this CSS class attribute will be applied to the HTML tr tag for each row, and override the value derived from the rowCssClasses</description>
+    </attribute>
+    <attribute>
+      <name>style</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>If provided this style attribute will be applied to the HTML &lt;tr&gt; tag</description>
+    </attribute>
+    <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+
+<j:Grid field="model1">
+  <j:GridRow rowCssClass='<%="A".equals( TagHelper.getModelMap(pageContext).get("status") )?"highlightRow":""%>'>
+    label=abcd123
+    customerAttribute=<j:Label key="label.material.core.tavfinder...."/>
+  </j:GridRow>
+  <j:GridColumn label="Status" >
+      <j:EditBox field="status"/>
+  </j:GridColumn>
+  <j:GridColumn label="Decription">
+      <j:CheckBox field="taskName"/>
+  </j:GridColumn>
+</j:Grid>
+    ]]></example>
+  </tag>
+
+  <tag>
+    <name>GridColumn</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.GridColumnTag</tag-class>
+    <body-content>JSP</body-content>
+    <display-name/>
+    <description>This defines a column in a grid. A column can contain any HTML/JSP content including other Jaffa widgets. (Except another Grid).</description>
+    <attribute>
+      <name>label</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description></description>  
+    </attribute>
+    <attribute>
+      <name>dataType</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>If this column is to be sorted (in Javascript) this specified its data type. The valid values are String, Number, Date, CaseInsensitiveString. If not specified the column can't support sorting.</description>  
+    </attribute>
+    <attribute>
+      <name>key</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+      <description>This indicates that this column will be displayed as a key in the popup hints</description>  
+    </attribute>
+    <attribute>
+      <name>treeField</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>This indicates that this column will be used to render the tree. The value indicate which fieldin the underlying GridModel will store the current indenture level of each row.</description>  
+    </attribute>
+    <attribute>
+      <name>treeSpacer</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>This is the HTML used to indent the tree, it defaults to &amp;nbsp;</description>  
+    </attribute>
+    <attribute>
+      <name>columnCssClass</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>If provided and not null, this CSS class attribute will be applied to the HTML &lt;td&gt; tag for this cell, and will override the value derived from the columnCssClasses</description>
+    </attribute>
+    <attribute>
+      <name>style</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>If provided this style attribute will be applied to the HTML td tag</description>
+    </attribute>    
+    <attribute>
+      <name>required</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Boolean</type>
+      <description>If this is a customizable grid, and this column is 'required', then the user will not
+      be able to remove this column from the list of displayed columns. If this column is a treeField, it is required by default. Key field however can be hidden my default.
+      </description>
+    </attribute>    
+    <example><![CDATA[
+See previous <j:Grid> example of how this can be used.
+    ]]></example>
+  </tag>
+
+  
+<!--
+  <tag>
+    <name>UserGrid</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.UserGridTag</tag-class>
+    <body-content>JSP</body-content>
+    <display-name/>
+    <description>This widget can support inner widgets
+NOTE: This widget should NOT be placed inside another widget</description>
+    <attribute>
+      <name>field</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>detail</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <attribute>
+      <name>width</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>userGridId</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>outputType</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>noRecordsKey</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>target</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>popupHints</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+<j:UserGrid field="model1"  userGridId="fred" >
+    <j:UserGridColumn label="EditBox-es" dataType="CaseInsensitiveString">
+        <j:EditBox field="field1"/>
+        <j:EditBox field="field2"/>
+    </j:UserGridColumn>
+    <j:UserGridColumn label="Another instance of an EditBox">
+        <j:EditBox field="field2" />
+    </j:UserGridColumn>
+    <j:UserGridColumn label="HTML Text">
+        Plain Text
+    </j:UserGridColumn>
+    <j:UserGridColumn label="Button">
+        <j:Button field="butt1" label="label for text button" text="true" detail="true"/>
+        <j:Button field="butt2" label="label for regular button" detail="true"/>
+    </j:UserGridColumn>
+</j:UserGrid>
+    ]]></example>
+  </tag>
+  
+  
+  <tag>
+    <name>UserGridColumn</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.UserGridColumnTag</tag-class>
+    <body-content>JSP</body-content>
+    <display-name/>
+    <description>@todo</description>
+    <attribute>
+      <name>label</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>width</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>height</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>dataType</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>key</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+    ]]></example>
+  </tag>
+-->  
+
+
+  <tag>
+    <name>UserGrid</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.GridTag</tag-class>
+    <body-content>JSP</body-content>
+    <display-name/>
+    <description>This has been deprecated, this tag now points to the same underlying class as the Grid Tag</description>
+    <attribute>
+      <name>field</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Name of the field/property on the formbean that contains the GridModel that this widget will bind to</description>
+    </attribute>
+    <attribute>
+      <name>cssClass</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>If provided this CSS class attribute will be applied to the outer HTML table</description>
+    </attribute>
+    <attribute>
+      <name>headerCssClass</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>If provided this CSS class attribute will be applied to the HTML tr tag for the header row</description>
+    </attribute>
+    <attribute>
+      <name>rowCssClasses</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>This can be a comma seperate list of CSS class names. If provided they will be applied to the HTML tr tag for each row repeatedly</description>
+    </attribute>
+    <attribute>
+      <name>columnCssClasses</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>This can be a comma seperate list of CSS class names. If provided they will be applied to the HTML td tag for each column repeatedly</description>
+    </attribute>
+    <attribute>
+      <name>detail</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>If true it enables the double-click event on the row. Make sure there is a handler for this event in your Action class</description>
+    </attribute>
+    <attribute>
+      <name>displayOnly</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Writes out a plain table with no default CSS styles or Classes except those specifically passed in. It also will not display a header. This will honor the layout and ordering of columns if a userGridId is specified, but won't allow customization or popupHints</description>
+    </attribute>
+    <attribute>
+      <name>noRecordsKey</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Override the default label token key that is used for displaying the 'No Records Found' message when there are no rows. The default token is [label.Jaffa.Widgets.UserGrid.NoRecordsKey],  if this token is not defined the text "No Records Found" is used</description>
+    </attribute>
+    <attribute>
+      <name>outputType</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Must be WebPage,Excel or Xml. Default is WebPage. If Excel is specified a simple table is rendered with special Excel markup based on the xmlns:x="urn:schemas-microsoft-com:office:excel" namespace.</description>
+    </attribute>
+    <attribute>
+      <name>popupHints</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Will display a popup box over the grid showing the column name and all the key fields. The key fields must be visible columns, and they must be flagged as key='true'. Its default value is true for a user grid, false for other grids. This default is overriden for the user grids from the Context property 'jaffa.widgets.usergrid.showtips', and from 'jaffa.widgets.grid.showtips' for the others</description>
+    </attribute>
+    <attribute>
+      <name>target</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>Specify a html window target for the double-click action. For example to cause the result of a double click to appear in a new window use '_blank'</description>
+    </attribute>
+    <attribute>
+      <name>userGridId</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>This is the name of the user grid. This name will be used when persisting the grid. It should be unique thoughout your application, but can be reused on multiple grids if they are showing data with the same column names</description>
+    </attribute>
+    <attribute>
+      <name>style</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>If provided this style attribute will be applied to the outer HTML &lt;table&gt; tag</description>
+    </attribute>
+  </tag>
+ 
+
+  <tag>
+    <name>UserGridColumn</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.GridColumnTag</tag-class>
+    <body-content>JSP</body-content>
+    <display-name/>
+    <description>This has been deprecated, this tag now points to the same underlying class as the GridColumn Tag</description>
+    <attribute>
+      <name>label</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description></description>  
+    </attribute>
+    <attribute>
+      <name>dataType</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>If this column is to be sorted (in Javascript) this specified its data type. The valid values are String, Number, Date, CaseInsensitiveString. If not specified the column can't support sorting.</description>  
+    </attribute>
+    <attribute>
+      <name>key</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+      <description>This indicates that this column will be displayed as a key in the popup hints</description>  
+    </attribute>
+    <attribute>
+      <name>treeField</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>This indicates that this column will be used to render the tree. The value indicate which fieldin the underlying GridModel will store the current indenture level of each row.</description>  
+    </attribute>
+    <attribute>
+      <name>columnCssClass</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>If provided and not null, this CSS class attribute will be applied to the HTML &lt;td&gt; tag for this cell, and will override the value derived from the columnCssClasses</description>
+    </attribute>
+    <attribute>
+      <name>style</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+      <description>If provided this style attribute will be applied to the HTML td tag</description>
+    </attribute>    
+    <attribute>
+      <name>required</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.Boolean</type>
+      <description>If this is a customizable grid, and this column is 'required', then the user will not
+      be able to remove this column from the list of displayed columns. If this column is a treeField, it is required by default. Key field however can be hidden my default.
+      </description>
+    </attribute>    
+  </tag>
+
+  
+  <tag>
+    <name>Table</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.TableTag</tag-class>
+    <body-content>JSP</body-content>
+    <display-name/>
+    <description>
+      This widget can have only non-updateable cells. We are considering consolidating
+      this widget into the Grid, but we have not yet deprecated the use of this.
+    </description>
+    <attribute>
+      <name>field</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>align</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>selectcolor</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>rollovercolor</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>multiSelect</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <attribute>
+      <name>detail</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <attribute>
+      <name>noRecordsKey</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+<j:Table field="model1" align="center" detail="true" multiSelect="true">
+    <j:TableColumn column="Column1" title="String"/>
+    <j:TableColumn column="Column2" title="Integer"/>
+    <j:TableColumn column="Column3" title="DateOnly"/>
+</j:Table>
+    ]]></example>
+  </tag>
+  
+  
+  <tag>
+    <name>TableColumn</name>
+    <tag-class>org.jaffa.presentation.portlet.widgets.taglib.TableColumnTag</tag-class>
+    <body-content>empty</body-content>
+    <display-name/>
+    <description>This is for setting a display column</description>
+    <attribute>
+      <name>column</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>title</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>width</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+    ]]></example>
+  </tag>
+  
+  <!-- ================================================== -->
+  <!-- Logic Control Tags : ComponentGuard, FunctionGuard, ... -->
+  <!-- ================================================== -->
+  
+  <tag>
+    <name>ComponentGuard</name>
+    <tag-class>org.jaffa.security.taglib.ComponentGuardTag</tag-class>
+    <body-content>JSP</body-content>
+    <display-name/>
+    <description>Used to guard some JSP content based on the user's security access to the specified component</description>
+    <attribute>
+      <name>name</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>hasAccess</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+<j:ComponentGuard name="Asset.AssetViewer">
+  html content
+</j:ComponentGuard>
+    ]]></example>
+  </tag>
+
+  
+  <tag>
+    <name>FunctionGuard</name>
+    <tag-class>org.jaffa.security.taglib.FunctionGuardTag</tag-class>
+    <body-content>JSP</body-content>
+    <display-name/>
+    <description>This is a widget tag that allows control over areas of a JSP dependant on user privaleges and access to particular business-functions</description>
+    <attribute>
+      <name>name</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>java.lang.String</type>
+    </attribute>
+    <attribute>
+      <name>hasAccess</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+      <type>boolean</type>
+    </attribute>
+    <example><![CDATA[
+<%@ taglib prefix="j" uri="/WEB-INF/jaffa-portlet.tld" %>
+<j:FunctionGuard name="Asset.AssetView.UserRef7">
+    html content
+</j:FunctionGuard>
+    ]]></example>
+  </tag>
+  
+</taglib>

@@ -1,0 +1,15 @@
+/*
+ * This is the master stylesheet used for all web 2.0 development in the Structure Module
+ */
+
+/* Include Common Stuff (could be moved outsise of structure) */
+/*
+@import url(../../../css/common-extjs.css);
+*/
+
+/* Include Structure Specific Stuff */
+@import url(main-core.css);
+
+/* Include Structure Override Stuff incase the core application needs to be overridden */
+@import url(main-override.css);
+

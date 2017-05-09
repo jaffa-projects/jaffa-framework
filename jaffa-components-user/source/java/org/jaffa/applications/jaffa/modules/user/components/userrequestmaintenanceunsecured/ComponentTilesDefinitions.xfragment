@@ -1,0 +1,30 @@
+   <definition name="jaffa.nonsecure.userrequestmaintenanceunsecure.MaintenanceLayout.main"  path="/jaffa/jsp/tiles/object_maintenance_2_0/MaintenanceLayout.jsp">
+        <!-- JSPs to be included -->
+        <put name="contextNav"  value="/jaffa/user/userrequestmaintenanceunsecured/contextNav.jsp"/>
+        <put name="defaultNav"  value="/jaffa/user/userrequestmaintenanceunsecured/defaultNav.jsp"/>
+        <put name="historyNav"  value="/jaffa/jsp/tiles/historyNav.jsp"/>
+        <put name="body"       value="/jaffa/user/userrequestmaintenance/main.jsp"/>
+        
+        <!-- Parameters used by the JSPs -->
+     	
+             <put name="action" value="/user_userRequestMaintenance"/>
+             <put name="currentScreenCounter" value="0"/>
+             <put name="createModeTitle" value="[title.Jaffa.User.UserRequestMaintenance.maintenance]"/>
+        <put name="updateModeTitle" value="[title.Jaffa.User.UserRequestMaintenance.maintenance]"/>
+    </definition>
+
+  
+     <definition name="jaffa.nonsecure.userrequestmaintenanceunsecured.main"  extends="jaffa.nonsecure.MainLayout">
+           <put name="title" value="[title.Jaffa.User.UserRequestMaintenance.maintenance]"/>
+           <put name="body" value="jaffa.nonsecure.userrequestmaintenanceunsecure.MaintenanceLayout.main"/>
+     </definition>
+     
+  <definition name="jaffa.nonsecure.MainLayout" path="/jaffa/user/MainLayout.jsp">
+         <!-- JSPs to be included -->
+         <put name="header"      value="/jaffa/jsp/tiles/header.jsp"/>        
+         <put name="body"        value="${BODY}"/>
+         <put name="footer"      value="/jaffa/jsp/tiles/footer.jsp"/>
+         
+         <!-- Parameters used by the JSPs -->
+         <put name="title"       value="${TITLE}"/>
+    </definition>     

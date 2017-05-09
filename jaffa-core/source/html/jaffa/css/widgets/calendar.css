@@ -1,0 +1,35 @@
+/* 
+  File name:  lookup.css
+  Author:     paule  
+
+  Description:
+    Example StyleSheet that controls the display of the lookup widget
+*/
+
+A.Calendar { 
+  font-family :Times New Roman, Times, serif;    
+  font-weight : normal;    
+  font-variant : normal;    
+  font-style : normal;  
+  font-size : small;    
+  background-repeat : no-repeat;    
+  background :  url(../../imgs/datetime/calendar_32b.gif) no-repeat left; 
+  background-position: left;
+  background-repeat: no-repeat;
+  white-space: nowrap;
+  padding-right: 30px; 
+ }
+ 
+ A.Calendar:hover { 
+  font-family :Times New Roman, Times, serif;    
+  font-weight : normal;    
+  font-variant : normal;    
+  font-style : normal;  
+  font-size : small;    
+  background-repeat : no-repeat;    
+  background :  url(../../imgs/datetime/calendar_32b.gif) no-repeat left; 
+  background-position: left;
+  background-repeat: no-repeat;
+  white-space: nowrap;
+  padding-right: 30px;  
+ }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE init PUBLIC "-//JAFFA//DTD JDBC Engine Init 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-init_1_0.dtd">
+<init>
+   <database name="default" engine="mysql">
+        <connection-factory class="org.jaffa.persistence.engines.jdbcengine.datasource.DbConnectionBrokerConnectionFactory">
+          <param name="url"                value="jdbc:mysql://localhost:3306/jaffa"/>
+          <param name="driverClass"        value="com.mysql.jdbc.Driver"/>
+          <param name="user"               value="jaffa"/>
+          <param name="password"           value="rocket"/>
+          <param name="minimumConnections" value="1"/>
+          <param name="maximumConnections" value="10"/>
+    
+          <!-- dbconnection broker pool values -->
+          <param name="debugLevel"         value="2"/>
+          <param name="logAppend"          value="true"/>
+          <param name="logFileName"        value="C:\Sandbox\tomcat50/logs/DBConnectionBroker.log"/>
+          <param name="maxCheckoutSeconds" value="0"/>
+          <param name="maxConnTime"        value="1"/>
+        </connection-factory>
+        <hitlistSize value="10"/>
+        <!--<jdbcSecurityPlugin value="org.jaffa.security.JDBCSecurityPlugin"/>-->
+        <usePreparedStatement value="true"/>
+    </database>
+
+    <conf-location>
+        <dir-loc dir="jdbcengine"/>
+    </conf-location>
+</init>
+
+

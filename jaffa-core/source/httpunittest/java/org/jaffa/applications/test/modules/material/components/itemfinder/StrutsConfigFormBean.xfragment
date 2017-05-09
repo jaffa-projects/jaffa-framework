@@ -1,0 +1,7 @@
+    <!-- ItemFinderCriteria -->
+    <form-bean      name="material_itemFinderCriteriaForm"
+                    type="org.jaffa.applications.test.modules.material.components.itemfinder.ui.ItemFinderCriteriaForm"/>
+
+    <!-- ItemFinderResults -->
+    <form-bean      name="material_itemFinderResultsForm"
+                    type="org.jaffa.applications.test.modules.material.components.itemfinder.ui.ItemFinderResultsForm"/>

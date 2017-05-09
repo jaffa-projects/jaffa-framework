@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE roles PUBLIC "-//JAFFA//DTD Security Roles 1.0//EN" "http://jaffa.sourceforge.net/DTD/security-roles_1_0.dtd">
+
+<!-- This is an empty role definition file, it will be loaded if you don't specify one
+     in the framework.properties file.
+     
+     This default one does not declare any roles, and hence if you use this and put
+     no mandatory constraints on the components in the components.xml file, then 
+     your application will be effectivly bypassing the security system
+-->
+
+<roles>
+
+    <!-- Below is an example of what a real role definition file will look like.
+       - 
+       - Based on how you declare your roles and assign them to users, you may want to duplicate 
+       - definitions per role, such that the manager include all the functions of the CLERK and SUPERVISOR,
+       - and you just grant the MANAGER role to the user.
+       - If you defined them like the example below, you can say that if a user is a manager then he
+       - is granted the roles of CLERK, SUPERVISOR and MANAGER. This remove additional duplication in this
+       - ploicy definition file.
+       - 
+       
+        <role name="Clerk">
+            <description>This is a clerk</description>
+        </role>
+        <role name="Supervisor">
+            <grant-function-access name="payroll.viewSalary"/>
+            <grant-function-access name="payroll.transactionOverride"/>
+        </role>
+        <role name="Manager">
+            <description>This is a Manager</description>
+            <grant-function-access name="payroll.updateSalary"/>
+            <grant-function-access name="payroll.printWages"/>
+        </role>
+    
+        -->
+</roles>

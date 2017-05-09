@@ -1,0 +1,75 @@
+    <!-- AttachmentFinder Criteria -->
+    <definition name="jaffa.attachment.attachmentfinder.FinderLayout.criteria"  extends="jaffa.FinderLayout">
+        <put name="body1" value="/jaffa/attachment/attachmentfinder/criteria.jsp"/>
+        <put name="body2" value=""/>
+        <put name="action" value="/jaffa_attachment_attachmentFinder"/>
+        <put name="createComponent" value="Jaffa.Attachment.AttachmentMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+            <add value="CreateFromCriteria"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.attachment.attachmentfinder.criteria"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Attachment.AttachmentFinder.criteria]"/>
+        <put name="body" value="jaffa.attachment.attachmentfinder.FinderLayout.criteria"/>
+    </definition>
+
+    <!-- AttachmentFinder Results -->
+    <definition name="jaffa.attachment.attachmentfinder.FinderLayout.results"  extends="jaffa.FinderLayout">
+        <put name="body1" value=""/>
+        <put name="body2" value="/jaffa/attachment/attachmentfinder/results.jsp"/>
+        <put name="action" value="/jaffa_attachment_attachmentFinder"/>
+        <put name="createComponent" value="Jaffa.Attachment.AttachmentMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="ModifySearch"/>
+            <add value="Refresh"/>
+            <add value="CreateFromResults"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="ModifySearch"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.attachment.attachmentfinder.results"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Attachment.AttachmentFinder.results]"/>
+        <put name="body" value="jaffa.attachment.attachmentfinder.FinderLayout.results"/>
+    </definition>
+
+    <!-- AttachmentFinder ConsolidatedCriteriaAndResults -->
+    <definition name="jaffa.attachment.attachmentfinder.FinderLayout.consolidatedCriteriaAndResults"  extends="jaffa.FinderLayout">
+        <put name="body1" value="/jaffa/attachment/attachmentfinder/criteria.jsp"/>
+        <put name="body2" value="/jaffa/attachment/attachmentfinder/results.jsp"/>
+        <put name="action" value="/jaffa_attachment_attachmentFinder"/>
+        <put name="createComponent" value="Jaffa.Attachment.AttachmentMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+            <add value="CreateFromResults"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.attachment.attachmentfinder.consolidatedCriteriaAndResults"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Attachment.AttachmentFinder.consolidated]"/>
+        <put name="body" value="jaffa.attachment.attachmentfinder.FinderLayout.consolidatedCriteriaAndResults"/>
+    </definition>
+
+    <!-- AttachmentFinder Results as Excel -->
+    <definition name="jaffa.attachment.attachmentfinder.FinderExcelLayout"  extends="jaffa.FinderExcelLayout">
+        <put name="body" value="/jaffa/attachment/attachmentfinder/results.jsp"/>
+        <put name="action" value="/jaffa_attachment_attachmentFinder"/>
+    </definition>
+
+    <!-- AttachmentFinder Results as Xml -->
+    <definition name="jaffa.attachment.attachmentfinder.FinderXmlLayout"  extends="jaffa.FinderXmlLayout">
+    </definition>
+

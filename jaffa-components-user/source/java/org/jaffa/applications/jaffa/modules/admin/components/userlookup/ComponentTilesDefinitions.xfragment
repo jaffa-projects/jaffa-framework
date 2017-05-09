@@ -1,0 +1,67 @@
+    <!-- UserLookup Criteria -->
+    <definition name="jaffa.admin.userlookup.LookupLayout.criteria"  extends="jaffa.LookupLayout">
+        <put name="body1" value="/jaffa/admin/userlookup/criteria.jsp"/>
+        <put name="body2" value=""/>
+        <put name="action" value="/admin_userLookup"/>
+        <put name="createComponent" value="Jaffa.Admin.UserMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+            <add value="CreateFromCriteria"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.admin.userlookup.criteria"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Admin.UserLookup.criteria]"/>
+        <put name="body" value="jaffa.admin.userlookup.LookupLayout.criteria"/>
+    </definition>
+
+    <!-- UserLookup Results -->
+    <definition name="jaffa.admin.userlookup.LookupLayout.results"  extends="jaffa.LookupLayout">
+        <put name="body1" value=""/>
+        <put name="body2" value="/jaffa/admin/userlookup/results.jsp"/>
+        <put name="action" value="/admin_userLookup"/>
+        <put name="createComponent" value="Jaffa.Admin.UserMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="ModifySearch"/>
+            <add value="Refresh"/>
+            <add value="CreateFromResults"/>
+            <add value="Close"/>
+            <add value="Select"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="ModifySearch"/>
+            <add value="Select"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.admin.userlookup.results"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Admin.UserLookup.results]"/>
+        <put name="body" value="jaffa.admin.userlookup.LookupLayout.results"/>
+    </definition>
+
+    <!-- UserLookup ConsolidatedCriteriaAndResults -->
+    <definition name="jaffa.admin.userlookup.LookupLayout.consolidatedCriteriaAndResults"  extends="jaffa.LookupLayout">
+        <put name="body1" value="/jaffa/admin/userlookup/criteria.jsp"/>
+        <put name="body2" value="/jaffa/admin/userlookup/results.jsp"/>
+        <put name="action" value="/admin_userLookup"/>
+        <put name="createComponent" value="Jaffa.Admin.UserMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+            <add value="CreateFromResults"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.admin.userlookup.consolidatedCriteriaAndResults"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Admin.UserLookup.consolidated]"/>
+        <put name="body" value="jaffa.admin.userlookup.LookupLayout.consolidatedCriteriaAndResults"/>
+    </definition>
+

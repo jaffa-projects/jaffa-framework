@@ -1,0 +1,11 @@
+    <!-- FormDefinitionViewer -->
+    <definition name="jaffa.printing.formdefinitionviewer.ViewerLayout"  extends="jaffa.ViewerLayout">
+        <put name="body" value="/jaffa/printing/formdefinitionviewer/view.jsp"/>
+        <put name="action" value="/jaffa_printing_formDefinitionViewer"/>
+        <put name="updateComponent" value="Jaffa.Printing.FormDefinitionMaintenance"/>
+    </definition>
+    <definition name="jaffa.printing.formdefinitionviewer"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.FormDefinitionViewer.view]"/>
+        <put name="body" value="jaffa.printing.formdefinitionviewer.ViewerLayout"/>
+    </definition>
+

@@ -1,0 +1,10 @@
+/* Include the core Jaffa CSS for unit tests */
+@import url(../jaffa/css/jaffa.css);
+
+/* Highlight Mandatory Fields */
+input.WidgetMandatoryEditBox {
+   padding: 1px;
+   border: solid 1px red 
+}
+
+

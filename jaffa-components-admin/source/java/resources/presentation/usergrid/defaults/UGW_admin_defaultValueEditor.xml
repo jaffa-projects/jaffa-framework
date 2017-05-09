@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<user-grid-settings>
+<user-grid-column-settings>
+<name>[label.Jaffa.Admin.LabelEditor.ComponentName]</name>
+<width></width>
+</user-grid-column-settings>
+<user-grid-column-settings>
+<name>[label.Jaffa.Admin.LabelEditor.ComponentType]</name>
+<width></width>
+</user-grid-column-settings>
+<user-grid-column-settings>
+<name>[label.Jaffa.Widgets.Button.Action]</name>
+<width></width>
+</user-grid-column-settings>
+</user-grid-settings>
+

@@ -1,0 +1,20 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the next release. For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+
+What's Changed / Improvements
+=====================================================
+- Enhanced the AttachmentFinderComponent to pass the serializedKey, if available, to the AttachmentMaintenanceComponent
+- Enhanced the doValidate0() method in AttachmentMaintenanceForm to raise an error if contents are not passed for an embedded-file.
+
+What's Deleted/Deprecated
+=====================================================
+
+Bug Fixes
+=====================================================
+- Fixed the label 'label.Jaffa.Attachment.Attachment.SupercededBy'

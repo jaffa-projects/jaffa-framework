@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+This dtd is used for validating the mapping files used by the JDBC Engine.
+It is in sync with the XML schema 'jdbc-engine-mapping_1_0.xsd' used for binding XML and Java.
+
+Heres an example of a mapping file conforming to this DTD
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+<classmap>
+    <class name="org.jaffa.persistence.domainobjects.Asset">
+        <map-to table="ZZ_JUT_ASSET" />
+
+        <field name="AssetTk" use-member="m_assetTk" type="java.lang.Long" primary-key="true" autogen-key="true">
+            <sql name="ASSET_TK" type="Integer" dirty="ignore"/>
+        </field>
+
+        <field name="AssetId" use-member="m_assetId" type="java.lang.String">
+            <sql name="ASSET_ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Part" use-member="m_part" type="java.lang.String">
+            <sql name="PART" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Custodian" use-member="m_custodian" type="java.lang.String">
+            <sql name="CUSTODIAN" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Condition" use-member="m_condition" type="java.lang.String">
+            <sql name="CONDITION" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="CreatedDatetime" use-member="m_createdDatetime" type="org.jaffa.datatypes.DateTime">
+            <sql name="CREATED_DATETIME" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+        <field name="Qty" use-member="m_qty" type="java.lang.Long">
+            <sql name="QTY" type="INTEGER" dirty="ignore"/>
+        </field>
+
+        <field name="KeyRef" use-member="m_keyRef" type="java.lang.String">
+            <sql name="KEY_REF" type="STRING" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>
+-->
+<!ELEMENT classmap (class)>
+
+<!-- The domain class being mapped -->
+<!ELEMENT class (map-to,field+)>
+<!ATTLIST class name CDATA #REQUIRED>
+
+<!-- The physical table in the database
+    table: The name of the table in the database
+    lockable: By default, the persistence engine will lock a table's row(s) before performing updates/deletes.
+        However, it is quite possible that the table may actually be a complex view, which may not support the 'Select... FOR UPDATE NOWAIT' construct.
+        For such cases, specify lockable='false' and put the appropriate locking code in the INSTEAD-OF triggers for the view.
+-->
+<!ELEMENT map-to EMPTY>
+<!ATTLIST map-to table CDATA #REQUIRED>
+<!ATTLIST map-to lockable (true|false) "true">
+
+<!-- A field being mapped
+  name: Name of the field
+  type: The Java class being used for this field in the domain class
+  use-member: By default, the persistence engine uses the getters/setters to obtain/set the value on a domain instance.
+    The value for this attribute, if specified, should contain the field-name in the domain class to be used instead of getter/setter.
+  primary-key: True, if this field is part of the primary-key
+  autogen-key: True, if we want the database to generate the key
+-->
+<!ELEMENT field (sql)>
+<!ATTLIST field
+    name CDATA #REQUIRED
+    type CDATA #REQUIRED
+    use-member CDATA #IMPLIED
+    primary-key (true|false) "false"
+    autogen-key (true|false) "false"
+>
+
+<!-- database specific attributes
+    name: The name of the corresponding column in the database
+    type: The datatype for the database column
+    dirty: This attribute is not functional yet
+    rpad: This is to support CHAR fields in the database, which suffer from the following peculiarities
+      1- Pad the CHAR fields in the where clause of prepared-statements
+      2- Pad the VARCHAR field or trim CHAR field when joining between VARCHAR and CHAR fields
+      3- Trim the CHAR fields when using the Criteria.RELATIONAL_ENDS_WITH criteria
+      4- Use "IS NULL OR = ' '" when checking for nulls
+      5- Use "IS NOT NULL AND != ' '" when checking for not-nulls
+-->
+<!ELEMENT sql EMPTY>
+<!ATTLIST sql
+    name CDATA #REQUIRED
+    type CDATA #REQUIRED
+    dirty CDATA "ignore"
+    rpad CDATA #IMPLIED
+>

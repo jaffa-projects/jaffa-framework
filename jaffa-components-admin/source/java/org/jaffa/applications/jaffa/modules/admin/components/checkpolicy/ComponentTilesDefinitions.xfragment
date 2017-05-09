@@ -1,0 +1,11 @@
+    <!-- Check Policy -->
+    <definition name="jaffa.admin.checkpolicy.Layout"  extends="jaffa.ViewerLayout">
+        <put name="contextNav"  value="/jaffa/admin/checkpolicy/contextNav.jsp"/>
+        <put name="defaultNav"  value="/jaffa/admin/checkpolicy/defaultNav.jsp"/>
+        <put name="body"        value="/jaffa/admin/checkpolicy/main.jsp"/>
+        <put name="action"      value="/admin_checkPolicy"/>
+    </definition>
+    <definition name="jaffa.admin.checkpolicy"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Admin.CheckPolicy]"/>
+        <put name="body" value="jaffa.admin.checkpolicy.Layout"/>
+    </definition>

@@ -1,0 +1,1420 @@
+// .//GEN-BEGIN:1_be
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ * 
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/ 
+package org.jaffa.transaction.domain;
+
+import org.apache.log4j.Logger;
+import java.util.*;
+import javax.xml.bind.annotation.*;
+import javax.persistence.*;
+import org.jaffa.datatypes.*;
+import org.jaffa.datatypes.adapters.*;
+import org.jaffa.metadata.*;
+import org.jaffa.rules.RulesEngine;
+import org.jaffa.persistence.*;
+import org.jaffa.persistence.exceptions.*;
+import org.jaffa.security.SecurityManager;
+import org.jaffa.util.*;
+import org.jaffa.beans.factory.config.StaticContext;
+import org.jaffa.exceptions.FrameworkException;
+import org.jaffa.exceptions.RelatedDomainObjectFoundException;
+import org.jaffa.exceptions.DuplicateKeyException;
+import org.jaffa.datatypes.exceptions.InvalidForeignKeyException;
+import org.jaffa.exceptions.ApplicationExceptions;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
+import org.jaffa.transaction.domain.TransactionPayload;
+import org.jaffa.transaction.domain.TransactionPayloadMeta;
+import org.jaffa.transaction.domain.TransactionField;
+import org.jaffa.transaction.domain.TransactionFieldMeta;
+import org.jaffa.transaction.domain.TransactionDependency;
+import org.jaffa.transaction.domain.TransactionDependencyMeta;
+// .//GEN-END:1_be
+// Add additional imports//GEN-FIRST:imports
+
+
+
+
+// .//GEN-LAST:imports
+// .//GEN-BEGIN:2_be
+/**
+ * Auto Generated Persistent class for the J_TRANSACTIONS table.
+ * @author  Auto-Generated
+ */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+@Entity
+@Table(name="J_TRANSACTIONS")
+@SqlResultSetMapping(name="Transaction",entities={@EntityResult(entityClass=Transaction.class)})
+@TypeDefs({@TypeDef(name="dateTimeType", typeClass=DateTimeType.class), @TypeDef(name="dateOnlyType", typeClass=DateOnlyType.class)})
+public class Transaction extends Persistent {
+
+    private static final Logger log = Logger.getLogger(Transaction.class);
+    /** Holds value of property id. */
+    @XmlElement(name="id")
+    @Id
+    @Column(name="ID")    
+    private java.lang.String m_id;
+
+    /** Holds value of property direction. */
+    @XmlElement(name="direction")
+    @Column(name="DIRECTION")    
+    private java.lang.String m_direction;
+
+    /** Holds value of property type. */
+    @XmlElement(name="type")
+    @Column(name="TYPE")    
+    private java.lang.String m_type;
+
+    /** Holds value of property subType. */
+    @XmlElement(name="subType")
+    @Column(name="SUB_TYPE")    
+    private java.lang.String m_subType;
+
+    /** Holds value of property status. */
+    @XmlElement(name="status")
+    @Column(name="STATUS")    
+    private java.lang.String m_status;
+
+    /** Holds value of property errorMessage. */
+    @XmlElement(name="errorMessage")
+    @Column(name="ERROR_MESSAGE")    
+    private java.lang.String m_errorMessage;
+
+    /** Holds value of property createdOn. */
+    @XmlElement(name="createdOn")
+    @Type(type="dateTimeType")
+    @Column(name="CREATED_ON")    
+    private org.jaffa.datatypes.DateTime m_createdOn;
+
+    /** Holds value of property createdBy. */
+    @XmlElement(name="createdBy")
+    @Column(name="CREATED_BY")    
+    private java.lang.String m_createdBy;
+
+    /** Holds value of property lastChangedOn. */
+    @XmlElement(name="lastChangedOn")
+    @Type(type="dateTimeType")
+    @Column(name="LAST_CHANGED_ON")    
+    private org.jaffa.datatypes.DateTime m_lastChangedOn;
+
+    /** Holds value of property lastChangedBy. */
+    @XmlElement(name="lastChangedBy")
+    @Column(name="LAST_CHANGED_BY")    
+    private java.lang.String m_lastChangedBy;
+
+    /** Holds related TransactionPayload object. */
+    private transient TransactionPayload m_transactionPayloadObject;
+
+    /** Holds related TransactionField objects. */
+    private transient Collection m_transactionFieldCollection;
+
+    /** Holds related TransactionDependency objects. */
+    private transient Collection m_transactionDependencyCollection;
+
+
+    /**
+     * Default Constructor
+     *
+     * Calls the Static Context Factory to allow Spring to initialize this object
+     */
+    public Transaction() {
+        StaticContext.configure(this);
+    }
+    /** Check if the domain object exists for the input Primary Key.
+     * @return true if the domain object exists for the input Primary Key.
+     * @throws FrameworkException Indicates some system error
+     */
+    public static boolean exists(UOW uow, java.lang.String id) throws FrameworkException {
+        boolean localUow = false;
+        try {
+            if (uow == null || !uow.isActive()) {
+                uow = new UOW();
+                localUow = true;
+            }
+            boolean exists = false;
+            Criteria criteria = findByPKCriteria(id);
+            criteria.addFunction(Criteria.FUNCTION_COUNT, null, Criteria.ID_FUNCTION_COUNT);
+            Iterator itr = uow.query(criteria).iterator();
+            if (itr.hasNext()) {
+                Number count = (Number) ((Map) itr.next()).get(Criteria.ID_FUNCTION_COUNT);
+                exists = count != null && count.intValue() > 0;
+            }
+            return exists;
+        } finally {
+            if (localUow && uow != null)
+                uow.rollback();
+        }
+    }
+
+    /** Returns the domain object for the input Primary Key.
+     * @return the domain object for the input Primary Key. A null is returned if the domain object is not found.
+     * @throws FrameworkException Indicates some system error
+     */
+    public static Transaction findByPK(UOW uow, java.lang.String id) throws FrameworkException {
+        boolean localUow = false;
+        try {
+            if (uow == null || !uow.isActive()) {
+                uow = new UOW();
+                localUow = true;
+            }
+            Criteria criteria = findByPKCriteria(id);
+            Iterator itr = uow.query(criteria).iterator();
+            if (itr.hasNext())
+                return (Transaction) itr.next();
+            else
+                return null;
+        } finally {
+            if (localUow && uow != null)
+                uow.rollback();
+        }
+    }
+
+    /** Returns a Criteria object for retrieving the domain object based on the input Primary Key.
+     * @return a Criteria object for retrieving the domain object based on the input Primary Key.
+     */
+    public static Criteria findByPKCriteria(java.lang.String id) {
+        Criteria criteria = new Criteria();
+        criteria.setTable(TransactionMeta.getName());
+        criteria.addCriteria(TransactionMeta.ID, id);
+        return criteria;
+    }
+    // .//GEN-END:2_be
+        // .//GEN-BEGIN:id_be
+    /** Getter for property id.
+     * @return Value of property id.
+     */
+    public java.lang.String getId() {
+        return m_id;
+    }
+    
+    /** Use this method to update the property id.
+     * This method will do nothing and simply return if the input value is the same as the current value.
+     * Validation will be performed on the input value.
+     * This will try to lock the underlying database row, in case CAUTIOUS locking is specified at the time of query.
+     * @param id New value of property id.
+     * @throws ValidationException if an invalid value is passed.
+     * @throws UpdatePrimaryKeyException if this domain object was loaded from the database.
+     * @throws ReadOnlyObjectException if a Read-Only object is updated.
+     * @throws AlreadyLockedObjectException if the underlying database row is already locked by another process.
+     * @throws FrameworkException Indicates some system error
+     */
+    public void setId(java.lang.String id)
+    throws ValidationException, UpdatePrimaryKeyException, ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException {
+        // ignore, if the current value and new value are the same
+        if (m_id == null ? id == null : m_id.equals(id))
+            return;
+
+        // this is part of the primary key.. do not update if its a database occurence.
+        if (isDatabaseOccurence())
+            throw new UpdatePrimaryKeyException();
+
+        id = validateId(id);
+        // .//GEN-END:id_be
+        // Add custom code before setting the value//GEN-FIRST:id
+
+
+        // .//GEN-LAST:id
+        // .//GEN-BEGIN:id_1_be
+        super.update();
+        super.addInitialValue(TransactionMeta.ID, m_id);
+        m_id = id;
+        m_transactionPayloadObject = null;
+        // .//GEN-END:id_1_be
+        // Add custom code after setting the value//GEN-FIRST:id_3
+
+
+        // .//GEN-LAST:id_3
+        // .//GEN-BEGIN:id_2_be
+    }
+    
+    /** This method is present for backwards compatibility only.
+     * It merely invokes the setId() method.
+     * @param id New value of property id.
+     * @throws ValidationException if an invalid value is passed.
+     * @throws UpdatePrimaryKeyException if this domain object was loaded from the database.
+     * @throws ReadOnlyObjectException if a Read-Only object is updated.
+     * @throws AlreadyLockedObjectException if the underlying database row is already locked by another process.
+     * @throws FrameworkException Indicates some system error
+     */
+    public void updateId(java.lang.String id)
+    throws ValidationException, UpdatePrimaryKeyException, ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException {
+        setId(id);
+    }
+
+    /** Use this method to validate a value for the property id.
+     * @param id Value to be validated for the property id.
+     * @throws ValidationException if an invalid value is passed
+     * @throws FrameworkException Indicates some system error
+     */
+    public java.lang.String validateId(java.lang.String id)
+    throws ValidationException, FrameworkException {
+        // .//GEN-END:id_2_be
+        // Add custom code before validation//GEN-FIRST:id_1
+
+
+        // .//GEN-LAST:id_1
+        // .//GEN-BEGIN:id_3_be
+        id = FieldValidator.validate(id, (StringFieldMetaData) TransactionMeta.META_ID, true);
+
+        // Invoke the Dynamic Rules Engine
+        RulesEngine.doAllValidationsForDomainField(TransactionMeta.getName(), TransactionMeta.ID, id, this.getUOW());
+
+        // .//GEN-END:id_3_be
+        // Add custom code after a successful validation//GEN-FIRST:id_2
+
+
+        // .//GEN-LAST:id_2
+        // .//GEN-BEGIN:id_4_be
+        return id;
+    }
+    // .//GEN-END:id_4_be
+    // .//GEN-BEGIN:direction_be
+    /** Getter for property direction.
+     * @return Value of property direction.
+     */
+    public java.lang.String getDirection() {
+        return m_direction;
+    }
+    
+    /** Use this method to update the property direction.
+     * This method will do nothing and simply return if the input value is the same as the current value.
+     * Validation will be performed on the input value.
+     * This will try to lock the underlying database row, in case CAUTIOUS locking is specified at the time of query.
+     * @param direction New value of property direction.
+     * @throws ValidationException if an invalid value is passed.
+     * @throws ReadOnlyObjectException if a Read-Only object is updated.
+     * @throws AlreadyLockedObjectException if the underlying database row is already locked by another process.
+     * @throws FrameworkException Indicates some system error
+     */
+    public void setDirection(java.lang.String direction)
+    throws ValidationException, ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException {
+        // ignore, if the current value and new value are the same
+        if (m_direction == null ? direction == null : m_direction.equals(direction))
+            return;
+
+
+        direction = validateDirection(direction);
+        // .//GEN-END:direction_be
+        // Add custom code before setting the value//GEN-FIRST:direction
+
+
+        // .//GEN-LAST:direction
+        // .//GEN-BEGIN:direction_1_be
+        super.update();
+        super.addInitialValue(TransactionMeta.DIRECTION, m_direction);
+        m_direction = direction;
+        // .//GEN-END:direction_1_be
+        // Add custom code after setting the value//GEN-FIRST:direction_3
+
+
+        // .//GEN-LAST:direction_3
+        // .//GEN-BEGIN:direction_2_be
+    }
+    
+    /** This method is present for backwards compatibility only.
+     * It merely invokes the setDirection() method.
+     * @param direction New value of property direction.
+     * @throws ValidationException if an invalid value is passed.
+     * @throws ReadOnlyObjectException if a Read-Only object is updated.
+     * @throws AlreadyLockedObjectException if the underlying database row is already locked by another process.
+     * @throws FrameworkException Indicates some system error
+     */
+    public void updateDirection(java.lang.String direction)
+    throws ValidationException, ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException {
+        setDirection(direction);
+    }
+
+    /** Use this method to validate a value for the property direction.
+     * @param direction Value to be validated for the property direction.
+     * @throws ValidationException if an invalid value is passed
+     * @throws FrameworkException Indicates some system error
+     */
+    public java.lang.String validateDirection(java.lang.String direction)
+    throws ValidationException, FrameworkException {
+        // .//GEN-END:direction_2_be
+        // Add custom code before validation//GEN-FIRST:direction_1
+
+
+        // .//GEN-LAST:direction_1
+        // .//GEN-BEGIN:direction_3_be
+        direction = FieldValidator.validate(direction, (StringFieldMetaData) TransactionMeta.META_DIRECTION, true);
+
+        // Invoke the Dynamic Rules Engine
+        RulesEngine.doAllValidationsForDomainField(TransactionMeta.getName(), TransactionMeta.DIRECTION, direction, this.getUOW());
+
+        // .//GEN-END:direction_3_be
+        // Add custom code after a successful validation//GEN-FIRST:direction_2
+
+
+        // .//GEN-LAST:direction_2
+        // .//GEN-BEGIN:direction_4_be
+        return direction;
+    }
+    // .//GEN-END:direction_4_be
+    // .//GEN-BEGIN:type_be
+    /** Getter for property type.
+     * @return Value of property type.
+     */
+    public java.lang.String getType() {
+        return m_type;
+    }
+    
+    /** Use this method to update the property type.
+     * This method will do nothing and simply return if the input value is the same as the current value.
+     * Validation will be performed on the input value.
+     * This will try to lock the underlying database row, in case CAUTIOUS locking is specified at the time of query.
+     * @param type New value of property type.
+     * @throws ValidationException if an invalid value is passed.
+     * @throws ReadOnlyObjectException if a Read-Only object is updated.
+     * @throws AlreadyLockedObjectException if the underlying database row is already locked by another process.
+     * @throws FrameworkException Indicates some system error
+     */
+    public void setType(java.lang.String type)
+    throws ValidationException, ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException {
+        // ignore, if the current value and new value are the same
+        if (m_type == null ? type == null : m_type.equals(type))
+            return;
+
+
+        type = validateType(type);
+        // .//GEN-END:type_be
+        // Add custom code before setting the value//GEN-FIRST:type
+
+
+        // .//GEN-LAST:type
+        // .//GEN-BEGIN:type_1_be
+        super.update();
+        super.addInitialValue(TransactionMeta.TYPE, m_type);
+        m_type = type;
+        // .//GEN-END:type_1_be
+        // Add custom code after setting the value//GEN-FIRST:type_3
+
+
+        // .//GEN-LAST:type_3
+        // .//GEN-BEGIN:type_2_be
+    }
+    
+    /** This method is present for backwards compatibility only.
+     * It merely invokes the setType() method.
+     * @param type New value of property type.
+     * @throws ValidationException if an invalid value is passed.
+     * @throws ReadOnlyObjectException if a Read-Only object is updated.
+     * @throws AlreadyLockedObjectException if the underlying database row is already locked by another process.
+     * @throws FrameworkException Indicates some system error
+     */
+    public void updateType(java.lang.String type)
+    throws ValidationException, ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException {
+        setType(type);
+    }
+
+    /** Use this method to validate a value for the property type.
+     * @param type Value to be validated for the property type.
+     * @throws ValidationException if an invalid value is passed
+     * @throws FrameworkException Indicates some system error
+     */
+    public java.lang.String validateType(java.lang.String type)
+    throws ValidationException, FrameworkException {
+        // .//GEN-END:type_2_be
+        // Add custom code before validation//GEN-FIRST:type_1
+
+
+        // .//GEN-LAST:type_1
+        // .//GEN-BEGIN:type_3_be
+        type = FieldValidator.validate(type, (StringFieldMetaData) TransactionMeta.META_TYPE, true);
+
+        // Invoke the Dynamic Rules Engine
+        RulesEngine.doAllValidationsForDomainField(TransactionMeta.getName(), TransactionMeta.TYPE, type, this.getUOW());
+
+        // .//GEN-END:type_3_be
+        // Add custom code after a successful validation//GEN-FIRST:type_2
+
+
+        // .//GEN-LAST:type_2
+        // .//GEN-BEGIN:type_4_be
+        return type;
+    }
+    // .//GEN-END:type_4_be
+    // .//GEN-BEGIN:subType_be
+    /** Getter for property subType.
+     * @return Value of property subType.
+     */
+    public java.lang.String getSubType() {
+        return m_subType;
+    }
+    
+    /** Use this method to update the property subType.
+     * This method will do nothing and simply return if the input value is the same as the current value.
+     * Validation will be performed on the input value.
+     * This will try to lock the underlying database row, in case CAUTIOUS locking is specified at the time of query.
+     * @param subType New value of property subType.
+     * @throws ValidationException if an invalid value is passed.
+     * @throws ReadOnlyObjectException if a Read-Only object is updated.
+     * @throws AlreadyLockedObjectException if the underlying database row is already locked by another process.
+     * @throws FrameworkException Indicates some system error
+     */
+    public void setSubType(java.lang.String subType)
+    throws ValidationException, ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException {
+        // ignore, if the current value and new value are the same
+        if (m_subType == null ? subType == null : m_subType.equals(subType))
+            return;
+
+
+        subType = validateSubType(subType);
+        // .//GEN-END:subType_be
+        // Add custom code before setting the value//GEN-FIRST:subType
+
+
+        // .//GEN-LAST:subType
+        // .//GEN-BEGIN:subType_1_be
+        super.update();
+        super.addInitialValue(TransactionMeta.SUB_TYPE, m_subType);
+        m_subType = subType;
+        // .//GEN-END:subType_1_be
+        // Add custom code after setting the value//GEN-FIRST:subType_3
+
+
+        // .//GEN-LAST:subType_3
+        // .//GEN-BEGIN:subType_2_be
+    }
+    
+    /** This method is present for backwards compatibility only.
+     * It merely invokes the setSubType() method.
+     * @param subType New value of property subType.
+     * @throws ValidationException if an invalid value is passed.
+     * @throws ReadOnlyObjectException if a Read-Only object is updated.
+     * @throws AlreadyLockedObjectException if the underlying database row is already locked by another process.
+     * @throws FrameworkException Indicates some system error
+     */
+    public void updateSubType(java.lang.String subType)
+    throws ValidationException, ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException {
+        setSubType(subType);
+    }
+
+    /** Use this method to validate a value for the property subType.
+     * @param subType Value to be validated for the property subType.
+     * @throws ValidationException if an invalid value is passed
+     * @throws FrameworkException Indicates some system error
+     */
+    public java.lang.String validateSubType(java.lang.String subType)
+    throws ValidationException, FrameworkException {
+        // .//GEN-END:subType_2_be
+        // Add custom code before validation//GEN-FIRST:subType_1
+
+
+        // .//GEN-LAST:subType_1
+        // .//GEN-BEGIN:subType_3_be
+        subType = FieldValidator.validate(subType, (StringFieldMetaData) TransactionMeta.META_SUB_TYPE, true);
+
+        // Invoke the Dynamic Rules Engine
+        RulesEngine.doAllValidationsForDomainField(TransactionMeta.getName(), TransactionMeta.SUB_TYPE, subType, this.getUOW());
+
+        // .//GEN-END:subType_3_be
+        // Add custom code after a successful validation//GEN-FIRST:subType_2
+
+
+        // .//GEN-LAST:subType_2
+        // .//GEN-BEGIN:subType_4_be
+        return subType;
+    }
+    // .//GEN-END:subType_4_be
+    // .//GEN-BEGIN:status_be
+    /** Getter for property status.
+     * @return Value of property status.
+     */
+    public java.lang.String getStatus() {
+        return m_status;
+    }
+    
+    /** Use this method to update the property status.
+     * This method will do nothing and simply return if the input value is the same as the current value.
+     * Validation will be performed on the input value.
+     * This will try to lock the underlying database row, in case CAUTIOUS locking is specified at the time of query.
+     * @param status New value of property status.
+     * @throws ValidationException if an invalid value is passed.
+     * @throws ReadOnlyObjectException if a Read-Only object is updated.
+     * @throws AlreadyLockedObjectException if the underlying database row is already locked by another process.
+     * @throws FrameworkException Indicates some system error
+     */
+    public void setStatus(java.lang.String status)
+    throws ValidationException, ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException {
+        // ignore, if the current value and new value are the same
+        if (m_status == null ? status == null : m_status.equals(status))
+            return;
+
+
+        status = validateStatus(status);
+        // .//GEN-END:status_be
+        // Add custom code before setting the value//GEN-FIRST:status
+
+
+        // .//GEN-LAST:status
+        // .//GEN-BEGIN:status_1_be
+        super.update();
+        super.addInitialValue(TransactionMeta.STATUS, m_status);
+        m_status = status;
+        // .//GEN-END:status_1_be
+        // Add custom code after setting the value//GEN-FIRST:status_3
+
+
+        // .//GEN-LAST:status_3
+        // .//GEN-BEGIN:status_2_be
+    }
+    
+    /** This method is present for backwards compatibility only.
+     * It merely invokes the setStatus() method.
+     * @param status New value of property status.
+     * @throws ValidationException if an invalid value is passed.
+     * @throws ReadOnlyObjectException if a Read-Only object is updated.
+     * @throws AlreadyLockedObjectException if the underlying database row is already locked by another process.
+     * @throws FrameworkException Indicates some system error
+     */
+    public void updateStatus(java.lang.String status)
+    throws ValidationException, ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException {
+        setStatus(status);
+    }
+
+    /** Use this method to validate a value for the property status.
+     * @param status Value to be validated for the property status.
+     * @throws ValidationException if an invalid value is passed
+     * @throws FrameworkException Indicates some system error
+     */
+    public java.lang.String validateStatus(java.lang.String status)
+    throws ValidationException, FrameworkException {
+        // .//GEN-END:status_2_be
+        // Add custom code before validation//GEN-FIRST:status_1
+
+
+        // .//GEN-LAST:status_1
+        // .//GEN-BEGIN:status_3_be
+        status = FieldValidator.validate(status, (StringFieldMetaData) TransactionMeta.META_STATUS, true);
+
+        // Invoke the Dynamic Rules Engine
+        RulesEngine.doAllValidationsForDomainField(TransactionMeta.getName(), TransactionMeta.STATUS, status, this.getUOW());
+
+        // .//GEN-END:status_3_be
+        // Add custom code after a successful validation//GEN-FIRST:status_2
+
+
+        // .//GEN-LAST:status_2
+        // .//GEN-BEGIN:status_4_be
+        return status;
+    }
+    // .//GEN-END:status_4_be
+    // .//GEN-BEGIN:errorMessage_be
+    /** Getter for property errorMessage.
+     * @return Value of property errorMessage.
+     */
+    public java.lang.String getErrorMessage() {
+        return m_errorMessage;
+    }
+    
+    /** Use this method to update the property errorMessage.
+     * This method will do nothing and simply return if the input value is the same as the current value.
+     * Validation will be performed on the input value.
+     * This will try to lock the underlying database row, in case CAUTIOUS locking is specified at the time of query.
+     * @param errorMessage New value of property errorMessage.
+     * @throws ValidationException if an invalid value is passed.
+     * @throws ReadOnlyObjectException if a Read-Only object is updated.
+     * @throws AlreadyLockedObjectException if the underlying database row is already locked by another process.
+     * @throws FrameworkException Indicates some system error
+     */
+    public void setErrorMessage(java.lang.String errorMessage)
+    throws ValidationException, ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException {
+        // ignore, if the current value and new value are the same
+        if (m_errorMessage == null ? errorMessage == null : m_errorMessage.equals(errorMessage))
+            return;
+
+
+        errorMessage = validateErrorMessage(errorMessage);
+        // .//GEN-END:errorMessage_be
+        // Add custom code before setting the value//GEN-FIRST:errorMessage
+
+
+        // .//GEN-LAST:errorMessage
+        // .//GEN-BEGIN:errorMessage_1_be
+        super.update();
+        super.addInitialValue(TransactionMeta.ERROR_MESSAGE, m_errorMessage);
+        m_errorMessage = errorMessage;
+        // .//GEN-END:errorMessage_1_be
+        // Add custom code after setting the value//GEN-FIRST:errorMessage_3
+
+
+        // .//GEN-LAST:errorMessage_3
+        // .//GEN-BEGIN:errorMessage_2_be
+    }
+    
+    /** This method is present for backwards compatibility only.
+     * It merely invokes the setErrorMessage() method.
+     * @param errorMessage New value of property errorMessage.
+     * @throws ValidationException if an invalid value is passed.
+     * @throws ReadOnlyObjectException if a Read-Only object is updated.
+     * @throws AlreadyLockedObjectException if the underlying database row is already locked by another process.
+     * @throws FrameworkException Indicates some system error
+     */
+    public void updateErrorMessage(java.lang.String errorMessage)
+    throws ValidationException, ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException {
+        setErrorMessage(errorMessage);
+    }
+
+    /** Use this method to validate a value for the property errorMessage.
+     * @param errorMessage Value to be validated for the property errorMessage.
+     * @throws ValidationException if an invalid value is passed
+     * @throws FrameworkException Indicates some system error
+     */
+    public java.lang.String validateErrorMessage(java.lang.String errorMessage)
+    throws ValidationException, FrameworkException {
+        // .//GEN-END:errorMessage_2_be
+        // Add custom code before validation//GEN-FIRST:errorMessage_1
+
+
+        // .//GEN-LAST:errorMessage_1
+        // .//GEN-BEGIN:errorMessage_3_be
+        errorMessage = FieldValidator.validate(errorMessage, (StringFieldMetaData) TransactionMeta.META_ERROR_MESSAGE, true);
+
+        // Invoke the Dynamic Rules Engine
+        RulesEngine.doAllValidationsForDomainField(TransactionMeta.getName(), TransactionMeta.ERROR_MESSAGE, errorMessage, this.getUOW());
+
+        // .//GEN-END:errorMessage_3_be
+        // Add custom code after a successful validation//GEN-FIRST:errorMessage_2
+
+
+        // .//GEN-LAST:errorMessage_2
+        // .//GEN-BEGIN:errorMessage_4_be
+        return errorMessage;
+    }
+    // .//GEN-END:errorMessage_4_be
+    // .//GEN-BEGIN:createdOn_be
+    /** Getter for property createdOn.
+     * @return Value of property createdOn.
+     */
+    public org.jaffa.datatypes.DateTime getCreatedOn() {
+        return m_createdOn;
+    }
+    
+    /** Use this method to update the property createdOn.
+     * This method will do nothing and simply return if the input value is the same as the current value.
+     * Validation will be performed on the input value.
+     * This will try to lock the underlying database row, in case CAUTIOUS locking is specified at the time of query.
+     * @param createdOn New value of property createdOn.
+     * @throws ValidationException if an invalid value is passed.
+     * @throws ReadOnlyObjectException if a Read-Only object is updated.
+     * @throws AlreadyLockedObjectException if the underlying database row is already locked by another process.
+     * @throws FrameworkException Indicates some system error
+     */
+    public void setCreatedOn(org.jaffa.datatypes.DateTime createdOn)
+    throws ValidationException, ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException {
+        // ignore, if the current value and new value are the same
+        if (m_createdOn == null ? createdOn == null : m_createdOn.equals(createdOn))
+            return;
+
+
+        createdOn = validateCreatedOn(createdOn);
+        // .//GEN-END:createdOn_be
+        // Add custom code before setting the value//GEN-FIRST:createdOn
+
+
+        // .//GEN-LAST:createdOn
+        // .//GEN-BEGIN:createdOn_1_be
+        super.update();
+        super.addInitialValue(TransactionMeta.CREATED_ON, m_createdOn);
+        m_createdOn = createdOn;
+        // .//GEN-END:createdOn_1_be
+        // Add custom code after setting the value//GEN-FIRST:createdOn_3
+
+
+        // .//GEN-LAST:createdOn_3
+        // .//GEN-BEGIN:createdOn_2_be
+    }
+    
+    /** This method is present for backwards compatibility only.
+     * It merely invokes the setCreatedOn() method.
+     * @param createdOn New value of property createdOn.
+     * @throws ValidationException if an invalid value is passed.
+     * @throws ReadOnlyObjectException if a Read-Only object is updated.
+     * @throws AlreadyLockedObjectException if the underlying database row is already locked by another process.
+     * @throws FrameworkException Indicates some system error
+     */
+    public void updateCreatedOn(org.jaffa.datatypes.DateTime createdOn)
+    throws ValidationException, ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException {
+        setCreatedOn(createdOn);
+    }
+
+    /** Use this method to validate a value for the property createdOn.
+     * @param createdOn Value to be validated for the property createdOn.
+     * @throws ValidationException if an invalid value is passed
+     * @throws FrameworkException Indicates some system error
+     */
+    public org.jaffa.datatypes.DateTime validateCreatedOn(org.jaffa.datatypes.DateTime createdOn)
+    throws ValidationException, FrameworkException {
+        // .//GEN-END:createdOn_2_be
+        // Add custom code before validation//GEN-FIRST:createdOn_1
+
+
+        // .//GEN-LAST:createdOn_1
+        // .//GEN-BEGIN:createdOn_3_be
+        createdOn = FieldValidator.validate(createdOn, (DateTimeFieldMetaData) TransactionMeta.META_CREATED_ON, true);
+
+        // Invoke the Dynamic Rules Engine
+        RulesEngine.doAllValidationsForDomainField(TransactionMeta.getName(), TransactionMeta.CREATED_ON, createdOn, this.getUOW());
+
+        // .//GEN-END:createdOn_3_be
+        // Add custom code after a successful validation//GEN-FIRST:createdOn_2
+
+
+        // .//GEN-LAST:createdOn_2
+        // .//GEN-BEGIN:createdOn_4_be
+        return createdOn;
+    }
+    // .//GEN-END:createdOn_4_be
+    // .//GEN-BEGIN:createdBy_be
+    /** Getter for property createdBy.
+     * @return Value of property createdBy.
+     */
+    public java.lang.String getCreatedBy() {
+        return m_createdBy;
+    }
+    
+    /** Use this method to update the property createdBy.
+     * This method will do nothing and simply return if the input value is the same as the current value.
+     * Validation will be performed on the input value.
+     * This will try to lock the underlying database row, in case CAUTIOUS locking is specified at the time of query.
+     * @param createdBy New value of property createdBy.
+     * @throws ValidationException if an invalid value is passed.
+     * @throws ReadOnlyObjectException if a Read-Only object is updated.
+     * @throws AlreadyLockedObjectException if the underlying database row is already locked by another process.
+     * @throws FrameworkException Indicates some system error
+     */
+    public void setCreatedBy(java.lang.String createdBy)
+    throws ValidationException, ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException {
+        // ignore, if the current value and new value are the same
+        if (m_createdBy == null ? createdBy == null : m_createdBy.equals(createdBy))
+            return;
+
+
+        createdBy = validateCreatedBy(createdBy);
+        // .//GEN-END:createdBy_be
+        // Add custom code before setting the value//GEN-FIRST:createdBy
+
+
+        // .//GEN-LAST:createdBy
+        // .//GEN-BEGIN:createdBy_1_be
+        super.update();
+        super.addInitialValue(TransactionMeta.CREATED_BY, m_createdBy);
+        m_createdBy = createdBy;
+        // .//GEN-END:createdBy_1_be
+        // Add custom code after setting the value//GEN-FIRST:createdBy_3
+
+
+        // .//GEN-LAST:createdBy_3
+        // .//GEN-BEGIN:createdBy_2_be
+    }
+    
+    /** This method is present for backwards compatibility only.
+     * It merely invokes the setCreatedBy() method.
+     * @param createdBy New value of property createdBy.
+     * @throws ValidationException if an invalid value is passed.
+     * @throws ReadOnlyObjectException if a Read-Only object is updated.
+     * @throws AlreadyLockedObjectException if the underlying database row is already locked by another process.
+     * @throws FrameworkException Indicates some system error
+     */
+    public void updateCreatedBy(java.lang.String createdBy)
+    throws ValidationException, ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException {
+        setCreatedBy(createdBy);
+    }
+
+    /** Use this method to validate a value for the property createdBy.
+     * @param createdBy Value to be validated for the property createdBy.
+     * @throws ValidationException if an invalid value is passed
+     * @throws FrameworkException Indicates some system error
+     */
+    public java.lang.String validateCreatedBy(java.lang.String createdBy)
+    throws ValidationException, FrameworkException {
+        // .//GEN-END:createdBy_2_be
+        // Add custom code before validation//GEN-FIRST:createdBy_1
+
+
+        // .//GEN-LAST:createdBy_1
+        // .//GEN-BEGIN:createdBy_3_be
+        createdBy = FieldValidator.validate(createdBy, (StringFieldMetaData) TransactionMeta.META_CREATED_BY, true);
+
+        // Invoke the Dynamic Rules Engine
+        RulesEngine.doAllValidationsForDomainField(TransactionMeta.getName(), TransactionMeta.CREATED_BY, createdBy, this.getUOW());
+
+        // .//GEN-END:createdBy_3_be
+        // Add custom code after a successful validation//GEN-FIRST:createdBy_2
+
+
+        // .//GEN-LAST:createdBy_2
+        // .//GEN-BEGIN:createdBy_4_be
+        return createdBy;
+    }
+    // .//GEN-END:createdBy_4_be
+    // .//GEN-BEGIN:lastChangedOn_be
+    /** Getter for property lastChangedOn.
+     * @return Value of property lastChangedOn.
+     */
+    public org.jaffa.datatypes.DateTime getLastChangedOn() {
+        return m_lastChangedOn;
+    }
+    
+    /** Use this method to update the property lastChangedOn.
+     * This method will do nothing and simply return if the input value is the same as the current value.
+     * Validation will be performed on the input value.
+     * This will try to lock the underlying database row, in case CAUTIOUS locking is specified at the time of query.
+     * @param lastChangedOn New value of property lastChangedOn.
+     * @throws ValidationException if an invalid value is passed.
+     * @throws ReadOnlyObjectException if a Read-Only object is updated.
+     * @throws AlreadyLockedObjectException if the underlying database row is already locked by another process.
+     * @throws FrameworkException Indicates some system error
+     */
+    public void setLastChangedOn(org.jaffa.datatypes.DateTime lastChangedOn)
+    throws ValidationException, ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException {
+        // ignore, if the current value and new value are the same
+        if (m_lastChangedOn == null ? lastChangedOn == null : m_lastChangedOn.equals(lastChangedOn))
+            return;
+
+
+        lastChangedOn = validateLastChangedOn(lastChangedOn);
+        // .//GEN-END:lastChangedOn_be
+        // Add custom code before setting the value//GEN-FIRST:lastChangedOn
+
+
+        // .//GEN-LAST:lastChangedOn
+        // .//GEN-BEGIN:lastChangedOn_1_be
+        super.update();
+        super.addInitialValue(TransactionMeta.LAST_CHANGED_ON, m_lastChangedOn);
+        m_lastChangedOn = lastChangedOn;
+        // .//GEN-END:lastChangedOn_1_be
+        // Add custom code after setting the value//GEN-FIRST:lastChangedOn_3
+
+
+        // .//GEN-LAST:lastChangedOn_3
+        // .//GEN-BEGIN:lastChangedOn_2_be
+    }
+    
+    /** This method is present for backwards compatibility only.
+     * It merely invokes the setLastChangedOn() method.
+     * @param lastChangedOn New value of property lastChangedOn.
+     * @throws ValidationException if an invalid value is passed.
+     * @throws ReadOnlyObjectException if a Read-Only object is updated.
+     * @throws AlreadyLockedObjectException if the underlying database row is already locked by another process.
+     * @throws FrameworkException Indicates some system error
+     */
+    public void updateLastChangedOn(org.jaffa.datatypes.DateTime lastChangedOn)
+    throws ValidationException, ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException {
+        setLastChangedOn(lastChangedOn);
+    }
+
+    /** Use this method to validate a value for the property lastChangedOn.
+     * @param lastChangedOn Value to be validated for the property lastChangedOn.
+     * @throws ValidationException if an invalid value is passed
+     * @throws FrameworkException Indicates some system error
+     */
+    public org.jaffa.datatypes.DateTime validateLastChangedOn(org.jaffa.datatypes.DateTime lastChangedOn)
+    throws ValidationException, FrameworkException {
+        // .//GEN-END:lastChangedOn_2_be
+        // Add custom code before validation//GEN-FIRST:lastChangedOn_1
+
+
+        // .//GEN-LAST:lastChangedOn_1
+        // .//GEN-BEGIN:lastChangedOn_3_be
+        lastChangedOn = FieldValidator.validate(lastChangedOn, (DateTimeFieldMetaData) TransactionMeta.META_LAST_CHANGED_ON, true);
+
+        // Invoke the Dynamic Rules Engine
+        RulesEngine.doAllValidationsForDomainField(TransactionMeta.getName(), TransactionMeta.LAST_CHANGED_ON, lastChangedOn, this.getUOW());
+
+        // .//GEN-END:lastChangedOn_3_be
+        // Add custom code after a successful validation//GEN-FIRST:lastChangedOn_2
+
+
+        // .//GEN-LAST:lastChangedOn_2
+        // .//GEN-BEGIN:lastChangedOn_4_be
+        return lastChangedOn;
+    }
+    // .//GEN-END:lastChangedOn_4_be
+    // .//GEN-BEGIN:lastChangedBy_be
+    /** Getter for property lastChangedBy.
+     * @return Value of property lastChangedBy.
+     */
+    public java.lang.String getLastChangedBy() {
+        return m_lastChangedBy;
+    }
+    
+    /** Use this method to update the property lastChangedBy.
+     * This method will do nothing and simply return if the input value is the same as the current value.
+     * Validation will be performed on the input value.
+     * This will try to lock the underlying database row, in case CAUTIOUS locking is specified at the time of query.
+     * @param lastChangedBy New value of property lastChangedBy.
+     * @throws ValidationException if an invalid value is passed.
+     * @throws ReadOnlyObjectException if a Read-Only object is updated.
+     * @throws AlreadyLockedObjectException if the underlying database row is already locked by another process.
+     * @throws FrameworkException Indicates some system error
+     */
+    public void setLastChangedBy(java.lang.String lastChangedBy)
+    throws ValidationException, ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException {
+        // ignore, if the current value and new value are the same
+        if (m_lastChangedBy == null ? lastChangedBy == null : m_lastChangedBy.equals(lastChangedBy))
+            return;
+
+
+        lastChangedBy = validateLastChangedBy(lastChangedBy);
+        // .//GEN-END:lastChangedBy_be
+        // Add custom code before setting the value//GEN-FIRST:lastChangedBy
+
+
+        // .//GEN-LAST:lastChangedBy
+        // .//GEN-BEGIN:lastChangedBy_1_be
+        super.update();
+        super.addInitialValue(TransactionMeta.LAST_CHANGED_BY, m_lastChangedBy);
+        m_lastChangedBy = lastChangedBy;
+        // .//GEN-END:lastChangedBy_1_be
+        // Add custom code after setting the value//GEN-FIRST:lastChangedBy_3
+
+
+        // .//GEN-LAST:lastChangedBy_3
+        // .//GEN-BEGIN:lastChangedBy_2_be
+    }
+    
+    /** This method is present for backwards compatibility only.
+     * It merely invokes the setLastChangedBy() method.
+     * @param lastChangedBy New value of property lastChangedBy.
+     * @throws ValidationException if an invalid value is passed.
+     * @throws ReadOnlyObjectException if a Read-Only object is updated.
+     * @throws AlreadyLockedObjectException if the underlying database row is already locked by another process.
+     * @throws FrameworkException Indicates some system error
+     */
+    public void updateLastChangedBy(java.lang.String lastChangedBy)
+    throws ValidationException, ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException {
+        setLastChangedBy(lastChangedBy);
+    }
+
+    /** Use this method to validate a value for the property lastChangedBy.
+     * @param lastChangedBy Value to be validated for the property lastChangedBy.
+     * @throws ValidationException if an invalid value is passed
+     * @throws FrameworkException Indicates some system error
+     */
+    public java.lang.String validateLastChangedBy(java.lang.String lastChangedBy)
+    throws ValidationException, FrameworkException {
+        // .//GEN-END:lastChangedBy_2_be
+        // Add custom code before validation//GEN-FIRST:lastChangedBy_1
+
+
+        // .//GEN-LAST:lastChangedBy_1
+        // .//GEN-BEGIN:lastChangedBy_3_be
+        lastChangedBy = FieldValidator.validate(lastChangedBy, (StringFieldMetaData) TransactionMeta.META_LAST_CHANGED_BY, true);
+
+        // Invoke the Dynamic Rules Engine
+        RulesEngine.doAllValidationsForDomainField(TransactionMeta.getName(), TransactionMeta.LAST_CHANGED_BY, lastChangedBy, this.getUOW());
+
+        // .//GEN-END:lastChangedBy_3_be
+        // Add custom code after a successful validation//GEN-FIRST:lastChangedBy_2
+
+
+        // .//GEN-LAST:lastChangedBy_2
+        // .//GEN-BEGIN:lastChangedBy_4_be
+        return lastChangedBy;
+    }
+    // .//GEN-END:lastChangedBy_4_be
+    // .//GEN-BEGIN:transactionPayloadObject_1_be
+    /** Returns a related TransactionPayload object.
+     * @return a related TransactionPayload object.
+     * @throws FrameworkException Indicates some system error
+     */
+    public TransactionPayload getTransactionPayloadObject() throws FrameworkException {
+        findTransactionPayloadObject(false);
+        return m_transactionPayloadObject;
+    }
+    
+    /** Finds the related TransactionPayload object.
+     * If checkExistenceOnly is false, then the related object will be fetched and assigned to the corresponding member variable of this class.
+     * If checkExistenceOnly is true, then a mere existence check is performed for the related object, as oppposed to fetching all the values for that object.
+     */
+    private void findTransactionPayloadObject(boolean checkExistenceOnly) throws FrameworkException {
+        UOW uow = getUOW();
+        boolean localUow = false;
+        try {
+            if (m_transactionPayloadObject == null && getId() != null) {
+                Criteria criteria = new Criteria();
+                criteria.setTable(TransactionPayloadMeta.getName());
+                criteria.addCriteria(TransactionPayloadMeta.ID, getId());
+                if (checkExistenceOnly)
+                    criteria.addFunction(Criteria.FUNCTION_COUNT, null, Criteria.ID_FUNCTION_COUNT);
+                Number count = null;
+                if (uow == null || !uow.isActive()) {
+                    uow = new UOW();
+                    localUow = true;
+                }
+                Iterator itr = uow.query(criteria).iterator();
+                if (itr.hasNext()) {
+                    if (checkExistenceOnly)
+                        count = (Number) ((Map) itr.next()).get(Criteria.ID_FUNCTION_COUNT);
+                    else
+                        m_transactionPayloadObject = (TransactionPayload) itr.next();
+                }
+            }
+        } finally {
+            if (localUow && uow != null)
+                uow.rollback();
+        }
+    }
+    /** Creates a new TransactionPayload object and initializes the related fields.
+     * @throws ValidationException if an invalid value is passed.
+     * @throws FrameworkException Indicates some system error
+     * @return the related TransactionPayload object with the initialized related fields.
+     */
+    public TransactionPayload newTransactionPayloadObject()
+    throws ValidationException, FrameworkException {
+        TransactionPayload transactionPayload = new TransactionPayload();
+        transactionPayload.setId(getId());
+        // .//GEN-END:transactionPayloadObject_1_be
+        // Add custom code//GEN-FIRST:transactionPayloadObject_1
+
+
+        // .//GEN-LAST:transactionPayloadObject_1
+        // .//GEN-BEGIN:transactionPayloadObject_2_be
+        return transactionPayload;
+    }
+    // .//GEN-END:transactionPayloadObject_2_be
+    // .//GEN-BEGIN:transactionFieldArray_1_be
+    /** Returns an array of related TransactionField objects.
+     * @return an array of related TransactionField objects.
+     * @throws FrameworkException Indicates some system error
+     */
+    public TransactionField[] getTransactionFieldArray() throws FrameworkException {
+        UOW uow = getUOW();
+        boolean localUow = false;
+        try {
+            TransactionField[] output = null;
+            if (m_transactionFieldCollection == null && isDatabaseOccurence()) {
+                Criteria criteria = findTransactionFieldCriteria();
+                if (uow == null || !uow.isActive()) {
+                    uow = new UOW();
+                    localUow = true;
+                }
+                Collection col = uow.query(criteria);
+                m_transactionFieldCollection = new ArrayList();
+                for (Iterator itr = col.iterator(); itr.hasNext(); )
+                    m_transactionFieldCollection.add(itr.next());
+            }
+
+            if (m_transactionFieldCollection != null)
+                output = (TransactionField[]) m_transactionFieldCollection.toArray(new TransactionField[0]);
+            return output;
+        } finally {
+            if (localUow && uow != null)
+                uow.rollback();
+        }
+    }
+    /** Returns a Criteria object for retrieving the related TransactionField objects.
+     * @return a Criteria object for retrieving the related TransactionField objects.
+     */
+    public Criteria findTransactionFieldCriteria() {
+        Criteria criteria = new Criteria();
+        criteria.setTable(TransactionFieldMeta.getName());
+        criteria.addCriteria(TransactionFieldMeta.TRANSACTION_ID, getId());
+        // .//GEN-END:transactionFieldArray_1_be
+        // Add custom criteria//GEN-FIRST:transactionFieldArray_1
+
+
+        // .//GEN-LAST:transactionFieldArray_1
+        // .//GEN-BEGIN:transactionFieldArray_2_be
+        return criteria;
+    }
+    /** Creates a new TransactionField object and initializes the related fields.
+     * This will uncache the related TransactionField objects.
+     * @throws ValidationException if an invalid value is passed.
+     * @throws FrameworkException Indicates some system error
+     * @return the related TransactionField object with the initialized related fields.
+     */
+    public TransactionField newTransactionFieldObject()
+    throws ValidationException, FrameworkException {
+        m_transactionFieldCollection = null;
+        TransactionField transactionField = new TransactionField();
+        transactionField.setTransactionId(getId());
+        // .//GEN-END:transactionFieldArray_2_be
+        // Add custom code//GEN-FIRST:transactionFieldArray_2
+
+
+        // .//GEN-LAST:transactionFieldArray_2
+        // .//GEN-BEGIN:transactionFieldArray_3_be
+        return transactionField;
+    }
+    // .//GEN-END:transactionFieldArray_3_be
+    // .//GEN-BEGIN:transactionDependencyArray_1_be
+    /** Returns an array of related TransactionDependency objects.
+     * @return an array of related TransactionDependency objects.
+     * @throws FrameworkException Indicates some system error
+     */
+    public TransactionDependency[] getTransactionDependencyArray() throws FrameworkException {
+        UOW uow = getUOW();
+        boolean localUow = false;
+        try {
+            TransactionDependency[] output = null;
+            if (m_transactionDependencyCollection == null && isDatabaseOccurence()) {
+                Criteria criteria = findTransactionDependencyCriteria();
+                if (uow == null || !uow.isActive()) {
+                    uow = new UOW();
+                    localUow = true;
+                }
+                Collection col = uow.query(criteria);
+                m_transactionDependencyCollection = new ArrayList();
+                for (Iterator itr = col.iterator(); itr.hasNext(); )
+                    m_transactionDependencyCollection.add(itr.next());
+            }
+
+            if (m_transactionDependencyCollection != null)
+                output = (TransactionDependency[]) m_transactionDependencyCollection.toArray(new TransactionDependency[0]);
+            return output;
+        } finally {
+            if (localUow && uow != null)
+                uow.rollback();
+        }
+    }
+    /** Returns a Criteria object for retrieving the related TransactionDependency objects.
+     * @return a Criteria object for retrieving the related TransactionDependency objects.
+     */
+    public Criteria findTransactionDependencyCriteria() {
+        Criteria criteria = new Criteria();
+        criteria.setTable(TransactionDependencyMeta.getName());
+        criteria.addCriteria(TransactionDependencyMeta.TRANSACTION_ID, getId());
+        // .//GEN-END:transactionDependencyArray_1_be
+        // Add custom criteria//GEN-FIRST:transactionDependencyArray_1
+
+
+        // .//GEN-LAST:transactionDependencyArray_1
+        // .//GEN-BEGIN:transactionDependencyArray_2_be
+        return criteria;
+    }
+    /** Creates a new TransactionDependency object and initializes the related fields.
+     * This will uncache the related TransactionDependency objects.
+     * @throws ValidationException if an invalid value is passed.
+     * @throws FrameworkException Indicates some system error
+     * @return the related TransactionDependency object with the initialized related fields.
+     */
+    public TransactionDependency newTransactionDependencyObject()
+    throws ValidationException, FrameworkException {
+        m_transactionDependencyCollection = null;
+        TransactionDependency transactionDependency = new TransactionDependency();
+        transactionDependency.setTransactionId(getId());
+        // .//GEN-END:transactionDependencyArray_2_be
+        // Add custom code//GEN-FIRST:transactionDependencyArray_2
+
+
+        // .//GEN-LAST:transactionDependencyArray_2
+        // .//GEN-BEGIN:transactionDependencyArray_3_be
+        return transactionDependency;
+    }
+    // .//GEN-END:transactionDependencyArray_3_be
+    // .//GEN-BEGIN:toString_1_be
+    /** This returns the diagnostic information.
+    * @return the diagnostic information.
+    */
+    public String toString() {
+        StringBuffer buf = new StringBuffer();
+        buf.append("<Transaction>");
+        buf.append("<id>"); if (m_id != null) buf.append(m_id); buf.append("</id>");
+        buf.append("<direction>"); if (m_direction != null) buf.append(m_direction); buf.append("</direction>");
+        buf.append("<type>"); if (m_type != null) buf.append(m_type); buf.append("</type>");
+        buf.append("<subType>"); if (m_subType != null) buf.append(m_subType); buf.append("</subType>");
+        buf.append("<status>"); if (m_status != null) buf.append(m_status); buf.append("</status>");
+        buf.append("<errorMessage>"); if (m_errorMessage != null) buf.append(m_errorMessage); buf.append("</errorMessage>");
+        buf.append("<createdOn>"); if (m_createdOn != null) buf.append(m_createdOn); buf.append("</createdOn>");
+        buf.append("<createdBy>"); if (m_createdBy != null) buf.append(m_createdBy); buf.append("</createdBy>");
+        buf.append("<lastChangedOn>"); if (m_lastChangedOn != null) buf.append(m_lastChangedOn); buf.append("</lastChangedOn>");
+        buf.append("<lastChangedBy>"); if (m_lastChangedBy != null) buf.append(m_lastChangedBy); buf.append("</lastChangedBy>");
+        // .//GEN-END:toString_1_be
+        // Add custom debug information//GEN-FIRST:toString_1
+
+
+        // .//GEN-LAST:toString_1
+        // .//GEN-BEGIN:toString_2_be
+        buf.append(super.toString());
+        buf.append("</Transaction>");
+        return buf.toString();
+    }
+    // .//GEN-END:toString_2_be
+    // .//GEN-BEGIN:clone_1_be
+    /** Returns a clone of the object.
+     * @throws CloneNotSupportedException if cloning is not supported. This should never happen.
+     * @return a clone of the object.
+     */
+    public Object clone() throws CloneNotSupportedException {
+        Transaction obj = (Transaction) super.clone();
+        obj.m_transactionPayloadObject = null;
+        obj.m_transactionFieldCollection = null;
+        obj.m_transactionDependencyCollection = null;
+        return obj;
+    }
+    // .//GEN-END:clone_1_be
+    // .//GEN-BEGIN:performForeignKeyValidations_1_be
+    /** This method ensures that the modified foreign-keys are valid.
+     * @throws ApplicationExceptions if an invalid foreign key is set.
+     * @throws FrameworkException Indicates some system error
+     */
+    public void performForeignKeyValidations() throws ApplicationExceptions, FrameworkException {
+        ApplicationExceptions appExps = new ApplicationExceptions();
+        if (appExps.size() > 0)
+            throw appExps;
+    }
+    // .//GEN-END:performForeignKeyValidations_1_be
+    // .//GEN-BEGIN:performPreDeleteReferentialIntegrity_1_be
+    /** This method is triggered by the UOW, before adding this object to the Delete-Store.
+     * This will raise an exception if any associated/aggregated objects exist.
+     * This will cascade delete all composite objects.
+     * @throws PreDeleteFailedException if any error occurs during the process.
+     */
+    public void performPreDeleteReferentialIntegrity() throws PreDeleteFailedException {
+        TransactionField[] transactionFieldArray = null;
+        try {
+            transactionFieldArray = getTransactionFieldArray();
+        } catch (FrameworkException e) {
+            throw new PreDeleteFailedException(null, e);
+        }
+        if (transactionFieldArray != null && transactionFieldArray.length > 0) {
+            try {
+                // Perform cascade deletes
+                for (int i = 0; i < transactionFieldArray.length; i++)
+                    getUOW().delete(transactionFieldArray[i]);
+            } catch (Exception e) {
+                throw new PreDeleteFailedException(null, e);
+            }
+        }
+        TransactionDependency[] transactionDependencyArray = null;
+        try {
+            transactionDependencyArray = getTransactionDependencyArray();
+        } catch (FrameworkException e) {
+            throw new PreDeleteFailedException(null, e);
+        }
+        if (transactionDependencyArray != null && transactionDependencyArray.length > 0) {
+            try {
+                // Perform cascade deletes
+                for (int i = 0; i < transactionDependencyArray.length; i++)
+                    getUOW().delete(transactionDependencyArray[i]);
+            } catch (Exception e) {
+                throw new PreDeleteFailedException(null, e);
+            }
+        }
+    }
+    // .//GEN-END:performPreDeleteReferentialIntegrity_1_be
+    // .//GEN-BEGIN:3_be
+    /**
+     * @clientCardinality 1
+     * @supplierCardinality 0..1
+     * @clientQualifier id
+     * @supplierQualifier id
+     * @link composition
+     */
+    /*#TransactionPayload lnkTransactionPayload;*/
+
+    /**
+     * @clientCardinality 1
+     * @supplierCardinality 0..*
+     * @clientQualifier id
+     * @supplierQualifier transactionId
+     * @link composition
+     */
+    /*#TransactionField lnkTransactionField;*/
+
+    /**
+     * @clientCardinality 1
+     * @supplierCardinality 0..*
+     * @clientQualifier id
+     * @supplierQualifier transactionId
+     * @link composition
+     */
+    /*#TransactionDependency lnkTransactionDependency;*/
+
+    // .//GEN-END:3_be
+    // .//GEN-BEGIN:preAdd_1_be
+    /** This method is triggered by the UOW, before adding this object to the Add-Store, but after a UOW has been associated to the object.
+     * It ensures that the primary-key is unique and that the foreign-keys are valid.
+     * @throws PreAddFailedException if any error occurs during the process.
+     */
+    public void preAdd() throws PreAddFailedException {
+        try {
+            if (getCreatedBy() == null && SecurityManager.getPrincipal() != null && SecurityManager.getPrincipal().getName() != null)
+                setCreatedBy(SecurityManager.getPrincipal().getName());
+        } catch (ValidationException e) {
+            throw new PreAddFailedException(new String[] {"StampType:CreatedUserId Error"}, e);
+        } catch (FrameworkException e) {
+            throw new PreAddFailedException(new String[] {"StampType:CreatedUserId Error"}, e);
+        }
+        try {
+            if (getCreatedOn() == null)
+                setCreatedOn(new DateTime());
+        } catch (ValidationException e) {
+            throw new PreAddFailedException(new String[] {"StampType:CreatedDateTime Error"}, e);
+        } catch (FrameworkException e) {
+            throw new PreAddFailedException(new String[] {"StampType:CreatedDateTime Error"}, e);
+        }
+        try {
+            if (getLastChangedBy() == null)
+                setLastChangedBy(getCreatedBy());
+        } catch (ValidationException e) {
+            throw new PreAddFailedException(new String[] {"StampType:LastUpdatedUserId Error"}, e);
+        } catch (FrameworkException e) {
+            throw new PreAddFailedException(new String[] {"StampType:LastUpdatedUserId Error"}, e);
+        }
+        try {
+            if (getLastChangedOn() == null)
+                setLastChangedOn(getCreatedOn());
+        } catch (ValidationException e) {
+            throw new PreAddFailedException(new String[] {"StampType:LastUpdatedDateTime Error"}, e);
+        } catch (FrameworkException e) {
+            throw new PreAddFailedException(new String[] {"StampType:LastUpdatedDateTime Error"}, e);
+        }
+        // .//GEN-END:preAdd_1_be
+        // Add custom code//GEN-FIRST:preAdd_1
+
+
+        // .//GEN-LAST:preAdd_1
+        // .//GEN-BEGIN:preAdd_2_be
+        super.preAdd();
+    }
+    // .//GEN-END:preAdd_2_be
+    // .//GEN-BEGIN:preUpdate_1_be
+    /** This method is triggered by the UOW, before adding this object to the Update-Store, but after a UOW has been associated to the object.
+     * It ensures that the foreign-keys are valid.
+     * @throws PreUpdateFailedException if any error occurs during the process.
+     */
+    public void preUpdate() throws PreUpdateFailedException {
+        try {
+            if (getLastChangedOn() == null || !isModified(TransactionMeta.LAST_CHANGED_ON))
+                setLastChangedOn(new DateTime());
+        } catch (ValidationException e) {
+            throw new PreUpdateFailedException(new String[] {"StampType:LastUpdatedDateTime Error"}, e);
+        } catch (FrameworkException e) {
+            throw new PreUpdateFailedException(new String[] {"StampType:LastUpdatedDateTime Error"}, e);
+        }
+        try {
+            if ((getLastChangedBy() == null || !isModified(TransactionMeta.LAST_CHANGED_BY)) && SecurityManager.getPrincipal() != null && SecurityManager.getPrincipal().getName() != null)
+                setLastChangedBy(SecurityManager.getPrincipal().getName());
+        } catch (ValidationException e) {
+            throw new PreUpdateFailedException(new String[] {"StampType:LastUpdatedUserId Error"}, e);
+        } catch (FrameworkException e) {
+            throw new PreUpdateFailedException(new String[] {"StampType:LastUpdatedUserId Error"}, e);
+        }
+        // .//GEN-END:preUpdate_1_be
+        // Update custom code//GEN-FIRST:preUpdate_1
+
+
+        // .//GEN-LAST:preUpdate_1
+        // .//GEN-BEGIN:preUpdate_2_be
+        super.preUpdate();
+    }
+    // .//GEN-END:preUpdate_2_be
+    // All the custom code goes here//GEN-FIRST:custom
+
+
+
+
+
+
+    // .//GEN-LAST:custom
+}

@@ -1,0 +1,7 @@
+    <!-- FormEventViewer Form -->
+    <action    path="/jaffa_printing_formEventViewer"
+               type="org.jaffa.modules.printing.components.formeventviewer.ui.FormEventViewerAction"
+               name="jaffa_printing_formEventViewerForm"
+               validate="false"
+               scope="request">
+    </action>

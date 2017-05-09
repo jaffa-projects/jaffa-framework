@@ -1,0 +1,133 @@
+Release: jboss-aop_1.1.2
+Package: org.jboss.aop;
+Class: AspectManager
+
+
+880:            WeakReference ref = (WeakReference) advisors.get(clazz);
+881:            Advisor advisor = (Advisor) ref.get();
+882:            if (ref == null) continue;
+883:            if (binding.getPointcut().softMatch(advisor))
+
+Should be 
+
+880:            WeakReference ref = (WeakReference) advisors.get(clazz);
+881:            if (ref == null) continue;
+882:            Advisor advisor = (Advisor) ref.get();
+883:            if(advisor == null) {
+884:                it.remove();
+885:                continue;
+886:            }
+887:            if (binding.getPointcut().softMatch(advisor))
+
+
+Otherwise 
+
+13:16:29,363 ERROR [JaffaClassMetaDataLoader] Failed to add rule HiddenPropertyRule to class com.mirotechnologies.userse
+curity.user.components.userfinder.ui.UserFinderForm with binding execution(* com.mirotechnologies.usersecurity.user.comp
+onents.userfinder.ui.UserFinderForm->getPassword())
+java.lang.NullPointerException
+        at org.jboss.aop.pointcut.PointcutExpression.softMatch(PointcutExpression.java:66)
+        at org.jboss.aop.AspectManager.addBinding(AspectManager.java:883)
+        at org.jaffa.rules.aop.metadata.JaffaClassMetaDataLoader.bindRule(JaffaClassMetaDataLoader.java:515)
+        
+PointcutExpression.java:66 is 
+
+64:   public boolean softMatch(Advisor advisor)
+65:   {
+66:      SoftClassMatcher matcher = new SoftClassMatcher(advisor, advisor.getName(), ast);
+67:      return matcher.matches();
+68:   }
+
+Only cause could be advisor is passed is as 'null'!
+
+
+Replaced with test code in AspectManager
+
+
+------------------
+315:         advisor = new ClassAdvisor(clazz.getName(), this);
+             System.out.println("@@@@@@@@ New Advisor created for " + clazz.getName() + "[Mgr="+this.getClass().getName()+"]");
+             synchronized (advisors)
+             {
+                advisors.put(clazz, new WeakReference(advisor));
+------------------
+880:            WeakReference ref = (WeakReference) advisors.get(clazz);
+                Advisor advisor = (Advisor) ref.get();
+                if (ref == null) continue;
+                if(advisor == null) {
+                    System.out.println("@@@@@@@@ WeakRef to Advisor for class "+ clazz + " is now null!");
+                    it.remove();
+                    continue;
+                }
+                if (binding.getPointcut().softMatch(advisor))
+                {
+------------------
+
+
+Following message is displayed when the container starts...
+
+14:55:57,632 INFO  [STDOUT] @@@@@@@@ New Advisor created for org.apache.struts.util.MessageResourcesFactory[Mgr=org.jboss.aop.AspectManager]
+14:55:58,647 INFO  [STDOUT] @@@@@@@@ New Advisor created for org.apache.struts.util.RequestUtils[Mgr=org.jboss.aop.AspectManager]
+14:55:58,741 INFO  [STDOUT] @@@@@@@@ New Advisor created for org.apache.struts.util.PropertyMessageResourcesFactory[Mgr=org.jboss.aop.AspectManager]
+14:55:58,741 INFO  [PropertyMessageResources] Initializing, config='org.apache.struts.util.LocalStrings', returnNull=true
+14:55:58,757 INFO  [PropertyMessageResources] Initializing, config='org.apache.struts.action.ActionResources', returnNull=true
+14:55:58,804 INFO  [STDOUT] @@@@@@@@ New Advisor created for org.apache.struts.config.ModuleConfigFactory[Mgr=org.jboss.aop.AspectManager]
+14:55:58,851 INFO  [STDOUT] @@@@@@@@ New Advisor created for org.apache.struts.config.impl.DefaultModuleConfigFactory[Mgr=org.jboss.aop.AspectManager]
+14:55:59,694 INFO  [STDOUT] @@@@@@@@ New Advisor created for org.jaffa.util.PropertyMessageResourcesFactory[Mgr=org.jboss.aop.AspectManager]
+14:55:59,694 INFO  [PropertyMessageResources] Initializing, config='resources/ApplicationResources', returnNull=true
+14:55:59,741 INFO  [STDOUT] @@@@@@@@ New Advisor created for org.apache.struts.tiles.TilesPlugin[Mgr=org.jboss.aop.AspectManager]
+14:55:59,819 INFO  [STDOUT] @@@@@@@@ New Advisor created for org.apache.struts.tiles.TilesUtilImpl[Mgr=org.jboss.aop.AspectManager]
+14:55:59,851 INFO  [STDOUT] @@@@@@@@ New Advisor created for org.apache.struts.tiles.DefinitionsUtil[Mgr=org.jboss.aop.AspectManager]
+14:55:59,929 INFO  [STDOUT] @@@@@@@@ New Advisor created for org.apache.struts.tiles.definition.ComponentDefinitionsFactoryWrapper[Mgr=org.jboss.aop.AspectManager]
+14:56:00,022 INFO  [STDOUT] @@@@@@@@ New Advisor created for org.apache.struts.tiles.ComponentDefinition[Mgr=org.jboss.aop.AspectManager]
+
+The following is displayed when i run a struts action that calles classes that have aspects...
+
+14:56:21,366 INFO  [STDOUT] @@@@@@@@ New Advisor created for com.mirotechnologies.usersecurity.user.components.userfinder.ui.UserFinderForm[Mgr=org.jboss.aop.AspectManager]
+14:56:21,459 INFO  [STDOUT] @@@@@@@@ WeakRef to Advisor for class class org.jaffa.util.PropertyMessageResourcesFactory is now null!
+14:56:21,459 INFO  [STDOUT] @@@@@@@@ WeakRef to Advisor for class class org.apache.struts.util.PropertyMessageResourcesFactory is now null!
+14:56:21,475 INFO  [STDOUT] @@@@@@@@ WeakRef to Advisor for class class org.apache.struts.config.impl.DefaultModuleConfigFactory is now null!
+
+
+
+
+
+
+
+
+Concurrent Transformations??
+
+18:19:39,854 ERROR [STDERR] [warn] AOP Instrumentor failed to transform com.mirotechnologies.material.core.domain.ItemComment
+18:19:39,854 ERROR [STDERR] java.util.ConcurrentModificationException
+18:19:39,854 ERROR [STDERR]     at java.util.LinkedHashMap$LinkedHashIterator.nextEntry(LinkedHashMap.java:358)
+18:19:39,854 ERROR [STDERR]     at java.util.LinkedHashMap$ValueIterator.next(LinkedHashMap.java:373)
+18:19:39,854 ERROR [STDERR]     at org.jboss.aop.instrument.JoinpointSimpleClassifier.classifyJoinpoint(JoinpointSimpleClassifier.java:48)
+18:19:39,854 ERROR [STDERR]     at org.jboss.aop.instrument.JoinpointClassifier.classifyMethodExecution(JoinpointClassifier.java:158)
+18:19:39,854 ERROR [STDERR]     at org.jboss.aop.instrument.MethodExecutionTransformer.classifyMethods(MethodExecutionTransformer.java:80)
+18:19:39,854 ERROR [STDERR]     at org.jboss.aop.instrument.MethodExecutionTransformer.instrument(MethodExecutionTransformer.java:181)
+18:19:39,854 ERROR [STDERR]     at org.jboss.aop.instrument.Instrumentor.transform(Instrumentor.java:626)
+18:19:39,854 ERROR [STDERR]     at org.jboss.aop.AspectManager.translate(AspectManager.java:742)
+18:19:39,854 ERROR [STDERR]     at org.jboss.aop.AspectManager.transform(AspectManager.java:657)
+18:19:39,885 ERROR [STDERR]     at org.jboss.mx.loading.RepositoryClassLoader.findClass(RepositoryClassLoader.java:574)
+18:19:39,885 ERROR [STDERR]     at java.lang.ClassLoader.loadClass(ClassLoader.java:289)
+18:19:39,885 ERROR [STDERR]     at org.jboss.mx.loading.RepositoryClassLoader.loadClassLocally(RepositoryClassLoader.java:160)
+18:19:39,885 ERROR [STDERR]     at org.jboss.mx.loading.ClassLoadingTask$ThreadTask.run(ClassLoadingTask.java:119)
+18:19:39,885 ERROR [STDERR]     at org.jboss.mx.loading.LoadMgr3.nextTask(LoadMgr3.java:385)
+18:19:39,885 ERROR [STDERR]     at org.jboss.mx.loading.RepositoryClassLoader.loadClassImpl(RepositoryClassLoader.java:470)
+18:19:39,885 ERROR [STDERR]     at org.jboss.mx.loading.RepositoryClassLoader.loadClass(RepositoryClassLoader.java:374)
+18:19:39,885 ERROR [STDERR]     at java.lang.ClassLoader.loadClass(ClassLoader.java:235)
+18:19:39,885 ERROR [STDERR]     at java.lang.ClassLoader.loadClassInternal(ClassLoader.java:302)
+18:19:39,885 ERROR [STDERR]     at java.lang.Class.getDeclaredMethods0(Native Method)
+18:19:39,885 ERROR [STDERR]     at java.lang.Class.privateGetDeclaredMethods(Class.java:1647)
+18:19:39,885 ERROR [STDERR]     at java.lang.Class.getDeclaredMethods(Class.java:1131)
+18:19:39,901 ERROR [STDERR]     at org.jboss.aop.ClassAdvisor.addDeclaredMethods(ClassAdvisor.java:1206)
+18:19:39,901 ERROR [STDERR]     at org.jboss.aop.ClassAdvisor.createMethodTables(ClassAdvisor.java:1260)
+18:19:39,901 ERROR [STDERR]     at org.jboss.aop.ClassAdvisor.access$100(ClassAdvisor.java:66)
+18:19:39,901 ERROR [STDERR]     at org.jboss.aop.ClassAdvisor$1.run(ClassAdvisor.java:222)
+18:19:39,901 ERROR [STDERR]     at java.security.AccessController.doPrivileged(Native Method)
+18:19:39,901 ERROR [STDERR]     at org.jboss.aop.ClassAdvisor.attachClass(ClassAdvisor.java:205)
+18:19:39,901 ERROR [STDERR]     at org.jboss.aop.AspectManager.getAdvisor(AspectManager.java:439)
+18:19:39,901 ERROR [STDERR]     at com.mirotechnologies.material.core.domain.Item.<clinit>(Item.java)
+18:19:39,932 ERROR [STDERR]     at java.lang.Class.forName0(Native Method)
+
+This has been fixed by JBoss in v1.3

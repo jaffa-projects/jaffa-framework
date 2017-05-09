@@ -1,0 +1,7 @@
+    <!-- OutputCommandViewer Form -->
+    <action    path="/jaffa_printing_outputCommandViewer"
+               type="org.jaffa.modules.printing.components.outputcommandviewer.ui.OutputCommandViewerAction"
+               name="jaffa_printing_outputCommandViewerForm"
+               validate="false"
+               scope="request">
+    </action>

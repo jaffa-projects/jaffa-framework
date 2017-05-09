@@ -1,0 +1,17 @@
+    <!-- QueueList Results -->
+    <definition name="jaffa.messaging.queuelist.FinderLayout.results"  extends="jaffa.FinderLayout">
+        <put name="body1" value=""/>
+        <put name="body2" value="/jaffa/messaging/queuelist/results.jsp"/>
+        <put name="action" value="/jaffa_messaging_queueList"/>
+        <putList name="contextNavLinks">
+            <add value="Refresh"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.messaging.queuelist.results"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Messaging.QueueList.results]"/>
+        <put name="body" value="jaffa.messaging.queuelist.FinderLayout.results"/>
+    </definition>

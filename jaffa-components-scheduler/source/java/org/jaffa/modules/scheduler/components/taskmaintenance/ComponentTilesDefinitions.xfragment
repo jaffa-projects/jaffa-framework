@@ -1,0 +1,15 @@
+    <!-- TaskMaintenance -->
+    <definition name="jaffa.scheduler.taskmaintenance.MaintenanceLayout.main"  extends="jaffa.MaintenanceLayout">
+      <put name="body" value="/jaffa/scheduler/taskmaintenance/main.jsp"/>
+      <put name="action" value="/jaffa_scheduler_taskMaintenance"/>
+      <put name="currentScreenCounter" value="0"/>
+      <put name="createModeTitle" value="[title.Jaffa.Scheduler.TaskMaintenance.maintenance]"/>
+      <put name="updateModeTitle" value="[title.Jaffa.Scheduler.TaskMaintenance.maintenance]"/>
+      <putList name="contextNavLinks">
+        <add value="field=ClearEventLog;type=link;label=[label.Jaffa.Scheduler.TaskMaintenance.ClearEventLog];image=jaffa/imgs/icons/clear.gif;guarded=true;mode=update;confirm=label.Jaffa.Scheduler.TaskMaintenance.ClearEventLog.confirm"/>
+      </putList>
+    </definition>
+    <definition name="jaffa.scheduler.taskmaintenance.main"  extends="jaffa.MainLayout">
+      <put name="title" value="[title.Jaffa.Scheduler.TaskMaintenance.maintenance]"/>
+      <put name="body" value="jaffa.scheduler.taskmaintenance.MaintenanceLayout.main"/>
+    </definition>

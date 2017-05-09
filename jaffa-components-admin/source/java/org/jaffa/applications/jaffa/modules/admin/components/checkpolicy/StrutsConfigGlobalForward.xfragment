@@ -1,0 +1,2 @@
+    <!-- Jaffa Check Policy -->
+    <forward name="admin_checkPolicy" path="jaffa.admin.checkpolicy"/>

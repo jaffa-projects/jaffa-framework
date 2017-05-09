@@ -1,0 +1,1 @@
+    <form-bean name="jaffa_printing_outputCommandLookupForm" type="org.jaffa.modules.printing.components.outputcommandlookup.ui.OutputCommandLookupForm"/>

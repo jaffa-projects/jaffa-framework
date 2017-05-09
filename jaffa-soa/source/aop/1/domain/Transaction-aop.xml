@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+  <!-- ================================================= -->
+  <!-- Rules for Domain Object Transaction -->
+  <!-- ================================================= -->
+  <metadata tag="jaffa.rules" class="org.jaffa.transaction.domain.Transaction">
+    <label>[label.Jaffa.Transaction.Transaction]</label>
+    <property name="id">
+      <label>[label.Jaffa.Transaction.Transaction.Id]</label>
+      <max-length>80</max-length>
+    </property>
+    <property name="direction">
+      <label>[label.Jaffa.Transaction.Transaction.Direction]</label>
+      <max-length>20</max-length>
+      <in-list>IN=[label.Jaffa.Transaction.Transaction.Direction.IN],OUT=[label.Jaffa.Transaction.Transaction.Direction.OUT]</in-list>
+    </property>
+    <property name="type">
+      <label>[label.Jaffa.Transaction.Transaction.Type]</label>
+      <max-length>100</max-length>
+    </property>
+    <property name="subType">
+      <label>[label.Jaffa.Transaction.Transaction.SubType]</label>
+      <max-length>100</max-length>
+    </property>
+    <property name="status">
+      <label>[label.Jaffa.Transaction.Transaction.Status]</label>
+      <max-length>20</max-length>
+      <in-list>O=[label.Jaffa.Transaction.Transaction.Status.O],S=[label.Jaffa.Transaction.Transaction.Status.S],E=[label.Jaffa.Transaction.Transaction.Status.E],H=[label.Jaffa.Transaction.Transaction.Status.H],I=[label.Jaffa.Transaction.Transaction.Status.I]</in-list>
+    </property>
+    <property name="errorMessage">
+      <label>[label.Jaffa.Transaction.Transaction.ErrorMessage]</label>
+      <max-length>2000</max-length>
+    </property>
+    <property name="createdOn">
+      <label>[label.Common.CreatedOn]</label>
+    </property>
+    <property name="createdBy">
+      <label>[label.Common.CreatedBy]</label>
+      <max-length>20</max-length>
+      <case-type>Upper</case-type>
+    </property>
+    <property name="lastChangedOn">
+      <label>[label.Common.LastChangedOn]</label>
+    </property>
+    <property name="lastChangedBy">
+      <label>[label.Common.LastChangedBy]</label>
+      <max-length>20</max-length>
+      <case-type>Upper</case-type>
+    </property>
+  </metadata>
+</aop>

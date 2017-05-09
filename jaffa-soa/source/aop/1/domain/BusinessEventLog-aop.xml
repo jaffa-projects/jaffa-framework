@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+  <!-- ================================================= -->
+  <!-- Rules for Domain Object Transaction -->
+  <!-- ================================================= -->
+
+  <metadata tag="jaffa.rules" class="org.jaffa.modules.messaging.domain.BusinessEventLog">
+
+    <label>[label.Jaffa.Messaging.BusinessEventLog]</label>
+
+    <property name="logId">
+      <label>[label.Jaffa.Messaging.BusinessEventLog.LogId]</label>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="correlationType">
+      <label>[label.Jaffa.Messaging.BusinessEventLog.CorrelationType]</label>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="correlationKey1">
+      <label>[label.Jaffa.Messaging.BusinessEventLog.CorrelationKey1]</label>
+      <max-length>100</max-length>
+    </property>
+    
+    <property name="correlationKey2">
+      <label>[label.Jaffa.Messaging.BusinessEventLog.CorrelationKey2]</label>
+      <max-length>100</max-length>
+    </property>
+    
+    <property name="correlationKey3">
+      <label>[label.Jaffa.Messaging.BusinessEventLog.CorrelationKey3]</label>
+      <max-length>100</max-length>
+    </property>
+
+    <property name="scheduledTaskId">  
+      <label>[label.Jaffa.Messaging.BusinessEventLog.ScheduledTaskId]</label>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="messageId">
+      <label>[label.Jaffa.Messaging.BusinessEventLog.MessageId]</label>
+      <max-length>80</max-length>
+    </property>
+    
+    <property name="loggedOn">
+      <label>[label.Jaffa.Messaging.BusinessEventLog.LoggedOn]</label>
+      <data-type>DATE_TIME</data-type>
+    </property>
+
+    <property name="loggedBy">
+      <label>[label.Jaffa.Messaging.BusinessEventLog.LoggedBy]</label>
+      <max-length>20</max-length>
+      <case-type>Upper</case-type>
+    </property>
+    
+    <property name="processName">
+      <label>[label.Jaffa.Messaging.BusinessEventLog.ProcessName]</label>
+      <max-length>80</max-length>
+    </property>
+    
+    <property name="subProcessName">
+      <label>[label.Jaffa.Messaging.BusinessEventLog.SubProcessName]</label>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="messageType">
+      <label>[label.Jaffa.Messaging.BusinessEventLog.MessageType]</label>
+       <max-length>20</max-length>
+      <in-list>TRACE=[label.Commons.TRACE.Caps],DEBUG=[label.Commons.DEBUG.Caps],INFO=[label.Commons.INFO.Caps],WARN=[label.Commons.WARN.Caps],ERROR=[label.Commons.ERROR.Caps],FATAL=[label.Commons.FATAL.Caps]</in-list>
+      <case-type>Upper</case-type>
+    </property>
+    
+    <property name="messageText">
+      <label>[label.Jaffa.Messaging.BusinessEventLog.MessageText]</label>
+      <max-length>4000</max-length>
+    </property>
+
+    <property name="sourceClass">
+      <label>[label.Jaffa.Messaging.BusinessEventLog.SourceClass]</label>
+      <max-length>255</max-length>
+    </property>
+
+    <property name="sourceMethod">
+      <label>[label.Jaffa.Messaging.BusinessEventLog.SourceMethod]</label>
+      <max-length>100</max-length>
+    </property>
+    
+    <property name="sourceLine">
+      <label>[label.Jaffa.Messaging.BusinessEventLog.SourceLine]</label>
+      <data-type>INTEGER</data-type>
+    </property>
+    
+    <property name="stackTrace">    
+      <label>[label.Jaffa.Messaging.BusinessEventLog.StackTrace]</label>
+      <max-length>4000</max-length>
+    </property>
+
+  </metadata>
+</aop>

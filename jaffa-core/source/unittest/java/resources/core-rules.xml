@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rules PUBLIC "-//JAFFA//DTD Dynamic Rules 1.0//EN" "http://jaffa.sourceforge.net/DTD/rules_1_0.dtd">
+
+<rules>
+    <domain class="org.jaffa.persistence.domainobjects.Item">
+    
+        <!-- Enforce the mandatory check -->
+        <field name="ItemId">
+            <mandatory/>
+        </field>
+        
+        <!-- The value should be a valid key on the zz_jut_condition table -->
+        <field name="Condition">
+            <foreign-key domainClass="org.jaffa.persistence.domainobjects.Condition" property="Condition"/>
+        </field>
+        
+        <!-- Limit the values to X,S,A,Y,T,B,1,2 -->
+        <field name="Status1">
+            <generic-foreign-key tableName="ZZ_JUT_ITEM" fieldName="STATUS"/>
+        </field>
+        
+        <!-- Limit the values to X,S,A,Y,T,B,1,2 -->
+        <field name="Status2" extendsClass="org.jaffa.persistence.domainobjects.Item" extendsField="Status1"/>
+        
+        <!-- Limit the values to P,Q,R -->
+        <field name="Status3">
+            <in-list list="P;Q;R" separator=";"/>
+        </field>
+        
+    </domain>
+
+    <!-- The following class is used for merely testing the various types of field-validators -->
+    <domain class="Dummy">
+        <field name="StringField"><string length="5" caseType="UpperCase" pattern="(ABCDE)|(PQRSTU)|(ABC)"/></field>
+        <field name="BooleanField"><boolean pattern="(true|yes|1)|(false|no|0)"/></field>
+        <field name="CurrencyField"><currency minValue="100" maxValue="5000" intSize="4" fracSize="2"/></field>
+        <field name="DateOnlyField"><dateonly minValue="1/1/2000" maxValue="1/1/2010"/></field>
+        <field name="DateTimeField"><datetime minValue="1/1/2000" maxValue="1/1/2010"/></field>
+        <field name="DecimalField"><decimal minValue="100" maxValue="5000" intSize="4" fracSize="2"/></field>
+        <field name="IntegerField"><integer minValue="100" maxValue="5000" intSize="4"/></field>
+    </domain>
+</rules>
+

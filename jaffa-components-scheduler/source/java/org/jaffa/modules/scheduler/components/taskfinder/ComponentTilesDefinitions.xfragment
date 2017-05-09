@@ -1,0 +1,14 @@
+    <!-- TaskFinder Results -->
+    <definition name="jaffa.scheduler.taskfinder.FinderLayout.results"  extends="jaffa.FinderLayout">
+      <put name="body1" value=""/>
+      <put name="body2" value="/jaffa/scheduler/taskfinder/results.jsp"/>
+      <put name="action" value="/jaffa_scheduler_taskFinder"/>
+      <put name="contextNav" value="/jaffa/scheduler/taskfinder/contextNav.jsp"/>
+      <putList name="defaultNavLinks">
+        <add value="Close"/>
+      </putList>
+    </definition>
+    <definition name="jaffa.scheduler.taskfinder.results"  extends="jaffa.MainLayout">
+      <put name="title" value="[title.Jaffa.Scheduler.TaskFinder.results]"/>
+      <put name="body" value="jaffa.scheduler.taskfinder.FinderLayout.results"/>
+    </definition>

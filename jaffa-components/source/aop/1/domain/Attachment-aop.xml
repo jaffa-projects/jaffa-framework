@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+  <!-- ================================================= -->
+  <!-- Rules for Domain Object Attachment -->
+  <!-- ================================================= -->
+
+  <metadata tag="jaffa.rules" class="org.jaffa.components.attachment.domain.Attachment">
+
+    <delete-domain-info name="org.jaffa.components.attachment.domain.AttachmentDelete"/>
+
+    <label>[label.Jaffa.Attachment.Attachment]</label>
+
+    <property name="attachmentId">
+      <label>[label.Jaffa.Attachment.Attachment.AttachmentId]</label>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="documentReferenceId">
+      <label>[label.Jaffa.Attachment.Attachment.DocumentReferenceId]</label>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="serializedKey">
+      <label>[label.Jaffa.Attachment.Attachment.SerializedKey]</label>
+      <mandatory/>
+      <max-length>500</max-length>
+    </property>
+
+    <property name="originalFileName">
+      <label>[label.Jaffa.Attachment.Attachment.OriginalFileName]</label>
+      <max-length>255</max-length>
+    </property>
+
+    <property name="attachmentType">
+      <label>[label.Jaffa.Attachment.Attachment.AttachmentType]</label>
+      <max-length>1</max-length>
+    </property>
+
+    <property name="contentType">
+      <label>[label.Jaffa.Attachment.Attachment.ContentType]</label>
+      <max-length>100</max-length>
+    </property>
+
+    <property name="description">
+      <label>[label.Jaffa.Attachment.Attachment.Description]</label>
+      <max-length>100</max-length>
+    </property>
+
+    <property name="remarks">
+      <label>[label.Jaffa.Attachment.Attachment.Remarks]</label>
+      <max-length>255</max-length>
+    </property>
+
+    <property name="supercededBy">
+      <label>[label.Jaffa.Attachment.Attachment.SupercededBy]</label>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="createdOn">
+      <label>[label.Common.CreatedOn]</label>
+    </property>
+
+    <property name="createdBy">
+      <label>[label.Common.CreatedBy]</label>
+      <max-length>20</max-length>
+    </property>
+
+    <property name="lastChangedOn">
+      <label>[label.Common.LastChangedOn]</label>
+    </property>
+
+    <property name="lastChangedBy">
+      <label>[label.Common.LastChangedBy]</label>
+      <max-length>20</max-length>
+    </property>
+
+    <property name="data">
+      <label>[label.Jaffa.Attachment.Attachment.Data]</label>
+    </property>
+
+    <property name="versionNumber">
+      <label>[label.Jaffa.Attachment.AttachmentDelete.VersionNumber]</label>
+      <max-length>10</max-length>
+    </property>
+
+  </metadata>
+</aop>

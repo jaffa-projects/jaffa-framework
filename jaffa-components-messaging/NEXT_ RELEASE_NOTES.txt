@@ -1,0 +1,27 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the next release. For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+
+What's Changed / Improvements
+=====================================================
+- Modified JmsBrowser.getPendingMessages() to throw an ApplicationException whenever an invalid syntax is used in the filter. This will result in a more user-friendly error message.
+- Enhanced JaffaComponentsMessaging to write a JMS Message to both a Queue as well as a Topic, if so configured
+  - Modified ConfigurationService to allow a Message to have both the queueName and topicName. Ensured that the topic and queue names are unique.
+  - Modified JmsClientHelper.send() to send messages to both a Queue and a Topic, if so configured
+- Enhanced JaffaComponentsMessaging to run a payload through a series of filters. A filter may inspect the input payload. It may choose to leave the payload as-is, modify the payload, add new payload(s), or replace with new payload(s). It may even choose to remove the payload, thereby stopping the submission of any message to the messaging system. This feature would allow for re-routing of Messages.
+  - Created org.jaffa.modules.messaging.services.IMessageFilter with a 'public void doFilter(List<Object> payloads)' method.
+  - Enhanced jaffa-messaging-config_1_0.xsd, adding zero or more 'message-filter' elements. The message-filter element will contain the attributes filter-name and filter-class. The value for the filter-class attribute should be a class that implements the IMessageFilter interface
+  - Regenerated JAXB classes for jaffa-messaging-config_1_0.xsd
+  - Enhanced ConfigurationService with a new method 'public List<MessageFilter> getMessageFilters()'
+  - Enhanced JmsClientHelper to invoke the filters, if specified, before processing a payload
+
+What's Deleted/Deprecated
+=====================================================
+
+Bug Fixes
+=====================================================

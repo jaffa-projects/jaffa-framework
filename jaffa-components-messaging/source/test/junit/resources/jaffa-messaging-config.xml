@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <jms-config connection-factory='ConnectionFactory' user='someUser' password='somePassword'>
+    <jndi-context>
+      <param name='java.naming.factory.initial'>org.jnp.interfaces.NamingContextFactory</param>
+      <param name='java.naming.factory.url.pkgs'>org.jnp.interfaces</param>
+      <param name='java.naming.provider.url'>localhost</param>
+    </jndi-context>
+  </jms-config>
+
+  <message dataBean='org.jaffa.modules.messaging.services.BaseMessage'
+      queueName='jaffa/queue'
+      toClass='org.jaffa.modules.messaging.services.BaseService'
+      toMethod='process'>
+    <lock-check>
+      <param name='jaffa.locks.global'>true</param>
+      <param expression='true' name='jaffa.locks.asset'>bean.assetId</param>
+    </lock-check>
+    <header>
+      <param expression='true' name='jaffa.locks.asset'>bean.assetId</param>
+    </header>
+  </message>
+
+  <message dataBean='org.jaffa.modules.messaging.services.Example1Message'
+      queueName='jaffa/queue1'
+      toClass='org.jaffa.modules.messaging.services.Example1Service'
+      toMethod='process'>
+    <lock-check>
+      <param name='jaffa.locks.global'>true</param>
+      <param expression='true' name='jaffa.locks.asset'>bean.assetId</param>
+    </lock-check>
+    <header>
+      <param expression='true' name='jaffa.locks.asset'>bean.assetId</param>
+    </header>
+  </message>
+
+  <queue name='jaffa/queue' consumerPolicy='single' errorQueue='false'>
+    <display-param name='JMSMessageID' label='Message ID'/>
+    <display-param name='JMSMessagePriority' label='Message Priority'/>
+  </queue>
+
+  <queue name='jaffa/queue1' consumerPolicy='single' errorQueue='false'>
+    <display-param name='JMSMessageID' label='Message ID'/>
+    <display-param name='JMSMessagePriority' label='Message Priority'/>
+  </queue>
+
+  <queue name='jaffa/queue2' consumerPolicy='multi' errorQueue='false'>
+    <display-param name='JMSMessageID' label='Message ID'/>
+    <display-param name='JMSMessagePriority' label='Message Priority'/>
+  </queue>
+
+  <queue name='jaffa/errorQueue' consumerPolicy='none' errorQueue='true'>
+    <display-param name='JMSMessageID' label='Message ID'/>
+    <display-param name='JMSMessagePriority' label='Message Priority'/>
+  </queue>
+
+</config>

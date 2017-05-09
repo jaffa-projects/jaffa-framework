@@ -1,0 +1,2 @@
+    <form-bean      name="jaffa_admin_userMaintenanceForm"
+                    type="org.jaffa.applications.jaffa.modules.admin.components.usermaintenance.ui.UserMaintenanceForm"/>

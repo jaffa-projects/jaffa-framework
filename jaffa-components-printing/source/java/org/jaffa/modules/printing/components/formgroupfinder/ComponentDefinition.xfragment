@@ -1,0 +1,4 @@
+    <component id="Jaffa.Printing.FormGroupFinder">
+        <class>org.jaffa.modules.printing.components.formgroupfinder.ui.FormGroupFinderComponent</class>
+        <type>ObjectFinder</type>
+    </component>

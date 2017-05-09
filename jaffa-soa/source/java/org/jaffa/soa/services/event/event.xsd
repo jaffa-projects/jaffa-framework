@@ -1,0 +1,24 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://www.mirotechnologies.com/GOLDesp/JMS/OutboundEvents"
+           targetNamespace="http://www.mirotechnologies.com/GOLDesp/JMS/OutboundEvents"
+           elementFormDefault="qualified">
+    <xs:element name="eventMessage">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element type="xs:string" name="eventId"/>
+                <xs:element type="xs:string" name="eventName"/>
+                <xs:element type="xs:string" name="description"/>
+                <xs:element type="xs:string" name="category"/>
+                <xs:element type="xs:string" name="createdBy"/>
+                <xs:element type="xs:dateTime" name="createdOn"/>
+                <xs:element name="headerParams" type="HeaderParam" maxOccurs="unbounded" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="HeaderParam">
+        <xs:sequence>
+            <xs:element type="xs:string" name="name"/>
+            <xs:element type="xs:string" name="value"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

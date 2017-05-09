@@ -1,0 +1,13 @@
+    <!-- Jaffa_Audit_AuditTransactionService -->
+    <create creator="new" javascript="Jaffa_Audit_AuditTransactionService">
+      <param name="class" value="org.jaffa.components.audit.apis.AuditTransactionService" />
+      <include method="query"/>
+    </create>
+    <!-- Jaffa_Audit_AuditTransactionViewService -->
+    <create creator="new" javascript="Jaffa_Audit_AuditTransactionViewService">
+      <param name="class" value="org.jaffa.components.audit.apis.AuditTransactionViewService" />
+      <include method="query"/>
+      <include method="getAuditableClasses"/>
+      <include method="getAuditableProperties"/>
+    </create>
+    <convert converter="nnBean" match="org.jaffa.components.audit.apis.data.*" />

@@ -1,0 +1,8 @@
+    <!-- FormTemplateLookup -->
+    <action    path="/jaffa_printing_formTemplateLookup"
+               type="org.jaffa.modules.printing.components.formtemplatelookup.ui.FormTemplateLookupAction"
+               name="jaffa_printing_formTemplateLookupForm"
+               validate="false"
+               scope="request">
+    </action>
+

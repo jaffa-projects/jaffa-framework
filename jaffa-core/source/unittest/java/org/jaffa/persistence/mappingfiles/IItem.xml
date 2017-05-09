@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.persistence.domainobjects.IItem">
+        <map-to table="ZZ_JUT_ITEM" />
+
+        <field name="ItemId" type="java.lang.String" primary-key="true">
+            <sql name="ITEM_ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="ReceivedItemId" type="java.lang.String">
+            <sql name="RECEIVED_ITEM_ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Part" type="java.lang.String">
+            <sql name="PART" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Prime" type="java.lang.String">
+            <sql name="PRIME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Sc" type="java.lang.String">
+            <sql name="SC" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Condition" type="java.lang.String">
+            <sql name="CONDITION" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="CreatedDatetime" type="org.jaffa.datatypes.DateTime">
+            <sql name="CREATED_DATETIME" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+        <field name="Qty" type="java.lang.Long">
+            <sql name="QTY" type="INTEGER" dirty="ignore"/>
+        </field>
+
+        <field name="KeyRef" type="java.lang.String">
+            <sql name="KEY_REF" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Status1" type="java.lang.String">
+            <sql name="STATUS_1" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Status2" type="java.lang.String">
+            <sql name="STATUS_2" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Status3" type="java.lang.String">
+            <sql name="STATUS_3" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Price" type="java.lang.Double">
+            <sql name="PRICE" type="DECIMAL" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

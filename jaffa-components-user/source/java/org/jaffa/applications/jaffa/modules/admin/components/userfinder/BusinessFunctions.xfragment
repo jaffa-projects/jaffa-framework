@@ -1,0 +1,3 @@
+    <business-function name="Jaffa.Admin.User.Inquiry">
+        <description>Able to run the UserFinder component</description>
+    </business-function>

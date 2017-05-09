@@ -1,0 +1,5 @@
+    <component id="Jaffa.Admin.ViewerHyperlinkConfig">
+        <class>org.jaffa.applications.jaffa.modules.admin.components.viewerhyperlinkconfig.ui.ViewerHyperlinkConfigComponent</class>
+        <type>Skeleton</type>
+        <mandatory-function name="Jaffa.Admin.EditViewerHyperlinkConfig"/>
+    </component>

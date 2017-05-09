@@ -1,0 +1,5 @@
+    <forward name="jaffa_printing_outputCommandFinderCriteria" path="jaffa.printing.outputcommandfinder.criteria"/>
+    <forward name="jaffa_printing_outputCommandFinderResults" path="jaffa.printing.outputcommandfinder.results"/>
+    <forward name="jaffa_printing_outputCommandFinderConsolidatedCriteriaAndResults" path="jaffa.printing.outputcommandfinder.consolidatedCriteriaAndResults"/>
+    <forward name="jaffa_printing_outputCommandFinderExcelResults" path="jaffa.printing.outputcommandfinder.FinderExcelLayout"/>
+    <forward name="jaffa_printing_outputCommandFinderXmlResults" path="jaffa.printing.outputcommandfinder.FinderXmlLayout"/>

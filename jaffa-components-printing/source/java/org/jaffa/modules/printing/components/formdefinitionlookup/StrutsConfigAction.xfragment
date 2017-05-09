@@ -1,0 +1,8 @@
+    <!-- FormDefinitionLookup -->
+    <action    path="/jaffa_printing_formDefinitionLookup"
+               type="org.jaffa.modules.printing.components.formdefinitionlookup.ui.FormDefinitionLookupAction"
+               name="jaffa_printing_formDefinitionLookupForm"
+               validate="false"
+               scope="request">
+    </action>
+

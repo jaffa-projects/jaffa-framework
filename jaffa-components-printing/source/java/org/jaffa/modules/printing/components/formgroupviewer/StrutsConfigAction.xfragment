@@ -1,0 +1,7 @@
+    <!-- FormGroupViewer Form -->
+    <action    path="/jaffa_printing_formGroupViewer"
+               type="org.jaffa.modules.printing.components.formgroupviewer.ui.FormGroupViewerAction"
+               name="jaffa_printing_formGroupViewerForm"
+               validate="false"
+               scope="request">
+    </action>

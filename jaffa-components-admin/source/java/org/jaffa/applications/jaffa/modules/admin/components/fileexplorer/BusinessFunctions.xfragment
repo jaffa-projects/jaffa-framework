@@ -1,0 +1,3 @@
+    <business-function name="Jaffa.Admin.FileExplorer">
+        <description>Able to run the FileExplorer Configuration component</description>
+    </business-function>

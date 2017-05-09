@@ -1,0 +1,6 @@
+  <component id="Jaffa.Scheduler.TaskFinder">
+    <class>org.jaffa.modules.scheduler.components.taskfinder.ui.TaskFinderComponent</class>
+    <type>ObjectFinder</type>
+    <optional-function name="Jaffa.Scheduler.SchedulerAdmin"/>
+    <optional-function name="Jaffa.Scheduler.TaskAdmin"/>
+  </component>

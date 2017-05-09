@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.persistence.domainobjects.ValidFieldValue">
+        <map-to table="ZZ_JUT_VALID_FIELD_VALUE" />
+
+        <field name="TableName" use-member="m_tableName" type="java.lang.String" primary-key="true">
+            <sql name="TABLE_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="FieldName" use-member="m_fieldName" type="java.lang.String" primary-key="true">
+            <sql name="FIELD_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="LegalValue" use-member="m_legalValue" type="java.lang.String" primary-key="true">
+            <sql name="LEGAL_VALUE" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Description" use-member="m_description" type="java.lang.String">
+            <sql name="DESCRIPTION" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Remarks" use-member="m_remarks" type="java.lang.String">
+            <sql name="REMARKS" type="STRING" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

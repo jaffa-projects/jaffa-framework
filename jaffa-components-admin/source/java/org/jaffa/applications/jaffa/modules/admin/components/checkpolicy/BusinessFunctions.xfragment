@@ -1,0 +1,3 @@
+    <business-function name="Jaffa.Admin.RunCheckPolicy">
+        <description>Able to run the CheckPolicy component</description>
+    </business-function>

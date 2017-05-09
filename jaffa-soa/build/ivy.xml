@@ -1,0 +1,54 @@
+<ivy-module version="2.0">
+
+	<!-- The groupId, artifactId and version of the artifacts.  Update the revision to match the Jaffa version being built. -->
+    <info organisation="org.jaffa" module="jaffa-soa" revision="${jaffa-version}"/>
+	
+	<!-- The pom and jar to be published to Maven repositories. -->
+	<publications>
+        <artifact name="jaffa-soa" type="pom"/>
+        <artifact name="jaffa-soa" type="jar"/>
+    </publications>
+
+  <dependencies>
+    <!-- Begin Apache Commons dependencies -->
+    <dependency org="commons-beanutils" name="commons-beanutils" rev="${commons-beanutils-version}" transitive="false"/>
+    <dependency org="commons-collections" name="commons-collections" rev="${commons-collections-version}" transitive="false"/>
+    <dependency org="commons-lang" name="commons-lang" rev="${commons-lang-version}" transitive="false"/>
+    <!-- End Apache Commons dependencies -->
+
+    <!-- Begin javax dependencies -->
+    <dependency org="javax.ejb" name="javax.ejb-api" rev="${javax.ejb-api-version}" transitive="false"/>
+    <dependency org="javax.servlet" name="servlet-api" rev="${servlet-api-version}" transitive="false"/>
+    <dependency org="javax.jms" name="javax.jms-api" rev="${javax.jms-api-version}" transitive="false"/>
+    <dependency org="javax.mail" name="mail" rev="${javax.mail-version}" transitive="false"/>
+    <!-- End javax dependencies -->
+
+    <!-- Begin Hibernate dependencies -->
+    <dependency org="org.hibernate" name="hibernate-core" rev="${hibernate-core-version}" transitive="false"/>
+    <dependency org="org.hibernate.javax.persistence" name="hibernate-jpa-2.1-api" rev="${hibernate-jpa-2.1-api-version}" transitive="false"/>
+    <!-- End Hibernate  dependencies -->
+
+    <!-- Begin Spring Framework dependencies -->
+    <dependency org="org.springframework" name="spring-beans" rev="${springframework-version}" transitive="false"/>
+    <dependency org="org.springframework" name="spring-context" rev="${springframework-version}" transitive="false"/>
+    <dependency org="org.springframework" name="spring-core" rev="${springframework-version}" transitive="false"/>
+    <!-- End Spring Framework dependencies -->
+
+    <!-- Begin Drools dependencies -->
+    <dependency org="org.drools" name="drools-compiler" rev="${drools-version}" transitive="false"/>
+    <dependency org="org.drools" name="drools-core" rev="${drools-version}" transitive="false"/>
+    <!-- End Drools dependencies -->
+
+    <!-- Begin Antlr dependencies -->
+    <dependency org="org.antlr" name="antlr-runtime" rev="${antlr-runtime-version}" transitive="false"/>
+    <!-- End Antlr dependencies -->
+
+    <!-- Begin Janino dependencies -->
+    <dependency org="janino" name="janino" rev="${janino-version}" transitive="false"/>
+    <!-- End Janino dependencies -->
+
+    <!-- Begin Dozer dependencies -->
+    <dependency org="net.sf.dozer" name="dozer" rev="${dozer-version}" transitive="false"/>
+    <!-- End Dozer dependencies -->
+  </dependencies>
+</ivy-module>

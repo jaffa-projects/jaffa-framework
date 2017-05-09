@@ -1,0 +1,605 @@
+Jaffa v1.3 Migration
+====================
+
+This guide will document the steps that we went through when upgrading an application based on 
+Jaffa v1.2, to the new Jaffa v1.3 release. This upgrade will not involve taking advantage of any 
+new features, just the shortest / quickest path to move an existing project onto the next release.
+
+
+Note 1: in this exmample, my sandbox is located on d:\sandbox on a Windows 2000 machine
+
+
+1. Building the new Jaffa
+----------------------
+
+Assumption - Rather than taking a download from sourceforge, we will build Jaffa from the source
+
+Step 1 - Checked out Jaffa Code (At time of writing, the HEAD branch is the v1.3 release)
+
+Step 2 - Edit D:\sandbox\JaffaCore\build\Jaffa.ant.properties, to point to 3rd-party libs
+
+	# Modify this setting to specify a different application-specific properties file
+	config.file=D:/Sandbox/MyJaffa/build/sandbox.ant.properties
+	#config.file=./build/sandbox.ant.properties
+
+	# Modify this setting to specify a folder having additonal JAR/ZIP library files
+	additional.libraries.folder=D:/Sandbox/MyJaffa/lib
+	#additional.libraries.folder=
+
+The contents of D:\sandbox\MyJaffa is...
+	\lib
+	       j2ee.jar
+	       jaxb-api.jar
+	       jaxb-libs.jar
+	       jaxb-ri.jar
+	       msbase.jar
+	       mssqlserver.jar
+	       msutil.jar
+	       mysql-connector-java-3.0.6-stable-bin.jar
+	       oracle12.jar
+
+	\build
+	       sandbox.ant.properties
+
+Note: this 'sandbox.ant.properties' contains information about a 'real' database, needed for unit and httpunit tests. 
+By default these tests are configured to run against oracle. For the purpose of this exercise, we are not worried about the
+tests (we assume jaffa has been full tested!), we just care about getting the 3 distribution files jaffa.jar, 
+jaffa-tools.jar and jaffa-html.zip
+
+Step 3 - Using apache ant (v1.5.3 or higher) run D:\sandbox\JaffaCore\build\build.xml
+
+Here is the ant output for comparision with your own version...
+
+	Buildfile: D:\sandbox\JaffaCore\build\build.xml
+
+	init:
+
+	compile:
+	[mkdir/Jaffa] Created dir: D:\sandbox\JaffaCore\dist\classes
+	[depend/Jaffa] Deleted 0 out of date files in 0 seconds
+	[javac/Jaffa] Compiling 655 source files to D:\sandbox\JaffaCore\dist\classes
+
+	JaffaJAR:
+	[jar/Jaffa] Building jar: D:\sandbox\JaffaCore\dist\jaffa.jar
+
+	JaffaToolsJAR:
+	[jar/Jaffa] Building jar: D:\sandbox\JaffaCore\dist\jaffa-tools.jar
+
+	copyHtml:
+	[mkdir/Jaffa] Created dir: D:\sandbox\JaffaCore\dist\html\jaffa
+	[copy/Jaffa] Copying 94 files to D:\sandbox\JaffaCore\dist\html\jaffa
+	[mkdir/Jaffa] Created dir: D:\sandbox\JaffaCore\dist\html\WEB-INF
+	[copy/Jaffa] Copying 6 files to D:\sandbox\JaffaCore\dist\html\WEB-INF
+
+	JaffaHtmlZip:
+	[zip/Jaffa] Building zip: D:\sandbox\JaffaCore\dist\jaffa-html.zip
+
+	core:
+
+	BUILD SUCCESSFUL
+	Total time: 34 seconds
+
+
+2. Copy Jaffa Libs to Your Project
+-------------------------------
+
+In this project (D:\sandbox\MyProject) i have a \lib folder for all my required JAR's, I also
+have \lib\jaffa for all the Jaffa libraries (jaffa.jar, jaffa-tools.jar and jaffa-html.zip) and
+\lib\jaffaext for all the external jaffa libraries that jaffa needs. 
+
+The current contents of this for using jaffa v1.2 are
+
+D:\sandbox
++---MyProject
+    +---lib
+	¦   j2ee.jar
+	¦   jaxb-api.jar
+	¦   jaxb-libs.jar
+	¦   jaxb-ri.jar
+	¦   msbase.jar
+	¦   mssqlserver.jar
+	¦   msutil.jar
+	¦
+	+---jaffa
+	¦       jaffa-html.zip
+	¦       jaffa-tools.jar
+	¦       jaffa.jar
+	¦    
+	+---jaffaext
+	        Tidy.jar
+	        catalina_4_0_3.jar
+	        dbConnectionBroker.jar
+	        httpunit.jar
+	        jdom.jar
+	        junit.jar
+	        log4j.jar
+	        struts.jar
+	        webmacro.jar
+	        xerces.jar
+	      
+Note, that this project used SQL Server 2000, so only has that set of drivers in \lib
+
+
+Step 1. Replace the three files in \lib\jaffa with new ones in D:\sandbox\JaffaCore\dist
+Step 2. Copy accross the supporting JAR's from D:\sandbox\JaffaCore\lib to D:\sandbox\MyProject\lib\jaffaext
+Step 3. Remove old JAR's. In this case in D:\sandbox\MyProject\lib\jaffaext the following are now obsolete
+		- catalina_4_0_3.jar	
+
+This \lib folder now looks like...
+
+D:\sandbox
++---MyProject
+    +---lib
+        ¦   j2ee.jar
+        ¦   jaxb-api.jar
+        ¦   jaxb-libs.jar
+        ¦   jaxb-ri.jar
+        ¦   msbase.jar
+        ¦   mssqlserver.jar
+        ¦   msutil.jar
+        ¦
+        +---jaffa
+        ¦       jaffa-html.zip
+        ¦       jaffa-tools.jar
+        ¦       jaffa.jar
+        ¦    
+        +---jaffaext
+                Tidy.jar
+                catalina_4_1_24.jar
+                commons-beanutils.jar
+                commons-collections.jar
+                commons-dbcp.jar
+                commons-digester.jar
+                commons-fileupload.jar
+                commons-lang.jar
+                commons-logging.jar
+                commons-pool.jar
+                commons-validator.jar
+                dbConnectionBroker.jar
+                httpunit.jar
+                jakarta-oro.jar
+                jdom.jar
+                junit.jar
+                log4j.jar
+                struts-legacy.jar
+                struts.jar
+                webmacro.jar
+                xerces.jar
+		
+Build Your App
+--------------
+
+Now try a 'Clean' build (ie delete any existing compiled code!) on your project and see what you get...
+We recommend doing the compile with 'deprecation' turned on, so we can see if what Jaffa classes you
+are using that need to be modified.
+
+In this case we get one warning...
+    [javac] D:\sandbox\MyProject\source\java\com\xxx\user\services\MyUserSessionFilter.java:23: warning: org.jaffa.presentation.portlet.session.UserSessionFilter in org.jaffa.presentation.portlet.session has been deprecated
+    [javac] public class MyUserSessionFilter extends UserSessionFilter {
+
+If you look at the release notes for v1.3 you will see the following line...
+
+	What's Deleted/Deprecated
+	=====================================================
+	...
+	10) UserSessionFilter has been deprecated as it has been superceeded with the new PortletFilter
+
+With the use of Struts 1.1 we have stopped using a custom version of the Struts Action Controller, and now put all the 
+Jaffa funtionality for security, session management, etc into one filter 'org.jaffa.presentation.portlet.PortletFilter'
+
+With v1.2 we used to extend UserSessionFilter, and then provide and implementation for the method
+    public void initUserInfo(UserSession us) throws UserSessionSetupException;
+    
+Now we can do a similar thing but we extend PortletFilter, and provide an implementation for the method
+    protected void initUserInfo(UserSession us) throws UserSessionSetupException;
+
+So as you can see, all that needs to be done to fix the application, is to extend a differnt class!
+	
+	
+WARNING: it is recommended that just don't just do a full compile and assume is all well if your app compiles, as you may have used
+parts of Jaffa in ways we did not expect, so please review the document "D:\sandbox\JaffaCore\RELEASE_NOTES_1_3.txt") also available
+on the Jaffa web site, and see if any other changes may impact your code.
+
+	
+3. Changing Your Configuration
+---------------------------
+
+So it build OK, but we're not done yet. The biggest change with Jaffa v1.3 is that we have moved to use Struts v1.1 as the underlying
+presentation libraries. In v1.2 we used Struts v1.0, and there are some significant changes to some of the struts and web config files 
+that come along with this.
+
+Note: If you want more information about how Jaffa v1.3 and Struts 1.1 (and Tiles) interoperate, there is a seperate document
+"D:\sandbox\JaffaCore\StrutsVsJaffa.txt" which discusses the differences and which new struts features are not compatible with Jaffa
+
+Step 1 - Change web.xml to use the new Filter
+
+Step 1.1 - Make sure were using Servlet spec 2.3, as 2.2 does not support Filters!
+
+<!DOCTYPE web-app
+  PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+  "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+
+Step 1.2 - Add the filter definition
+
+Assuming from above that we haven't renamed MyUserSessionFilter, (really we should call this MyPortletFilter now!)
+
+  <filter>
+    <filter-name>Portlet Filter</filter-name>
+    <filter-class>com.xxx.user.services.MyUserSessionFilter</filter-class> 
+  </filter>
+
+  <filter-mapping>
+    <filter-name>Portlet Filter</filter-name>
+    <url-pattern>*.jsp</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>Portlet Filter</filter-name>
+    <url-pattern>*.do</url-pattern>
+  </filter-mapping>
+
+Step 1.3 - Add the Servlet definition
+
+  <!-- Standard Action Servlet Configuration (with debugging) -->
+  <servlet>
+    <servlet-name>action</servlet-name>
+    <servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
+    <init-param>
+      <param-name>application</param-name>
+      <param-value>ApplicationResources</param-value>
+    </init-param>
+    <init-param>
+      <param-name>config</param-name>
+      <param-value>/WEB-INF/struts-config.xml</param-value>
+    </init-param>
+    <init-param>
+      <param-name>debug</param-name>
+      <param-value>0</param-value>
+    </init-param>
+    <init-param>
+      <param-name>detail</param-name>
+      <param-value>0</param-value>
+    </init-param>
+    <init-param>
+      <param-name>validate</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <param-name>listings</param-name>
+      <param-value>false</param-value>
+    </init-param>
+    <load-on-startup>3</load-on-startup>
+  </servlet>
+
+Note: The only change here is that we used to use a different class from Jaffa (org.jaffa.presentation.portlet.PortletServlet)
+but now we use a filter, and and again use the vanilla Struts Controller (org.apache.struts.action.ActionServlet)
+	
+Step 1.4 - Change the TagLib entries
+
+These are the new entries that are used with Struts 1.1
+
+  <!-- Struts Tag Library Descriptors -->
+  <taglib>
+    <taglib-uri>/tags/struts-bean</taglib-uri>
+    <taglib-location>/WEB-INF/struts-bean.tld</taglib-location>
+  </taglib>
+
+  <taglib>
+    <taglib-uri>/tags/struts-html</taglib-uri>
+    <taglib-location>/WEB-INF/struts-html.tld</taglib-location>
+  </taglib>
+
+  <taglib>
+    <taglib-uri>/tags/struts-logic</taglib-uri>
+    <taglib-location>/WEB-INF/struts-logic.tld</taglib-location>
+  </taglib>
+
+  <taglib>
+    <taglib-uri>/tags/struts-nested</taglib-uri>
+    <taglib-location>/WEB-INF/struts-nested.tld</taglib-location>
+  </taglib>
+
+  <taglib>
+    <taglib-uri>/tags/struts-tiles</taglib-uri>
+    <taglib-location>/WEB-INF/struts-tiles.tld</taglib-location>
+  </taglib>
+
+
+Step 1.5 - Catch ComponentExpired Errors
+
+From the v1.3 Release Notes 
+
+	What's Changed
+	=====================================================
+	2) struts-config.xml: Made it compatible with the new Struts1.1 DTD.
+	   Removed the references to the Logon component.
+	   Moved the mapping for pageExpired.jsp from struts-config.xml to web.xml
+
+The new way to map this error to a web page is as follows...
+
+  <error-page>
+    <exception-type>org.jaffa.exceptions.ComponentExpiredException</exception-type>
+    <location>/jaffa/jsp/pageExpired.jsp</location>
+  </error-page>
+
+
+Step 2 - Update struts-config.xml to the new format
+
+Step 2.1 - Update the DTD to the latest spec
+
+<!DOCTYPE struts-config PUBLIC 
+           "-//Apache Software Foundation//DTD Struts Configuration 1.0//EN"
+           "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd"> 
+
+Step 2.2 - Remove old admin functions (if you still have them)
+
+    <!-- The standard administrative actions available with Struts -->
+    <!-- These would be either omitted or protected by security -->
+    <!-- in a real application deployment -->
+    <action    path="/admin/addFormBean"
+               type="org.apache.struts.actions.AddFormBeanAction"/>
+    <action    path="/admin/addForward"
+               type="org.apache.struts.actions.AddForwardAction"/>
+    <action    path="/admin/addMapping"
+               type="org.apache.struts.actions.AddMappingAction"/>
+    <action    path="/admin/reload"
+               type="org.apache.struts.actions.ReloadAction"/>
+    <action    path="/admin/removeFormBean"
+               type="org.apache.struts.actions.RemoveFormBeanAction"/>
+    <action    path="/admin/removeForward"
+               type="org.apache.struts.actions.RemoveForwardAction"/>
+    <action    path="/admin/removeMapping"
+               type="org.apache.struts.actions.RemoveMappingAction"/>
+
+If you are using 'Code Merging' in your struts-config.xml, a typical Jaffa install will look like...
+
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+<struts-config>
+
+  <!-- ========== Form Bean Definitions =================================== -->
+  <form-beans>
+
+    <!-- Code Generated Form-Beans //GEN-BEGIN:StrutsConfigFormBean.xml -->
+    <!-- //GEN-END:StrutsConfigFormBean.xml -->
+    
+                    
+    <!-- Jaffa Session Explorer -->
+    <form-bean name="jaffa_sessionExplorerForm"
+               type="org.jaffa.presentation.portlet.session.ui.SessionExplorerForm"/>
+    <form-bean name="jaffa_componentExplorerForm"
+               type="org.jaffa.presentation.portlet.session.ui.ComponentExplorerForm"/>
+    <form-bean name="jaffa_componentDetailsForm"
+               type="org.jaffa.presentation.portlet.session.ui.ComponentDetailsForm"/>
+
+  </form-beans>
+
+
+  <!-- ========== Global Forward Definitions ============================== -->
+  <global-forwards>
+
+    <!-- Code Generated Global Forwards //GEN-BEGIN:StrutsConfigGlobalForward.xml -->
+    <!-- //GEN-END:StrutsConfigGlobalForward.xml -->
+    
+    <!-- Used if a the user has no component access -->
+    <forward name="jaffa_noComponentAccess"       path="/jaffa/jsp/noComponentAccess.jsp"/>
+    
+    <!-- GlobalForward For The Lookup -->
+    <forward   name="jaffa_lookup"                path="/jaffa/jsp/lookup.jsp"/>
+    
+    <!-- GlobalForward For Closing a Browser Window -->
+    <forward   name="jaffa_closeBrowser"          path="/jaffa/jsp/closeBrowser.jsp"/>
+    
+    <!-- Jaffa Session Explorer -->
+    <forward   name="jaffa_sessionExplorerForm"   path="/jaffa/jsp/sessionExplorer.jsp"/>
+    <forward   name="jaffa_componentExplorerForm" path="/jaffa/jsp/componentExplorer.jsp"/>
+    <forward   name="jaffa_componentDetailsForm"  path="/jaffa/jsp/componentDetails.jsp"/>
+
+  </global-forwards>
+
+
+  <!-- ========== Action Mapping Definitions ============================== -->
+  <action-mappings>
+
+    <!-- Code Generated Actions //GEN-BEGIN:StrutsConfigAction.xml -->
+    <!-- //GEN-END:StrutsConfigAction.xml -->
+    
+    
+    <!-- Standard framework action for initializing and executing a component directly -->
+    <action    path="/startComponent"
+               type="org.jaffa.presentation.portlet.StartComponentAction">
+    </action>
+
+    <!-- Jaffa Session Explorer -->
+    <action    path="/jaffa_sessionExplorer"
+               type="org.jaffa.presentation.portlet.session.ui.SessionExplorerAction"
+               name="jaffa_sessionExplorerForm"
+               validate="false"
+               scope="request">
+    </action>
+    <action    path="/jaffa_componentExplorer"
+               type="org.jaffa.presentation.portlet.session.ui.ComponentExplorerAction"
+               name="jaffa_componentExplorerForm"
+               validate="false"
+               scope="request">
+    </action>
+    <action    path="/jaffa_componentDetails"
+               type="org.jaffa.presentation.portlet.session.ui.ComponentDetailsAction"
+               name="jaffa_componentDetailsForm"
+               validate="false"
+               scope="request">
+    </action>
+
+  </action-mappings>
+
+</struts-config>
+
+Step 3 - Update the JDBC Engine config (D:\sandbox\MyProject\source\java\resources\jdbc-engine.xml)
+
+From the v1.3 Release Notes 
+
+	What's Changed
+	=====================================================
+	5) Revamped the init.xml to conform to the 'init_1_0.xsd' schema. Some of the major changes are
+	   a) New elements - connection-factory, hitlistSize, jdbcSecurityPlugin, usePreparedStatement
+	   b) The parameters are now children of the connection-factory element
+	   c) New parameters to support DbcpDataSourceConnectionFactory - maxWait, testOnBorrow, testOnReturn, validationQuery
+	   d) New parameters to support JndiDataSourceConnectionFactory - jndiDataSourceName
+
+If you forget to change this file from the v1.2 format and start your web app you will most likely get the following error...
+
+DefaultValidationEventHandler: [ERROR]: tag name "driver" is not allowed. Possible tag names are: <connection-factory>
+2003-09-25 08:50:43,619 ERROR configservice.ConfigurationService (?:?) [Thread-4]-Error while parsing the init file resources/jdbc-engine.xml
+javax.xml.bind.UnmarshalException
+ - with linked exception:
+[com.sun.msv.verifier.ValidityViolation: tag name "driver" is not allowed. Possible tag names are: <connection-factory>]
+        at javax.xml.bind.helpers.AbstractUnmarshallerImpl.createUnmarshalException(AbstractUnmarshallerImpl.java:306)
+        at com.sun.xml.bind.unmarshaller.UnmarshallerImpl.unmarshal(UnmarshallerImpl.java:134)
+        at javax.xml.bind.helpers.AbstractUnmarshallerImpl.unmarshal(AbstractUnmarshallerImpl.java:139)
+        at javax.xml.bind.helpers.AbstractUnmarshallerImpl.unmarshal(AbstractUnmarshallerImpl.java:186)
+        at org.jaffa.persistence.engines.jdbcengine.configservice.ConfigurationService.<init>(Unknown Source)
+        at org.jaffa.persistence.engines.jdbcengine.configservice.ConfigurationService.createConfigurationServiceInstance(Unknown Source)
+        
+
+In Jaffa v1.2 my 'jdbc-engine.xml' file looked like this
+
+<init>
+  <database name="default" engine="mssqlserver">
+    <driver url="jdbc:microsoft:sqlserver://<<DATABASE.HOST.SHORT>>:<<DATABASE.PORT>>;databasename=<<DATABASE.SID>>;SelectMethod=cursor"
+            class="com.microsoft.jdbc.sqlserver.SQLServerDriver"/>
+    <param name="user"     value="<<DATABASE.USER>>"/>
+    <param name="password" value="<<DATABASE.PASS>>"/>
+    
+    <param name="hitlistSize" value="<<INIT.XML.HITLISTSIZE>>"/>
+    <param name="minimumConnections" value="<<INIT.XML.MINIMUMCONNECTIONS>>"/>
+    <param name="maximumConnections" value="<<INIT.XML.MAXIMUMCONNECTIONS>>"/>
+    <param name="logFileName" value="<<DBCONNECTIONBROKER.LOG>>"/>
+    <param name="maxConnTime" value="<<INIT.XML.MAX_CONN_TIME>>"/>
+    <param name="logAppend" value="<<INIT.XML.LOG_APPEND>>"/>
+    <param name="maxCheckoutSeconds" value="<<INIT.XML.MAX_CHECKOUT_SECONDS>>"/>
+    <param name="debugLevel" value="<<INIT.XML.DEBUG_LEVEL>>"/>
+  </database>
+
+  <conf-location>
+    <dir-loc dir="resources/jdbcengine"/>
+  </conf-location>
+</init>
+
+Note, the parameters inside the << >> brackets are substitued in the ant build process with real values.
+
+The new version of this file for Jaffa v1.3 (assuming we still want the same connection pool mechanism as
+used in v1.2) looks like...
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE init PUBLIC "-//JAFFA//DTD JDBC Engine Init 1.0//EN"
+                      "http://jaffa.sourceforge.net/DTD/jdbc-engine-init_1_0.dtd">
+
+<init>
+  <database name="default" engine="<<DATABASE.ENGINE>>">
+
+    <!-- 
+     *********************************************************************************************
+     The connection-factory should implement the
+     org.jaffa.persistence.engines.jdbcengine.datasource.IConnectionFactory interface
+     *********************************************************************************************
+    -->
+    <connection-factory class="org.jaffa.persistence.engines.jdbcengine.datasource.DbConnectionBrokerConnectionFactory">
+
+      <!-- 
+       *********************************************************************************************
+       Parameters when using DbConnectionBrokerConnectionFactory or DbcpDataSourceConnectionFactory
+       *********************************************************************************************
+      -->
+      <param name="url" value="<<DATABASE.JDBC.URL>>"/>
+      <param name="driverClass" value="<<DATABASE.JDBC.DRIVER>>"/>
+      <param name="user" value="<<DATABASE.USER>>"/>
+      <param name="password" value="<<DATABASE.PASS>>"/>
+      <param name="minimumConnections" value="<<INIT.XML.MINIMUMCONNECTIONS>>"/>
+      <param name="maximumConnections" value="<<INIT.XML.MAXIMUMCONNECTIONS>>"/>
+    
+      <!-- 
+       ***********************************************************
+       Parameters when using DbConnectionBrokerConnectionFactory
+       ***********************************************************
+      -->
+      <param name="debugLevel" value="<<INIT.XML.DEBUG_LEVEL>>"/>
+      <param name="logFileName" value="<<DBCONNECTIONBROKER.LOG>>"/>
+      <param name="logAppend" value="<<INIT.XML.LOG_APPEND>>"/>
+      <param name="maxConnTime" value="<<INIT.XML.MAX_CONN_TIME>>"/>
+      <param name="maxCheckoutSeconds" value="<<INIT.XML.MAX_CHECKOUT_SECONDS>>"/>
+    
+    </connection-factory>
+ 
+    <hitlistSize value="<<INIT.XML.HITLISTSIZE>>"/>
+    <!--<jdbcSecurityPlugin value="org.jaffa.security.JDBCSecurityPlugin"/>-->
+    <usePreparedStatement value="true"/>
+  </database>
+  
+  <conf-location>
+    <dir-loc dir="resources/jdbcengine"/>
+  </conf-location>
+</init>
+
+Step 4 - In framework.properties remove the deprecated values
+framework.security.portlet.enabled
+framework.security.portlet.manager
+framework.security.portlet.bypassActionList
+framework.persistence.jdbcengine.usePreparedStatement
+framework.persistence.jdbcengine.security.plugin
+
+
+4. Changes to the JSP's
+--------------------
+
+From the v1.3 Release Notes 
+
+	Improvements
+	=====================================================
+	3) Made the following changes in ButtonTag, CheckBoxTag, DateTimeTag, DropDownTag, EditBoxTag, FooterTag, FormTag, GridColumnTag, GridTag, HeaderTag, ImageTag, LookupTag, RadioButtonTag, TableTag, TagHelper, TreeTag, UserGridColumnTag, UserGridTag
+	    a- Used pageContext.REQUEST_SCOPE when invoking pageContext.setAttribute()
+	    b- Replaced 'pageContext.getAttribute()' invocations with 'pageContext.findAttribute()'
+	   This was done to allow Jaffa widgets to be spread across multiple JSPs in template environmnents like the TILES framework. This would allow us to paint the FormTag in a Layout JSP and the widgets in the inner Tile JSP.
+
+
+Although the patterns have been refactored, there are some changes needed to the JSP's,
+as we are now setting all the attributes in the request-scope, as opposed to the page-scope in Jaffa v1.2
+
+So all JSP's that use "<%= (String) pageContext.getAttribute(TagHelper.ATTRIBUTE_FORM_NAME) %>" 
+must be changed to "<%= TagHelper.getFormName(pageContext) %>", or if you haven't customized your JSP's,
+delete them and let the pattern generator rebuild them.
+
+If you don't do this you the following tag
+    <bean:define
+	id="component"
+	name="<%= (String) pageContext.getAttribute(TagHelper.ATTRIBUTE_FORM_NAME) %>"
+	property="component"
+	type="org.jaffa.components.finder.FinderComponent"
+    />
+	             
+will cause the following error...
+
+root cause 
+javax.servlet.ServletException: Define tag can contain only one of name attribute, value attribute, or body content
+	at org.apache.jasper.runtime.PageContextImpl.handlePageException(PageContextImpl.java:533)
+	at org.apache.jsp.results_jsp._jspService(results_jsp.java:554)
+	...
+
+Because the 'name' attribute will be null, as the form name it is no-longer in the page scope.
+
+5. New Labels
+-------------
+
+Step 1 - In ApplicationResources.properties add
+exception.org.jaffa.exceptions.ComponentExpiredException.componentExpired=The page you are trying to view has expired!
+exception.org.jaffa.presentation.portlet.session.UserSessionSetupException.setupException=Error in setting up the UserSession
+
+
+6. Congratulations
+------------------
+
+Test You App, it should now be working with Jaffa v1.3
+

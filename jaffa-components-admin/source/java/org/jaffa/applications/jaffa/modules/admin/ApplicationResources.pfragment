@@ -1,0 +1,24 @@
+label.Jaffa.Admin.User=User
+label.Jaffa.Admin.User.UserName=User Name
+label.Jaffa.Admin.User.FirstName=First Name
+label.Jaffa.Admin.User.LastName=Last Name
+label.Jaffa.Admin.User.Password=Password
+label.Jaffa.Admin.User.Status=Status
+label.Jaffa.Admin.User.EMailAddress=EMail Address
+label.Jaffa.Admin.User.CreatedOn=Created On
+label.Jaffa.Admin.User.CreatedBy=Created By
+label.Jaffa.Admin.User.LastUpdatedOn=Last Updated On
+label.Jaffa.Admin.User.LastUpdatedBy=Last Updated By
+
+label.Jaffa.Admin.User.VerifyPassword=Verify Password
+label.Jaffa.Admin.User.Status.N=N (New)
+label.Jaffa.Admin.User.Status.A=A (Active)
+label.Jaffa.Admin.User.Status.I=I (Inactive)
+
+label.Jaffa.Admin.UserRole=User Role
+label.Jaffa.Admin.UserRole.UserName=[label.Jaffa.Admin.User.UserName]
+label.Jaffa.Admin.UserRole.RoleName=Role Name
+label.Jaffa.Admin.User.PasswordSection=Define Password
+label.Jaffa.Admin.User.AutoPassword=Generate Password
+label.Jaffa.Admin.User.NotifyUser=Notify User of Password or Status changes
+

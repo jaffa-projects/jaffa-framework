@@ -1,0 +1,71 @@
+<!--
+/**********************************************************************************************
+ * JAFFA - Java Application Framework For All - Copyright (C) 2008 JAFFA Development Group
+ *
+ * This library is free software; you can redistribute it and/or modify it under the terms
+ * of the GNU Lesser General Public License (version 2.1 any later).
+ *
+ * See http://jaffa.sourceforge.net/site/legal.html for more details.
+ *********************************************************************************************/
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>ExtJS - Simple Single Field Grouping Grid</title>
+
+    <script type="text/javascript" src="../../../js/extjs/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="../../../js/extjs/ext-all-debug.js"></script>
+
+    <script type="text/javascript">
+    // Firebug hack
+    if(!console) var console={debug:Ext.emptyFn,info:Ext.emptyFn,warn:Ext.emptyFn,error:Ext.emptyFn,trace:Ext.emptyFn,dir:Ext.emptyFn};
+    // Stop ref's to ExtJS site
+    Ext.BLANK_IMAGE_URL = "../../../js/extjs/resources/images/default/s.gif";
+    </script>
+
+<!--
+    <script type="text/javascript" src="../../../js/extjs/ux/grid/MultiGroupingStore.js"></script>
+    <script type="text/javascript" src="../../../js/extjs/ux/grid/MultiGroupingView.js"></script>
+    <script type="text/javascript" src="../../../js/extjs/ux/grid/MultiGroupingGrid.js"></script>
+-->
+    <script type="text/javascript" src="SingleGroup.js"></script>
+    
+    <!-- Include Ext stylesheets here: -->
+    <link rel="stylesheet" type="text/css" href="../../../js/extjs/resources/css/ext-all.css" />
+    
+    <style>
+      body {
+        font-family:helvetica,tahoma,verdana,sans-serif;
+        padding:20px;
+        padding-top:32px;
+        font-size:12px;
+      }
+      p {
+        margin-bottom:10px;
+      }
+      h1 {
+        font-size:large;
+        margin-bottom:15px;
+      }
+      h2 {
+        font-size:12px;
+        color:#333;
+        font-weight:bold;
+        margin:10px 0;
+      }
+      ul {
+        margin-left:20px;
+        list-style-type: disc;
+        list-style-position: inside;
+      }
+    </style>
+  </head>
+  <body>
+
+    <h1>Single-Grouping Reference Implementation</h1>
+
+    <hr/>
+    <div id="multiGroupEx1"></div>
+    <hr/>
+
+  </body>
+</html>

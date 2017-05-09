@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Object Maintenance Meta 2.0//EN" "http://jaffa.sourceforge.net/DTD/object-maintenance-meta_2_0.dtd">
+<Root>
+  <PatternTemplate>patterns/library/object_maintenance_2_1/ObjectMaintenancePattern.xml</PatternTemplate>
+  <Application>Jaffa</Application>
+  <Module>Printing</Module>
+  <Component>FormUsageMaintenance</Component>
+  <BasePackage>org.jaffa.modules.printing</BasePackage>
+  <DomainObject>FormUsage</DomainObject>
+  <DomainPackage>org.jaffa.modules.printing.domain</DomainPackage>
+  <Title>[title.Modules.Printing.FormUsageMaintenance.maintenance]</Title>
+  <KeyFields>
+    <KeyField>
+      <Name>FormName</Name>
+      <DataType>STRING</DataType>
+      <DomainField>FormName</DomainField>
+    </KeyField>
+  </KeyFields>
+  <Fields>
+    <Field>
+      <Name>FormAlternate</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>FormAlternate</DomainField>
+    </Field>
+    <Field>
+      <Name>Copies</Name>
+      <DataType>INTEGER</DataType>
+      <Display>true</Display>
+      <DomainField>Copies</DomainField>
+    </Field>
+    <Field>
+      <Name>CreatedOn</Name>
+      <DataType>DATE_TIME</DataType>
+      <Display>true</Display>
+      <DomainField>CreatedOn</DomainField>
+      <StampType>CreatedDateTime</StampType>
+    </Field>
+    <Field>
+      <Name>CreatedBy</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>CreatedBy</DomainField>
+      <StampType>CreatedUserId</StampType>
+    </Field>
+    <Field>
+      <Name>LastChangedOn</Name>
+      <DataType>DATE_TIME</DataType>
+      <Display>true</Display>
+      <DomainField>LastChangedOn</DomainField>
+      <StampType>LastUpdatedDateTime</StampType>
+      <UseForDirtyReadCheck>true</UseForDirtyReadCheck>
+    </Field>
+    <Field>
+      <Name>LastChangedBy</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>LastChangedBy</DomainField>
+      <StampType>LastUpdatedUserId</StampType>
+    </Field>
+  </Fields>
+  <ForeignObjects>
+    <ForeignObject>
+      <Name>FormEvent</Name>
+      <Object>FormEvent</Object>
+      <Package>org.jaffa.modules.printing.domain</Package>
+      <ForeignFields>
+        <ForeignField>
+          <Name>EventName</Name>
+          <DataType>STRING</DataType>
+          <Display>true</Display>
+          <Mandatory>true</Mandatory>
+          <DomainField>EventName</DomainField>
+          <DomainFieldInForeignObject>EventName</DomainFieldInForeignObject>
+          <KeyType>Primary</KeyType>
+        </ForeignField>
+      </ForeignFields>
+      <Lookup>
+        <Component>Jaffa.Printing.FormEventLookup</Component>
+        <TargetFields>eventName=eventName</TargetFields>
+        <BypassCriteriaScreen>true</BypassCriteriaScreen>
+        <StaticParameters/>
+        <DynamicParameters>eventName=eventName</DynamicParameters>
+      </Lookup>
+    </ForeignObject>
+    <ForeignObject>
+      <Name>FormGroup</Name>
+      <Object>FormGroup</Object>
+      <Package>org.jaffa.modules.printing.domain</Package>
+      <ForeignFields>
+        <ForeignField>
+          <Name>FormName</Name>
+          <DataType>STRING</DataType>
+          <Display>true</Display>
+          <Mandatory>true</Mandatory>
+          <DomainField>FormName</DomainField>
+          <DomainFieldInForeignObject>FormName</DomainFieldInForeignObject>
+          <KeyType>Primary</KeyType>
+        </ForeignField>
+      </ForeignFields>
+      <Lookup>
+        <Component>Jaffa.Printing.FormGroupLookup</Component>
+        <TargetFields>formName=formName</TargetFields>
+        <BypassCriteriaScreen>true</BypassCriteriaScreen>
+        <StaticParameters/>
+        <DynamicParameters>formName=formName</DynamicParameters>
+      </Lookup>
+    </ForeignObject>
+  </ForeignObjects>
+  <Screens>
+    <Screen SaveActionAvailableInCreateMode="true" PerformTxValidationOnNextAction="true" AvailableInUpdateMode="true" AvailableInCreateMode="true" Name="main">
+      <References>
+        <ForeignObjectReference ForeignObjectName="FormGroup"/>
+        <ForeignObjectReference ForeignObjectName="FormEvent"/>
+        <FieldReference Name="FormAlternate"/>
+        <FieldReference Name="Copies"/>
+        <FieldReference Name="CreatedOn"/>
+        <FieldReference Name="CreatedBy"/>
+        <FieldReference Name="LastChangedOn"/>
+        <FieldReference Name="LastChangedBy"/>
+      </References>
+    </Screen>
+  </Screens>
+</Root>

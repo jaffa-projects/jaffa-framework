@@ -1,0 +1,2 @@
+# Voucher Setting
+jaffa.voucher.voucherGenerator=org.jaffa.components.attachment.services.VMIDVoucherGenerator

@@ -1,0 +1,28 @@
+<ivy-module version="2.0">
+
+	<!-- The groupId, artifactId and version of the artifacts.  Update the revision to match the Jaffa version being built. -->
+    <info organisation="org.jaffa" module="jaffa-rules" revision="${jaffa-version}"/>
+	
+	<!-- The pom and jar to be published to Maven repositories. -->
+	<publications>
+        <artifact name="jaffa-rules" type="pom"/>
+        <artifact name="jaffa-rules" type="jar"/>
+    </publications>
+	
+  <dependencies>
+    <!-- Begin Apache Commons dependencies -->
+    <dependency org="commons-beanutils" name="commons-beanutils" rev="${commons-beanutils-version}" transitive="false"/>
+    <dependency org="org.apache.commons" name="commons-pool2" rev="${commons-pool2-version}" transitive="false"/>
+    <!-- End Apache Commons dependencies -->
+
+    <!-- Begin Spring Framework dependencies -->
+    <dependency org="org.springframework" name="spring-beans" rev="${springframework-version}" transitive="false"/>
+    <dependency org="org.springframework" name="spring-context" rev="${springframework-version}" transitive="false"/>
+    <dependency org="org.springframework" name="spring-core" rev="${springframework-version}" transitive="false"/>
+    <!-- End Spring Framework dependencies -->
+
+    <!-- Begin Bsh dependencies -->
+    <dependency org="org.beanshell" name="bsh" rev="${bsh-version}" transitive="false"/>
+    <!-- End Bsh dependencies -->
+  </dependencies>
+</ivy-module>

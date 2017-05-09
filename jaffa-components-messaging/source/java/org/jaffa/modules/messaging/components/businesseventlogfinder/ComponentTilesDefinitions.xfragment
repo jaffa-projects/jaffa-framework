@@ -1,0 +1,69 @@
+    <!-- BusinessEventLogFinder Criteria -->
+    <definition name="jaffa.messaging.businesseventlogfinder.FinderLayout.criteria"  extends="jaffa.FinderLayout">
+        <put name="body1" value="/jaffa/messaging/businesseventlogfinder/criteria.jsp"/>
+        <put name="body2" value=""/>
+        <put name="action" value="/jaffa_messaging_businessEventLogFinder"/>
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.messaging.businesseventlogfinder.criteria"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Modules.Messaging.BusinessEventLogFinder.criteria]"/>
+        <put name="body" value="jaffa.messaging.businesseventlogfinder.FinderLayout.criteria"/>
+    </definition>
+
+    <!-- BusinessEventLogFinder Results -->
+    <definition name="jaffa.messaging.businesseventlogfinder.FinderLayout.results"  extends="jaffa.FinderLayout">
+        <put name="body1" value=""/>
+        <put name="body2" value="/jaffa/messaging/businesseventlogfinder/results.jsp"/>
+        <put name="action" value="/jaffa_messaging_businessEventLogFinder"/>
+        <putList name="contextNavLinks">
+            <add value="ModifySearch"/>
+            <add value="Refresh"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="ModifySearch"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.messaging.businesseventlogfinder.results"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Modules.Messaging.BusinessEventLogFinder.results]"/>
+        <put name="body" value="jaffa.messaging.businesseventlogfinder.FinderLayout.results"/>
+    </definition>
+
+    <!-- BusinessEventLogFinder ConsolidatedCriteriaAndResults -->
+    <definition name="jaffa.messaging.businesseventlogfinder.FinderLayout.consolidatedCriteriaAndResults"  extends="jaffa.FinderLayout">
+        <put name="body1" value="/jaffa/messaging/businesseventlogfinder/criteria.jsp"/>
+        <put name="body2" value="/jaffa/messaging/businesseventlogfinder/results.jsp"/>
+        <put name="action" value="/jaffa_messaging_businessEventLogFinder"/>
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.messaging.businesseventlogfinder.consolidatedCriteriaAndResults"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Modules.Messaging.BusinessEventLogFinder.consolidated]"/>
+        <put name="body" value="jaffa.messaging.businesseventlogfinder.FinderLayout.consolidatedCriteriaAndResults"/>
+    </definition>
+
+    <!-- BusinessEventLogFinder Results as Excel -->
+    <definition name="jaffa.messaging.businesseventlogfinder.FinderExcelLayout"  extends="jaffa.FinderExcelLayout">
+        <put name="body" value="/jaffa/messaging/businesseventlogfinder/results.jsp"/>
+        <put name="action" value="/jaffa_messaging_businessEventLogFinder"/>
+    </definition>
+
+    <!-- BusinessEventLogFinder Results as Xml -->
+    <definition name="jaffa.messaging.businesseventlogfinder.FinderXmlLayout"  extends="jaffa.FinderXmlLayout">
+    </definition>
+

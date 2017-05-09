@@ -1,0 +1,8 @@
+    <!-- UserTimeEntryFinder -->
+    <action    path="/usertimeentry_userTimeEntryFinder"
+               type="org.jaffa.applications.test.modules.time.components.usertimeentryfinder.ui.UserTimeEntryFinderAction"
+               name="usertimeentry_userTimeEntryFinderForm"
+               validate="false"
+               scope="request">
+    </action>
+

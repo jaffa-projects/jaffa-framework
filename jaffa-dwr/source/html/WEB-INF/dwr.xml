@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dwr PUBLIC "-//GetAhead Limited//DTD Direct Web Remoting 2.0//EN" "http://getahead.org/dwr/dwr20.dtd">
+<dwr>
+  <init>
+
+    <converter id="jaffaDate" class="org.jaffa.dwr.converters.JaffaDateConverter"/>
+    <converter id="jaffaDateOverride" class="org.jaffa.dwr.converters.DateConverter"/>
+    <converter id="jaffaBooleanOverride" class="org.jaffa.dwr.converters.BooleanConverter"/>
+    <converter id="jaffaCurrencyOverride" class="org.jaffa.dwr.converters.CurrencyConverter"/>
+
+    <!-- Custom converter that adds in 'className' and filters out null properties -->
+    <converter id="nnBean" class="org.jaffa.dwr.converters.NotNullBeanConverter"/>
+    <converter id="flexBean" class="org.jaffa.dwr.converters.FlexBeanConverter"/>
+    <converter id="flexCriteriaBean" class="org.jaffa.dwr.converters.FlexCriteriaBeanConverter"/>
+
+  </init>
+
+  <allow>
+
+    <!-- Needed so Appliction/Framework Exceptions can be returned -->
+    <convert converter="exception" match="java.lang.Exception">
+      <param name="exclude" value="stackTrace"/>
+    </convert>
+    <convert converter="exception" match="org.jaffa.exceptions.*">
+      <param name="exclude" value="stackTrace"/>
+    </convert>
+    <convert converter="exception" match="org.jaffa.soa.rules.RulesApplicationException">
+      <param name="exclude" value="stackTrace"/>
+    </convert>
+    <convert converter="exception" match="org.jaffa.soa.rules.PendingEventException">
+      <param name="exclude" value="stackTrace"/>
+    </convert>
+    <convert converter="exception" match="org.jaffa.soa.rules.WarningEventException">
+      <param name="exclude" value="stackTrace"/>
+    </convert>
+
+    <!-- this is a bad idea for live, but can be useful in testing
+    <convert converter="bean" match="java.lang.StackTraceElement"/>
+    -->
+
+    <!-- Special converters so they are treated as native javascript date primatives -->
+    <convert converter="jaffaDate" match="org.jaffa.datatypes.DateOnly"/>
+    <convert converter="jaffaDate" match="org.jaffa.datatypes.DateTime"/>
+
+    <!-- Override the  default DWR boolean converter, to support boolean values like true/false/T/F/Y/N/1/0 -->
+    <convert converter="jaffaBooleanOverride" match="boolean"/>
+    <convert converter="jaffaBooleanOverride" match="java.lang.Boolean"/>
+	
+	<convert converter="jaffaCurrencyOverride" match="java.util.Currency"	/>
+	<convert converter="jaffaCurrencyOverride" match="org.jaffa.datatypes.Currency"	/>
+	
+    <!-- Override the  default DWR date converter, to take timezone differences into consideration -->
+    <convert converter="jaffaDateOverride" match="java.util.Date"/>
+    <convert converter="jaffaDateOverride" match="java.sql.Date"/>
+    <convert converter="jaffaDateOverride" match="java.sql.Time"/>
+    <convert converter="jaffaDateOverride" match="java.sql.Timestamp"/>
+    <convert converter="jaffaDateOverride" match="java.util.Calendar"/>
+
+    <!-- Common JAFFA Data Objects -->
+    <convert converter="nnBean" match="org.jaffa.beans.moulding.data.domain.*"/>
+    <convert converter="nnBean" match="org.jaffa.beans.moulding.data.criteria.*"/>
+    <convert converter="nnBean" match="org.jaffa.components.finder.*"/>
+    <convert converter="nnBean" match="org.jaffa.datatypes.*"/>
+    <convert converter="nnBean" match="org.jaffa.soa.graph.*"/>
+    <convert converter="flexBean" match="org.jaffa.flexfields.FlexBean">
+      <param name="exclude" value="persistentObject"/>
+    </convert>
+    <convert converter="nnBean" match="org.jaffa.flexfields.FlexClass">
+      <param name="exclude" value="dynaProperties"/>
+    </convert>
+    <convert converter="nnBean" match="org.jaffa.flexfields.FlexProperty">
+      <param name="exclude" value="type"/>
+    </convert>
+    <convert converter="flexCriteriaBean" match="org.jaffa.flexfields.FlexCriteriaBean"/>
+
+    <!-- Import service definitions //GEN-BEGIN:dwr.xfragment -->
+    <!-- //GEN-END:dwr.xfragment -->
+
+  </allow>
+
+</dwr>

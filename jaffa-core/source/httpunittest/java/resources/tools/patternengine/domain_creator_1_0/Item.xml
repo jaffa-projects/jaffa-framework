@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Domain Creator Meta 1.0//EN" "http://jaffa.sourceforge.net/DTD/domainCreatorMeta_1_0.dtd">
+
+<!--
+Non-null values for the following elements will be retained, the next time this file is regenerated, provided the merge option is set in the TableInfo file.
+1- Table Level: Description, LabelToken
+2- Field Level: Description, LabelToken, Layout, Pattern, Ignore
+-->
+
+<Root>
+    <DomainObject>Item</DomainObject>
+    <DomainPackage>org.jaffa.applications.test.modules.material.domain</DomainPackage>
+    <DatabaseTable>ITEM</DatabaseTable>
+    <MappingPackage>jdbcengine</MappingPackage>
+    <PatternTemplate>patterns/library/domain_creator_1_0/DomainCreatorPattern.xml</PatternTemplate>
+    <Description></Description>
+    <LabelToken>[label.Test.Material.Item]</LabelToken>
+    <Fields>
+        <Field>
+            <Name>ItemId</Name>
+            <DataType>java.lang.String</DataType>
+            <DatabaseFieldName>ITEM_ID</DatabaseFieldName>
+            <DatabaseDataType>STRING</DatabaseDataType>
+            <PrimaryKey>T</PrimaryKey>
+            <Description></Description>
+            <LabelToken>[label.Test.Material.Item.ItemId]</LabelToken>
+            <Mandatory>T</Mandatory>
+            <Width></Width>
+            <IntSize>20</IntSize>
+            <FracSize></FracSize>
+            <MinValue></MinValue>
+            <MaxValue></MaxValue>
+            <Layout></Layout>
+            <Pattern></Pattern>
+            <CaseType>UpperCase</CaseType>
+            <Ignore>false</Ignore>
+        </Field>
+        <Field>
+            <Name>Sc</Name>
+            <DataType>java.lang.String</DataType>
+            <DatabaseFieldName>SC</DatabaseFieldName>
+            <DatabaseDataType>STRING</DatabaseDataType>
+            <PrimaryKey>F</PrimaryKey>
+            <Description></Description>
+            <LabelToken>[label.Test.Material.Item.Sc]</LabelToken>
+            <Mandatory>F</Mandatory>
+            <Width></Width>
+            <IntSize>20</IntSize>
+            <FracSize></FracSize>
+            <MinValue></MinValue>
+            <MaxValue></MaxValue>
+            <Layout></Layout>
+            <Pattern></Pattern>
+            <CaseType>UpperCase</CaseType>
+            <Ignore>false</Ignore>
+        </Field>
+        <Field>
+            <Name>Part</Name>
+            <DataType>java.lang.String</DataType>
+            <DatabaseFieldName>PART</DatabaseFieldName>
+            <DatabaseDataType>STRING</DatabaseDataType>
+            <PrimaryKey>F</PrimaryKey>
+            <Description></Description>
+            <LabelToken>[label.Test.Material.Item.Part]</LabelToken>
+            <Mandatory>F</Mandatory>
+            <Width></Width>
+            <IntSize>50</IntSize>
+            <FracSize></FracSize>
+            <MinValue></MinValue>
+            <MaxValue></MaxValue>
+            <Layout></Layout>
+            <Pattern></Pattern>
+            <CaseType>UpperCase</CaseType>
+            <Ignore>false</Ignore>
+        </Field>
+        <Field>
+            <Name>Serial</Name>
+            <DataType>java.lang.String</DataType>
+            <DatabaseFieldName>SERIAL</DatabaseFieldName>
+            <DatabaseDataType>STRING</DatabaseDataType>
+            <PrimaryKey>F</PrimaryKey>
+            <Description></Description>
+            <LabelToken>[label.Test.Material.Item.Serial]</LabelToken>
+            <Mandatory>F</Mandatory>
+            <Width></Width>
+            <IntSize>20</IntSize>
+            <FracSize></FracSize>
+            <MinValue></MinValue>
+            <MaxValue></MaxValue>
+            <Layout></Layout>
+            <Pattern></Pattern>
+            <CaseType>UpperCase</CaseType>
+            <Ignore>false</Ignore>
+        </Field>
+        <Field>
+            <Name>Qty</Name>
+            <DataType>java.lang.Double</DataType>
+            <DatabaseFieldName>QTY</DatabaseFieldName>
+            <DatabaseDataType>DECIMAL</DatabaseDataType>
+            <PrimaryKey>F</PrimaryKey>
+            <Description></Description>
+            <LabelToken>[label.Test.Material.Item.Qty]</LabelToken>
+            <Mandatory>F</Mandatory>
+            <Width>16</Width>
+            <IntSize>10</IntSize>
+            <FracSize>5</FracSize>
+            <MinValue></MinValue>
+            <MaxValue></MaxValue>
+            <Layout></Layout>
+            <Pattern></Pattern>
+            <CaseType>MixedCase</CaseType>
+            <Ignore>false</Ignore>
+        </Field>
+    </Fields>
+</Root>
+
+

@@ -1,0 +1,96 @@
+<ivy-module version="2.0" xmlns:maven="http://maven.apache.org">
+  <!-- The groupId, module and version of the artifacts.  Update the revision to match the Jaffa version being built. -->
+  <info organisation="org.jaffa" module="jaffa-core" revision="${jaffa-version}"/>
+  <!-- The pom and jar to be published to Maven repositories. -->
+  <publications>
+    <artifact name="jaffa-core" type="pom"/>
+    <artifact name="jaffa-core" type="jar"/>
+    <artifact name="jaffa-config" type="pom"/>
+    <artifact name="jaffa-config" type="jar"/>
+  </publications>
+
+  <dependencies>
+    <!-- Begin Oracle Driver dependencies -->
+    <dependency org="com.oracle" name="ojdbc6" rev="${ojdbc6-version}" transitive="false"/>
+    <!-- End Oracle Driver dependencies -->
+
+    <!-- Begin Apache Commons dependencies -->
+    <dependency org="commons-beanutils" name="commons-beanutils" rev="${commons-beanutils-version}" transitive="false"/>
+    <dependency org="commons-dbcp" name="commons-dbcp" rev="${commons-dbcp-version}" transitive="false"/>
+    <dependency org="commons-logging" name="commons-logging" rev="${commons-logging-version}" transitive="false"/>
+    <dependency org="org.apache.commons" name="commons-pool" rev="${commons-pool-version}" transitive="false"/>
+    <!-- End Apache Commons dependencies -->
+
+    <!-- Begin Javax dependencies -->
+    <dependency org="javax.ejb" name="javax.ejb-api" rev="${javax.ejb-api-version}" transitive="false"/>
+    <dependency org="javax.servlet" name="servlet-api" rev="${servlet-api-version}" transitive="false"/>
+    <dependency org="javax.servlet.jsp" name="jsp-api" rev="${jsp-api-version}" transitive="false"/>
+    <dependency org="javax.mail" name="mail" rev="${javax.mail-version}" transitive="false"/>
+    <!-- End Javax dependencies -->
+
+    <!-- Begin log4j dependencies -->
+    <dependency org="log4j" name="log4j" rev="${log4j-version}" transitive="false"/>
+    <!-- End log4j dependencies -->
+
+    <!-- Begin Hibernate dependencies -->
+    <dependency org="org.hibernate" name="hibernate-core" rev="${hibernate-core-version}" transitive="false"/>
+    <dependency org="org.hibernate.javax.persistence" name="hibernate-jpa-2.1-api" rev="${hibernate-jpa-2.1-api-version}" transitive="false"/>
+    <!-- End Hibernate  dependencies -->
+
+    <!-- Begin Spring Framework dependencies -->
+    <dependency org="org.springframework" name="spring-beans" rev="${springframework-version}" transitive="false"/>
+    <dependency org="org.springframework" name="spring-context" rev="${springframework-version}" transitive="false"/>
+    <dependency org="org.springframework" name="spring-core" rev="${springframework-version}" transitive="false"/>
+    <!-- End Spring Framework dependencies -->
+
+    <!-- Begin Apache Struts dependencies -->
+    <dependency org="struts" name="struts" rev="${struts-version}" transitive="false"/>
+    <!-- End Apache Struts dependencies -->
+
+    <!-- Begin Jdom dependencies -->
+    <dependency org="org.jdom" name="jdom" rev="${jdom-version}" transitive="false"/>
+    <!-- End Jdom dependencies -->
+
+    <!-- Begin Bonecp dependencies -->
+    <dependency org="com.jolbox" name="bonecp" rev="${bonecp-version}" transitive="false"/>
+    <!-- End Bonecp dependencies -->
+
+    <!-- Begin Apache Velocity dependencies -->
+    <dependency org="org.apache.velocity" name="velocity" rev="${velocity-version}" transitive="false"/>
+    <!-- End Apache Velocity dependencies -->
+
+    <!-- Begin Json-lib dependencies -->
+    <dependency org="net.sf.json-lib" name="json-lib" rev="${json-lib-version}" maven:classifier="jdk15" transitive="false"/>
+    <!-- End Json-lib dependencies -->
+
+    <!-- Begin Xmlbeans dependencies -->
+    <dependency org="org.apache.xmlbeans" name="xmlbeans" rev="${xmlbeans-version}" transitive="false"/>
+    <!-- End Xmlbeans dependencies -->
+
+    <!-- Begin Apache Poi dependencies -->
+    <dependency org="org.apache.poi" name="poi" rev="${apache-poi-version}" transitive="false"/>
+    <dependency org="org.apache.poi" name="poi-ooxml" rev="${apache-poi-version}" transitive="false"/>
+    <dependency org="org.apache.poi" name="poi-ooxml-schemas" rev="${apache-poi-version}" transitive="false"/>
+    <!-- End Apache Poi dependencies -->
+
+    <!-- Begin Guava dependencies -->
+    <dependency org="com.google.guava" name="guava" rev="${guava-version}" transitive="false"/>
+    <!-- End Guava dependencies -->
+
+    <!-- Begin Antlr dependencies -->
+    <dependency org="org.antlr" name="antlr" rev="${antlr-version}" transitive="false"/>
+    <!-- End Antlr dependencies -->
+
+    <!-- Begin Dom4j dependencies -->
+    <dependency org="dom4j" name="dom4j" rev="${dom4j-version}" transitive="false"/>
+    <!-- End Dom4j dependencies -->
+
+    <!-- Begin Ezmorph dependencies -->
+    <dependency org="net.sf.ezmorph" name="ezmorph" rev="${ezmorph-version}" transitive="false"/>
+    <!-- End Ezmorph dependencies -->
+
+    <!-- Begin Oro dependencies -->
+    <dependency org="oro" name="oro" rev="${oro-version}" transitive="false"/>
+    <!-- End Oro dependencies -->
+  </dependencies>
+</ivy-module>

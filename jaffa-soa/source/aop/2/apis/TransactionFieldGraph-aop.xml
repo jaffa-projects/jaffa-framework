@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+  <metadata tag="jaffa.rules" class="org.jaffa.transaction.apis.data.TransactionFieldGraph" extends-class="org.jaffa.transaction.domain.TransactionField">
+    <super/>
+  </metadata>
+
+  <metadata tag="jaffa.rules" class="org.jaffa.transaction.apis.data.TransactionFieldCriteria" extends-class="org.jaffa.transaction.apis.data.TransactionFieldGraph">
+    <super/>
+  </metadata>
+</aop>

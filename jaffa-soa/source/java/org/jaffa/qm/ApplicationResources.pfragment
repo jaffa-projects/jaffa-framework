@@ -1,0 +1,42 @@
+label.Jaffa.QM.Queue=Queue
+label.Jaffa.QM.Queue.Type=Type
+label.Jaffa.QM.Queue.OpenCount=Open Count
+label.Jaffa.QM.Queue.SuccessCount=Success Count
+label.Jaffa.QM.Queue.ErrorCount=Error Count
+label.Jaffa.QM.Queue.InProcessCount=In-process Count
+label.Jaffa.QM.Queue.InterruptedCount=Interrupted Count
+label.Jaffa.QM.Queue.Status=Status
+label.Jaffa.QM.Queue.Status.ACTIVE=Active
+label.Jaffa.QM.Queue.Status.INACTIVE=Inactive
+
+label.Jaffa.QM.Message=Message
+label.Jaffa.QM.Message.Type=Type
+label.Jaffa.QM.Message.SubType=Sub Type
+label.Jaffa.QM.Message.MessageId=Message Id
+label.Jaffa.QM.Message.Direction=Direction
+label.Jaffa.QM.Message.Priority=Priority
+label.Jaffa.QM.Message.Status=Status
+label.Jaffa.QM.Message.CreatedBy=Created By
+label.Jaffa.QM.Message.CreatedOn=Created On
+label.Jaffa.QM.Message.ErrorMessage=Error Message
+label.Jaffa.QM.Message.Payload=Payload
+label.Jaffa.QM.Message.Direction.IN=In
+label.Jaffa.QM.Message.Direction.OUT=Out
+label.Jaffa.QM.Message.Status.ERROR=Error
+label.Jaffa.QM.Message.Status.INTERRUPTED=Interrupted
+label.Jaffa.QM.Message.Status.IN_PROCESS=In-process
+label.Jaffa.QM.Message.Status.OPEN=Open
+label.Jaffa.QM.Message.Status.SUCCESS=Success
+
+label.Jaffa.QM.MessageField=Message Field
+label.Jaffa.QM.MessageField.Name=Name
+label.Jaffa.QM.MessageField.Label=Label
+label.Jaffa.QM.MessageField.Value=Value
+
+label.Jaffa.QM.MessageDependency=Message Dependency
+label.Jaffa.QM.MessageDependency.DependsOnId=Depends On
+label.Jaffa.QM.MessageDependency.Status=Status
+label.Jaffa.QM.MessageDependency.Status.OPEN=Open
+label.Jaffa.QM.MessageDependency.Status.SUCCESS=Success
+
+exception.org.qm.apis.QueueAdminException.multipleQueues=Criteria for message query must identify a single queue 

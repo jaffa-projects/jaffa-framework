@@ -1,0 +1,7 @@
+title.Jaffa.Admin.MenuNavigation=Menu Navigation
+exception.org.jaffa.applications.jaffa.modules.admin.components.menunavigation.ui.exceptions.MenuNavigationException.parseError=Error while parsing the navigation xml file.<br> {0}
+exception.org.jaffa.applications.jaffa.modules.admin.components.menunavigation.ui.exceptions.MenuNavigationException.fileReadError=Error while reading the navigation xml File <br>{0}
+exception.org.jaffa.applications.jaffa.modules.admin.components.menunavigation.ui.exceptions.MenuNavigationException.fileNotFoundError= {0} File not found in the classpath or in the filesystem.
+exception.org.jaffa.applications.jaffa.modules.admin.components.menunavigation.ui.exceptions.MenuNavigationException.badurlError=Can't find navigation.xml .Bad URL {0} <br> {1}
+
+label.Jaffa.Admin.MenuNavigation.NoContent=No Content.

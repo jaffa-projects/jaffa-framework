@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- these settings are used for the consumption of EventTransactions -->
+<event-adapter-configuration>
+
+    <!-- the unique ID of this local machine, this should be different for each machine in the cluster -->
+    <local-machine-id>EVENT_LOCAL_MACHINE_ID</local-machine-id>
+
+    <!-- the number of threads to use when consuming EventTransactions -->
+    <number-of-consumer-threads>EVENT_NUMBER_OF_CONSUMER_THREADS</number-of-consumer-threads>
+
+    <!-- the maximum time in seconds threads can live idle -->
+    <threads-keep-alive>THREADS_KEEP_ALIVE</threads-keep-alive>
+    
+    <!-- the maximum capacity of the event queue -->
+    <event-queue-capacity>100000</event-queue-capacity>
+
+    <!-- the maximum age in ms that an event is allowed to be in the "I" or "O" states before it is retried -->
+    <!-- defaults to 14,400,000 | 4 hours -->
+    <event-retry-age>14400000</event-retry-age>
+
+</event-adapter-configuration>

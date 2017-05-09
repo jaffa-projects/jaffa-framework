@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.transaction.domain.TransactionPayload">
+        <map-to table="J_TRANSACTION_PAYLOADS" lockable="false"/>
+
+        <field name="Id" use-member="m_id" type="java.lang.String" primary-key="true">
+            <sql name="ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="ExternalMessage" use-member="m_externalMessage" type="byte[]">
+            <sql name="EXTERNAL_MESSAGE" type="BLOB" dirty="ignore"/>
+        </field>
+
+        <field name="InternalMessage" use-member="m_internalMessage" type="byte[]">
+            <sql name="INTERNAL_MESSAGE" type="BLOB" dirty="ignore"/>
+        </field>
+
+        <field name="InternalMessageClass" use-member="m_internalMessageClass" type="java.lang.String">
+            <sql name="INTERNAL_MESSAGE_CLASS" type="STRING" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

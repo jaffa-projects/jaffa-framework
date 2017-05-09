@@ -1,0 +1,5 @@
+    <component id="Jaffa.Admin.FileExplorer">
+	<class>org.jaffa.applications.jaffa.modules.admin.components.fileexplorer.ui.FileExplorerComponent</class>
+	<type>Custom</type>
+        <mandatory-function name="Jaffa.Admin.FileExplorer"/>
+    </component>

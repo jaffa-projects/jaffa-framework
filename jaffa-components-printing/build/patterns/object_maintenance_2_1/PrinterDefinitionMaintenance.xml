@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Object Maintenance Meta 2.0//EN" "http://jaffa.sourceforge.net/DTD/object-maintenance-meta_2_0.dtd">
+<Root>
+  <PatternTemplate>patterns/library/object_maintenance_2_1/ObjectMaintenancePattern.xml</PatternTemplate>
+  <Application>Jaffa</Application>
+  <Module>Printing</Module>
+  <Component>PrinterDefinitionMaintenance</Component>
+  <BasePackage>org.jaffa.modules.printing</BasePackage>
+  <DomainObject>PrinterDefinition</DomainObject>
+  <DomainPackage>org.jaffa.modules.printing.domain</DomainPackage>
+  <Title>[title.Modules.Printing.PrinterDefinitionMaintenance.maintenance]</Title>
+  <KeyFields>
+    <KeyField>
+      <Name>PrinterId</Name>
+      <DataType>STRING</DataType>
+      <DomainField>PrinterId</DomainField>
+    </KeyField>
+  </KeyFields>
+  <Fields>
+    <Field>
+      <Name>PrinterId</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>PrinterId</DomainField>
+    </Field>
+    <Field>
+      <Name>Description</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>Description</DomainField>
+    </Field>
+    <Field>
+      <Name>SiteCode</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>SiteCode</DomainField>
+    </Field>
+    <Field>
+      <Name>LocationCode</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>LocationCode</DomainField>
+    </Field>
+<!--
+<Field>
+<Name>Remote</Name>
+<DataType>BOOLEAN</DataType>
+<Display>true</Display>
+<DomainField>Remote</DomainField>
+<Breakup>
+<WidgetType>RadioButton</WidgetType>
+<StaticValues>
+<StaticValue>
+<Code>T</Code>
+<Description>Local</Description>
+</StaticValue>
+<StaticValue>
+<Code>F</Code>
+<Description>Remote</Description>
+</StaticValue>
+</StaticValues>
+</Breakup>
+</Field>
+-->
+    <Field>
+      <Name>Remote</Name>
+      <DataType>BOOLEAN</DataType>
+      <Display>true</Display>
+      <DomainField>Remote</DomainField>
+    </Field>
+    <Field>
+      <Name>RealPrinterName</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>RealPrinterName</DomainField>
+    </Field>
+    <Field>
+      <Name>PrinterOption1</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>PrinterOption1</DomainField>
+    </Field>
+    <Field>
+      <Name>PrinterOption2</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>PrinterOption2</DomainField>
+    </Field>
+    <Field>
+      <Name>OutputType</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>OutputType</DomainField>
+      <Breakup>
+        <WidgetType>DropDown</WidgetType>
+        <DynamicValues>
+          <DomainClassName>org.jaffa.modules.printing.domain.PrinterOutputType</DomainClassName>
+          <CodeFieldName>OutputType</CodeFieldName>
+          <DescriptionFieldName>OutputType</DescriptionFieldName>
+        </DynamicValues>
+      </Breakup>
+    </Field>
+    <Field>
+      <Name>ScaleToPageSize</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>ScaleToPageSize</DomainField>
+    </Field>    
+  </Fields>
+<!--
+<ForeignObjects>
+<ForeignObject>
+<Name>PrinterOutputType</Name>
+<Object>PrinterOutputType</Object>
+<Package>org.jaffa.modules.printing.domain</Package>
+<ForeignFields>
+<ForeignField>
+<Name>OutputType</Name>
+<DataType>STRING</DataType>
+<Display>true</Display>
+<Mandatory>true</Mandatory>
+<DomainField>OutputType</DomainField>
+<DomainFieldInForeignObject>OutputType</DomainFieldInForeignObject>
+<KeyType>Primary</KeyType>
+</ForeignField>
+</ForeignFields>
+<Lookup>
+<Component>Jaffa.Printing.PrinterOutputTypeLookup</Component>
+<TargetFields>outputType=outputType</TargetFields>
+<BypassCriteriaScreen>true</BypassCriteriaScreen>
+<StaticParameters></StaticParameters>
+<DynamicParameters>outputType=outputType</DynamicParameters>
+</Lookup>
+</ForeignObject>
+</ForeignObjects>
+-->
+  <Screens>
+    <Screen SaveActionAvailableInCreateMode="true" PerformTxValidationOnNextAction="true" AvailableInUpdateMode="true" AvailableInCreateMode="true" Name="main">
+      <References>
+        <FieldReference Name="PrinterId"/>
+        <FieldReference Name="Description"/>
+        <FieldReference Name="SiteCode"/>
+        <FieldReference Name="LocationCode"/>
+        <FieldReference Name="Remote"/>
+        <FieldReference Name="RealPrinterName"/>
+        <FieldReference Name="PrinterOption1"/>
+        <FieldReference Name="PrinterOption2"/>
+        <FieldReference Name="OutputType"/>
+        <FieldReference Name="ScaleToPageSize"/>
+<!--
+<ForeignObjectReference ForeignObjectName="PrinterOutputType"></ForeignObjectReference>
+-->
+      </References>
+    </Screen>
+  </Screens>
+</Root>

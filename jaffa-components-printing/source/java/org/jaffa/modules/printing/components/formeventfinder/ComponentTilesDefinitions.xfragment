@@ -1,0 +1,75 @@
+    <!-- FormEventFinder Criteria -->
+    <definition name="jaffa.printing.formeventfinder.FinderLayout.criteria"  extends="jaffa.FinderLayout">
+        <put name="body1" value="/jaffa/printing/formeventfinder/criteria.jsp"/>
+        <put name="body2" value=""/>
+        <put name="action" value="/jaffa_printing_formEventFinder"/>
+        <put name="createComponent" value="Jaffa.Printing.FormEventMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+            <add value="CreateFromCriteria"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.printing.formeventfinder.criteria"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.FormEventFinder.criteria]"/>
+        <put name="body" value="jaffa.printing.formeventfinder.FinderLayout.criteria"/>
+    </definition>
+
+    <!-- FormEventFinder Results -->
+    <definition name="jaffa.printing.formeventfinder.FinderLayout.results"  extends="jaffa.FinderLayout">
+        <put name="body1" value=""/>
+        <put name="body2" value="/jaffa/printing/formeventfinder/results.jsp"/>
+        <put name="action" value="/jaffa_printing_formEventFinder"/>
+        <put name="createComponent" value="Jaffa.Printing.FormEventMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="ModifySearch"/>
+            <add value="Refresh"/>
+            <add value="CreateFromResults"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="ModifySearch"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.printing.formeventfinder.results"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.FormEventFinder.results]"/>
+        <put name="body" value="jaffa.printing.formeventfinder.FinderLayout.results"/>
+    </definition>
+
+    <!-- FormEventFinder ConsolidatedCriteriaAndResults -->
+    <definition name="jaffa.printing.formeventfinder.FinderLayout.consolidatedCriteriaAndResults"  extends="jaffa.FinderLayout">
+        <put name="body1" value="/jaffa/printing/formeventfinder/criteria.jsp"/>
+        <put name="body2" value="/jaffa/printing/formeventfinder/results.jsp"/>
+        <put name="action" value="/jaffa_printing_formEventFinder"/>
+        <put name="createComponent" value="Jaffa.Printing.FormEventMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+            <add value="CreateFromResults"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.printing.formeventfinder.consolidatedCriteriaAndResults"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.FormEventFinder.consolidated]"/>
+        <put name="body" value="jaffa.printing.formeventfinder.FinderLayout.consolidatedCriteriaAndResults"/>
+    </definition>
+
+    <!-- FormEventFinder Results as Excel -->
+    <definition name="jaffa.printing.formeventfinder.FinderExcelLayout"  extends="jaffa.FinderExcelLayout">
+        <put name="body" value="/jaffa/printing/formeventfinder/results.jsp"/>
+        <put name="action" value="/jaffa_printing_formEventFinder"/>
+    </definition>
+
+    <!-- FormEventFinder Results as Xml -->
+    <definition name="jaffa.printing.formeventfinder.FinderXmlLayout"  extends="jaffa.FinderXmlLayout">
+    </definition>
+

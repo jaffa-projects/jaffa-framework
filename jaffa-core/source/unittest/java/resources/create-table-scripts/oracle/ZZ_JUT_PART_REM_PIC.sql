@@ -1,0 +1,6 @@
+CREATE TABLE "ZZ_JUT_PART_REM_PIC"(
+        "PART"          VARCHAR2(50) NOT NULL,
+        "REMARKS"          CLOB,
+        "PICTURE"          BLOB,
+    CONSTRAINT "ZZ_JUT_PART_REM_PICP1" PRIMARY KEY("PART")
+)

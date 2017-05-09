@@ -1,0 +1,11 @@
+    <!-- UserRequestViewer -->
+    <definition name="jaffa.user.userrequestviewer.ViewerLayout"  extends="jaffa.ViewerLayout">
+        <put name="body" value="/jaffa/user/userrequestviewer/view.jsp"/>
+        <put name="action" value="/user_userRequestViewer"/>
+        <put name="updateComponent" value="Jaffa.User.UserRequestMaintenance"/>
+    </definition>
+    <definition name="jaffa.user.userrequestviewer"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.User.UserRequestViewer.view]"/>
+        <put name="body" value="jaffa.user.userrequestviewer.ViewerLayout"/>
+    </definition>
+

@@ -1,0 +1,2 @@
+    <form-bean      name="jaffa_printing_formDefinitionMaintenanceForm"
+                    type="org.jaffa.modules.printing.components.formdefinitionmaintenance.ui.FormDefinitionMaintenanceForm"/>

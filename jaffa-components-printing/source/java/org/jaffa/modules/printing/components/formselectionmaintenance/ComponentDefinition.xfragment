@@ -1,0 +1,4 @@
+    <component id="Jaffa.Printing.FormSelectionMaintenance">
+        <class>org.jaffa.modules.printing.components.formselectionmaintenance.ui.FormSelectionMaintenanceComponent</class>
+        <type>ObjectFinder</type>
+    </component>

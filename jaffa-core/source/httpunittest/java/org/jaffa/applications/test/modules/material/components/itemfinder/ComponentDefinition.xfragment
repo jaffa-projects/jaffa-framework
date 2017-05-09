@@ -1,0 +1,4 @@
+    <component id="Material.ItemFinder">
+        <class>org.jaffa.applications.test.modules.material.components.itemfinder.ui.ItemFinderComponent</class>
+        <type>ObjectFinder</type>
+    </component>

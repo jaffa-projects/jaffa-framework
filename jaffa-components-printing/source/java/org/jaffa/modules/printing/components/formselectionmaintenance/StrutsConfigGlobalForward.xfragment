@@ -1,0 +1,6 @@
+    <forward name="jaffa_printing_formSelectionMaintenanceCriteria" path="jaffa.printing.formselectionmaintenance.criteria"/>
+    <forward name="jaffa_printing_formSelectionMaintenanceResults" path="jaffa.printing.formselectionmaintenance.results"/>
+    <forward name="jaffa_printing_formSelectionMaintenanceConsolidatedCriteriaAndResults" path="jaffa.printing.formselectionmaintenance.consolidatedCriteriaAndResults"/>
+    <forward name="jaffa_printing_formSelectionMaintenanceExcelResults" path="jaffa.printing.formselectionmaintenance.FinderExcelLayout"/>
+    <forward name="jaffa_printing_formSelectionMaintenanceXmlResults" path="jaffa.printing.formselectionmaintenance.FinderXmlLayout"/>
+    <forward name="jaffa_printing_formSelectionMaintenanceDisplay" path="/jaffa/printing/formselectionmaintenance/display.jsp"/>

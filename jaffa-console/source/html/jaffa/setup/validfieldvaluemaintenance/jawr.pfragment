@@ -1,0 +1,11 @@
+#----------------------------
+# Jaffa Valid Field Value System Code Finder
+#----------------------------
+
+# Finder Bundle : container.js
+jawr.js.bundle.JaffaValidFieldValueFinder.id=/bundles/jaffa/setup/validfieldvaluefinder.js
+jawr.js.bundle.JaffaValidFieldValueFinder.mappings=\
+        dwr:Jaffa_Setup_ValidFieldValueService, \
+        /jaffa/setup/validfieldvaluemaintenance/FinderCriteriaPanels.js, \
+        /jaffa/setup/validfieldvaluemaintenance/FinderContainer.js, \
+        /jaffa/setup/validfieldvaluemaintenance/main.js

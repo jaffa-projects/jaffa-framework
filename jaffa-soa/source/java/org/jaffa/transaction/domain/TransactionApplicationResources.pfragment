@@ -1,0 +1,16 @@
+label.Jaffa.Transaction.Transaction=Transaction
+label.Jaffa.Transaction.Transaction.Id=ID
+label.Jaffa.Transaction.Transaction.Direction=Direction
+label.Jaffa.Transaction.Transaction.Type=Type
+label.Jaffa.Transaction.Transaction.SubType=Sub Type
+label.Jaffa.Transaction.Transaction.Status=Status
+label.Jaffa.Transaction.Transaction.ErrorMessage=Error Message
+
+label.Jaffa.Transaction.Transaction.Direction.IN=In
+label.Jaffa.Transaction.Transaction.Direction.OUT=Out
+label.Jaffa.Transaction.Transaction.Status.O=Open
+label.Jaffa.Transaction.Transaction.Status.S=Success
+label.Jaffa.Transaction.Transaction.Status.E=Error
+label.Jaffa.Transaction.Transaction.Status.H=Hold
+label.Jaffa.Transaction.Transaction.Status.I=In-process
+label.Jaffa.Transaction.Transaction.Status.INT=Interrupted

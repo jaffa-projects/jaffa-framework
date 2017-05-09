@@ -1,0 +1,101 @@
+<!--
+/**********************************************************************************************
+ * JAFFA - Java Application Framework For All - Copyright (C) 2008 JAFFA Development Group
+ *
+ * This library is free software; you can redistribute it and/or modify it under the terms
+ * of the GNU Lesser General Public License (version 2.1 any later).
+ *
+ * See http://jaffa.sourceforge.net/site/legal.html for more details.
+ *********************************************************************************************/
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>ExtJS extension - Multiple Field Grouping Grid with Paging, Filtering and DWR integration</title>
+
+    <script type="text/javascript" src="../../../js/extjs/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="../../../js/extjs/ext-all-debug.js"></script>
+
+    <script type="text/javascript">
+    // Firebug hack
+    if(!console) var console={debug:Ext.emptyFn,info:Ext.emptyFn,warn:Ext.emptyFn,error:Ext.emptyFn,trace:Ext.emptyFn,dir:Ext.emptyFn};
+    // Stop ref's to ExtJS site
+    Ext.BLANK_IMAGE_URL = "../../../js/extjs/resources/images/default/s.gif";
+    </script>
+
+
+    <script type="text/javascript" src="../../../js/extjs/ux/grid/MultiGroupingStore.js"></script>
+    <script type="text/javascript" src="../../../js/extjs/ux/grid/MultiGroupingView.js"></script>
+    <script type="text/javascript" src="../../../js/extjs/ux/grid/MultiGroupingPanel.js"></script>
+
+    <!-- Add in DWR Interface -->
+    <script type='text/javascript' src='../../../dwr/engine.js'></script>
+    <script type='text/javascript' src='../../../dwr/interface/WorkOrderService.js'></script>
+
+    <script type="text/javascript" src="../../../js/extjs/data/DWRProxy.js"></script>
+
+    <script type="text/javascript" src="../../../js/extjs/ux/grid/GridFilters.js"></script>
+    <script type="text/javascript" src="../../../js/extjs/ux/grid/filter/Filter.js"></script>
+    <script type="text/javascript" src="../../../js/extjs/ux/grid/filter/BooleanFilter.js"></script>
+    <script type="text/javascript" src="../../../js/extjs/ux/grid/filter/DateFilter.js"></script>
+    <script type="text/javascript" src="../../../js/extjs/ux/grid/filter/ListFilter.js"></script>
+    <script type="text/javascript" src="../../../js/extjs/ux/grid/filter/NumericFilter.js"></script>
+    <script type="text/javascript" src="../../../js/extjs/ux/grid/filter/StringFilter.js"></script>
+    <script type="text/javascript" src="../../../js/extjs/ux/menu/EditableItem.js"></script>
+    <script type="text/javascript" src="../../../js/extjs/ux/menu/RangeMenu.js"></script>
+
+    <script type="text/javascript" src="MultiGroupDWR.js"></script>
+
+    <!-- Include Ext stylesheets here: -->
+    <link rel="stylesheet" type="text/css" href="../../../js/extjs/resources/css/ext-all.css" />
+    <link rel="stylesheet" type="text/css" href="examples.css" />
+  </head>
+  <body>
+
+    <h1>Multiple Field Grouping Grid with Paging, Filtering and DWR integration</h1>
+    <p>
+    This is another example of the Multiple Grid Paging Extention (See <a href="MultiGroupLive.html">basic example</a>)
+    <br/>
+    As per the previous example it gets its data from a back end service, but this time using <a href="http://directwebremoting.org/" target='_blank'>DWR</a>
+    instead of simply accessing a URL and expecting a JSON reponse.
+    <br/>
+    For this there has to be a Java WorkOrderService exposed by DWR. This service will expect a "criteria" object to be passed in
+    and the service will return an Array of WorkOrder objects.
+    The criteria object are typically based on the <a href="http://jaffa.cvs.sourceforge.net/jaffa/JaffaCore/source/java/org/jaffa/soa/graph/GraphCriteria.java?view=markup" target='_blank'>GraphCriteria</a> base class,
+    and the returned domain objects are typically based on the <a href="http://jaffa.cvs.sourceforge.net/jaffa/JaffaCore/source/java/org/jaffa/soa/graph/GraphDataObject.java?view=markup" target='_blank'>GraphDataObject</a> base class,     
+    <br/>
+    The query fields in the criteria object are typically based on the various CriteriaField objects like <a href="http://jaffa.cvs.sourceforge.net/jaffa/JaffaCore/source/java/org/jaffa/components/finder/StringCriteriaField.java?view=markup" target='_blank'>StringCriteriaField</a>.
+    The filter plug-in for the Grid will be a customized version such that it is compatible with these. 
+    </p>
+    
+    <h2>Below is a working Example...</h2>
+    <p><b>Note: </b>At this point there is no sample Java Backend available that supports this example<p>
+
+    <hr/>
+    <div id="multiGroupEx1"></div>
+    <hr/>
+
+    <p>This example is based on the JaffaRIA, JaffaCore, JaffaSOA and DWR deployments within the JAFFA project.</p>
+    <p>JaffaRIA can be downloaded and built from the CVS source,
+    or daily builds can found at <a href="http://jaffa.sf.net/repository/" target='_blank'>http://jaffa.sf.net/repository/</a><p>
+
+    <h2>Example source code can be found here</h2>
+    <ul>
+      <li><a href="http://jaffa.cvs.sourceforge.net/jaffa/JaffaRIA/source/html/tests/extjs/multigroup/MultiGroupDWR.html?view=markup" target='_blank'>tests/extjs/multigroup/MultiGroupDWR.html</a></li>
+      <li><a href="http://jaffa.cvs.sourceforge.net/jaffa/JaffaRIA/source/html/tests/extjs/multigroup/MultiGroupDWR.js?view=markup" target='_blank'>tests/extjs/multigroup/MultiGroupDWR.js</a></li>
+    </ul>
+
+    <h2>Change Log</h2>
+    <ul type="1">
+        
+    </ul>  
+    <h2>Known Issues</h2>
+    <ul>
+
+    </ul>  
+    <h2>Planned/Requested Features</h2>
+    <ul>
+
+    </ul>  
+
+  </body>
+</html>

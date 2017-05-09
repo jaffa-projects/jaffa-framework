@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.flexfields.domain.FlexFieldDelete">
+        <map-to table="J_FLEX_FIELDS_DEL" />
+
+        <field name="FlexFieldId" use-member="m_flexFieldId" type="java.lang.String" primary-key="true">
+            <sql name="FLEX_FIELD_ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="ObjectName" use-member="m_objectName" type="java.lang.String">
+            <sql name="OBJECT_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Key1" use-member="m_key1" type="java.lang.String">
+            <sql name="KEY1" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="VersionNumber" use-member="m_versionNumber" type="java.lang.Long">
+            <sql name="VERSION_NUMBER" type="INTEGER" dirty="ignore"/>
+        </field>
+
+        <field name="DeletionCreatedOn" use-member="m_deletionCreatedOn" type="org.jaffa.datatypes.DateTime">
+            <sql name="DELETION_CREATED_ON" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

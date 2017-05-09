@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Domain Creator Meta 1.1//EN" "http://jaffa.sourceforge.net/DTD/domain-creator-meta_1_1.dtd">
+<Root>
+  <DomainObject>WebServiceMetrics</DomainObject>
+  <DomainPackage>org.jaffa.wsapi.domain</DomainPackage>
+  <DatabaseTable>J_WEBSERVICE_METRICS</DatabaseTable>
+  <MappingPackage>resources/jdbcengine/jaffa</MappingPackage>
+  <PatternTemplate>patterns/library/domain_creator_1_1/DomainCreatorPattern.xml</PatternTemplate>
+  <Description>Holds Web Service metrics data capture by application</Description>
+  <LabelToken>[label.Jaffa.Console.WebServiceMetrics]</LabelToken>
+  <Fields>
+    <Field>
+      <Name>Id</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>ID</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <PrimaryKey>T</PrimaryKey>
+      <LabelToken>[label.Jaffa.Console.WebServiceMetrics.Id]</LabelToken>
+      <IntSize>80</IntSize>
+    </Field>  
+    <Field>
+      <Name>EndpointName</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>ENDPOINT_NAME</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>End point for the web service</Description>
+      <LabelToken>[label.Jaffa.Console.WebServiceMetrics.EndpointName]</LabelToken>
+      <IntSize>300</IntSize>
+    </Field>
+    <Field>
+      <Name>EndpointAddress</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>ENDPOINT_ADDRESS</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>End point address for the web service</Description>
+      <LabelToken>[label.Jaffa.Console.WebServiceMetrics.EndpointAddress]</LabelToken>
+      <IntSize>300</IntSize>
+    </Field>
+    <Field>
+      <Name>IPAddress</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>IP_ADDRESS</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>IP address of the node where the web service running</Description>
+      <LabelToken>[label.Jaffa.Console.WebServiceMetrics.IPAddress]</LabelToken>
+      <IntSize>20</IntSize>
+    </Field>
+    <Field>
+      <Name>Port</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>PORT</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Port number of the node where the web service running</Description>
+      <LabelToken>[label.Jaffa.Console.WebServiceMetrics.Port]</LabelToken>
+      <IntSize>10</IntSize>
+    </Field>    
+    <Field>
+      <Name>StartTime</Name>
+      <DataType>org.jaffa.datatypes.DateTime</DataType>
+      <DatabaseFieldName>START_TIME</DatabaseFieldName>
+      <DatabaseDataType>DATE_TIME</DatabaseDataType>
+      <Description>Web Service started time</Description>
+      <LabelToken>[label.Jaffa.Console.WebServiceMetrics.StartTime]</LabelToken>
+    </Field>
+    <Field>
+      <Name>StopTime</Name>
+      <DataType>org.jaffa.datatypes.DateTime</DataType>
+      <DatabaseFieldName>STOP_TIME</DatabaseFieldName>
+      <DatabaseDataType>DATE_TIME</DatabaseDataType>
+      <Description>Web Service stopped time</Description>
+      <LabelToken>[label.Jaffa.Console.WebServiceMetrics.StopTime]</LabelToken>
+    </Field>
+    <Field>
+      <Name>RequestCount</Name>
+      <DataType>java.lang.Long</DataType>
+      <DatabaseFieldName>REQUEST_COUNT</DatabaseFieldName>
+      <DatabaseDataType>INTEGER</DatabaseDataType>
+      <Description>Web Service request count</Description>
+      <LabelToken>[label.Jaffa.Console.WebServiceMetrics.RequestCount]</LabelToken>
+    </Field>
+    <Field>
+      <Name>ResponseCount</Name>
+      <DataType>java.lang.Long</DataType>
+      <DatabaseFieldName>RESPONSE_COUNT</DatabaseFieldName>
+      <DatabaseDataType>INTEGER</DatabaseDataType>
+      <Description>Web Service response count</Description>
+      <LabelToken>[label.Jaffa.Console.WebServiceMetrics.ResponseCount]</LabelToken>
+    </Field>    
+    <Field>
+      <Name>FaultCount</Name>
+      <DataType>java.lang.Long</DataType>
+      <DatabaseFieldName>FAULT_COUNT</DatabaseFieldName>
+      <DatabaseDataType>INTEGER</DatabaseDataType>
+      <Description>Web Service fault count</Description>
+      <LabelToken>[label.Jaffa.Console.WebServiceMetrics.FaultCount]</LabelToken>
+    </Field>    
+    <Field>
+      <Name>MinProcessingTime</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>MIN_PROCESSING_TIME</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Web Service Min Processing Time</Description>
+      <LabelToken>[label.Jaffa.Console.WebServiceMetrics.MinProcessingTime]</LabelToken>
+      <IntSize>20</IntSize>
+    </Field>    
+    <Field>
+      <Name>MaxProcessingTime</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>MAX_PROCESSING_TIME</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Web Service Max Processing Time</Description>
+      <LabelToken>[label.Jaffa.Console.WebServiceMetrics.MaxProcessingTime]</LabelToken>
+      <IntSize>20</IntSize>
+    </Field>    
+    <Field>
+      <Name>AvgProcessingTime</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>AVG_PROCESSING_TIME</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Web Service Avg Processing Time</Description>
+      <LabelToken>[label.Jaffa.Console.WebServiceMetrics.AvgProcessingTime]</LabelToken>
+      <IntSize>20</IntSize>
+    </Field>    
+    <Field>
+      <Name>CreatedOn</Name>
+      <DataType>org.jaffa.datatypes.DateTime</DataType>
+      <DatabaseFieldName>CREATED_ON</DatabaseFieldName>
+      <DatabaseDataType>DATE_TIME</DatabaseDataType>
+      <LabelToken>[label.Common.CreatedOn]</LabelToken>
+      <StampType>CreatedDateTime</StampType>
+    </Field>
+  </Fields>
+</Root>

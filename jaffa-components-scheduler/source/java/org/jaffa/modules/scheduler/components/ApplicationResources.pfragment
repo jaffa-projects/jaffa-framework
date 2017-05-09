@@ -1,0 +1,25 @@
+title.Jaffa.Scheduler.TaskFinder.results=Scheduler Administration
+label.Jaffa.Scheduler.TaskFinder.StartScheduler=Start Scheduler
+label.Jaffa.Scheduler.TaskFinder.StopScheduler=Stop Scheduler
+label.Jaffa.Scheduler.TaskFinder.StopScheduler.confirm=A scheduler once stopped, cannot be restarted. Are you sure you want to proceed with this action?
+label.Jaffa.Scheduler.TaskFinder.PauseScheduler=Pause Scheduler
+label.Jaffa.Scheduler.TaskFinder.PauseScheduler.confirm=Are you sure you want to pause the Scheduler?
+label.Jaffa.Scheduler.TaskFinder.ClearEventLog=Clear Event Log
+label.Jaffa.Scheduler.TaskFinder.ClearEventLog.confirm=This will delete all event logs associated with the Scheduler. Are you sure you want to proceed with this action?
+label.Jaffa.Scheduler.TaskFinder.ScheduledTask.LastError=Last Error
+label.Jaffa.Scheduler.TaskFinder.ScheduledTask.FailedTaskCount=Failed Tasks
+label.Jaffa.Scheduler.TaskFinder.ScheduledTask.Activate=Activate
+label.Jaffa.Scheduler.TaskFinder.ScheduledTask.Inactivate=Deactivate
+label.Jaffa.Scheduler.TaskFinder.ScheduledTask.Inactivate.confirm=Are you sure you want to deactivate the Task?
+error.Jaffa.Scheduler.TaskFinder.SchedulerError=Error while accessing Scheduler
+
+title.Jaffa.Scheduler.TaskMaintenance.maintenance=[label.Jaffa.Scheduler.ScheduledTask] Maintenance
+label.Jaffa.Scheduler.TaskMaintenance.TaskDetails=[label.Jaffa.Scheduler.ScheduledTask] Details
+label.Jaffa.Scheduler.TaskMaintenance.TriggerDetails=Trigger Details
+label.Jaffa.Scheduler.TaskMaintenance.RecoveryDetails=Recovery Details
+label.Jaffa.Scheduler.TaskMaintenance.RecoveryDetails.Question=How do you want to handle error conditions?
+label.Jaffa.Scheduler.TaskMaintenance.RecoveryDetails.MisfireRecovery=When the Scheduler is not available
+label.Jaffa.Scheduler.TaskMaintenance.TaskData=[label.Jaffa.Scheduler.ScheduledTask] Data
+label.Jaffa.Scheduler.TaskMaintenance.ClearEventLog=Clear Event Log
+label.Jaffa.Scheduler.TaskMaintenance.ClearEventLog.confirm=This will delete all event logs associated with the Task. Are you sure you want to proceed with this action?
+title.Jaffa.Scheduler.TaskViewer.view=[label.Jaffa.Scheduler.ScheduledTask] Details

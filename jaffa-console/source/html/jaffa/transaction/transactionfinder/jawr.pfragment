@@ -1,0 +1,21 @@
+#--------------------------------------------------
+# Jaffa \ Transaction \ TransactionFinder
+#--------------------------------------------------
+
+# Allowed Dependencies: 
+jawr.js.bundle.JaffaTransactionTransactionFinderContainer.id=/bundles/jaffa/transaction/transactionfindercontainer.js
+jawr.js.bundle.JaffaTransactionTransactionFinderContainer.mappings=\
+        dwr:Jaffa_Transaction_TransactionService, \
+        /jaffa/transaction/transactionfinder/FinderCriteriaPanels.js, \
+        /jaffa/transaction/transactionfinder/FinderContainer.js
+
+# Now define a bundle of files required to build the finder viewport
+jawr.js.bundle.JaffaTransactionTransactionFinderViewport.id=/bundles/jaffa/transaction/transactionfinderviewport.js
+jawr.js.bundle.JaffaTransactionTransactionFinderViewport.mappings=\
+        /jaffa/transaction/transactionfinder/main.js
+
+
+# Now define a full bundle of viewport and container
+jawr.js.bundle.JaffaTransactionTransactionFinder.id=/bundles/jaffa/transaction/transactionfinder.js
+jawr.js.bundle.JaffaTransactionTransactionFinder.composite=true
+jawr.js.bundle.JaffaTransactionTransactionFinder.child.names=JaffaTransactionTransactionFinderContainer,JaffaTransactionTransactionFinderViewport

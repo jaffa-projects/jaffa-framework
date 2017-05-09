@@ -1,0 +1,189 @@
+/********************************/
+/** Queue Manager Dashboard CSS */
+/********************************/
+.x-grid3-col-0 {
+    margin-left: 3px;
+}
+
+.ux-treegrid-icon {
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 0 none;
+    height: 18px;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    vertical-align: top;
+    width: 16px;
+}
+
+.tb-start {
+    background: url(../imgs/control_play_blue.png) no-repeat !important;
+}
+
+.tb-pause {
+    background: url(../imgs/control_pause_blue.png) no-repeat !important;
+}
+
+.tb-delete {
+    background: url(../imgs/delete.png) no-repeat !important;
+}
+
+.tb-retry {
+    background: url(../imgs/arrow_redo.png) no-repeat !important;
+}
+
+#queues-view .x-panel-body {
+    font: 11px Arial, Helvetica, sans-serif;
+}
+
+#queues-view .queue-wrap {
+    float: left;
+    margin: 4px;
+    margin-right: 0;
+    padding: 5px;
+}
+
+#queues-view .color-wrap {
+    float: left;
+    padding: 2px
+}
+
+#queues-view .queue-wrap span {
+    display: block;
+    overflow: hidden;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+#queues-view .color-wrap span {
+    display: block;
+    overflow: hidden;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+#queues-view .queue {
+    padding: 3px;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    height: 110px;
+    width: 110px;
+    position: relative;
+}
+
+#queues-view .queue-color {
+    padding: 3px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    height: 30px;
+    width: 180px;
+}
+
+#queues-view .queue span {
+    margin-top: 45px;
+    width: 110px;
+}
+
+#queues-view .queue-color span {
+    margin-top: 8px;
+    width: 180px;
+}
+
+#queues-view .queue-ACTIVE {
+    background: #99cc66;
+}
+
+#queues-view .queue-ACTIVE-DARK {
+    background: #669933;
+}
+
+#queues-view .queue-ACTIVE-BRIGHT {
+    background: #aaff66;
+}
+
+#queues-view .queue-INACTIVE {
+    background: #ffff99;
+}
+
+#queues-view .queue-INACTIVE-BRIGHT {
+    background: #ffff00;
+}
+
+#queues-view .queue-FAILED-DARK {
+    background: #c00000;
+}
+
+#queues-view .queue-FAILED {
+    background: #ff3333;
+}
+
+#queues-view .queue-FAILED-BRIGHT {
+    background: #ff0000;
+}
+
+#queues-view .queue .queueType {
+    height: 24px;
+    width: 24px;
+    margin: -4px -4px;
+    float: right;
+}
+
+#queues-view .queue .queueType-ie {
+    height: 24px;
+    width: 24px;
+    margin: -4px -4px;
+    float: right;
+}
+
+#queues-view .queue .queueType-Transaction {
+    background: #efefef url(../imgs/t.png) no-repeat;
+}
+
+#queues-view .queue .queueType-WKTR {
+    background: #efefef url(../imgs/w.png) no-repeat;
+}
+
+#queues-view .queue .runStatus {
+    position: absolute;
+    bottom: 0;
+    height: 24px;
+    width: 24px;
+    margin-left: 88px;
+    margin-bottom: 2px;
+}
+
+#queues-view .queue .runStatus-ie {
+    position: absolute;
+    bottom: 0;
+    height: 24px;
+    width: 24px;
+    margin-left: 88px;
+    margin-bottom: 2px;
+}
+
+#queues-view .queue .runStatus-R {
+}
+
+#queues-view .queue .runStatus-P {
+}
+
+#queues-view .x-view-over {
+    border: 1px solid #dddddd;
+    background: #efefef url(../imgs/row-over.gif) repeat-x left top;
+    padding: 4px;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+}
+
+#queues-view .x-view-selected {
+    border: 1px solid #003366;
+    background: #eff5fb url(../imgs/selected.gif) no-repeat right bottom;
+    padding: 4px;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+}

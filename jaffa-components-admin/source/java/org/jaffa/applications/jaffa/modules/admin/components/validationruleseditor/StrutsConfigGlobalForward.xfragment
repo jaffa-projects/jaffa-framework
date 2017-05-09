@@ -1,0 +1,2 @@
+    <forward name="admin_validationRulesEditor_rulesList" path="jaffa.admin.validationruleseditor.rulesList"/>
+    <forward name="admin_validationRulesEditor_editor" path="jaffa.admin.validationruleseditor.editor"/>

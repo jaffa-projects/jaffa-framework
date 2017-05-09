@@ -1,0 +1,18 @@
+<ivy-module version="2.0">
+
+	<!-- The groupId, artifactId and version of the artifacts.  Update the revision to match the Jaffa version being built. -->
+    <info organisation="org.jaffa" module="jaffa-components-admin" revision="${jaffa-version}"/>
+	
+	<!-- The pom and jar to be published to Maven repositories. -->
+	<publications>
+        <artifact name="jaffa-components-admin" type="pom"/>
+        <artifact name="jaffa-components-admin" type="jar"/>
+    </publications>
+
+  <dependencies>
+    <!-- Begin javax dependencies -->
+    <dependency org="javax.servlet" name="servlet-api" rev="${servlet-api-version}" transitive="false"/>
+    <dependency org="javax.servlet.jsp" name="jsp-api" rev="${jsp-api-version}" transitive="false"/>
+    <!-- End javax dependencies -->
+  </dependencies>
+</ivy-module>

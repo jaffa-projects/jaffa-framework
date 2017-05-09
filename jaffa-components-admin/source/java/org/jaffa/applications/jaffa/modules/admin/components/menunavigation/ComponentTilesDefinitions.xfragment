@@ -1,0 +1,11 @@
+    <!-- Menu Navigation-->
+    <definition name="jaffa.admin.menunavigation.Layout"  extends="jaffa.ViewerLayout">
+        <put name="contextNav"  value="/jaffa/admin/menunavigation/contextNav.jsp"/>
+        <put name="defaultNav"  value="/jaffa/admin/menunavigation/defaultNav.jsp"/>
+        <put name="body"        value="/jaffa/admin/menunavigation/main.jsp"/>
+        <put name="action"      value="/admin_menuNavigation"/>
+    </definition>
+    <definition name="jaffa.admin.menunavigation"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Admin.MenuNavigation]"/>
+        <put name="body" value="jaffa.admin.menunavigation.Layout"/>
+    </definition>

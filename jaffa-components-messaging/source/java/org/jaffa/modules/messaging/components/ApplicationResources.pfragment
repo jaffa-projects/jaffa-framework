@@ -1,0 +1,48 @@
+title.Jaffa.Messaging.QueueList.results=Queue List
+label.Jaffa.Messaging.QueueList.Queue=Queue
+label.Jaffa.Messaging.QueueList.Pending=Pending
+label.Jaffa.Messaging.QueueList.Error=Error
+label.Jaffa.Messaging.QueueList.InProcess=In Process
+label.Jaffa.Messaging.QueueList.ActiveConsumer=Active Consumer
+label.Jaffa.Messaging.QueueList.StartMessageDelivery=Start Message Delivery
+label.Jaffa.Messaging.QueueList.StartMessageDelivery.confirm=Are you sure you want to start Message delivery?
+label.Jaffa.Messaging.QueueList.StopMessageDelivery=Stop Message Delivery
+label.Jaffa.Messaging.QueueList.StopMessageDelivery.confirm=Are you sure you want to stop Message delivery?
+error.Jaffa.Messaging.QueueList.QueueError=Error while accessing Queue
+
+title.Jaffa.Messaging.QueueViewer.view=Queue Viewer
+title.Modules.Messaging.BusinessEventLogFinder.consolidated=[label.Jaffa.Messaging.BusinessEventLog] Inquiry
+title.Modules.Messaging.BusinessEventLogFinder.criteria=[label.Jaffa.Messaging.BusinessEventLog] Criteria
+title.Modules.Messaging.BusinessEventLogFinder.results=[label.Jaffa.Messaging.BusinessEventLog] List
+title.Modules.Messaging.BusinessEventLogLookup.consolidated=[label.Jaffa.Messaging.BusinessEventLog] Lookup
+title.Modules.Messaging.BusinessEventLogLookup.criteria=[label.Jaffa.Messaging.BusinessEventLog] Lookup Criteria
+title.Modules.Messaging.BusinessEventLogLookup.results=[label.Jaffa.Messaging.BusinessEventLog] Lookup
+title.Modules.Messaging.BusinessEventLogMaintenance.maintenance=[label.Jaffa.Messaging.BusinessEventLog] Maintenance
+title.Modules.Messaging.BusinessEventLogViewer.view=[label.Jaffa.Messaging.BusinessEventLog] Details
+
+label.Jaffa.Messaging.QueueViewer.Queue=[label.Jaffa.Messaging.QueueList.Queue]
+label.Jaffa.Messaging.QueueViewer.Filter=Filter
+label.Jaffa.Messaging.QueueViewer.DisplayParamNotDefined=Data cannot be displayed, since the display-param element has not been defined for queue {0}
+
+label.Jaffa.Messaging.Message.JMSMessageID= JMS Message ID
+label.Jaffa.Widgets.Button.Resubmit=Resubmit
+
+title.Jaffa.Messaging.MessageViewer.view=Message Viewer
+label.Jaffa.Messaging.MessageViewer.Error=Error
+
+label.Jaffa.Widgets.Button.ChangePriority=Change Priority
+label.Jaffa.Widgets.Button.MoreBusinessEventLog=More Business Event Log
+label.Jaffa.Messaging.MessageViewer.Header=Header
+label.Jaffa.Messaging.MessageViewer.Priority=Priority
+label.Jaffa.Messaging.MessageViewer.TechnicalDetails=Technical Details
+label.Jaffa.Messaging.MessageViewer.Message=Message
+label.Jaffa.Messaging.MessageViewer.BusinessEventLog=Business Event Log
+label.Jaffa.Messaging.Message.JMSDestination=JMS Desination
+label.Jaffa.Messaging.Message.JMSDeliveryMode=JMS Delivery Mode
+label.Jaffa.Messaging.Message.JMSTimestamp=JMS Timestamp
+label.Jaffa.Messaging.Message.JMSCorrelationID=JMS Correlation ID
+label.Jaffa.Messaging.Message.JMSReplyTo=JMS ReplyTo
+label.Jaffa.Messaging.Message.JMSRedelivered=JMS Redelivered
+label.Jaffa.Messaging.Message.JMSType=JMS Type
+label.Jaffa.Messaging.Message.JMSExpiration=JMS Expiration
+title.Jaffa.Messaging.BusinessEventFinder.titleHeader=Business Event Log Inquiry

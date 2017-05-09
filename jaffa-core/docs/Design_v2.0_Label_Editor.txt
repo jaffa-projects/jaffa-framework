@@ -1,0 +1,168 @@
+Requirements
+============
+- Create a LabelEditor component that will:
+    - Display all the entries from ApplicationResources.properties file
+    - Allow a user to override the default values
+    - The override value are retained through product upgrades
+- The LabelEditor component can also be used by a developer to 
+    - Change labels
+    - Sync the changes with the Source Code
+- The Jaffa widgets Label, UserGridColumn, Button, FoldingSection and HistoryNav and Error Popup
+    - Will be enhanced to render a small anchor next to them
+    - This anchor will start the LabelEditor component and allow the user to change the corresponding label
+
+
+Component
+=========
+- Jaffa.Admin.LabelEditor: This will be created in the JaffaComponents project
+
+
+Business Functions
+==================
+- AllowLabelEditing: This is a mandatory function for the LabelEditor component
+    <business-function name="Jaffa.Admin.Labels"></business-function>
+
+- AllowLabelEditingAndSourceSyncing: This is an optional function for the LabelEditor component
+    <business-function name="Jaffa.Admin.Labels.Developer"></business-function>
+
+
+Assumptions
+===========
+- The application will have an ApplicationResources.default file
+    - This will be built by Ant, or manually, by merging all the fragments
+    - The location of this file will be provided by a servlet parameter
+- The application will have an ApplicationResources.override file
+    - This will contain all the label variations put in by the customer
+    - It should ideally be placed outside the webapp, so that it can survive the product upgrades
+    - The location of this file will be provided by a servlet parameter
+- The application will have an ApplicationResources.properties file
+    - This will be created by a Jaffa servlet by merging the above 2 files, at startup
+    - The location of this file will be provided by a servlet parameter
+- In the absence of the above files, the LabelEditor will not work and consequently the links from the Jaffa widgets will fail
+
+
+Config.java
+===========
+Add the following dynamic properties
+    - PROP_APPLICATION_RESOURCES_LOCATION
+    - PROP_APPLICATION_RESOURCES_DEFAULT_LOCATION
+    - PROP_APPLICATION_RESOURCES_OVERRIDE_LOCATION
+
+
+InitApp Servlet
+===============
+- Add the optional parameters
+    - framework.ApplicationResourcesLocation
+    - framework.ApplicationResourcesDefaultLocation
+    - framework.ApplicationResourcesOverrideLocation
+- If the values are provided for the above parameters:
+    - This servlet will combine the ApplicationResources.default and ApplicationResources.override files to generate the ApplicationResources.properties file.
+    - Additionally, the servlet will set the appropriate dynamic properties in the org.jaffa.config.Config class.
+
+
+ApplicationResources.properties Flushing
+================================================
+- Create a new factory class 'org.jaffa.util.PropertyMessageResourcesFactory', which extends 'org.apache.struts.util.MessageResourcesFactory'
+- The factory class will return an instance of a new class 'org.jaffa.util.PropertyMessageResources', which extends 'org.apache.struts.util.PropertyMessageResources'
+- The new class will have the method flushCache() to clear the 'messages' field and 'locale' field of the base class
+- The new class will override the method loadLocale(), such that the properties file is loaded using File I/O. This allows us to view the changes to the file, without having to reload the webapp.
+- Specify the factory class in struts-config.xml
+    <message-resources parameter="ApplicationResources" null="false" factory="org.jaffa.util.PropertyMessageResourcesFactory"/>
+
+Component
+=========
+- Jaffa.Admin.LabelEditor: This will be created in the JaffaComponents project
+
+
+Business Functions
+==================
+- Jaffa.Admin.Labels: This is a mandatory function for the LabelEditor component
+- Jaffa.Admin.Labels.Developer: This is an optional function for the LabelEditor component
+
+
+LabelEditor
+===========
+- This component will render a screen having the following columns
+    Label (Text)
+    Default (Text)
+    Override (EditBox)
+    Display Value (Text)
+    It will have input fields for the searchPath and fragmentName to be used by the SyncToSource feature
+- By default all entries from ApplicationResources.properties will be displayed
+- When invoked from a Jaffa widget, only the input label will be displayed
+- 'Save' button. The event handler for this button will do the following
+    - Add an entry for each label having an override value to the ApplicationResources.override file.
+    - Remove all entries from the ApplicationResources.override file, for which the override value is blank
+    - Migrate all changes to the ApplicationResources.properties file by invoking InitApp.generateApplicationResources()
+    - Flush the struts properties cache by invoking the flushCache() method on the MessageResources, provided its an instance of 'org.jaffa.util.PropertyMessageResources'
+- 'SyncToSource' button will be available to a user having access to the optional business function 'Jaffa.Admin.Labels.Developer'. This will
+    - Migrate all the displayed override values to the appropriate fragment file
+    - Migrate all the displayed override values to the ApplicationResources.default file
+    - Delete all displayed override entries from the ApplicationResources.override file
+    - Migrate all changes to the ApplicationResources.properties file by invoking InitApp.generateApplicationResources()
+    - Flush the struts properties cache by invoking the flushCache() method on the MessageResources, provided its an instance of 'org.jaffa.util.PropertyMessageResources'
+- 'Refresh' button
+    This will re-render the screen
+- 'Close' button
+    This will close the component and return to the calling screen
+
+
+PropertyFileDecomposer
+======================
+The LabelEditorComponent uses this class to maintain the comments and order of properties in an existing fragment file during source-sync  
+
+
+Widget Access
+=============
+- The following jaffa widgets/components will have an anchor generated next to them for editing a label
+    Label
+    UserGridColumn
+    GridColumn
+    TableColumn
+    Button (not of type Image)
+    Folding Section
+    Nav History
+    Error popup
+- The anchor will link to a startComponent.do with target='_blank'
+- It will be controlled by a CSS class
+- The anchor will be generated only if the user has access to the LabelEditor
+- The anchor will be generated only if the widget-value represents a token
+    Valid values should be of the type '[xyz]'
+    Labels of the type '[xyz] blah blah [abc]' will not be available for hyperlinking
+
+
+Checklist for using the LabelEditor component
+=============================================
+- Ensure that a user has access to the business-functions: Jaffa.Admin.Labels and Jaffa.Admin.Labels.Developer
+- Copy ApplicationResources.properties as ApplicationResources.default. This can be achieved as part of the build process.
+- Provide the appropriate parameters in web.xml to the InitApp servlet for specifying the locations of the ApplicationResources files
+    <init-param>
+      <!-- This file will be picked up from WEB-INF/classes -->
+      <param-name>framework.ApplicationResourcesLocation</param-name>
+      <param-value>ApplicationResources.properties</param-value>
+    </init-param>
+    <init-param>
+      <!-- This file will be picked up from WEB-INF/classes -->
+      <param-name>framework.ApplicationResourcesDefaultLocation</param-name>
+      <param-value>ApplicationResources.default</param-value>
+    </init-param>
+    <init-param>
+      <!-- This file will be picked up from the current working directory -->
+      <param-name>framework.ApplicationResourcesOverrideLocation</param-name>
+      <param-value>ApplicationResources.override</param-value>
+    </init-param>
+- Specify the factory class in struts-config.xml for ApplicationResources
+  <message-resources parameter="ApplicationResources" null="false" factory="org.jaffa.util.PropertyMessageResourcesFactory"/>
+
+
+
+Extention Points
+================
+- Provide a Filters section in the LabelEditor screen
+    - Allows a user to limit the labels displayed using filters like BeginsWith, Contains
+    - Checkboxes to limit the search to Key, Value, DisplayValue, Labels, Titles, Errors, Exceptions, Others
+    - Available actions - ApplyFilter, RemoveFilter
+- Provide a 'Find' feature in the LabelEditor screen. This will have to be done using JavaScipt
+- Provide the the onblur event on the override field will obtain the appropriate display-value
+- We can have a framework property which will enable/disable the integration of the LabelEditor and the Jaffa Widgets.
+- Provide the ability to update labels taking into account language, country and variance

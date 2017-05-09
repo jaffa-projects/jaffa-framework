@@ -1,0 +1,7 @@
+    <!-- Jaffa_Setup_ValidFieldValueService -->
+    <create creator="new" javascript="Jaffa_Setup_ValidFieldValueService">
+      <param name="class" value="org.jaffa.modules.setup.apis.ValidFieldValueService"/>
+      <include method="query"/>
+      <include method="update"/>
+    </create>
+    <convert converter="nnBean" match="org.jaffa.modules.setup.apis.data.*" />

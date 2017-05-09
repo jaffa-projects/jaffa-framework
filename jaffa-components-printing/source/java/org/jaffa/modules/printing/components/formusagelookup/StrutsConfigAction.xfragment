@@ -1,0 +1,8 @@
+    <!-- FormUsageLookup -->
+    <action    path="/jaffa_printing_formUsageLookup"
+               type="org.jaffa.modules.printing.components.formusagelookup.ui.FormUsageLookupAction"
+               name="jaffa_printing_formUsageLookupForm"
+               validate="false"
+               scope="request">
+    </action>
+

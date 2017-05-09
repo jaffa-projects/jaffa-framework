@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='US-ASCII' ?>
+<bean-mapping>
+  <graph-data-object class='org.jaffa.transaction.apis.data.TransactionPayloadGraph'/>
+
+  <domain-object class='org.jaffa.transaction.domain.TransactionPayload'/>
+
+  <map-fields>
+    <field gdo='externalMessage'/>
+    <field gdo='internalMessage'/>
+    <field gdo='internalMessageClass'/>
+  </map-fields>
+</bean-mapping>

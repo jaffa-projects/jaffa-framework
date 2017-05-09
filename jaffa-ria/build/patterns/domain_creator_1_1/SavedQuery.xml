@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Domain Creator Meta 1.1//EN" "http://jaffa.sourceforge.net/DTD/domain-creator-meta_1_1.dtd">
+<Root>
+  <DomainObject>SavedQuery</DomainObject>
+  <DomainPackage>org.jaffa.ria.finder.domain</DomainPackage>
+  <DatabaseTable>J_SAVED_QUERIES</DatabaseTable>
+  <MappingPackage>resources/jdbcengine/jaffa</MappingPackage>
+  <PatternTemplate>patterns/library/domain_creator_1_1/DomainCreatorPattern.xml</PatternTemplate>
+  <Description>Holds Saved Query data</Description>
+  <LabelToken>[label.Jaffa.SavedQueries.SavedQuery]</LabelToken>
+  <Fields>
+    <Field>
+      <Name>QueryId</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>QUERY_ID</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <PrimaryKey>T</PrimaryKey>
+      <Description>Technical Key</Description>
+      <LabelToken>[label.Jaffa.SavedQueries.SavedQuery.QueryId]</LabelToken>
+      <IntSize>100</IntSize>
+    </Field>
+    <Field>
+      <Name>UserId</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>USER_ID</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>User Id</Description>
+      <LabelToken>[label.Jaffa.SavedQueries.SavedQuery.UserId]</LabelToken>
+      <Mandatory>T</Mandatory>
+      <IntSize>20</IntSize>
+    </Field>
+    <Field>
+      <Name>ComponentRef</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>COMPONENT_REF</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Component Ref</Description>
+      <LabelToken>[label.Jaffa.SavedQueries.SavedQuery.ComponentRef]</LabelToken>
+      <Mandatory>T</Mandatory>
+      <IntSize>100</IntSize>
+    </Field>
+    <Field>
+      <Name>ContextRef</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>CONTEXT_REF</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Context Ref</Description>
+      <LabelToken>[label.Jaffa.SavedQueries.SavedQuery.ContextRef]</LabelToken>
+      <IntSize>100</IntSize>
+    </Field>
+    <Field>
+      <Name>QueryName</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>QUERY_NAME</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Query Name</Description>
+      <LabelToken>[label.Jaffa.SavedQueries.SavedQuery.QueryName]</LabelToken>
+      <Mandatory>T</Mandatory>
+      <IntSize>100</IntSize>
+    </Field>
+    <Field>
+      <Name>isDefault</Name>
+      <DataType>java.lang.Boolean</DataType>
+      <DatabaseFieldName>IS_DEFAULT</DatabaseFieldName>
+      <DatabaseDataType>BOOLEAN</DatabaseDataType>
+      <Description>Indicates if the query is the default query</Description>
+      <LabelToken>[label.Jaffa.SavedQueries.SavedQuery.IsDefault]</LabelToken>
+    </Field>
+    <Field>
+      <Name>Criteria</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>CRITERIA</DatabaseFieldName>
+      <DatabaseDataType>CLOB</DatabaseDataType>
+      <Description>Criteria</Description>
+      <LabelToken>[label.Jaffa.SavedQueries.SavedQuery.Criteria]</LabelToken>
+    </Field>
+  </Fields>
+</Root>

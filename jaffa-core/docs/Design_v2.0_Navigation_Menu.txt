@@ -1,0 +1,242 @@
+Jaffa Global Menu Design
+========================
+
+1. DIV for Navigation Bar
+=========================
+
+- Class for CSS control will be 'navBar' (div.navBar)
+- Each top level option in the navigation bar will be an anchor 
+	- Each anchor can be either a direct 'HREF' to another page or a dropdown menu.
+	- Anchor will be used so that the ':hover' style can be used from the CSS
+	- Class for CSS control of a nav bar option will be 'navBarItem' (a.navBarItem, a.navBarItem:hover)
+
+	- If the anchor is a direct link then
+		- href point to the page to go to (i.e. href="http://jaffa.sf.net")
+		- onMouseOver="displayMenu(event,null)", passing in 'null' for the linked menu, infers "no menu",
+		  but if this is ommitted, then it will not hide other visible menus, if another option
+		  was being hightlighted. You can leave this event out and the menus won't break, but this is not
+		  'our' prefered behaviour.
+
+	- If the anchor is a dropdown menu then
+		- href="javascript:void(0)", if this is ommitted, the ":hover" seems to be ignored
+		- onMouseOver="displayMenu(event,'Runtime')", this identified what dropdown menu to
+		  display. In this case the we assume the value 'Runtime' to be a DOM ID reference to a
+		  DIV tag of class="navMenu".
+		  When generating from java we use the same text for the DIV ID's as we use for the 
+		  actual anchor text. This makes the code more readable, but isn't not a requirement.
+	
+1.1 Example of a navBar in HTML
+-------------------------------
+
+<div class="navBar" style="width:100%" align="left">
+  <a class="navBarItem" href="http://jaffa.sf.net" onMouseOver="displayMenu(event,null)">Home</a>
+  <a class="navBarItem" href="javascript:void(0)" onMouseOver="displayMenu(event,'Runtime')">Runtime</a>
+  <a class="navBarItem" href="javascript:void(0)" onMouseOver="displayMenu(event,'Rapid Development')">Rapid Development</a>
+  <a class="navBarItem" href="javascript:void(0)" onMouseOver="displayMenu(event,'Download')">Download</a>
+  <a class="navBarItem" href="http://jaffa.sf.net/site/contactUs.html" 	onMouseOver="displayMenu(event,null)"				>Contact Us</a>
+</div>
+
+
+1.2 Key CSS definitions for the nav bar
+---------------------------------------
+
+div.navBar {}
+a.navBarItem {
+  text-decoration: none;  /* Turn off underline for <a> */
+}
+a.navBarItem:hover {}
+
+
+2. DIV for Navigation Menu
+==========================
+
+- Class for CSS control will be 'navMenu' (div.navMenu)
+- Each menu option in the navigation menu will be an anchor
+	- Each anchor can be either a direct 'HREF' to another page or a dropdown menu.
+	- Class for CSS control of a menu option will be 'navMenuItem' (a.navMenuItem, a.navMenuItem:hover)
+	- Each anchor is split into two spans
+	- The first span is for the text, and is mandatory
+		- Class for CSS control of the text is 'navMenuText' (span.navMenuText)
+	- The second span is for the 'more' icon, indicating this option has a submenu. It is optional
+		- Class for CSS control of the 'more' icon is 'navMenuMore' (span.navMenuMore)
+		- Typically we use the CSS to insert the graphic in this span
+		- The span itself just contains a &nbsp;
+
+	- If the anchor is a direct link then
+		- href point to the page to go to (i.e. href="http://jaffa.sf.net")
+		- onMouseOver="hideSubMenu(event)", the 'hideSubMenu()' call allows an other visible sub menus
+		  that are currently being displayed to be hidden, this will include any of its sub menus too.
+		  This is mandatory, else the menu system will function incorrectly
+		  
+	- If the anchor is a dropdown menu then
+		- You should include the second span as mentioned above.
+		  (i.e. <span class="navMenuMore">&nbsp;</span> )
+		- Again, use href="javascript:void(0)"
+		- onMouseOver="displaySubMenu(event,'Presentation');", the displaySubMenu() call is used to display
+		  the sub-menu. Again the second parameter, just like the call to displayMenu() in the nav bar 
+		  we assume this value is a DOM ID reference to another DIV tag of class="navMenu".
+		  All a.navMenuItem tags use displaySubMenu(), where as all a.navBarItem tags use displayMenu()
+
+2.1 Example of a navMenu in HTML
+--------------------------------
+
+<div id="Runtime" class="navMenu">
+  <a class="navMenuItem" href="http://jaffa.sf.net/documentation/" onMouseOver="hideSubMenu(event)">
+    <span class="navMenuText">Overview</span>
+  </a>
+  <a class="navMenuItem" href="javascript:void(0)" onMouseOver="displaySubMenu(event,'Presentation');">
+    <span class="navMenuText">Presentation</span>
+    <span class="navMenuMore">&nbsp;</span>
+  </a>
+  <a class="navMenuItem" href="javascript:void(0)" onMouseOver="displaySubMenu(event,'Business');">
+    <span class="navMenuText">Business</span>
+    <span class="navMenuMore">&nbsp;</span>
+  </a>
+  <a class="navMenuItem" href="javascript:void(0)" onMouseOver="displaySubMenu(event,'Persistence');">
+    <span class="navMenuText">Persistence</span>
+    <span class="navMenuMore">&nbsp;</span>
+  </a>
+  <a class="navMenuItem" href="javascript:void(0)" onMouseOver="displaySubMenu(event,'Security');">
+    <span class="navMenuText">Security</span>
+    <span class="navMenuMore">&nbsp;</span>
+  </a>
+</div>
+
+
+2.2 Key CSS definitions for the nav menu
+----------------------------------------
+
+div.navMenu {
+  position: absolute;   /* Position dynamically with absolute co-ords */
+  visibility: hidden; 	/* Hide menus initially */
+  z-index: 101;		/* Layer menus over other page content */
+}
+a.navMenuItem {
+  text-decoration: none;/* Turn off underline for <a> */
+  white-space: nowrap;	/* The display and white-space are used so each <a> appears on its own line in the menu */
+  padding: 3px; 	/* Must be 1px or higher, for sub-menus to display */
+}
+a.navMenuItem:hover {}
+span.navMenuText {}
+span.navMenuMore {
+  /* This is needed to show the submenu graphic */
+  background-attachment : fixed;
+  background-position : right;
+  background-repeat : no-repeat;
+  background-image : url(../imgs/navigation/arrow.gif);
+  width:0px;		/* Make span not visible until size adjustment */
+}
+
+
+4. General Design
+=================
+
+4.1 Displaying Menus
+--------------------
+
+All div.navMenu tags will be hidden by default. The displayMenu and displaySubMenu will be used
+to set the visibiliy of each div, as well as specifying its (top,left) location relative
+to its parent element. The main difference between displayMenu and displaySubMenu, is how
+it is positioned relative to its parent. A displayMenu() will position the menu left aligned
+and underneath its parent. A displaySubMenu() will display the menu level with the top of the 
+option its was called from, and to the right of the div menu of all the options.
+
+4.2 Hiding menus
+----------------
+
+A stack of div's is maintained to keep track of which menus are being displayed.
+When displayMenu() is called the stack is 'cleared' and the new menu is added
+When displaySubMenu() is called, we look for the 'parent' menu on the stack, 'clear' 
+anything below it, and add the new sub-menu to the stack.
+When hideSubMenu() is called, we look for the 'parent' menu on the stack, 'clear' 
+anything below it.
+Clearing the stack, completely, or from a given point, does not just remove entry 
+from the array, its also hides the div tag associated to that entry in the array.
+This is how a cascading clear is achieved.
+
+4.3 Global Click
+----------------
+
+When a click is made outside of a menu, all menus will be hidden, this is as
+simple as 'clearing' the current stack.
+
+4.4 Aligning the 'More' Icons
+-----------------------------
+
+The 'More' Icon is provided into the span using a CSS background image
+
+span.navMenuMore {
+  background-attachment : fixed;
+  background-position : right;
+  background-repeat : no-repeat;
+  background-image : url(../imgs/navigation/arrow.gif);
+  width:0px;
+}
+
+By default this span is set to width 0px, so its it not visible.
+The image is set to the right border, so whatever width the span is
+set to, the image will align right.
+
+When a menu is displayed we get the width of the menu, and then for
+each menu option that has a span.navMenuText and span.navMenuMore, we 
+calculate the with of the span.navMenuMore as the difference between the
+div.navMenu and span.navMenuText for that line.
+A check is made when setting the width for the first span, if it has been
+set already we abort this menu alignment, as it has been done previously
+when this menu has been displayed.
+
+
+4.5 Fixes for Browser Compatibility
+-----------------------------------
+
+The original version developed for Internet Explorer uses 'style.width'
+to set the size of the 'More Icon' span.
+
+        if(span.style.width == "")
+          span.style.width = w - cw;
+
+
+This does not seem to work with Mozilla (v1.3). But if we use 'padding-left'
+in the css, this seems to work.
+
+        if(span.style.paddingLeft == "")
+          span.style.paddingLeft = w - cw;
+
+The other change is in the CSS definition for 'a.navMenuItem'. It seems that if
+'padding: 3px;' is not set, or set to 0px, the 'more icons' don't display.
+
+
+4.6 Fixes for Dropdown Layers
+-----------------------------
+
+Although we use z-index's of 100+ in the DIV layers, Internet Explorer has a bug such that
+any dropdown widget <SELECT><OPTION>... appears over the top of any layer. So if you have a 
+menu at the top of a page, that dropdowns, and then try and expand the menu over these
+the menu dissapears behind them, making the menu hard to use.
+
+The solution we have taken it to hide all dropdown widgets while the menu is in use.
+
+The following statement will define a style that hides them all
+  <style id="jaffaDropDown">select.WidgetDropDown {visibility : hidden};</style>
+The following line will disable this style initially when the page is rendered  
+  <script>document.getElementById("jaffaDropDown").disabled = false;</script>
+  
+In the navigation javascript we need to add to calls.
+1) in the displayMenu() we must enable this style
+2) in the globalHide() we must again disable this style.
+
+
+5. Using The Jaffa Version
+==========================
+
+Your HTML head block should look like...
+
+<head>
+  <script type="text/javascript" src="jaffa/js/tiles/navigation.js"></script>
+  <link href='jaffa/css/navigation.css' type='text/css' rel='StyleSheet'>
+</head>
+
+
+5.1 Complete Example
+--------------------
+Look at JaffaCore/source/html/navigation-example.html

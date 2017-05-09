@@ -1,0 +1,67 @@
+    <!-- PrinterDefinitionLookup Criteria -->
+    <definition name="jaffa.printing.printerdefinitionlookup.LookupLayout.criteria"  extends="jaffa.LookupLayout">
+        <put name="body1" value="/jaffa/printing/printerdefinitionlookup/criteria.jsp"/>
+        <put name="body2" value=""/>
+        <put name="action" value="/jaffa_printing_printerDefinitionLookup"/>
+        <put name="createComponent" value="Jaffa.Printing.PrinterDefinitionMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+            <add value="CreateFromCriteria"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.printing.printerdefinitionlookup.criteria"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.PrinterDefinitionLookup.criteria]"/>
+        <put name="body" value="jaffa.printing.printerdefinitionlookup.LookupLayout.criteria"/>
+    </definition>
+
+    <!-- PrinterDefinitionLookup Results -->
+    <definition name="jaffa.printing.printerdefinitionlookup.LookupLayout.results"  extends="jaffa.LookupLayout">
+        <put name="body1" value=""/>
+        <put name="body2" value="/jaffa/printing/printerdefinitionlookup/results.jsp"/>
+        <put name="action" value="/jaffa_printing_printerDefinitionLookup"/>
+        <put name="createComponent" value="Jaffa.Printing.PrinterDefinitionMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="ModifySearch"/>
+            <add value="Refresh"/>
+            <add value="CreateFromResults"/>
+            <add value="Close"/>
+            <add value="Select"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="ModifySearch"/>
+            <add value="Select"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.printing.printerdefinitionlookup.results"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.PrinterDefinitionLookup.results]"/>
+        <put name="body" value="jaffa.printing.printerdefinitionlookup.LookupLayout.results"/>
+    </definition>
+
+    <!-- PrinterDefinitionLookup ConsolidatedCriteriaAndResults -->
+    <definition name="jaffa.printing.printerdefinitionlookup.LookupLayout.consolidatedCriteriaAndResults"  extends="jaffa.LookupLayout">
+        <put name="body1" value="/jaffa/printing/printerdefinitionlookup/criteria.jsp"/>
+        <put name="body2" value="/jaffa/printing/printerdefinitionlookup/results.jsp"/>
+        <put name="action" value="/jaffa_printing_printerDefinitionLookup"/>
+        <put name="createComponent" value="Jaffa.Printing.PrinterDefinitionMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+            <add value="CreateFromResults"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.printing.printerdefinitionlookup.consolidatedCriteriaAndResults"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.PrinterDefinitionLookup.consolidated]"/>
+        <put name="body" value="jaffa.printing.printerdefinitionlookup.LookupLayout.consolidatedCriteriaAndResults"/>
+    </definition>
+

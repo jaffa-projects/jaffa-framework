@@ -1,0 +1,8 @@
+    <!-- UserLookup -->
+    <action    path="/admin_userLookup"
+               type="org.jaffa.applications.jaffa.modules.admin.components.userlookup.ui.UserLookupAction"
+               name="admin_userLookupForm"
+               validate="false"
+               scope="request">
+    </action>
+

@@ -1,0 +1,2 @@
+    <form-bean      name="user_requestPasswordForm"
+                    type="org.jaffa.applications.jaffa.modules.user.components.requestpassword.ui.RequestPasswordForm"/>

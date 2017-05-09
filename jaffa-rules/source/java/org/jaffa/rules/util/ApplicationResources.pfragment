@@ -1,0 +1,6 @@
+# Error Messages
+exception.org.jaffa.rules.util.MetaDataWriterFrameworkException.sourceNotFound=Source directory for writing meta data was not supplied
+exception.org.jaffa.rules.util.MetaDataWriterFrameworkException.parseError=Error occurred while parsing the meta data
+exception.org.jaffa.rules.util.MetaDataWriterFrameworkException.duplicateProperty=Duplicate property defined in meta data
+exception.org.jaffa.rules.util.MetaDataWriterFrameworkException.xmlParseError=Error occurred while transforming document to xml file
+exception.org.jaffa.rules.util.MetaDataWriterFrameworkException.fileError=Error loading or unloading meta data from the specified source path

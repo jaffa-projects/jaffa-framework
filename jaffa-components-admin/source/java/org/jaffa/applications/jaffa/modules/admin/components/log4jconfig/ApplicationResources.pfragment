@@ -1,0 +1,10 @@
+title.Jaffa.Admin.Log4jConfig=Log4j Configuration
+label.Jaffa.Admin.Log4jConfig.FileContents=Log4j xml File
+exception.org.jaffa.applications.jaffa.modules.admin.components.log4jconfig.ui.exceptions.Log4jConfigException.parseError=Error while parsing the Log4j xml file <br> {0}
+exception.org.jaffa.applications.jaffa.modules.admin.components.log4jconfig.ui.exceptions.Log4jConfigException.noneError=Log4J was not configured through the JAFFA framework.<br>Change the 'framework.Log4JConfig' property in framework.properties if you want to dynamically configure logging.
+exception.org.jaffa.applications.jaffa.modules.admin.components.log4jconfig.ui.exceptions.Log4jConfigException.defaultError=Log4J was configured using the BasicConfigurator.<br>Change the 'framework.Log4JConfig' property in framework.properties if you want to dynamically configure logging.
+exception.org.jaffa.applications.jaffa.modules.admin.components.log4jconfig.ui.exceptions.Log4jConfigException.fileReadError=Error while reading the log4j Xml File <br>{0}
+exception.org.jaffa.applications.jaffa.modules.admin.components.log4jconfig.ui.exceptions.Log4jConfigException.badurlError=Can't Find the xml file, Bad URL . {0}<br>{1}
+exception.org.jaffa.applications.jaffa.modules.admin.components.log4jconfig.ui.exceptions.Log4jConfigException.fileNotFoundError= {0} File not found in the classpath or in the filesystem.
+
+label.Jaffa.Admin.Log4JConfig.NoContent=No Content.

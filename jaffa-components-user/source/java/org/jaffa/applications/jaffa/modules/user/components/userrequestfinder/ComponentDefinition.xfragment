@@ -1,0 +1,4 @@
+    <component id="Jaffa.User.UserRequestFinder">
+        <class>org.jaffa.applications.jaffa.modules.user.components.userrequestfinder.ui.UserRequestFinderComponent</class>
+        <type>ObjectFinder</type>
+    </component>

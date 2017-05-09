@@ -1,0 +1,28 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the JAFFA Rules 4.0.0 Release (Since v1.1.0). For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+- Consolidated the release numbers for JaffaCore,JaffaTools,JaffaBuild,JaffaRules. All four modules will be released at the same time going forward
+
+What's Changed / Improvements
+=====================================================
+- Refactored as per the recent changes to DateTime and DateOnly classes, where the get* methods have been renamed to *
+- Made the following changes to the UnitTests
+  - The newer versions of JBossAOP wrap the exceptions thrown by the interceptors inside a RuntimeException. Modified the UnitTests to handle such scenarios
+  - Modified testParentOnlyMethodInvocation() to test the binding of rules defined for a child class, for a property coded in the base class only. The test succeeds only if 'c_applyInheritanceHack' is set to true in JaffaClassMetaDataLoader
+- Refactored the interceptors to include the 'value' property. Deleted the 'parameters' property from RuleInterceptor. The JaffaClassMetaDataLoader will instead set the actual properties on an Interceptor instance. This ensures that the Interceptors are compatible with vanilla JBossAOP syntax 
+- Fixed the JaffaClassMetaDataLoader to generate better JBossAOP syntax. The UnitTests now work with pure JBossAOP syntax.
+- Modified the JaffaRules classes to use JSE5.0 features whereever possible
+- Created a utility 'StrutsFormBeanConfigInterceptor' interceptor to bypass the loading of all Struts Form classes during server startup
+
+What's Deleted/Deprecated
+=====================================================
+- Deleted org/jboss/aop/JaffaClassAdvisorHelper.java, since that file is deprecated and not used anywhere
+
+Bug Fixes
+=====================================================
+- Modified the setDomainObject() method of ForeignKeyPropertyRule to not perform any foreign-class validations, since that prevents the foreign-class from being aspectized. Moved the validation to the invoke() method, which is executed much after the foregin-class has been aspectized

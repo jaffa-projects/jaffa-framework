@@ -1,0 +1,11 @@
+    <!-- Label Editor -->
+    <definition name="jaffa.admin.log4jconfig.Layout"  extends="jaffa.ViewerLayout">
+        <put name="contextNav"  value="/jaffa/admin/log4jconfig/contextNav.jsp"/>
+        <put name="defaultNav"  value="/jaffa/admin/log4jconfig/defaultNav.jsp"/>
+        <put name="body"        value="/jaffa/admin/log4jconfig/main.jsp"/>
+        <put name="action"      value="/admin_log4jConfig"/>
+    </definition>
+    <definition name="jaffa.admin.log4jconfig"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Admin.Log4jConfig]"/>
+        <put name="body" value="jaffa.admin.log4jconfig.Layout"/>
+    </definition>

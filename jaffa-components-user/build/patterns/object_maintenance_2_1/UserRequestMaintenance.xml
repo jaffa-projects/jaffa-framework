@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Object Maintenance Meta 2.0//EN" "http://jaffa.sourceforge.net/DTD/object-maintenance-meta_2_0.dtd">
+
+<Root>
+<PatternTemplate>patterns/library/object_maintenance_2_0/ObjectMaintenancePattern.xml</PatternTemplate>
+<Application>Jaffa</Application>
+<Module>User</Module>
+<Component>UserRequestMaintenance</Component>
+<BasePackage>org.jaffa.applications.jaffa.modules.user</BasePackage>
+<DomainObject>UserRequest</DomainObject>
+<DomainPackage>org.jaffa.applications.jaffa.modules.user.domain</DomainPackage>
+<Title>[title.Jaffa.User.UserRequestMaintenance.maintenance]</Title>
+<KeyFields>
+<KeyField>
+<Name>RequestId</Name>
+<DataType>INTEGER</DataType>
+<DomainField>RequestId</DomainField>
+</KeyField>
+</KeyFields>
+<Fields>
+<Field>
+<Name>RequestId</Name>
+<DataType>INTEGER</DataType>
+<Display>true</Display>
+<DomainField>RequestId</DomainField>
+</Field>
+<Field>
+<Name>UserName</Name>
+<DataType>STRING</DataType>
+<Display>true</Display>
+<DomainField>UserName</DomainField>
+</Field>
+<Field>
+<Name>FirstName</Name>
+<DataType>STRING</DataType>
+<Display>true</Display>
+<DomainField>FirstName</DomainField>
+</Field>
+<Field>
+<Name>LastName</Name>
+<DataType>STRING</DataType>
+<Display>true</Display>
+<DomainField>LastName</DomainField>
+</Field>
+   <!-- This is a dummy field
+    - Specify password='true' in the EditBox tag
+    - This field is mandatory only when creating a User
+    - Invoke user.updatePassword(input.getPassword1()) in the Tx, if input.getPassword1() != null
+    -->
+    <Field>
+        <Name>Password1</Name>
+        <DataType>STRING</DataType>
+        <Display>true</Display>
+        <Label>[label.Jaffa.User.User.Password]</Label>
+        <DomainField></DomainField>
+    </Field>
+    <Field>
+	    <Name>Password2</Name>
+	    <DataType>STRING</DataType>
+	    <Display>true</Display>
+	    <Label>[label.Jaffa.User.User.VerifyPassword]</Label>
+	    <DomainField></DomainField>
+    </Field>
+<Field>
+<Name>EMailAddress</Name>
+<DataType>STRING</DataType>
+<Display>true</Display>
+<DomainField>EMailAddress</DomainField>
+</Field>
+
+<Field>
+<Name>SecurityQuestion</Name>
+<DataType>INTEGER</DataType>
+<Display>false</Display>
+<DomainField>SecurityQuestion</DomainField>
+</Field>
+
+<Field>
+<Name>SecurityQuestion1</Name>
+<DataType>STRING</DataType>
+<Display>true</Display>
+<Mandatory>true</Mandatory>
+<DomainField></DomainField>
+<Breakup>
+<WidgetType>Dropdown</WidgetType>
+<StaticValues>
+  <StaticValue>
+    <Code>1</Code>
+    <Description>[label.Jaffa.User.UserRequest.SecurityQuestion.1]</Description>
+  </StaticValue>
+    <StaticValue>
+      <Code>2</Code>
+      <Description>[label.Jaffa.User.UserRequest.SecurityQuestion.2]</Description>
+  </StaticValue>
+  <StaticValue>
+    <Code>3</Code>
+    <Description>[label.Jaffa.User.UserRequest.SecurityQuestion.3]</Description>
+  </StaticValue>
+  <StaticValue>
+    <Code>4</Code>
+    <Description>[label.Jaffa.User.UserRequest.SecurityQuestion.4]</Description>
+  </StaticValue>          
+</StaticValues>
+</Breakup>
+</Field>
+
+<Field>
+<Name>SecurityAnswer</Name>
+<DataType>STRING</DataType>
+<Display>true</Display>
+<DomainField>SecurityAnswer</DomainField>
+</Field>
+<Field>
+<Name>Remarks</Name>
+<DataType>STRING</DataType>
+<Display>true</Display>
+<DomainField>Remarks</DomainField>
+</Field>
+<Field>
+<Name>CreatedOn</Name>
+<DataType>DATE_TIME</DataType>
+<Display>true</Display>
+<DomainField>CreatedOn</DomainField>
+</Field>
+<Field>
+<Name>ProcessedDatetime</Name>
+<DataType>DATE_TIME</DataType>
+<Display>true</Display>
+<DomainField>ProcessedDatetime</DomainField>
+</Field>
+<Field>
+<Name>ProcessedUserId</Name>
+<DataType>STRING</DataType>
+<Display>true</Display>
+<DomainField>ProcessedUserId</DomainField>
+</Field>
+   <Field>
+      <Name>Status</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>Status</DomainField>
+      <Breakup>
+        <WidgetType>Dropdown</WidgetType>
+        <StaticValues>
+          <StaticValue>
+            <Code>O</Code>
+            <Description>[label.Jaffa.User.UserRequest.Status.O]</Description>
+          </StaticValue>
+          <StaticValue>
+            <Code>S</Code>
+            <Description>[label.Jaffa.User.UserRequest.Status.S]</Description>
+          </StaticValue>
+          <StaticValue>
+            <Code>C</Code>
+            <Description>[label.Jaffa.User.UserRequest.Status.C]</Description>
+          </StaticValue>
+        </StaticValues>
+      </Breakup>
+    </Field>
+</Fields>
+<Screens>
+<Screen SaveActionAvailableInCreateMode="true" PerformTxValidationOnNextAction="true" AvailableInUpdateMode="true" AvailableInCreateMode="true" Name="main">
+<References>
+<FieldReference Name="RequestId"></FieldReference>
+<FieldReference Name="UserName"></FieldReference>
+<FieldReference Name="FirstName"></FieldReference>
+<FieldReference Name="LastName"></FieldReference>
+<FieldReference Name="Password1"></FieldReference>
+<FieldReference Name="Password2"></FieldReference>
+<FieldReference Name="EMailAddress"></FieldReference>
+<FieldReference Name="SecurityQuestion"></FieldReference>
+<FieldReference Name="SecurityAnswer"></FieldReference>
+<FieldReference Name="Remarks"></FieldReference>
+<FieldReference Name="CreatedOn"></FieldReference>
+<FieldReference Name="ProcessedDatetime"></FieldReference>
+<FieldReference Name="ProcessedUserId"></FieldReference>
+<FieldReference Name="Status"></FieldReference>
+</References>
+</Screen>
+</Screens>
+</Root>
+

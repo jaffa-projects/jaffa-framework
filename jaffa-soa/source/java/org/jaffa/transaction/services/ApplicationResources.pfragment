@@ -1,0 +1,5 @@
+exception.org.jaffa.transaction.services.JaffaTransactionFrameworkException.transactionInfoMissing=Transaction info missing from the configuration file for the class {0}
+
+label.Jaffa.Scheduler.JaffaTransactionInvokerJob.start=Sending Jaffa Transaction
+label.Jaffa.Scheduler.JaffaTransactionInvokerJob.success=Successfully sent Jaffa Transaction
+error.Jaffa.Scheduler.JaffaTransactionInvokerJob.error=Error in sending Jaffa Transaction

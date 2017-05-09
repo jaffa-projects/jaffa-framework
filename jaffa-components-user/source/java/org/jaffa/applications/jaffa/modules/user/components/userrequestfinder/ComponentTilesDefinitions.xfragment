@@ -1,0 +1,75 @@
+    <!-- UserRequestFinder Criteria -->
+    <definition name="jaffa.user.userrequestfinder.FinderLayout.criteria"  extends="jaffa.FinderLayout">
+        <put name="body1" value="/jaffa/user/userrequestfinder/criteria.jsp"/>
+        <put name="body2" value=""/>
+        <put name="action" value="/user_userRequestFinder"/>
+        <put name="createComponent" value="Jaffa.User.UserRequestMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+            <add value="CreateFromCriteria"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.user.userrequestfinder.criteria"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.User.UserRequestFinder.criteria]"/>
+        <put name="body" value="jaffa.user.userrequestfinder.FinderLayout.criteria"/>
+    </definition>
+
+    <!-- UserRequestFinder Results -->
+    <definition name="jaffa.user.userrequestfinder.FinderLayout.results"  extends="jaffa.FinderLayout">
+        <put name="body1" value=""/>
+        <put name="body2" value="/jaffa/user/userrequestfinder/results.jsp"/>
+        <put name="action" value="/user_userRequestFinder"/>
+        <put name="createComponent" value="Jaffa.User.UserRequestMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="ModifySearch"/>
+            <add value="Refresh"/>
+            <add value="CreateFromResults"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="ModifySearch"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.user.userrequestfinder.results"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.User.UserRequestFinder.results]"/>
+        <put name="body" value="jaffa.user.userrequestfinder.FinderLayout.results"/>
+    </definition>
+
+    <!-- UserRequestFinder ConsolidatedCriteriaAndResults -->
+    <definition name="jaffa.user.userrequestfinder.FinderLayout.consolidatedCriteriaAndResults"  extends="jaffa.FinderLayout">
+        <put name="body1" value="/jaffa/user/userrequestfinder/criteria.jsp"/>
+        <put name="body2" value="/jaffa/user/userrequestfinder/results.jsp"/>
+        <put name="action" value="/user_userRequestFinder"/>
+        <put name="createComponent" value="Jaffa.User.UserRequestMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+            <add value="CreateFromResults"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.user.userrequestfinder.consolidatedCriteriaAndResults"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.User.UserRequestFinder.consolidated]"/>
+        <put name="body" value="jaffa.user.userrequestfinder.FinderLayout.consolidatedCriteriaAndResults"/>
+    </definition>
+
+    <!-- UserRequestFinder Results as Excel -->
+    <definition name="jaffa.user.userrequestfinder.FinderExcelLayout"  extends="jaffa.FinderExcelLayout">
+        <put name="body" value="/jaffa/user/userrequestfinder/results.jsp"/>
+        <put name="action" value="/user_userRequestFinder"/>
+    </definition>
+
+    <!-- UserRequestFinder Results as Xml -->
+    <definition name="jaffa.user.userrequestfinder.FinderXmlLayout"  extends="jaffa.FinderXmlLayout">
+    </definition>
+

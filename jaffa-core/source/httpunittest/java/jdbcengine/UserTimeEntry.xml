@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.applications.test.modules.time.domain.UserTimeEntry">
+        <map-to table="UserTimeEntry" />
+
+        <field name="UserName" use-member="m_userName" type="java.lang.String" primary-key="true">
+            <sql name="USER_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="ProjectCode" use-member="m_projectCode" type="java.lang.String" primary-key="true">
+            <sql name="PROJECT_CODE" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Activity" use-member="m_activity" type="java.lang.String">
+            <sql name="ACTIVITY_CODE" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Task" use-member="m_task" type="java.lang.String" primary-key="true">
+            <sql name="TASK_CODE" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="PeriodStart" use-member="m_periodStart" type="org.jaffa.datatypes.DateTime" primary-key="true">
+            <sql name="PERIOD_START" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+        <field name="PeriodEnd" use-member="m_periodEnd" type="org.jaffa.datatypes.DateTime" primary-key="true">
+            <sql name="PERIOD_END" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

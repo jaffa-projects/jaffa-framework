@@ -1,0 +1,3 @@
+    <business-function name="Jaffa.Admin.ViewBusinessFunction">
+        <description>Able to view the BusinessFunction component</description>
+    </business-function>

@@ -1,0 +1,17 @@
+CREATE TABLE "USER_REQUEST"(
+        "REQUEST_ID"          NUMBER(50) NOT NULL,
+        "USER_NAME"          VARCHAR2(50) NOT NULL,
+        "FIRST_NAME"          VARCHAR2(50) NOT NULL,
+        "LAST_NAME"          VARCHAR2(50) NOT NULL,
+        "PASSWORD"          VARCHAR2(80) NOT NULL,
+        "E_MAIL_ADDRESS"          VARCHAR2(75),
+        "SECURITY_QUESTION"          NUMBER(20) NOT NULL,
+        "SECURITY_ANSWER"          VARCHAR2(50) NOT NULL,
+        "REMARKS"          VARCHAR2(180),
+        "CREATED_DATETIME"          DATE,
+        "PROCESSED_DATETIME"          DATE,
+        "PROCESSED_USER"          VARCHAR2(50),
+        "STATUS"          VARCHAR2(1),
+    CONSTRAINT "USER_REQUESTP1" PRIMARY KEY("REQUEST_ID")
+)
+/

@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Domain Creator Meta 1.1//EN" "http://jaffa.sourceforge.net/DTD/domain-creator-meta_1_1.dtd">
+
+<!--
+Non-null values for the following elements will be retained, the next time this file is regenerated, provided the merge option is set in the TableInfo file.
+1- Table Level: Description, LabelToken
+2- Field Level: Description, LabelToken, Layout, Pattern, Ignore
+-->
+
+<Root>
+    <DomainObject>PartPicture</DomainObject>
+    <DomainPackage>org.jaffa.persistence.domainobjects</DomainPackage>
+    <DatabaseTable>ZZ_JUT_PART_PIC</DatabaseTable>
+    <MappingPackage>org.jaffa.persistence.mappingfiles</MappingPackage>
+    <PatternTemplate>patterns/library/domain_creator_1_1/DomainCreatorPattern.xml</PatternTemplate>
+    <Description></Description>
+    <LabelToken>[label.App1.Catalog.PartPicture]</LabelToken>
+    <Fields>
+        <Field>
+            <Name>Part</Name>
+            <DataType>java.lang.String</DataType>
+            <DatabaseFieldName>PART</DatabaseFieldName>
+            <DatabaseDataType>STRING</DatabaseDataType>
+            <PrimaryKey>T</PrimaryKey>
+            <Description></Description>
+            <LabelToken>[label.App1.Catalog.PartPicture.Part]</LabelToken>
+            <Mandatory>T</Mandatory>
+            <Width></Width>
+            <IntSize>50</IntSize>
+            <FracSize></FracSize>
+            <MinValue></MinValue>
+            <MaxValue></MaxValue>
+            <Layout></Layout>
+            <Pattern></Pattern>
+            <CaseType>UpperCase</CaseType>
+            <Ignore>false</Ignore>
+        </Field>
+        <Field>
+            <Name>SmallPicture</Name>
+            <DataType>byte[]</DataType>
+            <DatabaseFieldName>SMALL_PICTURE</DatabaseFieldName>
+            <DatabaseDataType>RAW</DatabaseDataType>
+            <PrimaryKey>F</PrimaryKey>
+            <Description></Description>
+            <LabelToken>[label.App1.Catalog.PartPicture.SmallPicture]</LabelToken>
+            <Mandatory></Mandatory>
+            <Width></Width>
+            <IntSize>2000</IntSize>
+            <FracSize></FracSize>
+            <MinValue></MinValue>
+            <MaxValue></MaxValue>
+            <Layout></Layout>
+            <Pattern></Pattern>
+            <CaseType></CaseType>
+            <Ignore>false</Ignore>
+        </Field>
+        <Field>
+            <Name>Picture</Name>
+            <DataType>byte[]</DataType>
+            <DatabaseFieldName>PICTURE</DatabaseFieldName>
+            <DatabaseDataType>LONGRAW</DatabaseDataType>
+            <PrimaryKey>F</PrimaryKey>
+            <Description></Description>
+            <LabelToken>[label.App1.Catalog.PartPicture.Picture]</LabelToken>
+            <Mandatory></Mandatory>
+            <Width></Width>
+            <IntSize></IntSize>
+            <FracSize></FracSize>
+            <MinValue></MinValue>
+            <MaxValue></MaxValue>
+            <Layout></Layout>
+            <Pattern></Pattern>
+            <CaseType></CaseType>
+            <Ignore>false</Ignore>
+        </Field>
+    </Fields>
+    <Relationships>
+        <Relationship>
+            <ToDomainObject>Part</ToDomainObject>
+            <ToDomainPackage>org.jaffa.persistence.domainobjects</ToDomainPackage>
+            <FromCardinality>0..1</FromCardinality>
+            <ToCardinality>1</ToCardinality>
+            <Type>association</Type>
+            <FromFields>
+                <RelationshipField>
+                    <Name>Part</Name>
+                </RelationshipField>
+            </FromFields>
+            <ToFields>
+                <RelationshipField>
+                    <Name>Part</Name>
+                </RelationshipField>
+            </ToFields>
+        </Relationship>
+    </Relationships>
+</Root>

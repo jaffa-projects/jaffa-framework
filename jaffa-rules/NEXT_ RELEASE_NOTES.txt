@@ -1,0 +1,25 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the next release. For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+- Enhanced the UnitTest framework to support dynamic AOP
+  - Modified the 'test-execute' target in JaffaBuild/build/build-tests.xml to pass the java agent to the JVM, which is used to apply AOP dynamically.
+  - Moved the custom 'test-junit-jar-config' logic from JaffaRules/build/build.xml to the 'test-junit-module' target in JaffaBuild/build/build-tests.xml. This is used to generate AOP pointcuts from the available metadata.
+  - Modified the 'test.junit.aoppath' property in JaffaRules/build/sandbox.ant.properties to be a more manageable comma-separated list of top-level AOP folders
+  - A more explicit 'test.junit.fullaoppath' property is generated during the build process, and is passed to the java agent
+  - Modified the 'test-junit' target in JaffaRules/build/build.xml to execute UnitTests with both dynamic and preapplied AOP
+- The checkCondition() method in DefaultRuleHelper has been enhanced to evaluate conditions even if no object is passed in, provided the condition does not contain the word 'bean'. This will allow the evaluation of rules that depend on security-access etc. etc.
+
+What's Changed / Improvements
+=====================================================
+
+What's Deleted/Deprecated
+=====================================================
+
+Bug Fixes
+=====================================================
+- Corrected the loadSourceFiles() method of the AopGenerator class to sort the File objects alphabetically before loading the Repository. This will ensure that the AOP files under the '0' folder are loaded before any other files. Otherwise metadata in the files loaded before the '0' files will be ignored.

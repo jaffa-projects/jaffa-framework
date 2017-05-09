@@ -1,0 +1,67 @@
+    <!-- FormDefinitionLookup Criteria -->
+    <definition name="jaffa.printing.formdefinitionlookup.LookupLayout.criteria"  extends="jaffa.LookupLayout">
+        <put name="body1" value="/jaffa/printing/formdefinitionlookup/criteria.jsp"/>
+        <put name="body2" value=""/>
+        <put name="action" value="/jaffa_printing_formDefinitionLookup"/>
+        <put name="createComponent" value="Jaffa.Printing.FormDefinitionMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+            <add value="CreateFromCriteria"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.printing.formdefinitionlookup.criteria"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.FormDefinitionLookup.criteria]"/>
+        <put name="body" value="jaffa.printing.formdefinitionlookup.LookupLayout.criteria"/>
+    </definition>
+
+    <!-- FormDefinitionLookup Results -->
+    <definition name="jaffa.printing.formdefinitionlookup.LookupLayout.results"  extends="jaffa.LookupLayout">
+        <put name="body1" value=""/>
+        <put name="body2" value="/jaffa/printing/formdefinitionlookup/results.jsp"/>
+        <put name="action" value="/jaffa_printing_formDefinitionLookup"/>
+        <put name="createComponent" value="Jaffa.Printing.FormDefinitionMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="ModifySearch"/>
+            <add value="Refresh"/>
+            <add value="CreateFromResults"/>
+            <add value="Close"/>
+            <add value="Select"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="ModifySearch"/>
+            <add value="Select"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.printing.formdefinitionlookup.results"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.FormDefinitionLookup.results]"/>
+        <put name="body" value="jaffa.printing.formdefinitionlookup.LookupLayout.results"/>
+    </definition>
+
+    <!-- FormDefinitionLookup ConsolidatedCriteriaAndResults -->
+    <definition name="jaffa.printing.formdefinitionlookup.LookupLayout.consolidatedCriteriaAndResults"  extends="jaffa.LookupLayout">
+        <put name="body1" value="/jaffa/printing/formdefinitionlookup/criteria.jsp"/>
+        <put name="body2" value="/jaffa/printing/formdefinitionlookup/results.jsp"/>
+        <put name="action" value="/jaffa_printing_formDefinitionLookup"/>
+        <put name="createComponent" value="Jaffa.Printing.FormDefinitionMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+            <add value="CreateFromResults"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.printing.formdefinitionlookup.consolidatedCriteriaAndResults"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.FormDefinitionLookup.consolidated]"/>
+        <put name="body" value="jaffa.printing.formdefinitionlookup.LookupLayout.consolidatedCriteriaAndResults"/>
+    </definition>
+

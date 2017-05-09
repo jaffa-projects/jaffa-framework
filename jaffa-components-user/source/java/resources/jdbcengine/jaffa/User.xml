@@ -1,0 +1,54 @@
+<classmap>
+    <class name="org.jaffa.applications.jaffa.modules.admin.domain.User">
+        <map-to table="USERS" />
+
+        <field name="UserName" use-member="m_userName" type="java.lang.String" primary-key="true">
+            <sql name="USER_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="FirstName" use-member="m_firstName" type="java.lang.String">
+            <sql name="FIRST_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="LastName" use-member="m_lastName" type="java.lang.String">
+            <sql name="LAST_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Password" use-member="m_password" type="java.lang.String">
+            <sql name="PASSWORD" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Status" use-member="m_status" type="java.lang.String">
+            <sql name="STATUS" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="EMailAddress" use-member="m_eMailAddress" type="java.lang.String">
+            <sql name="E_MAIL_ADDRESS" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="SecurityQuestion" use-member="m_securityQuestion" type="java.lang.Long">
+            <sql name="SECURITY_QUESTION" type="INTEGER" dirty="ignore"/>
+        </field>
+
+        <field name="SecurityAnswer" use-member="m_securityAnswer" type="java.lang.String">
+            <sql name="SECURITY_ANSWER" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="CreatedOn" use-member="m_createdOn" type="org.jaffa.datatypes.DateTime">
+            <sql name="CREATED_DATETIME" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+        <field name="CreatedBy" use-member="m_createdBy" type="java.lang.String">
+            <sql name="CREATED_USER" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="LastUpdatedOn" use-member="m_lastUpdatedOn" type="org.jaffa.datatypes.DateTime">
+            <sql name="LAST_UPDATE_DATETIME" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+        <field name="LastUpdatedBy" use-member="m_lastUpdatedBy" type="java.lang.String">
+            <sql name="LAST_UPDATE_USER" type="STRING" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

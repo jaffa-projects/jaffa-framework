@@ -1,0 +1,159 @@
+Activity / WorkFlow
+
+
+===================================================
+Define all actors in the system, so can be automated threads
+===================================================
+<actors>
+  <actor id=#>
+     <name>
+     <description>
+     <robot>
+       <frequency>
+       <quantity>
+     </robot>  
+  </actor>
+  <actor>
+      ...
+  </actor>
+</actors>  
+
+
+
+===================================================
+Define all tasks as input->process->output, where 
+multiple outcomes of the task drive multiple outputs
+
+Tasks are not linked to workflow or state transitions 
+at this point
+===================================================
+<task id=#>
+  <name>
+  <description>
+  <task-bean-class>
+  <task-bean-package>
+  
+  <inputs>
+    <input id=# source=(actor|context)>
+    <input id=# source=(actor|context)>
+  </inputs>
+  <input-page>
+  
+  <outcomes>
+     <outcome id=#>
+       <output id=# source=(actor|context)>
+       <outcome-page>
+     </outcome>  
+     <outcome id=#>
+       <output id=# source=(actor|context)>
+       <output id=# source=(actor|context)>
+       <outcome-page>
+     </outcome>  
+  </outcomes>
+</task>  
+
+
+
+
+===================================================
+Define a business process as a flow of tasks, where
+the flow may vary based on outcome. Each task can be
+associated with actors.
+
+A process can have context that can be used as input
+to tasks and can be set as output 
+===================================================
+<business-process id=#>
+    <name>
+    <version>
+    <description>
+    <context>
+        <*param
+            id="#"
+            ?datatype="#" <!-- default is (java.lang.)String -->
+            ?required="(true|fales)" <!-- default is false, true implies it is needed to create this workflow -->
+        >
+    </context>
+   
+    <task-flow task=# initial=(true|false)>
+        <assignment>
+            <actor>
+            <actor>
+        </assignment>  
+        <if-outcome matches=#rexpr>
+           <update-context context-id=# ?output-id=#> <!-- if output-id ommitted, assume same as context-id -->  
+           <update-context ..>
+           <next-task>#(id)
+        </if-outcome>
+        <if-outcome matches=#rexpr>
+        </if-outcome>
+    </task-flow>
+    <task-flow task=#>
+   
+    </task-flow>
+</business-process>     
+
+
+===================================================
+Work Flow trackes the execution of a business process.
+It maintains current state in the process, as well as
+a history of the process.
+===================================================
+<work-flow id=#>
+  <business-process>#(id)
+  <context>
+    <param id=#>#
+    <param id=#>#
+  <context>  
+  <next-task>#(id) (null if end of flow reached)
+  <flow-history>
+     <task-history>
+        <user-id>
+        <time-stamp>
+        <task>
+        <outcome>
+     </task-history>
+     <task-history>
+     </task-history>
+  </flow-history>
+<work-flow>
+
+
+===================================
+Start a workflow process
+  - Start first task (input fields to first task)
+  - Batch Start (table of input fields for multiple first tasks)
+List current tasks (bases on roles (actors) the user is in)
+  - Group by task type
+  - List based on priority
+  - Execute task from list
+  - Batch execute same task types from list
+
+===================================
+Next phase....
+
+Versioning Of Business Processes
+   - How does this work?
+   - Can you edit a business process that has active work-flow?
+   	- Can you remove a task in the process that is a 'next task' in an active work-flow?
+   - Can you only start a business process on the most current version, or on previous ones?
+Estimated Completion Time (ECT) on work-flow
+   - More specifically about a start and end point within the flow?
+Work-Flow priorities
+   - Same process, but 'rush-jobs'
+   - How this priority impacts ECT.
+Undo (step back) a task in work flow?
+   - Would require a 'snapshot' of the context prior to each task in history
+Allow the definition of a 'Web Service' to be defined in a Task instead of a 'task-bean'
+   - Maybe a task bean should just provide a simple way to wrapper a web service, this
+     would require programming...
+Parallel Activities
+   - Can a task result is matching mutiple <if-outcome> clauses and provide parallel tasks?
+   - How can a task 'wait' based on the completion of multiple preceeding tasks
+   
+Tasks
+-----
+How can we add a custom form/jsp to the task bean?
+Does this form have access to the context for the work-flow?
+
+

@@ -1,0 +1,2 @@
+    <forward name="admin_defaultValueEditor_componentList" path="jaffa.admin.defaultvalueeditor.componentList"/>
+    <forward name="admin_defaultValueEditor_propertyEditor" path="jaffa.admin.defaultvalueeditor.propertyEditor"/>

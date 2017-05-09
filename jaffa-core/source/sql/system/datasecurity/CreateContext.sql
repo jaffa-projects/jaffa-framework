@@ -1,0 +1,1 @@
+create context <<SQL.PREFIX>>_sec_ctx using <<SQL.SCHEMA.NAME>>.jaffa_sec;

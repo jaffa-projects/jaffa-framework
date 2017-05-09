@@ -1,0 +1,4 @@
+label.Jaffa.Transaction.TransactionField=Transaction Field
+label.Jaffa.Transaction.TransactionField.TransactionId=Transaction ID
+label.Jaffa.Transaction.TransactionField.FieldName=Field Name
+label.Jaffa.Transaction.TransactionField.Value=Value

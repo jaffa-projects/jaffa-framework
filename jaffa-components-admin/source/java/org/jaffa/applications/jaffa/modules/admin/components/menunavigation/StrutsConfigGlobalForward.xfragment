@@ -1,0 +1,2 @@
+    <!-- Jaffa Menu Navigation -->
+    <forward name="admin_menuNavigation" path="jaffa.admin.menunavigation"/>

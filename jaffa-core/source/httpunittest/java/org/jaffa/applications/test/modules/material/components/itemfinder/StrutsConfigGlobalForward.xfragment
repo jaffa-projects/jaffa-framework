@@ -1,0 +1,4 @@
+    <!-- ItemFinderCriteria -->
+    <forward   name="material_itemFinderCriteria"    path="/test/material/itemfinder/jsp/criteria.jsp"/>
+    <!-- ItemFinderResults -->
+    <forward   name="material_itemFinderResults"    path="/test/material/itemfinder/jsp/results.jsp"/>

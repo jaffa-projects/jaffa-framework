@@ -1,0 +1,4 @@
+    <component id="Jaffa.Nonsecure.RequestPassword">
+        <class>org.jaffa.applications.jaffa.modules.user.components.requestpassword.ui.RequestPasswordComponent</class>
+        <type>Skeleton</type>
+    </component>

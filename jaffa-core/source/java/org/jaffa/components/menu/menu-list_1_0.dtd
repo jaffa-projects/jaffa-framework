@@ -1,0 +1,14 @@
+<?xml encoding="UTF-8" ?>
+<!ELEMENT menu (group+)>
+
+<!ELEMENT group (group-name,description,group-icon,title,option+)>
+<!ELEMENT group-name (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT group-icon (#PCDATA)>
+<!ELEMENT title (#PCDATA)>
+
+<!ELEMENT option (option-name,option-icon,(component | url))>
+<!ELEMENT option-name (#PCDATA)>
+<!ELEMENT option-icon (#PCDATA)>
+<!ELEMENT component (#PCDATA)>
+<!ELEMENT url (#PCDATA)>

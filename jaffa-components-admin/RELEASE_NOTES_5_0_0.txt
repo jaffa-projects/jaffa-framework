@@ -1,0 +1,20 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the next release. For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+- Enhanced the LabelEditor component to render the override-label in a TextArea. This will allow the entry of override-labels containing newline characters.
+
+What's Changed / Improvements
+=====================================================
+- Fixed deprecations related to JAXB validations and UserGridController
+
+What's Deleted/Deprecated
+=====================================================
+
+Bug Fixes
+=====================================================
+- Corrected the CheckPolicyComponent to allow for components having no business functions. Corrected the main.jsp for that component to set hideIfNoWidgets='false' in its FoldingSections

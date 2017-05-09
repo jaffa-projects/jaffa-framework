@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE menu PUBLIC "-//JAFFA//DTD Menu List 1.0//EN" "http://jaffa.sourceforge.net/DTD/menu-list_1_0.dtd">
+
+<menu>
+   <group>
+      <group-name>Orders</group-name>
+      <description>Click on Open Orders for orders that are open and on Shipped Orders for orders that have been shipped.</description>
+      <group-icon>ordersIcon.gif</group-icon>
+      <title>Orders</title>
+      <option>
+         <option-name>Open Orders</option-name>
+         <option-icon>openOrders.gif</option-icon>
+         <url>/startComponent.do?component=Orders.OpenOrder</url>
+      </option>
+      <option>
+         <option-name>Shipped Orders</option-name>
+         <option-icon>shippedOrders.gif</option-icon>
+         <url>/startComponent.do?component=Orders.ShippedOrder</url>
+      </option>
+   </group>
+</menu>

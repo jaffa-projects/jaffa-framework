@@ -1,0 +1,4 @@
+    <component id="Jaffa.Printing.PrinterOutputTypeFinder">
+        <class>org.jaffa.modules.printing.components.printeroutputtypefinder.ui.PrinterOutputTypeFinderComponent</class>
+        <type>ObjectFinder</type>
+    </component>

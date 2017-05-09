@@ -1,0 +1,7 @@
+    <!-- JaffaCore_Messaging_BusinessEventService -->
+    <create creator="new" javascript="Jaffa_Messaging_BusinessEventLogService">
+      <param name="class" value="org.jaffa.modules.messaging.apis.BusinessEventLogService"/>
+      <include method="query"/>
+      <include method="update"/>
+    </create>
+    <convert converter="nnBean" match="org.jaffa.modules.messaging.apis.data.*" />

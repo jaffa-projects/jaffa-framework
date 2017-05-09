@@ -1,0 +1,22 @@
+<ivy-module version="2.0">
+
+	<!-- The groupId, artifactId and version of the artifacts.  Update the revision to match the Jaffa version being built. -->
+    <info organisation="org.jaffa" module="jaffa-components-scheduler" revision="${jaffa-version}"/>
+	
+	<!-- The pom and jar to be published to Maven repositories. -->
+	<publications>
+        <artifact name="jaffa-components-scheduler" type="pom"/>
+        <artifact name="jaffa-components-scheduler" type="jar"/>
+    </publications>
+	
+  <dependencies>
+    <!-- Begin javax dependencies -->
+    <dependency org="javax.servlet" name="servlet-api" rev="${servlet-api-version}" transitive="false"/>
+    <dependency org="javax.jms" name="javax.jms-api" rev="${javax.jms-api-version}" transitive="false"/>
+    <!-- End javax dependencies -->
+
+    <!-- Begin Services: Job Scheduler dependencies -->
+    <dependency org="com.tapestrysolutions.goldesp.services" name="goldesp-services-scheduler" rev="${goldesp-services-scheduler-version}" transitive="false"/>
+    <!-- End Job Scheduler dependencies -->
+  </dependencies>
+</ivy-module>

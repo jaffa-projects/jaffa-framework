@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+  <!-- ================================================= -->
+  <!-- Rules for Domain Object AuditTransactionField -->
+  <!-- ================================================= -->
+
+  <metadata tag="jaffa.rules" class="org.jaffa.components.audit.domain.AuditTransactionField">
+
+
+    <label>[label.Jaffa.Audit.AuditTransactionField]</label>
+
+    <property name="fieldId">
+      <label>[label.Jaffa.Audit.AuditTransactionField.FieldId]</label>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="objectId">
+      <label>[label.Jaffa.Audit.AuditTransactionField.ObjectId]</label>
+      <mandatory/>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="fieldName">
+      <label>[label.Jaffa.Audit.AuditTransactionField.FieldName]</label>
+      <mandatory/>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="fromValue">
+      <label>[label.Jaffa.Audit.AuditTransactionField.FromValue]</label>
+      <max-length>2000</max-length>
+    </property>
+
+    <property name="toValue">
+      <label>[label.Jaffa.Audit.AuditTransactionField.ToValue]</label>
+      <max-length>2000</max-length>
+    </property>
+
+    <property name="changed">
+      <label>[label.Jaffa.Audit.AuditTransactionField.Changed]</label>
+    </property>
+
+    <property name="flex">
+      <label>[label.Jaffa.Audit.AuditTransactionField.Flex]</label>
+    </property>
+
+    <property name="overflowFlag">
+      <label>[label.Jaffa.Audit.AuditTransactionField.OverflowFlag]</label>
+    </property>
+
+    <property name="multilineHtmlFlag">
+      <label>[label.Jaffa.Audit.AuditTransactionField.MultilineHtmlFlag]</label>
+      <max-length>1</max-length>
+    </property>
+
+  </metadata>
+</aop>

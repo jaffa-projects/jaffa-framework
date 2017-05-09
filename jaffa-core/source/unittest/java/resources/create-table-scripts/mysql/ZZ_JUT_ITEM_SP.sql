@@ -1,0 +1,1 @@
+select * from ZZ_JUT_INSTRUMENT

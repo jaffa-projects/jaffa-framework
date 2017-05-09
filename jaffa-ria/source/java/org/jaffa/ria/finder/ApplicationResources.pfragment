@@ -1,0 +1,10 @@
+label.Jaffa.SavedQueries.SavedQuery=Saved Queries
+label.Jaffa.SavedQueries.SavedQuery.QueryId=Query Id
+label.Jaffa.SavedQueries.SavedQuery.UserId=User Id
+label.Jaffa.SavedQueries.SavedQuery.ComponentRef=Component Ref
+label.Jaffa.SavedQueries.SavedQuery.ContextRef=Context Ref
+label.Jaffa.SavedQueries.SavedQuery.QueryName=Query Name
+label.Jaffa.SavedQueries.SavedQuery.IsDefault=Is Default
+label.Jaffa.SavedQueries.SavedQuery.Criteria=Criteria
+label.Jaffa.DWR.Timeout.Title=Server Connection Expired
+label.Jaffa.DWR.Timeout.Message=Your connection to the server has expired, as a security measure, due to an extended period of inactivity.  Your browser will be redirected to the sign-in page.

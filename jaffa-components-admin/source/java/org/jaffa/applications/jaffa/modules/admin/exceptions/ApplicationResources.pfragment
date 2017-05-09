@@ -1,0 +1,4 @@
+exception.org.jaffa.applications.jaffa.modules.admin.components.exceptions.ConfigException.parseError=Error while parsing the XML file <br> {0}
+exception.org.jaffa.applications.jaffa.modules.admin.components.exceptions.ConfigException.fileReadError=Error while reading the XML File <br>{0}
+exception.org.jaffa.applications.jaffa.modules.admin.components.exceptions.ConfigException.badurlError=Can't Find the xml file, Bad URL . {0}<br>{1}
+exception.org.jaffa.applications.jaffa.modules.admin.components.exceptions.ConfigException.fileNotFoundError= {0} File not found in the classpath or in the filesystem.

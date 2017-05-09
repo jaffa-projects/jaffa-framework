@@ -1,0 +1,1 @@
+    <form-bean name="jaffa_printing_outputCommandFinderForm" type="org.jaffa.modules.printing.components.outputcommandfinder.ui.OutputCommandFinderForm"/>

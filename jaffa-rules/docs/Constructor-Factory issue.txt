@@ -1,0 +1,38 @@
+
+I'm using "JBoss (MX MicroKernel) [4.0.1 (build: CVSTag=JBoss_4_0_1 date=200501141152)]", and the version of JBoss AOP that comes as part of that deployment.
+
+I have created some pointcuts that attached methods to the constructor, for example
+[code]<prepare expr="execution(public org.jaffa.applications.jaffa.modules.admin.components.usermaintenance.ui.*->new(..))"/>[/code]
+
+I have enabled runtime aspect injection via the setting [i]< attribute name ="EnableTransformer" >true< /attribute >[/i]
+
+Everything works fine, the interceptors are correctly bound to the methods, but i have a problem with interceptors not being invoked for the constructor. I believe this is because I use a Factory pattern for constructing new instance of my object via the clazz.newInstance().
+
+If I hard code the new Class() constructor, JBoss will replace it with the correct call to an injected public static method to invoke the constructor interceptors and create the object.
+
+Can I therefore assume that to use JBoss AOP on constructors all object factories must be re-written to call this new public static method, if the class being constructed implements the Advised interface?
+
+Original Factory Code...
+[code]
+  Component compInst = (Component) clazz.newInstance();
+[/code]
+New Factory Code to be JBoss AOP complient...
+[code]
+  Component compInst =  null;
+  // Use the Advised static method to create the object if needed.
+  if(clazz instanceof Advised) {
+     String name = clazz.getName().substring(clazz.getName().lastIndexOf('.')) + "_new_$aop";
+     Method method = clazz.getDeclaredMethods(name, new Class[0]);
+     compInst = method.invoke(null, new Object[0]);
+   }
+   if(compInst==null)
+     compInst = clazz.newInstance();
+[/code]
+Am I missing something here, as this seems very intrusive, expecially if i now need to go and modify the likes of Struts so i can bind aspects to the creation of a FormBean?
+
+I'm sure you must address similar issues in Hibernate when creating new objects that may have constructor interceptor stacks?
+
+Please advise....
+
+PaulE
+([url]http://jaffa.sf.net[/url])

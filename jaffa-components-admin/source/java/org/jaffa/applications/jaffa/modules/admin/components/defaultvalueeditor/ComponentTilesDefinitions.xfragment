@@ -1,0 +1,33 @@
+    <!-- DefaultValueEditor -->
+    <definition name="jaffa.admin.defaultvalueeditor.Layout.componentList"  path="/jaffa/jsp/tiles/skeleton_component_2_0/SkeletonLayout.jsp">
+        <!-- JSPs to be included -->
+        <put name="historyNav"  value="/jaffa/jsp/tiles/historyNav.jsp"/>
+        <put name="contextNav"  value="/jaffa/admin/defaultvalueeditor/contextNav.jsp"/>
+        <put name="defaultNav"  value="/jaffa/admin/defaultvalueeditor/defaultNav.jsp"/>
+        <put name="body" value="/jaffa/admin/defaultvalueeditor/componentList.jsp"/>
+
+        <!-- Parameters used by the JSPs -->
+        <put name="action" value="/admin_defaultValueEditor"/>
+        <put name="currentScreenCounter" value="0"/>
+        <put name="screenTitle" value="[title.Jaffa.Admin.DefaultValueEditor]"/>
+    </definition>
+    <definition name="jaffa.admin.defaultvalueeditor.componentList"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Admin.DefaultValueEditor]"/>
+        <put name="body" value="jaffa.admin.defaultvalueeditor.Layout.componentList"/>
+    </definition>
+    <definition name="jaffa.admin.defaultvalueeditor.Layout.propertyEditor"  path="/jaffa/jsp/tiles/skeleton_component_2_0/SkeletonLayout.jsp">
+        <!-- JSPs to be included -->
+        <put name="historyNav"  value="/jaffa/jsp/tiles/historyNav.jsp"/>
+        <put name="contextNav"  value="/jaffa/admin/defaultvalueeditor/contextNav.jsp"/>
+        <put name="defaultNav"  value="/jaffa/admin/defaultvalueeditor/defaultNav.jsp"/>
+        <put name="body" value="/jaffa/admin/defaultvalueeditor/propertyEditor.jsp"/>
+
+        <!-- Parameters used by the JSPs -->
+        <put name="action" value="/admin_defaultValueEditor"/>
+        <put name="currentScreenCounter" value="1"/>
+        <put name="screenTitle" value="[title.Jaffa.Admin.DefaultValueEditor.Editor]"/>
+    </definition>
+    <definition name="jaffa.admin.defaultvalueeditor.propertyEditor"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Admin.DefaultValueEditor]"/>
+        <put name="body" value="jaffa.admin.defaultvalueeditor.Layout.propertyEditor"/>
+    </definition>

@@ -1,0 +1,22 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the next JaffaRules Release. For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+- Added label tag for comment separators along with the modifications in CommentStylePropertyRule.java to enable the configurable comment separators.
+- Created a BSFHelper utility class for invoking the Bean Scripting Framework. Refactored the interceptors to use the new utility.
+
+What's Changed / Improvements
+=====================================================
+- Implemented NotInListPropertyRule.java and added to RuleClasses.properties. This allows excluding a list of values from a properties.
+
+What's Deleted/Deprecated
+=====================================================
+
+Bug Fixes
+=====================================================
+- Modified the applyInheritanceHack in JaffaClassMetaDataLoader to use JBoss' MethodExpression to look for matching methods based on the complete signature, instead of the earlier erroneous match based on just the methodName. This should allow mandatory rules to be applied on a FormBean, which was earlier failing due to erroneous binding to the validate(...) method of Struts' ActionForm class.
+- Fixed the CommentStylePropertyRule to use the last comment rule defined for a property

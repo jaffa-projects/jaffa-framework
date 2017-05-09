@@ -1,0 +1,251 @@
+/* 
+  File name:  jaffa.css
+  Created on: 25-Feb-03
+  Author:     paule  
+
+  Description:
+    The basic stylesheet used by core jaffa JSP's.
+    Customized CSS for the colorful example
+*/
+
+
+/*************************************************************
+  Import all the widget CSS's
+ *************************************************************/
+@import url(widgets/button.css);
+@import url(widgets/dropdown.css);
+@import url(widgets/editbox.css);
+@import url(widgets/foldingSection.css);
+@import url(widgets/label.css);
+@import url(widgets/lookup.css);
+@import url(widgets/radiogroup.css);
+@import url(widgets/texttag.css);
+@import url(widgets/tree.css);
+@import url(widgets/grid.css);
+@import url(rules/error.css);
+@import url(navigation.css);
+
+
+/*************************************************************
+ Setup basic page display
+ *************************************************************/
+body { 
+  scrollbar-base-color: black;
+  scrollbar-face-color: #E4E9FF;
+  scrollbar-track-color: #F1F4FF; 
+  scrollbar-arrow-color: black;
+  scrollbar-highlight-color: #FFFFFF; 
+  scrollbar-3dlight-color: #ffffff;
+  scrollbar-shadow-color: #929DCD;
+  scrollbar-darkshadow-color: #6774AE;  
+  color: black;
+  background-color : white;
+  font-family: Verdana, Arial, Helvetica, sans-serif; 
+  font-size: x-small;
+  vertical-align : top;
+  height :100%;
+}
+
+html {height:100%;} 
+
+p,td {
+  font-size: x-small;
+  color: black;
+}
+
+a {
+  font-size: x-small;
+  color: #0066FF; 
+  text-decoration: underline;
+  vertical-align : middle;
+}
+
+a.ContextMenu {
+  text-decoration: none;
+}
+
+a.ContextMenu:hover {
+  text-decoration: none;
+}
+
+
+a:hover {
+  font-weight: 300; 
+  color: #FF9A31; 
+  text-decoration: underline;
+  vertical-align : middle;
+}
+
+
+/*************************************************************
+
+ Headings copied from the Jaffa Web Site
+
+ *************************************************************/
+H1 {
+  color: #FF9A31;  
+  text-decoration: none; 
+  font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;    
+  font-weight : bold;  
+  text-align : center; 
+  font-size : large;
+  padding-top: 15px;
+}
+
+H2 {
+  color: #FF5F00;  text-decoration: none; font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;    font-weight : bolder;  text-align : left; font-variant : normal;  font-size : medium;
+}
+
+H3 { 
+  color: #FF9966;  text-decoration: none; font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;    font-weight : bolder;  text-align : left; font-variant : normal;  font-size : small;  text-shadow : 2px;  text-indent : 2%; 
+}
+
+
+/* Control the look of the left navigation bar for generic component screens */
+table.leftNav {
+  text-align: left;
+  text-decoration: none;
+  width: 185px;
+  border-right: 2px  solid #FF9A31;
+  background : url(../../../imgs/navigation/line.gif) top;
+  vertical-align : top;
+  margin-right : 5px;
+  height: 100%;
+}
+
+.leftNavSpacer {
+  height:10px;
+}
+.leftNavFooter {
+  height:40px;
+  background:black;
+}
+
+table.defaultNav {
+        margin-top : 10px;
+  height:40px;
+  font-size: small;
+  background : url(../../../imgs/navigation/pattern2.gif);
+
+}
+table.defaultNav a {
+  font-size: medium;
+  color: black;
+}
+
+/* Contol the look of the extra text on the navBar (login/logout) */
+div.navBar a {
+  text-decoration: underline;
+  color: white;
+  font-weight: bold;
+}
+  
+div.navBar a:hover {
+  font-weight: bold;
+}
+
+span.editboxMandatorySuffix {
+  display: none;
+}
+
+span.editboxOptionalSuffix {
+  display: none;
+}
+
+span.editboxMandatoryPrefix {
+  background-image: url(../../../imgs/icons/required.gif);
+  background-position: left;
+  background-repeat: no-repeat;
+  width: 10px;
+  white-space: nowrap;
+}
+span.editboxOptionalPrefix {
+  width: 10px;
+}
+
+span.dropdownMandatorySuffix {
+  display: none;
+}
+
+span.dropdownOptionalSuffix {
+  display: none;
+}
+
+span.dropdownMandatoryPrefix {
+  background-image: url(../../../imgs/icons/required.gif);
+  background-position: left;
+  background-repeat: no-repeat;
+  width: 15px;
+  white-space: nowrap;
+}
+
+span.dropdownOptionalPrefix {
+  width: 15px;
+}
+
+span.checkBoxMandatorySuffix {
+  background-image: url(../../../imgs/icons/required.gif);
+  background-position: right;
+  background-repeat: no-repeat;
+  width: 10px;
+  white-space: nowrap;
+}
+
+span.checkBoxOptionalSuffix {
+  width: 10px;
+}
+
+span.checkBoxMandatoryPrefix {
+  background-image: url(../../../imgs/icons/required.gif);
+  background-position: left;
+  background-repeat: no-repeat;
+  width: 10px;
+  white-space: nowrap;
+}
+
+span.checkBoxOptionalPrefix {
+  width: 10px;
+}
+
+
+/* logon classes*/
+
+
+table.backcolor {
+  background: black;
+}
+
+tr.backcolor {
+  background: black;
+}
+
+td.spacer {
+  background-image: url(../../imgs/bottomSpacer.jpg);
+  height: 1px;
+}
+
+td.header {
+  background-image: url(../../imgs/jaffahead2.jpg);
+  height: 43px;
+}
+
+td.wramLogin {
+background-image: url(../../../../imgs/jaffahead1.jpg);
+width: 271px;
+height: 84px;
+background-repeat : no-repeat;
+}
+
+td.white {
+color: white;
+font-weight: bold;
+}
+
+p.black {
+  color: black;
+  font-weight: bold;
+}
+
+td.black {
+  color: black;
+}

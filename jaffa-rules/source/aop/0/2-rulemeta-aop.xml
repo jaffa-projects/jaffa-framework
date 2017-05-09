@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<!DOCTYPE aop PUBLIC "-//JBoss//DTD JBOSS AOP 1.0//EN" "http://www.jboss.org/aop/dtd/jboss-aop_1_0.dtd">-->
+
+<!-- Declare the supported Rules -->
+<aop>
+  <metadata-loader tag="jaffa.rulemeta" class="org.jaffa.rules.jbossaop.RuleLoader"/>
+
+  <metadata tag="jaffa.rulemeta" class="dummy">
+
+    <!-- A collection of parameters common to all rules -->
+    <rule name='common'>
+      <!-- If specified, then the rule is applied only if the condition evaluates to true -->
+      <parameter name='condition' mandatory='false'/>
+      <!-- Specified the scripting language used in the condition parameter -->
+      <parameter name='language' mandatory='false' default='beanshell'/>
+      <!-- If specified, then the rule is applied only if the variation in the current thread matches this parameter -->
+      <parameter name='variation' mandatory='false'/>
+      <!-- If specified, and if the validation fails, then an ApplicationException with the given errorCode will be thrown -->
+      <parameter name='errorCode' mandatory='false'/>
+      <!-- Contains a comma-separated list of fields, whose values are to be passed to the ApplicationException -->
+      <parameter name='errorParameters' mandatory='false'/>
+    </rule>
+
+
+    <!-- This is used to record information for describing a class/property. It can be applied to both a class as well as a property. -->
+    <rule name='annotation' precedence='last' text-parameter='value' extends-rule='common'>
+      <!-- Should contain the information for a class/property -->
+      <parameter name='value' mandatory='true'/>
+    </rule>
+
+    <!-- This is used to record information for describing a class/property. It can be applied to both a class as well as a property. -->
+    <rule name='method-params' precedence='last' text-parameter='value' extends-rule='common'>
+      <!-- Should contain the information for a class/property -->
+      <parameter name='value' mandatory='true'/>
+    </rule>
+
+        <!-- This is used to record information for describing a class/property. It can be applied to both a class as well as a property. -->
+    <rule name='method-param' precedence='last' text-parameter='value' extends-rule='common'>
+      <!-- Should contain the information for a class/property -->
+      <parameter name='value' mandatory='true'/>
+      <parameter name='name' mandatory='true'/>
+    </rule>
+
+    <rule name='method-return' precedence='last' text-parameter='value' extends-rule='common'>
+      <!-- Should contain the information for a class/property -->
+      <parameter name='value' mandatory='true'/>
+    </rule>
+
+    <!-- This is used to configure auditing for a domain class. It can be applied to both a class as well as a property. -->
+    <rule name='audit' precedence='last' extends-rule='common' inheritable='false'>
+      <!-- Can be used to disable auditing for a domain-class. This setting is applicable at the class-level only. -->
+      <parameter name='disabled' mandatory='false' default='false' valid-values='true,false'/>
+      <!-- If true, then the application will need to provide a reason for the change in a domain object. The reason has to be provided in Log4J's MDC object. A PendingEventException having eventName "ReasonRequiredForAuditing" will be raised if the reason is not provided. This setting is applicable at the class-level only. -->
+      <parameter name='reason-required' mandatory='false' default='false' valid-values='true,false'/>
+      <!-- If true, a property will always be recorded in the audit-trail, irrespective of whether it was modified or not. This setting is applicable at the property-level only. -->
+      <parameter name='record-always' mandatory='false' default='false' valid-values='true,false'/>
+      <!-- The choices are 'text', 'html' or 'multiline'. The value can be used to determine the format of the property data. This setting is applicable at the property-level only. -->
+      <parameter name='data-format' mandatory='false' default='text' valid-values='text,html,multiline'/>
+    </rule>
+
+
+    <!-- This rule is used to validate the uniqueness of an object. It'll ensure that no record exists in the database for the given candidate-key fields -->
+    <rule name='candidate-key' execution-realms='business' precedence='all' text-parameter='value' interceptor='candidate-key' extends-rule='common'>
+      <!-- Should contain a comma-separated list of fields which form the candidate-key -->
+      <parameter name='value' mandatory='true'/>
+      <!-- If true, this check will not be performed if any field of the candidate-key is null -->
+      <parameter name='ignore-null' mandatory='false' default='false' valid-values='true,false'/>
+    </rule>
+
+
+    <!-- When applied to a property, this will perform automatic case conversion when the setter is invoked. -->
+    <rule name='case-type' precedence='last' text-parameter='value' interceptor='case-type' extends-rule='common'>
+      <!-- The choices are 'upper', 'lower' or 'mixed'. Note: If the value is 'mixed' no conversion is performed. It can be used to ensure that no conversion is performed. -->
+      <parameter name='value' mandatory='true' default='mixed' valid-values='mixed,upper,lower' case-insensitive='true'/>
+    </rule>
+
+
+    <!-- When applied to a property, this will perform automatically concatenate to previous comments when the setter is invoked. -->
+    <rule name='comment' execution-realms='business' precedence='last' text-parameter='value' interceptor='comment' extends-rule='common'>
+      <!-- Should contain the comment style for this property. Valid styles are plain, lifo and fifo. -->
+      <parameter name='value' mandatory='true' default='plain' valid-values='plain,lifo,fifo' case-insensitive='true'/>
+    </rule>
+
+
+    <!-- This rule is used limit access to a method based on the access to a component. A SecurityException is raised if access is denied. -->
+    <rule name='component-guard' precedence='all' text-parameter='name' interceptor='component-guard' extends-rule='common'>
+      <!-- Should contain a method signature to bind the invocation of this rule to. -->
+      <parameter name='method' mandatory='true'/>
+      <!-- Should contain the name of a component for which access is required -->
+      <parameter name='name' mandatory='true'/>
+    </rule>
+
+
+    <!-- This rule is used to specify a data-type for a property -->
+    <rule name='data-type' precedence='last' text-parameter='value' extends-rule='common'>
+      <!-- Should contain a fully-qualified className -->
+      <parameter name='value' mandatory='true'/>
+    </rule>
+
+
+    <!-- This marks a class as a domain-class -->
+    <rule name='domain-info' precedence='last' extends-rule='common' inheritable='false'>
+      <!-- Specify a domain name, unique to the application. If not provided, the simple class name will be used. It is used in Auditing. -->
+      <parameter name='name' mandatory='false'/>
+      <!-- Used to describe the domain-class. -->
+      <parameter name='description' mandatory='false'/>
+      <!-- Used to specify the module to which the domain-class belongs. -->
+      <parameter name='module' mandatory='false'/>
+      <!-- Used to specify the sub-module to which the domain-class belongs. -->
+      <parameter name='sub-module' mandatory='false'/>
+      <!-- Used to specify the corresponding database table. -->
+      <parameter name='db-table' mandatory='false'/>
+    </rule>
+
+
+    <!-- This marks a class as a delete-domain-class -->
+    <rule name='delete-domain-info' precedence='last' extends-rule='common' inheritable='false'>
+      <!-- Specify a delete domain name, unique to the corresponding domain. -->
+      <parameter name='name' mandatory='true'/>
+    </rule>
+    
+    <!-- This marks a class as a base-domain-class -->
+    <rule name='base-domain-info' precedence='last' extends-rule='common' inheritable='false'>
+      <!-- Specify a base domain name, unique to the corresponding delete domain. -->
+      <parameter name='name' mandatory='true'/>
+    </rule>
+
+    <!-- This is used to configure flex fields for a domain class -->
+    <rule name='flex-fields' execution-realms='business,graph,criteria' precedence='last' text-parameter='source' interceptor='flex-fields' extends-rule='common'>
+      <!-- Points to another class, which will contain the flex-fields -->
+      <parameter name='source' mandatory='true'/>
+    </rule>
+
+
+    <!-- This is used to indicate the flex fields for a virtual class -->
+    <rule name='flex-field' precedence='last' text-parameter='domain-mapping' extends-rule='common'>
+      <!-- This will result in the value being persisted on a field (as identified by this mapping) of the actual domain class, rather than the FLEX_FIELDS table -->
+      <parameter name='domain-mapping' mandatory='false'/>
+    </rule>
+
+
+    <!-- When applied to a property, ensures that a valid foreign key is entered. Apply it at class-level to support composite-keys
+
+         At the property level it assume the specified domain object has a single field primary key,
+         which is what the property's value is being compared with
+         The minimum needed in the 'domainObject'
+         The value is not used and ignored at the property level
+         All other fields control the related lookup to be used for this foreign key.
+         These value will be used by the <j:Lookup/> JSP Tag if used inside the <j:Property..> tag
+         If the source property field contain a null value, the check will not be performed.
+
+         <foreign-key domainObject      = "org.example.Location"
+                      component         = "Inventory.Warehouse.LocationLookup"
+                      dynamicParameters = "siteCode=siteCode"
+                      targetFields      = "siteCode=siteCode"/>
+
+         At the object level you must specify both the 'domainObject' and 'value' where the value is a comma seperated list
+         of fields on the source object that match up (in order) to the key fields on the domain object.
+         If any of the source fields contain a null value, the check will not be performed.
+
+         <foreign-key domainObject      = "org.example.Warehouse"
+                      value             = "partNumber,siteCode"/>
+
+    -->
+    <rule name='foreign-key' execution-realms='business' precedence='all' text-parameter='value' interceptor='foreign-key' extends-rule='common'>
+      <!-- Should be the fully qualified name of the class against which the foreign key check is to be performed -->
+      <parameter name='domainObject' mandatory='true'/>
+      <!-- Used to supply information for the corresponding Lookup -->
+      <parameter name='component' mandatory='false'/>
+      <!-- Used to supply information for the corresponding Lookup -->
+      <parameter name='bypassCriteriaScreen' mandatory='false'/>
+      <!-- Used to supply information for the corresponding Lookup -->
+      <parameter name='dynamicParameters' mandatory='false'/>
+      <!-- Used to supply information for the corresponding Lookup -->
+      <parameter name='staticParameters' mandatory='false'/>
+      <!-- Used to supply information for the corresponding Lookup -->
+      <parameter name='targetFields' mandatory='false'/>
+      <!-- Used to supply information for the corresponding Lookup -->
+      <parameter name='criteriaFields' mandatory='false'/>
+      <!-- When applying at class-level, should contain a comma-separated list of fields which form the foreign-key -->
+      <parameter name='value' mandatory='false'/>
+    </rule>
+
+
+    <!-- This rule is used limit access to a method based on the access to a business-function. A SecurityException is raised if access is denied. -->
+    <rule name='function-guard' precedence='all' text-parameter='name' interceptor='function-guard' extends-rule='common'>
+      <!-- Should contain a method signature to bind the invocation of this rule to. -->
+      <parameter name='method' mandatory='true'/>
+      <!-- Should contain the name of a business-function for which access is required -->
+      <parameter name='name' mandatory='true'/>
+    </rule>
+
+    <!--
+      When applied to a property, prevents the setter from being executed if an invalid value is entered.
+
+      This validates a field against a set of valid values for that field, as listed in a database table
+      For eg. Lets assume that there is database table 'VALID_FIELD_VALUE' which holds a set of valid values for certain fields in the system.
+      The structure of this table 'VALID_FIELD_VALUE' in oracle can be like -
+        TABLE_NAME    NOT NULL VARCHAR2(20)
+        FIELD_NAME    NOT NULL VARCHAR2(30)
+        LEGAL_VALUE   NOT NULL VARCHAR2(20)
+
+      This table can hold values like -
+        TABLE_NAME      FIELD_NAME      LEGAL_VALUE
+        ==========      ==========      ===========
+        USER            DEPARTMENT      ACCOUNTS
+        USER            DEPARTMENT      ENGINEERING
+        USER            DEPARTMENT      PERSONNEL
+        ITEM            TYPE            CONSUMABLE
+        ITEM            TYPE            NON-CONSUMABLE
+
+      This way, the table can hold valid values for the different fields
+
+      The generic implementation provides the ValidFieldValue domain class and its mapping file. Tweak its mapping file to map it to the correct table and fields.
+      Or specify your own domain class.
+
+      The following properties define the meta data for the Generic Foreign Key table
+       1- domainClassName: This will be the fully qualified name of the domain class representing the Generic Foreign Key table. Default value is "org.jaffa.rules.examples.domain.ValidFieldValue".
+       2- fieldNameForTable: This is the column name of the Generic Foreign Key table which holds the table name. Default value is "TableName".
+       3- fieldNameForField: This is the column name of the Generic Foreign Key table which holds the field name. Default value is "FieldName".
+       4- fieldNameForValue:  This is the column name of the Generic Foreign Key table which holds the valid value. Default value is "LegalValue".
+    -->
+    <rule name='generic-foreign-key' execution-realms='business' precedence='all' interceptor='generic-foreign-key' extends-rule='common'>
+      <!-- Is used to lookup the set of valid values from the Generic Foreign Key table -->
+      <parameter name='tableName' mandatory='true'/>
+      <!-- Is used to lookup the set of valid values from the Generic Foreign Key table -->
+      <parameter name='fieldName' mandatory='true'/>
+      <!-- Defines the meta data for the Generic Foreign Key table -->
+      <parameter name='domainClassName' mandatory='false' default='org.jaffa.modules.setup.domain.ValidFieldValue'/>
+      <!-- Defines the meta data for the Generic Foreign Key table -->
+      <parameter name='fieldNameForTable' mandatory='false' default='TableName'/>
+      <!-- Defines the meta data for the Generic Foreign Key table -->
+      <parameter name='fieldNameForField' mandatory='false' default='FieldName'/>
+      <!-- Defines the meta data for the Generic Foreign Key table -->
+      <parameter name='fieldNameForValue' mandatory='false' default='LegalValue'/>
+    </rule>
+
+
+    <!-- Marks a property as hidden -->
+    <rule name='hidden' precedence='first' extends-rule='common'>
+    </rule>
+
+
+    <!-- This rule is merely to be used for binding the hyperlink information to a property -->
+    <rule name='hyperlink' precedence='last' extends-rule='common'>
+      <!-- Should contain the name of the Viewer component -->
+      <parameter name='component' mandatory='true'/>
+      <!-- Should contain a semicolon separated list of input fields of the viewer component -->
+      <parameter name='inputs' mandatory='true'/>
+      <!-- Should contain a semicolon separated list of current component fields to pass the values to the viewer component -->
+      <parameter name='values' mandatory='true'/>
+    </rule>
+
+
+    <!--
+      This rule is used to initialize a property when a bean is instantiated.
+      The property can be initialized by invoking its setter method or by directly updating a member variable of the bean.
+      The value can be literal or an expression to be evaluated at runtime.
+    -->
+    <rule name='initialize' precedence='last' text-parameter='value' interceptor='initialize' extends-rule='common'>
+      <!-- Should contain the initialization value for the property -->
+      <parameter name='value' mandatory='true'/>
+      <!-- Contains the name of the member-variable, which will be directly initialized to the given value. The setter will not be used, if the member-variable is specified -->
+      <parameter name='member' mandatory='false'/>
+      <!-- Indicates that the value contains an expression that should be evaluated at runtime -->
+      <parameter name='expression' mandatory='false' default='false' valid-values='true,false'/>
+    </rule>
+
+
+    <!-- When applied to a property, prevents the setter from being executed if an invalid value is entered. -->
+    <rule name='in-list' precedence='last' text-parameter='value' interceptor='in-list' extends-rule='common'>
+      <!-- This is mandatory. Should contain the list of valid values. -->
+      <parameter name='value' mandatory='true'/>
+      <!-- The separator character used in the list of valid values. -->
+      <parameter name='separator' mandatory='false' default=','/>
+    </rule>
+
+
+    <!-- Specify label for a property or class. -->
+    <rule name='label' precedence='last' text-parameter='value' extends-rule='common'>
+      <!-- The label. -->
+      <parameter name='value' mandatory='true'/>
+    </rule>
+
+
+    <!-- Specify layout for a property. -->
+    <rule name='layout' precedence='last' text-parameter='value' extends-rule='common'>
+      <!-- The layout. -->
+      <parameter name='value' mandatory='true'/>
+      <!-- If specified, then it should be an instance of org.jaffa.rules.rulemeta.IFormatter. If not specified, then the default formatter will be used. -->
+      <parameter name='formatterClass' mandatory='false'/>
+    </rule>
+
+
+    <!-- Marks a property as used in the objects lookup for the given scopes. -->
+    <rule name='lookup' precedence='last' text-parameter='scope' extends-rule='common'>
+      <!-- If specified, this should be a comma separated list of scopes that include this property -->
+      <parameter name='scope' mandatory='false' case-insensitive='true'/>
+    </rule>
+
+    <!-- Marks a property as mandatory. -->
+    <rule name='mandatory' execution-realms='business' precedence='first' interceptor='mandatory' extends-rule='common'>
+    </rule>
+
+
+    <!-- When applied to a property, prevents the setter from being executed if the Object being passed is greater than the maximum length specified -->
+    <rule name='max-length' precedence='all' text-parameter='value' interceptor='max-length' extends-rule='common'>
+      <!-- This is the maximum string length. It must be a valid integer value. For decimal fields, the 'value' parameter can be of the type "m,n", where m and n are integer values; m is the number of digits before the decimal and n is the number of digits after the decimal. -->
+      <parameter name='value' mandatory='true'/>
+    </rule>
+
+
+    <!-- When applied to a property, prevents the setter from being executed if the property exceeds the maxValue. -->
+    <rule name='max-value' precedence='all' text-parameter='value' interceptor='max-value' extends-rule='common'>
+      <!-- Should contain the maximum value for the property. -->
+      <parameter name='value' mandatory='true'/>
+    </rule>
+
+
+    <!-- When applied to a property, prevents the setter from being executed if the Object being passed is is not equal to or greater than the minimum length specified -->
+    <rule name='min-length' precedence='all' text-parameter='value' interceptor='min-length' extends-rule='common'>
+      <!-- This is the minimum string length. It must be a valid integer value. -->
+      <parameter name='value' mandatory='true'/>
+    </rule>
+
+
+    <!-- When applied to a property, prevents the setter from being executed if the property is below the minValue. -->
+    <rule name='min-value' precedence='all' text-parameter='value' interceptor='min-value' extends-rule='common'>
+      <!-- Should contain the minimum value for the property. -->
+      <parameter name='value' mandatory='true'/>
+    </rule>
+
+
+    <!-- When applied to a property, prevents the setter from being executed if an invalid value is entered. -->
+    <rule name='not-in-list' precedence='all' text-parameter='value' interceptor='not-in-list' extends-rule='common'>
+      <!-- This is mandatory. Should contain the list of excluded values. -->
+      <parameter name='value' mandatory='true'/>
+      <!-- The separator character used in the list of excluded values. -->
+      <parameter name='separator' mandatory='false' default=','/>
+    </rule>
+
+
+    <!-- Allows validation of a partial key:
+         Example, we have a table keyed on State, City, where the City may not be unique by its self, but is when referenced
+         within its State.
+
+         We have a field in the application that just requireds a valid City, regardless of state.
+
+         Unlike the foreign-key rule, that would need both State and City to perform the validation, this rule
+         can be used to just validate the field against the partial key of City.
+
+         Again we could also reuse this rule if we had a table that just wanted to validate a State, even though we don't
+         specifically have a system code keyed uniquly off State.
+
+         <property name="city">
+           <partial-foreign-key domainClassName="org.example.Cities" propertyName="cityName"/>
+         </property>
+    -->
+    <rule name='partial-foreign-key' execution-realms='business' precedence='all' interceptor='partial-foreign-key' extends-rule='common'>
+      <!-- Defines the domain object class to validate the field againts -->
+      <parameter name='domainObject' mandatory='true'/>
+      <!-- Defines the property name in the domain object to query on, if not provided
+           will assume this is the same name as the property the rule is being applied to -->
+      <parameter name='propertyName' mandatory='false'/>
+    </rule>
+
+
+    <!-- When applied to a property, prevents the setter from being executed if an invalid value is entered. This ensures that the value matches this rule's pattern. -->
+    <rule name='pattern' precedence='all' text-parameter='value' interceptor='pattern' extends-rule='common'>
+      <!-- Should contain the pattern against which a property's contents is to be matched. -->
+      <parameter name='value' mandatory='true'/>
+    </rule>
+
+
+    <!-- This rule is used to validate the uniqueness of an object. It'll ensure that no record exists in the database for the given primary-key fields -->
+    <rule name='primary-key' execution-realms='business' precedence='first' text-parameter='value' interceptor='primary-key' extends-rule='common'>
+      <!-- Should contain a comma-separated list of fields which form the primary-key -->
+      <parameter name='value' mandatory='true'/>
+    </rule>
+
+    <!-- This is used to record the default value for a property. -->
+    <rule name='default-value' precedence='last' extends-rule='common'>
+    </rule>
+
+    <!-- This provides additional information for a domain property -->
+    <rule name='property-info' precedence='last' extends-rule='common' inheritable='false'>
+      <!-- Specify a name for the property. If not provided, the name attribute of the surrounding property will be used. It is used in Auditing. -->
+      <parameter name='name' mandatory='false'/>
+      <!-- Used to describe the property. -->
+      <parameter name='description' mandatory='false'/>
+      <!-- Used to specify the column in the corresponding database table. -->
+      <parameter name='db-column' mandatory='false'/>
+      <!-- The UI may use this setting to lay out the field -->
+      <parameter name='display-sequence' mandatory='false'/>
+      <!-- The UI may use this setting to lay out the field as part of a group -->
+      <parameter name='display-group' mandatory='false'/>
+    </rule>
+
+
+    <!-- Marks a property as read-only -->
+    <rule name='read-only' precedence='first' extends-rule='common'>
+    </rule>
+
+
+    <!--
+      This rule is used to invoke a script. The following scenarios are possible
+        - Execute the script passed in the 'value' parameter
+        - Execute an external script, whose location is passed in the 'file' parameter
+        - Execute the methods in an external script, by passing both the 'value' and 'file' parameter
+      The 'trigger' parameter is mandatory and should contain a method signature to bind the invocation of this rule to.
+      By default, a script will be executed before the actual method. Its execution can however be deferred after the method-execution, if the optional 'executeOnReturn' parameter is true.
+    -->
+    <rule name='script' precedence='all' text-parameter='value' interceptor='script' extends-rule='common'>
+      <!-- Should contain a method signature to bind the invocation of this rule to. -->
+      <parameter name='trigger' mandatory='true'/>
+      <!-- Should contain some expression. It is mandatory if no 'file' is passed. -->
+      <parameter name='value' mandatory='false'/>
+      <!-- Should contain the URL of an external script. It is mandatory if no 'value' is passed. -->
+      <parameter name='file' mandatory='false'/>
+      <!-- By default, a script will be executed before the actual method. Its execution can however be deferred after the method-execution, if the optional 'executeOnReturn' parameter is true. -->
+      <parameter name='executeOnReturn' mandatory='false' default='false' valid-values='true,false'/>
+    </rule>
+
+
+    <!--
+      Struts loads all Form classes during the parsing of the struts-config.xml file.
+      This is done mainly to determine if a Form is DynaForm or otherwise.
+      When using dynamic AOP, the loading of classes will cause the AOP engine to preBind aspects against those classes.
+      Larger the application, larger will be the initial load time.
+      To work around the issue, bind this Interceptor to the setType() method of Struts' FormBeanConfig class.
+      This interceptor will directly update the 'type' field of the FormBeanConfig instance with the input Form className, without loading the Form class.
+      NOTE: The impact of this workaround on applications having DynaForms is unknown.
+      If required, this Interceptor can be made more intelligent to lazily determine the Dynamic nature of the Form class.
+      Usage:
+           <metadata tag="jaffa.rules" class="org.apache.struts.config.FormBeanConfig">
+             <property name="type">
+               <struts-FormBeanConfig/>
+             </property>
+           </metadata>
+    -->
+    <rule name='struts-FormBeanConfig' precedence='first' interceptor='struts-FormBeanConfig'/>
+
+  </metadata>
+</aop>

@@ -1,0 +1,18 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the next release. For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+
+What's Changed / Improvements
+=====================================================
+- Regenerated the UserMaintenance and UserViewer components to avoid using the deprecated UserGridController
+
+What's Deleted/Deprecated
+=====================================================
+
+Bug Fixes
+=====================================================

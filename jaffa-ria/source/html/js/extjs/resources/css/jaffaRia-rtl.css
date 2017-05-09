@@ -1,0 +1,1458 @@
+/** 
+*	Whenever user selects Arabic Language then this CSS gets loaded.
+*	The code describes about RTL Changes.
+** @ author by Kavya 		
+*/
+
+/* Goldesp logo drop down window -- start menu user window alignment from left to right*/
+.ux-start-menu-apps-panel{
+	margin-left: 97px;
+}
+.ux-start-menu-tools-panel{ 
+	right: 194px;
+}
+.ux-start-menu-tl .x-panel-icon {
+    background-position: 204pt 4px;
+    padding-right: 20px !important;
+}
+/*start menu user window icons and all grid icons change the direction*/
+.x-menu-item-icon.startMenu-settings, .x-menu-item-icon.startMenu-logout, .x-menu-item-icon.startMenu-screen, 
+.x-menu-item-icon.x-group-by-icon, .x-menu-item-icon.x-cols-icon{
+	transform: rotate(360deg);
+}
+/*************************************************************************************************************************
+**************************  Common code for all over the application start here  ************************************
+*************************************************************************************************************************/
+.x-form-clear-left {
+	clear:right;
+}
+/*It is used for bottom bar alignment in all the screens */
+.x-panel-bbar {
+  direction: rtl;
+}
+/* common for grid columns, change added for cursor expand/collapse - JIRA */
+.x-grid3-hd.x-grid3-cell {
+cursor:col-resize;
+}
+.x-grid3-hd.x-grid3-cell .x-grid3-hd-inner{
+cursor:default;
+}
+/* added for filter drop down text fields */
+.x-menu-floating.x-layer.x-no-bg.x-hide-offsets .x-menu-list .x-box-layout-ct .x-box-inner .x-form-text.x-box-item{
+text-align: right;
+left:0px !important;
+width:130px !important 	;
+}
+/* added for left aligning the greater that,equal to and less than icons in number field filter */
+.x-menu-list-item-indent .x-menu-item-icon.x-rangemenu-lt ,
+.x-menu-list-item-indent .x-menu-item-icon.x-rangemenu-gt , 
+.x-menu-list-item-indent .x-menu-item-icon.ux-rangemenu-eq {
+left:158px;
+}
+
+/* added for left align number in number field filter*/
+.x-menu.x-menu-floating.x-layer.x-hide-offsets .x-menu-list .x-menu-list-item.x-menu-list-item-indent.x-form-text.x-form-field.x-form-num-field
+{
+text-align:left !important;
+}
+/* Move the cursor from right to left in pop up window for resizing */
+.x-resizable-handle.x-resizable-handle-east.x-unselectable.x-window-handle {
+cursor:e-resize;
+left:0px !important;
+}
+/* kit order desktop - cursor changes */
+.x-resizable-handle.x-resizable-handle-east.x-unselectable.x-window-handle {
+	cursor:e-resize;
+	left:0px !important;
+}
+/*Fast access alignment from left to right - changed for yes/no button alignment*/
+.x-toolbar .x-toolbar-ct .x-toolbar-left {
+	direction: rtl;
+	text-align:right;
+}
+/* pagination Issue in Showing Results Panel of finder patterns */
+.x-toolbar-right-ct .x-toolbar-right-row .x-toolbar-cell .xtb-text {
+	direction:rtl !important;
+}
+.x-toolbar-right-ct .x-toolbar-right-row .x-toolbar-cell .xtb-text a{
+	margin-left: 3px;
+    position: static;
+}
+/* Tree structure - Inside the grid */
+.ux-maximgb-tg-elbow-end { 
+	background-image:url("../images/default/tree/elbow-end-rtl.gif"); 
+}
+.ux-maximgb-tg-elbow { 
+	background-image:url(../images/default/tree/elbow-rtl.gif);
+}
+/*Upload image direction change from left to right */
+.ext-ux-uploaddialog-uploadstartbtn, .ext-ux-uploaddialog-resetbtn{
+	background-position: right !important;
+}
+/* added the below codes for grid column drop down image positioning */
+.ext-strict .x-menu-item-icon{
+	left: auto !important;
+	right: 3px !important;
+}
+.x-menu-excel-yes .x-menu-item-text{
+	padding: 2px 19px 0px 20px !important;
+	background-position: 100% !important;
+}
+.x-menu-excel-rend .x-menu-item-text{
+	padding-right: 19px !important;
+	background-position: 100% !important;
+}
+/* added for tick mark image in grid column drop down */
+.x-menu-item-checked .x-menu-item-icon{
+	transform:rotate(360deg);
+}
+/* added for Grid columns alignment in all Grids */
+.x-grid3-row td,.x-grid3-summary-row td{
+	line-height:13px;
+	vertical-align:top;
+	padding-left:2px !important;
+	padding-right:0px !important; 
+	-moz-user-select:none;
+	-khtml-user-select:none;
+	-webkit-user-select: ignore;
+}
+/* A to Z Icons reverse alignment in all patterns */
+.x-menu-list-item .x-menu-item.xg-hmenu-sort-asc.x-unselectable .x-menu-item-icon {
+	transform: rotate(360deg);
+}
+.x-menu-list-item .x-menu-item.xg-hmenu-sort-desc.x-unselectable .x-menu-item-icon {
+	transform: rotate(360deg);
+}
+/* changed alignment of pencil icons in maintenance screens  */
+a.edit-label, a.edit-label:hover{
+	padding-right:14px !important;
+}
+.x-tab-strip span.x-tab-strip-text{
+	padding-left:3px;
+}
+
+/*this class is used for column symbols "endwith" alignment changes*/
+.x-menu.x-menu-floating.x-layer.x-hide-offsets .x-menu-list .x-menu-item.x-unselectable 
+.x-menu-item-icon.x-sf-endwith{
+transform:rotate(360deg) !important;
+}
+
+/*This class is used for column symbols "beginswith" alignment changes*/
+.x-menu.x-menu-floating.x-layer.x-hide-offsets .x-menu-list .x-menu-item.x-unselectable 
+.x-menu-item-icon.x-sf-beginswith{
+transform:rotate(360deg) !important;
+}
+
+/*This class is used for column symbols "like" alignment changes*/
+.x-menu.x-menu-floating.x-layer.x-hide-offsets .x-menu-list .x-menu-item.x-unselectable 
+.x-menu-item-icon.x-sf-like{
+transform:rotate(360deg) !important;
+}
+/* Radio-box alignment changes */
+.x-form-check-wrap {
+padding:3px 4px 0px 0px !important;
+}
+
+/* second header in maintenance pages RTL changes for all common maintenance screens */
+.ext-ie11.ext-ie11m.x-border-layout-ct .x-panel.x-panel-noborder.x-border-panel .x-panel-bwrap .x-panel-body.jaffa-header-body.x-panel-body-noheader.x-panel-body-noborder{
+direction: rtl!important;
+}
+/* Second header in maintenance pages RTL changes for all common maintenance screens(NSN) i.e. LCN-564 */		
+.ext-ie11.ext-ie11m.x-border-layout-ct .x-panel.x-panel-noborder.x-border-panel .x-panel-bwrap .x-panel-body.jaffa-header-body.x-panel-body-noheader.x-panel-body-noborder p#headerText{		
+	direction:ltr !important;		
+}
+/*Popup Buttons alignment from right to left*/
+.x-window-footer.x-window-footer-noborder.x-panel-btns .x-panel-fbar.x-small-editor.x-toolbar-layout-ct .x-toolbar-ct td.x-toolbar-left, 
+.x-window-footer.x-panel-btns .x-panel-fbar.x-small-editor.x-toolbar-layout-ct td.x-toolbar-left{
+	float:right;
+}
+.x-window-footer.x-window-footer-noborder.x-panel-btns .x-panel-fbar.x-small-editor.x-toolbar-layout-ct .x-toolbar-ct td.x-toolbar-right,
+.x-window-footer.x-panel-btns .x-panel-fbar.x-small-editor.x-toolbar-layout-ct td.x-toolbar-right{
+	float:left;
+}
+/*Pop up Scroll bar changes JIRA-417*/
+.x-window-footer.x-panel-btns .x-panel-fbar.x-small-editor.x-toolbar-layout-ct, .x-window.ext-ux-uploaddialog-dialog.x-window-noborder.x-window-plain.x-resizable-pinned .x-window-bwrap
+.x-window-ml .x-window-mr .x-window-mc .x-window-body.x-window-body-noborder .x-panel.x-grid-panel.x-abs-layout-item
+.x-panel-bwrap .x-panel-bbar .x-toolbar.x-small-editor.x-toolbar-layout-ct{
+	overflow:hidden !important;
+}
+/*All Drop downs Loading image alignment from left to right*/
+.loading-indicator{
+	float: right;
+	background: no-repeat right;
+    padding-right: 20px;
+	background-image: url(../images/default/grid/loading.gif);
+}
+/*All Mask Pages Loading image alignment from left to right*/
+.x-mask-loading div {
+    background-color: #fbfbfb;
+    background-image: url(../images/default/grid/loading.gif);
+    padding: 5px 20px 5px 15px;
+    background-position:right;
+    direction:rtl;
+}
+/*All Maintenance Pages Loading image alignment from left to right*/
+#jaffa-page-loading-container .jaffa-page-loading-indicator {
+    padding: 5px 20px 5px 15px;
+    background: no-repeat right;
+    background-color: #fbfbfb;
+    background-image: url(../images/default/grid/loading.gif);
+    border: 1px solid;
+    border-color: #6593cf;
+    font: normal 11px tahoma, arial, helvetica, sans-serif;
+    color: #222;
+    direction:rtl;
+    
+}
+/*some Textboxs are overlapping space between those text boxes */
+.x-form-text, textarea.x-form-field{ 
+	margin-bottom:1.5px; 
+}
+
+
+/* Calendar, Next and Previous buttons are reverse  */
+.x-menu-list .x-menu-list-item.x-menu-date-item .x-date-picker.x-unselectable .x-date-mp table .x-date-mp-ybtn a {
+	transform: rotate(180deg);
+}
+/*ALL Grid Headers Alignment with spacing JIRA LCN-456*/
+.x-grid3-hd-inner {
+    padding: 4px 13px 4px 5px !important;
+}
+
+/*grid-panel scroll bar alignment left changes, Save and cancel in all inline screens*/
+.x-grid-panel{
+	direction:rtl;
+}
+
+/*************************************************************************************************************************
+**************************  Common code for all over the application End here  ************************************
+*************************************************************************************************************************/
+
+
+/*************************************************************************************************************************
+***********************************************  FINDER PATTREN STARTS HERE ****************************************
+*************************************************************************************************************************/
+
+.x-form-item-adj{
+	float:right;
+	direction:rtl;
+} 
+/**collapsible panel **/
+/*load buttons alignment from left to right*/
+.x-btn-text-icon .x-btn-icon-small-right .x-btn-text {
+	padding-left: 18px;
+}
+/*right side collapsble panel header*/
+.x-panel-header-text{
+	float:right;
+}
+/*field set*/
+.x-fieldset{
+	direction:rtl;
+}
+/*grid header*/
+.x-grid3-header, .x-grid3-body {
+	direction:rtl;
+}
+
+.ext-safari .x-form-field-wrap .x-form-trigger, 
+.ext-gecko .x-form-field-wrap .x-form-trigger, 
+.ext-webkit .x-form-field-wrap .x-form-trigger {
+    left: auto !important;
+}
+/*   */
+.x-fieldset-bwrap .x-fieldset-body.x-table-layout-ct .x-table-layout .x-table-layout-cell .x-form-field-wrap.x-form-field-trigger-wrap.x-item-disabled
+ .x-form-trigger {
+	margin-left:0px !important;
+	left:0px !important;
+ }
+/*Combo list alignment from left to right here overriding this left property*/
+.x-combo-list  {
+	direction: rtl !important;
+} 
+/* pop up window title  */
+.x-window-header-text{
+	float:right;
+	direction:rtl;
+}
+/*calendar-- change the direction from right to left*/
+.x-date-inner{
+	direction:ltr;
+}
+/* Finder Pattern text box alignment  */
+.x-panel-bwrap .x-panel-body.x-panel-body-noheader .x-form-item  {
+	direction:rtl;
+	text-align:right !important;
+}
+
+/* Added to display check box to right in dropdown in finder pattern */
+ .x-grid3-hd-row .x-grid3-hd.x-grid3-cell.x-grid3-td-checker.x-grid3-cell-first{
+	cursor: default !important;
+ }
+.x-layer.x-combo-list .x-combo-list-item .ux-lovcombo-icon.ux-lovcombo-icon-unchecked{
+    float: right;
+	background-position: 2px -1px ! important;
+}
+.x-layer.x-combo-list .x-combo-list-item .ux-lovcombo-icon.ux-lovcombo-icon-checked{
+    float: right;
+	background-position: 2px -1px ! important;
+}
+/* Edit icon was missing in grid columns for all finder pattern screens */
+.x-grid3-hd-row .x-grid3-hd.x-grid3-cell .x-grid3-hd-inner .edit-label{
+padding-right:17px;
+}
+
+/*************************************************************************************************************************
+***********************************************  FINDER PATTREN ENDS HERE ****************************************
+*************************************************************************************************************************/
+
+
+/*************************************************************************************************************************
+***********************************************  MULTI TAB PATTREN STARTS HERE ****************************************
+*************************************************************************************************************************/
+/*Multi tabs -- The tabs are displayed to the right side and the direction of the attributes are also changed*/
+ul.x-tab-strip li {
+    float: right;
+}
+ul.x-tab-strip {
+    display: block;
+    width: auto;
+}
+/* table in multi layout */
+.x-table-layout {
+	direction:rtl;
+	float:right;
+}
+
+/*In Tabs, Editor label alignment in left side */
+.x-tab-strip-edit{
+	left: 0px;
+} 
+/*Editor tab*/
+.x-html-editor-tb{
+	float:right;
+}
+/*In Editor tab alignments*/
+.x-html-editor-wrap {
+	margin:0px 0px 2px 0px; 
+} 
+/*In filed set radio buttons alignment from left to right*/
+.indent .x-fieldset-body .x-form-item .x-form-element .x-form-check-wrap .x-form-item .x-form-radio{
+	float:right;
+}
+/*comments tab*/
+.x-form-label-left .x-tab-item .x-html-editor-wrap {
+	margin: 0px;
+}
+/********accordion starts here*********/
+/*In tree structure */
+.indent ul .x-tree-root-node{
+	direction:rtl;
+}
+/*last updated, only text alignment*/
+.x-panel .x-grid-panel{
+	background-color:#fff !important;
+}
+/*********accordion ends here*********/
+.x-form-field-wrap{
+	text-align:right !important;	
+}
+/* Notifications Icon Image space alignment */
+.x-panel-header-text span img{
+	padding-right:20px;
+}
+.x-panel-header-text span{
+	padding-left:0px !important;
+}
+/* In Multi-tab accordion menu, other sections tab links removed Static ID and placed class hierarchy */
+.x-panel.x-panel-noborder.x-border-panel .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-panel.x-panel-noborder .x-panel-bwrap 
+.x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-border-layout-ct .x-panel.x-border-panel .x-panel-bwrap {
+	direction:rtl;
+}
+/* In Quantities - table labels alignments  */
+.x-form-item.x-form-item-label {
+	text-align: right;  
+}
+/*date images*/
+.x-date-left a, .x-date-right a {
+	transform:rotate(180deg);
+}
+.x-form-label-left .x-form-item-label{
+	float:right;
+}
+.x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .x-panel-body.x-panel-body-noborder .x-panel.x-form-label-left 
+.x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-form-item.x-form-item-adj.x-tab-item .x-form-element {
+	float: left !important;
+}
+/*right panel table alignment */
+td.line-table-cell .x-form-text {
+	text-align:right !important;
+}
+/*In Tabs close icon alignment*/
+.x-tab-strip-editable.x-tab-strip-closable .x-tab-left {
+    padding-left: 14px;
+}
+.x-tab-strip .x-tab-strip-editable.x-tab-strip-closable a.x-tab-strip-edit {
+    left: 12px;
+}
+/*Standards text area alignment changed*/
+.x-form-textarea.x-form-field{
+	margin:0px !important;
+}
+/* In Multi tab - Steps accordion Add button  added on aug4*/
+.x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-border-layout-ct .x-tab-panel.x-border-panel .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-top .x-panel.x-panel-noborder .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder.x-border-layout-ct > div:nth-child(2) {
+	margin-right:475px !important;
+	position:relative;
+}
+.x-panel.x-panel-noborder.x-form-label-left.x-border-panel .x-panel-bwrap .x-panel-body.x-panel-body-noborder.x-form  > .x-fieldset.x-form-label-left{
+	width:446px !important;
+}
+.x-form-textonly {
+	width:auto !important;
+}
+.x-menu-item.x-unselectable {
+	text-align:right !important;
+}
+.step-node-U .status-label{
+	margin-left: 20px;
+}
+/* Vendors tab table columns alignment*/
+.x-grid3-header-inner {
+    overflow: hidden; 
+	zoom: 1;
+    float: right !important;
+}
+/* Install/Remove Remove Part/CAGE text align to right */
+.x-grid3-row.x-grid3-row-expanded .x-grid3-row-table tr.x-grid3-row-body-tr .x-grid3-body-cell .x-grid3-row-body strong, b {
+	float:right !important;
+}
+.x-grid3-row.x-grid3-row-collapsed .x-grid3-row-table tr.x-grid3-row-body-tr .x-grid3-body-cell .x-grid3-row-body strong, b {
+	float:right !important;
+}
+/* Have used ID to override float:right condition return in js file,so it will not effect other patterns */
+#tabMaster .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-top .x-panel.x-panel-noborder .x-panel-bwrap .x-fieldset.x-form-label-left 
+.x-fieldset-bwrap .x-fieldset-body .x-form-item-bwrap .x-column-inner .x-panel.x-column .x-panel-bwrap .x-form-check-wrap 
+.x-form-cb-label {
+	float:none !important;
+}
+/* In Install/Remove Maintenance screen spacing between two fields */
+.x-panel.x-form-label-left.x-border-panel .x-panel-bwrap .indent.x-form .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-column-layout-ct .x-column-inner fieldset:nth-child(1){	
+	margin-right:0px !important;
+}
+/* In Install/Remove Maintenance screen spacing between two fields */
+.x-panel.x-form-label-left.x-border-panel .x-panel-bwrap .indent.x-form .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-column-layout-ct .x-column-inner fieldset:nth-child(2){	
+	margin-right:10px !important;
+}
+/*************************************************************************************************************************
+***********************************************  MULTI TAB PATTREN ENDS HERE ****************************************
+*************************************************************************************************************************/
+
+
+/*************************************************************************************************************************
+*********************************************** ANTI PATTREN STARTS HERE ****************************************
+*************************************************************************************************************************/
+/*In header section change the direction from left to right*/
+table.header{
+	direction:rtl;
+}
+
+/*For Navbar header, this right side image is used for arabic version, 
+this image changes the direction by rotating it by 180 degrees*/
+td.rightheader {
+	transform:rotate(180deg); 
+}
+/*In Navbar change the direction from left to right*/
+table.navBar{
+	direction:rtl;
+}
+/*In Navbar, right side nav text alignment from left to right*/
+div.navBar{
+	text-align:right;
+}
+td{
+	direction:rtl;
+}
+a#inquiriesButton img, a#setupButton  img, a#processButton img{
+	transform:rotate(180deg);
+}
+.jaffa-action-panel{
+	direction:rtl;
+}
+/*In Anti pattern, create new record--> popup will be appear.
+*In Popup alignment from left to right
+*/
+.x-window-body{
+	direction:rtl;
+}
+/*In Popup EditLabel alignment from left to right*/
+.x-window-header .edit-label{
+	float:right;
+}
+/*Check box alignment from left to right in field set wrap
+*We are overriding English property so that we are using important,
+ */
+.x-fieldset legend input{
+    margin-right: 0px !important;
+    float: right !important;
+    margin-top:2px;
+}
+.x-form-cb-label{
+	margin-right:4px;
+}
+/* Work-order Rules Maintenance */
+.x-fieldset-body .x-form-item  .x-form-element .x-form-textarea.x-form-field{
+	margin-right:104px;
+	margin-top:-20px;
+}
+/* System config Desktop - For Images to shift right for System Config Desktop */
+.intro-img {
+    vertical-align: top;
+    float: right !important;
+    padding: 5px;
+}
+/* System config Desktop - For content in Introduction Main page, We have to use ID because if we didn't use ID then we have to apply this changes 
+over all the full page but that will adversely effecting other patterns so we are using ID here */
+#tabMaster {
+	direction:rtl;
+}
+/* System config Desktop - For tree node in contents panel */
+.x-tree-root-ct.x-tree-no-lines {
+	direction:rtl;
+}
+/* Text alignment for text inside actions panel */
+.x-panel.jaffa-action-panel .x-menu-list.x-btn-text-icon  .x-menu-list-item .x-btn-text{
+	padding-right: 16px ! important;
+	padding-bottom: 3px;
+}
+/*************************************************************************************************************************
+*********************************************** ANTI PATTREN ENDS HERE ****************************************
+*************************************************************************************************************************/
+
+/*************************************************************************************************************************
+*********************************************** TABBED PAGE VIEWER STARTS HERE ****************************************
+*************************************************************************************************************************/
+/*In Item details tab, Drop down alignment
+ *we can combine as many classes and IDs into a single selector*/
+ /*
+ This id will be removed when the drop down issue is resolved while overloading it in customized js file.
+ */
+.x-form-element#x-form-el-segCodeField .x-form-field-wrap.x-form-field-trigger-wrap{
+	margin-top: 20px;
+}
+/*This Property used for Unnecessary labels are hide.
+*Here We using multiple class selectors*/
+.x-form-item.x-hide-label .x-form-item-label{
+	display:none;
+}
+/*Text area, Here We using multiple class selectors*/
+.x-form-item.x-form-item-adj .x-form-element .x-form-textarea.x-form-field{
+	margin:0px;
+}
+/* For Filed set arrow Symbols right alignment   */
+.x-fieldset legend .x-tool-toggle {
+	margin-left: 2px;
+    float: right !important;
+}
+.x-form-label-left.x-column .x-form-item .x-form-element{
+	padding-left: 0px !important;
+}
+
+/* For Unplanned Receipt Text boxes alignment  */
+/* This much class hierarchy is used to eliminate to using of ID to override float:Right condition 
+return in js file,so it will not effect other patterns.We can decrease the long class hierarchy by using id */
+.x-panel .x-panel-bwrap .x-panel-body.x-panel-body-noheader .x-tab-panel .x-tab-panel-bwrap 
+.x-tab-panel-body.x-tab-panel-body-top .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder.x-form
+.x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-form-item.x-form-item-adj 
+.x-form-element {
+	float:left !important;
+}
+/* For Unplanned Receipt Text Label alignment  */
+.x-panel .x-panel-bwrap .x-panel-body.x-panel-body-noheader .x-tab-panel .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-top .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder.x-form .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap {
+	clear:right;
+}
+/* In header section close button left alignment in Unplanned Receipt  */ 
+.x-panel .x-panel-bwrap .x-panel-tbar.x-panel-tbar-noheader .x-toolbar.x-small-editor.x-toolbar-layout-ct {
+	direction:rtl;
+}
+/* In Receiving Workbench - Unplanned Receipt for shifting text box to left   */
+/* This much class hierarchy is used to eliminate to using of ID to override float:Right condition 
+return in js file,so it will not effect other patterns.We can decrease the long class hierarchy by using id */
+.x-panel .x-panel-bwrap .x-panel-body.x-panel-body-noheader .x-tab-panel .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-top .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder.x-form .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-btn.x-btn-noicon {
+    float: right;
+    margin-right: 70px !important;
+}
+/* In Receiving Workbench 4th tab - For alignment of text to right */
+/* This much class hierarchy is used to eliminate to using of ID to override float:Right condition 
+return in js file,so it will not effect other patterns.We can decrease the long class hierarchy by using id */
+.x-panel .x-panel-bwrap .x-panel-body.x-panel-body-noheader .x-tab-panel .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-top .x-panel.x-panel-noborder .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder.x-column-layout-ct .x-column-inner .x-panel.x-panel-noborder.x-column .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-form-item > div {
+	float:right !important;
+	margin-bottom:2px;
+}
+/* In Popup window for shifting pencil symbol to left  */
+.x-window.x-window-plain.x-window-dlg .x-window-tl .x-window-tr .x-window-tc .x-window-header.x-unselectable.x-window-draggable .x-window-header-text .edit-label {
+	float:left !important;
+	margin-left:253px !important;
+}
+/* In Receiving Workbench for Received Quantity & Current Price data fields should be left aligned  */
+.x-panel .x-panel-bwrap .x-panel-body.x-panel-body-noheader .x-tab-panel .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-top .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder.x-form .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-form-item.x-form-item-adj .x-form-element .x-form-text.x-form-field.x-form-num-field{
+	text-align:left !important;
+}
+/*************************************************************************************************************************
+*********************************************** TABBED PAGE VIEWER ENDS HERE ****************************************
+*************************************************************************************************************************/
+
+/*************************************************************************************************************************
+***********************************************   Integrated In-Line Maintenance Starts Here *****************************
+*************************************************************************************************************************/
+/*Grid row, column direction from left to right */
+.x-row-editor .x-column-inner{
+	direction:rtl;
+	float:right;
+ }
+
+/*For the maintenance code level list add line setting it to right with resizing*/
+.x-row-editor{
+	left:0px !important;
+	right:0px !important;
+}
+/*************************************************************************************************************************
+***********************************************   Integrated In-Line Maintenance Ends Here *****************************
+*************************************************************************************************************************/ 
+
+/*************************************************************************************************************************
+***********************************************   Integrated Detail Maintenance Starts Here ******************************
+*************************************************************************************************************************/
+/*Date box fields alignment from left to right*/
+.ux-datetime-date,.x-form-field-wrap .x-form-field-trigger-wrap{
+	margin-right:0px;
+}
+.ux-datetime-date{
+	padding-right:0px !important;
+}
+/*In Panel header editor icon alignment from left to right*/
+.x-panel .x-panel-header a.edit-label{
+	float:right;
+}
+/* added to move label to the right in clock maintenance/work recording --On click of any record, panel appears at bottom*/
+.x-panel.x-panel-noborder.x-form-label-left.x-border-panel.x-panel-expanded .x-panel-bwrap .indent.x-panel-body-noborder.x-form .x-panel.x-panel-noborder.x-form-label-left{
+float:right;
+}
+.queue-wrap {
+	float:right !important;
+}
+/*************************************************************************************************************************
+***********************************************   Integrated Detail Maintenance Ends here  *******************************
+*************************************************************************************************************************/
+
+/*************************************************************************************************************************
+*********************************************** Single Page Viewer Starts here *************************************
+*************************************************************************************************************************/
+/*RTL Tree structure */
+.x-tree-node {
+    float: right;
+} 
+ .indent{
+    float: right;
+    direction: rtl;
+} 
+.indent ,.x-tree-root-ct .x-tree-lines, .x-tree-node{
+    float: none;
+} 
+.x-tree-node-el {
+    direction: rtl !important;
+}
+/*In Reading Panel,comment message right to left alignment */
+.ext-el-mask{
+text-align:right !important;
+}
+/*************************************************************************************************************************
+*********************************************** Single Page Viewer Ends here *************************************
+*************************************************************************************************************************/
+
+/*************************************************************************************************************************
+*********************************************** Single Page Tree Grid Viewer Starts here *******************************
+*************************************************************************************************************************/
+ .x-form-check-wrap ,.x-form-cb-label {
+	direction:rtl;
+} 
+.indent .x-fieldset-bwrap .x-fieldset-body .x-form-item .x-form-element .x-form-check-group{
+	float:left;
+}
+ .x-form-textonly #templateNameField-text{
+	width:auto;
+}
+/* For Tree grid structure alignment*/
+.ux-maximgb-tg-uiwrap{
+	float:right;
+}  
+/*In Details tab drop down alignment */
+.x-combo-list{
+	direction:rtl;
+}
+/*************************************************************************************************************************
+*********************************************** Single Page Tree Grid Viewer Ends here *************************************
+*************************************************************************************************************************/
+
+/*************************************************************************************************************************
+***********************************************  Wizard Creation patterns starts here *************************************
+*************************************************************************************************************************/
+/* For drop down enabling */
+.x-form-element {
+	position: static !important;   
+	margin-right:-2px;
+}
+/* In part Info panel text for the label is floating to left side  */
+.x-fieldset-bwrap .x-fieldset-body .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder 
+.x-form-item.x-form-item-adj .x-form-element {
+	padding-left:0px !important;
+	float:left;
+}
+
+/*************************************************************************************************************************
+***********************************************   Wizard Creation patterns Ends here *************************************
+*************************************************************************************************************************/
+
+/*************************************************************************************************************************
+***********************************************   Wizard Based Creation + Multi Page Tabbed Maintenance Starts here  *****
+*************************************************************************************************************************/
+
+/*Text area alignment in  Shipping Info*/
+.x-panel.x-column .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-form-item .x-form-textarea.x-form-field{
+	margin-right: 0px;
+    margin-top: 1px;
+}
+/*Left side alignment from left to right*/
+.x-list-body-inner dt{
+	text-align:right !important;
+}
+/* For Edit Panel in Update Record */
+.x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .x-panel-body 
+.x-form-item.x-hide-label .x-form-element div > .x-html-editor-wrap {
+	margin:0px;
+}
+/*  Create Work order - For Remarks text-field alignment  */
+/* This much class hierarchy is used to eliminate to using of ID to override padding-left condition 
+return in js file,so it will not effect other patterns.We can decrease the long class hierarchy by using id */
+.x-tab-panel.x-border-panel .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-top .x-panel.x-panel-noborder .x-panel-bwrap 
+.indent.x-panel-body-noheader.x-panel-body-noborder fieldset .x-fieldset-bwrap .indent .x-panel.x-panel-mc .x-panel-bwrap 
+.x-panel-body.x-panel-body-noheader.x-column-layout-ct .x-column-inner .x-column .x-form-item > div {
+	padding-right:0px !important;
+}
+/* For Radio-box text alignment in Wizard based creation - Works for every page */
+.x-form-element .x-form-check-wrap .x-form-cb-label {
+	float:none !important;
+}
+/*************************************************************************************************************************
+***********************************************   Wizard Based Creation + Multi Page Tabbed Maintenance Ends here  *******************************
+*************************************************************************************************************************/
+
+/*************************************************************************************************************************
+***********************************************   Single Page Maintenance Starts here  *******************************
+*************************************************************************************************************************/
+/* Added for JIRA -LCN-87 basic pattern grouping grid expand/collapse icon in parts*/
+.x-grid-group-hd div.x-grid-group-title {
+	background-position:99.7%;
+	padding: 3px 22px 4px 17px !important;  
+}
+#finderContainer-resultsPanel .x-grid3-scroller .x-grid3-body .x-grid-group  .x-grid-group-body .x-grid3-row{
+    border-width: 1px 0px 1px 2px !important;
+}
+/* changed label alignment for Prices tab*/
+.indent.x-panel-body-noborder .x-column-layout-ct .x-column-inner .x-form-label-left.x-column {
+margin-right:0px!important;
+}
+/* changed text alignment for Unit of measure tab*/
+.x-table-layout .x-table-layout-cell .x-form-display-field.x-form-item{
+ padding-left:6px !important;
+ }
+
+/*************************************************************************************************************************
+***********************************************   Single Page Maintenance Ends here  *************************************
+*************************************************************************************************************************/
+
+/*************************************************************************************************************************
+***********************************************  Multi Row Action Finder Starts here  *************************************
+*************************************************************************************************************************/
+/*No space between result panel and bottom border*/
+.x-tab-panel-body.x-tab-panel-body-top{
+	height:auto !important;
+}
+
+/*************************************************************************************************************************
+***********************************************   Multi Row Action Finder Ends here  *************************************
+*************************************************************************************************************************/
+
+/*************************************************************************************************************************
+**************************  Wizard Based Creation + Single Page Tabbed Maintenance  Starts here  ************************************
+*************************************************************************************************************************/
+/* For Lifting Entry - To adjust label name alignment  */
+.x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-form .x-form-item  .x-form-element .x-panel.x-form-radio-group.x-panel-noborder.x-form-field .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-column-layout-ct .x-column-inner .x-panel.x-panel-noborder.x-column .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-form-item.x-hide-label .x-form-element .x-form-check-wrap .x-form-cb-label {
+	float:none !important;
+}
+/*  Especially for IE browser, for pencil label alignment we used this code */
+.x-panel-bwrap .indent.x-panel-body-noborder fieldset legend .x-fieldset-header-text{
+	float:right;
+	margin:1px;
+}
+/* For Previous button alignment in Lifting Entry screen */
+.x-panel.x-panel-noborder.x-border-panel .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .x-panel-body.x-panel-body-noborder  .x-tab-panel .x-tab-panel-bwrap .x-tab-panel-bbar .x-toolbar.x-small-editor.x-toolbar-layout-ct table .x-toolbar-left {
+	float:right;
+	width:auto;
+}
+/* For Next button alignment in Lifting Entry screen */
+.x-panel.x-panel-noborder.x-border-panel .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .x-panel-body.x-panel-body-noborder  .x-tab-panel .x-tab-panel-bwrap .x-tab-panel-bbar .x-toolbar.x-small-editor.x-toolbar-layout-ct table .x-toolbar-right {
+	float:left;
+	width:auto;
+}
+/* For comment box alignment in lifting Entry second Screen, third tab*/
+.x-panel.x-panel-noborder.x-border-panel .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .x-panel-body.x-panel-body-noborder .x-tab-panel .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-top .x-panel.x-panel-noborder .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder .x-form-item.x-hide-label .x-form-element .x-html-editor-wrap {
+	margin:0px !important;
+	float:right;
+}
+/* For comment box alignment in lifting Entry second Screen, third tab*/
+.x-panel.x-panel-noborder.x-border-panel .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .x-panel-body.x-panel-body-noborder .x-tab-panel .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-top .x-panel.x-panel-noborder .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder .x-form-item.x-hide-label .x-form-element{
+	padding-right:0px !important;
+}
+/* For Cannibalization Maintenance screen - Data is over flowing to left side   */
+.x-box-inner fieldset .x-fieldset-bwrap .x-fieldset-body .-bwrap .-body.-body-noheader .x-panel.x-panel-noborder .x-panel-bwrap .x-form-item.x-form-item-adj 
+.x-form-element {
+	float:left !important;
+	padding-left: 0px !important;
+}
+
+/* Form DD250 Maintenance - Grid view rtl changes from right to left */
+#wizard .x-panel-bwrap .x-panel-body.x-panel-body-noheader .x-panel .x-panel-bwrap .x-panel-body.x-panel-body-noheader .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-border-layout-ct .x-tab-panel.x-tab-panel-noborder.x-border-panel .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-noborder.x-tab-panel-body-top .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-panel.x-form-label-left .x-panel-bwrap .x-panel-tbar .x-toolbar.x-small-editor.x-toolbar-layout-ct .x-toolbar-ct .x-toolbar-right{
+float:left !important;
+}
+
+/* Form DD250 Maintenance - no. of records icon alignment changes */
+#wizard .x-panel-bwrap .x-panel-body.x-panel-body-noheader .x-panel .x-panel-bwrap .x-panel-body.x-panel-body-noheader .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-border-layout-ct .x-tab-panel.x-tab-panel-noborder.x-border-panel .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-noborder.x-tab-panel-body-top .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-panel.x-form-label-left .x-panel-bwrap .x-panel-tbar .x-toolbar.x-small-editor.x-toolbar-layout-ct .x-toolbar-ct .x-toolbar-left{
+text-align:left !important;
+float:left !important;
+margin-bottom:-20px;
+}
+
+/* Form1149 Maintenance - no. of records icon alignment changes */
+ #wizard  .x-panel-bwrap .x-panel-body.x-panel-body-noheader .x-tab-panel.x-tab-panel-noborder .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-noborder.x-tab-panel-body-top .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-panel.x-form-label-left .x-panel-bwrap .x-panel-tbar .x-toolbar.x-small-editor.x-toolbar-layout-ct .x-toolbar-ct tbody tr .x-toolbar-right{
+float:left !important;
+}
+
+/* Form1149 Maintenance - Grid view rtl changes from right to left */
+#wizard .x-panel-bwrap .x-panel-body.x-panel-body-noheader .x-tab-panel.x-tab-panel-noborder .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-noborder.x-tab-panel-body-top .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-panel.x-form-label-left .x-panel-bwrap .x-panel-tbar .x-toolbar.x-small-editor.x-toolbar-layout-ct .x-toolbar-ct tbody tr .x-toolbar-left{
+text-align:left !important;
+float:left !important;
+margin-bottom:-20px;
+}
+
+/*************************************************************************************************************************
+**************************  Wizard Based Creation + Single Page Tabbed Maintenance  Ends here  ************************************
+*************************************************************************************************************************/
+
+/*************************************************************************************************************************
+***********************************************  Material Module Starts Here  *******************************************
+*************************************************************************************************************************/
+
+/* In Item Maintenance panel,On Click of Details tab in main page ,the labels alignment changes---Equipment Status Board*/
+.x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder.x-column-layout-ct .x-column-inner .x-column .x-form-item  .x-form-item-description{
+clear:none !important;
+float:right; 
+padding-right:4px !important;
+} 
+/* This much class hierarchy is used to eliminate to using of ID to override padding-right condition 
+return in js file,so it will not effect other patterns.We can decrease the long class hierarchy by using id */
+.x-tab-panel.x-border-panel .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-top .x-panel.x-panel-noborder .x-panel-bwrap 
+.indent.x-panel-body-noheader.x-panel-body-noborder .x-tab-panel.x-tab-panel-noborder .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-noborder.x-tab-panel-body-top 
+.x-panel.x-panel-noborder .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder .x-fieldset .x-fieldset-bwrap .x-fieldset-body 
+.x-panel.x-panel-noborder {
+	padding-right: 170px;
+}
+/* This much class hierarchy is used to eliminate to using of ID to override padding-left condition 
+return in js file,so it will not effect other patterns.We can decrease the long class hierarchy by using id */
+.x-tab-panel.x-border-panel .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-top .x-panel.x-panel-noborder .x-panel-bwrap 
+.indent.x-panel-body-noheader.x-panel-body-noborder .x-tab-panel.x-tab-panel-noborder .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-noborder.x-tab-panel-body-top 
+.x-panel.x-panel-noborder .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder .x-fieldset .x-fieldset-bwrap .x-fieldset-body 
+.x-form-item .x-form-element{
+	padding-right: 0px !important;
+}  
+
+
+/*In item maintenance general tab text box and drop-down alignment changes */
+.x-tab-panel.x-column .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-noborder.x-tab-panel-body-top .x-panel.x-panel-noborder 
+.x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-panel .x-panel-bwrap {
+	float:right !important;
+	margin:1px;
+}
+/* Have used ID to override padding-right condition return in js file,so it will not effect other patterns */
+#componentDetails .x-panel.x-panel-noborder .x-form-item.x-form-item-adj  .x-form-element{
+padding-left:0px !important;
+} 
+/* Have used ID to override direction:rtl condition return in js file ,so it will not effect other patterns*/
+#gridDetailPanelRef .x-panel-bwrap .x-panel-tbar.x-panel-tbar-noheader.x-panel-tbar-noborder .x-toolbar.x-small-editor.x-toolbar-layout-ct 
+.x-toolbar-ct .x-toolbar-right-ct table .x-toolbar-right-row .x-toolbar-cell label {
+	direction:ltr;
+	float:right;
+}
+/* Form DD250 Pattern- Have used ID to override float:left condition return in js file, so it will not effect other patterns */
+#templateFieldset .x-fieldset-bwrap .x-fieldset-body.x-table-layout-ct .x-table-layout .x-table-layout-cell 
+.x-form-field-wrap.x-form-field-trigger-wrap .x-form-text.x-form-field.x-form-item {
+	float:right !important;
+}
+/* material: box alignment changes */
+#tabMaster .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-top .x-panel.x-panel-noborder .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder.x-box-layout-ct .x-box-inner .x-panel.x-panel-noborder.x-box-item 
+.x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-box-layout-ct .x-box-inner .x-fieldset.x-box-item  {
+	left:0px !important;
+	top:-5px !important;
+}
+
+
+/* Supply Discrepancy Maintenance - Alignment changes for label and text-box */
+#tabMaster .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-top .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .indent.x-panel-body-noborder .x-fieldset .x-fieldset-bwrap .x-fieldset-body .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-column-layout-ct .x-column-inner .x-panel.x-column .x-panel-bwrap .x-panel-body.x-panel-body-noheader .x-form-item.x-hide-label .x-form-element .x-form-text.x-form-field{
+float:none !important;
+}
+
+/* Supply Discrepancy Maintenance - Alignment changes for label and text-box */
+.x-tab-panel .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-top .x-panel.x-panel-noborder .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder .x-fieldset .x-fieldset-bwrap .x-fieldset-body .x-form-item.x-hide-label .x-form-element{
+padding-right:0px !important;
+} 
+
+/* Disposition Schedule Maintenance - Number field alignment changes */
+#dispositionScheduleWizardPanel .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .indent.x-panel-body-noborder.x-form .x-form-item  .x-form-element .x-form-text.x-form-field.x-form-num-field{
+text-align:left !important;
+}
+/*JIRA LCN-540 Material--> supply discrepancy inquiry*/
+.x-tab-panel.x-border-panel .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-top .x-panel.x-panel-noborder
+.x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .indent.x-panel-body-noborder .x-fieldset .x-fieldset-bwrap .x-fieldset-body
+.x-panel.x-panel-noborder:last-child .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder
+.x-form-item.x-hide-label:last-child .x-form-element .x-form-field-wrap.x-form-field-trigger-wrap{
+	text-align:left !important;
+	margin-right: -12px;
+}
+/*************************************************************************************************************************
+********************************************** Material Module Ends here ************************************************
+*************************************************************************************************************************/
+
+/*********************************************************
+***************ASSETS MODULE STARTS HERE******************
+**********************************************************/
+/*Assets right side panel collapsed symbols alignment from right to left*/
+.x-panel.wo-nav-tbar .x-tool, .x-panel .x-tool{  
+	float:left !important;
+}
+/*alignments from text fields*/
+.x-form-item label.x-form-item-label {
+	float:right !important;
+	clear:right !important;
+	padding:1px 0 3px 3px !important;
+}
+.x-tab-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-form-item .x-form-item-description{
+	float:right;
+}
+/*Assets workbench text-fields alignment*/
+.x-panel-bwrap .x-fieldset.x-panel-expanded > div > div > div > div > div > div > div{
+	padding-left:0px !important;
+}
+/*Asset text only message alignment from left to right*/
+ #workflowConfirmationScreen .x-form-item-description {
+	float: right;
+ }
+ /*Maintenance Program EO Template Checkbox alignment*/
+
+.x-panel.x-panel-noborder.x-border-panel .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder 
+.x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-border-layout-ct .x-tab-panel.x-border-panel .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-top .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .x-form-item .x-form-element .x-form-check-wrap .x-form-checkbox.x-form-field {
+	float:right;
+}
+/*Maintenance Program-->Default task schedule under radio buttons text alignment*/
+#taskMaintenancePanel fieldset#automationPanel .automation-radio-text{
+	padding-right:0px !important;
+}
+/*Asset Workbench -- cost info radio buttons alignment*/
+#assetCostMaintenancePanel .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .indent #mainFieldSet .x-fieldset-body.x-fieldset-body-noborder .x-form-item.x-hide-label .x-form-radio.x-form-field{
+	float:right;
+}
+/*Maintenance Program Planning status board from and to alignment*/
+.psbMain .intervals td.intervalFrom, .psbMain .intervals td.intervalTo{
+	width: 40px;
+	padding-right: 20px;
+}
+/*Maintenance Program -- task maintenance--> automation tab*/
+#automationPanel .x-fieldset-body .x-form-item.x-check-group-alt.x-hide-label .x-form-element{
+	padding-right:0px !important;
+} 
+
+/*********************************************************
+***************ASSETS MODULE ENDS HERE******************
+**********************************************************/
+
+/*********************************************************
+***************ENTERPRISE MODULE STARTS HERE**************
+**********************************************************/
+/*Check box alignment in enterprise finder pattern*/
+#finderContainer .x-panel.x-border-panel .x-panel-bwrap .x-panel-body .x-fieldset .x-fieldset-bwrap .x-fieldset-body .x-form-item .x-form-item.x-form-item-adj .x-form-element .x-form-check-wrap{
+	position:absolute;
+	margin-right:180px;
+}
+/*Alignment for all text fields in approval status template grouping classes*/
+.x-panel.panel-with-tbar.x-border-panel .x-panel-bwrap .x-panel-mc .x-panel-body .x-form-item.x-form-item-adj,
+.x-panel.x-border-panel .x-panel-body .x-form-item.x-form-item-adj{
+	float:right;
+}
+/*filed set header image and check box alignment grouping class*/
+.x-fieldset .x-fieldset-header.x-unselectable .x-tool.x-tool-toggle, 
+.x-fieldset.x-panel-collapsed legend.x-fieldset-header.x-unselectable input{
+	float:right !important;
+}
+/*tabs alignment from left to right*/
+ul.x-tab-strip.x-tab-strip-top{
+	float:right;
+}
+li.x-tab-strip-editable{
+	float:right !important;
+}
+/*Approval status board check boxes alignment from left to right*/
+.x-fieldset legend input, .x-fieldset.x-panel-expanded .x-fieldset-header.x-unselectable input{
+	float:right !important;
+}
+/*CAGE Filed Alignment from left to right in requisition page*/
+#acquisitionrequestwizard .x-panel-bwrap .x-panel-body.x-panel-body-noheader .x-tab-panel.x-tab-panel-noborder .x-tab-panel-bwrap 
+.x-tab-panel-body.x-tab-panel-body-noborder.x-tab-panel-body-top .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap 
+.indent.x-panel-body-noheader.x-panel-body-noborder.x-form .x-panel .x-panel-bwrap .x-panel-ml .x-panel-mr 
+.x-panel-mc .x-panel-body.x-form.x-column-layout-ct .x-column-inner .x-fieldset.x-fieldset-noborder.x-form-label-left.x-column 
+.x-fieldset-bwrap .x-fieldset-body.x-fieldset-body-noheader.x-fieldset-body-noborder .x-form-item .x-form-element {
+	padding-right:2px !important;
+	float:right;
+} 
+/*ASB-part request maintenance--total asset visibility based on records, item manager changes panel alignment*/ 
+#designatorPanel .x-panel.x-grid-panel{
+	padding-top:0px !important;
+}
+/*********************************************************
+***************ENTERPRISE MODULE ENDS HERE**************
+**********************************************************/
+
+/******************************************************************************************************************
+***********************************Aircraft Data Module Starts here *********************************************
+*****************************************************************************************************************/
+
+/*Aircraft Readiness Log- This class is used for label alignment changes*/
+.x-panel-bwrap .indent.x-panel-body-noborder .x-form-item .x-form-element .x-form-textonly{
+	text-align:right !important;    
+}
+
+/* Have used ID to override padding-Right condition return in js file,so it will not effect other patterns */
+/* Aircraft Readiness Log - We should keep ID because same hierarchy is followed by most of the classes 
+so we should keep static ID and this change is for right to left alignment  */
+#aircraftReadinessLogMaintenancePanel .x-panel-bwrap .x-panel.x-panel-noborder .x-panel-bwrap .x-form-item.x-form-item-adj .x-form-element {
+	padding-left:0px !important;
+	float:right;
+}
+
+/*Aircraft Readiness Log- This class is used for text box data alignment changes*/
+#aircraftReadinessLogMaintenancePanel .x-form-item  .x-form-element .x-form-text.x-form-field.x-form-num-field{
+text-align:right !important;
+}
+
+/* Weekly Flight Schedule Maintenance- alignment changes from left to right */
+.x-panel.x-panel-noborder.x-box-item .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-panel 
+.x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .indent .x-form-item  .x-form-element .x-form-textonly {
+	text-align:right !important;
+}
+/* Weekly Flight Schedule Desktop- alignment changes from left to right */
+.x-column{
+float:right !important;
+}
+
+/* Usage Forecast- Labels, Radio-boxes and drop down alignment changes from left to right */
+.x-panel.x-panel-noborder.x-border-panel.x-panel-expanded .x-panel-bwrap 
+.indent.x-panel-body-noborder .x-panel.x-panel-noborder .x-panel-bwrap 
+.x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-form .x-panel.x-panel-noborder.x-form-label-left.x-abs-layout-item:first-child{
+	right:0px !important;
+}
+/* Usage Forecast- Labels, Radio-boxes and drop down alignment changes from left to right */
+.x-panel.x-panel-noborder.x-border-panel.x-panel-expanded .x-panel-bwrap .indent.x-panel-body-noborder .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-form .x-panel.x-panel-noborder.x-form-label-left.x-abs-layout-item:nth-child(2){
+	right:200px !important;
+} 
+/* Engineering Order-Task Definition Maintenance page- radio buttons alignment changes from left to right */
+.automation-radio-text{
+        padding-right : 30px !important;
+}
+	  
+/*Aircraft Status Board- label and text-align changes */
+.x-panel.x-form-label-left.x-column .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder{
+width:auto !important;
+}
+/* Structure Receiving - label text alignment changes from left to right */
+#structureGridDetailContainer .x-panel-body.x-panel-body-noborder .x-form-item .x-form-item-description{
+float:right;
+}
+
+/*Engineering Order Maintenance - Engineering order Detail tab Alignment changes*/
+#engineeringOrderDetailsPanel .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .indent.x-panel-body-noborder .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-column-layout-ct .x-column-inner .x-panel.x-panel-noborder.x-column .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-form-item.x-form-item-adj .x-form-element{
+	padding-right: 170px !important;
+}
+/* Engineering  Order Workbench-- drop-down text alignment changes*/
+#taskCardsGridPanel + div.x-panel.x-panel-noborder .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .indent.x-panel-body-noborder .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-form-item.x-form-item-adj .x-form-element-adj .x-form-textonly {
+	padding-right:179px;
+} 
+
+/* Usage Forecast - alignment changes for data text-box label */
+.x-panel.x-panel-noborder.x-border-panel.x-panel-expanded .x-panel-bwrap .indent.x-panel-body-noborder .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-form .x-panel.x-panel-noborder.x-form-label-left.x-abs-layout-item .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-form-item  .x-form-item-label{
+margin-bottom:1px !important;
+height:0px;
+width:auto !important;
+}
+
+/* Usage Forecast - alignment changes for text overlapping on grid*/
+.x-panel.x-panel-noborder.x-border-panel.x-panel-expanded .x-panel-bwrap .indent.x-panel-body-noborder .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-form .x-panel.x-panel-noborder.x-form-label-left.x-abs-layout-item .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-form-item .x-form-element .x-form-text.x-form-field{
+width:135px !important;
+}	
+
+/* Engineering  Order Workbench labels and drop down alignment changes */
+#engineeringOrderDetailsPanel .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .indent.x-panel-body-noborder .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-column-layout-ct .x-column-inner .x-panel.x-panel-noborder.x-column .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-form-item.x-form-item-adj  .x-form-element{
+padding-left:0px !important;
+}
+
+/* Aircraft Status Board - Item Maintenance - Structure Info Tab text alignment changes */
+#aircraftDetails .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder.x-form.x-column-layout-ct .x-column-inner .x-tab-panel.x-column .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-noborder.x-tab-panel-body-top .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-form-item.x-form-item-adj.x-tab-item .x-form-element{
+padding-left:0px !important;
+}
+
+/* Platform Status Board-Structure Conversion page-Structure Conversion- finish and next buttons alignment changes from left to right */
+#structure-maintenance-wizard .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-tab-panel .x-tab-panel-bwrap .x-tab-panel-bbar .x-toolbar.x-small-editor.x-toolbar-layout-ct{
+direction:rtl;
+}
+
+/* Structure Receiving Inquiry - Part Field dropdown alignment changes */
+#componentSection  .x-fieldset-bwrap .x-fieldset-body .x-form-label-left{
+float:left;
+}
+/* Engineering Order Maintenance - Item Applicability tab- two drop-down alignment issue changes */
+#itemAppDetailTabPanelRef .x-panel-body.x-panel-body-noborder.x-form .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-form-item.x-form-item-adj  .x-form-element .x-form-field-wrap.x-form-field-trigger-wrap{
+float:left;
+} 
+/* LCN-540 Bug fix changes - Supply Discrepancy Maintenance */
+.x-panel-tbar.x-panel-tbar-noborder + .indent.x-panel-body-noborder .x-fieldset .x-fieldset-bwrap .x-fieldset-body .x-form-item  .x-form-element .x-form-field-wrap.x-form-field-trigger-wrap .x-form-text.x-form-field{
+margin-right:-22px;
+}
+
+/* LCN-540 Bug fix changes -Supply Discrepancy Maintenance */
+.x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-column-layout-ct .x-column-inner .x-fieldset.x-fieldset-noborder.x-column .x-fieldset-bwrap .x-fieldset-body.x-fieldset-body-noheader.x-fieldset-body-noborder .x-form-item  .x-form-element .x-form-text.x-form-field{
+margin-right:-20px;
+}
+/******************************************************************************************************************
+************************************* Aircraft Data Module Ends here*******************************************
+*****************************************************************************************************************/
+
+/*********************************************************
+***************KITTING MODULE STARTS HERE**************
+**********************************************************/
+/*Left side alignment from left to right*/
+.x-list-body-inner dt{
+	text-align:right !important;
+}
+/* Added  for effectively text box , ID is used since padding-left is set in js, if we change this condition in js,it will effect all other text box alignments */ 
+
+#effectivitySearch .x-form-item  .x-form-element{
+	padding-right:255px !important;
+}
+/* added for disabling an icon in parts */
+.x-tab-panel.x-border-panel .x-tab-panel-header.x-tab-scrolling.x-tab-scrolling-top .x-tab-scroller-right.x-unselectable{
+	display: none;
+}
+.x-tab-panel.x-border-panel .x-tab-panel-header.x-tab-scrolling.x-tab-scrolling-top .x-tab-scroller-left.x-unselectable{
+	display: none;
+}
+/* added for summary tab in material */
+.indent.x-panel-body-noborder.x-column-layout-ct .x-column-inner .x-fieldset.x-column{
+	margin-right:10px;
+}
+/* added for spacing between label and checkbox alignment */
+.x-fieldset.x-panel-collapsed .x-fieldset-header.x-unselectable .x-fieldset-header-text{
+	padding-right: 3px;
+}
+.x-fieldset.x-panel-expanded .x-fieldset-header.x-unselectable .x-fieldset-header-text{
+	padding-right: 3px;
+}
+/* added for closing grid for results inside Edit box (+ add) option  */
+.MsoTableGrid tbody tr td:nth-child(2){
+	border-left-width:1px !important;
+	border-left-style: solid !important;
+} 
+/* Have used ID to override padding-Right condition return in js file,so it will not effect other patterns */
+/* Segregation Code field text alignment in create kit order */
+#createCard2_KIT_false #workOrderInputPanel .x-fieldset-bwrap .x-form-element{
+padding-left:0px !important;
+}
+/* added this for pop up box - Finish ,save,cancel, checkbox alignment (**delete if affecting other pop-ups)*/
+.x-window-mc .x-window-bbar .x-toolbar.x-small-editor.x-toolbar-layout-ct .x-toolbar-left{
+float:right;
+width:0%;
+}
+.x-window-mc .x-window-bbar .x-toolbar.x-small-editor.x-toolbar-layout-ct .x-toolbar-right{
+float:left;
+}
+/*Kitting Project code and remark textfield alignment*/
+#projectCode.x-form-text.x-form-field, #remark.x-form-text.x-form-field{
+	float:right;
+}
+/* Kit Order Maintenance-Other Sections-Click on Standards-Remarks box alignment  */
+#workOrderStandardDetail .x-panel.x-panel-noborder .indent.x-panel-body-noborder .x-panel.x-panel-noborder.x-form-label-left .x-panel-body.x-panel-body-noborder.x-form .x-form-text.x-form-field,#workOrderStandardDetail .x-panel.x-panel-noborder .indent.x-panel-body-noborder .x-panel.x-panel-noborder.x-form-label-left .x-panel-body.x-panel-body-noborder.x-form .x-form-textarea.x-form-field{
+	float:right;
+}
+
+/* Shipping / Inventory plan finder and kitting maintenance refresh button alignment ---LCN-532 Issue Changes*/
+#tabmaster .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-top .x-panel.x-panel-noborder .x-panel-bwrap 
+.x-panel.x-panel-noborder .x-panel-bwrap .x-form-item.x-form-item-adj .x-form-element {
+	padding-left:0px !important;
+}
+/* added for partpanel in kit contents maintenance page */
+#partPanel .x-panel.x-panel-noborder.x-form-label-left{
+float:left;
+}
+/*Kitting workbench -- in content section, part request text alignment*/ 
+#partNavPanel ul.x-tree-node-ct .x-tree-node-el.x-tree-node-leaf.x-unselectable .x-tree-node-anchor{
+	direction:ltr !important;
+	float:left !important;
+}
+#partNavPanel ul.x-tree-node-ct .x-tree-node-el.x-tree-node-leaf.x-unselectable .x-tree-node-anchor span{
+	margin-left:80px;
+}
+/*********************************************************
+***************KITTING MODULE ENDS HERE**************
+**********************************************************/
+
+/*********************************************************
+***************REQUISITIONING MODULE STARTS HERE**********
+**********************************************************/
+/* In Quantities legend panel, For text and text-boxes alignment. We have to keep width:80px because in English they had taken 80px so we are also taking 80px and we are marking it as important to consider this width especially for this.
+We have to use ID because if we don't use ID this width is effecting Dates Legend Panel and it is breaking in to 2 lines instead of single line in Dates Panel. In Java script we assigned the width:80px and text align:left but in Java Script it is considering only text-align:left but not considering Width:80px so we are assigning it here*/
+#quantitiespanel .x-fieldset-bwrap .x-fieldset-body .x-form-item .x-form-textonly {
+	width:80px !important;
+	text-align:left !important;
+}
+/* In Quantities text and text-boxes alignment */
+.x-box-inner fieldset .x-fieldset-bwrap .x-fieldset-body .x-form-item .x-form-item-description {
+	float:right !important;
+}
+/* Acquisition Request Inquiry - ERRC Code text field is combining with the label */
+.x-panel-bwrap .x-panel-body.x-panel-body-noheader .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder.x-form .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-form-item.x-form-item-adj .x-form-element {
+	float:left !important;
+}
+/* Have used ID to override float-left condition return in js file,so it will not effect other patterns */
+/*For Requested Quantities box adjustment */
+#requestedquantitiespanel .x-panel-bwrap {
+	float:right !important;
+}
+/* For text box extra label alignment   */
+fieldset .x-fieldset-bwrap .x-fieldset-body .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder 
+.x-form-item.x-form-item-adj .x-form-element-adj .x-form-textonly {
+	direction:ltr !important;
+}
+/* For EACH label in label alignment */
+.x-panel-body.x-panel-body-noheader .x-panel.x-form-label-left .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-form-item 
+.x-form-item-description {
+	float:right !important;
+	padding-right: 5px !important;
+}
+
+.x-panel.x-panel-noborder.x-panel-expanded .x-panel-bwrap .x-panel-body.x-panel-body-noborder .x-panel.x-grid-panel {
+	float:right !important;
+}
+/* In Bench Stock Order Maintenance - Select Defaults legend items alignment */
+.x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .indent.x-panel-body-noborder.x-form 
+fieldset.x-fieldset.x-form-label-left .x-fieldset-bwrap .x-fieldset-body .x-panel.wizard-header-cls,.x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .indent.x-panel-body-noborder.x-form fieldset.x-fieldset.x-form-label-left .x-fieldset-bwrap .x-fieldset-body .x-panel.wizard-footer-cls {
+	padding-right:0px;
+}
+/* Update Multiple Records in Acquisition Request Inquiry - space between check-box and text field */
+.x-panel.x-panel-noborder.x-border-panel .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .x-panel-body.x-panel-body-noborder .x-form-item .x-form-element .x-form-composite.x-box-layout-ct.x-form-field .x-box-inner .x-form-field-wrap.x-form-field-trigger-wrap.x-box-item input{
+	margin-left: -10px !important;
+}  
+.x-panel.x-panel-noborder.x-border-panel .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .x-panel-body.x-panel-body-noborder .x-form-item .x-form-element .x-form-composite.x-box-layout-ct.x-form-field .x-box-inner .x-box-item input.x-form-checkbox.x-form-field {
+	margin-left: 8px !important;
+} 
+/* For Finish and Save buttons alignment in Acquisition Request maintenance  */
+.x-panel.x-border-panel .x-panel-bwrap .x-panel-body.x-panel-body-noheader .x-tab-panel.x-tab-panel-noborder .x-tab-panel-bwrap
+.x-tab-panel-bbar.x-tab-panel-bbar-noborder .x-toolbar.x-small-editor.x-toolbar-layout-ct table.x-toolbar-ct .x-toolbar-right {
+	float:left;
+}
+/* For Previous button alignment in Acquisition Request maintenance  */
+.x-panel.x-border-panel .x-panel-bwrap .x-panel-body.x-panel-body-noheader .x-tab-panel.x-tab-panel-noborder .x-tab-panel-bwrap
+.x-tab-panel-bbar.x-tab-panel-bbar-noborder .x-toolbar.x-small-editor.x-toolbar-layout-ct table.x-toolbar-ct .x-toolbar-left {
+	float:right;
+	width:auto;
+}
+/* Bench Stock Template Maintenance screen, Details Tab --> View section, the formatting of the fields is not properly shown  */
+.x-panel .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-column-layout-ct .x-column-inner .x-panel.x-column .x-panel-bwrap .x-panel-body.x-panel-body-noheader .x-panel.x-form-label-left .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap {
+	float:right !important;
+}
+/* Acquisition Request Maintenance, Requested Quantities Label alignment  */ 
+.x-tab-panel.x-tab-panel-noborder .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-noborder.x-tab-panel-body-top 
+.x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder.x-form 
+fieldset.x-fieldset.x-form-label-left .x-fieldset-bwrap .x-fieldset-body .x-form-item.x-form-item-label {
+	margin-right: -39px;
+}
+
+/* Acquisition Request Maintenance - Estimated Completion Date field alignment */
+.x-panel-bwrap .x-panel-body.x-panel-body-noheader .x-tab-panel.x-tab-panel-noborder
+.x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-noborder.x-tab-panel-body-top .x-panel.x-panel-noborder.x-form-label-left
+.x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder.x-form .x-panel .x-panel-bwrap .x-panel-ml .x-panel-mr
+.x-panel-mc .x-panel-body.x-form.x-column-layout-ct .x-column-inner #detailpanel .x-fieldset-bwrap .x-fieldset-body.x-fieldset-body-noheader.x-fieldset-body-noborder
+.x-form-item .x-form-element .x-form-field-wrap.x-form-field-trigger-wrap {
+float:right;
+}
+/* Acquisition Request Maintenance - Estimated Completion Date field alignment */
+.x-panel.x-border-panel .x-panel-bwrap .x-panel-body.x-panel-body-noheader .x-tab-panel.x-tab-panel-noborder
+.x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-noborder.x-tab-panel-body-top .x-panel.x-panel-noborder.x-form-label-left
+.x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder.x-form .x-panel .x-panel-bwrap .x-panel-ml .x-panel-mr
+.x-panel-mc .x-panel-body.x-form.x-column-layout-ct .x-column-inner #detailpanel .x-fieldset-bwrap .x-fieldset-body.x-fieldset-body-noheader.x-fieldset-body-noborder
+.x-form-item .x-form-element .x-form-field-wrap.x-form-field-trigger-wrap {
+float:right;
+}
+/* Bench Stock Order Create - Alignment Changes */
+#workorder-maintenance-wizard .x-form-item .x-form-element .x-form-field-wrap.x-form-field-trigger-wrap{
+	float:right;
+}
+/*Date change the alignment -- create warehouseJIRA-516 */
+#defaultWorkOrderTab .x-grid3-col.x-grid3-cell.x-grid3-td-1.x-grid3-cell-last .x-grid3-cell-inner.x-grid3-col-1.x-unselectable span:nth-child(1){
+	float:left !important;
+}
+
+/* Requisitioning- Acquisition Request Inquiry- comment box alignment changes  */
+ #acquisitionrequestmainpanel .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder.x-form .x-tab-panel.x-tab-panel-noborder .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-noborder.x-tab-panel-body-top .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .x-panel-body.x-panel-body-noborder.x-form .x-form-item.x-tab-item.x-hide-label .x-form-element{
+padding-right:0px !important;
+}
+/*Requisitioning- Acquisition Request Maintenance screen*/
+#acquisitionrequestwizard .x-panel-bwrap .x-panel-body.x-panel-body-noheader{
+	overflow:hidden !important;
+}
+/*Requisitioning- Acquisition Request Maintenance screen based on record display image in content section*/
+#notificationLinksPanel .x-panel-header-text span img {
+    padding-right: 20px;
+    float: left;
+}
+/*********************************************************
+***************REQUISITIONING MODULE ENDS HERE************
+**********************************************************/
+
+/*********************************************************
+***************WORK RECORDING MODULE STARTS HERE************
+**********************************************************/
+/* Work Recording - Work Order Create - Results For Order Details alignment Issue */
+#workorder-maintenance-wizard .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder 
+.x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc 
+.indent.x-panel-body-noborder.x-form fieldset.x-fieldset.x-form-label-left .x-fieldset-bwrap .x-fieldset-body 
+.x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap {
+	float:right;
+}
+/* Work Recording - Work Order Create - Results For Order Details, Date Fields alignment Issue */
+#workorder-maintenance-wizard .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder 
+.x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc 
+.indent.x-panel-body-noborder.x-form fieldset.x-fieldset.x-form-label-left .x-fieldset-bwrap .x-fieldset-body 
+.x-form-item .x-form-element .x-form-field-wrap {
+	float:right;
+}
+/* Work recording - Work Centre maintenance - Create Work Order Hrs text-alignment */
+#workcenterMaintenancePanel .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .indent.x-box-layout-ct .x-box-inner .x-panel.x-box-item .x-panel-bwrap .x-panel-body.x-panel-body-noheader .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-form-item.x-form-item-adj .x-form-element {
+	padding-left:0px !important;
+}
+/* Work recording -Clock time Workbench, Hrs text alignment  */
+.x-panel.x-panel-noborder.x-form-label-left.x-border-panel.x-panel-expanded .x-panel-bwrap .indent.x-panel-body-noborder.x-form .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder 
+.x-form-item.x-form-item-adj .x-form-element #durationID {
+	text-align:left !important;
+}
+/* Work Recording->Work Package - Part Number record overlaps with the label*/
+#tabMaster .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-top .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .indent.x-panel-body-noborder.x-form .x-panel.x-panel-noborder.x-form-label-left 
+.x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-form-item.x-form-item-adj .x-form-element {
+	float:right;
+}
+/* Work recording - Work package - Create New record Home Screen Drop down extra text-alignment */
+.x-panel.x-panel-noborder.x-border-panel .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .indent.x-panel-body-noborder.x-form .x-form-item  + .x-form-label-left .-bwrap .-body.-body-noheader .x-form-label-left .-bwrap .-body.-body-noheader .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-form-item.x-form-item-adj .x-form-element-adj{
+	padding-right: 163px;
+}
+/* Work recording - Work package - Part Number record overlaps with the label  */
+.x-panel.x-panel-noborder.x-border-panel .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder 
+.x-panel.x-panel-noborder .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder.x-border-layout-ct 
+.x-tab-panel.x-border-panel .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-top .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .indent.x-panel-body-noborder.x-form .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap {
+	float:right;
+}
+/* Calendar Icon space between Ok and Cancel */
+.x-menu.x-menu-floating.x-layer.x-date-menu.x-menu-plain.x-menu-nosep.x-hide-offsets .x-menu-list .x-menu-list-item.x-menu-date-item .x-date-picker.x-unselectable .x-date-mp table tbody .x-date-mp-btns .x-date-mp-ok {
+	margin-left:4px;
+}
+/* Edit box alignment under Instructions tab */
+.x-tab-panel.x-tab-panel-noborder .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-noborder.x-tab-panel-body-top .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder .x-form-item.x-tab-item 
+.x-form-item-label {
+	text-align:left;
+}
+/*Create work order-- text filed alignment based on record*/
+#workorder-maintenance-wizard .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder
+.x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc
+.indent.x-panel-body-noborder.x-form fieldset.x-fieldset.x-form-label-left .x-fieldset-bwrap .x-fieldset-body div:nth-child(8) .x-form-element{
+	padding-right:0px !important;
+	float:right;
+}
+/* Check-box space alignment */
+#defaultProcessDetailsPanel + .x-panel.x-panel-noborder.x-form-label-right .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-body.x-panel-body-noborder.x-form .x-tab-panel.x-tab-panel-noborder .x-tab-panel-bwrap .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-form-item.x-tab-item .x-form-check-wrap .x-form-checkbox.x-form-field {
+	margin-right:-2px !important;
+}
+
+.x-grid3-cell-inner.x-grid3-col-16{
+direction:ltr !important;
+}
+.x-grid3-cell-inner.x-grid3-col-43{
+direction:ltr !important;
+float:right !important;
+}
+/*Record Based data alignment changes radio buttons,check boxs and field set box*/
+#installRemoveItemPanel .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder.x-form .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-column-layout-ct
+.x-column-inner .x-fieldset.x-form-label-left.x-column .x-fieldset-bwrap .x-fieldset-body .x-form-item .x-form-element .x-form-check-wrap {
+	float:right;
+}
+#workorder-maintenance-wizard .x-fieldset.x-form-label-left.x-column .x-fieldset-bwrap .x-fieldset-body .x-form-item  .x-form-element .x-form-check-wrap.x-item-disabled{
+	float:right;
+}
+#workorder-maintenance-wizard .x-fieldset.x-form-label-left.x-masked-relative.x-masked.x-column{
+	margin-right:10px !important;
+}
+/*Calibration Customer feedback popup text fields alignment**/
+.x-window.x-resizable-pinned .x-window-bwrap .x-window-ml .x-window-mr .x-window-mc .x-window-body.x-window-body-noborder .x-panel.x-panel-mc.x-panel-noborder .x-panel-bwrap 
+.x-panel-body.x-panel-body-noborder  .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-form-item.x-form-item-adj .x-form-element{
+	padding-left:0px !important; 
+	float:right !important;
+}
+/*work order sign off field in steps tab gird alignment jira LCN-572*/
+#workorder-maintenance-wizard .x-panel.x-panel-noborder.x-form-label-left.x-border-panel
+.x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc form.x-panel-body.x-panel-body-noborder.x-form
+.x-fieldset.x-form-label-left .x-fieldset-bwrap .x-fieldset-body .x-panel.x-form-label-left
+.x-panel-bwrap .x-panel-body.x-panel-body-noheader div:nth-child(2).x-panel.x-grid-panel{
+	float:right !important;
+}
+/*JIRA LCN-565*/
+.x-panel .x-panel-bwrap .x-panel-body.x-panel-body-noheader .x-tab-panel
+.x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-top div.x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-panel.x-panel-noborder.x-grid-panel{
+	width:auto !important;
+	margin-right:10px;
+} 
+/*Fix for JIRA LCN-580:Work Package maintenance screen*/
+.x-panel.x-panel-noborder.x-border-panel .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder
+.x-panel.x-panel-noborder .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder.x-border-layout-ct
+.x-tab-panel.x-border-panel .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-top
+.x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-ml .x-panel-mr
+.x-panel-mc .indent.x-panel-body-noborder.x-form div.x-form-item:nth-child(6)
+.x-form-element .x-form-field-wrap.x-form-field-trigger-wrap{
+	float:right;
+}
+/*Fix for JIRA LCN-610: Reliability tab text fileds alignment */
+.x-panel.x-panel-noborder.x-border-panel#workorder-maintenance-wizard .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-border-layout-ct .x-tab-panel.x-border-panel .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-top .x-panel.x-panel-noborder:nth-child(2) .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder div.x-form-item .x-form-element .x-form-text.x-form-field{
+	float:right !important;
+}
+/*Fix for JIRA LCN-620: Create Work order text filed alignment */
+#workorder-maintenance-wizard.x-panel.x-panel-noborder.x-border-panel .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .indent.x-panel-body-noborder.x-form  fieldset.x-fieldset.x-form-label-left .x-fieldset-bwrap .x-fieldset-body div:nth-child(10) .x-form-element input.x-form-text.x-form-field{
+	float:right;
+}
+/*Fix for JIRA LCN-610: Reliability tab text fileds alignment */
+.x-panel.x-panel-noborder.x-border-panel#workorder-maintenance-wizard .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-border-layout-ct .x-tab-panel.x-border-panel .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-top .x-panel.x-panel-noborder:nth-child(2) .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder div.x-form-item .x-form-element .x-form-text.x-form-field{
+	float:right !important;
+}
+/*********************************************************
+***************WORK RECORDING MODULE ENDS HERE************
+**********************************************************/

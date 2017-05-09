@@ -1,0 +1,1 @@
+    <form-bean name="user_userRequestLookupForm" type="org.jaffa.applications.jaffa.modules.user.components.userrequestlookup.ui.UserRequestLookupForm"/>

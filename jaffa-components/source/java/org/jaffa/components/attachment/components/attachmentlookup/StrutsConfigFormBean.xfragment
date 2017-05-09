@@ -1,0 +1,1 @@
+    <form-bean name="jaffa_attachment_attachmentLookupForm" type="org.jaffa.components.attachment.components.attachmentlookup.ui.AttachmentLookupForm"/>

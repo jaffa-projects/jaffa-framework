@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+  <!-- ================================================= -->
+  <!-- Rules for Domain Object TransactionDependency -->
+  <!-- ================================================= -->
+
+  <metadata tag="jaffa.rules" class="org.jaffa.transaction.domain.TransactionDependency">
+
+    <label>[label.Jaffa.Transaction.TransactionDependency]</label>
+
+    <property name="transactionId">
+      <label>[label.Jaffa.Transaction.TransactionDependency.TransactionId]</label>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="dependsOnId">
+      <label>[label.Jaffa.Transaction.TransactionDependency.DependsOnId]</label>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="status">
+      <label>[label.Jaffa.Transaction.TransactionDependency.Status]</label>
+      <max-length>20</max-length>
+      <in-list>O=[label.Jaffa.Transaction.TransactionDependency.Status.O],S=[label.Jaffa.Transaction.TransactionDependency.Status.S]</in-list>
+    </property>
+
+  </metadata>
+</aop>

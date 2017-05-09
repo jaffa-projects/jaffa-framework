@@ -1,0 +1,8 @@
+CREATE TABLE J_VALID_FIELD_VALUES (
+        TABLE_NAME          VARCHAR(20) NOT NULL,
+        FIELD_NAME          VARCHAR(30) NOT NULL,
+        LEGAL_VALUE          VARCHAR(200) NOT NULL,
+        DESCRIPTION          VARCHAR(80),
+        REMARKS          VARCHAR(250),
+        VERSION_NUMBER          BIGINT
+) ENGINE=InnoDB

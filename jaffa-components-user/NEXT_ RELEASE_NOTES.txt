@@ -1,0 +1,18 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the next release. For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+
+What's Changed / Improvements
+=====================================================
+- Moved the domain mapping files from resources/jdbcengine to resources/jdbcengine/jaffa; consistent with the other Jaffa modules
+
+What's Deleted/Deprecated
+=====================================================
+
+Bug Fixes
+=====================================================

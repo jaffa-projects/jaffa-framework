@@ -1,0 +1,5 @@
+    <forward name="jaffa_printing_formGroupFinderCriteria" path="jaffa.printing.formgroupfinder.criteria"/>
+    <forward name="jaffa_printing_formGroupFinderResults" path="jaffa.printing.formgroupfinder.results"/>
+    <forward name="jaffa_printing_formGroupFinderConsolidatedCriteriaAndResults" path="jaffa.printing.formgroupfinder.consolidatedCriteriaAndResults"/>
+    <forward name="jaffa_printing_formGroupFinderExcelResults" path="jaffa.printing.formgroupfinder.FinderExcelLayout"/>
+    <forward name="jaffa_printing_formGroupFinderXmlResults" path="jaffa.printing.formgroupfinder.FinderXmlLayout"/>

@@ -1,0 +1,23 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the next release. For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+- Enhanced JaffaScheduler to support an 'Every {day}' option in the Weekly and Monthly triggers.
+- Modified OracleJDBCDelegate to extract the original Connection before using Oracle-specific operations for creating BLOBs. This is necessary since the newer Quartz implementations (1.6.x) hide the original Connection inside a Proxy
+- Upgraded the quartz library from version 1.5.2 to 1.6.2.
+  - A new jar quartz-all-1.6.2.jar is now released by this project
+  - source/sql/upgrade_5.0.0_to_5.1.0 contains the upgrade scripts if the old Quartz tables were in use
+- Created a DatabasePoller to poll for the addition of new rows in a database table.
+
+What's Changed / Improvements
+=====================================================
+
+What's Deleted/Deprecated
+=====================================================
+
+Bug Fixes
+=====================================================

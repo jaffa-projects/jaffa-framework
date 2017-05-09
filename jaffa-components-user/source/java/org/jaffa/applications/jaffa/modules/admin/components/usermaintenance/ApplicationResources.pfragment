@@ -1,0 +1,11 @@
+title.Jaffa.Admin.UserMaintenance.maintenance=[label.Jaffa.Admin.User] Maintenance
+title.Jaffa.Admin.UserMaintenance.create=Create [label.Jaffa.Admin.User]
+title.Jaffa.Admin.UserMaintenance.update=Update [label.Jaffa.Admin.User]
+exception.org.jaffa.applications.jaffa.modules.admin.components.usermaintenance.tx.exceptions.UserMaintenanceException.noMaintAccess=User has no access to the perform this action
+exception.org.jaffa.applications.jaffa.modules.admin.components.usermaintenance.tx.exceptions.UserMaintenanceException.includedRoleMissing=The {1} role has to be selected when selecting {0}
+exception.org.jaffa.applications.jaffa.modules.admin.components.usermaintenance.tx.exceptions.UserMaintenanceException.excludedRolePresent=The {1} role cannot be selected when {0} has been selected
+exception.org.jaffa.applications.jaffa.modules.admin.components.usermaintenance.tx.exceptions.UserMaintenanceException.noAccess=User has no access to the perform this action
+exception.org.jaffa.applications.jaffa.modules.admin.components.usermaintenance.tx.exceptions.UserMaintenanceException.cannotUpdateOthersProfile=User has no privilege to update someone else's profile
+error.Jaffa.Admin.UserMaintenance.InvalidPassword.Different=Your [label.Jaffa.Admin.User.VerifyPassword] does not match your [label.Jaffa.Admin.User.Password]
+error.Jaffa.Admin.UserMaintenance.AddRolesSelection={1} was selected because {0} was selected.
+error.Jaffa.Admin.UserMaintenance.ExcludedRolesSelection=The following roles {1} cannot be selected when {0} has been selected.

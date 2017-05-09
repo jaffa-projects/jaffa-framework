@@ -1,0 +1,2 @@
+    <form-bean      name="jaffa_printing_formGroupMaintenanceForm"
+                    type="org.jaffa.modules.printing.components.formgroupmaintenance.ui.FormGroupMaintenanceForm"/>

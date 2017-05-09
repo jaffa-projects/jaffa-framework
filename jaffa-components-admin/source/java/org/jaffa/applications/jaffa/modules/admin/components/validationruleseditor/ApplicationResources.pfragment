@@ -1,0 +1,12 @@
+label.Jaffa.Admin.ValidationRulesEditor.Name=File Name
+label.Jaffa.Admin.ValidationRulesEditor.Variation=Variation
+label.Jaffa.Admin.ValidationRulesEditor.ValidationRules=Validation Rules
+label.Jaffa.Admin.ValidationRulesEditor.CoreRulesUrl=Core Rules Url
+label.Jaffa.Admin.ValidationRulesEditor.ValidatorsUrls=Validators Urls
+label.Jaffa.Admin.ValidationRulesEditor.VariationRulesDir=Variation Rules Dir
+label.Jaffa.Admin.ValidationRulesEditor.NoRecords=None
+
+title.Jaffa.Admin.ValidationRulesEditor=Validation Rules Editor
+title.Jaffa.Admin.ValidationRulesEditor.Editor=View/Edit File
+title.Jaffa.Admin.ValidationRulesEditor.RulesList=Validation Rules Editor
+title.Jaffa.Admin.ValidationRulesEditor.Rules=Available Variation Rules Files

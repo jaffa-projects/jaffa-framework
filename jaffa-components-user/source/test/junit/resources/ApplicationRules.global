@@ -1,0 +1,10 @@
+# Global Settings
+jaffa.email.smtpHost=<<JUNIT.MAIL.SERVER>>
+jaffa.email.smtpLocalHost=<<JUNIT.MAIL.SERVER.LOCALHOST>>
+jaffa.email.smtpUser=<<JUNIT.MAIL.SERVER.USER>>
+jaffa.email.smtpPassword=<<JUNIT.MAIL.SERVER.PASS>>
+jaffa.email.administrator=junit@jaffa.sf.net
+
+
+test.rule.1=global
+test.rule.2=global

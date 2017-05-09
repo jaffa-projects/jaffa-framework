@@ -1,0 +1,3 @@
+    <business-function name="Jaffa.Admin.Log4j">
+        <description>Able to run the Log4j Configuration component</description>
+    </business-function>

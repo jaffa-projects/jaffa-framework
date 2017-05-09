@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.persistence.domainobjects.PartPicture">
+        <map-to table="ZZ_JUT_PART_PIC" />
+
+        <field name="Part" use-member="m_part" type="java.lang.String" primary-key="true">
+            <sql name="PART" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="SmallPicture" use-member="m_smallPicture" type="byte[]">
+            <sql name="SMALL_PICTURE" type="RAW" dirty="ignore"/>
+        </field>
+
+        <field name="Picture" use-member="m_picture" type="byte[]">
+            <sql name="PICTURE" type="LONGRAW" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

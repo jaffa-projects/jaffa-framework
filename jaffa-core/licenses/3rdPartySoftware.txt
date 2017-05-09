@@ -1,0 +1,117 @@
+The Jaffa Project acknowledges the use of the following Projects. Where permitted Jaffa includes
+files from some of these projects in various distributions. The Jaffa Group makes make every
+effort to comply with the licenses of all included projects. As such all projects are listed here,
+and any related project license has been included in this directory. Anyone re-distributing JAFFA must,
+in addition to complying with our license, also comply with the licenses of these other projects.
+
+The Jaffa Group also makes every attempt to guarentee that all code in JAFFA is the original 
+work of the contributors, and they grant express permission for their work to be used in 
+accordance to JAFFA's software license (LGPL). All committers to the Jaffa project are the original
+copyright holders of their respective work.
+
+Below is a list of projects used in the various Jaffa Modules
+
+Jaffa Core
+==========
+
+Apache Jakarta Commons - ASF License v2.0
+    commons-beanutils.jar
+    commons-collections.jar
+    commons-dbcp-1.1.jar
+    commons-digester.jar
+    commons-fileupload.jar
+    commons-lang.jar
+    commons-logging.jar
+    commons-pool-1.1.jar
+    commons-validator.jar
+
+Apache Jakarta Log4J - ASF License v2.0
+    log4j.jar
+
+Apache Jakarta Oro - ASF License v2.0
+    jakarta-oro.jar
+    
+Apache Jakarta Struts - ASF License v2.0
+    struts-legacy.jar
+    struts.jar
+    
+Apache Jakarta Taglibs - ASF License v2.0
+    tlddoc.jar
+    
+Apache Jakarta Tomcat - ASF License v2.0
+    catalina_4_1_24.jar
+    
+JDOM Project - Open Source
+    jdom.jar
+    
+Apache XML Xerces 2 - ASF License v1.1
+    xerces.jar
+    
+Java WSDP v1.0 - Sun Microsystems, Inc. Binary Code License Agreement.
+    jaxb-api-1.0.jar
+    jaxb-impl-1.0.jar
+    jaxb-libs-1.0.jar
+    jaxb-xjc-1.0.jar
+
+JavaBeans Activation Framework - Sun Microsystems, Inc. Binary Code License Agreement.
+    activation.jar
+    
+JavaMail - Sun Microsystems, Inc. Binary Code License Agreement.    
+    mail.jar
+    
+JBoss AS v4.0.x - Lesser GNU Public License v2.1
+    jboss-j2ee.jar
+    javax.servlet.jar
+    javax.servlet.jsp.jar
+    
+
+Jaffa Components
+================
+
+Apache Jakarta Velocity - ASF License v2.0
+    velocity-1.7.jar
+    
+iText - Mozilla Public License and Lesser GNU Public License
+    itext-1.02b.jar
+    itext-xml-1.02.jar
+
+
+Jaffa Rules
+===========
+
+Apache Jakarta BSF - ASF License v1.1
+    bsf.jar
+    
+BeanShell - Lesser GNU Public License v2.1 / Sun Public License Version 1.0
+    bsh-2.0b2.jar
+
+JBoss AOP - Lesser GNU Public License v2.1
+    concurrent.jar
+    javassist.jar
+    jboss-aop.jar
+    jboss-aspect-library.jar
+    jboss-common.jar
+    qdox.jar
+    trove.jar
+
+
+Tools
+=====
+
+HTML Tidy - W3C http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231
+    Tidy.jar
+
+HttpUnit - Open Source    
+    httpunit.jar
+
+JUnit - IBM's Common Public License Version 0.5
+    junit.jar
+
+WebMacro - Semiotek Public License    
+    webmacro.jar
+
+Emma -  IBM Common Public License v1.0   
+    emma.jar
+
+MySql - GNU Public License v2 and Commercial
+    mysql-connector-java-3.1.8-bin.jar    

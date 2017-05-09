@@ -1,0 +1,32 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the JAFFA Rules 1.1.0 Release (Since v1.0.0). For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+- Added the HyperlinkPropertyRule. This will be used by the TextTag to generate hyperlinks based on the <hyperlink> rules defined for a property
+
+What's Changed / Improvements
+=====================================================
+- JaffaRules is now base-lined off JBoss AOP 1.3
+- Each class that has rules is added to the implicit include list
+- JaffaRules is now base-lined off JBoss AOP 1.3.1, the Initialize rule has been updated to use the 'constructor()' pointcut. This means that we no longer need to use the reflection aspect.
+- Enhanced the JaffaClassMetaDataLoader to generate the JBossAOP equivalent synatx of the jaffa rules. This new feature is enabled by passing the system property 'jaffa.aop.jbossAOPSyntaxFile', which should point to a File for writing the syntax to.
+- Applied a temporary hack to JaffaClassMetaDataLoader to support inheritance
+  - It changes a pointcut to a method, if that method is only implemented in a base class
+  - This hack can be disabled by setting the internal static c_applyInheritanceHack to false
+  - JBoss is expected to fix the inheritance issues in their next jboss-aop_2.0 release, at which point this hack should be disabled.
+  - Created a property 'classNameForInheritanceHack' in the RuleInterceptor class to support the InheritanceHack
+
+
+What's Deleted/Deprecated
+=====================================================
+- Deprecated org.jboss.aop.JaffaClassAdvisorHelper, move to new package org.jaffa.rules.aop.metadata.ClassAdvisorHelper
+- Removed IEnforceRules class. It has been redundant for a long time, since the JaffaClassMetaDataLoader was modified to mixin the various Interfaces via its INTRODUCTIONS field. All references to IEnforceRules have been removed
+
+Bug Fixes
+=====================================================
+- JBoss bug JBAOP-139 fixed as of 1.3, removing the need for source\ext\jboss\java\org\jboss\aop\AspectManager.java. There is no need for the Ant Task "compileJBoss","buildJarJbossAop", and no need to deploy jboss-aop-custom.jar
+- Fixed NPE thrown by ClassAdvisorHelper.debugListInterceptors when using v1.3.1

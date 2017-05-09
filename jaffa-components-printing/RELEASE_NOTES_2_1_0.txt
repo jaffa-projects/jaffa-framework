@@ -1,0 +1,20 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the next release. For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+
+What's Changed / Improvements
+=====================================================
+- Merged in FormSelection changes in from 1.2.0 to allow direct display of forms.
+- Modified so no document is generated if there is no DOM returned from the DataBean
+
+What's Deleted/Deprecated
+=====================================================
+
+Bug Fixes
+=====================================================
+- When using sample data in the iText print-preview, it was using the wrong encoding type in the URLEncoder. It not correctly uses UTF-8

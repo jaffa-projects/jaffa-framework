@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Domain Creator Meta 1.1//EN" "http://jaffa.sourceforge.net/DTD/domain-creator-meta_1_1.dtd">
+<Root>
+  <DomainObject>AuditTransactionOverflow</DomainObject>
+  <DomainPackage>org.jaffa.components.audit.domain</DomainPackage>
+  <DatabaseTable>J_AUDIT_TRANSACTION_OVERFLOW</DatabaseTable>
+  <MappingPackage>resources/jdbcengine/jaffa</MappingPackage>
+  <PatternTemplate>patterns/library/domain_creator_1_1/DomainCreatorPattern.xml</PatternTemplate>
+  <Description>Audit Transaction Field Overflow From and To Values</Description>
+  <LabelToken>[label.Jaffa.Audit.AuditTransactionOverflow]</LabelToken>
+  <Fields>
+    <Field>
+      <Name>FieldId</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>FIELD_ID</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <PrimaryKey>T</PrimaryKey>
+      <Description>Technical Key</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransactionOverflow.FieldId]</LabelToken>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>ObjectId</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>OBJECT_ID</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Technical Key for the parent AuditTransactionObject record</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransactionOverflow.ObjectId]</LabelToken>
+      <Mandatory>T</Mandatory>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>FieldName</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>FIELD_NAME</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Field Name</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransactionOverflow.FieldName]</LabelToken>
+      <Mandatory>T</Mandatory>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>FromValue</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>FROM_VALUE</DatabaseFieldName>
+      <DatabaseDataType>CLOB</DatabaseDataType>
+      <Description>Original value for the field</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransactionOverflow.FromValue]</LabelToken>
+      <CaseType>MixedCase</CaseType>
+    </Field>
+    <Field>
+      <Name>ToValue</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>TO_VALUE</DatabaseFieldName>
+      <DatabaseDataType>CLOB</DatabaseDataType>
+      <Description>New value for the field</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransactionOverflow.ToValue]</LabelToken>
+      <CaseType>MixedCase</CaseType>
+    </Field>
+  </Fields>
+</Root>

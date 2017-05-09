@@ -1,0 +1,4 @@
+    <component id="Jaffa.User.UserRequestViewer">
+        <class>org.jaffa.applications.jaffa.modules.user.components.userrequestviewer.ui.UserRequestViewerComponent</class>
+        <type>ObjectViewer</type>
+    </component>

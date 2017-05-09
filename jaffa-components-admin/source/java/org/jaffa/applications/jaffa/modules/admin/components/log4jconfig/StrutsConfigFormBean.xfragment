@@ -1,0 +1,3 @@
+        <!-- Jaffa Log4j Config -->
+        <form-bean      name="admin_log4jConfigForm"
+                        type="org.jaffa.applications.jaffa.modules.admin.components.log4jconfig.ui.Log4jConfigForm"/>

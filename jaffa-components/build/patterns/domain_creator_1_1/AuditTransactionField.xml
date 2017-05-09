@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Domain Creator Meta 1.1//EN" "http://jaffa.sourceforge.net/DTD/domain-creator-meta_1_1.dtd">
+<Root>
+  <DomainObject>AuditTransactionField</DomainObject>
+  <DomainPackage>org.jaffa.components.audit.domain</DomainPackage>
+  <DatabaseTable>J_AUDIT_TRANSACTION_FIELDS</DatabaseTable>
+  <MappingPackage>resources/jdbcengine/jaffa</MappingPackage>
+  <PatternTemplate>patterns/library/domain_creator_1_1/DomainCreatorPattern.xml</PatternTemplate>
+  <Description>A field for an AuditTransactionObject</Description>
+  <LabelToken>[label.Jaffa.Audit.AuditTransactionField]</LabelToken>
+  <Fields>
+    <Field>
+      <Name>FieldId</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>FIELD_ID</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <PrimaryKey>T</PrimaryKey>
+      <Description>Technical Key</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransactionField.FieldId]</LabelToken>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>ObjectId</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>OBJECT_ID</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Technical Key for the parent AuditTransactionObject record</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransactionField.ObjectId]</LabelToken>
+      <Mandatory>T</Mandatory>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>FieldName</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>FIELD_NAME</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Field Name</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransactionField.FieldName]</LabelToken>
+      <Mandatory>T</Mandatory>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>FromValue</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>FROM_VALUE</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Original value for the field</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransactionField.FromValue]</LabelToken>
+      <IntSize>2000</IntSize>
+    </Field>
+    <Field>
+      <Name>ToValue</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>TO_VALUE</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>New value for the field</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransactionField.ToValue]</LabelToken>
+      <IntSize>2000</IntSize>
+    </Field>
+    <Field>
+      <Name>Changed</Name>
+      <DataType>java.lang.Boolean</DataType>
+      <DatabaseFieldName>CHANGED</DatabaseFieldName>
+      <DatabaseDataType>BOOLEAN</DatabaseDataType>
+      <Description>Indicates if the field was changed</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransactionField.Changed]</LabelToken>
+    </Field>
+    <Field>
+      <Name>Flex</Name>
+      <DataType>java.lang.Boolean</DataType>
+      <DatabaseFieldName>FLEX</DatabaseFieldName>
+      <DatabaseDataType>BOOLEAN</DatabaseDataType>
+      <Description>Indicates if the field is a flex field</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransactionField.Flex]</LabelToken>
+    </Field>
+    <Field>
+      <Name>OverflowFlag</Name>
+      <DataType>java.lang.Boolean</DataType>
+      <DatabaseFieldName>OVERFLOW_FLAG</DatabaseFieldName>
+      <DatabaseDataType>BOOLEAN</DatabaseDataType>
+      <Description>Flag to specify that the From and To Values are more than 2000 chars and the complete values were stored in a child table</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransactionField.OverflowFlag]</LabelToken>
+    </Field>
+    <Field>
+      <Name>MultilineHtmlFlag</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>MULTILINE_HTML_FLAG</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Flag to specify if the Field being audited is a multi line or htm</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransactionField.MultilineHtmlFlag]</LabelToken>
+      <IntSize>1</IntSize>
+    </Field>
+  </Fields>
+  <Relationships>
+    <Relationship>
+      <Name>AuditTransactionObject</Name>
+      <ToDomainObject>AuditTransactionObject</ToDomainObject>
+      <ToDomainPackage>org.jaffa.components.audit.domain</ToDomainPackage>
+      <FromCardinality>0..*</FromCardinality>
+      <ToCardinality>1</ToCardinality>
+      <Type>association</Type>
+      <FromFields>
+        <RelationshipField>
+          <Name>ObjectId</Name>
+        </RelationshipField>
+      </FromFields>
+      <ToFields>
+        <RelationshipField>
+          <Name>ObjectId</Name>
+        </RelationshipField>
+      </ToFields>
+    </Relationship>
+    <Relationship>
+      <Name>AuditTransactionOverflow</Name>
+      <ToDomainObject>AuditTransactionOverflow</ToDomainObject>
+      <ToDomainPackage>org.jaffa.components.audit.domain</ToDomainPackage>
+      <FromCardinality>1</FromCardinality>
+      <ToCardinality>0..1</ToCardinality>
+      <Type>composition</Type>
+      <FromFields>
+        <RelationshipField>
+          <Name>FieldId</Name>
+        </RelationshipField>
+        <RelationshipField>
+          <Name>ObjectId</Name>
+        </RelationshipField>
+      </FromFields>
+      <ToFields>
+        <RelationshipField>
+          <Name>FieldId</Name>
+        </RelationshipField>
+        <RelationshipField>
+          <Name>ObjectId</Name>
+        </RelationshipField>
+      </ToFields>
+    </Relationship>
+  </Relationships>
+</Root>

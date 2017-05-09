@@ -1,0 +1,3 @@
+    <!-- PrinterOutputTypeViewer Form -->
+    <form-bean      name="jaffa_printing_printerOutputTypeViewerForm"
+                    type="org.jaffa.modules.printing.components.printeroutputtypeviewer.ui.PrinterOutputTypeViewerForm"/>

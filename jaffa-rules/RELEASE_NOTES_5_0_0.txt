@@ -1,0 +1,35 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the next release. For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+- Changed the '4-rules-aop.xml' rules file to use the new MetaDataLoader
+- Upgraded to the latest stable version jboss-aop_1.5.6.GA
+- Created showRules.jsp, which can be used as a debug tool for displaying metadata and bindings for a class
+- Created a ScriptHelper which utilizes the scripting support new in Java6. It replaces the old BSFHelper
+- Replaced bsh-2.0b2.jar with bsh-2.0b5.jar, since it provides the implementation for the Java6 ScriptEngine
+- Enhanced JaffaRules to selectively inherit rules
+  - Enhanced the Realm definition to support an 'inherit-rules-filter' to include/exclude a set of rules when inheriting from another class
+  - Introduced a 'criteria' realm that maps to Finder, Lookup, Viewer and GraphCriteria
+  - Enhanced the <super> rule to support includes/excludes
+- Introduced the component-guard rule to limit access to a method, based on the user's access to a given component
+- Introduced the function-guard rule to limit access to a method, based on the user's access to a given business-function
+
+What's Changed / Improvements
+=====================================================
+- Enhanced the ScriptInterceptor to pass the arguments of the intercepted-method to the context of ScriptingEngine
+- The execution-realm for the mandatory rule has now been set to 'business'
+- Enhanced the InitializeInterceptor to bind to all constructors of a class; not just the default constructor
+- Enhanced the ForeignKeyInterceptor to determine the primaryKeyLabel for passing into the InvalidForeignKeyException
+
+What's Deleted/Deprecated
+=====================================================
+- Deleted the older JaffaRules implementation in the 'org.jaffa.rules.aop' package
+- Deleted the extension to Aopc task, since it is not relevant anymore in jboss-aop_1.5.6.GA
+- Deleted all customizations related to Bean Scripting Framework, since we now use the scripting support provide by Java6
+
+Bug Fixes
+=====================================================

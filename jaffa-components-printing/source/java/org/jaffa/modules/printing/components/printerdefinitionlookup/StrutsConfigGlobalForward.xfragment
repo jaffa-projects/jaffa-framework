@@ -1,0 +1,3 @@
+    <forward name="jaffa_printing_printerDefinitionLookupCriteria" path="jaffa.printing.printerdefinitionlookup.criteria"/>
+    <forward name="jaffa_printing_printerDefinitionLookupResults" path="jaffa.printing.printerdefinitionlookup.results"/>
+    <forward name="jaffa_printing_printerDefinitionLookupConsolidatedCriteriaAndResults" path="jaffa.printing.printerdefinitionlookup.consolidatedCriteriaAndResults"/>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.transaction.domain.TransactionField">
+        <map-to table="J_TRANSACTION_FIELDS" lockable="false"/>
+
+        <field name="TransactionId" use-member="m_transactionId" type="java.lang.String" primary-key="true">
+            <sql name="TRANSACTION_ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="FieldName" use-member="m_fieldName" type="java.lang.String" primary-key="true">
+            <sql name="FIELD_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Value" use-member="m_value" type="java.lang.String">
+            <sql name="VALUE" type="STRING" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

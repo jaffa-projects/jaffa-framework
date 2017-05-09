@@ -1,0 +1,4 @@
+    <component id="Jaffa.Printing.FormEventViewer">
+        <class>org.jaffa.modules.printing.components.formeventviewer.ui.FormEventViewerComponent</class>
+        <type>ObjectViewer</type>
+    </component>

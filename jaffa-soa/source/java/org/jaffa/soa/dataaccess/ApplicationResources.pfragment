@@ -1,0 +1,12 @@
+exception.org.jaffa.soa.dataaccess.TransformException.0=Service Transformation Error at {0} - Method {1} not found.
+exception.org.jaffa.soa.dataaccess.TransformException.1=Service Transformation Error at {0} - Can't get key '{1}' on object '{2}'
+exception.org.jaffa.soa.dataaccess.TransformException.2=Service Transformation Error at {0} - Method Access Error : {1}
+exception.org.jaffa.soa.dataaccess.TransformException.3=Service Transformation Error at {0} -  Method Invocation Error : {1}
+exception.org.jaffa.soa.dataaccess.TransformException.4=Service Transformation Error at {0} - Object Constuction Error : {1}
+exception.org.jaffa.soa.dataaccess.TransformException.5=Service Transformation Error at {0} - Can't Introspect Method : {1}
+exception.org.jaffa.soa.dataaccess.TransformException.6=Service Transformation Error at {0} - Invalid mapping, Foreign Key field '{1}' not accessable on '{2}'
+exception.org.jaffa.soa.dataaccess.TransformException.7=Service Transformation Error at {0} - Mismatch in foreign key mapping from '{1}' to '{2}'
+exception.org.jaffa.soa.dataaccess.TransformException.8=Service Transformation Error at {0} - Can't set key field '{1}' on object '{2}'
+exception.org.jaffa.soa.dataaccess.TransformException.9=Service Transformation Error at {0} - No Setter for property '{1}' on object '{2}'
+exception.org.jaffa.soa.dataaccess.TransformException.10=Service Transformation Error at {0} -  No Getter for property '{1}' on object '{2}'
+exception.org.jaffa.soa.dataaccess.TransformException.11=Service Transformation Error - Data Type Mismatch method '{0}' expected '{1}', but had '{2}'

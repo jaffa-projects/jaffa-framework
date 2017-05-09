@@ -1,0 +1,8 @@
+title.Jaffa.Admin.ViewerHyperlinkConfig=Viewer Hyperlink Config
+title.Jaffa.Admin.ViewerHyperlinkConfig.DomainFieldViewerComponentMapping=[title.Jaffa.Admin.ViewerHyperlinkConfig] - File 1
+title.Jaffa.Admin.ViewerHyperlinkConfig.KeyFieldPerViewerComponent=[title.Jaffa.Admin.ViewerHyperlinkConfig] - File 2
+label.Jaffa.Admin.ViewerHyperlinkConfig.DomainFieldViewerComponentMapping.FileName=Domain Field and Viewer Component Mapping File
+label.Jaffa.Admin.ViewerHyperlinkConfig.KeyFieldPerViewerComponent.FileName=Key Field per Viewer Component File
+exception.org.jaffa.applications.jaffa.modules.admin.components.viewerhyperlinkconfig.ui.exceptions.ViewerHyperlinkConfigException.invalidSetup=The framework properties 'framework.DomainFieldViewerComponentMappingFile' and 'framework.KeyFieldPerViewerComponentFile' need to be defined for using this component
+exception.org.jaffa.applications.jaffa.modules.admin.components.viewerhyperlinkconfig.ui.exceptions.ViewerHyperlinkConfigException.fileReadError=Error in reading the file {0}
+exception.org.jaffa.applications.jaffa.modules.admin.components.viewerhyperlinkconfig.ui.exceptions.ViewerHyperlinkConfigException.fileStoreError=Error in writing to the file {0}

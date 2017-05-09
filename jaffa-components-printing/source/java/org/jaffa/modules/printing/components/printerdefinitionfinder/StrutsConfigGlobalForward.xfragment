@@ -1,0 +1,5 @@
+    <forward name="jaffa_printing_printerDefinitionFinderCriteria" path="jaffa.printing.printerdefinitionfinder.criteria"/>
+    <forward name="jaffa_printing_printerDefinitionFinderResults" path="jaffa.printing.printerdefinitionfinder.results"/>
+    <forward name="jaffa_printing_printerDefinitionFinderConsolidatedCriteriaAndResults" path="jaffa.printing.printerdefinitionfinder.consolidatedCriteriaAndResults"/>
+    <forward name="jaffa_printing_printerDefinitionFinderExcelResults" path="jaffa.printing.printerdefinitionfinder.FinderExcelLayout"/>
+    <forward name="jaffa_printing_printerDefinitionFinderXmlResults" path="jaffa.printing.printerdefinitionfinder.FinderXmlLayout"/>

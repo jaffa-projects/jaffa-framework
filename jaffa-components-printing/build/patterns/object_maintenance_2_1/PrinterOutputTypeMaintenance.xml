@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Object Maintenance Meta 2.0//EN" "http://jaffa.sourceforge.net/DTD/object-maintenance-meta_2_0.dtd">
+<Root>
+  <PatternTemplate>patterns/library/object_maintenance_2_1/ObjectMaintenancePattern.xml</PatternTemplate>
+  <Application>Jaffa</Application>
+  <Module>Printing</Module>
+  <Component>PrinterOutputTypeMaintenance</Component>
+  <BasePackage>org.jaffa.modules.printing</BasePackage>
+  <DomainObject>PrinterOutputType</DomainObject>
+  <DomainPackage>org.jaffa.modules.printing.domain</DomainPackage>
+  <Title>[title.Modules.Printing.PrinterOutputTypeMaintenance.maintenance]</Title>
+  <KeyFields>
+    <KeyField>
+      <Name>OutputType</Name>
+      <DataType>STRING</DataType>
+      <DomainField>OutputType</DomainField>
+    </KeyField>
+  </KeyFields>
+  <Fields>
+    <Field>
+      <Name>OutputType</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>OutputType</DomainField>
+    </Field>
+    <Field>
+      <Name>Description</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>Description</DomainField>
+    </Field>
+    <Field>
+      <Name>DirectPrinting</Name>
+      <DataType>BOOLEAN</DataType>
+      <Display>false</Display>
+      <Label>[label.Modules.Printing.PrintOutputType.PrintMethod]</Label>
+      <DomainField>DirectPrinting</DomainField>
+    </Field>
+    <Field>
+      <Name>CreatedOn</Name>
+      <DataType>DATE_TIME</DataType>
+      <Display>true</Display>
+      <DomainField>CreatedOn</DomainField>
+      <StampType>CreatedDateTime</StampType>
+    </Field>
+    <Field>
+      <Name>CreatedBy</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>CreatedBy</DomainField>
+      <StampType>CreatedUserId</StampType>
+    </Field>
+    <Field>
+      <Name>LastChangedOn</Name>
+      <DataType>DATE_TIME</DataType>
+      <Display>true</Display>
+      <DomainField>LastChangedOn</DomainField>
+      <StampType>LastUpdatedDateTime</StampType>
+      <UseForDirtyReadCheck>true</UseForDirtyReadCheck>
+    </Field>
+    <Field>
+      <Name>LastChangedBy</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>LastChangedBy</DomainField>
+      <StampType>LastUpdatedUserId</StampType>
+    </Field>
+  </Fields>
+  <RelatedObjects>
+    <RelatedObject>
+      <Name>OutputCommand</Name>
+      <ObjectName>OutputCommand</ObjectName>
+      <Package>org.jaffa.modules.printing.domain</Package>
+      <RelationshipToDomainObject>Many</RelationshipToDomainObject>
+      <DeleteConstraint>Cascading</DeleteConstraint>
+      <RelatedObjectJoinFields>
+        <RelatedObjectJoinBetween>
+          <Name>OutputType</Name>
+          <DomainField>OutputType</DomainField>
+          <RelatedObjectFieldName>OutputType</RelatedObjectFieldName>
+          <RelatedObjectDomainField>OutputType</RelatedObjectDomainField>
+        </RelatedObjectJoinBetween>
+      </RelatedObjectJoinFields>
+      <RelatedObjectFields>
+        <RelatedObjectField>
+          <Name>OutputCommandId</Name>
+          <DataType>INTEGER</DataType>
+          <Display>false</Display>
+          <DisplayAsKey>true</DisplayAsKey>
+          <Label>[label.Jaffa.Printing.OutputCommand.OutputCommandId]</Label>
+          <DomainField>OutputCommandId</DomainField>
+        </RelatedObjectField>
+        <RelatedObjectField>
+          <Name>OutputType</Name>
+          <DataType>STRING</DataType>
+          <Display>false</Display>
+          <DisplayAsKey>false</DisplayAsKey>
+          <Label>[label.Jaffa.Printing.PrinterOutputType.OutputType]</Label>
+          <DomainField>OutputType</DomainField>
+        </RelatedObjectField>
+        <RelatedObjectField>
+          <Name>SequenceNo</Name>
+          <DataType>INTEGER</DataType>
+          <Display>true</Display>
+          <DisplayAsKey>false</DisplayAsKey>
+          <Label>[label.Jaffa.Printing.OutputCommand.SequenceNo]</Label>
+          <DomainField>SequenceNo</DomainField>
+        </RelatedObjectField>
+        <RelatedObjectField>
+          <Name>OsPattern</Name>
+          <DataType>STRING</DataType>
+          <Display>true</Display>
+          <DisplayAsKey>false</DisplayAsKey>
+          <Label>[label.Jaffa.Printing.OutputCommand.OsPattern]</Label>
+          <DomainField>OsPattern</DomainField>
+        </RelatedObjectField>
+        <RelatedObjectField>
+          <Name>CommandLine</Name>
+          <DataType>STRING</DataType>
+          <Display>true</Display>
+          <DisplayAsKey>false</DisplayAsKey>
+          <Label>[label.Jaffa.Printing.OutputCommand.CommandLine]</Label>
+          <DomainField>CommandLine</DomainField>
+        </RelatedObjectField>
+        <RelatedObjectField>
+          <Name>CreatedOn</Name>
+          <DataType>DATE_TIME</DataType>
+          <Display>false</Display>
+          <DisplayAsKey>false</DisplayAsKey>
+          <Label>[label.Jaffa.Common.CreatedOn]</Label>
+          <DomainField>CreatedOn</DomainField>
+        </RelatedObjectField>
+        <RelatedObjectField>
+          <Name>CreatedBy</Name>
+          <DataType>STRING</DataType>
+          <Display>false</Display>
+          <DisplayAsKey>false</DisplayAsKey>
+          <Label>[label.Jaffa.Common.CreatedBy]</Label>
+          <DomainField>CreatedBy</DomainField>
+        </RelatedObjectField>
+        <RelatedObjectField>
+          <Name>LastChangedOn</Name>
+          <DataType>DATE_TIME</DataType>
+          <Display>false</Display>
+          <DisplayAsKey>false</DisplayAsKey>
+          <Label>[label.Jaffa.Common.LastChangedOn]</Label>
+          <DomainField>LastChangedOn</DomainField>
+        </RelatedObjectField>
+        <RelatedObjectField>
+          <Name>LastChangedBy</Name>
+          <DataType>STRING</DataType>
+          <Display>false</Display>
+          <DisplayAsKey>false</DisplayAsKey>
+          <Label>[label.Jaffa.Common.LastChangedBy]</Label>
+          <DomainField>LastChangedBy</DomainField>
+        </RelatedObjectField>
+      </RelatedObjectFields>
+      <OrderByFields>
+        <OrderByField>
+          <DomainFieldName>SequenceNo</DomainFieldName>
+          <sortAscending>true</sortAscending>
+        </OrderByField>
+      </OrderByFields>
+      <RelatedObjectCreator>
+        <ComponentName>Jaffa.Printing.OutputCommandMaintenance</ComponentName>
+        <ClassName>OutputCommandMaintenanceComponent</ClassName>
+        <Package>org.jaffa.modules.printing.components.outputcommandmaintenance.ui</Package>
+      </RelatedObjectCreator>
+      <RelatedObjectUpdator>
+        <ComponentName>Jaffa.Printing.OutputCommandMaintenance</ComponentName>
+        <ClassName>OutputCommandMaintenanceComponent</ClassName>
+        <Package>org.jaffa.modules.printing.components.outputcommandmaintenance.ui</Package>
+      </RelatedObjectUpdator>
+      <RelatedObjectDeletor>
+        <ComponentName>Jaffa.Printing.OutputCommandMaintenance</ComponentName>
+        <ClassName>OutputCommandMaintenanceComponent</ClassName>
+        <Package>org.jaffa.modules.printing.components.outputcommandmaintenance.ui</Package>
+        <TxClass>org.jaffa.modules.printing.components.outputcommandmaintenance.tx.OutputCommandMaintenanceTx</TxClass>
+        <DeleteInDtoClass>org.jaffa.modules.printing.components.outputcommandmaintenance.dto.OutputCommandMaintenanceDeleteInDto</DeleteInDtoClass>
+      </RelatedObjectDeletor>
+      <RelatedObjectKeyFields>
+        <RelatedObjectKeyField>
+          <RelatedObjectFieldName>OutputCommandId</RelatedObjectFieldName>
+          <DataType>INTEGER</DataType>
+          <FieldNameInTargetComponent>OutputCommandId</FieldNameInTargetComponent>
+        </RelatedObjectKeyField>
+      </RelatedObjectKeyFields>
+    </RelatedObject>
+<!--<RelatedObject>
+<Name>PrinterDefinition</Name>
+<ObjectName>PrinterDefinition</ObjectName>
+<Package>org.jaffa.modules.printing.domain</Package>
+<RelationshipToDomainObject>Many</RelationshipToDomainObject>
+<DeleteConstraint>Restricted</DeleteConstraint>
+<RelatedObjectJoinFields>
+<RelatedObjectJoinBetween>
+<Name>OutputType</Name>
+<DomainField>OutputType</DomainField>
+<RelatedObjectFieldName>OutputType</RelatedObjectFieldName>
+<RelatedObjectDomainField>OutputType</RelatedObjectDomainField>
+</RelatedObjectJoinBetween>
+</RelatedObjectJoinFields>
+<RelatedObjectKeyFields>
+<RelatedObjectKeyField>
+<RelatedObjectFieldName>PrinterId</RelatedObjectFieldName>
+<DataType>STRING</DataType>
+<FieldNameInTargetComponent>PrinterId</FieldNameInTargetComponent>
+</RelatedObjectKeyField>
+</RelatedObjectKeyFields>
+</RelatedObject>-->
+  </RelatedObjects>
+  <Screens>
+    <Screen SaveActionAvailableInCreateMode="true" PerformTxValidationOnNextAction="true" AvailableInUpdateMode="true" AvailableInCreateMode="true" Name="main">
+      <References>
+        <FieldReference Name="OutputType"/>
+        <FieldReference Name="Description"/>
+        <FieldReference Name="DirectPrinting"/>
+        <RelatedObjectReference RelatedObjectName="OutputCommand"/>
+      </References>
+    </Screen>
+  </Screens>
+</Root>

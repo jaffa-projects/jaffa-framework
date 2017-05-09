@@ -1,0 +1,6 @@
+    <action    path="/jaffa_scheduler_taskViewer"
+               type="org.jaffa.modules.scheduler.components.taskviewer.ui.TaskViewerAction"
+               name="jaffa_scheduler_taskViewerForm"
+               validate="false"
+               scope="request">
+    </action>

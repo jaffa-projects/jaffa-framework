@@ -1,0 +1,147 @@
+/* 
+  File name:  button.css
+  Author:     paule  
+
+  Description:
+    StyleSheet that controls the display of the Table, Grid and UserGrid widgets
+    This is part of the 'color' skin for Jaffa
+*/
+
+/* These Apply to Table, Grid, UserGrid Widgets */
+
+
+/* This is to control inner scroll bars
+   Delete reference if you dont want them
+   This will only work on Mozilla Browsers
+   */
+tbody .scroll  { 
+			overflow: auto; 
+			max-height: 100px; 
+			width:200px; 
+}
+
+table.sort	{	
+			background-color: #DBDCE5;
+			font-family: Helvetica;
+			font-size: xx-small;
+			color: black;
+			padding: 2px;
+}
+						
+thead td.sort	{
+			font-family: sans-serif;
+			font-size: 12px;
+			font-weight: 600;
+			color: White;
+			background: #AAA9BB;
+			padding: 3px;
+			text-align: center;
+			border : 1px solid #888992;
+}
+			 
+thead .arrow {
+			color: #AAA9BB ; 
+			margin-bottom: 2; 
+			padding-top: 0px; 
+			padding-bottom: 2px;
+  		    /*nice vertical positioning :-) */
+}
+			
+tr.sort	{		
+			font-family: Helvetica;
+			font-size: xx-small;
+			color: black;
+			background: #EFF0F5;
+}
+							
+tr.altsort {		
+			font-family: Helvetica;
+			font-size: xx-small;
+			color: black;
+			border-bottom: 1px groove #888992;
+			border-right: 1px groove #888992;
+			background: #DBDCE5;
+}
+							
+td.sort {		
+			font-family: helvetica;
+			font-size: xx-small;
+			color: black;
+			border-left:1px solid #B2B4BF; 
+			border-right: 1px groove #B2B4BF;
+			border-bottom: 1px groove #B2B4BF;
+			padding: 2px;
+}
+
+
+/*  These apply to the floating Hint Box on the UserGrid Only */
+div.userGridHint  {	
+			font-family: Helvetica;
+			font-size: xx-small;
+			color: white;
+			 background: #AAA9BB;
+			 text-align: left;
+			padding: 8px;
+}
+
+div.userGridHint A.title {	
+				color: white;
+				font-weight: 600;
+}
+
+div.userGridHint A.key {	
+				color: white;
+}
+
+div.userGridHint A.value{	
+				color: black;		 	
+}					
+							
+/*  These apply to the popup menu and settings screen on the UserGrid Only */
+
+tr.userGridSettingsHighlightOn {
+				background-color :  #DBDCE5;
+				font-family: Helvetica;
+				font-size: xx-small;
+				color: black;
+}
+		
+table.userGridPopupMenu  {	
+				font-family: Helvetica, sans-serif;
+				font-size: xx-small;
+				color: white;
+			 	background-color:  black;
+			 	text-align: left;
+				width: 200px;
+				padding: 3px 3px 3px 3px;
+}
+
+table.userGridPopupMenu td	{	
+				padding: 3px;
+				font-size: xx-small;
+				color: white;
+}
+
+table.userGridPopupMenu A{	
+				color: white;
+				font-size: xx-small;
+			
+
+}
+							
+table.userGridPopupMenu td A:Hover{	
+				color: #DBDCE5;
+				font-size: xx-small;
+			
+
+}
+
+/*  These apply to the export to excel option on the UserGrid Only */
+th.excelHeader          {   background-color: Silver;
+                            border : groove;
+                	}
+table.excelTable        {   border:1px solid;
+                        }
+		
+table.excelTable td     {   border:1px solid;
+                        }

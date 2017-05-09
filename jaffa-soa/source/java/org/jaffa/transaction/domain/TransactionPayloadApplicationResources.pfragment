@@ -1,0 +1,5 @@
+label.Jaffa.Transaction.TransactionPayload=Transaction Payload
+label.Jaffa.Transaction.TransactionPayload.Id=ID
+label.Jaffa.Transaction.TransactionPayload.ExternalMessage=External Message
+label.Jaffa.Transaction.TransactionPayload.InternalMessage=Internal Message
+label.Jaffa.Transaction.TransactionPayload.InternalMessageClass=Internal Message Class

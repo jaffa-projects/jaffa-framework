@@ -1,0 +1,3 @@
+    <!-- AttachmentViewer Form -->
+    <form-bean      name="jaffa_attachment_attachmentViewerForm"
+                    type="org.jaffa.components.attachment.components.attachmentviewer.ui.AttachmentViewerForm"/>

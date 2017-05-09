@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+<!-- This dtd is used for validating the input xml to the RulesMetaDataService -->
+
+<!ELEMENT rules (domain*,dto*)>
+<!ELEMENT domain (field*)>
+<!ATTLIST domain class CDATA #REQUIRED>
+<!ELEMENT dto (field*)>
+<!ATTLIST dto class CDATA #REQUIRED>
+
+<!-- The new validators should be added to the field element -->
+<!ELEMENT field ((mandatory|foreign-key|generic-foreign-key|in-list|string|boolean|currency|dateonly|datetime|decimal|integer)*)>
+<!ATTLIST field name CDATA #REQUIRED>
+
+<!-- This attribute can have true/false values. It has an impact only in a variant file.
+By default, the value will be false, and hence the variant file will be treated as extending the rules in the core file.
+However, if the value is true, then the core-rules will not be invoked.
+-->
+<!ATTLIST field overridesDefault (true|false) "false">
+
+<!-- The following 2 attributesUse will be used to inherit the rules from another field. Both the values should be supplied, if inheritance is desired -->
+<!ATTLIST field extendsClass CDATA #IMPLIED>
+<!ATTLIST field extendsField CDATA #IMPLIED>
+
+
+
+<!-- The different field validators -->
+<!ELEMENT mandatory EMPTY>
+
+<!ELEMENT foreign-key EMPTY>
+<!ATTLIST foreign-key domainClass CDATA #REQUIRED property CDATA #REQUIRED>
+
+<!ELEMENT generic-foreign-key EMPTY>
+<!ATTLIST generic-foreign-key tableName CDATA #REQUIRED fieldName CDATA #REQUIRED>
+
+<!ELEMENT in-list EMPTY>
+<!ATTLIST in-list list CDATA #REQUIRED separator CDATA ",">
+
+<!ELEMENT string EMPTY>
+<!ATTLIST string pattern CDATA #IMPLIED length CDATA #IMPLIED minLength CDATA #IMPLIED caseType (UpperCase|LowerCase|MixedCase) "MixedCase">
+
+<!ELEMENT boolean EMPTY>
+<!ATTLIST boolean pattern CDATA #IMPLIED>
+
+<!ELEMENT currency EMPTY>
+<!ATTLIST currency layout CDATA #IMPLIED minValue CDATA #IMPLIED maxValue CDATA #IMPLIED intSize CDATA #IMPLIED fracSize CDATA #IMPLIED>
+
+<!ELEMENT dateonly EMPTY>
+<!ATTLIST dateonly layout CDATA #IMPLIED minValue CDATA #IMPLIED maxValue CDATA #IMPLIED>
+
+<!ELEMENT datetime EMPTY>
+<!ATTLIST datetime layout CDATA #IMPLIED minValue CDATA #IMPLIED maxValue CDATA #IMPLIED>
+
+<!ELEMENT decimal EMPTY>
+<!ATTLIST decimal layout CDATA #IMPLIED minValue CDATA #IMPLIED maxValue CDATA #IMPLIED intSize CDATA #IMPLIED fracSize CDATA #IMPLIED>
+
+<!ELEMENT integer EMPTY>
+<!ATTLIST integer layout CDATA #IMPLIED minValue CDATA #IMPLIED maxValue CDATA #IMPLIED intSize CDATA #IMPLIED>
+
+
+
+
+

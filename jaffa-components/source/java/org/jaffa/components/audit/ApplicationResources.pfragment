@@ -1,0 +1,28 @@
+label.Jaffa.Audit.AuditTransaction=Audit Transaction
+label.Jaffa.Audit.AuditTransaction.TransactionId=Transaction ID
+label.Jaffa.Audit.AuditTransaction.ProcessName=Process Name
+label.Jaffa.Audit.AuditTransaction.SubProcessName=Sub-Process Name
+label.Jaffa.Audit.AuditTransaction.Reason=Reason
+label.Jaffa.Audit.AuditTransaction.CreatedBy=Created By
+label.Jaffa.Audit.AuditTransaction.CreatedOn=Created On
+
+label.Jaffa.Audit.AuditTransactionObject=Audit Transaction Object
+label.Jaffa.Audit.AuditTransactionObject.ObjectId=Object Id
+label.Jaffa.Audit.AuditTransactionObject.TransactionId=[label.Jaffa.Audit.AuditTransaction.TransactionId]
+label.Jaffa.Audit.AuditTransactionObject.ObjectName=Object Name
+label.Jaffa.Audit.AuditTransactionObject.ChangeType=Change Type
+
+label.Jaffa.Audit.AuditTransactionField=Audit Transaction Field
+label.Jaffa.Audit.AuditTransactionField.FieldId=Field Id
+label.Jaffa.Audit.AuditTransactionField.ObjectId=[label.Jaffa.Audit.AuditTransactionObject.ObjectId]
+label.Jaffa.Audit.AuditTransactionField.FieldName=Field Name
+label.Jaffa.Audit.AuditTransactionField.FromValue=From Value
+label.Jaffa.Audit.AuditTransactionField.ToValue=To Value
+label.Jaffa.Audit.AuditTransactionField.Changed=Changed
+label.Jaffa.Audit.AuditTransactionField.Flex=Flex Field
+
+label.Jaffa.Audit.AuditTransactionObject.ChangeType.I=Add
+label.Jaffa.Audit.AuditTransactionObject.ChangeType.D=Delete
+label.Jaffa.Audit.AuditTransactionObject.ChangeType.U=Modify
+error.Jaffa.Audit.AuditTransactionObject.ChangeType.InvalidValue=The valid [label.Jaffa.Audit.AuditTransactionObject.ChangeType] field values are: [label.Jaffa.Audit.AuditTransactionObject.ChangeType.I], [label.Jaffa.Audit.AuditTransactionObject.ChangeType.D], and [label.Jaffa.Audit.AuditTransactionObject.ChangeType.U].
+label.Jaffa.Audit.AuditTransactionViewer.TransactionIdRequiredMsg=[label.Jaffa.Audit.AuditTransaction.TransactionId] required.

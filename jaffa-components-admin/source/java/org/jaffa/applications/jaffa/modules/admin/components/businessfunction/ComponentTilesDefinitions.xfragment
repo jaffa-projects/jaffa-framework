@@ -1,0 +1,11 @@
+    <!-- Business Function -->
+    <definition name="jaffa.admin.businessfunction.Layout"  extends="jaffa.ViewerLayout">
+        <put name="contextNav"  value="/jaffa/admin/businessfunction/contextNav.jsp"/>
+        <put name="defaultNav"  value="/jaffa/admin/businessfunction/defaultNav.jsp"/>
+        <put name="body"        value="/jaffa/admin/businessfunction/main.jsp"/>
+        <put name="action"      value="/admin_businessFunction"/>
+    </definition>
+    <definition name="jaffa.admin.businessfunction"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Admin.BusinessFunction]"/>
+        <put name="body" value="jaffa.admin.businessfunction.Layout"/>
+    </definition>

@@ -1,0 +1,50 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the JaffaCore 3.2.0 Release (Since v3.1.0). For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+Presentation
+------------
+
+Widgets
+-------
+
+Components & Patterns
+---------------------
+- Modified Finder component so that is a saved query is requested on initial invocation, and it is not valid, the criteria screen is displayed
+- Modified Finder component to have a 'queryLastRunOn' property for display at the top of the results grid.
+
+Persistence
+-----------
+
+General
+-------
+
+
+Bug Fixes
+=====================================================
+
+Presentation
+------------
+- Fixed issue with folding section cookies when the 'path' changes during the running of the same component
+- Fixed issue with <label> tag producing additional new-line characters when resolving a token
+
+Widgets
+-------
+
+Components & Patterns
+---------------------
+- Fixed buttons on querySaver.jsp, so the are hidden if not appropriate
+
+Persistence
+-----------
+
+General
+-------
+
+
+What's Deleted/Deprecated
+=====================================================

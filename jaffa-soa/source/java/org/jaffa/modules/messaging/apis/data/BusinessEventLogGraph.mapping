@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="US-ASCII" ?>
+
+<bean-mapping>
+  <graph-data-object class="org.jaffa.modules.messaging.apis.data.BusinessEventLogGraph"/>
+  <domain-object class="org.jaffa.modules.messaging.domain.BusinessEventLog"/>
+
+  <map-key-fields>
+    <field gdo='logId'/>
+  </map-key-fields>
+
+  <map-fields>
+    <field gdo='correlationType'/>
+    <field gdo='correlationKey1'/>
+    <field gdo='correlationKey2'/>
+    <field gdo='correlationKey3'/>
+    <field gdo='loggedOn'/>
+    <field gdo='loggedBy'/>
+    <field gdo='processName'/>
+    <field gdo='subProcessName'/>
+    <field gdo='messageType'/>
+    <field gdo='messageText'/>
+    <field gdo='sourceClass'/>
+    <field gdo='stackTrace'/>
+	<field gdo='messageId'/>
+	<field gdo='scheduledTaskId'/>
+  </map-fields>
+</bean-mapping>

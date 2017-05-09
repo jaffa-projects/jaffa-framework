@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Domain Creator Meta 1.1//EN" "http://jaffa.sourceforge.net/DTD/domain-creator-meta_1_1.dtd">
+<Root>
+  <DomainObject>SOAEventParam</DomainObject>
+  <DomainPackage>org.jaffa.soa.domain</DomainPackage>
+  <DatabaseTable>J_SOA_EVENT_PARAMS</DatabaseTable>
+  <MappingPackage>resources/jdbcengine/jaffa</MappingPackage>
+  <PatternTemplate>patterns/library/domain_creator_1_1/DomainCreatorPattern.xml</PatternTemplate>
+  <Description>Holds parameters for a SOA Event</Description>
+  <LabelToken>[label.Jaffa.SOA.SOAEventParam]</LabelToken>
+  <Lockable>false</Lockable>
+  <Fields>
+    <Field>
+      <Name>EventId</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>EVENT_ID</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <PrimaryKey>T</PrimaryKey>
+      <Description>Technical Key for a SOA Event</Description>
+      <LabelToken>[label.Jaffa.SOA.SOAEventParam.EventId]</LabelToken>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>Name</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>NAME</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <PrimaryKey>T</PrimaryKey>
+      <Description>Name for a SOA Event Parameter</Description>
+      <LabelToken>[label.Jaffa.SOA.SOAEventParam.Name]</LabelToken>
+      <Mandatory>T</Mandatory>
+      <IntSize>100</IntSize>
+    </Field>
+    <Field>
+      <Name>Value</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>VALUE</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Value for a SOA Event Parameter</Description>
+      <LabelToken>[label.Jaffa.SOA.SOAEventParam.Value]</LabelToken>
+      <IntSize>100</IntSize>
+    </Field>
+  </Fields>
+  <Relationships>
+    <Relationship>
+      <Name>SOAEvent</Name>
+      <ToDomainObject>SOAEvent</ToDomainObject>
+      <ToDomainPackage>org.jaffa.soa.domain</ToDomainPackage>
+      <FromCardinality>0..*</FromCardinality>
+      <ToCardinality>1</ToCardinality>
+      <Type>association</Type>
+      <FromFields>
+        <RelationshipField>
+          <Name>EventId</Name>
+        </RelationshipField>
+      </FromFields>
+      <ToFields>
+        <RelationshipField>
+          <Name>EventId</Name>
+        </RelationshipField>
+      </ToFields>
+    </Relationship>
+  </Relationships>
+</Root>

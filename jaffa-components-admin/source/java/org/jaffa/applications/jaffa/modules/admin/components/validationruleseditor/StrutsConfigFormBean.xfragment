@@ -1,0 +1,2 @@
+    <form-bean      name="admin_validationRulesEditorForm"
+                    type="org.jaffa.applications.jaffa.modules.admin.components.validationruleseditor.ui.ValidationRulesEditorForm"/>

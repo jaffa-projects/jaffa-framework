@@ -1,0 +1,7 @@
+    <!-- FormTemplateViewer Form -->
+    <action    path="/jaffa_printing_formTemplateViewer"
+               type="org.jaffa.modules.printing.components.formtemplateviewer.ui.FormTemplateViewerAction"
+               name="jaffa_printing_formTemplateViewerForm"
+               validate="false"
+               scope="request">
+    </action>

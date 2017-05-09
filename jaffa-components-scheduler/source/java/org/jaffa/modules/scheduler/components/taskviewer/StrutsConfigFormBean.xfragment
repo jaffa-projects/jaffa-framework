@@ -1,0 +1,2 @@
+    <form-bean      name="jaffa_scheduler_taskViewerForm"
+                    type="org.jaffa.modules.scheduler.components.taskviewer.ui.TaskViewerForm"/>

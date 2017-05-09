@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Object Maintenance Meta 2.0//EN" "http://jaffa.sourceforge.net/DTD/object-maintenance-meta_2_0.dtd">
+
+<Root>
+    <PatternTemplate>patterns/library/object_maintenance_2_1/ObjectMaintenancePattern.xml</PatternTemplate>
+    <Application>Jaffa</Application>
+    <Module>Attachment</Module>
+    <Component>AttachmentMaintenance</Component>
+    <BasePackage>org.jaffa.components.attachment</BasePackage>
+    <DomainObject>Attachment</DomainObject>
+    <DomainPackage>org.jaffa.components.attachment.domain</DomainPackage>
+    <Title>[title.Jaffa.Attachment.AttachmentMaintenance.maintenance]</Title>
+    <KeyFields>
+        <KeyField>
+            <Name>AttachmentId</Name>
+            <DataType>STRING</DataType>
+            <DomainField>AttachmentId</DomainField>
+        </KeyField>
+    </KeyFields>
+    <Fields>
+        <Field>
+            <Name>AttachmentId</Name>
+            <DataType>STRING</DataType>
+            <Display>true</Display>
+            <DomainField>AttachmentId</DomainField>
+        </Field>
+        <Field>
+            <Name>SerializedKey</Name>
+            <DataType>STRING</DataType>
+            <Display>true</Display>
+            <DomainField>SerializedKey</DomainField>
+        </Field>
+        <Field>
+            <Name>OriginalFileName</Name>
+            <DataType>STRING</DataType>
+            <Display>true</Display>
+            <DomainField>OriginalFileName</DomainField>
+        </Field>
+        <Field>
+            <Name>AttachmentType</Name>
+            <DataType>STRING</DataType>
+            <Display>true</Display>
+            <DomainField>AttachmentType</DomainField>
+            <Breakup>
+              <WidgetType>RadioButton</WidgetType>
+              <StaticValues>
+                <StaticValue>
+                  <Code>L</Code>
+                  <Description>[label.Jaffa.Attachment.Attachment.AttachmentType.L]</Description>
+                </StaticValue>
+                <StaticValue>
+                  <Code>W</Code>
+                  <Description>[label.Jaffa.Attachment.Attachment.AttachmentType.W]</Description>
+                </StaticValue>
+                <StaticValue>
+                  <Code>E</Code>
+                  <Description>[label.Jaffa.Attachment.Attachment.AttachmentType.E]</Description>
+                </StaticValue>
+              </StaticValues>
+            </Breakup>
+        </Field>
+        <Field>
+            <Name>ContentType</Name>
+            <DataType>STRING</DataType>
+            <Display>true</Display>
+            <DomainField>ContentType</DomainField>
+        </Field>
+        <Field>
+            <Name>Description</Name>
+            <DataType>STRING</DataType>
+            <Display>true</Display>
+            <DomainField>Description</DomainField>
+        </Field>
+        <Field>
+            <Name>Remarks</Name>
+            <DataType>STRING</DataType>
+            <Display>true</Display>
+            <DomainField>Remarks</DomainField>
+        </Field>
+        <Field>
+            <Name>SupercededBy</Name>
+            <DataType>STRING</DataType>
+            <Display>true</Display>
+            <DomainField>SupercededBy</DomainField>
+        </Field>
+        <Field>
+            <Name>CreatedOn</Name>
+            <DataType>DATE_TIME</DataType>
+            <Display>true</Display>
+            <DomainField>CreatedOn</DomainField>
+            <StampType>CreatedDateTime</StampType>
+        </Field>
+        <Field>
+            <Name>CreatedBy</Name>
+            <DataType>STRING</DataType>
+            <Display>true</Display>
+            <DomainField>CreatedBy</DomainField>
+            <StampType>CreatedUserId</StampType>
+        </Field>
+        <Field>
+            <Name>LastChangedOn</Name>
+            <DataType>DATE_TIME</DataType>
+            <Display>true</Display>
+            <DomainField>LastChangedOn</DomainField>
+            <StampType>LastUpdatedDateTime</StampType>
+            <UseForDirtyReadCheck>true</UseForDirtyReadCheck>
+        </Field>
+        <Field>
+            <Name>LastChangedBy</Name>
+            <DataType>STRING</DataType>
+            <Display>true</Display>
+            <DomainField>LastChangedBy</DomainField>
+            <StampType>LastUpdatedUserId</StampType>
+        </Field>
+        <Field>
+            <Name>Data</Name>
+            <DataType>RAW</DataType>
+            <Display>true</Display>
+            <DomainField>Data</DomainField>
+        </Field>
+    </Fields>
+    <Screens>
+        <Screen SaveActionAvailableInCreateMode="true" PerformTxValidationOnNextAction="true" AvailableInUpdateMode="true" AvailableInCreateMode="true" Name="main">
+            <References>
+                <FieldReference Name="AttachmentId"/>
+                <FieldReference Name="SerializedKey"/>
+                <FieldReference Name="OriginalFileName"/>
+                <FieldReference Name="AttachmentType"/>
+                <FieldReference Name="ContentType"/>
+                <FieldReference Name="Description"/>
+                <FieldReference Name="Remarks"/>
+                <FieldReference Name="SupercededBy"/>
+                <FieldReference Name="CreatedOn"/>
+                <FieldReference Name="CreatedBy"/>
+                <FieldReference Name="LastChangedOn"/>
+                <FieldReference Name="LastChangedBy"/>
+                <!--<FieldReference Name="Data"/>-->
+            </References>
+        </Screen>
+    </Screens>
+</Root>

@@ -1,0 +1,13 @@
+    <!-- PrinterOutputTypeViewer -->
+    <definition name="jaffa.printing.printeroutputtypeviewer.ViewerLayout"  extends="jaffa.ViewerLayout">
+        <put name="contextNav"  value="/jaffa/printing/printeroutputtypeviewer/contextNav.jsp"/>
+        <put name="body" value="/jaffa/printing/printeroutputtypeviewer/view.jsp"/>                    
+        <put name="action" value="/jaffa_printing_printerOutputTypeViewer"/>
+        <put name="updateComponent" value="Jaffa.Printing.PrinterOutputTypeMaintenance"/>
+        <put name="deleteComponent" value="Jaffa.Printing.PrinterOutputTypeMaintenance"/>
+    </definition>
+    <definition name="jaffa.printing.printeroutputtypeviewer"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.PrinterOutputTypeViewer.view]"/>
+        <put name="body" value="jaffa.printing.printeroutputtypeviewer.ViewerLayout"/>
+    </definition>
+

@@ -1,0 +1,4 @@
+    <component id="UserTimeEntry.UserTimeEntryMaintenance">
+        <class>org.jaffa.applications.test.modules.time.components.usertimeentrymaintenance.ui.UserTimeEntryMaintenanceComponent</class>
+        <type>ObjectMaintenance</type>
+    </component>

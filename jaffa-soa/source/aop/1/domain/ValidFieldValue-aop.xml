@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+  <!-- ================================================= -->
+  <!-- Rules for Domain Object ValidFieldValue -->
+  <!-- ================================================= -->
+
+  <metadata tag="jaffa.rules" class="org.jaffa.modules.setup.domain.ValidFieldValue">
+
+
+    <label>[label.Jaffa.Setup.ValidFieldValue]</label>
+
+    <property name="tableName">
+      <label>[label.Jaffa.Setup.ValidFieldValue.TableName]</label>
+      <mandatory/>
+      <max-length>20</max-length>
+    </property>
+
+    <property name="fieldName">
+      <label>[label.Jaffa.Setup.ValidFieldValue.FieldName]</label>
+      <mandatory/>
+      <max-length>30</max-length>
+    </property>
+
+    <property name="legalValue">
+      <label>[label.Jaffa.Setup.ValidFieldValue.LegalValue]</label>
+      <mandatory/>
+      <max-length>200</max-length>
+    </property>
+
+    <property name="description">
+      <label>[label.Jaffa.Setup.ValidFieldValue.Description]</label>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="remarks">
+      <label>[label.Jaffa.Setup.ValidFieldValue.Remarks]</label>
+      <max-length>250</max-length>
+    </property>
+
+    <property name="versionNumber">
+      <label>[label.Jaffa.Setup.ValidFieldValue.VersionNumber]</label>
+      <max-length>10</max-length>
+    </property>
+
+  </metadata>
+</aop>

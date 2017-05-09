@@ -1,0 +1,8 @@
+    <!-- UserRequestLookup -->
+    <action    path="/user_userRequestLookup"
+               type="org.jaffa.applications.jaffa.modules.user.components.userrequestlookup.ui.UserRequestLookupAction"
+               name="user_userRequestLookupForm"
+               validate="false"
+               scope="request">
+    </action>
+

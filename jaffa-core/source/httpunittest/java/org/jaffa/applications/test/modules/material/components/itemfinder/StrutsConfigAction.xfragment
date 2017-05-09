@@ -1,0 +1,15 @@
+    <!-- ItemFinderCriteria -->
+    <action    path="/material_itemFinderCriteria"
+               type="org.jaffa.applications.test.modules.material.components.itemfinder.ui.ItemFinderCriteriaAction"
+               name="material_itemFinderCriteriaForm"
+               validate="false"
+               scope="request">
+    </action>
+
+    <!-- ItemFinderResults -->
+    <action    path="/material_itemFinderResults"
+               type="org.jaffa.applications.test.modules.material.components.itemfinder.ui.ItemFinderResultsAction"
+               name="material_itemFinderResultsForm"
+               validate="false"
+               scope="request">
+    </action>

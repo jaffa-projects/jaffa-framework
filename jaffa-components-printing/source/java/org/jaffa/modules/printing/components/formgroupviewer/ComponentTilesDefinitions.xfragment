@@ -1,0 +1,11 @@
+    <!-- FormGroupViewer -->
+    <definition name="jaffa.printing.formgroupviewer.ViewerLayout"  extends="jaffa.ViewerLayout">
+        <put name="body" value="/jaffa/printing/formgroupviewer/view.jsp"/>
+        <put name="action" value="/jaffa_printing_formGroupViewer"/>
+        <put name="updateComponent" value="Jaffa.Printing.FormGroupMaintenance"/>
+    </definition>
+    <definition name="jaffa.printing.formgroupviewer"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.FormGroupViewer.view]"/>
+        <put name="body" value="jaffa.printing.formgroupviewer.ViewerLayout"/>
+    </definition>
+

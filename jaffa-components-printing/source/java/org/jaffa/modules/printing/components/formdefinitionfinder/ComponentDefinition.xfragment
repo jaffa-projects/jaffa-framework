@@ -1,0 +1,4 @@
+    <component id="Jaffa.Printing.FormDefinitionFinder">
+        <class>org.jaffa.modules.printing.components.formdefinitionfinder.ui.FormDefinitionFinderComponent</class>
+        <type>ObjectFinder</type>
+    </component>

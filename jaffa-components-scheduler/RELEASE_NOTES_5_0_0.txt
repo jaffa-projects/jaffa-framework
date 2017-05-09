@@ -1,0 +1,29 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the next release. For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+- Upgraded to Java6
+  - Regenerated JAXB bindings
+- Added a Heartbeat feature to JaffaComponentsScheduler which can be useful for checking the health of the Scheduler
+  - The SchedulerHelper supports the following new operations
+    - createHeartbeat: to submit a test Job to the Scheduler
+    - getHeartbeat: to check the status of the Job
+    - deleteHeartbeat: to delete the Job
+  - QuartzSchedulerHelper has been enhanced to implement the new operations
+  - The new feature is purely for Test purpose, and is available via the tests/scheduler/status.jsp
+  - Refactored TaskMaintenanceTx, moving the createTask/updateTask related logic to the QuartzSchedulerHelper
+
+What's Changed / Improvements
+=====================================================
+- The ClientError from Quartz is now propagated as a ApplicationException, which is then displayed to the user.
+
+What's Deleted/Deprecated
+=====================================================
+
+Bug Fixes
+=====================================================
+- Removed the 'recurrence' PropertyTag from the jsp for the Scheduler.TaskMaintenance component. This ensures that the data-types for the sub-fields within each recurrence-type are not incorrect.

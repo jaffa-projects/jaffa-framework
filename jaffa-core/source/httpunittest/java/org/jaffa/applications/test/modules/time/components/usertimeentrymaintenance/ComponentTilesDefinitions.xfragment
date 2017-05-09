@@ -1,0 +1,13 @@
+    <!-- UserTimeEntryMaintenance -->
+    <definition name="jaffa.usertimeentry.usertimeentrymaintenance.MaintenanceLayout.main"  extends="jaffa.MaintenanceLayout">
+        <put name="body" value="/jaffa/usertimeentry/usertimeentrymaintenance/main.jsp"/>
+        <put name="action" value="/usertimeentry_userTimeEntryMaintenance"/>
+        <put name="currentScreenCounter" value="0"/>
+        <put name="createModeTitle" value="[title.Jaffa.UserTimeEntry.UserTimeEntryMaintenance.maintenance]"/>
+        <put name="updateModeTitle" value="[title.Jaffa.UserTimeEntry.UserTimeEntryMaintenance.maintenance]"/>
+    </definition>
+    <definition name="jaffa.usertimeentry.usertimeentrymaintenance.main"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.UserTimeEntry.UserTimeEntryMaintenance.maintenance]"/>
+        <put name="body" value="jaffa.usertimeentry.usertimeentrymaintenance.MaintenanceLayout.main"/>
+    </definition>
+

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Object Maintenance Meta 2.0//EN" "http://jaffa.sourceforge.net/DTD/object-maintenance-meta_2_0.dtd">
+<Root>
+  <PatternTemplate>patterns/library/object_maintenance_2_1/ObjectMaintenancePattern.xml</PatternTemplate>
+  <Application>Jaffa</Application>
+  <Module>Printing</Module>
+  <Component>FormEventMaintenance</Component>
+  <BasePackage>org.jaffa.modules.printing</BasePackage>
+  <DomainObject>FormEvent</DomainObject>
+  <DomainPackage>org.jaffa.modules.printing.domain</DomainPackage>
+  <Title>[title.Modules.Printing.FormEventMaintenance.maintenance]</Title>
+  <KeyFields>
+    <KeyField>
+      <Name>EventName</Name>
+      <DataType>STRING</DataType>
+      <DomainField>EventName</DomainField>
+    </KeyField>
+  </KeyFields>
+  <Fields>
+    <Field>
+      <Name>EventName</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Printing.FormGroup.EventName]</Label>
+      <DomainField>EventName</DomainField>
+    </Field>
+    <Field>
+      <Name>Description</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>Description</DomainField>
+    </Field>
+  </Fields>
+  <RelatedObjects>
+    <RelatedObject>
+      <Name>FormUsage</Name>
+      <ObjectName>FormUsage</ObjectName>
+      <Package>org.jaffa.modules.printing.domain</Package>
+      <RelationshipToDomainObject>Many</RelationshipToDomainObject>
+      <DeleteConstraint>Restricted</DeleteConstraint>
+      <RelatedObjectJoinFields>
+        <RelatedObjectJoinBetween>
+          <Name>EventName</Name>
+          <DomainField>EventName</DomainField>
+          <RelatedObjectFieldName>EventName</RelatedObjectFieldName>
+          <RelatedObjectDomainField>EventName</RelatedObjectDomainField>
+        </RelatedObjectJoinBetween>
+      </RelatedObjectJoinFields>
+      <RelatedObjectFields>
+        <RelatedObjectField>
+          <Name>EventName</Name>
+          <DataType>STRING</DataType>
+          <Display>false</Display>
+          <DisplayAsKey>false</DisplayAsKey>
+          <Label>[label.Jaffa.Printing.FormGroup.EventName]</Label>
+          <DomainField>EventName</DomainField>
+        </RelatedObjectField>
+      </RelatedObjectFields>
+      <RelatedObjectKeyFields>
+        <RelatedObjectKeyField>
+          <RelatedObjectFieldName>FormName</RelatedObjectFieldName>
+          <DataType>STRING</DataType>
+          <FieldNameInTargetComponent>FormName</FieldNameInTargetComponent>
+        </RelatedObjectKeyField>
+      </RelatedObjectKeyFields>
+    </RelatedObject>
+  </RelatedObjects>
+  <Screens>
+    <Screen SaveActionAvailableInCreateMode="true" PerformTxValidationOnNextAction="true" AvailableInUpdateMode="true" AvailableInCreateMode="true" Name="main">
+      <References>
+        <FieldReference Name="EventName"/>
+        <FieldReference Name="Description"/>
+      </References>
+    </Screen>
+  </Screens>
+</Root>

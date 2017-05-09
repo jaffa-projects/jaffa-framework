@@ -1,0 +1,6 @@
+    <action    path="/admin_validationRulesEditor"
+               type="org.jaffa.applications.jaffa.modules.admin.components.validationruleseditor.ui.ValidationRulesEditorAction"
+               name="admin_validationRulesEditorForm"
+               validate="false"
+               scope="request">
+    </action>

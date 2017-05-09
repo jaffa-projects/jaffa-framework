@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project [
+	<!ENTITY replace SYSTEM './searchandreplace.xml'>
+	<!ENTITY header SYSTEM './header.xml'>
+]>
+<project basedir=".." default="core" name="Main">
+
+	<!-- Include header.xml -->
+	<target name="init">
+		&header;
+	</target>
+	
+	<!-- ======================================================= -->
+	<!-- Clean up various files and directories                  -->
+	<!-- ======================================================= -->
+	<target name="clean" depends="init">
+		<delete dir="${dist}" quiet="true" taskname="delete/${appname}"/>
+	</target>
+	
+	<!-- ======================================================= -->
+	<!-- Build the different distributables                      -->
+	<!-- ======================================================= -->
+	<target name="buildDeliverables" depends="init">
+		<ant antfile="${project.build}/build.xml" target="all" taskname="ant/${appname}"/>
+	</target>
+
+	<!-- ======================================================= -->
+	<!-- Execute all UnitTests                                   -->
+	<!-- ======================================================= -->
+	<target name="executeUnitTests" depends="init">
+		<ant antfile="${project.build}/UnitTest.xml" target="core" taskname="ant/${appname}"/>
+	</target>
+
+	<!-- ======================================================= -->
+	<!-- Execute all HttpUnitTests                                   -->
+	<!-- ======================================================= -->
+	<target name="executeHttpUnitTests" depends="init">
+		<ant antfile="${project.build}/HttpUnitTestApp.xml" target="core" taskname="ant/${appname}"/>
+	</target>
+
+	<!-- ======================================================= -->
+	<!-- Default Task                                            -->
+	<!-- ======================================================= -->
+	<target name="core" depends="init">
+		<antcall target="clean" taskname="antcall/${appname}"/>
+		<antcall target="buildDeliverables" taskname="antcall/${appname}"/>
+		<antcall target="executeUnitTests" taskname="antcall/${appname}"/>
+		<antcall target="executeHttpUnitTests" taskname="antcall/${appname}"/>
+	</target>
+	
+</project>

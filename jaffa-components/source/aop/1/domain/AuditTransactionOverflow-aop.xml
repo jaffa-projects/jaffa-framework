@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+  <!-- ================================================= -->
+  <!-- Rules for Domain Object AuditTransactionOverflow -->
+  <!-- ================================================= -->
+
+  <metadata tag="jaffa.rules" class="org.jaffa.components.audit.domain.AuditTransactionOverflow">
+
+
+    <label>[label.Jaffa.Audit.AuditTransactionOverflow]</label>
+
+    <property name="fieldId">
+      <label>[label.Jaffa.Audit.AuditTransactionOverflow.FieldId]</label>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="objectId">
+      <label>[label.Jaffa.Audit.AuditTransactionOverflow.ObjectId]</label>
+      <mandatory/>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="fieldName">
+      <label>[label.Jaffa.Audit.AuditTransactionOverflow.FieldName]</label>
+      <mandatory/>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="fromValue">
+      <label>[label.Jaffa.Audit.AuditTransactionOverflow.FromValue]</label>
+    </property>
+
+    <property name="toValue">
+      <label>[label.Jaffa.Audit.AuditTransactionOverflow.ToValue]</label>
+    </property>
+
+  </metadata>
+</aop>

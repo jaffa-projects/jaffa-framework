@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<!DOCTYPE aop PUBLIC "-//JBoss//DTD JBOSS AOP 1.0//EN" "http://www.jboss.org/aop/dtd/jboss-aop_1_0.dtd">-->
+
+<aop>
+  <metadata tag="jaffa.rulemeta" class="dummy">
+    <!-- This rule is used to raise a SOA Event at a given trigger-point -->
+    <rule name='raise-soa-event' execution-realms='business' precedence='all' text-parameter='eventName' interceptor='raise-soa-event' extends-rule='common'>
+      <!-- Should contain a method signature to bind the invocation of this rule to -->
+      <parameter name='trigger' mandatory='true'/>
+      <!-- By default, the interceptor will be executed before the actual method. Its execution can however be deferred after the method-execution, if the optional 'executeOnReturn' parameter is true. -->
+      <parameter name='executeOnReturn' mandatory='false' default='false' valid-values='true,false'/>
+      <!-- Name for a SOA Event -->
+      <parameter name='eventName' mandatory='true'/>
+      <!-- Description for a SOA Event -->
+      <parameter name='description' mandatory='false'/>
+      <!-- Category for a SOA Event. Example value for the category is 'High' or 'NA' -->
+      <parameter name='category' mandatory='false'/>      
+      <!-- A semi-colon separated list of static parameters (name-value pairs) for the Event -->
+      <parameter name='staticParameters' mandatory='false'/>
+      <!-- A semi-colon separated list of dynamic parameters (name-value pairs, where value will be a property of the current object) for the Event -->
+      <parameter name='dynamicParameters' mandatory='false'/>
+    </rule>
+  </metadata>
+  
+  <interceptor name="raise-soa-event" class="org.jaffa.soa.jbossaop.RaiseSOAEventInterceptor" scope="PER_VM"/> 
+</aop>

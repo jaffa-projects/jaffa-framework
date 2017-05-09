@@ -1,0 +1,26 @@
+div.navBar {}
+a.navBarItem {
+  text-decoration: none;  /* Turn off underline for <a> */
+}
+a.navBarItem:hover {}
+
+div.navMenu {
+  position: absolute;   /* Position dynamically with absolute co-ords */
+  visibility: hidden; 	/* Hide menus initially */
+  z-index: 101;		/* Layer menus over other page content */
+}
+a.navMenuItem {
+  text-decoration: none;/* Turn off underline for <a> */
+  white-space: nowrap;	/* The display and white-space are used so each <a> appears on its own line in the menu */
+  padding: 3px; 	/* Must be 1px or higher, for sub-menus to display */
+}
+a.navMenuItem:hover {}
+span.navMenuText {}
+span.navMenuMore {
+  /* This is needed to show the submenu graphic */
+  background-attachment : fixed;
+  background-position : right;
+  background-repeat : no-repeat;
+  background-image : url(../imgs/navigation/arrow.gif);
+  width:0px;		/* Make span not visible until size adjustment */
+}

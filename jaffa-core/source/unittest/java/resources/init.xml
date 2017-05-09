@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE init PUBLIC "-//JAFFA//DTD JDBC Engine Init 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-init_1_0.dtd">
+
+<!--
+    ********************************************************
+            ORACLE (Set engine="oracle")
+    ********************************************************
+     Use the following construct, suitably modifying the relevant values -
+    <driver url="jdbc:oracle:thin:@[host]:[port]:[database]" class="oracle.jdbc.driver.OracleDriver"/>
+
+    TESTED WITH: ojdbc14.jar
+
+    @since 1.3 use the following
+
+    <param name="url" value="jdbc:oracle:thin:@<<DATABASE.HOST>>:<<DATABASE.PORT>>:<<DATABASE.INSTANCE>>"/>
+    <param name="driverClass" value="oracle.jdbc.driver.OracleDriver"/>
+-->
+
+
+
+<!--
+    ********************************************************
+            MySQL (Set engine="mysql")
+    ********************************************************
+    Use the following construct, suitably modifying the relevant values -
+    <driver url="jdbc:mysql://[host]:[port]/[database]" class="com.mysql.jdbc.Driver"/>
+
+    TESTED WITH: mysql-connector-java-3.0.6-stable-bin.jar
+
+    Unit Test Results - 3 Failures
+
+    NOTES:
+    1 - Could not find the 'Select... FOR UPDATE NOWAIT' feature, or its equivalent in mysql
+        It does however have the 'FOR UPDATE' construct, which we use for the Paranoid/Pessimistic locking strategies.
+        To simulate the NOWAIT requirement, make the following configuration change for the mysql database:
+            set-variable = innodb_lock_wait_timeout=0
+
+    2 - [testVoucherStoredProcedure] - N/A
+        Stored Procedure support is missing. Its expected in MySQL 5.0
+
+    3 - [testQueryWithEscapeCharacters] - expected:<2> but was:<0>
+        The 'testQueryWithEscapeCharacters' UnitTest is failing, since MySQL seems to have a bug with the 'ESCAPE' clause.
+        Its simply ignoring the ESCAPE character '|'
+
+    @since 1.3 use the following
+
+    <param name="url" value="jdbc:mysql://<<DATABASE.HOST>>:<<DATABASE.PORT>>/<<DATABASE.INSTANCE>>"/>
+    <param name="driverClass" value="com.mysql.jdbc.Driver"/>
+-->
+
+
+
+<!--
+    ********************************************************
+            MS SQL Server 2008 (Set engine="mssqlserver")
+    ********************************************************
+     Use the following construct, suitably modifying the relevant values -
+    <driver url="jdbc:sqlserver://[host]:[port];DatabaseName=[database];" class="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+
+    TESTED WITH: sqljdbc4.jar and TCP/IP enabled via SQLServerConfigurationManager
+
+    TO TEST IntegratedWindowsLogin:
+    a) Indicate integratedSecurity=true by setting the url to "jdbc:sqlserver://[host]:[port];DatabaseName=[database];integratedSecurity=true;"
+    b) Add reference to sqljdbc_auth.dll by including the following subelement in the junit task: <jvmarg value="-Djava.library.path=C:\Microsoft SQL Server JDBC Driver\sqljdbc_<version>\enu\auth\x64"/>
+
+    Unit Test Results - 1 Failure
+
+    NOTE: The following features are missing in MS SQL Server 2008
+
+    1 - Could not find the 'Select... FOR UPDATE NOWAIT' feature. However, the Microsoft documentation suggests using
+        the hint 'UPDLOCK', and the setting 'SET LOCK_TIMEOUT 0' or invoking setQueryTimeout(n seconds) on the Statement object, to achieve similar results.
+
+    2 - The CLOB and BLOB datatypes are not present. Instead, use TEXT and IMAGE.
+
+    3 - [testVoucherStoredProcedure] - Stored Procedures having CURSOR output parameter are not supported by the JDBC driver. Consequently 'testStoredProcedureReturningObjects' is failing.
+
+    4 - To achieve isolation level similar to Oracle, and for ConcurrencyTest.testDirtyRead to succeed, set the default isolation level as: ALTER DATABASE TEST SET READ_COMMITTED_SNAPSHOT ON
+
+    @since 1.3 use the following
+
+    <param name="url" value="jdbc:sqlserver://[host]:[port];DatabaseName=[database];"/>
+    <param name="driverClass" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+-->
+
+
+
+<!--
+    ********************************************************
+            PostgreSQL (Set engine="postgresql")
+    ********************************************************
+    Use the following construct, suitably modifying the relevant values -
+    <driver url="jdbc:postgresql://[host]:[port]/[database]" class="org.postgresql.Driver"/>
+
+    TESTED WITH: pg73jdbc3.jar
+
+    NOTES:
+    1 - Could not find the 'Select... FOR UPDATE NOWAIT' feature, or its equivalent in postgresql
+        It does however have the 'FOR UPDATE' construct, which we use for the Paranoid/Pessimistic locking strategies.
+        Their documentation suggests using 'SET LOCK_TIMEOUT 0' before locking records. But that doesn't work thru JDBC.
+        Neither does setQueryTimeout(n seconds) work.
+        The UnitTests related to the locking strategies - testPessimisticLocking() and testParanoidLocking() - in ConcurrencyTest.java are failing.
+
+    2 - [testAddClobAndBlob,testUpdateClob,testUpdateBlob] - N/A
+        The CLOB and BLOB datatypes are supported in PostgreSQL 7.4, which is currently available on non-windows platforms only.
+
+    3 - [testVoucherStoredProcedure] - N/A
+        A Stored Procedure Test for this has not been developed, this test works for oracle only.
+        Stored procedures do work, we need a test to prove this for PostgreSQL
+
+    4- [testAddWithAutoKey] - N/A
+        The auto-key feature is not present
+
+-->
+
+
+
+<init>
+    <database name="default" engine="<<DATABASE.ENGINE>>">
+
+        <!-- The connection-factory should implement the org.jaffa.persistence.engines.jdbcengine.datasource.IConnectionFactory interface -->
+        <connection-factory class="org.jaffa.persistence.engines.jdbcengine.datasource.DbConnectionBrokerConnectionFactory">
+
+            <!--
+            ****************************************************************************************************************
+             Parameters when using DbConnectionBrokerConnectionFactory or DbcpDataSourceConnectionFactory
+             ****************************************************************************************************************
+            -->
+            <param name="url" value="<<DATABASE.URL>>"/>
+            <param name="driverClass" value="<<DATABASE.DRIVER>>"/>
+            <param name="user" value="<<DATABASE.USER>>"/>
+            <param name="password" value="<<DATABASE.PASSWORD>>"/>
+            <param name="minimumConnections" value="<<INIT.XML.MINIMUMCONNECTIONS>>"/>
+            <param name="maximumConnections" value="<<INIT.XML.MAXIMUMCONNECTIONS>>"/>
+
+            <!--
+            ********************************************************
+             Parameters when using DbConnectionBrokerConnectionFactory
+             ********************************************************
+            -->
+            <param name="debugLevel" value="<<INIT.XML.DEBUG_LEVEL>>"/>
+            <param name="logFileName" value="<<INIT.XML.LOGFILENAME>>"/>
+            <param name="logAppend" value="<<INIT.XML.LOG_APPEND>>"/>
+            <param name="maxConnTime" value="<<INIT.XML.MAX_CONN_TIME>>"/>
+            <param name="maxCheckoutSeconds" value="<<INIT.XML.MAX_CHECKOUT_SECONDS>>"/>
+
+            <!--
+            ********************************************************
+             Parameters when using DbcpDataSourceConnectionFactory
+             ********************************************************
+            -->
+            <param name="maxWait" value="100"/>
+            <param name="testOnBorrow" value="true"/>
+            <param name="testOnReturn" value="true"/>
+            <param name="validationQuery" value="select 1 from dual"/>
+
+            <!--
+            ********************************************************
+             Parameters when using JndiDataSourceConnectionFactory
+             ********************************************************
+            -->
+            <param name="jndiDataSourceName" value="java:/comp/env/app1/datasource1"/>
+        </connection-factory>
+        <hitlistSize value="<<INIT.XML.HITLISTSIZE>>"/>
+        <!--<jdbcSecurityPlugin value="org.jaffa.security.JDBCSecurityPlugin"/>-->
+        <usePreparedStatement value="true"/>
+    </database>
+
+    <preload>
+        <class name="org.jaffa.persistence.domainobjects.CategoryOfInstrument"/>
+        <class name="org.jaffa.persistence.domainobjects.Condition"/>
+    </preload>
+
+    <conf-location>
+        <dir-loc dir="classpath:///jdbcengine"/>
+        <dir-loc dir="classpath:///org/jaffa/persistence/mappingfiles"/>
+    </conf-location>
+</init>

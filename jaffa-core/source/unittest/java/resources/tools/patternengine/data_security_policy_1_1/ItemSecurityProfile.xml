@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE Domain PUBLIC "-//JAFFA//DTD Data Security Policy 1.1//EN" "http://jaffa.sourceforge.net/DTD/data-security-policy_1_1.dtd">
+<Domain>
+  <PatternTemplate>patterns/library/data_security_policy_1_1/SecurityDomainPattern.xml</PatternTemplate>
+  <MappingPackage>clerk</MappingPackage>
+  <SchemaName>jaffatest</SchemaName>
+  <SqlPrefix>jaffa</SqlPrefix>
+  <BasePackage>sec_itemfilter</BasePackage>
+  <Roles>
+    <Role>CLERK</Role>
+  </Roles>
+  <Description>Manager Profile Security</Description>
+  <Tables>
+    <Table>
+      <PolicyName>clerk_item_sec</PolicyName>
+      <SourceTable>ZZ_JUT_ITEM</SourceTable>
+      <Custom>
+      	<Predicate>sc like ''Jaffa%''</Predicate>
+      </Custom>
+    </Table>
+    <Table>
+      <PolicyName>clerk_part_sec</PolicyName>
+      <SourceTable>ZZ_JUT_PART</SourceTable>
+      <Indirect>
+        <SourceField>part</SourceField>
+        <ForeignTable>ZZ_JUT_ITEM</ForeignTable>
+        <ForeignField>part</ForeignField>
+      </Indirect>
+    </Table>
+  </Tables>
+</Domain>

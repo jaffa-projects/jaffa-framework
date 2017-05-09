@@ -1,0 +1,8 @@
+#The root directory for the generated files
+ProjectRootDirectory=@gen.root@
+
+#Directory for the temporary file created when the pattern template XML has the template metadata applied to it
+TempMetaDataDirectory=@gen.temp@
+
+#Directory to hold the generated logs
+LogDirectory=@gen.logs@

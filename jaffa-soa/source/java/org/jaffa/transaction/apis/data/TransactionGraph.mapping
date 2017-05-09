@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='US-ASCII' ?>
+
+<bean-mapping>
+
+  <graph-data-object class='org.jaffa.transaction.apis.data.TransactionGraph'/>
+
+  <domain-object class='org.jaffa.transaction.domain.Transaction'/>
+  
+  <dirty-read gdo='lastChangedOn' error-params='lastChangedBy,lastChangedOn'/>
+
+  <map-key-fields>
+    <field gdo='id'/>
+  </map-key-fields>
+
+  <map-fields>
+    <field gdo='direction'/>
+    <field gdo='type'/>
+    <field gdo='subType'/>
+    <field gdo='status'/>
+    <field gdo='errorMessage'/>
+    <field gdo='createdOn'/>
+    <field gdo='createdBy'/>
+    <field gdo='lastChangedOn'/>
+    <field gdo='lastChangedBy'/>
+  </map-fields>
+
+  <map-aggregate-objects>
+    <field gdo='transactionPayload' do='transactionPayloadObject'/>
+    <field gdo='transactionFields' do='transactionFieldArray'/>
+    <field gdo='transactionDependencies' do='transactionDependencyArray'/>
+  </map-aggregate-objects>
+</bean-mapping>

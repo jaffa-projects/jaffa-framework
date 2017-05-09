@@ -1,0 +1,14 @@
+    <!-- PrinterDefinitionMaintenance -->
+    <definition name="jaffa.printing.printerdefinitionmaintenance.MaintenanceLayout.main"  extends="jaffa.MaintenanceLayout">
+        <put name="body" value="/jaffa/printing/printerdefinitionmaintenance/main.jsp"/>
+        <put name="action" value="/jaffa_printing_printerDefinitionMaintenance"/>
+        <put name="currentScreenCounter" value="0"/>
+        <put name="createModeTitle" value="[title.Jaffa.Printing.PrinterDefinitionMaintenance.maintenance]"/>
+        <put name="updateModeTitle" value="[title.Jaffa.Printing.PrinterDefinitionMaintenance.maintenance]"/>
+        <put name="enctype" value="multipart/form-data"/>
+    </definition>
+    <definition name="jaffa.printing.printerdefinitionmaintenance.main"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.PrinterDefinitionMaintenance.maintenance]"/>
+        <put name="body" value="jaffa.printing.printerdefinitionmaintenance.MaintenanceLayout.main"/>
+    </definition>
+

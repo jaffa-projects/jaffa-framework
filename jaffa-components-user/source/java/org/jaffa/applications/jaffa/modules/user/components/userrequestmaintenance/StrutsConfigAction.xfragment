@@ -1,0 +1,6 @@
+    <action    path="/user_userRequestMaintenance"
+               type="org.jaffa.applications.jaffa.modules.user.components.userrequestmaintenance.ui.UserRequestMaintenanceAction"
+               name="user_userRequestMaintenanceForm"
+               validate="false"
+               scope="request">
+    </action>

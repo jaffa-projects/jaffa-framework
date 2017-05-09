@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.persistence.domainobjects.PartAdditional">
+        <map-to table="ZZ_JUT_PART_ADDITIONAL" />
+
+        <field name="Part" use-member="m_part" type="java.lang.String" primary-key="true">
+            <sql name="PART" type="STRING" dirty="ignore" rpad="50"/>
+        </field>
+
+        <field name="Field1" use-member="m_field1" type="java.lang.String">
+            <sql name="FIELD1" type="STRING" dirty="ignore" rpad="20"/>
+        </field>
+
+        <field name="Field2" use-member="m_field2" type="java.lang.String">
+            <sql name="FIELD2" type="STRING" dirty="ignore" rpad="20"/>
+        </field>
+
+        <field name="Field3" use-member="m_field3" type="java.lang.String">
+            <sql name="FIELD3" type="STRING" dirty="ignore" rpad="20"/>
+        </field>
+
+    </class>
+</classmap>

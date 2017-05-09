@@ -1,0 +1,4 @@
+    <component id="Jaffa.Attachment.AttachmentFinder">
+        <class>org.jaffa.components.attachment.components.attachmentfinder.ui.AttachmentFinderComponent</class>
+        <type>ObjectFinder</type>
+    </component>

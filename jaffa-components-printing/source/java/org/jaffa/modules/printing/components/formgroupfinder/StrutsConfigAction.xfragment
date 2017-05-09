@@ -1,0 +1,8 @@
+    <!-- FormGroupFinder -->
+    <action    path="/jaffa_printing_formGroupFinder"
+               type="org.jaffa.modules.printing.components.formgroupfinder.ui.FormGroupFinderAction"
+               name="jaffa_printing_formGroupFinderForm"
+               validate="false"
+               scope="request">
+    </action>
+

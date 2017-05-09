@@ -1,0 +1,299 @@
+############################################################################
+#### General Errors
+############################################################################
+error={0}
+
+############################################################################
+#### Jaffa Framework Errors
+############################################################################
+error.framework.general=An Internal Error With The Framework Has Occurred. Contact Your Administrator. The error has been written to the log file.
+exception.org.jaffa.exceptions.FrameworkException.DomainObjectValidationException=Domain object validation failed
+exception.org.jaffa.middleware.CreateServiceException.instantiationFailed=Error in generating the Transaction controller. Cannot instantiate the class {0}
+exception.org.jaffa.middleware.CreateServiceException.invalidInput=Error in generating the Transaction controller. The interface {0} should be prefixed by an 'I'
+exception.org.jaffa.middleware.CreateServiceException.notAnInterface=Error in generating the Transaction controller. The Input {0} Should be an Interface
+exception.org.jaffa.persistence.engines.jdbcengine.datasource.exceptions.DataSourceCreationException.connectionFactoryCreationFailed=The data source could not be acquired. Error in creating an instance of the ConnectionFactory for the class {0}
+exception.org.jaffa.persistence.engines.jdbcengine.datasource.exceptions.DataSourceCreationException.connectionFailed=The data source could not be acquired. Error in acquiring a Connection from the ConnectionFactory
+exception.org.jaffa.persistence.engines.jdbcengine.datasource.exceptions.DataSourceCreationException.jdbcSecurityPluginCreationFailed=The data source could not be acquired. Error in creating an instance of the JDBC Security Plugin for the class {0}
+exception.org.jaffa.persistence.engines.jdbcengine.datasource.exceptions.DataSourceCreationException.newConnectionOfJdbcSecurityPluginFailed=The data source could not be acquired. Error in executing the newConnection trigger of the JdbcSecurityPlugin
+exception.org.jaffa.persistence.engines.jdbcengine.datasource.exceptions.DataSourceCreationException.persistenceLoggerCreationFailed=The data source could not be acquired. Error in instantiating the Persistence Logger
+exception.org.jaffa.persistence.engines.jdbcengine.datasource.exceptions.DataSourceCreationException.setAutoCommitFailed=The data source could not be acquired. Error in re-setting the AutoCommit on the Connection
+exception.org.jaffa.persistence.exceptions.AddFailedException=Add Failed
+exception.org.jaffa.persistence.exceptions.AlreadyLockedObjectException=Persistent object {0} has been locked by another process
+exception.org.jaffa.persistence.exceptions.CommitFailedException=Commit Failed
+exception.org.jaffa.persistence.exceptions.DeleteFailedException=Delete Failed
+exception.org.jaffa.persistence.exceptions.EngineInstantiationException=The persistence engine could not be instantiated
+exception.org.jaffa.persistence.exceptions.PostLoadFailedException=PostLoad Failed
+exception.org.jaffa.persistence.exceptions.PreAddFailedException=PreAdd Failed. {0}
+exception.org.jaffa.persistence.exceptions.PostAddFailedException=PostAdd Failed
+exception.org.jaffa.persistence.exceptions.PreDeleteFailedException=PreDelete Failed. 
+exception.org.jaffa.persistence.exceptions.PostDeleteFailedException=PostDelete Failed
+exception.org.jaffa.persistence.exceptions.PreUpdateFailedException=PreUpdate Failed. {0}
+exception.org.jaffa.persistence.exceptions.PostUpdateFailedException=PostUpdate Failed
+exception.org.jaffa.persistence.exceptions.QueryFailedException=Query Failed
+exception.org.jaffa.persistence.exceptions.ReadOnlyObjectException=ReadOnly object cannot be updated
+exception.org.jaffa.persistence.exceptions.RollbackFailedException=Rollback Failed
+exception.org.jaffa.persistence.exceptions.UpdateFailedException=Update Failed
+exception.org.jaffa.persistence.exceptions.UpdatePrimaryKeyException=Updating a Primary Key Field is not allowed
+exception.org.jaffa.rules.RulesEngineException.engineInstantiationFailed=Error in instantiating the Rules Engine
+exception.org.jaffa.rules.RulesEngineException.fieldReadFailed=Error in Dynamic Rules Engine. Error thrown while trying to read the value for the field {0} of the bean {1}
+exception.org.jaffa.rules.RulesEngineException.loadingRulesFailed=Error in Dynamic Rules Engine. Error thrown while trying to read the rules for the class {0} and variation {1}
+exception.org.jaffa.rules.RulesEngineException.ruleInvocationFailed=Error in Dynamic Rules Engine. Error thrown while trying to invoke the rules for the field {0} having the value {1}  
+exception.org.jaffa.util.LabelWriterFrameworkException.writeError=Failed to write label changes to override file
+
+############################################################################
+#### Application Specific Errors
+############################################################################
+error.widgets.usergrid.savefailed=User Grid Settings were not saved successfully.
+exception.org.jaffa.exceptions.ApplicationExceptionWithContext.messageWithContext={0}: {1}
+exception.org.jaffa.exceptions.ComponentExpiredException.componentExpired=The page you are trying to view has expired!
+exception.org.jaffa.exceptions.DomainObjectChangedException.domainObjectChanged=A conflicting action has been performed upon this record by {0} on {1}.  Please refresh or clear and try again.
+exception.org.jaffa.exceptions.DomainObjectChangedException.domainObjectChanged.noUserId=A conflicting action has been performed upon this record on {0}.  Please refresh or clear and try again.
+exception.org.jaffa.exceptions.DomainObjectChangedException.domainObjectChanged.objectDeleted=The record that you are trying to update may have been removed. Please refresh the record.
+exception.org.jaffa.exceptions.DomainObjectNotFoundException.domainObjectNotFound={0} not found
+exception.org.jaffa.exceptions.DuplicateCandidateKeyException.duplicateCandidateKey=Candidate Key Error. The value provided for '{1}' already exists in {0}
+exception.org.jaffa.exceptions.DuplicateKeyException.duplicateKey=Key already exists in {0}
+exception.org.jaffa.exceptions.GetQueryDataException.invokationFailure=Fail to save the specified query
+exception.org.jaffa.exceptions.IncompleteKeySpecifiedException.incompleteKeySpecified=Incomplete criteria specified for {0}.  Please specify a unique input criteria.
+exception.org.jaffa.exceptions.MultipleDomainObjectsFoundException.multipleDomainObjectsFound=Multiple {0} objects retrieved. Please specify a unique input criteria for the object.
+exception.org.jaffa.exceptions.RelatedDomainObjectFoundException.restrictedConstraint=The record can not be deleted because there is at least one record in {0} referencing it.
+exception.org.jaffa.exceptions.ScriptingException.executionError=Error executing script {0}
+exception.org.jaffa.exceptions.TokenMismatchException.tokenMismatch=This action is not permitted, since it has processed already
+exception.org.jaffa.exceptions.ValidationException.belowMinimum={0} has a value below the allowable minimum {1}
+exception.org.jaffa.exceptions.ValidationException.dateTimeRoundingPrecision=Precision must be a factor of 60, such as 30, 20, 15, 10, 6, 5, 4, 2, 1, 0.
+exception.org.jaffa.exceptions.ValidationException.exceedsMaximum={0} exceeds the maximum allowable value {1}
+exception.org.jaffa.exceptions.ValidationException.formatCurrency={0} must contain only currency values
+exception.org.jaffa.exceptions.ValidationException.formatDateOnly={0} must contain only date values. Date format must be like '{1}' or 'n|t (+|- days)'
+exception.org.jaffa.exceptions.ValidationException.formatDateTime={0} must contain only date/time values. Date/time format must be like '{1}' or 'n|t (+|- days)'. However it is permissible to only enter a date into this field
+exception.org.jaffa.exceptions.ValidationException.formatDecimal={0} must contain only decimal values
+exception.org.jaffa.exceptions.ValidationException.formatInteger={0} must contain only integer values
+exception.org.jaffa.exceptions.ValidationException.inList={0} has an invalid value. Valid values are {1}
+exception.org.jaffa.exceptions.ValidationException.invalidForeignKey='{0}' has an invalid value. It should be a valid '{2}' in the '{1}' table
+exception.org.jaffa.exceptions.ValidationException.invalidGenericForeignKey='{0}' has an invalid value. It should be a valid value for table '{1}', field '{2}'. Valid values are '{3}'
+exception.org.jaffa.exceptions.ValidationException.mandatoryField={0} is a mandatory field
+exception.org.jaffa.exceptions.ValidationException.patternMismatch={0} has an invalid pattern. Valid Pattern is {1}
+exception.org.jaffa.exceptions.ValidationException.patternExclusion={0} has an invalid pattern. Valid Pattern excludes {1}
+exception.org.jaffa.exceptions.ValidationException.tooLittleData={0} should have at least {1} characters
+exception.org.jaffa.exceptions.ValidationException.tooMuchData={0} has too much data in it. Limit is {1} characters
+exception.org.jaffa.persistence.engines.jdbcengine.LockedApplicationException=Row(s) locked in the database. Try again in a little while. Contact Your Administrator if error persists. The error has been written to the log file.
+exception.org.jaffa.persistence.engines.jdbcengine.SQLApplicationException.reason={0}
+exception.org.jaffa.presentation.portlet.session.UserSessionSetupException.setupException=Error setting up the User Session Data for {0}
+
+############################################################################
+### Jaffa Framework Labels
+############################################################################
+label.Jaffa.DefaultCurrencySymbol=$
+label.Jaffa.Inquiry.BooleanCriteriaDropDownOption.Any=Any
+label.Jaffa.Inquiry.BooleanCriteriaDropDownOption.False=False
+label.Jaffa.Inquiry.BooleanCriteriaDropDownOption.True=True
+label.Jaffa.Inquiry.CriteriaDropDownOption.BeginsWith=Begins With
+label.Jaffa.Inquiry.CriteriaDropDownOption.Between=Between
+label.Jaffa.Inquiry.CriteriaDropDownOption.EndsWith=Ends With
+label.Jaffa.Inquiry.CriteriaDropDownOption.Equals==
+label.Jaffa.Inquiry.CriteriaDropDownOption.GreaterThan=>
+label.Jaffa.Inquiry.CriteriaDropDownOption.GreaterThanEqualTo=>=
+label.Jaffa.Inquiry.CriteriaDropDownOption.In=In
+label.Jaffa.Inquiry.CriteriaDropDownOption.NotIn=NotIn
+label.Jaffa.Inquiry.CriteriaDropDownOption.IsNotNull=Is Not Null
+label.Jaffa.Inquiry.CriteriaDropDownOption.IsNull=Is Null
+label.Jaffa.Inquiry.CriteriaDropDownOption.Like=Like
+label.Jaffa.Inquiry.CriteriaDropDownOption.NotEquals=!=
+label.Jaffa.Inquiry.CriteriaDropDownOption.SmallerThan=<
+label.Jaffa.Inquiry.CriteriaDropDownOption.SmallerThanEqualTo=<=
+label.Jaffa.Inquiry.CriteriaOption.Any=(Any)
+label.Jaffa.Inquiry.MaxRecordsDropDownOption.Unlimited=Unlimited
+label.Jaffa.Inquiry.OrderByField.SortAscending=
+label.Jaffa.Inquiry.OrderByField.SortDescending=\ (DESC)
+label.Jaffa.Inquiry.delete.confirm=Are you sure you want to perform the delete?
+label.Jaffa.Inquiry.cancel.confirm=Do you want to discontinue this operation? If so, press OK. To return and continue the function, click Cancel.
+label.Jaffa.Inquiry.export=Export
+label.Jaffa.Inquiry.exporttype.excel=Export To Excel
+label.Jaffa.Inquiry.exporttype.webPage=Web Page
+label.Jaffa.Inquiry.exporttype.xml=XML
+label.Jaffa.Inquiry.maxRecords=Max Records
+label.Jaffa.Inquiry.moreRecordsExist=<i><b>more<b></i>
+label.Jaffa.Inquiry.moreRecordsPrefix=Would you like to retrieve
+label.Jaffa.Inquiry.moreRecordsSuffix=?
+label.Jaffa.Inquiry.numberOfRecords=<b>{0}</b> records were retrieved.
+label.Jaffa.Inquiry.numberOfRecordsAndTime=<b>{0}</b> record(s) were retrieved as of <i>{1}</i>
+label.Jaffa.Inquiry.sort=Sort
+label.Jaffa.Widgets.Button.SaveAs=Save As...
+label.Jaffa.Widgets.Button.Action=Action
+label.Jaffa.Widgets.Button.Cancel=Cancel
+label.Jaffa.Widgets.Button.CancelProcess=Cancel this process
+label.Jaffa.Widgets.Button.CancelTrans=Cancel this transaction
+label.Jaffa.Widgets.Button.Clear=Clear
+label.Jaffa.Widgets.Button.Close=Close
+label.Jaffa.Widgets.Button.Copy=Copy
+label.Jaffa.Widgets.Button.Continue=Continue
+label.Jaffa.Widgets.Button.CreateNew=Create New
+label.Jaffa.Widgets.Button.Delete=Delete
+label.Jaffa.Widgets.Button.Finish=Finish
+label.Jaffa.Widgets.Button.ModifySearch=Search Again
+label.Jaffa.Widgets.Button.Next=Next
+label.Jaffa.Widgets.Button.Previous=Previous
+label.Jaffa.Widgets.Button.Print=Print
+label.Jaffa.Widgets.Button.Refresh=Refresh
+label.Jaffa.Widgets.Button.RefreshPage=Refresh this page
+label.Jaffa.Widgets.Button.RunReport=Run Report
+label.Jaffa.Widgets.Button.Save=Save
+label.Jaffa.Widgets.Button.Search=Search
+label.Jaffa.Widgets.Button.Select=Select
+label.Jaffa.Widgets.Button.Submit=Submit form
+label.Jaffa.Widgets.Button.SubmitTrans=Submit this transaction
+label.Jaffa.Widgets.Button.Update=Update
+label.Jaffa.Widgets.Button.View=View
+label.Jaffa.Widgets.Hidden=(Restricted)
+label.Jaffa.Widgets.PropertyEditor.Key=Key
+label.Jaffa.Widgets.PropertyEditor.Value=Value
+label.Jaffa.Widgets.PropertyEditor.Comments=Comments
+label.Jaffa.Widgets.UserGrid.ColName=Column Name
+label.Jaffa.Widgets.UserGrid.KeyName=Key Data
+label.Jaffa.Widgets.UserGrid.NoRecordsKey=No records returned or you do not have security for these records
+label.Jaffa.Widgets.UserGrid.NoRecordsKeyTest=There were no records returned test
+label.Jaffa.Desktop.Copyright=Jaffa @ Sourceforge
+label.Jaffa.Desktop.Copyright.Url=http://jaffa.sourceforge.net
+label.Jaffa.Desktop.UserPreferences=User Preferences
+label.Jaffa.Desktop.MakeDefault=Make Default Desktop
+label.Jaffa.DesktopError.Error=Error occurred when trying to view desktop.
+label.Jaffa.DesktopError.Error.Body=You are unable to view the default desktop for this menu option. It may be that you do not have the correct security to view this page.
+
+label.Jaffa.Finder.SavedQueries=Saved Queries
+label.Jaffa.Finder.LoadQuery=Load Query
+label.Jaffa.Finder.RunQuery=Run Query
+label.Jaffa.Finder.DeleteQuery=Delete Query
+
+label.Jaffa.Finder.SaveQuery=Save Query
+label.Jaffa.Finder.NewQueryName=Query Name
+label.Jaffa.Finder.DefaultQuery=Default Query
+label.Jaffa.Finder.DefaultQueryNo=No
+label.Jaffa.Finder.DefaultQueryYes=Yes
+label.Jaffa.Finder.QueryHasShortCut=Has Shortcut
+label.Jaffa.Finder.QueryHasShortCutNo=No
+label.Jaffa.Finder.QueryHasShortCutYes=Yes
+label.Jaffa.Finder.NoSavedQueries=[label.Jaffa.Finder.DefaultQueryNo] [label.Jaffa.Finder.SavedQueries]
+
+############################################################################
+### Jaffa Framework Titles
+############################################################################
+title.Jaffa.HistoryNav.Home=Home
+title.Jaffa.ContextNav=Actions
+title.Jaffa.SectionNav=Sections
+
+title.Jaffa.Finder=Inquiry
+title.Jaffa.Finder.Criteria=Criteria
+title.Jaffa.Finder.Results=List
+title.Jaffa.Lookup=Lookup
+title.Jaffa.Lookup.Criteria=Lookup Criteria
+title.Jaffa.Lookup.Results=Lookup
+title.Jaffa.Maintenance=Maintenance
+title.Jaffa.Viewer=Details
+
+title.Jaffa.Alert.IllegalAction=Illegal Action:
+title.Jaffa.Alert.AuthorizationError=Authorization Error:
+
+############################################################################
+### Jaffa Common Labels
+############################################################################
+label.Jaffa.Common.CreatedOn=Created On
+label.Jaffa.Common.CreatedBy=Created By
+label.Jaffa.Common.LastChangedOn=Last Changed On
+label.Jaffa.Common.LastChangedBy=Last Changed By
+
+############################################################################
+### Jaffa Widget Labels For Tag lib java classes
+############################################################################
+label.Jaffa.Widgets.Grid.ColumnHeader.ConfigurableTableSettings=Configurable Table Settings
+label.Jaffa.Widgets.Grid.ColumnHeader.AvailableColumns=Available Columns
+label.Jaffa.Widgets.Grid.Button.AddButton=add
+label.Jaffa.Widgets.Grid.Button.RemoveButton=remove
+label.Jaffa.Widgets.Grid.ColumnHeader.SelectedColumns=Selected Columns
+label.Jaffa.Widgets.Grid.Button.CancelButton=cancel
+label.Jaffa.Widgets.Grid.ColumnHeader.SaveSettings=save settings
+label.Jaffa.Widgets.Grid.Button.MoveDownButton=move down
+label.Jaffa.Widgets.Grid.Button.MoveUpButton=move up
+label.Jaffa.Widgets.Grid.Button.Enable=Enable
+label.Jaffa.Widgets.Grid.Button.Disable=Disable
+label.Jaffa.Widgets.Grid.ColumnHeader.FloatingHelp=Floating Help
+label.Jaffa.Widgets.Grid.ColumnHeader.DefaultColoumnSettings=Default Col Settings
+label.Jaffa.Widgets.Grid.Button.Selected=SELECTED
+label.Jaffa.Widgets.Grid.ColumnHeader.Error=Error
+label.Jaffa.Widgets.Grid.ColumnHeader.Message=Message
+label.Jaffa.Mask.InTransaction=Transaction in Progress
+label.Jaffa.Widgets.Grid.ColumnHeader.firstDayOfWeek=firstDayOfWeek
+label.Jaffa.Widgets.Grid.Button.CheckedRadioButton=checked
+label.Jaffa.Mask.InProgress=Processing your request
+
+title.Jaffa.Common.AccessDataDictionary=Access Data Dictionary
+title.Jaffa.Common.AccessOnLineHelp=Access On-Line Help
+title.Jaffa.Common.DataAccess=Data Access
+title.Jaffa.Common.GeneralDetails=General Details
+title.Jaffa.Common.Template=Template
+
+title.Jaffa.NoComponentAccess.titleHeader=No Component Access
+title.Jaffa.PageExpired.titleHeader=Expired Page
+title.Jaffa.PageExpired.InfoMsg=The page you are trying to view has expired !
+label.Jaffa.NoComponentAccess.ComponentAccessViolation=Component Access Violation
+label.Jaffa.NoComponentAccess.NoAuthorityExecuteMsg=You do not have authority to execute this component!
+label.Jaffa.NoComponentAccess.ComponentName=Component Name
+
+label.Jaffa.ErrorPopup.titleHeader=Error Screen
+label.Jaffa.ErrorPopup.FailedMessage=Failed to create error windows (check popup blockers or too many error-popups are open).
+label.Jaffa.ErrorPopup.FailedMessageErrorList=The errors were
+label.Jaffa.ErrorPopup.FailedFocusErrorWindowMsg=Failed to focus on error window:
+label.Jaffa.ErrorPopup.MessageTitle=Message
+label.Jaffa.ErrorPopup.ErrorTitle=Error
+label.Jaffa.ErrorPopup.Button.Previous=previous
+label.Jaffa.ErrorPopup.Button.Next=next
+label.Jaffa.ErrorPopup.ManyPopupsWindowsAreOpenMaximumAllowedMsg=Too many popups windows are open. Maximum allowed is
+label.Jaffa.ErrorPopup.CannotCreateWindowMsg=Can't Create Window
+label.Jaffa.ErrorPopup.WindoeTitle=ErrorPopup
+
+label.Jaffa.ErrorPage.ErrorBody.StackTrace=[label.Jaffa.Messaging.BusinessEventLog.StackTrace]
+label.Jaffa.ErrorPage.ErrorBody.RootCause=Root Cause
+label.Jaffa.ErrorPage.ErrorBody.PageYouAreTryingAccessExpiredMsg=The page you are trying to access has expired.
+label.Jaffa.ErrorPage.ErrorBody.YouShouldReturnURLMsg=You should return to the
+label.Jaffa.ErrorPage.ErrorBody.MainMenu=[label.UserSecurity.User.User.MainMenu]
+label.Jaffa.ErrorPage.ErrorBody.TryRunningTheDesiredScreenAgainMsg=and try running the desired screen again.
+label.Jaffa.ErrorPage.ErrorBody.Description=[label.Common.Description]
+label.Jaffa.ErrorPage.ErrorBody.Message=[label.Commons.Message]
+label.Jaffa.ErrorPage.ErrorBody.WebAppRoot=Web App Root
+label.Jaffa.ErrorPage.ErrorBody.ErrorWhenAccessingURIMsg=Error when accessing URI
+label.Jaffa.ErrorPage.ContactAdmin=Contact Admin
+label.Jaffa.ErrorPage.Back=Back
+label.Jaffa.ErrorPage.Close=Close
+label.Jaffa.ErrorPage.MIROSupportZone=MIRO Support Zone
+
+label.Jaffa.Panels.alertHeaderMsg.FoldingSectionCookieTooBig=Folding Section Cookie Too Big
+label.Jaffa.Panels.alertHeaderMsg.FormNotLoaded=The Form has not finished loading. Try again later
+label.Jaffa.Panels.alertHeaderMsg.JavaScriptError=JavaScript Error. Exception was
+label.Jaffa.Panels.alertHeaderMsg.OnloadJavaScriptError=JavaScript Error in onLoad(). Exception was
+label.Jaffa.Widget.CalenderPopup.titleHeader=Calendar
+label.Jaffa.Widget.DateTimePopup.titleHeader=DateTime Picker
+label.Jaffa.Widgets.CalendarPopup.alertMsg=Use setReturnFunction() to define which function will get the clicked results!
+label.Jaffa.Widgets.CalendarPopup.alertMsgDatetimePicker=TimeMode can only be 12 or 24
+label.Jaffa.Widgets.CalendarPopup.alertMsgGridConfigure=This field is required and cannot be removed
+label.Jaffa.Widgets.CalendarPopup.alertMsgJaffaTabs=Tab onLoad code failed for div.id
+
+label.Jaffa.Rules.alertMsgFieldMandatory=Field is mandatory.
+label.Jaffa.Rules.alertMsgNumberNotValid=This number is not valid. Please Re-enter
+label.Jaffa.Rules.alertMsgOnlyIntegerValues=Only integer values can be used here.
+label.Jaffa.Rules.alertMsgSignificantDigitsAllowed=significant digits are allowed.
+label.Jaffa.Rules.alertMsgDecimalPlacesAllowed=decimal places are allowed.
+label.Jaffa.Rules.alertMsgDigitsLengthExceeded=Too many digits. Maximum is
+label.Jaffa.Rules.alertMsgValueCannotLessThan=Value cannot be less than
+label.Jaffa.Rules.alertMsgValueExceedsMaxValue=Value exceeds maximum value of
+label.Jaffa.Rules.InvalidDate=Invalid Date
+label.Jaffa.Rules.alertMsgUseCorrectFormat=Please use the correct format or use n/t for current date expressions
+label.Jaffa.Rules.alertMsgEitherFormat=Please use either the format
+label.Jaffa.Rules.alertMsgUseN/TCurrentDateExp=or use n/t for current date expressions
+label.Jaffa.Rules.alertMsgMonthBet1and12=Month must be between 1 and 12.
+label.Jaffa.Rules.alertMsgDaysBet1and31=Day must be between 1 and 31.
+label.Jaffa.Rules.alertMsgDoesnotHave31Days=doesnot have 31 days!
+label.Jaffa.Rules.alertMsgDoesnotHave=doesnot have
+label.Jaffa.Rules.alertMsgLengthCannotExceed=Length cannot exceed
+label.Jaffa.Rules.alertMsgLengthLessThan=Length cannot be less than
+label.Jaffa.Rules.alertMsgValueDoesNotMatchExpression=Value does not match expression
+label.Jaffa.Rules.alertMsgValueNotContained=Value not contained in list
+label.Jaffa.Rules.alertTime=[label.Jaffa.WS.WSDoc.Time]
+label.Jaffa.Rules.alertValue=value.
+label.Jaffa.Common.Language.Arabic=ar_OM

@@ -1,0 +1,4 @@
+    <component id="Jaffa.Printing.FormUsageViewer">
+        <class>org.jaffa.modules.printing.components.formusageviewer.ui.FormUsageViewerComponent</class>
+        <type>ObjectViewer</type>
+    </component>

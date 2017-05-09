@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="US-ASCII" ?>
+
+<bean-mapping>
+  <graph-data-object class="org.jaffa.modules.setup.apis.data.ValidFieldValueGraph"/>
+  <domain-object class="org.jaffa.modules.setup.domain.ValidFieldValue"/>
+
+  <map-key-fields>
+    <field gdo='tableName'/>
+    <field gdo='fieldName'/>
+    <field gdo='legalValue'/>
+  </map-key-fields>
+
+  <map-fields>
+    <field gdo='description'/>
+    <field gdo='remarks'/>
+  </map-fields>
+</bean-mapping>

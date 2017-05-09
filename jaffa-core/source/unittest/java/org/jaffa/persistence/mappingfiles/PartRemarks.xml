@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.persistence.domainobjects.PartRemarks">
+        <map-to table="ZZ_JUT_PART_REM" />
+
+        <field name="Part" use-member="m_part" type="java.lang.String" primary-key="true">
+            <sql name="PART" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Remarks" use-member="m_remarks" type="java.lang.String">
+            <sql name="REMARKS" type="LONGSTRING" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

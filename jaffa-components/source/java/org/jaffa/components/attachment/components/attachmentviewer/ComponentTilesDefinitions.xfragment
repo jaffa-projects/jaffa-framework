@@ -1,0 +1,12 @@
+    <!-- AttachmentViewer -->
+    <definition name="jaffa.attachment.attachmentviewer.ViewerLayout"  extends="jaffa.ViewerLayout">
+        <put name="body" value="/jaffa/attachment/attachmentviewer/view.jsp"/>
+        <put name="action" value="/jaffa_attachment_attachmentViewer"/>
+        <put name="updateComponent" value="Jaffa.Attachment.AttachmentMaintenance"/>
+        <put name="deleteComponent" value="Jaffa.Attachment.AttachmentMaintenance"/>
+    </definition>
+    <definition name="jaffa.attachment.attachmentviewer"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Attachment.AttachmentViewer.view]"/>
+        <put name="body" value="jaffa.attachment.attachmentviewer.ViewerLayout"/>
+    </definition>
+

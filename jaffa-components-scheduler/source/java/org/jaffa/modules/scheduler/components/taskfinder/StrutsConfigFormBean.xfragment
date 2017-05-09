@@ -1,0 +1,1 @@
+    <form-bean name="jaffa_scheduler_taskFinderForm" type="org.jaffa.modules.scheduler.components.taskfinder.ui.TaskFinderForm"/>

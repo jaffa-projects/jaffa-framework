@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Object Maintenance Meta 2.0//EN" "http://jaffa.sourceforge.net/DTD/object-maintenance-meta_2_0.dtd">
+<Root>
+  <PatternTemplate>patterns/library/object_maintenance_2_1/ObjectMaintenancePattern.xml</PatternTemplate>
+  <Application>Jaffa</Application>
+  <Module>Printing</Module>
+  <Component>FormTemplateMaintenance</Component>
+  <BasePackage>org.jaffa.modules.printing</BasePackage>
+  <DomainObject>FormTemplate</DomainObject>
+  <DomainPackage>org.jaffa.modules.printing.domain</DomainPackage>
+  <Title>[title.Modules.Printing.FormTemplateMaintenance.maintenance]</Title>
+  <KeyFields>
+    <KeyField>
+      <Name>FormId</Name>
+      <DataType>INTEGER</DataType>
+      <DomainField>FormId</DomainField>
+    </KeyField>
+  </KeyFields>
+  <Fields>
+    <Field>
+      <Name>TemplateData</Name>
+      <DataType>RAW</DataType>
+      <Display>true</Display>
+      <DomainField>TemplateData</DomainField>
+    </Field>
+    <Field>
+      <Name>LayoutData</Name>
+      <DataType>RAW</DataType>
+      <Display>true</Display>
+      <DomainField>LayoutData</DomainField>
+    </Field>
+  </Fields>
+  <ForeignObjects>
+    <ForeignObject>
+      <Name>FormDefinition</Name>
+      <Object>FormDefinition</Object>
+      <Package>org.jaffa.modules.printing.domain</Package>
+      <ForeignFields>
+        <ForeignField>
+          <Name>FormId</Name>
+          <DataType>INTEGER</DataType>
+          <Display>true</Display>
+          <Mandatory>true</Mandatory>
+          <DomainField>FormId</DomainField>
+          <DomainFieldInForeignObject>FormId</DomainFieldInForeignObject>
+          <KeyType>Primary</KeyType>
+        </ForeignField>
+      </ForeignFields>
+      <Lookup>
+        <Component>Jaffa.Printing.FormDefinitionLookup</Component>
+        <TargetFields>formId=formId</TargetFields>
+        <BypassCriteriaScreen>true</BypassCriteriaScreen>
+        <StaticParameters/>
+        <DynamicParameters>formId=formId</DynamicParameters>
+      </Lookup>
+    </ForeignObject>
+  </ForeignObjects>
+  <Screens>
+    <Screen SaveActionAvailableInCreateMode="true" PerformTxValidationOnNextAction="true" AvailableInUpdateMode="true" AvailableInCreateMode="true" Name="main">
+      <References>
+        <ForeignObjectReference ForeignObjectName="FormDefinition"/>
+        <FieldReference Name="TemplateData"/>
+        <FieldReference Name="LayoutData"/>
+      </References>
+    </Screen>
+  </Screens>
+</Root>

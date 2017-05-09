@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.wsapi.domain.WebServiceMetrics">
+        <map-to table="J_WEBSERVICE_METRICS" />
+
+        <field name="Id" use-member="m_id" type="java.lang.String" primary-key="true">
+            <sql name="ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="EndpointName" use-member="m_endpointName" type="java.lang.String">
+            <sql name="ENDPOINT_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="EndpointAddress" use-member="m_endpointAddress" type="java.lang.String">
+            <sql name="ENDPOINT_ADDRESS" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="IPAddress" use-member="m_iPAddress" type="java.lang.String">
+            <sql name="IP_ADDRESS" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Port" use-member="m_port" type="java.lang.String">
+            <sql name="PORT" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="StartTime" use-member="m_startTime" type="org.jaffa.datatypes.DateTime">
+            <sql name="START_TIME" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+        <field name="StopTime" use-member="m_stopTime" type="org.jaffa.datatypes.DateTime">
+            <sql name="STOP_TIME" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+        <field name="RequestCount" use-member="m_requestCount" type="java.lang.Long">
+            <sql name="REQUEST_COUNT" type="INTEGER" dirty="ignore"/>
+        </field>
+
+        <field name="ResponseCount" use-member="m_responseCount" type="java.lang.Long">
+            <sql name="RESPONSE_COUNT" type="INTEGER" dirty="ignore"/>
+        </field>
+
+        <field name="FaultCount" use-member="m_faultCount" type="java.lang.Long">
+            <sql name="FAULT_COUNT" type="INTEGER" dirty="ignore"/>
+        </field>
+
+        <field name="MinProcessingTime" use-member="m_minProcessingTime" type="java.lang.String">
+            <sql name="MIN_PROCESSING_TIME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="MaxProcessingTime" use-member="m_maxProcessingTime" type="java.lang.String">
+            <sql name="MAX_PROCESSING_TIME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="AvgProcessingTime" use-member="m_avgProcessingTime" type="java.lang.String">
+            <sql name="AVG_PROCESSING_TIME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="CreatedOn" use-member="m_createdOn" type="org.jaffa.datatypes.DateTime">
+            <sql name="CREATED_ON" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

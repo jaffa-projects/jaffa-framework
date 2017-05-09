@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Domain Creator Meta 1.1//EN" "http://jaffa.sourceforge.net/DTD/domain-creator-meta_1_1.dtd">
+<Root>
+  <DomainObject>TransactionDependencySweeperView</DomainObject>
+  <DomainPackage>org.jaffa.transaction.domain</DomainPackage>
+  <DatabaseTable>J_TRANS_DEPENDS_SWEEPER$VIEW</DatabaseTable>
+  <MappingPackage>resources/jdbcengine/jaffa</MappingPackage>
+  <PatternTemplate>patterns/library/domain_for_view_1_0/DomainForViewPattern.xml</PatternTemplate>
+  <Description>Holds Transaction Dependencies</Description>
+  <LabelToken>[label.Jaffa.Transaction.TransactionDependency]</LabelToken>
+  <Fields>
+    <Field>
+      <Name>TransactionId</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>TRANSACTION_ID</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <PrimaryKey>T</PrimaryKey>
+      <LabelToken>[label.Jaffa.Transaction.TransactionDependency.TransactionId]</LabelToken>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>DependsOnId</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>DEPENDS_ON_ID</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <PrimaryKey>T</PrimaryKey>
+      <LabelToken>[label.Jaffa.Transaction.TransactionDependency.DependsOnId]</LabelToken>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>Status</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>STATUS</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <LabelToken>[label.Jaffa.Transaction.TransactionDependency.Status]</LabelToken>
+      <IntSize>20</IntSize>
+    </Field>
+  </Fields>
+</Root>

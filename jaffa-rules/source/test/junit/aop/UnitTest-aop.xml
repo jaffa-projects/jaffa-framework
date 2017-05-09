@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+  <!-- ================================================= -->
+  <!-- Rules used by the test case test.rules.AccessTest -->
+  <!-- ================================================= -->
+
+   <metadata tag="jaffa.rules" class="test.rules.Access1">
+      <property name="field1">
+      </property>  
+      <property name="field2">
+        <read-only/>
+      </property>  
+      <property name="field3">
+        <hidden/>
+      </property>  
+   </metadata>
+   
+   <metadata tag="jaffa.rules" class="test.rules.Access2">
+      <property name="field1">
+         <initialize value="data4"/>
+      </property>  
+      <property name="field2">
+        <read-only/>
+        <initialize member="field2">data4</initialize>
+      </property>  
+      <property name="field3">
+        <hidden/>
+        <initialize>
+          <member>field3</member>
+          <value>data4</value>
+        </initialize>
+      </property>  
+   </metadata>
+   
+   <metadata tag="jaffa.rules" class="test.rules.Access3">
+      <property name="field1">
+      </property>  
+      <property name="field2">
+        <read-only/>
+        <initialize value="data4"/>
+      </property>  
+      <property name="field3">
+        <hidden/>
+      </property>  
+   </metadata>
+   
+   <metadata tag="jaffa.rules" class="test.rules.Access4">
+      <property name="field1">
+      </property>  
+      <property name="field2">
+        <read-only/>
+      </property>  
+      <property name="field3">
+        <hidden/>
+        <initialize value="data4"/>
+      </property>  
+   </metadata>
+
+  <!-- ================================================= -->
+  <!-- Rules used by the test case test.rules.StringsTest -->
+  <!-- ================================================= -->
+
+   <metadata tag="jaffa.rules" class="test.rules.Strings1" execution-realm="business">
+      <primary-key value='Field1'/>
+      <candidate-key value='Field3,Field4'/>
+      <candidate-key value='Field2,Field3'/>
+      <property name="field1">
+        <case-type value="mixed"/>
+        <mandatory/>
+      </property>  
+      <property name="field2">
+        <case-type value="Lower"/>
+        <min-length>3</min-length>
+      </property>  
+      <property name="field3">
+        <case-type value="UPPER"/>
+        <max-length>10</max-length>
+      </property>  
+      <property name="field4">
+        <case-type value="upper"/>
+        <case-type value="mixed"/>
+      </property>  
+   </metadata>
+
+  <!-- ================================================= -->
+  <!-- Rules used by the test case test.rules.ExtensionTest -->
+  <!-- ================================================= -->
+
+   <metadata tag="jaffa.rules" class="test.rules.Extension1" execution-realm="business">
+      <label condition='bean.field1 == null'>object label to use when field1 is null</label>
+      <label condition='bean.field1 != null'>object label to use when field1 is not null</label>
+      <label condition='1 == 2'>invalid object label since condition can never be true</label>
+      <foreign-key domainObject='test.rules.SomeForeignClassWithCompositeKey' value='field10,field5'/>
+      <property name="field1">
+        <initialize>value1</initialize>
+        <label condition='bean.field1 == null'>label to use when field1 is null</label>
+        <label condition='bean.field1 != null'>label to use when field1 is not null</label>
+        <label condition='1 == 2'>invalid label since condition can never be true</label>
+        <in-list>value1=label1,value2=label2,value3,value4=label4</in-list> <!-- valid values separated by the default comma separator -->
+        <layout value="[label.module.prop.{0}]" formatterClass='org.jaffa.rules.util.PropertyTranslator'/>
+      </property>  
+      <property name="field1">
+        <initialize>value2</initialize>
+      </property>  
+      <property name="field2">
+        <initialize>value1</initialize>
+        <in-list separator=":">value1=label1:value2=label2:value3:value4</in-list> <!-- valid values separated by the custom colon separator -->
+      </property>  
+      <property name="field3">
+        <initialize>value1</initialize>
+        <min-length>1</min-length>
+        <max-length>100</max-length>
+        <pattern>value\d+</pattern> <!-- "value" followed by one or more digits. eg. "value1", "value23" -->
+      </property>  
+      <property name="field4">
+        <min-value>1</min-value>
+        <max-value>100</max-value>
+        <layout>[decimalOptional.format]</layout>
+      </property>
+      <property name="field5">
+        <min-value>1</min-value>
+        <max-value>100</max-value>
+      </property>
+      <property name="field6">
+        <min-value errorCode='aCustomErrorMessageTokenForField6'>t-10</min-value>
+        <max-value>t</max-value>
+      </property>
+      <property name="field7">
+        <min-value>1</min-value>
+        <max-value>100</max-value>
+      </property>
+      <property name="field8">
+        <in-list>02/15/2004,t=today,t-1=yesterday</in-list>
+      </property>
+      <property name="field9">
+        <min-length>3</min-length>
+        <max-length>5,2</max-length>
+      </property>
+      <property name="field10">
+        <foreign-key domainObject='test.rules.SomeForeignClass' condition='bean.field1 != null'/>
+        <generic-foreign-key tableName='TABLEA' fieldName='FIELD1' condition='bean.field1 == null'/>
+      </property>
+      <property name="field11">
+        <generic-foreign-key tableName='TABLEA' fieldName='FIELD2'/>
+      </property>
+   </metadata>
+
+   <metadata tag="jaffa.rules" class="test.rules.Extension1">
+      <property name="field2">
+        <initialize>value2</initialize>
+      </property>  
+   </metadata>
+
+   <metadata tag="jaffa.rules" class="test.rules.Initialize1">
+    <property name="fieldboolean"><initialize expression="true">1 == 1</initialize></property>
+    <property name="fieldbyte"><initialize>123</initialize></property>
+    <property name="fielddouble"><initialize>12,345.567</initialize></property>
+    <property name="fieldfloat"><initialize>12,345.56</initialize></property>
+    <property name="fieldint"><initialize>1,234,567</initialize></property>
+    <property name="fieldlong"><initialize>12,345,678</initialize></property>
+    <property name="fieldshort"><initialize>12,345</initialize></property>
+    <property name="fieldBoolean"><initialize>1</initialize></property>
+    <property name="fieldByte"><initialize>123</initialize></property>
+    <property name="fieldDouble"><initialize>12,345.567</initialize></property>
+    <property name="fieldFloat"><initialize>12,345.567</initialize></property>
+    <property name="fieldInteger"><initialize>1,234,567</initialize></property>
+    <property name="fieldLong"><initialize>12,345,678</initialize></property>
+    <property name="fieldShort"><initialize>12,345</initialize></property>
+    <property name="fieldString"><initialize>Hello World</initialize></property>
+    <property name="fieldDateOnly"><initialize>n-30</initialize></property>
+    <property name="fieldDateTime"><initialize>01/31/2004 12:47:44</initialize></property>
+    <property name="fieldCurrency"><initialize expression="true">(100 * 1000) + 0.21</initialize></property>
+   </metadata>
+
+   <metadata tag="jaffa.rules" class="test.rules.Initialize2">
+    <property name="fieldboolean"><initialize member="fieldboolean" expression="true">1 == 1</initialize></property>
+    <property name="fieldbyte"><initialize member="fieldbyte">123</initialize></property>
+    <property name="fielddouble"><initialize member="fielddouble">12,345.567</initialize></property>
+    <property name="fieldfloat"><initialize member="fieldfloat">12,345.56</initialize></property>
+    <property name="fieldint"><initialize member="fieldint">1,234,567</initialize></property>
+    <property name="fieldlong"><initialize member="fieldlong">12,345,678</initialize></property>
+    <property name="fieldshort"><initialize member="fieldshort">12,345</initialize></property>
+    <property name="fieldBoolean"><initialize member="fieldBoolean">1</initialize></property>
+    <property name="fieldByte"><initialize member="fieldByte">123</initialize></property>
+    <property name="fieldDouble"><initialize member="fieldDouble">12,345.567</initialize></property>
+    <property name="fieldFloat"><initialize member="fieldFloat">12,345.567</initialize></property>
+    <property name="fieldInteger"><initialize member="fieldInteger">1,234,567</initialize></property>
+    <property name="fieldLong"><initialize member="fieldLong">12,345,678</initialize></property>
+    <property name="fieldShort"><initialize member="fieldShort">12,345</initialize></property>
+    <property name="fieldString"><initialize member="fieldString">Hello World</initialize></property>
+    <property name="fieldDateOnly"><initialize member="fieldDateOnly">n-30</initialize></property>
+    <property name="fieldDateTime"><initialize member="fieldDateTime">01/31/2004 12:47:44</initialize></property>
+    <property name="fieldCurrency"><initialize member="fieldCurrency" expression="true">(100 * 1000) + 0.21</initialize></property>
+   </metadata>
+         
+   <metadata tag="jaffa.rules" class="test.rules.ScriptBean">
+     <!-- Invoke methods on an external script file -->
+     <script trigger='preUpdate()' file='test/rules/script1.bsh' language='beanshell'>
+       System.out.println("Invoking updateField1() on the external script file script1.bsh");
+       updateField1();
+       System.out.println("Invoking updateField2() on the external script file script1.bsh");
+       updateField2();
+     </script>
+     
+     <!-- Evaluate the embedded script -->
+     <script trigger='preUpdate(*)'>
+       System.out.println("Directly updating the bean");
+       System.out.println("Original value of Field3 of the bean: " + bean.field3);
+       bean.field3="NewField3";
+       System.out.println("Modified value of Field3 of the bean: " + bean.field3);
+     </script>
+     
+     <!-- Invoke an external script file -->
+     <script trigger='preUpdate()' file='test/rules/script2.bsh'/>
+     <script trigger='preUpdate(*)' file='test/rules/script2.bsh'/>
+   </metadata>
+   
+   
+   <metadata tag="jaffa.rules" class="test.rules.Parent">
+      <property name="field1">
+        <initialize value="value11"/>
+        <label value="ParentField1"/>
+        <in-list value="value11,value12,value13"/>
+      </property> 
+      <property name="field2">
+        <initialize value="value21"/>
+        <label value="ParentField2"/>
+        <in-list value="value21,value22,value23,bigvalue"/>
+      </property>  
+      <property name="field3">
+        <initialize value="value31"/>
+        <label value="ParentField3"/>
+        <case-type value="lower"/>
+        <max-length value='7'/>
+      </property>  
+   </metadata>
+   
+   <metadata tag="jaffa.rules" class="test.rules.Child1">
+      <property name="field0">
+        <case-type value="upper"/>
+      </property>
+      <property name="field1">
+        <initialize value="value12"/>
+        <in-list value="value12,value13,value14,value15"/>
+      </property>
+      <property name="field2">
+        <initialize value="value22"/>
+        <label value="Child1Field2"/>
+        <in-list value="value22,value23,value24,value25"/>
+      </property>
+      <property name="field3">
+        <case-type value="upper"/>
+      </property>
+   </metadata>
+   
+   <metadata tag="jaffa.rules" class="test.rules.Child2" extends-class='test.rules.Parent' execution-realm="business">
+      <!-- Inherit object-level rules -->
+      <super/>
+      
+      <!-- Inherit + override the property-level rules -->
+      <property name="field1">
+        <super/>
+        <initialize value="value12"/>
+        <in-list value="value12,value13,value14,value15"/>
+      </property>
+      
+      <!-- Extend a property on the same class -->
+      <property name="field3" extends-class='test.rules.Child2' extends-property='field2'>
+        <super/>
+      </property>
+      
+      <!-- The foreign-key rule can only be executed when the class is in the 'business' realm -->
+      <property name="field4">
+        <label value='Child2Field4'/>
+        <foreign-key domainObject='test.rules.SomeForeignClass'/>
+      </property>
+      
+      <!-- Undefined properties will be inherited from the base class -->
+   </metadata>
+   
+   <metadata tag="jaffa.rules" class="test.rules.Child2">
+      <property name="field2">
+        <label value='Child2Field2'/>
+      </property>
+   </metadata>
+   
+   <metadata tag="jaffa.rules" class="test.rules.Child3" extends-class='test.rules.Child2'>
+      <!-- Inherit all the properties from the base class -->
+      <!-- The object-level rules will not be inherited, since we are not specifying <super/> -->
+      <!-- Only the non-realm rules of Child2 will be inherited, since we have not specified any execution-realm for Child3 -->
+   </metadata>
+   
+   <metadata tag="jaffa.rules" class="test.rules.PersistentChild">
+     <script trigger='preAdd()'>
+       System.out.println("Directly updating the bean");
+       System.out.println("Original value of Field1 of the bean: " + bean.field1);
+       bean.field1="NewField1";
+       System.out.println("Modified value of Field1 of the bean: " + bean.field1);
+     </script>
+   </metadata>
+   
+   <!-- The following rules will be applied, no matter what variation exists in the thread context -->
+   <metadata tag="jaffa.rules" class="test.rules.VariationBean">
+      <property name="field1">
+        <label value="NoVariationField1"/>
+      </property>
+      <property name="field2">
+        <label value="NoVariationField2"/>
+      </property>
+      <property name="field3">
+        <label value="NoVariationField3"/>
+      </property>
+   </metadata>
+   
+   <!-- The rules for the following class will be applied only if the variation is VAR1 in the thread context -->
+   <!-- The variation check can however be overidden at property or rule levels !! -->
+   <metadata tag="jaffa.rules" class="test.rules.VariationBean" variation='VAR1'>
+      <property name="field1">
+        <label value="VAR1Field1"/>
+      </property>
+      
+      <!-- The rules for the following property will be applied only if the variation is VAR2 -->
+      <!-- It overrides any variation defined at class level -->
+      <!-- The variation check can however be overidden at rule level !! -->
+      <property name="field2" variation='VAR2'>
+        <label value="VAR2Field2"/>
+      </property>
+      
+      <property name="field3">
+        <!-- The following rule will be applied only if the variation is 'VAR3' -->
+        <!-- It overrides any variation defined at property or class levels -->
+        <label value="VAR3Field3" variation='VAR3'/>
+      </property>
+   </metadata>
+   
+   <!-- Setup the properties of CommentBusinessBean as comments -->
+   <metadata tag="jaffa.rules" class="test.rules.CommentBusinessBean" execution-realm="business">
+      <property name="field1">
+        <comment value="plain"/>
+      </property>
+      <property name="field2">
+        <comment value="lifo"/>
+      </property>
+      <property name="field3">
+        <comment value="fifo"/>
+      </property>
+   </metadata>
+   
+   <!-- Setup the properties of CommentBean as comments -->
+   <!-- However, since the execution-realm is not business, the values for the properties will not be converted -->
+   <metadata tag="jaffa.rules" class="test.rules.CommentBean" extends-class='test.rules.CommentBusinessBean'>
+   </metadata>
+   
+   <!-- Define a Virtual Class -->
+   <metadata tag="jaffa.rules" class="test.rules.Virtual1">
+      <property name="field1">
+        <data-type value="STRING"/>
+        <max-length value="20"/>
+      </property>
+      <property name="field2">
+        <data-type value="INTEGER"/>
+        <max-length value="5"/>
+      </property>
+   </metadata>
+
+   <metadata tag="jaffa.rules" class="test.rules.SomeGraphCriteria" extends-class='test.rules.Strings1'>
+      <!-- This should inherit only those rules which are allowed by the realm -->
+      <super/>
+      
+      <!-- In addition to realm-filtering, the following will also filter based on the excludes attribute of the SUPER rule -->
+      <property name="field3">
+        <super excludes='case-type'/>
+      </property>  
+   </metadata>
+
+</aop>

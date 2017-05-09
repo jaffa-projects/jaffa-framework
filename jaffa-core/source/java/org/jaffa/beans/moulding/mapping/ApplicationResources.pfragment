@@ -1,0 +1,12 @@
+exception.org.jaffa.beans.moulding.mapping.MouldException.0=Mould Error at {0} - Method {1} not found.
+exception.org.jaffa.beans.moulding.mapping.MouldException.1=Mould Error at {0} - Can't get key '{1}' on object '{2}'
+exception.org.jaffa.beans.moulding.mapping.MouldException.2=Mould Error at {0} - Method Access Error : {1}
+exception.org.jaffa.beans.moulding.mapping.MouldException.3=Mould Error at {0} -  Method Invocation Error : {1}
+exception.org.jaffa.beans.moulding.mapping.MouldException.4=Mould Error at {0} - Object Constuction Error : {1}
+exception.org.jaffa.beans.moulding.mapping.MouldException.5=Mould Error at {0} - Can't Introspect Method : {1}
+exception.org.jaffa.beans.moulding.mapping.MouldException.6=Mould Error at {0} - Invalid mapping, Foreign Key field '{1}' not accessable on '{2}'
+exception.org.jaffa.beans.moulding.mapping.MouldException.7=Mould Error at {0} - Mismatch in foreign key mapping from '{1}' to '{2}'
+exception.org.jaffa.beans.moulding.mapping.MouldException.8=Mould Error at {0} - Can't set key field '{1}' on object '{2}'
+exception.org.jaffa.beans.moulding.mapping.MouldException.9=Mould Error at {0} - No Setter for property '{1}' on object '{2}'
+exception.org.jaffa.beans.moulding.mapping.MouldException.10=Mould Error at {0} -  No Getter for property '{1}' on object '{2}'
+exception.org.jaffa.beans.moulding.mapping.MouldException.11=Mould Error - Data Type Mismatch method '{0}' expected '{1}', but had '{2}'

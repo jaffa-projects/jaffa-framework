@@ -1,0 +1,34 @@
+<ivy-module version="2.0">
+
+	<!-- The groupId, artifactId and version of the artifacts.  Update the revision to match the Jaffa version being built. -->
+    <info organisation="org.jaffa" module="jaffa-components" revision="${jaffa-version}"/>
+
+	<!-- The pom and jar to be published to Maven repositories. -->
+	<publications>
+        <artifact name="jaffa-components" type="pom"/>
+        <artifact name="jaffa-components" type="jar"/>
+    </publications>
+
+  <dependencies>
+    <!-- Begin Apache Commons dependencies -->
+    <dependency org="commons-beanutils" name="commons-beanutils" rev="${commons-beanutils-version}" transitive="false"/>
+    <!-- End Apache Commons dependencies -->
+
+    <!-- Begin javax dependencies -->
+    <dependency org="javax.servlet" name="servlet-api" rev="${servlet-api-version}" transitive="false"/>
+    <!-- End javax dependencies -->
+
+    <!-- Begin Hibernate dependencies -->
+    <dependency org="org.hibernate" name="hibernate-core" rev="${hibernate-core-version}" transitive="false"/>
+    <dependency org="org.hibernate.javax.persistence" name="hibernate-jpa-2.1-api" rev="${hibernate-jpa-2.1-api-version}" transitive="false"/>
+    <!-- End Hibernate  dependencies -->
+
+    <!-- Begin GOLDesp JDBC Plus dependencies -->
+    <dependency org="com.tapestrysolutions.goldesp.components" name="goldesp-components-jdbcplus" rev="${goldesp-components-jdbcplus-version}" transitive="false"/>
+    <!-- End GOLDesp JDBC Plus dependencies -->
+
+    <!-- Begin jsoup dependencies -->
+    <dependency org="org.jsoup" name="jsoup" rev="${jsoup-version}" transitive="false"/>
+    <!-- End jsoup dependencies -->
+  </dependencies>
+</ivy-module>

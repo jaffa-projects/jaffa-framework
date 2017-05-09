@@ -1,0 +1,6 @@
+    <business-function name="Jaffa.Admin.Labels">
+        <description>Able to run the LabelEditor component</description>
+    </business-function>
+    <business-function name="Jaffa.Admin.Labels.Developer">
+        <description>Able to run the 'SyncToSource' in the LabelEditor component</description>
+    </business-function>

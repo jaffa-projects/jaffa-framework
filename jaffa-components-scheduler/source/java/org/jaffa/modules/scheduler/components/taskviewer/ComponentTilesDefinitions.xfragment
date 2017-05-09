@@ -1,0 +1,10 @@
+    <definition name="jaffa.scheduler.taskviewer.ViewerLayout"  extends="jaffa.ViewerLayout">
+        <put name="body" value="/jaffa/scheduler/taskviewer/view.jsp"/>
+        <put name="action" value="/jaffa_scheduler_taskViewer"/>
+    </definition>
+    
+    <definition name="jaffa.scheduler.taskviewer"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Scheduler.TaskViewer.view]"/>
+        <put name="body" value="jaffa.scheduler.taskviewer.ViewerLayout"/>
+    </definition>
+

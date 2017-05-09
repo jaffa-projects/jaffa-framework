@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.modules.printing.domain.OutputCommand">
+        <map-to table="J_OUTPUT_COMMANDS" />
+
+        <field name="OutputCommandId" use-member="m_outputCommandId" type="java.lang.Long" primary-key="true" autogen-key="true">
+            <sql name="OUTPUT_COMMAND_ID" type="INTEGER" dirty="ignore"/>
+        </field>
+
+        <field name="OutputType" use-member="m_outputType" type="java.lang.String">
+            <sql name="OUTPUT_TYPE" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="SequenceNo" use-member="m_sequenceNo" type="java.lang.Long">
+            <sql name="SEQUENCE_NO" type="INTEGER" dirty="ignore"/>
+        </field>
+
+        <field name="OsPattern" use-member="m_osPattern" type="java.lang.String">
+            <sql name="OS_PATTERN" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="CommandLine" use-member="m_commandLine" type="java.lang.String">
+            <sql name="COMMAND_LINE" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="CreatedOn" use-member="m_createdOn" type="org.jaffa.datatypes.DateTime">
+            <sql name="CREATED_ON" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+        <field name="CreatedBy" use-member="m_createdBy" type="java.lang.String">
+            <sql name="CREATED_BY" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="LastChangedOn" use-member="m_lastChangedOn" type="org.jaffa.datatypes.DateTime">
+            <sql name="LAST_CHANGED_ON" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+        <field name="LastChangedBy" use-member="m_lastChangedBy" type="java.lang.String">
+            <sql name="LAST_CHANGED_BY" type="STRING" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

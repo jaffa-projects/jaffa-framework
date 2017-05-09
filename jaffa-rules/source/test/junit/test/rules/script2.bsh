@@ -1,0 +1,5 @@
+System.out.println("Inside script2.bsh");
+System.out.println("Original value of Field4 of the bean: " + bean.field4);
+bean.field4="NewField4";
+System.out.println("Modified value of Field4 of the bean: " + bean.field4);
+System.out.println("Exiting script2.bsh");

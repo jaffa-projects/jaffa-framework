@@ -1,0 +1,5 @@
+    <forward name="usertimeentry_userTimeEntryFinderCriteria" path="jaffa.usertimeentry.usertimeentryfinder.criteria"/>
+    <forward name="usertimeentry_userTimeEntryFinderResults" path="jaffa.usertimeentry.usertimeentryfinder.results"/>
+    <forward name="usertimeentry_userTimeEntryFinderConsolidatedCriteriaAndResults" path="jaffa.usertimeentry.usertimeentryfinder.consolidatedCriteriaAndResults"/>
+    <forward name="usertimeentry_userTimeEntryFinderExcelResults" path="jaffa.usertimeentry.usertimeentryfinder.FinderExcelLayout"/>
+    <forward name="usertimeentry_userTimeEntryFinderXmlResults" path="jaffa.usertimeentry.usertimeentryfinder.FinderXmlLayout"/>

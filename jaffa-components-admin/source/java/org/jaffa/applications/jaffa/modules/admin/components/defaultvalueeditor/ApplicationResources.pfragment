@@ -1,0 +1,8 @@
+title.Jaffa.Admin.DefaultValueEditor=Default Value Editor
+title.Jaffa.Admin.DefaultValueEditor.Editor=View/Edit File
+label.Jaffa.Admin.DefaultValueEditor.ComponentList=Component List
+label.Jaffa.Admin.LabelEditor.ComponentName=Component Name
+label.Jaffa.Admin.LabelEditor.ComponentClass=Class
+label.Jaffa.Admin.LabelEditor.ComponentType=Type
+exception.org.jaffa.applications.jaffa.modules.admin.components.defaultvalueeditor.ui.exceptions.DefaultValueEditorException.readFailed=Error in reading file {0}
+exception.org.jaffa.applications.jaffa.modules.admin.components.defaultvalueeditor.ui.exceptions.DefaultValueEditorException.writeFailed=Error in writing to file {0}

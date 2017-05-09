@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.components.attachment.domain.AttachmentDelete">
+        <map-to table="J_ATTACHMENTS_DEL" />
+
+        <field name="AttachmentId" use-member="m_attachmentId" type="java.lang.String" primary-key="true">
+            <sql name="ATTACHMENT_ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="SerializedKey" use-member="m_serializedKey" type="java.lang.String">
+            <sql name="SERIALIZED_KEY" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="VersionNumber" use-member="m_versionNumber" type="java.lang.Long">
+            <sql name="VERSION_NUMBER" type="INTEGER" dirty="ignore"/>
+        </field>
+
+        <field name="DeletionCreatedOn" use-member="m_deletionCreatedOn" type="org.jaffa.datatypes.DateTime">
+            <sql name="DELETION_CREATED_ON" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

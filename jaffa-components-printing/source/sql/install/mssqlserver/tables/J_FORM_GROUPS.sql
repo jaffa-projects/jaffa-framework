@@ -1,0 +1,14 @@
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE "J_FORM_GROUPS"(
+        "FORM_NAME"          VARCHAR(20) NOT NULL,
+        "DESCRIPTION"          VARCHAR(100),
+        "FORM_TYPE"          VARCHAR(20),
+        "CREATED_ON"          DATETIME,
+        "CREATED_BY"          VARCHAR(20),
+        "LAST_CHANGED_ON"          DATETIME,
+        "LAST_CHANGED_BY"          VARCHAR(20),
+    CONSTRAINT "J_FORM_GROUPSP1" PRIMARY KEY("FORM_NAME")
+)
+GO

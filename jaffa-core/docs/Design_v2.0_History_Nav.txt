@@ -1,0 +1,102 @@
+Objective
+=========
+Create historyNav.jsp, which can be included as a tile in each screen.
+This JSP will render a list of links for all the screens visited upto the current screen.
+A user can click on a link to get to an earlier screen.
+
+
+
+Implementation
+==============
+We'll maintain a List of FormKey objects in the request stream keyed by the attribute HistoryNav.HISTORY_NAV_PARAMETER
+The historyNav.jsp will use this attribute to generate the row of links.
+The last element in the row (which will be the current screen) will not be hyperlinked
+Additionally, any FormKey which has a null FormName will not be hyperlinked. They will be rendered as plain text.
+The historyNav.jsp will have a hidden field, name=HistoryNav.HISTORY_NAV_PARAMETER, that'll contain XML representation of the List
+Each link will have href='javascript:eventId="HistoryNav={index};Clicked"; postForm();', so that clicking a link will invoke the do_HistoryNav_Clicked() method on the Action class.
+The ActionBase will contain the handler for the 'HistoryNav' event, that gets invoked when a link is clicked in the historyNav.jsp
+The ActionBase will also be enhanced to add the FormKey returned by any event-handler to the List. However, if the FormKey is already present in the List, then all the subsequent FormKeys, if any, will be removed from the List and the subsequent components, if any, will be closed.
+
+
+
+ApplicationResources.properties
+===============================
+Add the following label
+title.Jaffa.HistoryNav.Home=Home
+
+
+struts-config.xml
+=================
+Add the following global forward
+<!-- GlobalForward For the Home page -->
+<forward   name="jaffa_home"          path="/"/>
+     
+
+tiles-defs.xml
+==============
+Add the following to the tiles definitions for 'jaffa.FinderLayout', 'jaffa.MaintenanceLayout', 'jaffa.LookupLayout', 'jaffa.ViewerLayout'
+        <put name="historyNav"  value="/jaffa/jsp/tiles/historyNav.jsp"/>
+
+
+FinderLayout.jsp, MaintenanceLayout.jsp, LookupLayout.jsp, ViewerLayout.jsp
+===========================================================================
+Add the following before the 'body' tile(s)
+                <%-- This will display the HistoryNav --%>
+                <TR><TD>
+                    <tiles:useAttribute name='title' classname='String' ignore='true'/>
+                    <tiles:insert attribute='historyNav'>
+                        <tiles:put name='title' value='<%= title %>'/>
+                    </tiles:insert>
+                </TD></TR>
+
+
+MainLayout.jsp
+==============
+Pass the 'title' attribute to the 'body' tile
+            <TR><TD>
+                <tiles:insert attribute='body' ignore='true'>
+                    <tiles:put name='title' value='<%= title %>'/>
+                </tiles:insert>
+            </TD></TR>
+
+
+FormKey.java
+============
+Add the property 'Title'. The historyNav.jsp uses this property to obtain the text for each link in the historyNav.jsp
+
+
+StartComponentAction.java
+=========================
+This will initialize the List of FormKey objects to be displayed in the historyNav.
+The 1st FormKey to be added to the List will have componentId=null, formName="/", title="[title.Jaffa.HistoryNav.Home]"
+The 2nd FormKey to be added to the List will be computed from the finalUrl. It will have componentId=null, formName={finalUrl}, title={desktopName from finalUrl}
+The List will then be added to the request stream, keyed by the attribute HistoryNav.HISTORY_NAV_PARAMETER.
+
+
+ActionBase.java
+===============
+This will contain the handler for the 'HistoryNav' event, public FormKey do_HistoryNav_Clicked(String index), which obtains the List by un-marshalling the value of request.getParameter(HistoryNav.HISTORY_NAV_PARAMETER), and then returns the appropriate FormKey from the List.
+The ActionBase will be enhanced to add the FormKey, returned by any event-handler, to the List (obtained by un-marshalling the value of request.getParameter(HistoryNav.HISTORY_NAV_PARAMETER)). However, if the FormKey is already present in the List, then all the subsequent FormKeys, if any, will be removed from the List and the subsequent components, if any, will be closed. It then adds the List to the request stream as an attribute keyed by HistoryNav.HISTORY_NAV_PARAMETER.
+
+
+HistoryNav.java (new)
+=====================
+This will have the constant HISTORY_NAV_PARAMETER = "historyNav"
+It'll have the static method encode() to marshal the historyNavList into XML
+It'll have the static method decode() to unmarshal XML back to the historyNavList
+It'll have helper methods for use by the StartComponentAction and the ActionBase
+
+
+historyNav.jsp (new)
+====================
+This will read the HistoryNav.HISTORY_NAV_PARAMETER attribute from the request stream.
+The title for the last FormKey in the List may not have any value. This JSP will set it using the input Tiles attribute, if passed.
+It will create a link for each FormKey. A FormKey having a null FormName will only have the text displayed.
+The last element in the List (which will be the current screen) will not be hyperlinked
+Each link will have href='javascript:eventId="HistoryNav={index};Clicked"; postForm();'
+This will have a hidden field, name=HistoryNav.HISTORY_NAV_PARAMETER, that'll contain a XML representation of the List
+
+
+ComponentAction.wm (for object_finder_2_0, object_maintenance_2_0, object_lookup_2_0, object_viewer_2_0 patterns)
+===================
+The template for the Action class will be modified to re-initialize the HistoryNav when executing the events for rendering object viewers. This was done since the viewer will be rendered in a new browser and we don't want to see the existing history in the new browser.

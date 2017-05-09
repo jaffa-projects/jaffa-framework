@@ -1,0 +1,27 @@
+    <!-- RequestPassword -->
+    <definition name="jaffa.nonsecure.requestpassword.Layout.request Password"  path="/jaffa/jsp/tiles/skeleton_component_2_0/SkeletonLayout.jsp">
+        <!-- JSPs to be included -->
+        <put name="historyNav"  value="/jaffa/jsp/tiles/historyNav.jsp"/>
+        <put name="contextNav"  value="/jaffa/user/requestpassword/contextNav.jsp"/>
+        <put name="defaultNav"  value="/jaffa/user/requestpassword/defaultNav.jsp"/>
+        <put name="body" value="/jaffa/user/requestpassword/request Password.jsp"/>
+
+        <!-- Parameters used by the JSPs -->
+        <put name="action" value="/user_requestPassword"/>
+        <put name="currentScreenCounter" value="0"/>
+        <put name="screenTitle" value="[title.Jaffa.User.RequestPassword]"/>
+    </definition>
+    <definition name="jaffa.nonsecure.requestpassword.request Password"  extends="jaffa.nonsecure.MainLayout">
+        <put name="title" value="[title.Jaffa.User.RequestPassword]"/>
+        <put name="body" value="jaffa.nonsecure.requestpassword.Layout.request Password"/>
+    </definition>
+
+  <definition name="jaffa.nonsecure.MainLayout" path="/jaffa/user/MainLayout.jsp">
+        <!-- JSPs to be included -->
+        <put name="header"      value="/jaffa/jsp/tiles/header.jsp"/>        
+        <put name="body"        value="${BODY}"/>
+        <put name="footer"      value="/jaffa/jsp/tiles/footer.jsp"/>
+        
+        <!-- Parameters used by the JSPs -->
+        <put name="title"       value="${TITLE}"/>
+    </definition>     

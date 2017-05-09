@@ -1,0 +1,21 @@
+<ivy-module version="2.0">
+
+	<!-- The groupId, artifactId and version of the artifacts.  Update the revision to match the Jaffa version being built. -->
+    <info organisation="org.jaffa" module="dwr-ext" revision="${jaffa-version}"/>
+	
+	<!-- The pom and jar to be published to Maven repositories. -->
+	<publications>
+        <artifact name="dwr-ext" type="pom"/>
+        <artifact name="dwr-ext" type="jar"/>
+    </publications>
+
+  <dependencies>
+    <!-- Begin Apache Commons dependencies -->
+    <dependency org="commons-beanutils" name="commons-beanutils" rev="${commons-beanutils-version}" transitive="false"/>
+    <!-- End Apache Commons dependencies -->
+
+    <!-- Begin javax dependencies -->
+    <dependency org="javax.servlet" name="servlet-api" rev="${servlet-api-version}" transitive="false"/>
+    <!-- End javax dependencies -->
+  </dependencies>
+</ivy-module>

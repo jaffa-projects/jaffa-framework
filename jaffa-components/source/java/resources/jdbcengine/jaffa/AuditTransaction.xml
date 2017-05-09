@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.components.audit.domain.AuditTransaction">
+        <map-to table="J_AUDIT_TRANSACTIONS" />
+
+        <field name="TransactionId" use-member="m_transactionId" type="java.lang.String" primary-key="true">
+            <sql name="TRANSACTION_ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="ProcessName" use-member="m_processName" type="java.lang.String">
+            <sql name="PROCESS_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="SubProcessName" use-member="m_subProcessName" type="java.lang.String">
+            <sql name="SUB_PROCESS_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Reason" use-member="m_reason" type="java.lang.String">
+            <sql name="REASON" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="CreatedBy" use-member="m_createdBy" type="java.lang.String">
+            <sql name="CREATED_BY" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="CreatedOn" use-member="m_createdOn" type="org.jaffa.datatypes.DateTime">
+            <sql name="CREATED_ON" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

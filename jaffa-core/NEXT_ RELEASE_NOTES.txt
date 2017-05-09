@@ -1,0 +1,81 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the next release. For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+Presentation
+------------
+- Add org.jaffa.util.JSONHelper to convert java.util.Map objects, request parameters to JSON string.
+
+Widgets
+-------
+- Added a generateHyperlink() method to the TagHelper. This could then be used by a JSP to generate hyperlink to a Viewer component. The TextTag was refactored to use the new routine.
+
+Components & Patterns
+---------------------
+- Enhanced the 'containerFormKey' feature to allow certain FormKeys to not be replaced. This is espcially useful for rendering the results of a Finder component in Excel or as Xml
+  - Added a replaceWithContainerFormKey() method to the Component class, which returns true if a FormKey is to be replaced
+  - Modified the ActionBase.processContainerFormKey() method to invoke the replaceWithContainerFormKey() method before attempting to replace a FormKey with the containerFormKey
+
+Persistence
+-----------
+- Enhanced the UOW to allow control over the position at which an IPersistenceLoggingPlugin implementation can be added.
+- Enhanced the persistence engine to support SQL functions with criteria containing JOINs. This involves the creaiton of a wrapper statement containing the SQL functions, around a statement containing the JOIN criteria.
+- Enhanced the TypeDefs class to apply the oracle-specific LOB logic only when using the older drivers. The newer Oracle drivers work well with LOBs
+- The clone() method of the Persistent class has been modified to clone it's internal list of modifiedFields as well. This was necessary since the AOP validation rules are applied only if a field is modified, while the earlier clone() implementation was clearing the list of modified fields.
+
+General
+-------
+- Added a convenience sortFiles() method to FileHelper, to sort an array of File objects alphabetically
+- Created a utility Class 'NumberHelper' for common Number manipulation routines like rounding.
+- Enhanced the 'org.jaffa.soa' package to perform dirty-read checks during updates and deletes
+  - Added an element to a Graph Mapping file, declaring the field to use in the dirty-read check. For example
+    - <dirty-read gdo='lastChangedOn' error-params='lastChangedOn,lastChangedBy'/>
+    - gdo: Indicates a graph field, whose screen value will be compared against the value in the database for detecting any changes
+    - error-label-token (optional): Can be used to specify a custom error message
+    - error-params: A comma-separated list of domain fields, whose database values will be used in the error message, if any
+  - Enhanced GraphMapping to support the new element
+  - Added a new property "performDirtyReadCheck:Boolean" to the GraphDataObject
+  - Enhanced the TransformerUtils to perform dirty-read check during updates/deletes, provided the performDirtyReadCheck property is true, and if the mapping-file contains the dirty-read block
+  - Enhanced the exception handling in DataTransformer and TransformerUtils to include the context
+  - Enhanced the DomainObjectChangedException to support a custom error code
+  - Enhanced ApplicationExceptionWithContext to handle context containing array indicators, such that the MessageHelper doesn't treat them as tokens
+- Created a generic GraphService class, which makes it easy to write graph-based services that utilize the DataTransformer
+- Moved the 'org.jaffa.soa' package from JaffaCore to the JaffaSOA module.
+
+Bug Fixes
+=====================================================
+Presentation
+------------
+- Modified the lookup.jsp to include header.js, so that the browser-detection code (which was modified during ext-js integration) works without a hitch
+- When a button has 'submit=true and confirm='{xyz} and guarded=true', the web-page becomes un-usable after the user cancel's the Action, when asked to confirm it. To avoid this scenario, the validateTrapKey() function in header.js has been modified to not display the progress-bar. In any case, the progress-bar will be displayed by the postForm().
+
+Widgets
+-------
+- Due to recent change to the Calendar widget (renders a <button> instead of an <a> element), the DropDowns were no longer hiding in IE6, which messes up the rendering of the Calendar in IE.
+  - Earlier the navigation.js:globalClick() function would be invoked before the rendering of the Calendar. But now, that function is called after the rendering of the Calendar.
+  - The navigation.js:globalClick() function has now been fixed to unhide DropDowns only if no Calendar is being rendered currently.
+  - The datetimePicker.js:killPopUp() function has been corrected to unhide DropDowns when Calendar is collapsed.
+
+Components & Patterns
+---------------------
+
+Persistence
+-----------
+- Fixed the persistence engine to use the original Statement object when closing related ResultSet instances. This involved changes to the DataSource, DataSourceCursor and JdbcBridge classes
+- The message 'Error in writing the logs for a transaction' is logged even if the error is due to an invalid value. Modified the PersistentTransaction in Jaffa to log a DEBUG message if the PersistenceLoggingPlugin raises an ApplicationException
+
+General
+-------
+- Corrected the ExceptionHelper.extractException() method to recursively scan the exceptions inside an ApplicationExceptions object.
+- Corrected the GraphCriteria to initialize it's objectStart property to 0 instead of 1, since that feature is 0-based.
+- Corrected ComponentManager, Loader, PolicyManager and PolicyCache, making the loading of components.xml and roles.xml thread-safe
+- Corrected the parseCurrency() method to use the default decimal layout, in case there is an error in parsing a numeric value against a currency format. This was necessary since a currency layout was recently added to locale.properties
+- Modified the DateBase.parse() method to reset the lenient flag of Java's DateFormat class to false. This will ensure that an error is raised if the String to be parsed doesn't exactly match the required Date format.
+
+
+What's Deleted/Deprecated
+=====================================================

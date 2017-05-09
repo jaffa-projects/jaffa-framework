@@ -1,0 +1,71 @@
+<!-- The global-menu is the top level menu, and its list of options will be listed
+     horizontally across the page. Each top level menu option should be defined with
+     a sub-menu, to provide the initial list of drop-down options
+-->     
+<!ELEMENT global-menu ( menu-option+ )>
+
+<!-- A menu-option is used to define an option on both the 'global navigation menu' and on 
+     the 'desktop navigation menu'. There are four options here, 
+     component-action,
+     	- which is a direct link to run a Jaffa Component
+     url-action,
+     	- which can directly run a URL. This can be a relative or absolute href, or could
+          even be a "javascript:" based url to call client side code.
+     sub-menu,
+     	- which is used to describe a lower level list of menu options
+     desktop-menu,
+     	- which is only used in a 'global navigation menu', to infer that the
+          these menu options are not part of the global menu, but are the root of 
+          a desktop level menu. A definition of a desktop-menu from within a desktop
+          menu will be treated as if it were just a 'sub-menu' definition.
+-->                   
+<!ELEMENT menu-option ( label, (component-action | url-action | sub-menu | desktop-menu) )>
+
+<!-- label text can be plain text, or can contain tokens [xx.yy.zz] to be derived from
+     a resource bundle -->
+<!ELEMENT label (#PCDATA) >
+
+<!-- A component-action will only be available on the menu if the user has access to
+     run that component. The component-name must be valid and defined in 'components.xml'
+-->
+<!ELEMENT component-action ( component-name, param*, url-suffix?, target? )>
+<!ELEMENT component-name (#PCDATA) >
+
+<!-- param entries will be added to the generated URL for invoking the component
+     they can be used to pass static values to the component being called
+-->
+<!ELEMENT param EMPTY>
+<!ATTLIST param name CDATA #REQUIRED value CDATA #REQUIRED >
+<!-- if provided url-suffix will be appended to the end of the auto-generated url for invoking
+     this component, this is just a free-form version of the 'param' entries
+-->
+<!ELEMENT url-suffix (#PCDATA) >
+<!ELEMENT target (#PCDATA) >
+
+<!-- A url-action is used to define a basic url link on the menu. If required it can be tied
+     into the Jaffa security layer to control certain users from seeing this option
+-->     
+<!ELEMENT url-action ( url, target?, requires-component-access*, requires-function-access* )>
+<!ELEMENT url (#PCDATA) >
+
+<!-- append-final is a boolean (true/false), it defaults to false. If true the system defined
+     '(?|&)finalUrl=xxx' parameter will be added to the URL specified. This can be useful if you 
+     are using this as a custom way of invoking a Jaffa Component, and want to leave the framework
+     to decided what this value should be set to when your custom component exits.
+-->     
+<!ATTLIST url append-final CDATA #IMPLIED >
+<!-- List of components AND business-functions the user must have access to, to be given this menu option
+-->
+<!ELEMENT requires-component-access (#PCDATA) >
+<!ELEMENT requires-function-access (#PCDATA) >
+
+<!-- defines this menu-option has being a parent option to a list of other menu options -->
+<!ELEMENT sub-menu ( menu-option+ )>
+
+<!-- defines this menu-option has being a desktop link where the list other menu options is the top level
+     options for this desktop
+-->
+<!ELEMENT desktop-menu ( label, struts-tile-template?, home-page?, menu-option+ )>
+<!ELEMENT struts-tile-template (#PCDATA) >
+<!ELEMENT home-page (#PCDATA) >
+

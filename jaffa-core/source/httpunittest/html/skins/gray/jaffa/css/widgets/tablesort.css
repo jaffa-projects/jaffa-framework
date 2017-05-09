@@ -1,0 +1,108 @@
+/* These Apply to Table, Grid, UserGrid Widgets */
+table.sort	{	
+			background-color: #EEEEEE;
+			font-family: Helvetica;
+			font-size: xx-small;
+			color: black;
+			padding: 2px;
+}
+						
+thead td.sort	{
+			font-family: sans-serif;
+			font-size: 12px;
+			font-weight: 600;
+			color: #555555;
+			background: #d0d0d0;
+			padding: 3px;
+			text-align: center;
+			border : 1px solid #555555;
+}
+			 
+thead .arrow {
+			color: #555555; 
+			margin-bottom: 2; 
+			padding-top: 0px; 
+			padding-bottom: 2px;
+  		    /*nice vertical positioning :-) */
+}
+			
+tr.sort	{		
+			font-family: Helvetica;
+			font-size: xx-small;
+			color: black;
+			background: #eeeeee;
+}
+							
+tr.altsort {		
+			font-family: Helvetica;
+			font-size: xx-small;
+			color: black;
+			border-bottom: 1px groove #555555;
+			border-right: 1px groove #555555;
+			background: d0d0d0;
+}
+							
+td.sort {		
+			font-family: helvetica;
+			font-size: xx-small;
+			color: black;
+			border-left:1px solid #555555; 
+			border-right: 1px groove #d0d0d0;
+			border-bottom: 1px groove #555555;
+			padding: 2px;
+}
+
+
+/*  These apply to the floating Hint Box on the UserGrid Only */
+div.userGridHint  {	
+			font-family: Helvetica;
+			font-size: xx-small;
+			color: #555555;
+			 background: #d0d0d0;
+			 text-align: left;
+			 cursor: default;
+			border: 1px solid #555555;
+			padding: 8px;
+}
+
+div.userGridHint A.title {	
+				color: black;
+				font-weight: 600;
+}
+
+div.userGridHint A.key {	
+				color: #55555;
+}
+
+div.userGridHint A.value{	
+				color: #3366CC;		 	
+}					
+							
+/*  These apply to the popup menu and settings screen on the UserGrid Only */
+
+tr.userGridSettingsHighlightOn {
+				background-color : #d0d0d0;
+				font-family: Helvetica;
+				font-size: xx-small;
+}
+		
+table.userGridPopupMenu  {	
+				font-family: Helvetica, sans-serif;
+				font-size: xx-small;
+				color: #555555;
+			 	background-color: #eeeeee;
+			 	text-align: left;
+				width: 200px;
+				border: 1px solid black;
+				padding: 3px 3px 3px 3px;
+}
+
+table.userGridPopupMenu td	{	
+				padding: 3px;
+}
+							
+table.userGridPopupMenu td A:Hover{	
+				color: black;
+
+}
+

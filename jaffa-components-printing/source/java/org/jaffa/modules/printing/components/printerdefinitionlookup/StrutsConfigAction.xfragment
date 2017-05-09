@@ -1,0 +1,8 @@
+    <!-- PrinterDefinitionLookup -->
+    <action    path="/jaffa_printing_printerDefinitionLookup"
+               type="org.jaffa.modules.printing.components.printerdefinitionlookup.ui.PrinterDefinitionLookupAction"
+               name="jaffa_printing_printerDefinitionLookupForm"
+               validate="false"
+               scope="request">
+    </action>
+

@@ -1,0 +1,7 @@
+    <!-- FormDefinitionViewer Form -->
+    <action    path="/jaffa_printing_formDefinitionViewer"
+               type="org.jaffa.modules.printing.components.formdefinitionviewer.ui.FormDefinitionViewerAction"
+               name="jaffa_printing_formDefinitionViewerForm"
+               validate="false"
+               scope="request">
+    </action>

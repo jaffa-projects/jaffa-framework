@@ -1,0 +1,13 @@
+    <!-- FormTemplateMaintenance -->
+    <definition name="jaffa.printing.formtemplatemaintenance.MaintenanceLayout.main"  extends="jaffa.MaintenanceLayout">
+        <put name="body" value="/jaffa/printing/formtemplatemaintenance/main.jsp"/>
+        <put name="action" value="/jaffa_printing_formTemplateMaintenance"/>
+        <put name="currentScreenCounter" value="0"/>
+        <put name="createModeTitle" value="[title.Jaffa.Printing.FormTemplateMaintenance.maintenance]"/>
+        <put name="updateModeTitle" value="[title.Jaffa.Printing.FormTemplateMaintenance.maintenance]"/>
+    </definition>
+    <definition name="jaffa.printing.formtemplatemaintenance.main"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.FormTemplateMaintenance.maintenance]"/>
+        <put name="body" value="jaffa.printing.formtemplatemaintenance.MaintenanceLayout.main"/>
+    </definition>
+

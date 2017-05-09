@@ -1,0 +1,21 @@
+/* 
+  File name:  editbox.css
+  Author:     paule  
+
+  Description:
+    Example StyleSheet that controls the display of the editbox widget
+*/
+
+/* For the multi-line input boxes */
+textarea {
+}
+
+/* This is for all html input boxes, use 'input.WidgetEditBox' for just
+   ths single line editbox widgets
+*/
+input {
+}
+
+/* For HTML based checkboxes */
+input.WidgetCheckBox {
+}

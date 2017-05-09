@@ -1,0 +1,8 @@
+    <!-- AttachmentLookup -->
+    <action    path="/jaffa_attachment_attachmentLookup"
+               type="org.jaffa.components.attachment.components.attachmentlookup.ui.AttachmentLookupAction"
+               name="jaffa_attachment_attachmentLookupForm"
+               validate="false"
+               scope="request">
+    </action>
+

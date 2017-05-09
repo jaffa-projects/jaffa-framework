@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.modules.printing.domain.FormTemplate">
+        <map-to table="J_FORM_TEMPLATES" />
+
+        <field name="FormId" use-member="m_formId" type="java.lang.Long" primary-key="true">
+            <sql name="FORM_ID" type="INTEGER" dirty="ignore"/>
+        </field>
+
+        <field name="TemplateData" use-member="m_templateData" type="byte[]">
+            <sql name="TEMPLATE_DATA" type="BLOB" dirty="ignore"/>
+        </field>
+
+        <field name="LayoutData" use-member="m_layoutData" type="byte[]">
+            <sql name="LAYOUT_DATA" type="BLOB" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

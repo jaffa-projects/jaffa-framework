@@ -1,0 +1,3 @@
+    <forward name="usertimeentry_userTimeEntryLookupCriteria" path="jaffa.usertimeentry.usertimeentrylookup.criteria"/>
+    <forward name="usertimeentry_userTimeEntryLookupResults" path="jaffa.usertimeentry.usertimeentrylookup.results"/>
+    <forward name="usertimeentry_userTimeEntryLookupConsolidatedCriteriaAndResults" path="jaffa.usertimeentry.usertimeentrylookup.consolidatedCriteriaAndResults"/>

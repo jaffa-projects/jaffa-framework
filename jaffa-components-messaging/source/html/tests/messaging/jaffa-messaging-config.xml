@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <!-- Map User to A -->
+  <message dataBean='org.jaffa.applications.jaffa.modules.admin.domain.User'
+      queueName='A'
+      toClass='org.jaffa.modules.messaging.services.UserService'
+      toMethod='process'>
+      
+    <!-- Do not write a message if "jaffa_locks_global='true' or jaffa_locks_userName='{userName}'" -->
+    <lock-check>
+      <param name='jaffa_locks_global'>true</param>
+      <param expression='true' name='jaffa_locks_userName'>bean.userName</param>
+    </lock-check>
+    
+    <!-- Add userName to header -->
+    <header>
+      <param expression='true' name='jaffa_locks_userName'>bean.userName</param>
+    </header>
+  </message>
+
+
+  <!-- Map UserRole to B -->
+  <message dataBean='org.jaffa.applications.jaffa.modules.admin.domain.UserRole'
+      queueName='B'
+      toClass='org.jaffa.modules.messaging.services.UserRoleService'
+      toMethod='process'>
+      
+    <!-- Do not write a message if "jaffa_locks_global='true' or (jaffa_locks_userName='{userName}' and jaffa_locks_roleName='{roleName}')" -->
+    <lock-check>
+      <filter expression='true'>"jaffa_locks_global='true' or (jaffa_locks_userName='" + bean.userName + "' and jaffa_locks_roleName='" + bean.roleName + "')"</filter>
+    </lock-check>
+    
+    <!-- Add userName and roleName to header, and set the global lock to true -->
+    <header>
+      <param expression='true' name='jaffa_locks_userName'>bean.userName</param>
+      <param expression='true' name='jaffa_locks_roleName'>bean.roleName</param>
+      <param name='jaffa_locks_global'>true</param>
+    </header>
+  </message>
+
+
+  <!-- By default JBoss messaging comes with the following queues -->
+  <queue name='A' consumerPolicy='single' errorQueue='false'>
+    <display-param name='JMSMessageID' label='Message ID'/>
+    <display-param name='JMSPriority' label='Message Priority'/>
+  </queue>
+
+  <queue name='B' consumerPolicy='multi' errorQueue='false'>
+    <display-param name='JMSMessageID' label='Message ID'/>
+    <display-param name='JMSPriority' label='Message Priority'/>
+  </queue>
+
+  <queue name='C' consumerPolicy='none' errorQueue='true'>
+    <display-param name='JMSMessageID' label='Message ID'/>
+    <display-param name='JMSPriority' label='Message Priority'/>
+  </queue>
+
+</config>

@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    To make a release use
+        -Ddo.release=y -Ddownload=true release-HEAD
+    To build javadocs use
+        -Ddownload=true  javadoc
+    To run unit tests use
+        -DTYPE=unittest junit
+    To run a validation to make sure code can be checked-in    
+        -Dlib.dependent.build=clean verifyCheckIn
+-->
+<project basedir=".." default="build" name="build" xmlns:sonar="antlib:org.sonar.ant"
+         xmlns:ivy="antlib:org.apache.ivy.ant">
+    <property name="imports.basedir" value="${basedir}/../JaffaBuild"/>
+    <property name="shared.version.propfile" value="${imports.basedir}/build/shared.version.properties"/>
+
+    <!-- make sure 'ant-contrib-1.0b1.jar' is in $ANT_HOME$/lib -->
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+
+    <!-- Hardcode override for global.ant.properties -->
+    <property name="src.test.junit" value="${basedir}/source/unittest/java"/>
+    <property name="src.test.httpunit" value="${basedir}/source/httpunittest"/>
+
+
+    <property environment="env"/>
+    <property file="${imports.basedir}/build/global.ant.properties"/>
+    <property file="./build/project.ant.properties"/>
+    <property file="${config.file}"/>
+    <property file="${imports.basedir}/build/shared.ant.properties"/>
+    <property file="${shared.version.propfile}"/>
+
+    <import file="${imports.basedir}/build/build-module.xml"/>
+    <import file="${imports.basedir}/build/code-generator.xml"/>
+    <defaultexcludes add="${cvs.excludes}"/>
+
+    <!-- Define the SonarQube project properties-->
+    <import file="sonar.properties"/>
+
+    <target name="usage">
+        <echo>
+            Usage: build target-name
+
+            Available Code Generator Targets:
+            generate-all - Generate all domain and CRUD code
+            generate-domain - Generate all domain code
+            generate-app - Executes the AppBuilder to generate the CRUD descriptors
+            generate-finders - Generate all finder code
+            generate-viewers - Generate all viewer code
+            generate-maintenance - Generate all maintenance code
+            generate-lookups - Generate all lookup code
+            generate-skeletons - Generate all skeleton code
+            formatXml - Format all pattern XML
+            formatXml-domain - Format domain pattern XML
+            formatXml-finder - Format finder pattern XML
+            formatXml-lookup - Format lookup pattern XML
+            formatXml-viewer - Format viewer pattern XML
+            formatXml-maintenance - Format maintenance pattern XML
+            formatXml-skeleton - Format skeleton pattern XML
+            list-customizations - Lists the customizations made to code generated files. You may modify the fileset used
+            in 'JaffaBuild/build/code-generator.xml: list-customizations' to narrow the set of files to scan
+
+            Available Module Targets:
+            clean - Delete all working folders, so the next build is from source
+            get-dependencies - Builds all the dependencies, if not built already.
+            compile - Compile all classes
+            jar - Build JAR file for deployment
+            html - Build a ZIP of HTML needed for inclusion in the WAR file
+            build - Build JAR and ZIP
+            javadoc - Generate Javadoc
+            release-prepare - Prepare a release in the /dist/release
+            release-version - Release a named version to the repository
+            release-HEAD - Release a HEAD version to the repository
+
+            Available Module Targets for aiding quick development:
+            fast-JSP-Deploy - Copy JSP Files for current module to Server
+            fast-Class-Deploy - Builds the current module, copies its JAR to the server, restarts the server
+            fast-Class-Deploy-With-Aspects - Builds the current module, applies aspects, copies the aspect-ized JAR to
+            the server, restarts the server
+
+            Available Testing Targets:
+            test-junit - Run Unit Tests and generate report
+            httpunit - Run HttpUnit Tests and generate report
+
+        </echo>
+    </target>
+
+
+    <!-- ======================================================= -->
+    <!-- Custom compile task, based on the existance of the Oracle JDBC driver -->
+    <!-- ======================================================= -->
+    <target name="compile" depends="init">
+
+        <mkdir dir="${dist.classes}"/>
+        <depend classpathref="project.class.path"
+                destdir="${dist.classes}"
+                srcdir="${src.java}">
+            <exclude name="org/jaffa/security/JDBCSecurityPlugin.java" unless="HAS.ORACLE.JAR"/>
+        </depend>
+
+        <javac fork="true"
+               destdir="${dist.classes}"
+               srcdir="${src.java}"
+               deprecation="${JAVAC.DEPRECATION}"
+               debug="${JAVAC.DEBUG}"
+               optimize="${JAVAC.OPTIMIZE}"
+               taskname="javac/${appname}"
+               memoryinitialsize="128m"
+               memorymaximumsize="256m">
+            <classpath refid="project.class.path"/>
+            <include name="**/*.java"/>
+            <exclude name="org/jaffa/security/JDBCSecurityPlugin.java" unless="HAS.ORACLE.JAR"/>
+        </javac>
+
+    </target>
+
+    <target name="jar" depends="jar-core,jar-config"/>
+
+    <!-- ============================================================ -->
+    <!-- Build jaffa-core.jar                                         -->
+    <!-- ============================================================ -->
+    <target name="jar-core" depends="init,compile">
+        <mkdir dir="${dist.jar}"/>
+
+        <!-- TODO: Get this list of files in \lib\runtime as a list so they
+             can be inserted into the manafest as the ClassPath.
+
+             May want to re-think this as it will FORCE them all to be
+             available, where as now you can leave some out if your not
+             using that bit of the framework. Some unit tests just use
+             struts.jar and log4j.jar and not all the others...
+        -->
+
+        <jar jarfile="${dist.jar}/jaffa-core.jar" taskname="jar/${appname}">
+
+            <!-- Include all core classes, exclude all tools Based ones -->
+            <fileset dir="${dist.classes}" excludes="${cvs.excludes}">
+                <include name="org/owasp/**/*.class"/>
+                <include name="org/jaffa/**/*.class"/>
+                <exclude name="org/jaffa/tools/**/*.class"/>
+                <exclude name="org/jaffa/tomcat/**"/>
+                <exclude name="org/jaffa/patterns/library/**"/>
+            </fileset>
+
+            <!-- Include all runtime DTD's and XSDs but exclude the Tools ones -->
+            <fileset dir="${src.java}" excludes="${cvs.excludes}">
+                <include name="org/jaffa/**/*.dtd"/>
+                <include name="org/jaffa/**/*.xsd"/>
+                <exclude name="org/jaffa/tools/**/*.dtd"/>
+                <exclude name="org/jaffa/tools/**/*.xsd"/>
+            </fileset>
+
+            <!-- Include the bgm.ser files generated by JAXB, except Tools based ones.-->
+            <fileset dir="${src.java}" excludes="${cvs.excludes}">
+                <include name="org/jaffa/**/bgm.ser"/>
+                <exclude name="org/jaffa/tools/**/bgm.ser"/>
+            </fileset>
+
+            <fileset dir="${src.sql}" excludes="${cvs.excludes}">
+                <include name="**/*.sql"/>
+            </fileset>
+
+            <manifest>
+                <attribute name="Implementation-Title" value="jaffa-core"/>
+                <attribute name="Implementation-Version" value="${release.version}"/>
+                <attribute name="Built-By" value="${user.name}"/>
+                <attribute name="Built-Date" value="${TODAY}"/>
+            </manifest>
+        </jar>
+    </target>
+
+
+    <!-- ============================================================ -->
+    <!-- Build jaffa-config.jar                                       -->
+    <!-- ============================================================ -->
+    <target name="jar-config" depends="init">
+        <jar jarfile="${dist.jar}/jaffa-config.jar" taskname="jar/${appname}">
+
+            <!-- Include all properties files, but exclude any fragments, except Tools based ones -->
+            <fileset dir="${src.java}" excludes="${cvs.excludes}">
+                <include name="org/jaffa/**/*.properties*"/>
+                <exclude name="org/jaffa/tools/**/*.properties"/>
+                <exclude name="org/jaffa/tomcat/**/*.properties"/>
+                <exclude name="org/jaffa/config/ApplicationResources.properties"/>
+
+                <!-- Include possible fragments that other apps should use. -->
+                <include name="**/*fragment"/>
+            </fileset>
+
+            <fileset dir="${src.java}" excludes="${cvs.excludes}">
+                <include name="resources/**/*.*"/>
+                <exclude name="resources/tools/**/*.*"/>
+            </fileset>
+
+            <!-- Include all standard SQL scripts for completeness -->
+            <fileset dir="${src}" excludes="${cvs.excludes}">
+                <include name="sql/**/*.sql"/>
+            </fileset>
+
+            <manifest>
+                <attribute name="Implementation-Title" value="jaffa-config"/>
+                <attribute name="Implementation-Version" value="${release.version}"/>
+                <attribute name="Built-By" value="${user.name}"/>
+                <attribute name="Built-Date" value="${TODAY}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <!-- ==================================== -->
+    <!-- Build HTML zip for use by the WAR    -->
+    <!-- ==================================== -->
+    <target name="html" depends="init">
+        <!-- this has been customized to exclude specific files for deployment -->
+        <if>
+            <available file="${src.html}" type="dir"/>
+            <then>
+                <mkdir dir="${dist.zip}"/>
+                <zip basedir="${src.html}"
+                     compress="true"
+                     zipfile="${dist.zip}/${appname}.zip"
+                     excludes="${cvs.excludes}"
+                     includes="jaffa/**,WEB-INF/**"
+                     taskname="zip/${appname}">
+                </zip>
+            </then>
+        </if>
+    </target>
+
+    <!-- ======================================================= -->
+    <!-- Create Javadocs for tag libraries                       -->
+    <!-- ======================================================= -->
+    <target name="tlddoc" depends="init">
+        <delete dir="${dist.tlddoc}"/>
+        <mkdir dir="${dist.tlddoc}"/>
+        <java classname="com.sun.tlddoc.TLDDoc" failonerror="true" fork="yes">
+            <classpath path="${project.build}"/>
+            <classpath path="${src.java}"/>
+            <classpath refid="project.class.path"/>
+            <arg value="-d"/>
+            <arg value="${dist.tlddoc}"/>
+            <arg value="${src.html}/WEB-INF/jaffa-portlet.tld"/>
+        </java>
+    </target>
+
+    <!-- Need to set up the JDBC engine for the tests.  -->
+    <target name="test-junit-jar-config" depends="init">
+        <taskdef resource="org/jaffa/tools/build/ant/taskdef.properties" classpathref="project.class.path"/>
+        <mkdir dir="${dist}/ant" taskname="mkdir/${appname}/UnitTest"/>
+        <echoproperties destfile="${dist}/ant/ant.properties"/>
+        <replacetoken filtersfile="${dist}/ant/ant.properties" begintoken="${begin.token}" endtoken="${end.token}"/>
+        <mkdir dir="${dist.test.junit.stage}" taskname="mkdir/${appname}/UnitTest"/>
+        <copy file="${src.test.junit}/resources/init.xml"
+              todir="${dist.test.junit.stage}/resources"
+              overwrite="true"
+              filtering="true"
+              taskname="copy/${appname}/UnitTest"
+                />
+        <zip file="${dist.jar}/${appname}-unittests.jar" update="true">
+            <zipfileset dir="${dist.test.junit.stage}"/>
+        </zip>
+    </target>
+
+    <!-- ======================================================= -->
+    <!-- Package DOJO deployment                                 -->
+    <!--   This task should be modified each time a new DOJO
+           baseline is being included, and the generated file
+           should also be checked in                             -->
+    <!-- ======================================================= -->
+    <target name="dojo" depends="init">
+        <delete dir="${dist}/dojo"/>
+        <mkdir dir="${dist}/dojo/js/dojo"/>
+        <gunzip src="${lib}/dojo/dojo-0.4.3-ajax.tar.gz"/>
+        <untar src="${lib}/dojo/dojo-0.4.3-ajax.tar" dest="${dist}/dojo/js"/>
+        <move todir="${dist}/dojo/js/dojo">
+            <fileset dir="${dist}/dojo/js/dojo-0.4.3-ajax"/>
+        </move>
+        <zip basedir="${dist}/dojo"
+             compress="true"
+             zipfile="${lib}/dojo/dojo-jaffa.zip"
+             excludes="${cvs.excludes}"
+             includes="js/dojo/dojo.js,js/dojo/iframe_history.html,js/dojo/src/**">
+        </zip>
+    </target>
+
+    <!-- ======================================================= -->
+    <!-- Package tinyMCE deployment                              -->
+    <!-- This task should be modified each time a new tinyMCE
+           baseline is being included, and the generated file
+           should also be checked in                             -->
+    <!-- contextmenu.css is modified in v2.1.2 to be
+           div.contextMenu                                       -->
+    <!-- ======================================================= -->
+    <target name="tinyMCE" depends="init">
+        <delete dir="${dist}/tinyMCE"/>
+        <mkdir dir="${dist}/tinyMCE/deploy/js"/>
+        <unzip src="${lib}/tinyMCE/tinymce_2_1_2.zip" dest="${dist}/tinyMCE"/>
+        <move todir="${dist}/tinyMCE/deploy/js">
+            <fileset dir="${dist}/tinyMCE/tinymce/jscripts"/>
+        </move>
+        <zip basedir="${dist}/tinyMCE/deploy"
+             compress="true"
+             zipfile="${lib}/tinyMCE/tinyMCE-jaffa.zip">
+        </zip>
+    </target>
+
+    <!-- ====================================================================================================== -->
+    <!-- Define the SonarQube target                                                                                   -->
+    <!-- ====================================================================================================== -->
+    <target name="sonar">
+        <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
+            <!-- Update the following line, or put the "sonar-ant-task-*.jar" file in your "$HOME/.ant/lib" folder -->
+            <!--<classpath path="/u01/apache-ant-1.9.1/libsonar-ant-task-*.jar" />-->
+            <classpath path="C:\apache-ant-1.9.4\lib\sonar-ant-task-2.2.jar"/>
+        </taskdef>
+        <property name="sonar.host.url" value="http://sonar:9000"/>
+        <!-- Execute the SonarQube analysis -->
+        <sonar:sonar/>
+    </target>
+
+  <!-- ========================================================================== -->
+  <!-- Use ivy to generate the poms.                                              -->
+  <!-- ========================================================================== -->
+    <target name="gen-pom" depends="jar">
+        <echo level="info" message="Generating pom: ${dist.jar}/jaffa-core.pom"/>
+        <ivy:makepom ivyfile="build/ivy-core-pom.xml" pomfile="${dist.jar}/jaffa-core.pom">
+            <mapping conf="default" scope="compile"/>
+        </ivy:makepom>
+        <echo level="info" message="Generating pom: ${dist.jar}/jaffa-config.pom"/>
+        <ivy:makepom ivyfile="build/ivy-config-pom.xml" pomfile="${dist.jar}/jaffa-config.pom">
+            <mapping conf="default" scope="compile"/>
+        </ivy:makepom>
+    </target>
+
+</project>

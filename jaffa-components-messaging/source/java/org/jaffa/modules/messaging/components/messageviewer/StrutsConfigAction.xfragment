@@ -1,0 +1,7 @@
+    <!-- MessageViewer Form -->
+    <action    path="/jaffa_messaging_messageViewer"
+               type="org.jaffa.modules.messaging.components.messageviewer.ui.MessageViewerAction"
+               name="jaffa_messaging_messageViewerForm"
+               validate="true"
+               scope="request">
+    </action>

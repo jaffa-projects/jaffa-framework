@@ -1,0 +1,18 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the JaffaComponentsPrinting 2.0.0 Release. For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+- Consolidated the release numbers for JaffaComponents (Admin,User,Printing). All three modules will be released at the same time going forward
+
+What's Changed / Improvments
+=====================================================
+
+What's Deleted/Deprecated
+=====================================================
+
+Bug Fixes
+=====================================================

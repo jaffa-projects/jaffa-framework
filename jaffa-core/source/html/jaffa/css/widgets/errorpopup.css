@@ -1,0 +1,84 @@
+/* 
+  File name:  errorpopup.css
+  Created on: 28-Jan-04
+  Author:     gautamj  
+
+  Description:
+    The basic stylesheet used by the Error popups
+*/
+
+/*************************************************************
+
+ Import all the related CSS's
+
+ *************************************************************/
+@import url(./label.css);
+
+/*************************************************************
+
+ Setup basic page display
+
+ *************************************************************/
+body { 
+	background-color: #FFFFFF;
+}
+
+
+h1 {
+	font-family : Verdana, Arial, Helvetica, sans-serif;
+	margin-bottom: -15px;
+        margin-left: 10px;
+        color: #840000;
+}
+
+
+p {
+	font-family: tahoma, arial, helvitica;
+	font-size: 12px;
+        margin-left: 10px;
+        margin-right: 10px;
+}
+
+
+a {
+	color: #AA4612;
+	text-decoration: underline;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: x-small;
+	font-weight: bold;
+	vertical-align: middle;
+}
+
+
+a:hover {
+	color: #EFCF73; 
+	text-decoration: underline;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: x-small;
+	font-weight: bold;
+	vertical-align: middle;
+}
+
+
+td.previous {
+}
+
+
+td.next {
+	width: 100%;
+	text-align: right;
+}
+
+span.previous {
+	background-image: url(../../imgs/icons/prev.gif);
+	background-position: left;
+	background-repeat: no-repeat;
+	padding-left: 15px;
+}
+
+span.next {
+	background-image: url(../../imgs/icons/next.gif);
+	background-position: right;
+	background-repeat: no-repeat;
+	padding-right: 15px;
+}

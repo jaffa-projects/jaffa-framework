@@ -1,0 +1,24 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the next JAFFA Components Release. For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+-  Added in UserRequest Module and support for .dop files.
+-  Added in a Request Password module.
+
+What's Changed / Improvements
+=====================================================
+- Made the following enhancements to LabelEditorComponent
+  - It now sorts the entries in the override file before writing to that file
+  - When editing a label, if its default value contains references to other labels, then those labels will also be available for editing
+
+What's Deleted/Deprecated
+=====================================================
+
+
+Bug Fixes
+=====================================================
+

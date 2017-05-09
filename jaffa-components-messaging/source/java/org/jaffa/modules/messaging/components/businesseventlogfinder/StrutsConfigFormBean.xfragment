@@ -1,0 +1,1 @@
+    <form-bean name="jaffa_messaging_businessEventLogFinderForm" type="org.jaffa.modules.messaging.components.businesseventlogfinder.ui.BusinessEventLogFinderForm"/>

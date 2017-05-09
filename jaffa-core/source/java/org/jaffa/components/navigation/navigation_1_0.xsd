@@ -1,0 +1,167 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns:xsd='http://www.w3.org/2001/XMLSchema'
+            xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+            jxb:version="1.0">
+
+ <xsd:annotation>
+  <xsd:documentation>
+   XSL Schema for the data structure used to drive the global and desktop navigation systems for
+   Jaffa v2.0 and later. This schema is used to create Java binding for reading and writing XML
+   schema instances.
+  </xsd:documentation>
+  <xsd:appinfo>
+   <jxb:schemaBindings>
+    <jxb:package name="org.jaffa.components.navigation.domain"/> 
+   </jxb:schemaBindings>
+  </xsd:appinfo>
+
+ </xsd:annotation>
+
+
+
+ <xsd:element name='global-menu'>
+  <xsd:annotation>
+   <xsd:documentation>
+    The global-menu is the top level menu, and its list of options will be listed
+    horizontally across the page. Each top level menu option should be defined with
+    a sub-menu, to provide the initial list of drop-down options
+   </xsd:documentation>
+  </xsd:annotation>
+
+  <xsd:complexType>
+   <xsd:sequence>
+    <xsd:element name='menu-option' type='menu-option' minOccurs='1' maxOccurs='unbounded'/>
+   </xsd:sequence>
+  </xsd:complexType>
+ </xsd:element>
+
+
+ <xsd:complexType name='menu-option'>
+  <xsd:annotation>
+   <xsd:documentation>
+    A menu-option is used to define an option on both the 'global navigation menu' and on 
+    the 'desktop navigation menu'. There are four options here, 
+        
+    component-action,
+       	- which is a direct link to run a Jaffa Component
+    
+    url-action,
+       	- which can directly run a URL. This can be a relative or absolute href, or could
+          even be a "javascript:" based url to call client side code.
+    
+    sub-menu,
+       	- which is used to describe a lower level list of menu options
+    
+    desktop-menu,
+      	- which is only used in a 'global navigation menu', to infer that the
+          these menu options are not part of the global menu, but are the root of 
+          a desktop level menu. A definition of a desktop-menu from within a desktop
+          menu will be treated as if it were just a 'sub-menu' definition.
+          
+    Note: 'label' text can be plain text, or can contain tokens [xx.yy.zz] to be derived
+          from a resource bundle          
+   </xsd:documentation>
+  </xsd:annotation>
+
+  <xsd:sequence>
+   <xsd:element name='label' type='xsd:string' minOccurs='1' maxOccurs='1' />
+   <xsd:choice>
+    <xsd:element name='component-action' type='component-action'/>
+    <xsd:element name='url-action'       type='url-action'/>
+    <xsd:element name='sub-menu'         type='sub-menu'/>
+    <xsd:element name='desktop-menu'     type='desktop-menu'/>
+    </xsd:choice>
+  </xsd:sequence>
+ </xsd:complexType>
+
+
+
+ <xsd:complexType name='component-action'>
+  <xsd:annotation>
+   <xsd:documentation>
+    A component-action will only be available on the menu if the user has access to
+    run that component. The component-name must be valid and defined in 'components.xml'
+   </xsd:documentation>
+  </xsd:annotation>
+
+  <xsd:sequence>
+   <xsd:element name='component-name' type='xsd:string' minOccurs='1' maxOccurs='1' />
+   <xsd:element name='param'                            minOccurs='0' maxOccurs='unbounded'>
+    <xsd:complexType>
+     <xsd:attribute name='name'       type='xsd:string' use='required'/>
+     <xsd:attribute name='value'      type='xsd:string' use='required'/>
+    </xsd:complexType>
+   </xsd:element>
+   <xsd:element name='url-suffix'     type='xsd:string' minOccurs='0' maxOccurs='1' />
+   <xsd:element name='target'         type='xsd:string' minOccurs='0' maxOccurs='1' />
+  </xsd:sequence>
+ </xsd:complexType>
+ 
+
+
+ <xsd:complexType name='desktop-menu'>
+  <xsd:annotation>
+   <xsd:documentation>
+    defines this menu-option has being a desktop link where the list other menu options is
+    the top level options for this desktop
+   </xsd:documentation>
+  </xsd:annotation>
+
+  <xsd:sequence>
+   <xsd:element name='label'                type='xsd:string'  minOccurs='1' maxOccurs='1' />
+   <xsd:element name='struts-tile-template' type='xsd:string'  minOccurs='0' maxOccurs='1' />
+   <xsd:element name='home-page'            type='xsd:string'  minOccurs='0' maxOccurs='1' />
+   <xsd:element name='menu-option'          type='menu-option' minOccurs='1' maxOccurs='unbounded'/>
+  </xsd:sequence>
+ </xsd:complexType>
+
+
+
+ <xsd:complexType name='sub-menu'>
+  <xsd:annotation>
+   <xsd:documentation>
+     defines this menu-option has being a parent option to a list of other menu options
+   </xsd:documentation>
+  </xsd:annotation>
+
+  <xsd:sequence>
+   <xsd:element name='menu-option'          type='menu-option' minOccurs='1' maxOccurs='unbounded'/>
+  </xsd:sequence>
+ </xsd:complexType>
+
+
+
+ <xsd:complexType name='url-action'>
+  <xsd:annotation>
+   <xsd:documentation>
+    A url-action is used to define a basic url link on the menu. If required it can be tied
+    into the Jaffa security layer to control certain users from seeing this option
+   </xsd:documentation>
+  </xsd:annotation>
+
+  <xsd:sequence>
+   <xsd:element name='url'  minOccurs='1' maxOccurs='1' >
+    <xsd:complexType>
+     <xsd:annotation>
+      <xsd:documentation>
+       append-final is a boolean (true/false), it defaults to false. If true the system defined
+       '(?|&amp;)finalUrl=xxx' parameter will be added to the URL specified. This can be useful if you 
+       are using this as a custom way of invoking a Jaffa Component, and want to leave the framework
+       to decided what this value should be set to when your custom component exits.
+      </xsd:documentation>
+     </xsd:annotation>
+     <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+       <xsd:attribute name='append-final' type='xsd:boolean' use='optional' default='false'/>
+      </xsd:extension>
+     </xsd:simpleContent>
+    </xsd:complexType>
+   </xsd:element>
+   <xsd:element name='target' type='xsd:string' minOccurs='0' maxOccurs='1' />
+   <xsd:element name='requires-component-access' type='xsd:string'  minOccurs='0' maxOccurs='unbounded'/>
+   <xsd:element name='requires-function-access'  type='xsd:string'  minOccurs='0' maxOccurs='unbounded'/>
+  </xsd:sequence>
+ </xsd:complexType>
+ 
+
+</xsd:schema>

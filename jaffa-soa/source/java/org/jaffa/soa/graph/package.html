@@ -1,0 +1,492 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<title>org.jaffa.soa.graph package</title>
+</head>
+<body bgcolor="white">
+This contains all the base classes used for domain object graphs.
+<p>
+<style>
+code {background:#eeeeee;}
+code.i {margin-left:70px}
+pre {padding-left:70px}
+</style>
+
+<h1 id="howto">How to control what is returned in a domain object graph</h1>
+<p>
+The GraphCriteria object supports a <code>setResultGraphRules(java.lang.String[] resultGraphRules)</code>
+method to control the scope of the domain graph retrieved. This is important for performance reasons, as
+many Domain Objects have a large number of related objects, and Domain Object Graph
+based queries can bring back large sets of related domain objects. Sometimes this is required, but many
+times we only want a subset of that data. By specifying just a subset of data, the number of internal queries
+that are performed to build the Graph, and the volume of unneeded data being returned can be dramatically
+reduced, and hence yield a faster response.
+<p>
+The section below explains how with a given domain object graph, these domain object graph filtering rules
+can be applied.
+<hr>
+<p>
+<h2>We will use the following example</h2>
+<p>
+The root of this graph is a 'vendor'.
+<p>
+The 'vendor' has the following fields
+<ul>
+	<li>vendorCode (Key)
+	<li>vendorName (Mandatory)
+	<li>cageCode
+</ul>
+The 'vendor' has a foreign Object
+<ul>
+	<li>businessType
+</ul>
+The 'vendor' has related objects
+<ul>
+	<li>comments (one-to-one)
+	<li>sites (one-to-many)
+</ul>
+<p>
+The foreign object 'businessType' has two fields
+<ul>
+	<li>businessType
+	<li>description
+</ul>
+<p>
+The 'site' object has the following fields
+<ul>
+	<li>siteCode (Key)
+	<li>addressLine
+	<li>city
+	<li>country
+	<li>state
+	<li>zip
+	<li>taxRate
+	<li>methodOfPayment
+	<li>rating
+</ul>
+The 'site' has a related object
+<ul>
+	<li>contacts (one-to-many)
+</ul>
+<p>
+The 'contact' object has the following fields
+<ul>
+	<li>sequence (Key)
+	<li>contactName
+	<li>addressLine
+	<li>city
+	<li>country
+	<li>state
+	<li>zip
+</ul>
+<p>
+If we now 'list' the total set of fields in this domain object graph,
+we get the following set of field references. (Note the dot(.) notation
+is similar to that now used in the JSP 2.0 expression language)
+<p>
+<code><pre>
+businessType.businessType
+businessType.description
+cageCode
+comments
+comments.text
+vendorCode
+vendorName
+vendorSites
+vendorSites.addressLine
+vendorSites.city
+vendorSites.contacts
+vendorSites.contacts.addressLine
+vendorSites.contacts.city
+vendorSites.contacts.contactName
+vendorSites.contacts.country
+vendorSites.contacts.sequence
+vendorSites.contacts.state
+vendorSites.contacts.zip
+vendorSites.country
+vendorSites.methodOfPayment
+vendorSites.rating
+vendorSites.siteCode
+vendorSites.state
+vendorSites.taxRate
+vendorSites.zip
+</pre>
+</code>
+<p>
+<h2>1. Basic filters</h2>
+<p>
+Filters support *, which matches a single field name, or ** which matches multiple property names
+<p>
+We assume all field names match the regular expression [a-zA-Z_0-9]
+<p>
+<h3>1.1 The default</h3>
+<p>
+The default filter is *, which matches all fields in the primary object.
+<p>
+<code class='i'>setRules = null</code><br>
+  or<br>
+<code class='i'>setRules = "*"</code> <br>
+<p>
+The above rules will give the following resulting map
+<code><pre>
+vendorName
+vendorCode
+businessType
+businessType.businessType
+cageCode
+</pre></code>
+<p>
+Note: that we filter out the vendorSites object as this is an array of object, and no fields have
+requested from this object. The infers the default behavior is that NO one-to-one/one-to-many objects
+will be automatically included, unless specifically requested.
+<p>
+Note: we have included businessType this is a foreign object, and in this case we need an instance
+of the businessType object to hold the business type value. However, no other fields in the businessType
+object will be filled in, unless specifically requested.
+<p>
+
+<h3>1.2 Include the world</h3>
+<p>
+We want to include not just the main fields, but all fields on related and foreign objects
+<p>
+	<code class='i'>setRules = "**"</code> (where "**" mean match 'anything')<br>
+or <br>
+	<code class='i'>setRules = "**.*","*"</code> (where "**.*" means any match all fields on 'anything'
+and "*" also include the fields on the root object too)
+<p>
+<p>
+The above rules will give the following resulting map
+<code><pre>
+businessType
+businessType.businessType
+businessType.description
+cageCode
+comments
+comments.text
+vendorCode
+vendorName
+vendorSites
+vendorSites.addressLine
+vendorSites.city
+vendorSites.contacts
+vendorSites.contacts.addressLine
+vendorSites.contacts.city
+vendorSites.contacts.contactName
+vendorSites.contacts.country
+vendorSites.contacts.sequence
+vendorSites.contacts.state
+vendorSites.contacts.zip
+vendorSites.country
+vendorSites.methodOfPayment
+vendorSites.rating
+vendorSites.siteCode
+vendorSites.state
+vendorSites.taxRate
+vendorSites.zip
+</pre></code>
+<p>
+<h3>1.3 Includes and Excludes</h3>
+<p>
+If a rule beings with a '-' (minus) sign it means exclude all fields that match
+this rule, if a rule beings with '+' (plus) it means include all fields that match
+this rule. If neither '+' or '-' is used then '+' is assumed, and the rule is inclusive.
+In this case the default rule set is really '+*'
+<p>
+The rules are processed in the order the are supplied, and once a rule is processed that either
+included or excludes a field, no more rules are read. If no rule is found that included or excludes
+a given field, that field will be excluded. To change the default behavior to include any field that
+is not referenced put a 'catch-all' rule as the last rule (i.e. use either '**' or something similar)
+<p>
+This is an example of how the order works<br>
+	<code class='i'>setRules = "*","+vendorSites.*","-vendorSites.taxRate","-vendorSites.rating"</code><br>
+Will return
+<code><pre>
+vendorName
+vendorCode
+vendorSites.siteCode
+vendorSites.country
+vendorSites.taxRate
+vendorSites.addressLine
+vendorSites.state
+vendorSites.methodOfPayment
+vendorSites.zip
+vendorSites.rating
+vendorSites.city
+businessType
+cageCode
+</pre></code>
+<p>
+Not the two fields taxRate and rating are still there, since the "+vendorSites.*" rule was first
+and explicitly included them. The correct way to do this would have been...
+<p>
+<code class='i'>setRules = "-vendorSites.taxRate","-vendorSites.rating","+vendorSites.*","*"</code>
+<p>
+Which would have given
+<code><pre>
+vendorName
+vendorCode
+vendorSites.siteCode
+vendorSites.country
+vendorSites.addressLine
+vendorSites.state
+vendorSites.methodOfPayment
+vendorSites.zip
+vendorSites.city
+businessType
+cageCode
+</pre></code><p>
+<p>
+<h3>1.4. Basic includes</h3>
+<p>
+We saw that<br>
+	<code class='i'>setRules = "*"</code> <br>
+Gives the following
+<code><pre>
+vendorName
+vendorCode
+businessType
+cageCode
+</pre></code>
+<p>
+The businessType only has the key field in, but we want the description too
+We should use the following<br>
+	<code class='i'>setRules = "*","businessType.description"</code><br>
+		or<br>
+	<code class='i'>setRules = "*","businessType.*"</code><br>
+Gives the following
+<code><pre>
+vendorName
+vendorCode
+businessType
+businessType.businessType
+businessType.description
+cageCode
+</pre></code>
+We now want just the list of sites as well<br>
+	<code class='i'>setRules = "*","businessType.*","vendorSites.siteCode"</code><br>
+Gives the following
+<code><pre>
+vendorName
+vendorCode
+vendorSites
+vendorSites.siteCode
+businessType
+businessType.businessType
+businessType.description
+cageCode
+</pre></code>
+<p>
+And now per site, we want the contact name and address	<br>
+	<code class='i'>setRules = "*","businessType.*","vendorSites.siteCode","vendorSites.contacts.*"</code><br>
+Gives the following
+<code><pre>
+vendorName
+vendorCode
+vendorSites
+vendorSites.contacts
+vendorSites.contacts.contactName
+vendorSites.contacts.country
+vendorSites.contacts.addressLine
+vendorSites.contacts.state
+vendorSites.contacts.zip
+vendorSites.contacts.sequence
+vendorSites.contacts.city
+vendorSites.siteCode
+businessType
+businessType.businessType
+businessType.description
+cageCode
+</pre></code>
+<p>
+Now i want just the site and contact addresses<br>
+	<code class='i'>setRules = "vendorCode","vendorName","vendorSites.siteCode","vendorSites.contacts.contactName",
+	           "**.addressLine","**.city","**.state","**.zip","**.country"</code><br>
+Gives the following
+<code><pre>
+vendorName
+vendorCode
+vendorSites
+vendorSites.contacts
+vendorSites.contacts.contactName
+vendorSites.contacts.country
+vendorSites.contacts.addressLine
+vendorSites.contacts.state
+vendorSites.contacts.zip
+vendorSites.contacts.city
+vendorSites.siteCode
+vendorSites.country
+vendorSites.addressLine
+vendorSites.state
+vendorSites.zip
+vendorSites.city
+</pre></code>
+<p>
+<h2>2. Rules for related objects</h2>
+<p>
+Whether the relationship is one-to-many (Array of Objects), or just one-to-one (Object)
+the related object is no included in the results unless at least one field in the
+related object is referenced. In the above example referenced to "vendorSites" or
+"vendorSites.contacts" are meaningless, and will not include those objects. To be
+included they should be suffixed with a ".*".
+<p>
+So the following scenarios occur<br>
+<ol>
+	<li><code>setRules = "vendorSites"</code><br>
+Will return<br>
+	&lt;nothing&gt;
+	<li><code>setRules = "vendorSites.*"</code><br>
+Will return
+<code><pre>
+vendorSites
+vendorSites.siteCode
+vendorSites.country
+vendorSites.taxRate
+vendorSites.addressLine
+vendorSites.state
+vendorSites.methodOfPayment
+vendorSites.zip
+vendorSites.rating
+vendorSites.city
+</pre></code><p>
+	<li><code>setRules = "vendorSites.**"</code><br>
+Will return
+<code><pre>
+vendorSites
+vendorSites.contacts
+vendorSites.contacts.contactName
+vendorSites.contacts.country
+vendorSites.contacts.addressLine
+vendorSites.contacts.state
+vendorSites.contacts.zip
+vendorSites.contacts.sequence
+vendorSites.contacts.city
+vendorSites.siteCode
+vendorSites.country
+vendorSites.taxRate
+vendorSites.addressLine
+vendorSites.state
+vendorSites.methodOfPayment
+vendorSites.zip
+vendorSites.rating
+vendorSites.city
+</pre></code>
+</ol>
+<p>
+<h2>3. Rules for foreign objects</h2>
+<p>
+When a foreign object is referenced by a main object there are 3 scenarios to look at
+<ol type="a">
+	<li>is there a need for the object. This is the case when the foreign keys are null. In
+this case the foreign object reference is null
+	<li>is there a need to retrieve a foreign object? if we can avoid loading foreign objects then
+this will improve performance.
+	<li>we need to load the foreign object, as the user wants to access fields from that foreign object.
+</ol>
+<p>
+In both scenarios (b) and (c) a foreign object will be return. In the case of (b) only the fields
+that make up the object key will be populated, as these can be derived from the foreign keys in the
+main object. In scenario (c) we need to load the foreign object so we can access other data from it
+<p>
+How do we detect when to load and not load the object?
+<p>
+We first need to see if either the object property, or and of its fields are referenced.
+In the above case we will look at the 'businessType' on the vendor. Any of the following
+referenced will cause the object to be returned...
+<code><pre>
+businessType
+businessType.businessType
+businessType.description
+</pre></code>
+but only a reference to description required the record to be read from the database.
+<p>
+The filtering engine will internally do the following
+<ol type="a">
+	<li>apply the filter rules to any field reference, and included it if valid.
+   if it is valid the following additional rules will be applied
+<p>
+	<li>if the foreign object field is referenced, it will leave it in the 'fields to include' list
+<p>
+	<li>if one of the primary keys of the object is referenced it will
+	<ol type="i">
+   		<li>add in a reference to the object, like in (b), if there is not one already
+   		<li>it will remove the primary key reference, as the primary fields will ALWAYS be returned
+       regardless of any rules that may try and exclude them
+    </ol>
+<p>
+	<li>any field reference on the foreign object that is not a primary key field will be left in the list
+</ol>
+<p>
+So the following scenarios occur
+<ol>
+
+<li><code>setRules = "*"</code><br>
+Will return
+<code><pre>
+...
+businessType
+businessType.businessType
+</pre></code>
+<p>
+
+<li><code>setRules = "businessType"</code><br>
+Will return
+<code><pre>
+businessType
+businessType.businessType
+</pre></code>
+<p>
+
+<li><code>setRules = "businessType.businessType"</code><br>
+Will return
+<code><pre>
+businessType
+businessType.businessType
+</pre></code>
+<p>
+
+<li><code>setRules = "businessType.description"</code><br>
+Will return
+<code><pre>
+businessType
+businessType.businessType
+businessType.description
+</pre></code>
+<p>
+
+<li><code>setRules = "businessType.*"</code><br>
+Will return
+<code><pre>
+businessType
+businessType.businessType
+businessType.description
+</pre></code>
+<p>
+
+<li><code>setRules = "-businessType.businessType","businessType"</code><br>
+Will return
+<code><pre>
+businessType
+businessType.businessType
+</pre></code>
+<p>
+
+<li><code>setRules = "-businessType.description","businessType.*"</code><br>
+Will return
+<code><pre>
+businessType
+businessType.businessType
+</pre></code>
+<p>
+
+<li><code>setRules = "-businessType.businessType","businessType.*"</code><br>
+Will return
+<code><pre>
+businessType
+businessType.businessType
+businessType.description
+</pre></code>
+
+
+
+</body>
+</html>

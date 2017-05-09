@@ -1,0 +1,8 @@
+     <!-- Jaffa_Printing_PrinterDefinitionFinder -->
+	<create creator="new" javascript="Jaffa_Printing_PrinterDefinitionFinder">
+	  <param name="class" value="org.jaffa.modules.printing.components.printerdefinitionfinder.tx.PrinterDefinitionFinderTx" />
+	  <include method="find"/>
+	</create>
+	<convert converter="nnBean" match="org.jaffa.modules.printing.components.printerdefinitionfinder.dto.*" />
+
+

@@ -1,0 +1,12 @@
+    <!-- Jaffa_QM_QueueManager -->
+    <create creator="new" javascript="Jaffa_QM_QueueManager">
+      <param name="class" value="org.jaffa.qm.apis.QueueManager"/>
+      <include method="queueQuery"/>
+      <include method="messageQuery"/>
+      <include method="toggleQueueStatus"/>
+      <include method="deleteMessage"/>
+      <include method="resubmitMessage"/>
+    </create>
+    <convert converter="nnBean" match="org.jaffa.qm.apis.data.*" />
+    <convert converter="enum" match="org.jaffa.qm.apis.data.MessageGraph$Status" />
+    <convert converter="enum" match="org.jaffa.qm.apis.data.QueueGraph$Status" />

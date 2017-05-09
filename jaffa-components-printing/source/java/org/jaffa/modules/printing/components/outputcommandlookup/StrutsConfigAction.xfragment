@@ -1,0 +1,8 @@
+    <!-- OutputCommandLookup -->
+    <action    path="/jaffa_printing_outputCommandLookup"
+               type="org.jaffa.modules.printing.components.outputcommandlookup.ui.OutputCommandLookupAction"
+               name="jaffa_printing_outputCommandLookupForm"
+               validate="false"
+               scope="request">
+    </action>
+

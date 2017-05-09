@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Object Viewer Meta 2.1//EN" "http://jaffa.sourceforge.net/DTD/object-viewer-meta_2_1.dtd">
+<Root>
+  <PatternTemplate>patterns/library/object_viewer_2_1/ObjectViewerPattern.xml</PatternTemplate>
+  <Application>Jaffa</Application>
+  <Module>Printing</Module>
+  <Component>FormDefinitionViewer</Component>
+  <BasePackage>org.jaffa.modules.printing</BasePackage>
+  <DomainObject>FormDefinition</DomainObject>
+  <DomainPackage>org.jaffa.modules.printing.domain</DomainPackage>
+  <Title>[title.Modules.Printing.FormDefinitionViewer.view]</Title>
+  <CriteriaFields>
+    <CriteriaField>
+      <Name>FormId</Name>
+      <DataType>INTEGER</DataType>
+      <DomainField>FormId</DomainField>
+    </CriteriaField>
+  </CriteriaFields>
+  <ResultsFields>
+    <ResultsField>
+      <Name>FormId</Name>
+      <DataType>INTEGER</DataType>
+      <Display>false</Display>
+      <Label>[label.Jaffa.Printing.FormDefinition.FormId]</Label>
+      <DomainField>FormId</DomainField>
+    </ResultsField>
+    <ResultsField>
+      <Name>FormName</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Printing.FormGroup.FormName]</Label>
+      <DomainField>FormName</DomainField>
+    </ResultsField>
+    <ResultsField>
+      <Name>FormAlternate</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Printing.FormDefinition.FormAlternate]</Label>
+      <DomainField>FormAlternate</DomainField>
+    </ResultsField>
+    <ResultsField>
+      <Name>FormVariation</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Printing.FormDefinition.FormVariation]</Label>
+      <DomainField>FormVariation</DomainField>
+    </ResultsField>
+    <ResultsField>
+      <Name>Description</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Printing.FormDefinition.Description]</Label>
+      <DomainField>Description</DomainField>
+    </ResultsField>
+    <ResultsField>
+      <Name>Remarks</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Printing.FormDefinition.Remarks]</Label>
+      <DomainField>Remarks</DomainField>
+    </ResultsField>
+    <ResultsField>
+      <Name>OutputType</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Printing.FormDefinition.OutputType]</Label>
+      <DomainField>OutputType</DomainField>
+    </ResultsField>
+    <ResultsField>
+      <Name>FollowOnFormName</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Printing.FormDefinition.FollowOnFormName]</Label>
+      <DomainField>FollowOnFormName</DomainField>
+    </ResultsField>
+    <ResultsField>
+      <Name>FormTemplate</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Printing.FormDefinition.FormTemplate]</Label>
+      <DomainField>FormTemplate</DomainField>
+    </ResultsField>
+    <ResultsField>
+      <Name>FieldLayout</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Printing.FormDefinition.FieldLayout]</Label>
+      <DomainField>FieldLayout</DomainField>
+    </ResultsField>
+    <ResultsField>
+      <Name>DomClass</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Printing.FormDefinition.DomClass]</Label>
+      <DomainField>DomClass</DomainField>
+    </ResultsField>
+    <ResultsField>
+      <Name>DomKey1</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Printing.FormDefinition.DomKey1]</Label>
+      <DomainField>DomKey1</DomainField>
+    </ResultsField>
+    <ResultsField>
+      <Name>DomKey2</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Printing.FormDefinition.DomKey2]</Label>
+      <DomainField>DomKey2</DomainField>
+    </ResultsField>
+    <ResultsField>
+      <Name>DomKey3</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Printing.FormDefinition.DomKey3]</Label>
+      <DomainField>DomKey3</DomainField>
+    </ResultsField>
+    <ResultsField>
+      <Name>DomKey4</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Printing.FormDefinition.DomKey4]</Label>
+      <DomainField>DomKey4</DomainField>
+    </ResultsField>
+    <ResultsField>
+      <Name>DomKey5</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Printing.FormDefinition.DomKey5]</Label>
+      <DomainField>DomKey5</DomainField>
+    </ResultsField>
+    <ResultsField>
+      <Name>DomKey6</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Printing.FormDefinition.DomKey6]</Label>
+      <DomainField>DomKey6</DomainField>
+    </ResultsField>    
+    <ResultsField>
+      <Name>DomFactory</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Printing.FormDefinition.DomFactory]</Label>
+      <DomainField>DomFactory</DomainField>
+    </ResultsField>
+    <ResultsField>
+      <Name>AdditionalDataComponent</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Printing.FormDefinition.AdditionalDataComponent]</Label>
+      <DomainField>AdditionalDataComponent</DomainField>
+    </ResultsField>
+    <ResultsField>
+      <Name>FollowOnFormAlternate</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Printing.FormDefinition.FollowOnFormAlternate]</Label>
+      <DomainField>FollowOnFormAlternate</DomainField>
+    </ResultsField>
+<!--
+<ResultsField>
+<Name>CreatedOn</Name>
+<DataType>DATE_TIME</DataType>
+<Display>true</Display>
+<Label>[label.Jaffa.Common.CreatedOn]</Label>
+<DomainField>CreatedOn</DomainField>
+</ResultsField>
+<ResultsField>
+<Name>CreatedBy</Name>
+<DataType>STRING</DataType>
+<Display>true</Display>
+<Label>[label.Jaffa.Common.CreatedBy]</Label>
+<DomainField>CreatedBy</DomainField>
+</ResultsField>
+<ResultsField>
+<Name>LastChangedOn</Name>
+<DataType>DATE_TIME</DataType>
+<Display>true</Display>
+<Label>[label.Jaffa.Common.LastChangedOn]</Label>
+<DomainField>LastChangedOn</DomainField>
+</ResultsField>
+<ResultsField>
+<Name>LastChangedBy</Name>
+<DataType>STRING</DataType>
+<Display>true</Display>
+<Label>[label.Jaffa.Common.LastChangedBy]</Label>
+<DomainField>LastChangedBy</DomainField>
+</ResultsField>
+<ResultsField>
+<Name>TemplateData</Name>
+<DataType>RAW</DataType>
+<Display>true</Display>
+<Label>[label.Jaffa.Printing.FormTemplate.TemplateData]</Label>
+<DomainField>TemplateData</DomainField>
+<SourceChain>
+<Source>
+<Object>FormTemplate</Object>
+<Package>org.jaffa.modules.printing.domain</Package>
+<JoinFields>
+<JoinBetween>
+<DomainObjectField>FormId</DomainObjectField>
+<SourceField>FormId</SourceField>
+</JoinBetween>
+</JoinFields>
+</Source>
+</SourceChain>
+</ResultsField>
+<ResultsField>
+<Name>LayoutData</Name>
+<DataType>RAW</DataType>
+<Display>true</Display>
+<Label>[label.Jaffa.Printing.FormTemplate.LayoutData]</Label>
+<DomainField>LayoutData</DomainField>
+<SourceChain>
+<Source>
+<Object>FormTemplate</Object>
+<Package>org.jaffa.modules.printing.domain</Package>
+<JoinFields>
+<JoinBetween>
+<DomainObjectField>FormId</DomainObjectField>
+<SourceField>FormId</SourceField>
+</JoinBetween>
+</JoinFields>
+</Source>
+</SourceChain>
+</ResultsField>
+-->
+  </ResultsFields>
+  <Updator>
+    <ComponentName>Jaffa.Printing.FormDefinitionMaintenance</ComponentName>
+    <ClassName>FormDefinitionMaintenanceComponent</ClassName>
+    <Package>org.jaffa.modules.printing.components.formdefinitionmaintenance.ui</Package>
+  </Updator>
+<!--
+<Deletor>
+<ComponentName>Jaffa.Printing.FormDefinitionMaintenance</ComponentName>
+<ClassName>FormDefinitionMaintenanceComponent</ClassName>
+<Package>org.jaffa.modules.printing.components.formdefinitionmaintenance.ui</Package>
+</Deletor>
+-->
+</Root>
+

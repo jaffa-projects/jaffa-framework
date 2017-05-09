@@ -1,0 +1,139 @@
+<span width="100%" style="whitespace:normal">
+<h1 style="color:#006666;text-decoration:none;font-family:Verdana,Arial;font-size:medium;">
+Welcome to JAFFA - Java Application Framework For All
+</h1>
+<p>
+These are the changes made for the JAFFA 1.3 Release. For more information visit us at <a href="http://jaffa.sourceforge.net">http://jaffa.sourceforge.net</a>
+<p>
+<h2 style="color:#339966;text-decoration:none;font-family:Verdana,Arial;font-size:small;">
+What's New in Version 1.3
+</h2>
+<p>
+<ol>
+<li> Created PortletFilter which is a replacement for the PortletServlet and the org.jaffa.presentation.portlet.security package.
+<li> Created ComponentExpiredException and the message: exception.org.jaffa.exceptions.ComponentExpiredException.componentExpired=The page you are trying to view has expired!
+<li> Added the message: exception.org.jaffa.presentation.portlet.session.UserSessionSetupException.setupException=Error in setting up the UserSession
+<li> Added Ant tasks that wrapper org.jaffa.tools.build.ConfigFileUpdate and org.jaffa.tools.build.ValidatePropertiesFile, &lt;configfileupdate&gt; and &lt;validatepropertiesfile&gt;.
+<li> Created the following classes to support configurable data sources - IConnectionFactory, DbConnectionBrokerConnectionFactory, DbcpDataSourceConnectionFactory, JndiDataSourceConnectionFactory
+<li> Created a new XML schema 'jdbc-engine-init_1_0.xsd' and a DTD 'jdbc-engine-init_1_0.dtd' for the jdbcengine init.xml file
+<li> The 'BOOLEAN' datatype has been enhanced to support different packing styles, viz. BOOLEAN_BIT, BOOLEAN_TF, BOOLEAN_YN, BOOLEAN_10 (Feature#730303, <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=730303&amp;group_id=39497&amp;atid=425398">http://sourceforge.net/tracker/index.php?func=detail&amp;aid=730303&amp;group_id=39497&amp;atid=425398</a>)
+<li> Added org.jaffa.util.SettingsBase to be used to access web/ejb server based properties
+<li> Added org.jaffa.util.EmailHelper for sending emails with Excel attachments
+<li> Added support for database generated key in the persistence layer
+</ol>
+<p>
+<h2 style="color:#339966;text-decoration:none;font-family:Verdana,Arial;font-size:small;">
+What's Changed
+</h2>
+<p>
+<ol>
+<li> components.xml: Removed the reference to the deprecated LogonComponent
+<li> struts-config.xml: Made it compatible with the new Struts1.1 DTD. Removed the references to the Logon component. Moved the mapping for pageExpired.jsp from struts-config.xml to web.xml
+<li> web.xml: Added the PortletFilter. Replaced the PortletServlet with the ActionServlet
+<li> FormBase: Since Struts1.1, the reset() method is being invoked from the FormTag, in addition to the ActionServlet(or RequestProcessor). Modified the reset() method to not set the widget-cache, as it leads to erroneous state
+<li> Revamped the init.xml to conform to the 'jdbc-engine-init_1_0.xsd' schema. Some of the major changes are
+   a) New elements - connection-factory, hitlistSize, jdbcSecurityPlugin, usePreparedStatement
+   b) The parameters are now children of the connection-factory element
+   c) New parameters to support DbcpDataSourceConnectionFactory - maxWait, testOnBorrow, testOnReturn, validationQuery
+   d) New parameters to support JndiDataSourceConnectionFactory - jndiDataSourceName
+<li> Moved the framework properties to init.xml - framework.persistence.jdbcengine.usePreparedStatement, framework.persistence.jdbcengine.security.plugin. As a result the following classes needed to be changed - DataSource, JdbcBridge
+</ol>
+<p>
+<h2 style="color:#339966;text-decoration:none;font-family:Verdana,Arial;font-size:small;">
+What's Deleted/Deprecated
+</h2>
+<p>
+<ol>
+<li> Removed the logic related to tokens in Config class and deleted the tokens.properties file.
+<li> Removed the Config constants - PROP_CASTOR_DATABASE_URI, PROP_CASTOR_DATABASE_NAME, PROP_PERSISTENCE_ENGINE_LOGGING
+<li> Deprecated the Config constants - PROP_PORTLET_SECURITY_ENABLED, PROP_PORTLET_SECURITY_MGR, PROP_PORTLET_SECURITY_BYPASS_ACTION_LIST
+<li> Removed the framework properties - framework.security.portlet.enabled, framework.security.portlet.manager, framework.security.portlet.bypassActionList
+<li> Deleted the org.jaffa.presentation.portal package
+<li> Deprecated PortletServlet
+<li> Deprecated the package org.jaffa.presentation.portlet.security
+<li> Deleted switchSkin.jsp
+<li> Removed org.jaffa.util.XmlBean and org.jaffa.util.xml.XmlBean. These two 'experimental' classes, either use the XML serializer or the Jakarta collections-bean-utils for these kind of functions.
+<li> UserSessionFilter has been deprecated as it has been superceeded with the new PortletFilter
+<li> Deleted JdbcSecurityPluginFactory, since its no longer used. DataSourceFactory does the needful.
+<li> Deleted InitParser and JAFFADataSource. They have been replaced by the JAXB files generated for jdbc-engine-init_1_0.xsd and the logic added to ConfigurationService
+<li> Deprecated logon.jsp; instead use container authentication
+</ol>
+<p>
+<h2 style="color:#339966;text-decoration:none;font-family:Verdana,Arial;font-size:small;">
+Bug Fixes
+</h2>
+<p>
+<ol>
+<li> Concurrency bottleneck in ActionBase (Bug#780503, <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=780503&amp;group_id=39497&amp;atid=425395">http://sourceforge.net/tracker/index.php?func=detail&amp;aid=780503&amp;group_id=39497&amp;atid=425395</a>)
+Struts has implemented a singleton pattern for each Action class. But we set instance variables in the Action class. This leads to concurrency problems when multiple submissions are made to an Action class.
+Fixed the ActionBase class such that a new instance of the Action class is created in the perform() method,  which is then used for event handling.
+<li> Javascript bug on TableSort (Bug#788943, <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=788943&amp;group_id=39497&amp;atid=425395">http://sourceforge.net/tracker/index.php?func=detail&amp;aid=788943&amp;group_id=39497&amp;atid=425395</a>)
+When an action button is pressed on a UserGrid it causes a javascript error to be produced. Fixed the files tablesort.js and tablesortUK.js
+<li> Fixed UserGridColumnTag to stop javascript errors on mouseOver events for the tooltip when page hasn't finished loading
+<li> Fixed GridController and UserGridController. The call to update the inner model is not made, if the model is null. This fixes the NullPointerException being thrown by the log.debug() method
+<li> Fixed LoadTester, AppBuilder &amp; DomainObjectHelper. They use JAXB but weren't ignoring the &lt;!DOCTYPE&gt;. Now they don't rely on <a href="http://jaffa/sf/net/DTD">http://jaffa/sf/net/DTD</a> being available
+<li> Fixed the date field error for MySQL (Bug#800690, <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=800690&amp;group_id=39497&amp;atid=425395">http://sourceforge.net/tracker/index.php?func=detail&amp;aid=800690&amp;group_id=39497&amp;atid=425395</a>). This involved the following changes
+  <ol type="a">
+  <li> Added a new variant property 'PROP_USE_TO_DATE_SQL_FUNCTION' which will determine if the to_date() function is to be used for managing date fields.
+  <li> Modified DataSource, DataTranslator, JdbcBridge, QueryStatementHelper, StatementHelper and TypeDefs to propagate 'engineType' when generating SQL
+  <li> Added UnitTests for testing date based queries/inserts/updates
+  </ol>
+<li> Fixed the quote character bug in MS SQL Server (Bug#730595, <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=730595&amp;group_id=39497&amp;atid=425395">http://sourceforge.net/tracker/index.php?func=detail&amp;aid=730595&amp;group_id=39497&amp;atid=425395</a>). This involved the following changes
+   a) Fixed the class 'TypeDefs' to not replace quote characters when using PreparedStatements
+   b) Added a UnitTest to check the fix
+<li> Fixed UserGridManager, replacing the warnings with error logs when a MalformedURLException is thrown (Bug#771979, <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=771979&amp;group_id=39497&amp;atid=425395">http://sourceforge.net/tracker/index.php?func=detail&amp;aid=771979&amp;group_id=39497&amp;atid=425395</a>)
+</ol>
+<p>
+<h2 style="color:#339966;text-decoration:none;font-family:Verdana,Arial;font-size:small;">
+Improvements
+</h2>
+<p>
+<ol>
+<li> Modified realm to support data sources (RFE#781129, <a href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=781129&amp;group_id=39497&amp;atid=425398">http://sourceforge.net/tracker/index.php?func=detail&amp;aid=781129&amp;group_id=39497&amp;atid=425398</a>)
+Merged datasource code into the realm, resynced based on Tomcat 4.1.26 source code for both DataSource and JDBC realms
+<li> Modified the getStatement() method in the DataSource class of the jdbc engine, to get a Statement object from a connection, using the default settings - TYPE_FORWARD_ONLY and CONCUR_READ_ONLY. This will be much more effecient than the previous code which was using the TYPE_SCROLL_INSENSITIVE and CONCUR_UPDATABLE settings
+<li> Made the following changes in ButtonTag, CheckBoxTag, DateTimeTag, DropDownTag, EditBoxTag, FooterTag, FormTag, GridColumnTag, GridTag, HeaderTag, ImageTag, LookupTag, RadioButtonTag, TableTag, TagHelper, TreeTag, UserGridColumnTag, UserGridTag
+    a- Used pageContext.REQUEST_SCOPE when invoking pageContext.setAttribute()
+    b- Replaced 'pageContext.getAttribute()' invocations with 'pageContext.findAttribute()'
+   This was done to allow Jaffa widgets to be spread across multiple JSPs in template environmnents like the TILES framework. This would allow us to paint the FormTag in a Layout JSP and the widgets in the inner Tile JSP.
+<li> Replaced '(String) pageContext.getAttribute(TagHelper.ATTRIBUTE_FORM_NAME)' with 'TagHelper.getFormName(pageContext)' in finder-pattern/ComponentResultsJSP, lookup-pattern/ComponentResultsJSP and httpunittest/results.jsp
+<li> Modified DataSourceFactory to use the class specified in init.xml for instantiating an IConnectionFactory for obtaining database connections
+<li> Modified ConfigurationService to use JAXB for reading init.xml
+<li> Added a hack to JDBCSecurityPlugin to extract the oracle connection from the dbcp wrapper
+<li> Modified the classes Engine and PersistentTransaction to use the JAXB generated class 'Database' instead of JAFFADataSource
+<li> Added some extra customization points in the maintence pattern
+</ol>
+<p>
+<h3 style="color:#339966;text-decoration:none;font-family:Verdana,Arial;font-size:x-small;">
+Fixes to overcome Compile errors when working with Struts1.1 (new Struts JARs and TLDs)
+</h3>
+<p>
+<ol>
+<li> PortletServlet - removed references to processPreprocess, processPath, processMapping, processActionForward, processPopulate methods of ActionServlet. Refactored most of the code. Commented out processPopulate(), which is redundant and should have been removed when the error-handling was revamped in FormBase
+<li> FormTag - Removed the getActionMappingURL() method, and instead extended the renderFormStartElement() and lookup() methods of the base class to support the 'url' attribute. Also replaced references to getName() with getBeanName()
+<li> ButtonTag, EditBoxTag, TreeTag - replaced the reference to formTag.getName() with TagHelper.getFormName(pageContext)
+</ol>
+<p>
+<h3 style="color:#339966;text-decoration:none;font-family:Verdana,Arial;font-size:x-small;">
+Fixes to overcome Deprecation warnings when working with Struts1.1
+</h3>
+<p>
+<ol>
+<li> ActionBase, LogonAction, LogonPreAction, SampleApplication.LogoutAction - replaced the perform() method with execute() method
+<li> ActionBase - Refactored the exception-handling, with the new signature of execute() allowing an Exception to be thrown
+<li> StartComponentAction - Refactored the exception handling, with the new signature of execute() allowing an Exception to be thrown
+<li> EventHandlerRuntimeException - This class has been removed, since its redundant with the new signature of execute() allowing an Exception to be thrown
+<li> FormBase - replaced the call to ActionMessages.empty() with ActionMessages.isEmpty()
+<li> FormBase, MessageHelper - replaced the references to Action.constants with Globals.constants
+</ol>
+<p>
+<h3 style="color:#339966;text-decoration:none;font-family:Verdana,Arial;font-size:x-small;">
+Fixes to add a Form ID tag to allow multiple forms to have their actions fired in Netscape
+</h3>
+<p>
+<ol>
+<li> FormTag was updated. If a style ID tag is not specified, the ID will be written as the Form bean name.
+<li> UserGridSettings.js was modified to allow the form bean name to be passed in instead of using Form[0] which does not work in Netscape.
+</ol>
+<p>
+</span>

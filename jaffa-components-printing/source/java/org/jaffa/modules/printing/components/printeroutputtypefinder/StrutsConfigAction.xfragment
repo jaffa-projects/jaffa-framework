@@ -1,0 +1,8 @@
+    <!-- PrinterOutputTypeFinder -->
+    <action    path="/jaffa_printing_printerOutputTypeFinder"
+               type="org.jaffa.modules.printing.components.printeroutputtypefinder.ui.PrinterOutputTypeFinderAction"
+               name="jaffa_printing_printerOutputTypeFinderForm"
+               validate="false"
+               scope="request">
+    </action>
+

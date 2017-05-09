@@ -1,0 +1,13 @@
+    <!-- UserRequestMaintenance -->
+    <definition name="jaffa.user.userrequestmaintenance.MaintenanceLayout.main"  extends="jaffa.MaintenanceLayout">
+        <put name="body" value="/jaffa/user/userrequestmaintenance/main.jsp"/>
+        <put name="action" value="/user_userRequestMaintenance"/>
+        <put name="currentScreenCounter" value="0"/>
+        <put name="createModeTitle" value="[title.Jaffa.User.UserRequestMaintenance.maintenance]"/>
+        <put name="updateModeTitle" value="[title.Jaffa.User.UserRequestMaintenance.maintenance]"/>
+    </definition>
+    <definition name="jaffa.user.userrequestmaintenance.main"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.User.UserRequestMaintenance.maintenance]"/>
+        <put name="body" value="jaffa.user.userrequestmaintenance.MaintenanceLayout.main"/>
+    </definition>
+

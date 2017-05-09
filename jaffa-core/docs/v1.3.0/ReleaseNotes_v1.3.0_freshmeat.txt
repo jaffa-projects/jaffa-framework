@@ -1,0 +1,5 @@
+JAFFA Version 1.3 - This release is a major maintenance release primarily focused on Struts 1.1 compatibility,
+but it also includes all the smaller feature requests and bug fixes over the last few months. Highlights of
+this release are (1) Supports Struts 1.1 and Tiles within the Presentation Layer. (2) New Ant Tasks to support
+the fragment merging. (3) Additional connection pool support via Jakarta Commons DBCP package. (4) Supports database
+generated keys in the persistence layer. (5) Modified Tomcat encryption Realm to support DataSources and connection pooling 

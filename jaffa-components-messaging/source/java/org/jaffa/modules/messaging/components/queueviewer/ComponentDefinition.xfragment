@@ -1,0 +1,4 @@
+    <component id="Jaffa.Messaging.QueueViewer">
+        <class>org.jaffa.modules.messaging.components.queueviewer.ui.QueueViewerComponent</class>
+        <type>ObjectViewer</type>
+    </component>

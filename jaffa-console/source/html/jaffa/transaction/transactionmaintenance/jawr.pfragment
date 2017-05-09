@@ -1,0 +1,13 @@
+#----------------------------
+# Jaffa \ Transaction \ TransactionMaintenance
+#----------------------------
+
+jawr.js.bundle.TransactionMaintenance.id=/bundles/jaffa/transaction/transactionmaintenance.js
+jawr.js.bundle.TransactionMaintenance.mappings=\
+    dwr:Jaffa_Transaction_TransactionService, \
+    dwr:Jaffa_Messaging_BusinessEventLogService, \
+    /jaffa/transaction/transactionmaintenance/DetailPanel.js, \
+    /jaffa/transaction/transactionmaintenance/DependencyPanel.js, \
+    /jaffa/transaction/transactionmaintenance/EventLogPanel.js, \
+    /jaffa/transaction/transactionmaintenance/PayloadPanel.js, \
+    /jaffa/transaction/transactionmaintenance/main.js

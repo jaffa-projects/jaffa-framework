@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.persistence.domainobjects.Asset">
+        <map-to table="ZZ_JUT_ASSET" />
+
+        <field name="AssetTk" use-member="m_assetTk" type="java.lang.Long" primary-key="true" autogen-key="true">
+            <sql name="ASSET_TK" type="Integer" dirty="ignore"/>
+        </field>
+
+        <field name="AssetId" use-member="m_assetId" type="java.lang.String">
+            <sql name="ASSET_ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Part" use-member="m_part" type="java.lang.String">
+            <sql name="PART" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Custodian" use-member="m_custodian" type="java.lang.String">
+            <sql name="CUSTODIAN" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Condition" use-member="m_condition" type="java.lang.String">
+            <sql name="CONDITION" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="CreatedDatetime" use-member="m_createdDatetime" type="org.jaffa.datatypes.DateTime">
+            <sql name="CREATED_DATETIME" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+        <field name="Qty" use-member="m_qty" type="java.lang.Long">
+            <sql name="QTY" type="INTEGER" dirty="ignore"/>
+        </field>
+
+        <field name="KeyRef" use-member="m_keyRef" type="java.lang.String">
+            <sql name="KEY_REF" type="STRING" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

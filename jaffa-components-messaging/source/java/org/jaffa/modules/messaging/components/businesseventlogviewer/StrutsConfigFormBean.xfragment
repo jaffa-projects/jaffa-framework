@@ -1,0 +1,3 @@
+    <!-- BusinessEventLogViewer Form -->
+    <form-bean      name="jaffa_messaging_businessEventLogViewerForm"
+                    type="org.jaffa.modules.messaging.components.businesseventlogviewer.ui.BusinessEventLogViewerForm"/>

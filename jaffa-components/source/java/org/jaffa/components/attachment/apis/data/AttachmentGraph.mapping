@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="US-ASCII" ?>
+<bean-mapping>
+  <graph-data-object class="org.jaffa.components.attachment.apis.data.AttachmentGraph"/>
+  <domain-object class="org.jaffa.components.attachment.domain.Attachment"/>
+  <dirty-read gdo='lastChangedOn' error-params='lastChangedBy,lastChangedOn'/>
+  <map-key-fields>
+    <field gdo="attachmentId"/>
+  </map-key-fields>
+  <map-fields>
+    <field gdo="documentReferenceId"/>
+    <field gdo="serializedKey"/>
+    <field gdo="originalFileName"/>
+    <field gdo="attachmentType"/>
+    <field gdo="contentType"/>
+    <field gdo="description"/>
+    <field gdo="remarks"/>
+    <field gdo="supercededBy"/>
+    <field gdo="createdOn"/>
+    <field gdo="createdBy"/>
+    <field gdo="lastChangedOn"/>
+    <field gdo="lastChangedBy"/>
+    <field gdo="data"/>
+  </map-fields>
+</bean-mapping>

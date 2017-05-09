@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.transaction.domain.Transaction">
+        <map-to table="J_TRANSACTIONS" lockable="false"/>
+
+        <field name="Id" use-member="id" type="java.lang.String" primary-key="true">
+            <sql name="ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Direction" use-member="direction" type="java.lang.String">
+            <sql name="DIRECTION" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Type" use-member="type" type="java.lang.String">
+            <sql name="TYPE" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="SubType" use-member="subType" type="java.lang.String">
+            <sql name="SUB_TYPE" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Status" use-member="status" type="java.lang.String">
+            <sql name="STATUS" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="ErrorMessage" use-member="errorMessage" type="java.lang.String">
+            <sql name="ERROR_MESSAGE" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="CreatedOn" use-member="createdOn" type="java.sql.Timestamp">
+            <sql name="CREATED_ON" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+        <field name="CreatedBy" use-member="createdBy" type="java.lang.String">
+            <sql name="CREATED_BY" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="LastChangedOn" use-member="lastChangedOn" type="java.sql.Timestamp">
+            <sql name="LAST_CHANGED_ON" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+        <field name="LastChangedBy" use-member="lastChangedBy" type="java.lang.String">
+            <sql name="LAST_CHANGED_BY" type="STRING" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Object Maintenance Meta 2.0//EN" "http://jaffa.sourceforge.net/DTD/object-maintenance-meta_2_0.dtd">
+<Root>
+  <PatternTemplate>patterns/library/object_maintenance_2_1/ObjectMaintenancePattern.xml</PatternTemplate>
+  <Application>Jaffa</Application>
+  <Module>Admin</Module>
+  <Component>UserMaintenance</Component>
+  <BasePackage>org.jaffa.applications.jaffa.modules.admin</BasePackage>
+  <DomainObject>User</DomainObject>
+  <DomainPackage>org.jaffa.applications.jaffa.modules.admin.domain</DomainPackage>
+  <Title>[title.Jaffa.Admin.UserMaintenance.maintenance]</Title>
+  <KeyFields>
+    <KeyField>
+      <Name>UserName</Name>
+      <DataType>STRING</DataType>
+      <DomainField>UserName</DomainField>
+    </KeyField>
+  </KeyFields>
+  <Fields>
+    <Field>
+      <Name>UserName</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>UserName</DomainField>
+    </Field>
+    <Field>
+      <Name>FirstName</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>FirstName</DomainField>
+    </Field>
+    <Field>
+      <Name>LastName</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>LastName</DomainField>
+    </Field>
+<!-- This is a dummy field
+    - Specify password='true' in the EditBox tag
+    - This field is mandatory only when creating a User
+    - Invoke user.updatePassword(input.getPassword1()) in the Tx, if input.getPassword1() != null
+    -->
+    <Field>
+      <Name>Password1</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Admin.User.Password]</Label>
+      <DomainField/>
+    </Field>
+<!-- This is a dummy field
+    - Specify password='true' in the EditBox tag
+    - This field is mandatory only when creating a User
+    - Invoke user.updatePassword(input.getPassword1()) in the Tx, if input.getPassword1() != null
+    -->
+    <Field>
+        <Name>RequestId</Name>
+        <DataType>STRING</DataType>
+        <Display>false</Display>
+        <Label></Label>
+        <DomainField></DomainField>
+    </Field>    
+    <!-- This is a dummy field
+    - Specify password='true' in the EditBox tag
+    - This field is mandatory only when creating a User
+    - Ensure that this value equals the password1 in the doValidate() of the FormBean
+    -->
+    <Field>
+      <Name>Password2</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Admin.User.VerifyPassword]</Label>
+      <DomainField/>
+    </Field>
+    <Field>
+      <Name>Status</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>Status</DomainField>
+      <Breakup>
+        <WidgetType>Dropdown</WidgetType>
+        <StaticValues>
+          <StaticValue>
+            <Code>N</Code>
+            <Description>[label.Jaffa.Admin.User.Status.N]</Description>
+          </StaticValue>
+          <StaticValue>
+            <Code>A</Code>
+            <Description>[label.Jaffa.Admin.User.Status.A]</Description>
+          </StaticValue>
+          <StaticValue>
+            <Code>I</Code>
+            <Description>[label.Jaffa.Admin.User.Status.I]</Description>
+          </StaticValue>
+        </StaticValues>
+      </Breakup>
+    </Field>
+    <Field>
+      <Name>EMailAddress</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>EMailAddress</DomainField>
+    </Field>
+ <Field>
+ <Name>SecurityQuestion</Name>
+ <DataType>INTEGER</DataType>
+ <Display>false</Display>
+ <DomainField>SecurityQuestion</DomainField>
+ </Field>
+ 
+ <Field>
+ <Name>SecurityQuestion1</Name>
+ <DataType>STRING</DataType>
+ <Display>true</Display>
+ <Mandatory>true</Mandatory>
+ <DomainField></DomainField>
+ <Breakup>
+ <WidgetType>Dropdown</WidgetType>
+ <StaticValues>
+   <StaticValue>
+     <Code>1</Code>
+     <Description>[label.Jaffa.User.UserRequest.SecurityQuestion.1]</Description>
+   </StaticValue>
+     <StaticValue>
+       <Code>2</Code>
+       <Description>[label.Jaffa.User.UserRequest.SecurityQuestion.2]</Description>
+   </StaticValue>
+   <StaticValue>
+     <Code>3</Code>
+     <Description>[label.Jaffa.User.UserRequest.SecurityQuestion.3]</Description>
+   </StaticValue>
+   <StaticValue>
+     <Code>4</Code>
+     <Description>[label.Jaffa.User.UserRequest.SecurityQuestion.4]</Description>
+   </StaticValue>          
+ </StaticValues>
+ </Breakup>
+</Field>
+   <Field>
+      <Name>SecurityAnswer</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>SecurityAnswer</DomainField>
+    </Field>    
+    <Field>
+      <Name>CreatedOn</Name>
+      <DataType>DATE_TIME</DataType>
+      <Display>true</Display>
+      <DomainField>CreatedOn</DomainField>
+      <StampType>CreatedDateTime</StampType>
+    </Field>
+    <Field>
+            <Name>AutoPassword</Name>
+            <DataType>BOOLEAN</DataType>
+            <Display>true</Display>
+            <Label>[label.Jaffa.Admin.User.AutoPassword]</Label>
+            <DomainField></DomainField>
+    </Field>    
+    <Field>
+            <Name>NotifyUser</Name>
+            <DataType>BOOLEAN</DataType>
+            <Display>true</Display>
+            <Label>[label.Jaffa.Admin.User.NotifyUser]</Label>
+            <DomainField></DomainField>
+    </Field>        
+    <Field>
+      <Name>CreatedBy</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>CreatedBy</DomainField>
+      <StampType>CreatedUserId</StampType>
+    </Field>
+    <Field>
+      <Name>LastUpdatedOn</Name>
+      <DataType>DATE_TIME</DataType>
+      <Display>true</Display>
+      <DomainField>LastUpdatedOn</DomainField>
+      <StampType>LastUpdatedDateTime</StampType>
+      <UseForDirtyReadCheck>true</UseForDirtyReadCheck>
+    </Field>
+    <Field>
+      <Name>LastUpdatedBy</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>LastUpdatedBy</DomainField>
+      <StampType>LastUpdatedUserId</StampType>
+    </Field>
+  </Fields>
+  <RelatedObjects>
+<!-- 
+    The UserRole has been specified here to generate Tx code for deleting the UserRoles when a User is deleted.
+    We'll manually add code to the UserMaintenance to add/remove roles for a User
+     -->
+    <RelatedObject>
+      <Name>UserRole</Name>
+      <ObjectName>UserRole</ObjectName>
+      <Package>org.jaffa.applications.jaffa.modules.admin.domain</Package>
+      <RelationshipToDomainObject>Many</RelationshipToDomainObject>
+      <DeleteConstraint>Cascading</DeleteConstraint>
+      <RelatedObjectJoinFields>
+        <RelatedObjectJoinBetween>
+          <Name>UserName</Name>
+          <DomainField>UserName</DomainField>
+          <RelatedObjectFieldName>UserName</RelatedObjectFieldName>
+          <RelatedObjectDomainField>UserName</RelatedObjectDomainField>
+        </RelatedObjectJoinBetween>
+      </RelatedObjectJoinFields>
+      <RelatedObjectFields>
+        <RelatedObjectField>
+          <Name>RoleName</Name>
+          <DataType>STRING</DataType>
+          <Display>true</Display>
+          <Label>[label.Jaffa.Admin.UserRole.RoleName]</Label>
+          <DomainField>RoleName</DomainField>
+        </RelatedObjectField>
+      </RelatedObjectFields>
+      <RelatedObjectKeyFields>
+        <RelatedObjectKeyField>
+          <RelatedObjectFieldName>UserName</RelatedObjectFieldName>
+          <DataType>STRING</DataType>
+          <FieldNameInTargetComponent>UserName</FieldNameInTargetComponent>
+        </RelatedObjectKeyField>
+        <RelatedObjectKeyField>
+          <RelatedObjectFieldName>RoleName</RelatedObjectFieldName>
+          <DataType>STRING</DataType>
+          <FieldNameInTargetComponent>RoleName</FieldNameInTargetComponent>
+        </RelatedObjectKeyField>
+      </RelatedObjectKeyFields>
+    </RelatedObject>
+  </RelatedObjects>
+  <Screens>
+    <Screen Name="main" SaveActionAvailableInCreateMode="true" PerformTxValidationOnNextAction="true" AvailableInUpdateMode="true" AvailableInCreateMode="true" CreateModeTitle="[title.Jaffa.Admin.UserMaintenance.create]" UpdateModeTitle="[title.Jaffa.Admin.UserMaintenance.update]">
+      <References>
+        <FieldReference Name="UserName"/>
+        <FieldReference Name="FirstName"/>
+        <FieldReference Name="LastName"/>
+        <FieldReference Name="Password1"/>
+        <FieldReference Name="Password2"/>
+        <FieldReference Name="Status"/>
+        <FieldReference Name="AutoPassword"/>
+        <FieldReference Name="NotifyUser"/>   
+      <FieldReference Name="SecurityQuestion1"/>
+      <FieldReference Name="SecurityAnswer"/>
+        <FieldReference Name="EMailAddress"/>
+        <FieldReference Name="CreatedOn"/>
+        <FieldReference Name="CreatedBy"/>
+        <FieldReference Name="LastUpdatedOn"/>
+        <FieldReference Name="LastUpdatedBy"/>
+      </References>
+    </Screen>
+  </Screens>
+</Root>

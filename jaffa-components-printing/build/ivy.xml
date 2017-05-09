@@ -1,0 +1,39 @@
+<ivy-module version="2.0">
+
+	<!-- The groupId, artifactId and version of the artifacts.  Update the revision to match the Jaffa version being built. -->
+    <info organisation="org.jaffa" module="jaffa-components-printing" revision="${jaffa-version}"/>
+	
+	<!-- The pom and jar to be published to Maven repositories. -->
+	<publications>
+        <artifact name="jaffa-components-printing" type="pom"/>
+        <artifact name="jaffa-components-printing" type="jar"/>
+    </publications>
+
+  <dependencies>
+    <!-- Begin Apache Commons dependencies -->
+    <dependency org="commons-beanutils" name="commons-beanutils" rev="${commons-beanutils-version}" transitive="false"/>
+    <!-- End Apache Commons dependencies -->
+
+    <!-- Begin javax dependencies -->
+    <dependency org="javax.servlet" name="servlet-api" rev="${servlet-api-version}" transitive="false"/>
+    <dependency org="javax.mail" name="mail" rev="${javax.mail-version}" transitive="false"/>
+    <!-- End javax dependencies -->
+
+    <!-- Begin Hibernate dependencies -->
+    <dependency org="org.hibernate" name="hibernate-core" rev="${hibernate-core-version}" transitive="false"/>
+    <dependency org="org.hibernate.javax.persistence" name="hibernate-jpa-2.1-api" rev="${hibernate-jpa-2.1-api-version}" transitive="false"/>
+    <!-- End Hibernate  dependencies -->
+
+    <!-- Begin PDF library dependencies -->
+    <dependency org="com.pdflib" name="pdflib" rev="${pdflib-version}" transitive="false"/>
+    <!-- End PDF library dependencies -->
+
+    <!-- Begin Velocity dependencies -->
+    <dependency org="org.apache.velocity" name="velocity" rev="${velocity-version}" transitive="false"/>
+    <!-- End Velocity dependencies -->
+
+    <!-- Begin Itext dependencies -->
+    <dependency org="com.lowagie" name="itext" rev="${itext-version}" transitive="false"/>
+    <!-- End Itext dependencies -->
+  </dependencies>	
+</ivy-module>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+<!ELEMENT business-functions (business-function*)>
+<!ELEMENT business-function (description?) >
+<!ATTLIST business-function name CDATA #REQUIRED >
+<!ELEMENT description (#PCDATA) >

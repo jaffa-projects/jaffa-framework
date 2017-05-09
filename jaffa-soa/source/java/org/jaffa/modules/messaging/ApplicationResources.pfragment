@@ -1,0 +1,67 @@
+exception.org.jaffa.modules.messaging.services.JaffaMessagingApplicationException.invalidSelector=Invalid [label.Jaffa.Messaging.QueueViewer.Filter]. The syntax is based on a subset of the SQL92 conditional expression syntax. Check the latest JMS specification for more details.
+exception.org.jaffa.modules.messaging.services.JaffaMessagingApplicationException.lockError=The Message {1} in Queue {0} blocks the submission of any more messages that need a lock-check
+exception.org.jaffa.modules.messaging.services.JaffaMessagingApplicationException.messageNotFound=Message not found. It may have been processed, or you may not access to it.
+exception.org.jaffa.modules.messaging.services.JaffaMessagingApplicationException.noAdminMessageAccess=You do not have access to administer messages in the Queue {0}
+exception.org.jaffa.modules.messaging.services.JaffaMessagingApplicationException.noChangePriorityAccess=You do not have access to change priority of messages in the Queue {0}
+exception.org.jaffa.modules.messaging.services.JaffaMessagingFrameworkException.browseError=Error in browsing the JMS Queue {0}
+exception.org.jaffa.modules.messaging.services.JaffaMessagingFrameworkException.changePriorityError=Error in changing the priority of a JMS Message
+exception.org.jaffa.modules.messaging.services.JaffaMessagingFrameworkException.cloneError=Error in creating a copy of a JMS Message
+exception.org.jaffa.modules.messaging.services.JaffaMessagingFrameworkException.commitError=Error in committing the JMS Session
+exception.org.jaffa.modules.messaging.services.JaffaMessagingFrameworkException.connectionError=Error in obtaining the JMS Connection
+exception.org.jaffa.modules.messaging.services.JaffaMessagingFrameworkException.connectionFactoryNotFound=Error in obtaining the JMS ConnectionFactory
+exception.org.jaffa.modules.messaging.services.JaffaMessagingFrameworkException.deleteError=Error in deleting the JMS Message
+exception.org.jaffa.modules.messaging.services.JaffaMessagingFrameworkException.initialContextError=Error in creating an InitialContext
+exception.org.jaffa.modules.messaging.services.JaffaMessagingFrameworkException.mbeanMissing=Error in locating the MBean {0}
+exception.org.jaffa.modules.messaging.services.JaffaMessagingFrameworkException.messageFilterError=Error in instantiating MessageFilter (name={0}, class={1})
+exception.org.jaffa.modules.messaging.services.JaffaMessagingFrameworkException.messageInfoMissing=Message info missing from the configuration file for the class {0}
+exception.org.jaffa.modules.messaging.services.JaffaMessagingFrameworkException.payloadError=Error in creating the XML payload for the Message
+exception.org.jaffa.modules.messaging.services.JaffaMessagingFrameworkException.queueNotFound=Error in obtaining the JMS Queue {0}
+exception.org.jaffa.modules.messaging.services.JaffaMessagingFrameworkException.resubmitkError=Error in resubmitting the JMS Message
+exception.org.jaffa.modules.messaging.services.JaffaMessagingFrameworkException.rollbackError=Error in rolling back the JMS Session
+exception.org.jaffa.modules.messaging.services.JaffaMessagingFrameworkException.sendError=Error in sending the JMS Message
+exception.org.jaffa.modules.messaging.services.JaffaMessagingFrameworkException.sessionError=Error in obtaining the JMS Session
+exception.org.jaffa.modules.messaging.services.JaffaMessagingFrameworkException.topicNotFound=Error in obtaining the JMS Topic {0}
+exception.org.jaffa.modules.messaging.services.JaffaMessagingFrameworkException.jmsTransactionError=Exception in writing to JMS for the Transaction instance {0}
+
+label.Jaffa.Scheduler.JmsInvokerJob.start=Sending JMS Message
+label.Jaffa.Scheduler.JmsInvokerJob.success=Successfully sent JMS Message
+error.Jaffa.Scheduler.JmsInvokerJob.error=Error in sending JMS Message
+
+label.Jaffa.Messaging.JaffaMessageBean.start=Processing message
+label.Jaffa.Messaging.JaffaMessageBean.success=Successfully processed message
+label.Jaffa.Messaging.JaffaMessageBean.redirect=Redirecting message to the Error Queue
+error.Jaffa.Messaging.JaffaMessageBean.error=Error in message processing
+error.Jaffa.Messaging.JaffaMessageBean.redirectError=Error in redirecting message to the Error Queue
+
+label.Jaffa.Messaging.BusinessEventLog=Business Event Log
+label.Jaffa.Messaging.BusinessEventLog.LogId=Log ID
+label.Jaffa.Messaging.BusinessEventLog.CorrelationType=Correlation Type
+label.Jaffa.Messaging.BusinessEventLog.CorrelationKey1=Correlation Key1
+label.Jaffa.Messaging.BusinessEventLog.CorrelationKey2=Correlation Key2
+label.Jaffa.Messaging.BusinessEventLog.CorrelationKey3=Correlation Key3
+label.Jaffa.Messaging.BusinessEventLog.ScheduledTaskId=Scheduled Task ID
+label.Jaffa.Messaging.BusinessEventLog.MessageId=Message ID
+label.Jaffa.Messaging.BusinessEventLog.LoggedOn=Logged On
+label.Jaffa.Messaging.BusinessEventLog.LoggedBy=Logged By
+label.Jaffa.Messaging.BusinessEventLog.ProcessName=Process Name
+label.Jaffa.Messaging.BusinessEventLog.SubProcessName=Sub Process Name
+label.Jaffa.Messaging.BusinessEventLog.MessageType=Message Type
+label.Jaffa.Messaging.BusinessEventLog.MessageText=Message Text
+label.Jaffa.Messaging.BusinessEventLog.SourceClass=Source Class
+label.Jaffa.Messaging.BusinessEventLog.SourceMethod=Source Method
+label.Jaffa.Messaging.BusinessEventLog.SourceLine=Source Line
+label.Jaffa.Messaging.BusinessEventLog.StackTrace=Stack Trace
+
+email.subject.messaging.failureNotification=Failure notification for queue ${queue}
+email.body.messaging.failureNotification=<html>There was a failure in processing a Message in the queue ${queue}#if($errorMessage != "")<p>${errorMessage}#end <p>Check <a href='${appUrl}/startComponent.do?component=Jaffa.Messaging.QueueViewer&messageMode=ERROR&queue=${queue}'/>Error Queue</a> and <a href='${appUrl}/startComponent.do?component=Jaffa.Messaging.MessageViewer&messageMode=ERROR&queue=${queue}&JMSMessageID=${message.JMSMessageID}'/>Message Details</a></html>
+
+
+title.Jaffa.Messaging.BusinessEventFinder.criteria=[label.Jaffa.Messaging.BusinessEventLog] [title.Jaffa.Finder.Criteria]
+title.Jaffa.Messaging.BusinessEventFinder.results=[label.Jaffa.Messaging.BusinessEventLog] [title.Jaffa.Finder.Results]
+label.Jaffa.Messaging.BusinessEventFinder.GeneralTab=General
+title.Jaffa.Messaging.BusinessEventFinder.consolidated=[label.Jaffa.Messaging.BusinessEventLog] [title.Jaffa.Finder]
+label.Jaffa.Messaging.BusinessEventFinder.Button.View=[label.JaffaRIA.Button.View]
+
+title.Jaffa.Messaging.BusinessEvent.Maintenance=[label.Jaffa.Messaging.BusinessEventLog] [title.Jaffa.Maintenance]
+label.Jaffa.Messaging.BusinessEvent.Maintenance.DetailsTab=Details
+label.JaffaCore.Messaging.BusinessEvent.Buttons.Save=[label.Common.maintenance.Buttons.Save]

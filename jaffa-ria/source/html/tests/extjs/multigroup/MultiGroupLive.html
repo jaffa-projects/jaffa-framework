@@ -1,0 +1,90 @@
+<!--
+/**********************************************************************************************
+ * JAFFA - Java Application Framework For All - Copyright (C) 2008 JAFFA Development Group
+ *
+ * This library is free software; you can redistribute it and/or modify it under the terms
+ * of the GNU Lesser General Public License (version 2.1 any later).
+ *
+ * See http://jaffa.sourceforge.net/site/legal.html for more details.
+ *********************************************************************************************/
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>ExtJS extension - Multiple Field Grouping Grid with Paging</title>
+
+    <script type="text/javascript" src="../../../js/extjs/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="../../../js/extjs/ext-all-debug.js"></script>
+
+    <script type="text/javascript">
+    // Firebug hack
+    if(!console) var console={debug:Ext.emptyFn,info:Ext.emptyFn,warn:Ext.emptyFn,error:Ext.emptyFn,trace:Ext.emptyFn,dir:Ext.emptyFn};
+    // Stop ref's to ExtJS site
+    Ext.BLANK_IMAGE_URL = "../../../js/extjs/resources/images/default/s.gif";
+    </script>
+
+
+    <script type="text/javascript" src="../../../js/extjs/ux/grid/MultiGroupingStore.js"></script>
+    <script type="text/javascript" src="../../../js/extjs/ux/grid/MultiGroupingView.js"></script>
+    <script type="text/javascript" src="../../../js/extjs/ux/grid/MultiGroupingPanel.js"></script>
+    <script type="text/javascript" src="MultiGroupLive.js"></script>
+
+    <!-- Include Ext stylesheets here: -->
+    <link rel="stylesheet" type="text/css" href="../../../js/extjs/resources/css/ext-all.css" />
+    <link rel="stylesheet" type="text/css" href="examples.css" />
+  </head>
+  <body>
+
+    <h1>Mult-Grouping Grid Extension - Live Data Example</h1>
+    <p>
+    This is another example of the Multiple Grid Extention (See <a href="MultiGroup.html">basic example</a>)
+    <br/>
+    It is based on getting the data from a back end live data source is "chunks", and doing server side sorting.
+    </p>
+    
+    <h2>Below is a working Example...</h2>
+    <p><b>Note: </b>Must be deployed on a JSP based server to work as as that is used as the dummy data source<p>
+
+    <hr/>
+    <div id="multiGroupEx1"></div>
+    <hr/>
+
+    <p>This example is based on the JaffaRIA deployment bundle which includes the full version of ExtJS 2.x, along
+    with the many extensions that have been added as part of JaffaRIA.</p>
+    <p>JaffaRIA can be downloaded and built from the CVS source,
+    or daily builds can found at <a href="http://jaffa.sf.net/repository/" target='_blank'>http://jaffa.sf.net/repository/</a><p>
+
+    <h2>Example source code can be found here</h2>
+    <ul>
+      <li><a href="http://jaffa.cvs.sourceforge.net/jaffa/JaffaRIA/source/html/tests/extjs/multigroup/MultiGroupLive.html?view=markup" target='_blank'>tests/extjs/multigroup/MultiGroup.html</a></li>
+      <li><a href="http://jaffa.cvs.sourceforge.net/jaffa/JaffaRIA/source/html/tests/extjs/multigroup/MultiGroupLive.js?view=markup" target='_blank'>tests/extjs/multigroup/MultiGroup.js</a></li>
+    </ul>
+
+    <h2>Change Log</h2>
+    <ul type="1">
+      <li>Implemented a new panel MultiGroupingPagingPanel that handles all the new events to page the data in as you are
+          scrolling. It also added to the panel's bottom tool bar to provide record count status and a manual button to
+          get the next page. 
+      <li>Implemented the server-side interface for the store so that it passed 'start' and 'limit' and 'sort'.
+          Sort now contains a comma seperated list of fields to sort by, optionally suffixed with ASC or DESC. 
+          This list is made up from the group fields and the single column sort field.
+      <li>Added a new attribute 'incomplete' to the information available to the groupTemplate, this example uses a "+"
+          to indicate the group is incomplete, and supresses the calculation of a group total
+      <li>Implemented a JSP backed by a CSV file of data to remove the need for a live database to test this. This JSP
+          simulates multi column sorting, column filtering (based on a beginsWith clause) and support the start and limit parameters
+      <li>Implements a "dirty" data check, whereby it reads one more row that it is displaying so it knows if there is more data,
+          and then uses this row to make sure it matches the first row returned when asking for the next page. A mismatch will
+          cause a complete re-retrieve of all data             
+    </ul>  
+    <h2>Known Issues</h2>
+    <ul>
+      <li>Not all columns returned may be supported by the server-side sorting, these columns can't be grouped by.
+      <li>There may be cases when the field name need by the 'sort' is not the same as the one used in the columns 'dataIndex'
+    </ul>  
+    <h2>Planned/Requested Features</h2>
+    <ul>
+      <li>Add in an example that uses filters
+      <li>Add in an example that will use a DWR based proxy to invoke a 
+    </ul>  
+
+  </body>
+</html>

@@ -1,0 +1,7 @@
+    <!-- Jaffa_Finder_SavedQueryService -->
+    <create creator="new" javascript="Jaffa_Finder_SavedQueryService">
+      <param name="class" value="org.jaffa.ria.finder.apis.SavedQueryService" />
+      <include method="query"/>
+      <include method="update"/>
+    </create>
+    <convert converter="nnBean" match="org.jaffa.ria.finder.apis.data.*" />

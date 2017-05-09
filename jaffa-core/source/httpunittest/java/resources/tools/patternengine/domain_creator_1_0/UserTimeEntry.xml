@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Domain Creator Meta 1.1//EN" "http://jaffa.sourceforge.net/DTD/domain-creator-meta_1_1.dtd">
+<Root>
+  <DomainObject>UserTimeEntry</DomainObject>
+  <DomainPackage>org.jaffa.applications.test.modules.time.domain</DomainPackage>
+  <DatabaseTable>UserTimeEntry</DatabaseTable>
+  <MappingPackage>jdbcengine</MappingPackage>
+  <PatternTemplate>patterns/library/domain_creator_1_1/DomainCreatorPattern.xml</PatternTemplate>
+  <Description>This is a test for Dependant DropDown</Description>
+  <LabelToken>[label.Jaffa.Time.UserTimeEntry]</LabelToken>
+  <Fields>
+    <Field>
+      <Name>UserName</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>USER_NAME</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <PrimaryKey>T</PrimaryKey>
+      <Description>The Unique Id For This User Time Entry</Description>
+      <LabelToken>[label.Jaffa.Admin.Time.UserName]</LabelToken>
+      <Mandatory>T</Mandatory>
+      <Width/>
+      <IntSize>50</IntSize>
+      <Pattern/>
+      <CaseType>MixedCase</CaseType>
+      <Ignore>false</Ignore>
+    </Field>
+    <Field>
+      <Name>ProjectCode</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>PROJECT_CODE</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <PrimaryKey>T</PrimaryKey>
+      <Description>Project Code</Description>
+      <LabelToken>[label.Jaffa.Admin.Time.ProjectCode]</LabelToken>
+      <Mandatory>T</Mandatory>
+      <Width/>
+      <IntSize>50</IntSize>
+      <CaseType>MixedCase</CaseType>
+      <Ignore>false</Ignore>
+    </Field>
+    <Field>
+      <Name>Activity</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>ACTIVITY_CODE</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <PrimaryKey>F</PrimaryKey>
+      <Description>Activity Code</Description>
+      <LabelToken>[label.Jaffa.Admin.Time.Activity]</LabelToken>
+      <Mandatory>T</Mandatory>
+      <Width/>
+      <IntSize>50</IntSize>
+      <CaseType>MixedCase</CaseType>
+      <Ignore>false</Ignore>
+    </Field>
+    <Field>
+      <Name>Task</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>TASK_CODE</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <PrimaryKey>T</PrimaryKey>
+      <Description>Task Code</Description>
+      <LabelToken>[label.Jaffa.Admin.Time.Task]</LabelToken>
+      <Mandatory>T</Mandatory>
+      <Width/>
+      <IntSize>50</IntSize>
+      <CaseType>MixedCase</CaseType>
+      <Ignore>false</Ignore>
+    </Field>
+    <Field>
+      <Name>PeriodStart</Name>
+      <DataType>org.jaffa.datatypes.DateTime</DataType>
+      <DatabaseFieldName>PERIOD_START</DatabaseFieldName>
+      <DatabaseDataType>DATE_TIME</DatabaseDataType>
+      <PrimaryKey>T</PrimaryKey>
+      <Description>The date this user period started</Description>
+      <LabelToken>[label.Jaffa.Admin.Time.PeriodStart]</LabelToken>
+      <Mandatory>T</Mandatory>
+      <Width/>
+      <CaseType>MixedCase</CaseType>
+      <Ignore>false</Ignore>
+    </Field>
+    <Field>
+      <Name>PeriodEnd</Name>
+      <DataType>org.jaffa.datatypes.DateTime</DataType>
+      <DatabaseFieldName>PERIOD_END</DatabaseFieldName>
+      <DatabaseDataType>DATE_TIME</DatabaseDataType>
+      <PrimaryKey>T</PrimaryKey>
+      <Description>The date this user period ended</Description>
+      <LabelToken>[label.Jaffa.Admin.Time.PeriodEnd]</LabelToken>
+      <Mandatory>T</Mandatory>
+      <Width/>
+      <CaseType>MixedCase</CaseType>
+      <Ignore>false</Ignore>
+    </Field>
+  </Fields>
+</Root>

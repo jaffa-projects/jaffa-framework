@@ -1,0 +1,52 @@
+/* 
+  File name:  comment.css
+  Author:     markw  
+
+  Description:
+    Example StyleSheet that controls the display of comments
+*/
+
+table.WidgetComment {
+	font-family :Times New Roman, Times, serif;    
+	font-weight : normal;    
+	font-variant : normal;    
+	font-style : normal;  
+ 	font-size : normal;    
+}
+
+
+table.WidgetComment tr {
+	font-family :Times New Roman, Times, serif;    
+	font-weight : normal;    
+	font-variant : normal;    
+	font-style : normal;  
+ 	font-size : normal;    
+}
+
+
+table.WidgetComment tr td {
+	font-family :Times New Roman, Times, serif;    
+	font-weight : normal;    
+	font-variant : normal;    
+	font-style : normal;  
+ 	font-size : normal;    
+}
+
+textarea.WidgetComment {
+	font-family :Times New Roman, Times, serif;    
+	font-weight : normal;    
+	font-variant : normal;    
+	font-style : normal;  
+ 	font-size : normal;    
+}
+
+input.WidgetComment {
+	font-family :Times New Roman, Times, serif;    
+	font-weight : normal;    
+	font-variant : normal;    
+	font-style : normal;  
+ 	font-size : normal;    
+}
+
+
+

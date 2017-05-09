@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE components PUBLIC "-//JAFFA//DTD Component Definitions 1.0//EN" "http://jaffa.sourceforge.net/DTD/component-definitions_1_0.dtd">
+
+<components>
+
+    <!-- Code Generated Components //GEN-BEGIN:ComponentDefinition.xfragment -->
+    <!-- //GEN-END:ComponentDefinition.xfragment -->
+    
+    <!-- Portlet-Widgets Test Components -->
+    <component id="Portlet.Widget.Test.EditBox">
+	<class>org.jaffa.presentation.portlet.widgets.tests.EditBoxComponent</class>
+        <type>Custom</type>
+    </component>
+    <component id="Portlet.Widget.Test.Grid">
+	<class>org.jaffa.presentation.portlet.widgets.tests.GridComponent</class>
+        <type>Custom</type>
+    </component>
+    <component id="Portlet.Widget.Test.UserGrid">
+    	<class>org.jaffa.presentation.portlet.widgets.tests.UserGridComponent</class>
+        <type>Custom</type>
+    </component>
+    <component id="Portlet.Widget.Test.Text">
+	<class>org.jaffa.presentation.portlet.widgets.tests.TextComponent</class>
+        <type>Custom</type>
+    </component>
+    <component id="Portlet.Widget.Test.Button">
+	<class>org.jaffa.presentation.portlet.widgets.tests.ButtonComponent</class>
+        <type>Custom</type>
+    </component>
+    <component id="Portlet.Widget.Test.DateTime">
+	<class>org.jaffa.presentation.portlet.widgets.tests.DateTimeComponent</class>
+        <type>Custom</type>
+    </component>
+    <component id="Portlet.Widget.Test.CheckBox">
+	<class>org.jaffa.presentation.portlet.widgets.tests.CheckBoxComponent</class>
+        <type>Custom</type>
+    </component>
+    <component id="Portlet.Widget.Test.Image">
+	<class>org.jaffa.presentation.portlet.widgets.tests.ImageComponent</class>
+        <type>Custom</type>
+    </component>
+    <component id="Portlet.Widget.Test.RadioButton">
+	<class>org.jaffa.presentation.portlet.widgets.tests.RadioButtonComponent</class>
+        <type>Custom</type>
+    </component>
+    <component id="Portlet.Widget.Test.DropDown">
+	<class>org.jaffa.presentation.portlet.widgets.tests.DropDownComponent</class>
+        <type>Custom</type>
+    </component>
+    <component id="Portlet.Widget.Test.Table">
+	<class>org.jaffa.presentation.portlet.widgets.tests.TableComponent</class>
+        <type>Custom</type>
+    </component>
+    <component id="Portlet.Widget.Test.LookupClient">
+	<class>org.jaffa.presentation.portlet.widgets.tests.LookupClientComponent</class>
+        <type>Custom</type>
+    </component>
+    <component id="Portlet.Widget.Test.Lookup">
+	<class>org.jaffa.presentation.portlet.widgets.tests.LookupComponent</class>
+        <type>Custom</type>
+    </component>
+    <component id="Portlet.Widget.Test.Label">
+	<class>org.jaffa.presentation.portlet.widgets.tests.LabelComponent</class>
+        <type>Custom</type>
+    </component>
+    <component id="Portlet.Widget.Test.FoldingSection">
+	<class>org.jaffa.presentation.portlet.widgets.tests.FoldingSectionComponent</class>
+        <type>Custom</type>
+    </component>
+    <component id="Portlet.Widget.Test.Tree">
+	<class>org.jaffa.presentation.portlet.widgets.tests.TreeComponent</class>
+        <type>Custom</type>
+    </component>
+
+    <!-- Components for HTTP Unit Testing -->
+    <component id="Test.Security.Test1">
+	<class>org.jaffa.applications.test.modules.security.components.test1.ui.Test1Component</class>
+        <type>Custom</type>
+    </component>
+    <component id="Test.Security.Test2">
+        <description>This is a dummy entry for testing, this component does not exist yet!</description>
+	<class>org.jaffa.applications.test.modules.security.components.test2.ui.Test2Component</class>
+        <type>Custom</type>
+        <mandatory-function name="Function2"/>
+    </component>
+    
+    
+</components>

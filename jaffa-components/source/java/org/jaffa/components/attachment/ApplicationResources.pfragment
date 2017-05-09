@@ -1,0 +1,25 @@
+label.Jaffa.Attachment.Attachment=Attachment
+label.Jaffa.Attachment.Attachment.AttachmentId=Attachment Id
+label.Jaffa.Attachment.Attachment.SerializedKey=Serialized Key
+label.Jaffa.Attachment.Attachment.OriginalFileName=Original File Name
+label.Jaffa.Attachment.Attachment.AttachmentType=Attachment Type
+label.Jaffa.Attachment.Attachment.ContentType=Content Type
+label.Jaffa.Attachment.Attachment.Description=Description
+label.Jaffa.Attachment.Attachment.Remarks=Remarks
+label.Jaffa.Attachment.Attachment.SupercededBy=Superseded By
+label.Jaffa.Attachment.Attachment.Data=Data
+
+label.Jaffa.Attachment.Attachment.AttachmentType.L=Local Link
+label.Jaffa.Attachment.Attachment.AttachmentType.W=Web Link
+label.Jaffa.Attachment.Attachment.AttachmentType.E=Embedded
+
+title.Jaffa.Attachment.AttachmentFinder.consolidated=[label.Jaffa.Attachment.Attachment] Inquiry
+title.Jaffa.Attachment.AttachmentFinder.criteria=[label.Jaffa.Attachment.Attachment] Criteria
+title.Jaffa.Attachment.AttachmentFinder.results=[label.Jaffa.Attachment.Attachment] List
+title.Jaffa.Attachment.AttachmentLookup.consolidated=[label.Jaffa.Attachment.Attachment] Lookup
+title.Jaffa.Attachment.AttachmentLookup.criteria=[label.Jaffa.Attachment.Attachment] Lookup Criteria
+title.Jaffa.Attachment.AttachmentLookup.results=[label.Jaffa.Attachment.Attachment] Lookup
+title.Jaffa.Attachment.AttachmentMaintenance.maintenance=[label.Jaffa.Attachment.Attachment] Maintenance
+title.Jaffa.Attachment.AttachmentViewer.view=[label.Jaffa.Attachment.Attachment] Details
+
+exception.org.jaffa.components.attachment.attachmentNotFound=Attachment '{0}' not found

@@ -1,0 +1,10 @@
+    <!-- BusinessEventLogViewer -->
+    <definition name="jaffa.messaging.businesseventlogviewer.ViewerLayout"  extends="jaffa.ViewerLayout">
+        <put name="body" value="/jaffa/messaging/businesseventlogviewer/view.jsp"/>
+        <put name="action" value="/jaffa_messaging_businessEventLogViewer"/>
+    </definition>
+    <definition name="jaffa.messaging.businesseventlogviewer"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Modules.Messaging.BusinessEventLogViewer.view]"/>
+        <put name="body" value="jaffa.messaging.businesseventlogviewer.ViewerLayout"/>
+    </definition>
+

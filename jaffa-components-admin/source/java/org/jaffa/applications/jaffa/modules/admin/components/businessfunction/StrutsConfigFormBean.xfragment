@@ -1,0 +1,3 @@
+        <!-- Jaffa Business Function -->
+        <form-bean      name="admin_businessFunctionForm"
+                        type="org.jaffa.applications.jaffa.modules.admin.components.businessfunction.ui.BusinessFunctionForm"/>

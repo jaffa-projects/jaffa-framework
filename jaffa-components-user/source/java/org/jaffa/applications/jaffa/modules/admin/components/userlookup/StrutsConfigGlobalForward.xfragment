@@ -1,0 +1,3 @@
+    <forward name="admin_userLookupCriteria" path="jaffa.admin.userlookup.criteria"/>
+    <forward name="admin_userLookupResults" path="jaffa.admin.userlookup.results"/>
+    <forward name="admin_userLookupConsolidatedCriteriaAndResults" path="jaffa.admin.userlookup.consolidatedCriteriaAndResults"/>

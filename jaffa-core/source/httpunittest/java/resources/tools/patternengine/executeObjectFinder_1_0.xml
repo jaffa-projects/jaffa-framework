@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="../../../../../../" default="all" name="">
+    <target name="all">
+        <java classname="org.jaffa.tools.patternengine.PatternGenerator" failonerror="true" fork="yes">
+            <classpath>
+                <pathelement location="./source/httpunittest/java"/>
+                <pathelement location="./source/java"/>
+                <fileset dir="lib">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+
+            <arg value="resources/tools/patternengine/object_finder_1_0"/>
+        </java>
+    </target>
+</project>

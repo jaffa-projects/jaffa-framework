@@ -1,0 +1,3 @@
+    <business-function name="Jaffa.Admin.EditMenu">
+        <description>Able to run the Menu Navigation  component</description>
+    </business-function>

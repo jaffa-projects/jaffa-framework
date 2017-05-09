@@ -1,0 +1,5 @@
+    <forward name="jaffa_printing_formTemplateFinderCriteria" path="jaffa.printing.formtemplatefinder.criteria"/>
+    <forward name="jaffa_printing_formTemplateFinderResults" path="jaffa.printing.formtemplatefinder.results"/>
+    <forward name="jaffa_printing_formTemplateFinderConsolidatedCriteriaAndResults" path="jaffa.printing.formtemplatefinder.consolidatedCriteriaAndResults"/>
+    <forward name="jaffa_printing_formTemplateFinderExcelResults" path="jaffa.printing.formtemplatefinder.FinderExcelLayout"/>
+    <forward name="jaffa_printing_formTemplateFinderXmlResults" path="jaffa.printing.formtemplatefinder.FinderXmlLayout"/>

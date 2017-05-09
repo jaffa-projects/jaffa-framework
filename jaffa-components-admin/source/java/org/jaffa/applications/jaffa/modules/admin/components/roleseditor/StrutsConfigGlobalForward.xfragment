@@ -1,0 +1,2 @@
+    <!-- Jaffa Roles Editor -->
+    <forward name="admin_rolesEditor" path="jaffa.admin.roleseditor"/>

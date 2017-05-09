@@ -1,0 +1,501 @@
+
+<public:event	name="onrowselect" ID="rowSelect" />
+<public:property name="hlColor" />
+<public:property name="slColor" />
+<public:property name='dragColor' />
+
+<PUBLIC:ATTACH EVENT="ondetach" ONEVENT="cleanup()" />
+<public:attach 	event="oncontentready" onevent="init();" />
+
+
+<script language="jscript">
+
+var currRow = -1;
+var selRow = -1;
+
+if (element.tagName == 'TABLE')
+{
+	element.attachEvent('onmouseover', onMouseOver);
+	element.attachEvent('onmouseout', onMouseOut);
+	element.attachEvent('onclick', onClick);
+}
+else
+{
+	alert("Error: tableAct not attached to a table element");
+}
+
+function cleanup()
+{
+	hilite(-1);
+
+	element.detachEvent('onmouseover', onMouseOver);
+	element.detachEvent('onmouseout', onMouseOut);
+	element.detachEvent('onclick', onClick);
+}
+
+
+function onClick()
+{
+}
+
+
+function onMouseOver()
+{
+	srcElem = window.event.srcElement;
+	//crawl up to find the row
+	while (srcElem.tagName != "TR" && srcElem.tagName != "TABLE")
+		srcElem = srcElem.parentElement;
+
+	if(srcElem.tagName != "TR") return;
+
+	if (srcElem.rowIndex > 0)
+		hilite(srcElem);
+	else
+		hilite(-1);
+
+}
+
+function onMouseOut()
+{
+	// Make sure we catch exit from the table
+	hilite(-1, -1);
+}
+
+function hilite(newRow)
+{
+	if (hlColor != null )
+	{
+		if (currRow != -1 && currRow!=selRow)
+		{
+			currRow.runtimeStyle.backgroundColor = '';
+		}
+
+		if (newRow != -1 && newRow!=selRow)
+		{
+			newRow.runtimeStyle.backgroundColor = hlColor;
+		}
+	}
+	currRow = newRow;
+} 
+
+/// sort
+//
+// global variables
+//
+var tbody=null;					
+var theadrow=null;
+var colCount = null;
+
+
+var reverse = false;
+var lastclick = -1;					// stores the object of our last used object
+
+var arrHitTest = new Array();
+var bDragMode = false;
+var objDragItem;
+var arrHitTest = new Array();
+var iArrayHit = false;
+
+
+function init() {
+	
+	// get TBODY - take the first TBODY for the table to sort
+	tbody = element.tBodies(0);
+	if (!tbody) return;
+
+	//Get THEAD  
+	var thead = element.tHead;
+	if (!thead)  return;
+	
+	theadrow = thead.children[0]; //Assume just one Head row
+	if (theadrow.tagName != "TR") return;
+
+	theadrow.runtimeStyle.cursor = "hand";
+
+	colCount = theadrow.children.length;
+	var l, clickCell;
+  var cx=0;
+  var cy=0;
+  var c;
+
+	for (var i=0; i<colCount; i++) 
+	{
+		// Create our blank gif
+		l=document.createElement("IMG");
+		l.src="jaffa/imgs/table/blank.gif";
+		l.id="srtImg";
+		l.width=25;
+		l.height=11;
+		l.align="right";
+		l.valign="top";
+
+		clickCell = theadrow.children[i];
+		clickCell.selectIndex = i;
+		clickCell.width = clickCell.offsetWidth + 25;
+		clickCell.insertAdjacentElement("beforeEnd", l);
+		if (clickCell.type != null) 
+		clickCell.attachEvent("onclick", doClick);
+
+        arrHitTest[i] = new Array();
+
+    	c = clickCell.offsetParent;
+
+
+	   if(cx == 0 && cy == 0 )
+	   {
+	    	while (c.offsetParent != null) {
+                  cy += c.offsetTop;
+                  cx += c.offsetLeft;
+                  c = c.offsetParent;
+		}
+	}
+
+	arrHitTest[i][0] = cx + clickCell.offsetLeft;
+	arrHitTest[i][1] = cy + clickCell.offsetTop;
+	arrHitTest[i][2] = clickCell;
+	arrHitTest[i][3] = cx + clickCell.offsetLeft + eval(clickCell.width);
+
+	clickCell.attachEvent("onmousedown",onMouseDown);
+	}
+
+  defaultTitleColor = theadrow.children[0].currentStyle.backgroundColor;	 
+
+  
+  element.document.attachEvent("onmouseup",onMouseUp);
+  element.document.attachEvent("onselectstart",onSelect);
+}
+
+//
+// doClick handler
+// 
+//
+function doClick(e) 
+{
+
+	if (resize != true) {		
+		var clickObject = e.srcElement;
+
+		while (clickObject.tagName != "TD") 
+		{
+			clickObject = clickObject.parentElement;
+		}
+
+
+		// clear the sort images in the head
+		var imgcol= theadrow.all('srtimg');
+		for(var x = 0; x < imgcol.length; x++) 
+			imgcol[x].src = "jaffa/imgs/table/blank.gif";
+
+		if(lastclick == clickObject.selectIndex)
+		{
+			if(reverse == false)
+			{
+				clickObject.children[0].src = "jaffa/imgs/table/down.gif";
+			      reverse = true;
+			}
+			else 
+			{
+				clickObject.children[0].src = "jaffa/imgs/table/up.gif";
+				reverse = false;
+			}
+		}
+		else
+		{
+			reverse = false;
+			lastclick = clickObject.selectIndex;
+			clickObject.children[0].src = "jaffa/imgs/table/up.gif";
+		}
+
+		//insertionSort(tbody, tbody.rows.length-1,  reverse, clickObject.selectIndex);
+		sortColumn(e);
+	 } 
+	
+	 resize = false;
+}
+
+function insertionSort(t, iRowEnd, fReverse, iColumn)
+{
+	
+	var iRowInsertRow, iRowWalkRow, current, insert;
+    for ( iRowInsert = 0 + 1 ; iRowInsert <= iRowEnd ; iRowInsert++ )
+    {
+        if (iColumn) {	
+		if( (typeof(t.children[iRowInsert].children[iColumn]) != "undefined")) {
+		     
+     		      textRowInsert = t.children[iRowInsert].children[iColumn].innerText;
+     		     
+     		     
+     		      }
+		else
+			textRowInsert = "";
+        } else {
+           textRowInsert = t.children[iRowInsert].innerText;
+           
+        }
+	
+	
+        for ( iRowWalk = 0; iRowWalk <= iRowInsert ; iRowWalk++ )
+        {
+            if (iColumn) {
+			if(typeof(t.children[iRowWalk].children[iColumn]) != "undefined")
+				textRowCurrent = t.children[iRowWalk].children[iColumn].innerText;
+			else
+				textRowCurrent = null;
+            } else {
+			textRowCurrent = t.children[iRowWalk].innerText;
+            }
+
+		//
+		// We save our values so we can manipulate the numbers for
+		// comparison
+		//
+		current = textRowCurrent;
+		insert  = textRowInsert;
+
+
+		//  If the value is not a number, we sort normally, else we evaluate	
+		//  the value to get a numeric representation
+		//
+		if ( !isNaN(current) ||  !isNaN(insert)) 
+		{
+			//current= eval(current);
+			
+			if (insert != "" ) {
+			//	insert = eval(insert);
+			}
+		}
+		else
+		{
+			current	= current.toLowerCase();
+			insert	= insert.toLowerCase();
+		}
+
+
+            if ( (   (!fReverse && insert < current)
+                 || ( fReverse && insert > current) )
+                 && (iRowInsert != iRowWalk) )
+            {
+		    eRowInsert = t.children[iRowInsert];
+                eRowWalk = t.children[iRowWalk];
+                t.insertBefore(eRowInsert, eRowWalk);
+                iRowWalk = iRowInsert; // done
+            }
+        }
+    }
+}
+
+
+/// Drag
+
+function InitHeader()
+{
+  var cx=0;
+  var cy=0;
+  var c;
+	 
+  for (i=0; i<colCount ; i++) {
+
+	var clickCell = theadrow.children[i];
+	clickCell.selectIndex = i;
+	c = clickCell.offsetParent;
+
+	if(cx == 0 && cy == 0 )
+	{
+		while (c.offsetParent != null) {
+                  cy += c.offsetTop;
+                  cx += c.offsetLeft;
+                  c = c.offsetParent;
+		}
+	}
+
+	arrHitTest[i][0] = cx + clickCell.offsetLeft;
+	arrHitTest[i][1] = cy + clickCell.offsetTop;
+	arrHitTest[i][2] = clickCell;
+	arrHitTest[i][3] = cx + clickCell.offsetLeft + eval(clickCell.width);
+  } 
+}
+
+function onSelect()
+{
+	//disable selection
+	//Jonny Change to allow selection	
+	if (srcElem.parentElement.tagName == 'THEAD') {
+		return false;
+	}
+}
+
+function ChangeHeader(iChange)
+{
+	for(var y = 0; y < arrHitTest.length; y++)
+	{
+	if (arrHitTest[y][2].currentStyle.backgroundColor == dragColor)
+		arrHitTest[y][2].style.backgroundColor = defaultTitleColor;
+	}
+
+	if(iChange == "-1") return; 
+
+	arrHitTest[iChange][2].style.backgroundColor = dragColor;
+}
+
+function onMouseUp(e)
+{
+	if(!bDragMode)	return;
+	bDragMode = false;
+
+	var iSelected = objDragItem.selectIndex;
+	
+	objDragItem.removeNode(true);
+	objDragItem = null;
+
+	ChangeHeader(-1);
+
+	if( (iArrayHit - 1) < 0 || iSelected < 0) return;	// default faliure
+
+	CopyRow(iSelected, (iArrayHit - 1) );
+
+	// Reset our variables
+	iSelected = 0;
+	iArrayHit = -1;
+}
+
+function onMouseDown(e)
+{
+	bDragMode 	= true;
+	var src 	= e.srcElement;
+	var c 	= e.srcElement;
+
+	while (src.tagName != "TD") 
+		src = src.parentElement;
+
+	// Create our header on the fly
+	objDragItem = document.createElement("DIV");
+	objDragItem.innerHTML		= src.innerHTML;
+	objDragItem.style.height	= src.currentStyle.height;
+	objDragItem.style.width 	= src.currentStyle.width;
+	objDragItem.style.background 	= src.currentStyle.backgroundColor;
+	objDragItem.style.fontColor	= src.currentStyle.fontColor;
+	objDragItem.style.position 	= "absolute";
+	objDragItem.selectIndex		= src.selectIndex;
+	while (c.offsetParent != null) 
+        {
+		objDragItem.style.y += c.offsetTop;
+		objDragItem.style.x += c.offsetLeft;
+		c = c.offsetParent;
+	}
+ 	objDragItem.style.borderStyle	= "outset";
+	objDragItem.style.display	= "none";
+
+	src.insertBefore(objDragItem);
+}
+
+
+function CheckHit(x,y,e)
+{
+	midWObj = objDragItem.style.posWidth / 2;
+	midHObj = 12;
+
+	if( ((x) > (arrHitTest[0][1] + 20) ) || ( (x) < (arrHitTest[0][1]) ) )
+	{
+		ChangeHeader(-1);
+		return -1;
+	}
+
+	for(var i=0; i < colCount; i++)
+	{
+		if( (y) > (arrHitTest[i][0]) && (y) < (arrHitTest[i][3] )) //+ 100))
+		{
+			ChangeHeader(i);
+			return i + 1;
+		}
+	}
+	return -1;
+}
+
+//
+// Copy from row to row.. Does the Header also.
+//
+function CopyRow(from, to)
+{	
+	if(from == to) return;
+
+
+	var origfrom = from;
+	var origto = to;
+	var iDiff = 0;
+
+	if( from > to )
+	{
+
+		iDiff = from - to;
+
+		var saveObj 	= theadrow.children[from].innerHTML;
+		var saveWidth 	= theadrow.children[from].width;
+
+		for(var i = 0 ; i < iDiff; i++)
+		{
+			theadrow.children[from].innerHTML = theadrow.children[from - 1].innerHTML;
+			theadrow.children[from].width = theadrow.children[from - 1].width;
+			from--;
+		}
+		theadrow.children[to].innerHTML 	= saveObj;
+		theadrow.children[to].width = saveWidth;
+		
+	}
+	else
+	{
+
+		iDiff = to - from;
+
+		var saveObj = theadrow.children[from].innerHTML;
+		var saveWidth 	= theadrow.children[from].width;
+
+		for(var i = 0 ; i < iDiff; i++)
+		{
+			theadrow.children[from].innerHTML = theadrow.children[from + 1].innerHTML;
+			theadrow.children[from].width = theadrow.children[from + 1].width;
+			from++;
+		}
+
+		theadrow.children[to].innerHTML 	= saveObj;
+		theadrow.children[to].width = saveWidth;
+	}
+
+
+
+	for(var i = 0 ; i < theadrow.children.length; i++)
+			theadrow.children[i].selectIndex = i;
+
+
+
+	InitHeader();
+	for ( var iRowInsert = 0 ; iRowInsert < tbody.rows.length; iRowInsert++ )
+	{
+		from = origfrom;
+		to = origto;
+		if( from > to )
+		{
+			iDiff = from - to;
+			var saveObj = tbody.children[iRowInsert].children[from].innerHTML
+			for(var i = 0 ; i < iDiff; i++)
+			{
+				tbody.children[iRowInsert].children[from].innerHTML = tbody.children[iRowInsert].children[from - 1].innerHTML;
+				from--;
+			}
+			tbody.children[iRowInsert].children[to].innerHTML = saveObj;
+
+		}
+		else
+		{
+			iDiff = to - from;
+			var saveObj = tbody.children[iRowInsert].children[from].innerHTML
+			for(var i = 0 ; i < iDiff; i++)
+			{
+				tbody.children[iRowInsert].children[from].innerHTML = tbody.children[iRowInsert].children[from + 1].innerHTML;
+				from++;
+			}
+			tbody.children[iRowInsert].children[to].innerHTML = saveObj;
+		}
+	}
+}
+
+</script>

@@ -1,0 +1,2 @@
+    <!-- Jaffa Label Editor -->
+    <forward name="admin_labelEditor" path="jaffa.admin.labeleditor"/>

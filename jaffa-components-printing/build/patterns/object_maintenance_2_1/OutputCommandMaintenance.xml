@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Object Maintenance Meta 2.0//EN" "http://jaffa.sourceforge.net/DTD/object-maintenance-meta_2_0.dtd">
+<Root>
+  <PatternTemplate>patterns/library/object_maintenance_2_1/ObjectMaintenancePattern.xml</PatternTemplate>
+  <Application>Jaffa</Application>
+  <Module>Printing</Module>
+  <Component>OutputCommandMaintenance</Component>
+  <BasePackage>org.jaffa.modules.printing</BasePackage>
+  <DomainObject>OutputCommand</DomainObject>
+  <DomainPackage>org.jaffa.modules.printing.domain</DomainPackage>
+  <Title>[title.Modules.Printing.OutputCommandMaintenance.maintenance]</Title>
+  <KeyFields>
+    <KeyField>
+      <Name>OutputCommandId</Name>
+      <DataType>INTEGER</DataType>
+      <DomainField>OutputCommandId</DomainField>
+    </KeyField>
+  </KeyFields>
+  <Fields>
+    <Field>
+      <Name>OutputCommandId</Name>
+      <DataType>INTEGER</DataType>
+      <Display>false</Display>
+      <DomainField>OutputCommandId</DomainField>
+    </Field>
+    <Field>
+      <Name>SequenceNo</Name>
+      <DataType>INTEGER</DataType>
+      <Display>true</Display>
+      <DomainField>SequenceNo</DomainField>
+    </Field>
+    <Field>
+      <Name>OsPattern</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <Label>[label.Jaffa.Printing.OutputCommand.OsPattern]</Label>
+      <DomainField>OsPattern</DomainField>
+    </Field>
+    <Field>
+      <Name>CommandLine</Name>
+      <DataType>STRING</DataType>
+      <Display>true</Display>
+      <DomainField>CommandLine</DomainField>
+    </Field>
+  </Fields>
+  <ForeignObjects>
+    <ForeignObject>
+      <Name>PrinterOutputType</Name>
+      <Object>PrinterOutputType</Object>
+      <Package>org.jaffa.modules.printing.domain</Package>
+      <ForeignFields>
+        <ForeignField>
+          <Name>OutputType</Name>
+          <DataType>STRING</DataType>
+          <Display>true</Display>
+          <Mandatory>false</Mandatory>
+          <DomainField>OutputType</DomainField>
+          <DomainFieldInForeignObject>OutputType</DomainFieldInForeignObject>
+          <KeyType>Primary</KeyType>
+        </ForeignField>
+      </ForeignFields>
+      <Lookup>
+        <Component>Jaffa.Printing.PrinterOutputTypeLookup</Component>
+        <TargetFields>outputType=outputType</TargetFields>
+        <BypassCriteriaScreen>true</BypassCriteriaScreen>
+        <StaticParameters></StaticParameters>
+        <DynamicParameters>outputType=outputType</DynamicParameters>
+      </Lookup>
+    </ForeignObject>
+  </ForeignObjects>
+  <Screens>
+    <Screen SaveActionAvailableInCreateMode="true" PerformTxValidationOnNextAction="true" AvailableInUpdateMode="true" AvailableInCreateMode="true" Name="main">
+      <References>
+        <ForeignObjectReference ForeignObjectName="PrinterOutputType"/>
+        <FieldReference Name="SequenceNo"/>
+        <FieldReference Name="OsPattern"/>
+        <FieldReference Name="CommandLine"/>
+      </References>
+    </Screen>
+  </Screens>
+</Root>

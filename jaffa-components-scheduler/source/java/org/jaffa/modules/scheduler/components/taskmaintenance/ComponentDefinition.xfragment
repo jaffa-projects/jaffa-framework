@@ -1,0 +1,4 @@
+    <component id="Jaffa.Scheduler.TaskMaintenance">
+        <class>org.jaffa.modules.scheduler.components.taskmaintenance.ui.TaskMaintenanceComponent</class>
+        <type>ObjectMaintenance</type>
+    </component>

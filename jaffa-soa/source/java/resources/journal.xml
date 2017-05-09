@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<journal xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="journal.xsd">
+
+    <!-- Path to where the local journal file should live (path and filename - i.e. /journal.dat) -->
+    <journal-file-path>JOURNAL_FILE_PATH</journal-file-path>
+
+    <!-- ID of this server - must match a server 'id' in the 'servers' list -->
+    <server-id>JOURNAL_SERVER_ID</server-id>
+
+    <!-- list of all servers that journals should be replicated to -->
+    <servers>
+	
+		<!-- there should be one server tag for each server in the system, including this one -->
+        <server>
+            <!-- id of the server -->
+            <id>JOURNAL_SERVER_ID</id>
+            <!-- hostname of the server (i.e. localhost) -->
+            <hostname>JOURNAL_HOST_NAME</hostname>
+            <!-- port of the server -->
+            <port>JOURNAL_PORT</port>
+        </server>
+		
+    </servers>
+	
+</journal>

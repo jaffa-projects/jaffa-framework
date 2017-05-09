@@ -1,0 +1,12 @@
+    <!-- UserSelfUpdate -->
+    <definition name="jaffa.admin.userselfupdate.MaintenanceLayout.main"  extends="jaffa.MaintenanceLayout">
+        <put name="body" value="/jaffa/admin/userselfupdate/main.jsp"/>
+        <put name="action" value="/admin_userMaintenance"/>
+        <put name="currentScreenCounter" value="0"/>
+        <put name="updateModeTitle" value="[title.Jaffa.Admin.UserSelfUpdate.default]"/>
+    </definition>
+    <definition name="jaffa.admin.userselfupdate.main"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Admin.UserSelfUpdate.default]"/>
+        <put name="body" value="jaffa.admin.userselfupdate.MaintenanceLayout.main"/>
+    </definition>
+

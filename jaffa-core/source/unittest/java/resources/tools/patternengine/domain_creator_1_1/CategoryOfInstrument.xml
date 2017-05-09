@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Domain Creator Meta 1.1//EN" "http://jaffa.sourceforge.net/DTD/domain-creator-meta_1_1.dtd">
+
+<!--
+Non-null values for the following elements will be retained, the next time this file is regenerated, provided the merge option is set in the TableInfo file.
+1- Table Level: Description, LabelToken
+2- Field Level: Description, LabelToken, Layout, Pattern, Ignore
+-->
+
+<Root>
+    <DomainObject>CategoryOfInstrument</DomainObject>
+    <DomainPackage>org.jaffa.persistence.domainobjects</DomainPackage>
+    <DatabaseTable>ZZ_JUT_INSTRUMENT</DatabaseTable>
+    <MappingPackage>org.jaffa.persistence.mappingfiles</MappingPackage>
+    <PatternTemplate>patterns/library/domain_creator_1_1/DomainCreatorPattern.xml</PatternTemplate>
+    <Description></Description>
+    <LabelToken>[label.App1.Catalog.CategoryOfInstrument]</LabelToken>
+    <Fields>
+        <Field>
+            <Name>CategoryInstrument</Name>
+            <DataType>java.lang.String</DataType>
+            <DatabaseFieldName>CATEGORY_INSTRUMENT</DatabaseFieldName>
+            <DatabaseDataType>STRING</DatabaseDataType>
+            <PrimaryKey>T</PrimaryKey>
+            <Description></Description>
+            <LabelToken>[label.App1.Catalog.CategoryOfInstrument.CategoryInstrument]</LabelToken>
+            <Mandatory>T</Mandatory>
+            <Width></Width>
+            <IntSize>12</IntSize>
+            <FracSize></FracSize>
+            <MinValue></MinValue>
+            <MaxValue></MaxValue>
+            <Layout></Layout>
+            <Pattern></Pattern>
+            <CaseType>UpperCase</CaseType>
+            <Ignore>false</Ignore>
+        </Field>
+        <Field>
+            <Name>Description</Name>
+            <DataType>java.lang.String</DataType>
+            <DatabaseFieldName>DESCRIPTION</DatabaseFieldName>
+            <DatabaseDataType>STRING</DatabaseDataType>
+            <PrimaryKey>F</PrimaryKey>
+            <Description></Description>
+            <LabelToken>[label.App1.Catalog.CategoryOfInstrument.Description]</LabelToken>
+            <Mandatory>F</Mandatory>
+            <Width></Width>
+            <IntSize>20</IntSize>
+            <FracSize></FracSize>
+            <MinValue></MinValue>
+            <MaxValue></MaxValue>
+            <Layout></Layout>
+            <Pattern></Pattern>
+            <CaseType>MixedCase</CaseType>
+            <Ignore>false</Ignore>
+        </Field>
+        <Field>
+            <Name>SupportEquip</Name>
+            <DataType>java.lang.Boolean</DataType>
+            <DatabaseFieldName>SUPPORT_EQUIP_B</DatabaseFieldName>
+            <DatabaseDataType>BOOLEAN_BIT</DatabaseDataType>
+            <PrimaryKey>F</PrimaryKey>
+            <Description></Description>
+            <LabelToken>[label.App1.Catalog.CategoryOfInstrument.SupportEquip]</LabelToken>
+            <Mandatory>F</Mandatory>
+            <Width></Width>
+            <IntSize></IntSize>
+            <FracSize></FracSize>
+            <MinValue></MinValue>
+            <MaxValue></MaxValue>
+            <Layout></Layout>
+            <Pattern></Pattern>
+            <CaseType>MixedCase</CaseType>
+            <Ignore>false</Ignore>
+        </Field>
+        <Field>
+            <Name>CalculateMtbf</Name>
+            <DataType>java.lang.Boolean</DataType>
+            <DatabaseFieldName>CALCULATE_MTBF_B</DatabaseFieldName>
+            <DatabaseDataType>BOOLEAN_TF</DatabaseDataType>
+            <PrimaryKey>F</PrimaryKey>
+            <Description></Description>
+            <LabelToken>[label.App1.Catalog.CategoryOfInstrument.CalculateMtbf]</LabelToken>
+            <Mandatory>F</Mandatory>
+            <Width></Width>
+            <IntSize></IntSize>
+            <FracSize></FracSize>
+            <MinValue></MinValue>
+            <MaxValue></MaxValue>
+            <Layout></Layout>
+            <Pattern></Pattern>
+            <CaseType>MixedCase</CaseType>
+            <Ignore>false</Ignore>
+        </Field>
+    </Fields>
+    <Relationships>
+        <Relationship>
+            <ToDomainObject>Part</ToDomainObject>
+            <ToDomainPackage>org.jaffa.persistence.domainobjects</ToDomainPackage>
+            <FromCardinality>1</FromCardinality>
+            <ToCardinality>0..*</ToCardinality>
+            <Type>association</Type>
+            <FromFields>
+                <RelationshipField>
+                    <Name>CategoryInstrument</Name>
+                </RelationshipField>
+            </FromFields>
+            <ToFields>
+                <RelationshipField>
+                    <Name>CategoryInstrument</Name>
+                </RelationshipField>
+            </ToFields>
+        </Relationship>
+    </Relationships>
+</Root>

@@ -1,0 +1,11 @@
+    <!-- Jaffa_Transaction_TransactionService -->
+    <create creator="new" javascript="Jaffa_Transaction_TransactionService">
+      <param name="class" value="org.jaffa.transaction.apis.TransactionService"/>
+      <include method="query"/>
+      <include method="update"/>
+      <include method="getTypeNames"/>
+      <include method="getSubTypeNames"/>
+      <include method="hasBrowseAccess"/>
+      <include method="hasAdminAccess"/>
+    </create>
+    <convert converter="nnBean" match="org.jaffa.transaction.apis.data.*" />

@@ -1,0 +1,4 @@
+    <component id="UserTimeEntry.UserTimeEntryViewer">
+        <class>org.jaffa.applications.test.modules.time.components.usertimeentryviewer.ui.UserTimeEntryViewerComponent</class>
+        <type>ObjectViewer</type>
+    </component>

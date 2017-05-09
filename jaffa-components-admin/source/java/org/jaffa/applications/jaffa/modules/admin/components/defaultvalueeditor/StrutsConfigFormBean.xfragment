@@ -1,0 +1,2 @@
+    <form-bean      name="admin_defaultValueEditorForm"
+                    type="org.jaffa.applications.jaffa.modules.admin.components.defaultvalueeditor.ui.DefaultValueEditorForm"/>

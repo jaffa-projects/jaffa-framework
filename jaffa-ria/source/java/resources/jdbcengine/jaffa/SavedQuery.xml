@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.ria.finder.domain.SavedQuery">
+        <map-to table="J_SAVED_QUERIES" />
+
+        <field name="QueryId" use-member="m_queryId" type="java.lang.String" primary-key="true">
+            <sql name="QUERY_ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="UserId" use-member="m_userId" type="java.lang.String">
+            <sql name="USER_ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="ComponentRef" use-member="m_componentRef" type="java.lang.String">
+            <sql name="COMPONENT_REF" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="ContextRef" use-member="m_contextRef" type="java.lang.String">
+            <sql name="CONTEXT_REF" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="QueryName" use-member="m_queryName" type="java.lang.String">
+            <sql name="QUERY_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="IsDefault" use-member="m_isDefault" type="java.lang.Boolean">
+            <sql name="IS_DEFAULT" type="BOOLEAN" dirty="ignore"/>
+        </field>
+
+        <field name="Criteria" use-member="m_criteria" type="java.lang.String">
+            <sql name="CRITERIA" type="CLOB" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

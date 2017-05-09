@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE validators PUBLIC "-//JAFFA//DTD Dynamic Rule Validators 1.0//EN" "http://jaffa.sourceforge.net/DTD/validators_1_0.dtd">
+
+<validators>
+    <field-validator>
+        <name>mandatory</name>
+        <description>Mandatory validator</description>
+        <class>org.jaffa.rules.fieldvalidators.MandatoryFieldValidator</class>
+        <mandatory>true</mandatory>
+    </field-validator>
+
+    <field-validator>
+        <name>foreign-key</name>
+        <description>Foreign Key validator</description>
+        <class>org.jaffa.rules.fieldvalidators.ForeignKeyFieldValidator</class>
+        <mandatory>false</mandatory>
+    </field-validator>
+
+    <field-validator>
+        <name>generic-foreign-key</name>
+        <description>Generic Foreign Key validator. Check the javadoc of the class GenericForeignKeyFieldValidator for more useful information</description>
+        <class>org.jaffa.rules.fieldvalidators.GenericForeignKeyFieldValidator</class>
+        <mandatory>false</mandatory>
+        <param name='domainClassName' value='org.jaffa.rules.examples.domain.ValidFieldValue'/>
+        <param name='fieldNameForTable' value='TableName'/>
+        <param name='fieldNameForField' value='FieldName'/>
+        <param name='fieldNameForValue' value='LegalValue'/>
+    </field-validator>
+
+    <field-validator>
+        <name>in-list</name>
+        <description>Validates against the values in a List</description>
+        <class>org.jaffa.rules.fieldvalidators.InListFieldValidator</class>
+        <mandatory>false</mandatory>
+    </field-validator>
+
+    <field-validator>
+        <name>string</name>
+        <description>String validator</description>
+        <class>org.jaffa.rules.fieldvalidators.StringFieldValidator</class>
+        <mandatory>false</mandatory>
+    </field-validator>
+
+    <field-validator>
+        <name>boolean</name>
+        <description>Boolean validator</description>
+        <class>org.jaffa.rules.fieldvalidators.BooleanFieldValidator</class>
+        <mandatory>false</mandatory>
+    </field-validator>
+
+    <field-validator>
+        <name>currency</name>
+        <description>Currency validator</description>
+        <class>org.jaffa.rules.fieldvalidators.CurrencyFieldValidator</class>
+        <mandatory>false</mandatory>
+    </field-validator>
+
+    <field-validator>
+        <name>dateonly</name>
+        <description>DateOnly validator</description>
+        <class>org.jaffa.rules.fieldvalidators.DateOnlyFieldValidator</class>
+        <mandatory>false</mandatory>
+    </field-validator>
+
+    <field-validator>
+        <name>datetime</name>
+        <description>DateTime validator</description>
+        <class>org.jaffa.rules.fieldvalidators.DateTimeFieldValidator</class>
+        <mandatory>false</mandatory>
+    </field-validator>
+
+    <field-validator>
+        <name>decimal</name>
+        <description>Decimal validator</description>
+        <class>org.jaffa.rules.fieldvalidators.DecimalFieldValidator</class>
+        <mandatory>false</mandatory>
+    </field-validator>
+
+    <field-validator>
+        <name>integer</name>
+        <description>Integer validator</description>
+        <class>org.jaffa.rules.fieldvalidators.IntegerFieldValidator</class>
+        <mandatory>false</mandatory>
+    </field-validator>
+
+</validators>
+

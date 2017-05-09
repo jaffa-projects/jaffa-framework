@@ -1,0 +1,2 @@
+    <form-bean      name="jaffa_scheduler_taskMaintenanceForm"
+                    type="org.jaffa.modules.scheduler.components.taskmaintenance.ui.TaskMaintenanceForm"/>

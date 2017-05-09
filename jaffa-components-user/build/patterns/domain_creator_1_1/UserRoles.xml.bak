@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Domain Creator Meta 1.1//EN" "http://jaffa.sourceforge.net/DTD/domain-creator-meta_1_1.dtd">
+<Root>
+  <DomainObject>UserRole</DomainObject>
+  <DomainPackage>org.jaffa.applications.jaffa.modules.admin.domain</DomainPackage>
+  <DatabaseTable>USER_ROLE</DatabaseTable>
+  <MappingPackage>jdbcengine</MappingPackage>
+  <PatternTemplate>patterns/library/domain_creator_1_1/DomainCreatorPattern.xml</PatternTemplate>
+  <Description>This domain object will represent a User Role</Description>
+  <LabelToken>[label.Jaffa.Admin.UserRole]</LabelToken>
+  <Fields>
+    <Field>
+      <Name>UserName</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>USER_NAME</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <PrimaryKey>T</PrimaryKey>
+      <Description>The Unique Id For This User Account</Description>
+      <LabelToken>[label.Jaffa.Admin.UserRole.UserName]</LabelToken>
+      <Mandatory>T</Mandatory>
+      <Width/>
+      <IntSize>50</IntSize>
+      <CaseType>MixedCase</CaseType>
+      <Ignore>false</Ignore>
+    </Field>
+    <Field>
+      <Name>RoleName</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>ROLE_NAME</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <PrimaryKey>T</PrimaryKey>
+      <Description>Role Name</Description>
+      <LabelToken>[label.Jaffa.Admin.UserRole.RoleName]</LabelToken>
+      <Mandatory>T</Mandatory>
+      <Width/>
+      <IntSize>50</IntSize>
+      <CaseType>MixedCase</CaseType>
+      <Ignore>false</Ignore>
+    </Field>
+  </Fields>
+  <Relationships>
+    <Relationship>
+      <ToDomainObject>User</ToDomainObject>
+      <ToDomainPackage>org.jaffa.applications.jaffa.modules.admin.domain</ToDomainPackage>
+      <FromCardinality>0..*</FromCardinality>
+      <ToCardinality>1</ToCardinality>
+      <Type>association</Type>
+      <FromFields>
+        <RelationshipField>
+          <Name>UserName</Name>
+        </RelationshipField>
+      </FromFields>
+      <ToFields>
+        <RelationshipField>
+          <Name>UserName</Name>
+        </RelationshipField>
+      </ToFields>
+    </Relationship>
+  </Relationships>
+</Root>

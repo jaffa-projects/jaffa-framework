@@ -1,0 +1,36 @@
+<ivy-module version="2.0">
+
+	<!-- The groupId, artifactId and version of the artifacts.  Update the revision to match the Jaffa version being built. -->
+    <info organisation="org.jaffa" module="jaffa-ria" revision="${jaffa-version}"/>
+
+	<!-- The pom and jar to be published to Maven repositories. -->
+	<publications>
+        <artifact name="jaffa-ria" type="pom"/>
+        <artifact name="jaffa-ria" type="jar"/>
+    </publications>
+
+  <dependencies>
+    <!-- Begin Apache Commons dependencies -->
+    <dependency org="commons-beanutils" name="commons-beanutils" rev="${commons-beanutils-version}" transitive="false"/>
+    <!-- End Apache Commons dependencies -->
+
+    <!-- Begin javax dependencies -->
+    <dependency org="javax.servlet" name="servlet-api" rev="${servlet-api-version}" transitive="false"/>
+    <dependency org="javax.servlet.jsp" name="jsp-api" rev="${jsp-api-version}" transitive="false"/>
+    <!-- End javax dependencies -->
+
+    <!-- Begin Hibernate dependencies -->
+    <dependency org="org.hibernate.javax.persistence" name="hibernate-jpa-2.1-api" rev="${hibernate-jpa-2.1-api-version}" transitive="false"/>
+    <!-- End Hibernate  dependencies -->
+
+    <!-- Begin ExtJs dependencies -->
+    <dependency org="com.sencha.extjs" name="extjs" rev="${extjs-version}" transitive="false">
+      <artifact name="extjs" type="zip" />
+    </dependency>
+    <!-- End ExtJs dependencies -->
+
+    <!-- Begin Jawr dependencies -->
+    <dependency org="net.jawr" name="jawr" rev="${jawr-version}" transitive="false"/>
+    <!-- End Jawr dependencies -->
+  </dependencies>
+</ivy-module>

@@ -1,0 +1,6 @@
+    <action    path="/usertimeentry_userTimeEntryMaintenance"
+               type="org.jaffa.applications.test.modules.time.components.usertimeentrymaintenance.ui.UserTimeEntryMaintenanceAction"
+               name="usertimeentry_userTimeEntryMaintenanceForm"
+               validate="false"
+               scope="request">
+    </action>

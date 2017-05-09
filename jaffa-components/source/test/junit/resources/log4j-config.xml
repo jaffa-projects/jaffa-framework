@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<!-- ==================== NOTES ==================================== -->
+<!-- 1) Ensure that there are no duplicate appenders, when the       -->
+<!-- the application is deployed in a container that configures      -->
+<!-- Log4J as well, since that leads to duplicate messages           -->
+<!--                                                                 -->
+<!-- 2) To prevent looping in a container that configures Log4J      -->
+<!-- as well do not define the <root> element                        -->
+<!-- =============================================================== -->
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="true">
+
+  <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d %-5p [%t] %C{2} (%F:%L) - %m%n"/>
+    </layout>
+  </appender>
+
+  <!-- Configure one or more JDBCAppender to direct Business Event Logs to the database -->
+  <appender name="JDBCAppender1" class="org.jaffa.components.attachment.services.JDBCAppenderWithAttachment">
+    <param name="url" value="<<JUNIT.DATABASE.JDBC.URL>>"/>
+    <param name="dbclass" value="<<JUNIT.DATABASE.JDBC.DRIVER>>"/>
+    <param name="username" value="<<JUNIT.DATABASE.USER>>"/>
+    <param name="password" value="<<JUNIT.DATABASE.PASSWORD>>"/>
+
+    <param name="table" value="ZJ_BUSINESS_EVENT_LOGS"/>
+    <param name="column" value="log_id~ID~org.apache.log4j.jdbcplus.VMIDHandler"/>
+    <param name="column" value="correlation_type~MDC~CorrelationType"/>
+    <param name="column" value="correlation_key1~MDC~CorrelationKey1"/>
+    <param name="column" value="correlation_key2~MDC~CorrelationKey2"/>
+    <param name="column" value="correlation_key3~MDC~CorrelationKey3"/>
+    <param name="column" value="scheduled_task_id~MDC~ScheduledTaskId"/>
+    <param name="column" value="message_id~MDC~MessageId"/>
+    <param name="column" value="logged_on~TIMESTAMP"/>
+    <param name="column" value="logged_by~MDC~LoggedBy"/>
+    <param name="column" value="process_name~MDC~ProcessName"/>
+    <param name="column" value="sub_process_name~MDC~SubProcessName"/>
+    <param name="column" value="message_type~LAYOUT~1"/>
+    <param name="column" value="message_text~MSG"/>
+    <param name="column" value="source_class~LAYOUT~2"/>
+    <!-- WARNING: Generating caller location information is extremely slow and should be avoided
+    <param name="column" value="source_method~LAYOUT~3"/>
+    <param name="column" value="source_line~LAYOUT~4"/>
+    -->
+    <param name="column" value="source_method~EMPTY"/>
+    <param name="column" value="source_line~EMPTY"/>
+    <param name="column" value="stack_trace~THROWABLE"/>
+
+    <param name="usePreparedStatements" value="true"/>
+    <param name="buffer" value="1"/>
+    <param name="commit" value="true"/>
+    <param name="quoteReplace" value="true"/>
+    <param name="throwableMaxChars" value="4000"/>
+    <param name="layoutPartsDelimiter" value="#"/>
+    
+    <!-- The following parameters are needed to generate Attachments -->
+    <param name="attachmentTable" value="ZJ_ATTACHMENTS"/>
+    <param name="attachmentMDCKey" value="Data"/>
+    <param name="engine" value="<<JUNIT.DATABASE.ENGINE>>"/>
+    
+    <layout class="org.apache.log4j.PatternLayout">
+      <!-- WARNING: Generating caller location information is extremely slow and should be avoided
+      <param name="ConversionPattern" value="%p#%C#%M#%L"/>
+      -->
+      <param name="ConversionPattern" value="%p#%c"/>
+    </layout>
+
+    <!-- The optional filter element(s) may be used to filter the messages to be logged into the database -->
+    <!--Match can be one of EQUALS|CONTAINS|EMPTY|NOT EMPTY|IN LIST
+    <filter class="org.apache.log4j.jdbcplus.MDCFilter">
+      <param name="match" value="NOT EMPTY"/>
+      <param name="key" value="LoggedBy"/>
+    </filter>
+    <filter class="org.apache.log4j.jdbcplus.MDCFilter">
+      <param name="match" value="IN LIST"/>
+      <param name="key" value="ProcessName"/>
+      <param name="value" value="MDB,ABC"/>
+    </filter>
+    -->
+  </appender>
+
+  <!-- Direct the logs from the TestCase to JDBCAppender1 -->
+  <category name="org.jaffa.components.attachment.services.JDBCAppenderWithAttachmentTest">
+    <priority value="INFO" />
+    <appender-ref ref="JDBCAppender1"/>
+  </category>
+
+  <!-- Info Level for all the other stuff -->
+  <root>
+    <priority value="INFO"/>
+    <appender-ref ref="CONSOLE"/>
+  </root>
+</log4j:configuration>

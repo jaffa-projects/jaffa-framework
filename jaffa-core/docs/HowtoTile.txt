@@ -1,0 +1,76 @@
+Howto apply the Tiles framework in Jaffa1.3
+============================================
+
+
+
+ENABLE TILES:
+=============
+Add the Tiles plug-in to the 'struts-config.xml' file. This will initialize Tiles using the 'WEB-INF/tiles-defs.xml' file. The plugin changes Struts configuration by specifying a TilesRequestProcessor as request processor. If the user has also specified another request processor, this later should subclass TilesRequestProcessor.
+  <plug-in className="org.apache.struts.tiles.TilesPlugin" >
+    <set-property property="definitions-config" value="/WEB-INF/tiles-defs.xml" />
+    <set-property property="moduleAware" value="false" />
+  </plug-in>
+
+
+
+EXAMPLE:
+=============
+The following example will modify the UserFinder component of the SampleApp to display criteria and results together using tiles. It'll involve no code changes !!
+1) Create layouts
+    a) MainLayout.jsp - This will be the layout for the whole application. It'll have a title, header, menu, body and a footer.
+	<%@ taglib uri="/WEB-INF/struts-tiles.tld" prefix="tiles" %>
+	<HTML>
+	    <HEAD><TITLE><tiles:getAsString name="title"/></TITLE></HEAD>
+	    <BODY>
+		<TABLE border="0" width="100%" cellspacing="5">
+		    <TR><TD colspan="2"><tiles:insert attribute="header" ignore="true"/></TD></TR>
+		    <TR><TD width="140" valign="top"><tiles:insert attribute='menu' ignore="true"/></TD>
+			<TD valign="top" align="left"><tiles:insert attribute='body'/></TD></TR>
+		    <TR><TD colspan="2"><tiles:insert attribute="footer" ignore="true"/></TD></TR>
+		</TABLE>
+	    </BODY>
+	</HTML>
+    b) FinderLayout.jsp - This will be the layout for the Finder component. This will be nested into the 'body' of MainLayout.jsp
+	<%@ taglib uri="/WEB-INF/struts-tiles.tld" prefix="tiles" %>
+	<TABLE>
+	    <TR><TD><tiles:insert attribute='body1'/></TD></TR>
+	    <TR><TD><tiles:insert attribute='body2'/></TD></TR>
+	</TABLE>
+    
+2) Add tiles definitions to tiles-defs.xml
+    a) The following will be the definitions for the layouts
+	  <definition name="sample.MainLayout" path="/MainLayout.jsp">
+		  <put name="title"  value="The Title for the Sample Application" />
+		  <put name="header"   value="${HEADER}" />
+		  <put name="menu"   value="${MENU}" />
+		  <put name="body"   value="${BODY}" />
+		  <put name="footer"   value="${FOOTER}" />
+	  </definition>
+	  <definition name="sample.FinderLayout"  path="/FinderLayout.jsp">
+		  <put name="body1"  value="${BODY1}" />
+		  <put name="body2"  value="${BODY2}" />
+	  </definition>
+    b) The following will be the definitions for the UserFinder component.
+	  <definition name="sample.user.userfinder.body"  extends="sample.FinderLayout">
+		  <put name="body1"  value="/sample/user/userfinder/jsp/criteria.jsp" />
+		  <put name="body2"  value="/sample/user/userfinder/jsp/results.jsp" />
+	  </definition>
+	  <definition name="sample.user.userfinder"  extends="sample.MainLayout">
+		  <!-- Values for the other attributes of the MainLayout may be specified -->
+		  <put name="body"   value="sample.user.userfinder.body" />
+	  </definition>
+
+3) Modify the forward-defintions in struts-config.xml to point to tiles-definitions
+    <!-- UserFinderCriteria -->
+    <forward   name="user_userFinderCriteria"    path="sample.user.userfinder"/>
+    <!-- UserFinderResults -->
+    <forward   name="user_userFinderResults"    path="sample.user.userfinder"/>
+    
+
+
+NOTES:
+=============
+1) The convention is to use initial uppercase for layout JSPs
+2) The ${Xxx} is merely an indicator that the value should be supplied by a page extending the layout definition
+3) It is possible to split a html-form between multiple tiles. The outer tile can have the <portlet:form> tag, while the inner tiles can have the other widgets for the form.
+4) It may not be possible to correctly display tiles from different components on the same layout.

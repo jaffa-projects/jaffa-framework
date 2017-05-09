@@ -1,0 +1,247 @@
+/* 
+  File name:  jaffa.css
+  Created on: 25-Feb-03
+  Author:     paule  
+
+  Description:
+    The basic stylesheet used by core jaffa JSP's.
+    Customized CSS for the colorful example
+*/
+
+/*************************************************************
+
+ Import all the widget CSS's (except tablesort!)
+
+ *************************************************************/
+@import url(widgets/button.css);
+@import url(widgets/dropdown.css);
+@import url(widgets/editbox.css);
+@import url(widgets/foldingSection.css);
+@import url(widgets/label.css);
+@import url(widgets/lookup.css);
+@import url(widgets/radiogroup.css);
+@import url(widgets/texttag.css);
+@import url(widgets/calendar.css);
+@import url(widgets/comment.css);
+@import url(rules/error.css);
+@import url(navigation.css);
+/*************************************************************
+
+ Setup basic page display
+
+ *************************************************************/
+body { 
+  scrollbar-base-color: #FFE5CB; 
+  scrollbar-face-color: #FFE5CB; 
+  scrollbar-track-color: #FFFFFF; 
+  scrollbar-arrow-color: #FF6B00;
+  scrollbar-highlight-color: #FFFFFF; 
+  scrollbar-3dlight-color: rgb(172,172,172);
+  scrollbar-shadow-color: #FFFFFF;
+  scrollbar-darkshadow-color: rgb(172,172,172);  
+  color: black;
+  background-color: white;
+  font-family: Arial, serif;
+  font-size: x-small;
+  margin-top: 15px;
+}
+
+p {
+  font-family: Arial, serif;
+  font-size: x-small;
+  color: black;
+}
+
+A {
+  FONT-SIZE: 11px; 
+  COLOR: #0066FF; 
+  FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; 
+  TEXT-DECORATION: underline;
+  vertical-align : middle;
+}
+A:hover {
+  FONT-WEIGHT: 300; 
+  FONT-SIZE: 11px; 
+  COLOR: #FF9A31; 
+  FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; 
+  TEXT-DECORATION: underline;
+  vertical-align : middle;
+}
+
+
+/*************************************************************
+
+ Headings copied from the Jaffa Web Site
+
+ *************************************************************/
+H1 {
+  color: #FF4500;  text-decoration: none; font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;    font-weight : bold;  text-align : left; font-variant : normal;  font-size : large;
+}
+
+H2 {
+  color: #FF5F00;  text-decoration: none; font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;    font-weight : bolder;  text-align : left; font-variant : normal;  font-size : medium;
+}
+
+H3 { 
+  color: #FF9966;  text-decoration: none; font-family : Verdana, Geneva, Arial, Helvetica, sans-serif;    font-weight : bolder;  text-align : left; font-variant : normal;  font-size : small;  text-shadow : 2px;  text-indent : 2%; 
+}
+
+
+
+/*************************************************************
+
+ Set up display for the main menu
+
+ *************************************************************/
+H1.mainmenu {
+  font-weight: bold;
+  font-size: 20px;
+  font-family: Arial, serif;
+  color: #8fcf1d;
+  text-align : Center;
+}
+
+H2.mainmenu {
+  font-weight : bold;
+  font-size: 16px ;
+  font-family: Arial, serif;
+  color: #94BEF6;
+  text-align : center;
+}
+
+td.menugroup {
+        width: 110px;
+      text-align : left;
+}
+td.menuoption {
+        width: 300px;
+  text-align : center;
+        vertical-align : top;
+}
+
+td.menuoption a {
+  text-decoration: none;        
+}
+
+
+/*************************************************************
+
+ Set up controls for the standard window layout
+
+ The basic page layout should be
+    table.outer
+       table.header
+           td.left
+           td.middle
+           td.right
+       table.window
+       table.footer
+           td.left
+           td.middle
+           td.right
+
+ *************************************************************/
+
+/* This is the main table for all JSPs */
+table.outer {
+  width: 100% center;
+  background-position : center;
+}
+
+/* This is the table the real content will be in */
+table.window {
+  background-color: #FEF1E6;
+        padding-top: 10px;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-bottom: 5px;
+  background-position: center;
+  width: 100%;
+  border-bottom: 2px groove #FF5F00;
+  text-align: left;
+
+}
+
+/* The 'header' table is in the 'outer' table before the 'window' table */
+table.header { 
+  background-color: transparent;
+  padding: 0px 0px 0px 0px;
+  margin: 0px;
+  border: 0px;
+  width:100%;
+}
+
+table.header td.left {
+  /*background-image : url(../img/topLeftCorner.gif);
+  background-position : left;
+  background-repeat : no-repeat;
+  background-color : transparent;
+  height: 24px;
+  width: 10px;
+  padding: 0px; margin: 0px;
+        */
+}
+
+table.header td.middle {
+  background-color : #FF9A31;
+  color: white;
+  width : 96%;
+  text-align : center;
+  letter-spacing : 0px;
+  font-style : normal;
+  font-weight : bold;
+  font-size : x-small;
+  margin: 0px;
+  height: 22px;
+  padding: 0px 0px 0px 0px;
+  border: 0px;
+}
+
+table.header td.right {
+  /*background-image : url(../img/topRightCorner.gif);
+  background-position : left;
+  background-repeat : no-repeat;
+  background-color : transparent;
+  height: 24px;
+  width: 10px;
+  padding: 0px; margin: 0px;
+        */
+}
+
+
+/* The 'footer' table is in the 'outer' table after the 'window' table */
+table.footer {
+  width: 100%;
+}
+
+table.footer td.left { 
+  background-color : #888888;
+}
+
+table.footer td.middle {
+  background-color : #888888;
+  width: 80%;
+}
+
+table.footer td.right {
+  background-color : #888888;
+}
+
+/* this controls the history tabs */
+
+A.historyNav {
+  color : black;
+  text-decoration : none;
+  font-size : 10px;
+  white-space : normal;
+  font : bold;
+    text-decoration:underline;
+}
+ 
+TD.historyNav {
+  color : black;
+  text-decoration : none; 
+  font-size : 10px;
+  white-space : normal;
+  padding: 5px;
+}

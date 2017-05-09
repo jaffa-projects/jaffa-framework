@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.transaction.domain.TransactionSweeperView">
+        <map-to table="J_TRANS_SWEEPER$VIEW" />
+
+        <field name="Id" use-member="id" type="java.lang.String" primary-key="true">
+            <sql name="ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="CreatedOn" use-member="createdOn" type="java.sql.Timestamp">
+            <sql name="CREATED_ON" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+        <field name="CreatedBy" use-member="createdBy" type="java.lang.String">
+            <sql name="CREATED_BY" type="STRING" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

@@ -1,0 +1,6 @@
+    <action    path="/user_requestPassword"
+               type="org.jaffa.applications.jaffa.modules.user.components.requestpassword.ui.RequestPasswordAction"
+               name="user_requestPasswordForm"
+               validate="false"
+               scope="request">
+    </action>

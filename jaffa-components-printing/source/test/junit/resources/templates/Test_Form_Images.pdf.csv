@@ -1,0 +1,8 @@
+Page,Field,x1',y1',x2',y2',Font,Size,Align,Multiline,Fit Method,Rotate,Style,Color,Background,Sample Data
+1,urlImage,73,577,251,647,Image,12,left,FALSE,noclip,,,,,135x135 .png - Jaffa Logo
+1,fileImage,361,577,539,647,Image,12,left,FALSE,fill,,,,,16x16 .gif - Save Icon
+1,stringUrl,73,451,251,521,Image,12,left,FALSE,clip,,,,,135x135 .png - Jaffa Logo  
+1,stringLocalFile,361,451,539,647,Image,12,left,FALSE,noclip,,,,,16x16 .gif - Save Icon
+1,stringClasspath,361,343,539,413,Image,12,right,FALSE,fill,,,,,95x37 - Powered By JAFFA
+1,awtImage,37,37,575,323,Image,12,center,FALSE,scale,,,,,300x200 - JFreeChart
+1,logo,576,1,611,18,Image,12,center,FALSE,scale,,,,,Default Logo

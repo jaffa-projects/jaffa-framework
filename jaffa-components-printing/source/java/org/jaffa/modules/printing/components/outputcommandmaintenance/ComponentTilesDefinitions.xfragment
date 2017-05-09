@@ -1,0 +1,13 @@
+    <!-- OutputCommandMaintenance -->
+    <definition name="jaffa.printing.outputcommandmaintenance.MaintenanceLayout.main"  extends="jaffa.MaintenanceLayout">
+        <put name="body" value="/jaffa/printing/outputcommandmaintenance/main.jsp"/>
+        <put name="action" value="/jaffa_printing_outputCommandMaintenance"/>
+        <put name="currentScreenCounter" value="0"/>
+        <put name="createModeTitle" value="[title.Jaffa.Printing.OutputCommandMaintenance.maintenance]"/>
+        <put name="updateModeTitle" value="[title.Jaffa.Printing.OutputCommandMaintenance.maintenance]"/>
+    </definition>
+    <definition name="jaffa.printing.outputcommandmaintenance.main"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.OutputCommandMaintenance.maintenance]"/>
+        <put name="body" value="jaffa.printing.outputcommandmaintenance.MaintenanceLayout.main"/>
+    </definition>
+

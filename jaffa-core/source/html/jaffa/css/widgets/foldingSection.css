@@ -1,0 +1,28 @@
+/* 
+  File name:  foldingSection.css
+  Created:    5-Mar-03
+  Author:     paule  
+
+  Description:
+    StyleSheet that controls the display of the FoldingSection widget
+    This is part of the 'color' skin for Jaffa
+
+  New version for Jaffa 2 - All sections are controllable by CSS
+
+*/
+
+
+
+td .sectionheader {
+border: solid #FF9966
+font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+color : #B4AB90;
+font-size : 14px;
+ border-bottom : solid;
+ border-right : none;
+ border-top : none;
+ border-left : none;
+}
+td .outer {
+  align:"center";
+}

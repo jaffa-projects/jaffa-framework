@@ -1,0 +1,3 @@
+    <forward name="jaffa_printing_formGroupLookupCriteria" path="jaffa.printing.formgrouplookup.criteria"/>
+    <forward name="jaffa_printing_formGroupLookupResults" path="jaffa.printing.formgrouplookup.results"/>
+    <forward name="jaffa_printing_formGroupLookupConsolidatedCriteriaAndResults" path="jaffa.printing.formgrouplookup.consolidatedCriteriaAndResults"/>

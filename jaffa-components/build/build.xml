@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    To make a release use
+        -Dlib.dependent.build=download -Ddo.release=y release-HEAD
+    To build javadocs use
+        -Dlib.dependent.build=download javadoc
+    To run unit tests use
+        -Dlib.dependent.build=lazy test-junit
+    To make a specific release to a known repository    
+        -Dlib.dependent.build=clean -Drepository.publish=c:\.jaffa\repository\downloads -Drelease.version=1.0.0 -Ddo.release=y release-version
+
+  -Dlib.dependent.build=clean
+  -Dlib.dependent.build=dirty
+  -Dlib.dependent.build=lazy clean build
+  -Dlib.dependent.build=download
+  -Dlib.dependent.build=skip jsp-compile
+  -Ddeploy.live=true
+-->
+<project basedir=".." default="build" name="build" xmlns:sonar="antlib:org.sonar.ant" xmlns:ivy="antlib:org.apache.ivy.ant">
+  <property name="imports.basedir" value="${basedir}/../JaffaBuild"/>
+  <property name="shared.version.propfile" value="${imports.basedir}/build/shared.version.properties"/>
+
+  <!-- make sure 'ant-contrib-1.0b1.jar' is in $ANT_HOME$/lib -->
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+
+  <property environment="env"/>
+  <property file="${imports.basedir}/build/global.ant.properties"/>
+  <property file="./build/project.ant.properties"/>
+  <property file="${config.file}"/>
+  <property file="${imports.basedir}/build/shared.ant.properties"/>
+  <property file="${shared.version.propfile}"/>
+
+  <import file="${imports.basedir}/build/build-master.xml"/>
+  <import file="${imports.basedir}/build/code-generator.xml"/>
+  <defaultexcludes add="${cvs.excludes}"/>
+ 
+   <!-- Define the SonarQube project properties-->
+  <import file="sonar.properties"/>
+  
+  <target name="usage">
+    <echo>
+Usage:    build target-name
+
+Available Code Generator Targets:
+  generate-app          - Executes the AppBuilder to generate the CRUD descriptors
+  generate-all          - Generate all domain and CRUD code
+  generate-domain       - Generate all domain code
+  generate-finders      - Generate all finder code
+  generate-viewers      - Generate all viewer code
+  generate-maintenance  - Generate all maintenance code
+  generate-lookups      - Generate all lookup code
+  generate-skeletons    - Generate all skeleton code
+  formatXml             - Format all pattern XML
+  formatXml-domain      - Format domain pattern XML
+  formatXml-finder      - Format finder pattern XML
+  formatXml-lookup      - Format lookup pattern XML
+  formatXml-viewer      - Format viewer pattern XML
+  formatXml-maintenance - Format maintenance pattern XML
+  formatXml-skeleton    - Format skeleton pattern XML
+  list-customizations   - Lists the customizations made to code generated files. You may modify the fileset used in 'JaffaBuild/build/code-generator.xml: list-customizations' to narrow the set of files to scan
+
+Available Module Targets:
+  clean            - Delete all working folders, so the next build is from source
+  get-dependencies - Builds all the dependencies, if not built already.
+  compile          - Compile all classes
+  jar              - Build JAR file for deployment
+  html             - Build a ZIP of HTML needed for inclusion in the WAR file
+  build            - Build JAR and ZIP
+  javadoc          - Generate Javadoc
+
+Available Module Targets for aiding quick development:
+  fast-JSP-Deploy                - Copy JSP Files for current module to Server
+  fast-Class-Deploy              - Builds the current module, copies its JAR to the server, restarts the server
+  fast-Class-Deploy-With-Aspects - Builds the current module, applies aspects, copies the aspect-ized JAR to the server, restarts the server
+
+Available Testing Targets:
+  test-junit          - Runs JUnit Tests and generates report
+  test-junit-coverage - Runs JUnit Tests with code coverage and generates report
+  test-httpunit       - Builds and deploys application and then executes the HttpUnit tests and generates report
+  test-xml-web-inf    - Validate and test files in WEB-INF  
+
+Additional Parameters
+  -Dlib.dependent.build=[ skip | download | lazy | dirty | clean ]
+
+Available Container Targets:
+  jsp-compile      - Compile JSP's in this module against the container to check for compile errors
+    </echo>
+  </target>
+   <!-- ====================================================================================================== -->
+   <!-- Define the SonarQube target                                                                                   -->
+   <!-- ====================================================================================================== -->   
+   <target name="sonar" >
+    <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
+        <!-- Update the following line, or put the "sonar-ant-task-*.jar" file in your "$HOME/.ant/lib" folder -->
+        <classpath path="/u01/apache-ant-1.9.1/lib/sonar-ant-task-*.jar" />
+    </taskdef>
+    <!-- Execute the SonarQube analysis -->
+    <sonar:sonar />
+   </target>  
+
+  <!-- ========================================================================== -->
+  <!-- Generate view classes.                                                     -->
+  <!-- ========================================================================== -->
+  <target name="generate-domain-view" depends="generator-init" if="can.generate.domain">
+  <patterngenerator>
+    <fileset dir="${project.build}/patterns/domain_for_view_1_0" includes="**/*.xml"/>
+  </patterngenerator>
+  </target>
+
+</project>

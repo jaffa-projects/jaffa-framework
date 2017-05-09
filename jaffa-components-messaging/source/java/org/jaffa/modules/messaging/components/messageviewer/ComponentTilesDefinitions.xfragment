@@ -1,0 +1,11 @@
+    <!-- MessageViewer -->
+    <definition name="jaffa.messaging.messageviewer.ViewerLayout"  extends="jaffa.ViewerLayout">
+        <put name="body" value="/jaffa/messaging/messageviewer/view.jsp"/>
+        <put name="contextNav"  value="/jaffa/messaging/messageviewer/contextNav.jsp"/>
+        <put name="action" value="/jaffa_messaging_messageViewer"/>
+    </definition>
+    <definition name="jaffa.messaging.messageviewer"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Messaging.MessageViewer.view]"/>
+        <put name="body" value="jaffa.messaging.messageviewer.ViewerLayout"/>
+    </definition>
+

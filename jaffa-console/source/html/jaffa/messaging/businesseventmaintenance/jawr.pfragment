@@ -1,0 +1,14 @@
+#----------------------------
+# Jaffa \ Messaging \ BusinessEventMaintenance
+#----------------------------
+
+jawr.js.bundle.BusinessEventMaintenanceMain.id=/bundles/jaffa/messaging/businesseventmaintenancemain.js
+jawr.js.bundle.BusinessEventMaintenanceMain.mappings=\
+    dwr:Jaffa_Messaging_BusinessEventLogService, \
+    /jaffa/messaging/businesseventmaintenance/DetailPanel.js, \
+    /jaffa/messaging/businesseventmaintenance/StackTracePanel.js, \
+    /jaffa/messaging/businesseventmaintenance/main.js
+ 
+jawr.js.bundle.BusinessEventMaintenance.id=/bundles/jaffa/messaging/businesseventmaintenance.js
+jawr.js.bundle.BusinessEventMaintenance.composite=true
+jawr.js.bundle.BusinessEventMaintenance.child.names=BusinessEventMaintenanceMain,jaffaAttachment

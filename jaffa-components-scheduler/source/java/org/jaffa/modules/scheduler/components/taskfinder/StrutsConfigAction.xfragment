@@ -1,0 +1,8 @@
+    <!-- TaskFinder -->
+    <action    path="/jaffa_scheduler_taskFinder"
+               type="org.jaffa.modules.scheduler.components.taskfinder.ui.TaskFinderAction"
+               name="jaffa_scheduler_taskFinderForm"
+               validate="false"
+               scope="request">
+    </action>
+

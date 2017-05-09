@@ -1,0 +1,19 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the next release. For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+- Created UserContextWrapperFactory for returning instances of UserContextWrapper, based on the rule 'jaffa.user.UserContextWrapper'
+
+What's Changed / Improvements
+=====================================================
+
+
+What's Deleted/Deprecated
+=====================================================
+
+Bug Fixes
+=====================================================

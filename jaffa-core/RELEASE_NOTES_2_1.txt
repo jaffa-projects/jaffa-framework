@@ -1,0 +1,155 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the JAFFA 2.1.0 Release (Since v2.0.0). For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New in Version 2.1.0
+=====================================================
+- Enhanced the Persistence engine to use the member variables of the domain objects in addition to the getters/setters.
+    - Added an optional attribute 'use-member' to the mapping files for domain classes. If this is specified, then the Persistence Engine will use the member variable for accessing/setting the data on the domain object. If not specified, then it'll continue to use the getters/setters.
+    - The member-variables, getters, setters can be private
+- Enhanced the Persistence Engine to support Interfaces in addition to concrete classes. This involved the utilization of the Dynamic Proxy API to create a dynamic proxy for an Interface. The following changes were implemented:
+    - Created an IPersistent interface
+    - The Persistent class now implements the new IPersistent interface
+    - Refactored the various Persistence Engine classes to deal with the IPersistent interface instead of the Persistent class
+    - Added 2 new methods to the UOW
+        - newPersistentInstance(): This returns a regular instance for a 'Class' input or a dynamic proxy for an 'Interface' input
+        - getActualPersistentClass(): This returns the actual class that was used for creating a proxy
+    - Created the PersistentInstanceFactory for generating the dynamic proxy for an Interface
+    - It is recommended to use the newPersistentInstance() method of the UOW for instantiating a domain object
+    - However you do not need to change existing code, if you plan to continue using concrete classes, instead of Interfaces.
+    - The UnitTests were enhanced to use the new feature. Check the Part domain class. This is now an Interface.
+- The domain_creator_1_1 pattern. It has the following features:
+    - The mapping files will now specify the optional 'use-member' attribute for each field so that the Persistence Engine uses the member variables for accessing/setting data on the domain object
+    - The setXyz() method on the domain class will be similar to the older version of the updateXyz() method.
+    - The updateXyz() method is now available for backwards compatibility only. It'll merely invoke the setXyz() method.
+    - Maintains a list of modified fields and their initial values
+    - Has helper methods for existence checks, findByPK
+    - Has getters for ForeignObjects. These will be lazily instantiated
+    - Has validators for the ForeignObjects. This will be invoked by the preAdd() and preUpdate() methods
+    - Has getters for related objects
+    - Has helper methods to create instances of related objects with the initialized related fields
+    - Has an implementation for the preAdd() method
+        - It ensures the uniqueness of the primary key
+        - Validates all foreign keys
+    - Has an implementation for the preUpdate() method
+        - Validates all the modified foreign keys
+    - Has an implementation for the preDelete() method
+        - Throws an exception if objects in association/aggregation relationship exist
+        - Performs cascading deletes for objects in composition relationship
+    - It will ignore a relationship if any of its fields have the 'ignore' flag set to true
+    - Uses the domain-creator-meta_1_1.dtd, which has the new optional attribute 'Name' for a relationship
+- Added new variant options in persistent layer queries for MSSqlServer so it can do select for updates (Merged from v1.3.1)
+- Added the ability to obtain messages from a ResourceBundle in the business-tier. The following changes were made:
+    - Enhanced the PropertyMessageResourcesFactory to create only one PropertyMessageResources instance per config. This will allow the presentation-tier and the business-tier to share the cache used by that PropertyMessageResources instance, when running in the same JVM
+    - Added the 'framework.messageResources.bundle' property to the framework.properties file. The value for this property should ideally be the same as the value specified in struts-config.xml to point to the same ResourceBundle
+    - Removed the 'framework.ApplicationResourcesLocation' parameter from web.xml. It has been replaced by the value for the 'framework.messageResources.bundle' property in framework.properties file.
+    - Added helper methods in MessageHelper, which will return the messages from the default Resource Bundle, as specified in the framework.properties file.
+    - CustomException
+        - Moved from the utils package to the exceptions package
+        - Provided getter for the arguments
+        - Overrides the getLocalizedMessage() which returns the message from the default ResourceBundle using the errorCode
+    - Refactored FrameworkException, ApplicationException, CustomRuntimeException
+    - ApplicationExceptions: Provided the 'public ApplicationException[] getApplicationExceptionArray()' method
+    - Moved the error messages from ErrorConstants to the ApplicationResources.pfragment file
+    - Removed the redundant ErrorConstants.java and ErrorConstants.properties files
+    - Removed the redundant org.jaffa.exceptions.MandatoryFieldException and references to it in the object-viewer pattern
+    - Fixed the Exception classes which extend CustomRuntimeException, ApplicationException, ValidationException, FrameworkException, MiddlewareException, UOWException
+    - Fixed Patterns
+        - object_viewer_2_0: Removed the references to the old MandatoryException from the Component Controller
+        - object_maintenance_2_0 : Fixed the references to the VoucherGeneratorException in the Tx and the references to ValidationException in FormBean
+        - domain_creator_1_1 : Fixed the exception references
+- Added onValidate attribute for EditBox widget. It allows custom code snippets to be added into an editboxes leave field validation.
+   - The only constraint is that the object is referred to as 'field' and if you wish to return a false back you set isError to false.
+- Added some Domain Object generation tools
+	- JDBCSchemaReader can reverse engineer a database schema (via JDBC) and generate Domain Object XML definitions
+	- ErWinSchemaReader can read an ER-Win model (saved in the XML format) and generate Domain Object XML definitions
+- Added SyncSchema (it was in v2.0.0 but never mentioned in the release notes!). This is a developer tool and allows you to point to two database schemas and list all the table and field level changes between them. The goal is to eventually have this generate 'change scripts' to migrate the schema from the source definition to the target one.
+- Created ApplicationExceptionWithContext to add a context to an ApplicationException. This is useful when dealing with a collection of data-sets and helps to pinpoint the context under which the error occurs.
+- Added a convenience method to ApplicationExceptions to add context to its collection of ApplicationException instances
+- Added a raiseError method to FormBase to accept an argument array
+- Added postAdd, postUpdate and postDelete triggers to the IPersistent interface
+- Added new bean moulding framework in org.jaffa.beans. Allows simple mapping between DataAccessObjects and DomainObjects for passing Domain Object Graphs between the business and presentation/web service tier
+- Added new bean moulding framework in org.jaffa.beans. Allows sipmle mapping between DataAccessObjects and DomainObjects for passing Domain Object Graphs between the business and presentation/web service tier
+- The data-security-policy_1_1 which supercedes the script_generator_1_0.Following are the changes to ver 1.1
+     * You can now specify a list of Roles in the Xml definition (Roles Element added)
+     * SqlPrefix element added to the dtd.
+
+What's Changed
+=====================================================
+- Modified AppBuilder so when building v2.0 Viewers, it doesn't include associated related objects
+- Updated AppBuilder to use new ListProperties, so labels are sorted prior to storing
+- Updated v2.0 Viewer pattern JSP to add folding section tags around related objects (like the maintenance pattern)
+- The object-maintenance_2_0 pattern no longer stamps the Comments or concatenates it with the previous value. It is recommended that this functionality be added manually at the domain object level by invoking the StringHelper.addCommentWithStamp() method. The domain-creator pattern will be enhanced at a later date to automatically generate the required code.
+- Refactored CriteriaField and its various implementations. The main motivation for this change was to have the getValues() method return actual datatypes (String[], Boolean[],..) instead of Object[]. This is of great use to web service clients, enabling them to pass the correct datatype.
+    - Renamed 'Object[] getValues()' to 'Object[] returnValuesAsObjectArray()'
+    - Removed getFieldName(), since it was added for the CodeHelper component.
+    - Added 'String[] getValues()' to StringCriteriaField, 'Boolean[] getValues()' to BooleanCriteriaField and so on
+- The CodeHelper component was modified, adding a CriteriaElementDto which encapsulates a fieldname and a criteria
+    - Consequently the ComponentController templates had to be refactored in object_finder, object_lookup and object_maintenance patterns.
+- The domain_creator_1_1 pattern no longer uses the findByPK method to obtain Foreign and RelatedOne objects. This way the relationships need not be restricted to primary keys
+- The logic related to one-to-one relationships in the domain_creator_1_1 pattern was further enhanced to take the cardinality into account and perform validations for a mandatory related object in adds/updates and cascade/restrict deletes for an optional related object
+- Modified the LocaleContext to return the default context for the JVM, if no value was assigned
+- Modified the MessageHelper to get the locale from the LocaleContext, if no locale is passed
+- Modified the Pre(Add/Update/Delete)FailedException classes to extend the (Add/Update/Delete)FailedException classes respectively
+- Changed the widget models so the 'isModelChanged()' is not set to true, if the model is updated with its current value.
+
+What's Deleted/Deprecated
+=====================================================
+- Removed the unnecessary 'useFileIo' variants of the getUrl() and getInputStream() methods in URLHelper
+- The addCommentWithStamp() method has been deprecated in the MaintTx class. A similar function is now provided by the StringHelper.
+- Removed the unnecessary variant-property 'lockConstructPreStatement' from the Persistence Engine
+- Enhanced the newExtendedURL() method of the URLHelper to support inputs without any protocol
+- script_generator_1_0 under java\patterns\library has been deprecated. It is been replaced by data_security_policy_1_1
+
+Bug Fixes
+=====================================================
+- Corrected the handling of logical layouts in the Parser and Formatter classes
+- Fixed the CheckBoxModel constructor to handle a null input correctly
+- #891668. PolicyCache now clears the roleindex , component-role index and function-role index
+- #850440. Pressing enter to submit a form will now force all leavefield validation to be executed.
+- #899251. Usergrid supports tokens in default file. Will still work with literal string however and even allows default files with literal string to be compared against tokenized columns as long as the columns token value matches the literal string.
+- Fixed the StatementHelper correcting the code that handles null objects during query generation
+- Fixed the QueryInterceptor to remove a Criteria from its internal collection, even when the query fails. This allows us to perform further queries on the same UOW, even after any query failures.
+- Corrected the ComponentForm template of the object_maintenance_2_0 pattern to correctly instantiate DateTimeModel objects
+- Fixed bug in AppBuilder for v2.0 Maintenance Objects where there are multiple foreign objects wanting to use the same fields
+- Fixed the findMessage and replaceTokens methods in MessageHelper to check for null arguments
+- Fixed the faulty candidate key logic in the UnifaceSchemaReader, which treated them as mandatory fields
+- Fixed the RulesEngine to support validations of any class and not just Persistent classes
+- Corrected the DateOnlyFieldValidator and DateTimeFieldValidator of the RulesEngine to handle java.util.Date values appropriately
+
+Improvements
+=====================================================
+- Added 'decimalOptional.format' to locale.properties.. This will be useful for suppressing the decimal portion of a number, if its zero
+- Created the SkeletonLayout.jsp and modified the skeleton_component_2_0 pattern to use the new layout, instead of a custom layout
+- Tools / Website / GenerateTOC.java -> Added command line parameters and changed page title to SiteMap so it can be integrated in to the build process of the Jaffa WebSite
+- Added new variant options in persistent layer queries for MSSqlServer so it can do select for updates (Merged from v1.3.1)
+- Modified the persistence engine to invoke the setQueryTimeout(5 seconds) on a Statement/PreparedStatement object when locking a record. Note: This setting works in MS-Sql-Server only
+- The DomParser was enhanced to interpret the cardinality of the relationships and interpret if its optional or otherwise
+- Enhanced the newExtendedURL() method of the URLHelper to support inputs without any protocol
+- Enhanced the SourceDecomposerUtils.listCustomizations() method. It now supports a customizationFilter to filter the customization blocks
+- It has been decided to move some of the logic from the PersistentTransaction to the preAdd/preUpdate triggers of the Persistent base class
+    - It has been decided to move some of the logic from the PersistentTransaction to the preAdd/preUpdate triggers of the Persistent base class
+    - This will give greater control over code execution, since a domain class can override or put custom code before/after the trigger code of the base class
+    - The PersistentHelper class was created to provide many convenience methods to checkMandatoryFields, duplicate-key checks, generate serialized keys, load from serialized keys
+    - Added a convenience method convertDataType() to the BeanHelper
+    - domain_creator_1_1 enhancements
+        - Made the performForeignKeyValidations() method public
+        - Created a new performPreDeleteReferentialIntegrity() method
+        - Removed the preAdd, preUpdate and preDelete methods from the domain-class, since the base class is expected to provide the appropriate functionality
+        - Added getKeyFields and getMandatoryFields methods in the meta class
+    - Provided default code for the preAdd/preUpdate trigger in the Persistent base class
+        - Will invoke the PersistentHelper.exists() to check against duplicate keys.
+        - Will invoke the performForeignKeyValidations() method to ensure no invalid foreign-keys are set.
+        - Will invoke PersistentHelper.checkMandatoryFields() to perform mandatory field checks.
+        - Will invoke the Rules Engine to perform mandatory field checks. Provide the preDelete code in the base Persistent class. This will invoke the performPreDeleteReferentialIntegrity() method
+    - Provided default code for the preDelete trigger in the base Persistent class. This will invoke the performPreDeleteReferentialIntegrity() method
+    - Removed the preAdd/preUpdate code from the PersistentTransaction class, since we have added similar code in Persistent class
+    - Fixed the PersistentDelegate, used by the  proxy handler, appropriately, by overriding the preAdd and preUpdate methods of the base class
+- The maintenance patern has been enhanced to support RadioButtons
+    - Note: Only static values can be specified.
+- The defaultNav.jsp for all the components have been modified to display the image as hyperlinks
+- The tablesort.css has been modified to display a much more pleasing color sheme for the Grid widget
+- The button.css has been modified to display hyperlinks, instead of buttons, for the various UserGrid customization options
+- Added a addHTMLLineBreak() method to the StringHelper for wrapping long textual data

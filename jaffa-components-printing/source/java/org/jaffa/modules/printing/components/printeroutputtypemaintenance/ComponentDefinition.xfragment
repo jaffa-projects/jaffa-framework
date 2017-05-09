@@ -1,0 +1,4 @@
+    <component id="Jaffa.Printing.PrinterOutputTypeMaintenance">
+        <class>org.jaffa.modules.printing.components.printeroutputtypemaintenance.ui.PrinterOutputTypeMaintenanceComponent</class>
+        <type>ObjectMaintenance</type>
+    </component>

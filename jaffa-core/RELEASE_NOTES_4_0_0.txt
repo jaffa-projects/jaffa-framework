@@ -1,0 +1,86 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the JaffaCore 4.0.0 Release (Since v3.1.0). For more information visit us at http://jaffa.sourceforge.net
+NOTE: This release also includes all the changes made in v3.2.0 upto 20-Dec-2006, any futher changes to the v3.2.x branch will be included in future 4.x releases.
+
+
+What's New
+=====================================================
+- Consolidated the release numbers for JaffaCore,JaffaTools,JaffaBuild,JaffaRules. All four modules will be released at the same time going forward
+
+Presentation
+------------
+
+Widgets
+-------
+- Enhanced the javascript to cache the various widgets in a tree-like structure, so that the entire DOM isn't scanned for packing Grid data into XML. The following changes were made
+  - Created a new javascript file 'widgetCache.js' for caching the widgets on a webpage as a tree of nodes, per Form
+  - Modified the preProcess() function in 'header.js' to iterate through the widgetCache, instead of the entire DOM, when packing the complex widgets
+  - Modified the gridPack() function in 'gridMain.js' to iterate through the child nodes of a Grid, instead of the entire DOM, when packing that grid
+  - Modified the HeaderTag to include the new javascript file 'widgetCache.js'
+  - Created a convenience method getWidgetRegistrationScript() in CustomModelTag, which returns the javascript for registering the Tag with the global widgetCache, and with the RulesEngine
+  - Modified the following Tags to invoke the getWidgetRegistrationScript() method: CheckBoxTag, DateTimeTag, DropDownTag, EditBoxTag, RadioButtonTag, TableTag
+  - Modified the TagHelper to provide helper routine for getting the parentNodeId from the pageContext
+  - Modified the GridTag to store its nodeId in the pageContext for use by its inner widgets, as well as to invoke the getWidgetRegistrationScript() method
+  - Modified the EditBoxTag to allow comments to be added like in a discussion forum. Specifically, new comments can be added on top of the old ones (LIFO mode) or at the bottom (FIFO mode). See details in Comment_Widget.doc.
+  - Modified the org.jaffa.components.finder.FinderComponent2.display() to direct home page to criteria screen if the default search is not defined or the provided search is not found. Otherwise, run the search and show the results.
+  - Added isHasSavedQueries() in FinderForm.java so that the jsp can find out whether any saved queries exist.
+  - Modified saveExpanded() function in header.js so that all the session cookies saved are with the path=/${application}/.
+
+Components & Patterns
+---------------------
+- Modified Finder component so that is a saved query is requested on initial invocation, and it is not valid, the criteria screen is displayed
+- Modified Finder component to have a 'queryLastRunOn' property for display at the top of the results grid.
+
+Persistence
+-----------
+- The JDBCEngine trims the STRING data on each database query. This feature can now be disabled by the rule 'jaffa.persistence.jdbcengine.doNotTrimStrings'
+- Enhanced the UOW to maintain a stacktrace during instantiation. During the finalize() method, this stacktrace is logged as an info message if the UOW was not closes by the application. Errant code can thus be easily pinpointed
+- Created an IPersistenceLoggingPlugin interface. A plugin implementing this interface will be invoked by the Persistence Engine to log ADD, UPDATE and DELETE events.
+
+General
+-------
+- Some tools, for example the webservice implementation from JBoss, do not handle the DateTime and DateOnly classes well. The various get methods are treated as properties, and at runtime the tools fail, since there are no setters
+  - The DateTime and DateOnly classes have been completely refactored
+  - The various get* methods have been replaced with *. Hence getYear() is now year() and so on
+  - The only getter left is getUtilDate(), for which a setter has now been provided
+  - The DateTime and DateOnly classes are no longer immutable
+- Created a new format [integerNoSeparator.format] for rendering integers without separators. This could be useful for displaying 'year' fields for example
+
+Bug Fixes
+=====================================================
+
+Presentation
+------------
+- Fixed errorpopup.js to take into account that the history starts from 0 in IE and from 1 in Mozilla, when closing the browser window.
+- Fixed issue with folding section cookies when the 'path' changes during the running of the same component
+- Fixed issue with <label> tag producing additional new-line characters when resolving a token
+ 
+
+Widgets
+-------
+- Fixed the DropDownTag to escape HTML characters from a DropDown option
+- Fixed the LookupTag to use the standard escape() javascript function for handling special characters, instead of invoking the custom toXML() function
+- Fixed the TextTag to use the Form class to determine the FieldMetaData for obtaining the layout. This was necessary since the domain and domainField attributes are defaulted with the values from a surrounding property, which could be different from the Form class
+- Fixed global menu use use onClick instead of href if it is a URL starting with "javascript", this was originally fixed in the submenus and desktops, but to in the top level options
+- The transition-page is not being displayed when clicking on a Button having guarded=true and preprocess=false. It works fine if preprocess=true. This is because the progress-bar invocation is embedded deep inside the preprocess logic.
+  - The progress-bar logic has now been extracted into a new startProgressBar() function of header.js
+  - The new function is called from the original preprocess logic inside header.js
+  - A call to the new function is generated by the ButtonTag for the specific scenario of guarded=true and preprocess=false
+
+Components & Patterns
+---------------------
+- Fixed the LookupComponent2 to obtain the layout for a field using the RulesEngine/FieldMetaData, for formatting the value of that field
+- Fixed buttons on querySaver.jsp, so the are hidden if not appropriate
+
+Persistence
+-----------
+- Modified the DataSource to consume the exceptions thrown when closing ResultSets/Statements, since it is intermittently encountering a 'java.sql.SQLException: Already closed' error
+
+General
+-------
+
+
+What's Deleted/Deprecated
+=====================================================

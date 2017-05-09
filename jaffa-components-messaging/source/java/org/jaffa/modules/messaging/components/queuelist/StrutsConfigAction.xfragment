@@ -1,0 +1,8 @@
+    <!-- QueueList -->
+    <action    path="/jaffa_messaging_queueList"
+               type="org.jaffa.modules.messaging.components.queuelist.ui.QueueListAction"
+               name="jaffa_messaging_queueListForm"
+               validate="false"
+               scope="request">
+    </action>
+

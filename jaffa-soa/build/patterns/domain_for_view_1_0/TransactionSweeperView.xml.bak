@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Domain Creator Meta 1.1//EN" "http://jaffa.sourceforge.net/DTD/domain-creator-meta_1_1.dtd">
+<Root>
+  <DomainObject>TransactionSweeperView</DomainObject>
+  <DomainPackage>org.jaffa.transaction.domain</DomainPackage>
+  <DatabaseTable>J_TRANS_SWEEPER$VIEW</DatabaseTable>
+  <MappingPackage>resources/jdbcengine/jaffa</MappingPackage>
+  <PatternTemplate>patterns/library/domain_creator_with_jpa_1_0/DomainCreatorWithJpaPattern.xml</PatternTemplate>
+  <Description>Holds Transactions created by the application</Description>
+  <LabelToken>[label.Jaffa.Transaction.Transaction]</LabelToken>
+  <Fields>
+    <Field>
+      <Name>Id</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>ID</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <PrimaryKey>T</PrimaryKey>
+      <LabelToken>[label.Jaffa.Transaction.Transaction.Id]</LabelToken>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>CreatedOn</Name>
+      <DataType>org.jaffa.datatypes.DateTime</DataType>
+      <DatabaseFieldName>CREATED_ON</DatabaseFieldName>
+      <DatabaseDataType>DATE_TIME</DatabaseDataType>
+      <LabelToken>[label.Common.CreatedOn]</LabelToken>
+      <StampType>CreatedDateTime</StampType>
+    </Field>
+    <Field>
+      <Name>CreatedBy</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>CREATED_BY</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <LabelToken>[label.Common.CreatedBy]</LabelToken>
+      <IntSize>20</IntSize>
+      <StampType>CreatedUserId</StampType>
+    </Field>
+  </Fields>
+</Root>

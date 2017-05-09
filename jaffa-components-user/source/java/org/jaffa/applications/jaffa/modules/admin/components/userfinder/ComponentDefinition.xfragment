@@ -1,0 +1,6 @@
+    <component id="Jaffa.Admin.UserFinder">
+        <class>org.jaffa.applications.jaffa.modules.admin.components.userfinder.ui.UserFinderComponent</class>
+        <type>ObjectFinder</type>
+    	<mandatory-function name="Jaffa.Admin.User.Inquiry"/>
+    	<mandatory-function name="Jaffa.Admin.User.Details"/>
+    </component>

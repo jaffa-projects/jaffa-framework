@@ -1,0 +1,16 @@
+#----------------------------------------------
+# Jaffa \ QM \ QueueManager
+#----------------------------------------------
+
+# Allowed Dependencies: Material,ContractWarehouse,CatalogVendor,Commons,UserSecurity,Structure
+jawr.js.bundle.QmQueueManager.id=/bundles/jaffa/qm/queuemanager/queueManager.js
+jawr.js.bundle.QmQueueManager.mappings=\
+        dwr:Jaffa_QM_QueueManager, \
+        dwr:Jaffa_Messaging_BusinessEventLogService, \
+        /jaffa/qm/queuemanager/QueueTransactionFinder.js, \
+        /jaffa/qm/queuemanager/QueueTransactionDetail.js, \
+        /jaffa/qm/queuemanager/QueueManagerHelper.js, \
+        /jaffa/qm/queuemanager/QueueManagerList.js, \
+        /jaffa/qm/queuemanager/QueueManagerDetail.js, \
+        /jaffa/qm/queuemanager/main.js
+        

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project [
+  <!ENTITY replace SYSTEM './searchandreplace.xml'>
+  <!ENTITY header SYSTEM './header.xml'>
+]>
+<project basedir=".." default="core" name="UnitTest">
+
+  <target name="init">
+    <!-- Include header.xml -->
+    &header;
+    <mkdir dir="${dist}/unittest" taskname="mkdir/${appname}/UnitTest"/>
+    <!-- ======================================================= -->
+    <!-- ClassPath containing the jaffa deliverables             -->
+    <!-- viz. jaffa.jar and jaffa-tools.jar                      -->
+    <!-- ======================================================= -->
+    <path id="dist.class.path">
+      <fileset dir="${dist.unittest}">
+        <include name="*.jar"/>
+      </fileset>
+      <fileset dir="${dist}/jar">
+        <include name="*.jar"/>
+      </fileset>
+    </path>
+  </target>
+
+
+
+  <!-- ======================================================= -->
+  <!-- Clean up various files and directories.                 -->
+  <!-- ======================================================= -->
+  <target name="clean" depends="init">
+    <delete dir="${dist.unittest}" quiet="true" taskname="delete/${appname}/UnitTest"/>
+  </target>
+
+
+
+  <!-- ======================================================= -->
+  <!-- Compile all UnitTest classes                            -->
+  <!-- ======================================================= -->
+  <target name="compileUnitTest" depends="init">
+    <!-- Ensure that jaffa.jar and jaffa-tools.jar have been created -->
+
+    <mkdir dir="${dist.unittest.classesdir}" taskname="mkdir/${appname}/UnitTest"/>
+    <javac srcdir="${src.unittest.java}" destdir="${dist.unittest.classesdir}" deprecation="${JAVAC.DEPRECATION}" debug="${JAVAC.DEBUG}" taskname="javac/${appname}/UnitTest">
+      <classpath refid="project.class.path"/>
+      <classpath refid="dist.class.path"/>
+    </javac>
+  </target>
+
+
+
+  <!-- ============================================================ -->
+  <!-- Configure jaffa-unittest.jar                                 -->
+  <!-- ============================================================ -->
+  <target name="unitTestJar-configure" depends="init">
+    <mkdir dir="${dist.staging}" taskname="mkdir/${appname}/UnitTest"/>
+    <copy file="${src.unittest.java}/resources/init.xml" todir="${dist.staging}/resources" overwrite="true" taskname="copy/${appname}/UnitTest"/>
+    <replace dir="${dist.staging}" summary="true" taskname="replace/${appname}/UnitTest">
+      &replace;
+    </replace>
+  </target>
+
+
+
+  <!-- ============================================================ -->
+  <!-- Build jaffa-unittest.jar                                     -->
+  <!-- ============================================================ -->
+  <target name="createUnitTestJar" depends="init,compileUnitTest,unitTestJar-configure">
+    <jar jarfile="${dist.unittest}/jaffa-unittest.jar" taskname="jar/${appname}/UnitTest">
+      <fileset dir="${dist.unittest.classesdir}"/>
+      <fileset dir="${src.unittest.java}">
+        <exclude name="**/*.java"/>
+        <exclude name="**/*.class"/>
+        <exclude name="**/.nbattrs"/>
+        <exclude name="**/CVS/**"/>
+        <exclude name="**/init.xml"/>
+      </fileset>
+      <fileset dir="${dist.staging}" includes="resources/init.xml"/>
+    </jar>
+  </target>
+
+
+
+  <!-- ======================================================= -->
+  <!-- Execute all UnitTests                                   -->
+  <!-- ======================================================= -->
+  <target name="executeUnitTest" depends="init,createUnitTestJar">
+    <delete dir="${dist.unittest.reports}" taskname="delete/${appname}/UnitTest"/>
+    <mkdir dir="${dist.unittest.reports}" taskname="mkdir/${appname}/UnitTest"/>
+
+    <!-- Execute the Unit Tests -->
+    <junit printsummary="true" fork="yes" timeout="${unittest.timeout}" taskname="junit/${appname}/UnitTest">
+      <formatter type="xml"/>
+      <batchtest fork="yes" toDir="${dist.unittest.reports}">
+          <fileset dir="${src.unittest.java}">
+            <include name="org/jaffa/persistence/blackboxtests/**/*Test*.java"/>
+            <exclude name="org/jaffa/persistence/blackboxtests/PerformanceTest.java"/>
+            <include name="org/jaffa/presentation/portlet/component/*Test*.java"/>
+            <include name="org/jaffa/security/PolicyManagerTest.java"/>
+            <include name="org/jaffa/security/EncryptionHelperTest.java"/>
+            <include name="org/jaffa/security/TestDataSecurity.java"/>
+            <include name="org/jaffa/datatypes/ConvertDataTypesTest.java"/>
+          </fileset>
+      </batchtest>
+
+      <!-- This jvmarg is needed when using WindowsAuthentication (i.e. integratedSecurity=true) in MS-SQL-SERVER -->
+      <!--<jvmarg value="-Djava.library.path=C:\Microsoft SQL Server JDBC Driver\sqljdbc_<version>\enu\auth\x64"/>-->
+
+      <!-- The following jvmargs are needed to debug UnitTests
+      <jvmarg value="-Xdebug"/>
+      <jvmarg value="-Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=y"/>
+      -->
+
+      <classpath refid="project.class.path"/>
+      <classpath refid="dist.class.path"/>
+
+      <!-- Hack to get EncryptionHelperTest.testCreateKey() working -->
+      <classpath path="."/>
+    </junit>
+
+    <!-- Now create the Unit Test Report -->
+    <junitreport todir="${dist.unittest.reports}" taskname="junitreport/${appname}/UnitTest">
+      <fileset dir="${dist.unittest.reports}">
+        <include name="TEST-*.xml"/>
+      </fileset>
+      <report format="frames" todir="${dist.unittest.reports.html}"/>
+    </junitreport>
+  </target>
+
+
+
+  <!-- ======================================================= -->
+  <!-- Default Task                                            -->
+  <!-- Execute all UnitTests                                   -->
+  <!-- ======================================================= -->
+  <target name="core" depends="init">
+    <!-- Ensure that all the jaffa*.jars have been created -->
+    <ant antfile="${project.build}/build.xml" target="build" taskname="ant/${appname}/UnitTest" inheritAll='false'/>
+
+    <antcall target="executeUnitTest" taskname="antcall/${appname}/UnitTest"/>
+  </target>
+
+</project>

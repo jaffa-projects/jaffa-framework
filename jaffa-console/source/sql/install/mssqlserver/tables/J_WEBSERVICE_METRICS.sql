@@ -1,0 +1,21 @@
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE "J_WEBSERVICE_METRICS"(
+        "ID"          VARCHAR(80) NOT NULL,
+        "ENDPOINT_NAME"          VARCHAR(300),
+        "ENDPOINT_ADDRESS"          VARCHAR(300),
+        "IP_ADDRESS"          VARCHAR(20),
+        "PORT"          VARCHAR(10),
+        "START_TIME"          DATETIME,
+        "STOP_TIME"          DATETIME,
+        "REQUEST_COUNT"          NUMERIC,
+        "RESPONSE_COUNT"          NUMERIC,
+        "FAULT_COUNT"          NUMERIC,
+        "MIN_PROCESSING_TIME"          VARCHAR(20),
+        "MAX_PROCESSING_TIME"          VARCHAR(20),
+        "AVG_PROCESSING_TIME"          VARCHAR(20),
+        "CREATED_ON"          DATETIME,
+    CONSTRAINT "J_WEBSERVICE_METRICSP1" PRIMARY KEY("ID")
+)
+GO

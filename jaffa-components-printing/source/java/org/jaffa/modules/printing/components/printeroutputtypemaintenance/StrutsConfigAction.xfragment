@@ -1,0 +1,6 @@
+    <action    path="/jaffa_printing_printerOutputTypeMaintenance"
+               type="org.jaffa.modules.printing.components.printeroutputtypemaintenance.ui.PrinterOutputTypeMaintenanceAction"
+               name="jaffa_printing_printerOutputTypeMaintenanceForm"
+               validate="false"
+               scope="request">
+    </action>

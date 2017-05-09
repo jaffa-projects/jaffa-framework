@@ -1,0 +1,8 @@
+    <!-- UserTimeEntryLookup -->
+    <action    path="/usertimeentry_userTimeEntryLookup"
+               type="org.jaffa.applications.test.modules.time.components.usertimeentrylookup.ui.UserTimeEntryLookupAction"
+               name="usertimeentry_userTimeEntryLookupForm"
+               validate="false"
+               scope="request">
+    </action>
+

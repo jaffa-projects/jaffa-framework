@@ -1,0 +1,8 @@
+    <!-- AttachmentFinder -->
+    <action    path="/jaffa_attachment_attachmentFinder"
+               type="org.jaffa.components.attachment.components.attachmentfinder.ui.AttachmentFinderAction"
+               name="jaffa_attachment_attachmentFinderForm"
+               validate="false"
+               scope="request">
+    </action>
+

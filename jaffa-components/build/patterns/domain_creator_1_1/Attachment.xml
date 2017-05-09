@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Domain Creator Meta 1.1//EN" "http://jaffa.sourceforge.net/DTD/domain-creator-meta_1_1.dtd">
+<Root>
+  <DomainObject>Attachment</DomainObject>
+  <DomainPackage>org.jaffa.components.attachment.domain</DomainPackage>
+  <DatabaseTable>J_ATTACHMENTS</DatabaseTable>
+  <MappingPackage>resources/jdbcengine/jaffa</MappingPackage>
+  <PatternTemplate>patterns/library/domain_creator_1_1/DomainCreatorPattern.xml</PatternTemplate>
+  <DeleteDomainObject>AttachmentDelete</DeleteDomainObject>
+  <DeleteDomainPackage>org.jaffa.components.attachment.domain</DeleteDomainPackage>
+  <Description>Holds one or more attachments for any domain object</Description>
+  <LabelToken>[label.Jaffa.Attachment.Attachment]</LabelToken>
+  <Fields>
+    <Field>
+      <Name>AttachmentId</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>ATTACHMENT_ID</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <PrimaryKey>T</PrimaryKey>
+      <Description>Technical Key for an Attachment</Description>
+      <LabelToken>[label.Jaffa.Attachment.Attachment.AttachmentId]</LabelToken>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>DocumentReferenceId</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>DOCUMENT_REFERENCE_ID</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <PrimaryKey>F</PrimaryKey>
+      <Description>Document Reference Id for Attachment</Description>
+      <LabelToken>[label.Jaffa.Attachment.Attachment.DocumentReferenceId]</LabelToken>
+      <IntSize>80</IntSize>
+    </Field>	
+    <Field>
+      <Name>SerializedKey</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>SERIALIZED_KEY</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Serialized key of the domain object for which an Attachment exists</Description>
+      <LabelToken>[label.Jaffa.Attachment.Attachment.SerializedKey]</LabelToken>
+      <Mandatory>T</Mandatory>
+      <IntSize>500</IntSize>
+    </Field>
+    <Field>
+      <Name>OriginalFileName</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>ORIGINAL_FILE_NAME</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Original File Name for an Attachment</Description>
+      <LabelToken>[label.Jaffa.Attachment.Attachment.OriginalFileName]</LabelToken>
+      <IntSize>255</IntSize>
+    </Field>
+    <Field>
+      <Name>AttachmentType</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>ATTACHMENT_TYPE</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Can be 'L'ocalLink, 'W'ebLink or 'E'mbedded</Description>
+      <LabelToken>[label.Jaffa.Attachment.Attachment.AttachmentType]</LabelToken>
+      <IntSize>1</IntSize>
+    </Field>
+    <Field>
+      <Name>ContentType</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>CONTENT_TYPE</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Content type for an Attachment. Example 'text/plain', 'text/html', etc.</Description>
+      <LabelToken>[label.Jaffa.Attachment.Attachment.ContentType]</LabelToken>
+      <IntSize>100</IntSize>
+    </Field>
+    <Field>
+      <Name>Description</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>DESCRIPTION</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Description for an attachment</Description>
+      <LabelToken>[label.Jaffa.Attachment.Attachment.Description]</LabelToken>
+      <IntSize>100</IntSize>
+    </Field>
+    <Field>
+      <Name>Remarks</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>REMARKS</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Remarks for an attachment</Description>
+      <LabelToken>[label.Jaffa.Attachment.Attachment.Remarks]</LabelToken>
+      <IntSize>255</IntSize>
+    </Field>
+    <Field>
+      <Name>SupercededBy</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>SUPERCEDED_BY</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>The AttachmentId of an attachment that supercedes another attachment</Description>
+      <LabelToken>[label.Jaffa.Attachment.Attachment.SupercededBy]</LabelToken>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>CreatedOn</Name>
+      <DataType>org.jaffa.datatypes.DateTime</DataType>
+      <DatabaseFieldName>CREATED_ON</DatabaseFieldName>
+      <DatabaseDataType>DATE_TIME</DatabaseDataType>
+      <LabelToken>[label.Common.CreatedOn]</LabelToken>
+      <StampType>CreatedDateTime</StampType>
+    </Field>
+    <Field>
+      <Name>CreatedBy</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>CREATED_BY</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <LabelToken>[label.Common.CreatedBy]</LabelToken>
+      <IntSize>20</IntSize>
+      <StampType>CreatedUserId</StampType>
+    </Field>
+    <Field>
+      <Name>LastChangedOn</Name>
+      <DataType>org.jaffa.datatypes.DateTime</DataType>
+      <DatabaseFieldName>LAST_CHANGED_ON</DatabaseFieldName>
+      <DatabaseDataType>DATE_TIME</DatabaseDataType>
+      <LabelToken>[label.Common.LastChangedOn]</LabelToken>
+      <StampType>LastUpdatedDateTime</StampType>
+    </Field>
+    <Field>
+      <Name>LastChangedBy</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>LAST_CHANGED_BY</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <LabelToken>[label.Common.LastChangedBy]</LabelToken>
+      <IntSize>20</IntSize>
+      <StampType>LastUpdatedUserId</StampType>
+    </Field>
+    <Field>
+      <Name>Data</Name>
+      <DataType>byte[]</DataType>
+      <DatabaseFieldName>DATA</DatabaseFieldName>
+      <DatabaseDataType>BLOB</DatabaseDataType>
+      <Description>The Embedded Attachment</Description>
+      <LabelToken>[label.Jaffa.Attachment.Attachment.Data]</LabelToken>
+    </Field>
+    <Field>
+      <Name>VersionNumber</Name>
+      <DataType>java.lang.Long</DataType>
+      <DatabaseFieldName>VERSION_NUMBER</DatabaseFieldName>
+      <DatabaseDataType>INTEGER</DatabaseDataType>
+      <LabelToken>[label.Jaffa.Attachment.AttachmentDelete.VersionNumber]</LabelToken>
+      <IntSize>10</IntSize>
+      <Ignore>false</Ignore>
+    </Field>    
+  </Fields>
+</Root>

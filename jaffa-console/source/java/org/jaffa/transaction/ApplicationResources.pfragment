@@ -1,0 +1,25 @@
+title.Jaffa.Transaction.TransactionFinder=[label.Jaffa.Transaction.Transaction] Admin Desktop
+title.Jaffa.Transaction.TransactionMaintenance=[label.Jaffa.Transaction.Transaction] Admin
+title.Jaffa.Transaction.TransactionFinder.CriteriaPanel=[label.Jaffa.Transaction.Transaction] Criteria
+title.Jaffa.Transaction.TransactionFinder.ResultsPanel=[label.Jaffa.Transaction.Transaction] List
+title.Jaffa.Transaction.TransactionFinder.Fields=[label.Jaffa.Transaction.Transaction] Fields
+
+label.Jaffa.Transaction.TransactionFinder.ResultsPanel.noSelectionError=No rows are selected.
+label.Jaffa.Transaction.TransactionFinder.ResultsPanel.DeleteError=[label.Jaffa.Transaction.Transaction] with status = {0} cannot be deleted. Please unselect those transactions before proceed.
+label.Jaffa.Transaction.TransactionFinder.ResultsPanel.RetryError=Only [label.Jaffa.Transaction.Transaction] with (E)Error status may be retried.
+label.Jaffa.Transaction.TransactionFinder.ResultsPanel.DeleteSuccess=The selected [label.Jaffa.Transaction.Transaction](s) are successfully deleted.
+label.Jaffa.Transaction.TransactionFinder.ResultsPanel.RetrySuccess=The selected [label.Jaffa.Transaction.Transaction](s) are successfully retried.
+
+label.Jaffa.Transaction.TransactionFinder.DeleteConfirm=Are you sure to delete the selected [label.Jaffa.Transaction.Transaction](s)?
+
+title.Jaffa.Transaction.TransactionMaintenance.Maintenance=[label.Jaffa.Transaction.Transaction] [title.Jaffa.Maintenance]
+label.Jaffa.Transaction.TransactionMaintenance.DetailTab=Details
+label.Jaffa.Transaction.TransactionMaintenance.EventLogTab=Event Log
+label.Jaffa.Transaction.TransactionMaintenance.DependencyTab=Dependencies
+label.Jaffa.Transaction.TransactionMaintenance.PayloadTab=Internal Payload
+
+label.Jaffa.Transaction.TransactionMaintenance.DeletePromptMessage=[label.Common.maintenance.confirmDeletePrefix] [label.Jaffa.Transaction.Transaction]?
+label.Jaffa.Transaction.TransactionMaintenance.DeleteSuccess=This [label.Jaffa.Transaction.Transaction] record has been successfully deleted.
+label.Jaffa.Transaction.TransactionMaintenance.RetryInvalidStatusException=You can only retry a transaction that has a status of Error
+
+label.Jaffa.Audit.TransactionFinder.DomainField.Combobox.noSelection=- No Selection -

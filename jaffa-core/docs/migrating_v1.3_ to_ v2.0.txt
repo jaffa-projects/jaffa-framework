@@ -1,0 +1,42 @@
+Changes to widgets in Jaffa V2.0
+
+
+Changes to the Folding Section Widget :- 
+
+The CSS structure for the folding section widget has been changed , it now uses the following tags. They can be found by default in the FoldingSection.CSS file in JAFFA.
+
+td .sectionheader {}
+This controls the look of the header row of the folding section.
+
+td .sectiontitle {}
+This controls the look of the text cell of the titie.
+
+td .outer {}
+This controls the look and feel of the main body cell of the folding section.
+
+Changes to the Edit Box Widget :- 
+
+The editbox widget now supports adding a mandatory icon to the front of the edit box and/or the end of the the edit box as well as allowing the color properties of the editbox itself to be changed. The metadata passed into the model will now govern if the CSS tags are written to the generated HTML. IF you do not wish to support any of these new visual displays for mandatory status, then include the CSS references into your Main CSS and put a Display:none; attribute to it.
+
+editboxMandatoryPrefix {} (before editbox)
+
+editboxMandatorySuffix {}(after editbox)
+
+WidgetMandatoryEditBox {} (input fields style value)
+
+Same applies for DateTime Widget :- 
+
+datetimeMandatoryPrefix {} (before input box)
+
+datetimeMandatorySuffix  {} (after input box)
+
+WidgetMandatoryDateTime {} (input fields style value)
+
+Same applies for DropDown Widget :- 
+
+dropdownMandatoryPrefix {} (before dropdown)
+
+dropdownMandatorySuffix  {} (after dropdown)
+
+
+

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project basedir=".." default="nothing" name="Generate">
+
+  <import file="${basedir}/build/build.xml"/>
+
+  <target name="business-functions_1_0">
+    <md.xjc schemaFileName="${src.java}/org/jaffa/security/businessfunctionsdomain/business-functions_1_0.xsd"/>
+  </target>
+
+  <target name="security-roles_1_0">
+    <md.xjc schemaFileName="${src.java}/org/jaffa/security/securityrolesdomain/security-roles_1_0.xsd"/>
+  </target>
+
+  <target name="component-definitions_1_0">
+    <md.xjc schemaFileName="${src.java}/org/jaffa/presentation/portlet/component/componentdomain/component-definitions_1_1.xsd"/>
+  </target>
+
+  <target name="user-grid-layout_1_0">
+    <md.xjc schemaFileName="${src.java}/org/jaffa/presentation/portlet/widgets/controller/usergriddomain/user-grid-layout_1_0.xsd"/>
+  </target>
+
+  <target name="jdbc-engine-init_1_0">
+    <md.xjc schemaFileName="${src.java}/org/jaffa/persistence/engines/jdbcengine/configservice/initdomain/jdbc-engine-init_1_0.xsd"/>
+  </target>
+
+  <target name="navigation_1_0">
+    <md.xjc schemaFileName="${src.java}/org/jaffa/components/navigation/navigation_1_0.xsd"/>
+  </target>
+
+  <target name="all" depends="business-functions_1_0, security-roles_1_0, component-definitions_1_0, user-grid-layout_1_0, jdbc-engine-init_1_0, navigation_1_0"/>
+
+  <target name="nothing">
+    <echo>
+        This is the default task, this prevents the user running this task
+        by mistake and re-generating all the classes. Use the &apos;all&apos;
+        task if this is what you want!
+    </echo>
+  </target>
+
+</project>

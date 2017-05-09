@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project [
+  <!ENTITY replace SYSTEM './searchandreplace.xml'>
+  <!ENTITY header SYSTEM './header.xml'>
+]>
+<project basedir=".." default="core" name="HttpUnitTestApp">
+
+  <target name="init">
+    <!-- Include header.xml -->
+    &header;
+    <!-- ======================================================= -->
+    <!-- ClassPath containing the jaffa deliverables             -->
+    <!-- viz. jaffa.jar and jaffa-tools.jar                      -->
+    <!-- ======================================================= -->
+    <mkdir dir="${dist.httpunittest}" taskname="mkdir/${appname}"/>
+    <path id="dist.class.path">
+      <fileset dir="${dist.httpunittest}">
+        <include name="*.jar"/>
+        <exclude name="catalina*.jar"/>
+      </fileset>
+      <fileset dir="${dist}">
+        <include name="*.jar"/>
+      </fileset>
+    </path>
+  </target>
+
+
+  <!-- ======================================================= -->
+  <!-- Clean up various files and directories.                 -->
+  <!-- ======================================================= -->
+  <target name="clean" depends="init">
+    <delete dir="${dist.httpunittest}" quiet="true" taskname="delete/${appname}"/>
+  </target>
+
+
+    
+  <!-- ======================================================= -->
+  <!-- Compile the HttpUnitTest sample Application classes     -->
+  <!-- ======================================================= -->
+  <target name="compileHttpUnitTestApp" depends="init">
+    <!-- Ensure that jaffa.jar has been created -->
+    <ant antfile="${project.build}/build.xml" target="jar" taskname="jar/JaffaCore"/>
+
+    <!-- Ensure that jaffa-tools.jar has been created -->
+    <ant antfile="${project.build}/build.xml" target="jar-tools" taskname="jar-tools/JaffaCore"/>
+
+    <mkdir dir="${dist.httpunittest.java.classesdir}" taskname="mkdir/${appname}"/>
+    <javac destdir="${dist.httpunittest.java.classesdir}" srcdir="${src.httpunittest.java}" deprecation="${JAVAC.DEPRECATION}" debug="${JAVAC.DEBUG}" taskname="javac/${appname}">
+      <classpath refid="project.class.path"/>
+      <classpath refid="dist.class.path"/>
+    </javac>
+  </target>
+
+
+    
+  <!-- ============================================================ -->
+  <!-- Configure httpunittest.war                                   -->
+  <!-- ============================================================ -->
+  <target name="httpUnitTestAppWar-configure" depends="init">
+    <mkdir dir="${dist.staging}" taskname="mkdir/${appname}"/>
+    <copy file="${src.httpunittest.java}/resources/init.xml" todir="${dist.staging}/resources" overwrite="true" taskname="copy/${appname}"/>
+    <replace dir="${dist.staging}" summary="true" taskname="replace/${appname}">
+      &replace;
+    </replace>
+  </target>
+
+
+    
+  <!-- ============================================================ -->
+  <!-- Build httpunittest.war                                       -->
+  <!-- ============================================================ -->
+  <target name="createHttpUnitTestAppWar" depends="init,compileHttpUnitTestApp,httpUnitTestAppWar-configure,build-struts,build-components,build-tiles">
+    <!-- Ensure that jaffa-html.zip has been created -->
+    <ant antfile="${project.build}/build.xml" target="JaffaHtmlZip" taskname="ant/${appname}"/>
+
+    <war update="false" warfile="${dist.httpunittest}/httpunittest.war" webxml="${src.httpunittest.html}/WEB-INF/web.xml" taskname="war/${appname}">
+      <fileset dir="${src.httpunittest.html}" excludes="${cvs.excludes},annontation,WEB-INF/web.xml,WEB-INF/struts-config.xml,config/components.xml,**/.nbattrs,WEB-INF/web.warContent,WEB-INF/*.tld,WEB-INF/tiles-defs.xml"/>
+      <fileset dir="${dist.httpunittest.temp}" includes="WEB-INF/struts-config.xml"/>
+      <fileset dir="${dist.httpunittest.temp}" includes="config/components.xml"/>
+      <fileset dir="${dist.httpunittest.temp}" includes="WEB-INF/tiles-defs.xml"/>
+      <classes dir="${src.httpunittest.java}" excludes="${cvs.excludes}">
+        <include name="**/*.properties"/>
+        <include name="**/*.xml"/>
+        <include name="resources/**/*.*"/>
+        <exclude name="resources/tools/**/*.*"/>
+        <exclude name="patterns/**/*.*"/>
+        <exclude name="**/init.xml"/>
+      </classes>
+      <classes dir="${dist.httpunittest.java.classesdir}">
+        <include name="**/*.class"/>
+      </classes>
+      <classes dir="${dist.staging}">
+        <include name="**/init.xml"/>
+      </classes>
+      <lib dir="${project.lib}/runtime">
+        <include name="*.jar"/>
+      </lib>
+      <lib dir="${dist}">
+        <include name="jaffa.jar"/>
+      </lib>
+      <lib dir="${additional.libraries.folder}">
+        <include name="*.jar"/>
+        <exclude name="j2ee.jar"/>
+      </lib>
+      <zipfileset excludes="${cvs.excludes}" includes="**/*.*" src="${dist}/jaffa-html.zip"/>
+    </war>
+  </target>
+
+
+
+  <!-- ======================================================= -->
+  <!-- Build and Deploy Tests To JBoss                         -->
+  <!-- ======================================================= -->
+  <target name="build-deploy" depends="createHttpUnitTestAppWar,deploy"/>
+  <target name="deploy" depends="init">
+    <echo message="Deploying Application" taskname="echo/${appname}"/>
+    <delete file="${env.JBOSS_HOME}/server/default/deploy/JaffaHttpUnitTest/httpunittest.war" taskname="delete/${appname}" quiet="true"/>
+    <delete dir="${env.JBOSS_HOME}/server/default/deploy/JaffaHttpUnitTest/httpunittest.war" taskname="delete/${appname}" quiet="true"/>
+    
+
+    <!-- Use this for a full expanded WAR, delete will fail if server is running -->
+    <unzip src="${dist.httpunittest}/httpunittest.war" dest="${env.JBOSS_HOME}/server/default/deploy/JaffaHttpUnitTest/httpunittest.war"/>
+    
+    <!-- Use this to hot deploy complete WAR 
+    <copy file="${dist.httpunittest}/httpunittest.war" todir="${env.JBOSS_HOME}/server/default/deploy/JaffaHttpUnitTest/" taskname="copy/${appname}"/>
+    -->
+  </target>
+
+  
+    
+  <!-- ============================================================ -->
+  <!-- ReDeploy httpunittest.war in Tomcat3
+      1- Stop Tomcat
+      2- Create a new WAR
+      3- Copy the WAR to the Tomcat webapps folder
+      4- Start Tomcat
+  -->
+  <!-- ============================================================ -->
+  <target name="redeploy-Tomcat3" depends="init">
+    <antcall target="stop-Tomcat3" taskname="antcall/${appname}"/>
+    <sleep seconds="${dist.httpunittest.tomcat.stop.sleep}" taskname="sleep/${appname}"/>
+    <antcall target="createHttpUnitTestAppWar" taskname="antcall/${appname}"/>
+    <antcall target="deploy-Tomcat3" taskname="antcall/${appname}"/>
+  </target>
+
+
+    
+  <!-- ============================================================ -->
+  <!-- ReDeploy httpunittest.war in Tomcat4
+      1- Stop Tomcat
+      2- Create a new WAR
+      3- Copy the WAR to the Tomcat webapps folder
+      4- Start Tomcat
+  -->
+  <!-- ============================================================ -->
+  <target name="redeploy-Tomcat4" depends="init">
+    <antcall target="stop-Tomcat4" taskname="antcall/${appname}"/>
+    <sleep seconds="${dist.httpunittest.tomcat.stop.sleep}" taskname="sleep/${appname}"/>
+    <antcall target="createHttpUnitTestAppWar" taskname="antcall/${appname}"/>
+    <antcall target="deploy-Tomcat4" taskname="antcall/${appname}"/>
+  </target>
+
+
+    
+  <!-- ======================================================= -->
+  <!-- Compile all HttpUnitTest classes                        -->
+  <!-- ======================================================= -->
+  <target name="compileHttpUnitTest" depends="init,compileHttpUnitTestApp">
+    <mkdir dir="${dist.httpunittest.tests.classesdir}" taskname="mkdir/${appname}"/>
+    <javac srcdir="${src.httpunittest.tests}" destdir="${dist.httpunittest.tests.classesdir}" taskname="javac/${appname}">
+      <classpath refid="project.class.path"/>
+      <classpath refid="dist.class.path"/>
+      <classpath path="${dist.httpunittest.java.classesdir}"/>
+    </javac>
+  </target>
+
+
+    
+  <!-- ============================================================ -->
+  <!-- Build jaffa-httpunittest.jar                                 -->
+  <!-- ============================================================ -->
+  <target name="createHttpUnitTestJar" depends="init,compileHttpUnitTest">
+    <jar jarfile="${dist.httpunittest}/jaffa-httpunittest.jar" taskname="jar/${appname}">
+      <fileset dir="${dist.httpunittest.tests.classesdir}"/>
+      <fileset dir="${src.httpunittest.tests}">
+        <exclude name="**/*.java"/>
+        <exclude name="**/*.class"/>
+        <exclude name="**/.nbattrs"/>
+        <exclude name="**/CVS/**"/>
+      </fileset>
+    </jar>
+  </target>
+
+
+    
+  <!-- ======================================================= -->
+  <!-- Execute all HttpUnitTests                               -->
+  <!-- ======================================================= -->
+  <target name="executeHttpUnitTest" depends="init,createHttpUnitTestJar">
+    <mkdir dir="${dist.httpunittest.reports}" taskname="mkdir/${appname}"/>
+
+    <!-- Execute the Http Unit Tests -->
+    <junit printsummary="true" fork="yes" taskname="junit/${appname}">
+      <formatter type="xml"/>
+      <test name="AllTests" toDir="${dist.httpunittest.reports}"/>
+      <classpath refid="project.class.path"/>
+      <classpath refid="dist.class.path"/>
+    </junit>
+
+    <!-- Now create the Http Unit Test Report -->
+    <junitreport todir="${dist.httpunittest.reports}" taskname="junitreport/${appname}">
+      <fileset dir="${dist.httpunittest.reports}">
+        <include name="TEST-*.xml"/>
+      </fileset>
+      <report format="frames" todir="${dist.httpunittest.reports.html}"/>
+    </junitreport>
+        
+  </target>
+
+
+        
+  <!-- ============================================================ -->
+  <!-- Stop Tomcat3                                                 -->
+  <!-- ============================================================ -->
+  <target name="stop-Tomcat3" depends="init">
+    <exec executable="${env.TOMCAT_HOME}/bin/shutdown.${SCRIPT.EXT}" taskname="exec/${appname}"/>
+  </target>
+
+
+            
+  <!-- ============================================================ -->
+  <!-- Deploy httpunittest.war in Tomcat3                           -->
+  <!-- ============================================================ -->
+  <target name="deploy-Tomcat3" depends="init">
+    <echo message="Deploying Application" taskname="echo/${appname}"/>
+    <delete file="${env.TOMCAT_HOME}/webapps/httpunittest.war" taskname="delete/${appname}"/>
+    <delete dir="${env.TOMCAT_HOME}/webapps/httpunittest" taskname="delete/${appname}"/>
+    <copy file="${dist.httpunittest}/httpunittest.war" todir="${env.TOMCAT_HOME}/webapps" taskname="copy/${appname}"/>
+
+    <echo message="Starting Tomcat" taskname="echo/${appname}"/>
+    <exec executable="${env.TOMCAT_HOME}/bin/startup.${SCRIPT.EXT}" taskname="exec/${appname}"/>
+  </target>
+
+
+  <!-- ============================================================ -->
+  <!-- Stop Tomcat4                                                 -->
+  <!-- ============================================================ -->
+  <target name="stop-Tomcat4" depends="init">
+    <exec executable="${env.CATALINA_HOME}/bin/shutdown.${SCRIPT.EXT}" taskname="exec/${appname}"/>
+  </target>
+
+
+    
+  <!-- ============================================================ -->
+  <!-- Deploy httpunittest.war in Tomcat4                           -->
+  <!-- ============================================================ -->
+  <target name="deploy-Tomcat4" depends="init">
+    <echo message="Deploying Application" taskname="echo/${appname}"/>
+    <delete file="${env.CATALINA_HOME}/webapps/httpunittest.war" taskname="delete/${appname}"/>
+    <delete dir="${env.CATALINA_HOME}/webapps/httpunittest" taskname="delete/${appname}"/>
+    <copy file="${dist.httpunittest}/httpunittest.war" todir="${env.CATALINA_HOME}/webapps" taskname="copy/${appname}"/>
+
+    <echo message="Starting Tomcat" taskname="echo/${appname}"/>
+    <exec executable="${env.CATALINA_HOME}/bin/startup.${SCRIPT.EXT}" taskname="exec/${appname}"/>
+  </target>
+
+
+        
+  <!-- ======================================================= -->
+  <!-- Default Task
+      1- Stop Tomcat4
+      2- Create the httpunittest.war
+      3- Copy the WAR to the Tomcat webapps folder
+      4- Start Tomcat
+      5- Create the jaffa-httpunittest.jar
+      6- Execute the Tests in jaffa-httpunittest.jar
+      7- Stop Tomcat4
+  -->
+  <!-- ======================================================= -->
+  <target name="core" depends="init">
+    <antcall target="stop-Tomcat4" taskname="antcall/${appname}"/>
+    <sleep seconds="${dist.httpunittest.tomcat.stop.sleep}" taskname="sleep/${appname}"/>
+    <antcall target="createHttpUnitTestAppWar" taskname="antcall/${appname}"/>
+    <parallel>
+      <antcall target="deploy-Tomcat4" taskname="antcall/${appname}"/>
+      <sequential>
+        <sleep seconds="${dist.httpunittest.tomcat.start.sleep}" taskname="sleep/${appname}"/>
+        <antcall target="executeHttpUnitTest" taskname="antcall/${appname}"/>
+        <antcall target="stop-Tomcat4" taskname="antcall/${appname}"/>
+      </sequential>
+    </parallel>
+  </target>
+
+
+  <!-- Merge in all the auto-generated StrutsConfigAction.xfragment, StrutsConfigAction.xfragment, StrutsConfigGlobalForward.xfragment stubs into struts-config.xml -->
+  <target name="build-struts" depends="init">
+    <!-- copy the struts-config.xml file to the dist/httpunittest/temp/WEB-INF folder -->
+    <copy file="${src.httpunittest.html}/WEB-INF/struts-config.xml" overwrite="true" todir="${dist.httpunittest.temp}/WEB-INF" taskname="copy/${appname}"/> 
+
+    <!-- Now merge the fragment files into the temporary file -->
+    <java classname="org.jaffa.tools.build.ConfigFileUpdate" failonerror="true" fork="yes" taskname="java/${appname}">
+      <classpath path="${dist.httpunittest.temp}"/>
+      <classpath refid="project.class.path"/>
+      <classpath><fileset dir="${dist}" includes="*.jar"/></classpath>
+
+      <!-- The name of the configuration file to generate. This file must be found in the classpath -->
+      <arg value="WEB-INF/struts-config.xml"/>
+
+      <!-- Path to search for fragments to include -->
+      <arg value="${src.httpunittest.java}"/>
+    </java>
+  </target>
+
+
+  
+
+  <!-- Merge in all the auto-generated ComponentDefinition.xfragment stubs into components.xml -->
+  <target name="build-components" depends="init">
+    <!-- copy the components.xml file to the dist/httpunittest/classes/resources folder -->
+    <copy file="${src.httpunittest.html}/config/components.xml" overwrite="true" todir="${dist.httpunittest.temp}/config" taskname="copy/${appname}"/>
+
+    <!-- Now merge the fragment files into the temporary file -->
+    <java classname="org.jaffa.tools.build.ConfigFileUpdate" failonerror="true" fork="yes" taskname="java/${appname}">
+      <classpath path="${dist.httpunittest.temp}"/>
+      <classpath refid="project.class.path"/>
+      <classpath><fileset dir="${dist}" includes="*.jar"/></classpath>
+
+      <!-- The name of the properties file to generate -->
+      <arg value="config/components.xml"/>
+
+      <!-- Path to search for fragments to include -->
+      <arg value="${src.httpunittest.java}"/>
+    </java>
+  </target>
+
+
+  
+
+  <!-- Merge in all the auto-generated ComponentTilesDefinitions.xfragment stubs into tiles-defs.xml -->
+  <target name="build-tiles" depends="init">
+    <!-- copy the tiles-defs.xml file to the dist/httpunittest/temp/WEB-INF folder -->
+    <copy file="${src.httpunittest.html}/WEB-INF/tiles-defs.xml" overwrite="true" todir="${dist.httpunittest.temp}/WEB-INF" taskname="copy/${appname}"/> 
+
+    <!-- Now merge the fragment files into the temporary file -->
+    <java classname="org.jaffa.tools.build.ConfigFileUpdate" failonerror="true" fork="yes" taskname="java/${appname}">
+      <classpath path="${dist.httpunittest.temp}"/>
+      <classpath refid="project.class.path"/>
+      <classpath><fileset dir="${dist}" includes="*.jar"/></classpath>
+
+      <!-- The name of the configuration file to generate. This file must be found in the classpath -->
+      <arg value="WEB-INF/tiles-defs.xml"/>
+
+      <!-- Path to search for fragments to include -->
+      <arg value="${src.httpunittest.java}"/>
+    </java>
+  </target>
+
+
+  <!-- ============================================================ -->
+  <!--                                                              -->
+  <!-- ============================================================ -->
+  <target name="fast-JSP-Deploy" depends="init">
+    <echo message="Copying JSP Files" taskname="echo/${appname}"/>
+    <copy todir="${env.CATALINA_HOME}/webapps/httpunittest/" taskname="copy/httpunittest">
+      <fileset dir="${src.html}" includes="**/*.jsp"/>
+      <fileset dir="${src.html}" includes="**/*.js"/>
+      <fileset dir="${src.html}" includes="**/*.css"/>
+      <fileset dir="${src.httpunittest.html}" includes="**/*.jsp"/>
+      <fileset dir="${src.httpunittest.html}" includes="**/*.js"/>
+      <fileset dir="${src.httpunittest.html}" includes="**/*.css"/>
+    </copy>
+  </target>
+
+
+</project>

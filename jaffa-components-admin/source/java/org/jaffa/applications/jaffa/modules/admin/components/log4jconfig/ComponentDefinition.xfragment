@@ -1,0 +1,5 @@
+    <component id="Jaffa.Admin.Log4jConfig">
+	<class>org.jaffa.applications.jaffa.modules.admin.components.log4jconfig.ui.Log4jConfigComponent</class>
+	<type>Custom</type>
+        <mandatory-function name="Jaffa.Admin.Log4j"/>
+    </component>

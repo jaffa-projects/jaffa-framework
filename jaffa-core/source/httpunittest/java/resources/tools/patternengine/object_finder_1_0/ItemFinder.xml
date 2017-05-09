@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Object Finder Meta 1.0//EN" "http://jaffa.sourceforge.net/DTD/object-finder-meta_1_0.dtd">
+
+
+<Root>
+	<PatternTemplate>patterns/library/object_finder_1_0/ObjectFinderPattern.xml</PatternTemplate>
+	<Application>Test</Application>
+	<Module>Material</Module>
+	<Component>ItemFinder</Component>
+    	<BasePackage>org.jaffa.applications.test.modules.material</BasePackage>
+   	<DomainObject>Item</DomainObject>
+    	<DomainPackage>org.jaffa.applications.test.modules.material.domain</DomainPackage>
+        
+	<CriteriaFields>
+		<CriteriaField>
+			<Name>SegregationCode</Name>
+			<DataType>String</DataType>
+                        <Display>true</Display>			
+                        <DomainField>Sc</DomainField>
+		</CriteriaField>
+		<CriteriaField>
+			<Name>PartNo</Name>
+			<DataType>String</DataType>
+                        <Display>true</Display>			
+                        <DomainField>Part</DomainField>
+		</CriteriaField>
+		<CriteriaField>
+			<Name>Serial</Name>
+			<DataType>String</DataType>
+                        <Display>true</Display>			
+                        <DomainField>Serial</DomainField>
+		</CriteriaField>
+		<CriteriaField>
+			<Name>Qty</Name>
+			<DataType>Decimal</DataType>
+                        <Display>true</Display>
+                        <DomainField>Qty</DomainField>
+		</CriteriaField>
+	</CriteriaFields>
+        
+	<ResultsFields>
+		<ResultsField>
+			<Name>SegregationCode</Name>
+			<DataType>String</DataType>
+                        <Display>true</Display>
+			<Label>Segregation Code</Label>
+			<Width>300px</Width>
+                        <DomainField>Sc</DomainField>
+		</ResultsField>
+                
+		<ResultsField>
+			<Name>ItemId</Name>
+			<DataType>String</DataType>
+                        <Display>false</Display>
+			<Label>Item Id</Label>
+			<Width>300px</Width>
+                        <DomainField>ItemId</DomainField>
+		</ResultsField>
+                
+		<ResultsField>
+			<Name>PartNo</Name>
+			<DataType>String</DataType>
+                        <Display>true</Display>
+			<Label>Part No</Label>
+			<Width>300px</Width>
+                        <DomainField>Part</DomainField>
+		</ResultsField>
+                
+		<ResultsField>
+			<Name>Serial</Name>
+			<DataType>String</DataType>
+                        <Display>true</Display>
+			<Label>Serial</Label>
+			<Width>300px</Width>
+                        <DomainField>Serial</DomainField>
+		</ResultsField>
+		<ResultsField>
+			<Name>Qty</Name>
+			<DataType>Decimal</DataType>
+                        <Display>true</Display>
+			<Label>Qty</Label>
+			<Width>300px</Width>
+                        <DomainField>Qty</DomainField>
+		</ResultsField>
+	</ResultsFields>
+
+        <KeyFields>
+            <KeyField>
+                <ResultsFieldName>ItemId</ResultsFieldName>
+                <DataType>String</DataType>
+                <FieldNameInTargetComponent>ItemId</FieldNameInTargetComponent>
+            </KeyField>
+        </KeyFields>
+
+</Root>

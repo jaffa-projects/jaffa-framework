@@ -1,0 +1,15 @@
+label.Jaffa.Transaction.TransactionFinder.DeleteConfirm
+label.Jaffa.Transaction.TransactionFinder.ResultsPanel.DeleteError
+label.Jaffa.Transaction.TransactionFinder.ResultsPanel.DeleteSuccess
+label.Jaffa.Transaction.TransactionFinder.ResultsPanel.RetryError
+label.Jaffa.Transaction.TransactionFinder.ResultsPanel.RetrySuccess
+label.Jaffa.Transaction.TransactionFinder.ResultsPanel.noSelectionError
+label.Jaffa.Widgets.Button.Delete
+label.JaffaRIA.Button.Retry
+label.product.button.erroraction.selectAtLeastOneRecord
+label.product.button.erroraction.selectOneRecord
+title.Jaffa.Transaction.TransactionFinder
+title.Jaffa.Transaction.TransactionFinder.CriteriaPanel
+title.Jaffa.Transaction.TransactionFinder.Fields
+title.Jaffa.Transaction.TransactionFinder.ResultsPanel
+title.jaffaRIA.Success

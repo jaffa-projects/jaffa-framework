@@ -1,0 +1,8 @@
+    <!-- FormGroupLookup -->
+    <action    path="/jaffa_printing_formGroupLookup"
+               type="org.jaffa.modules.printing.components.formgrouplookup.ui.FormGroupLookupAction"
+               name="jaffa_printing_formGroupLookupForm"
+               validate="false"
+               scope="request">
+    </action>
+

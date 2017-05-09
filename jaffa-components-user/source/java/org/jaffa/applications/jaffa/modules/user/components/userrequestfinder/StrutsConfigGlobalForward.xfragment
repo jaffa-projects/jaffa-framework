@@ -1,0 +1,5 @@
+    <forward name="user_userRequestFinderCriteria" path="jaffa.user.userrequestfinder.criteria"/>
+    <forward name="user_userRequestFinderResults" path="jaffa.user.userrequestfinder.results"/>
+    <forward name="user_userRequestFinderConsolidatedCriteriaAndResults" path="jaffa.user.userrequestfinder.consolidatedCriteriaAndResults"/>
+    <forward name="user_userRequestFinderExcelResults" path="jaffa.user.userrequestfinder.FinderExcelLayout"/>
+    <forward name="user_userRequestFinderXmlResults" path="jaffa.user.userrequestfinder.FinderXmlLayout"/>

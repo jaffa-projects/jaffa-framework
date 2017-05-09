@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+<!ELEMENT components (component*)>
+<!ELEMENT component (description?, class, type?, mandatory-function*, optional-function*) >
+<!ATTLIST component id CDATA #REQUIRED >
+<!ELEMENT description (#PCDATA) >
+<!ELEMENT type (#PCDATA) >
+<!ELEMENT class (#PCDATA) >
+<!ELEMENT mandatory-function EMPTY>
+<!ATTLIST mandatory-function name CDATA #REQUIRED >
+<!ELEMENT optional-function EMPTY>
+<!ATTLIST optional-function name CDATA #REQUIRED >
+

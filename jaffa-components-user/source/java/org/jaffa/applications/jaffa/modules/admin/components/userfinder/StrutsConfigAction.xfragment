@@ -1,0 +1,8 @@
+    <!-- UserFinder -->
+    <action    path="/admin_userFinder"
+               type="org.jaffa.applications.jaffa.modules.admin.components.userfinder.ui.UserFinderAction"
+               name="admin_userFinderForm"
+               validate="false"
+               scope="request">
+    </action>
+

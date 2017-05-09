@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    To make a release use
+        -Dlib.dependent.build=download -Ddo.release=y release-HEAD
+    To build javadocs use
+        -Dlib.dependent.build=download javadoc
+    To run unit tests use
+        -Dlib.dependent.build=lazy test-junit
+    To make a specific release to a known repository    
+        -Dlib.dependent.build=clean -Drepository.publish=c:\.jaffa\repository\downloads -Drelease.version=1.0.0 -Ddo.release=y release-version
+
+  -Dlib.dependent.build=clean
+  -Dlib.dependent.build=dirty
+  -Dlib.dependent.build=lazy clean build
+  -Dlib.dependent.build=download
+  -Dlib.dependent.build=skip jsp-compile
+  -Ddeploy.live=true
+-->
+<project basedir=".." default="build" name="build" xmlns:sonar="antlib:org.sonar.ant" xmlns:ivy="antlib:org.apache.ivy.ant">
+    <property name="imports.basedir" value="${basedir}/../JaffaBuild"/>
+    <property name="shared.version.propfile" value="${imports.basedir}/build/shared.version.properties"/>
+
+    <!-- make sure 'ant-contrib-1.0b1.jar' is in $ANT_HOME$/lib -->
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+
+    <property environment="env"/>
+    <property file="${imports.basedir}/build/global.ant.properties"/>
+    <property file="./build/project.ant.properties"/>
+    <property file="${config.file}"/>
+    <property file="${imports.basedir}/build/shared.ant.properties"/>
+    <property file="${shared.version.propfile}"/>
+    <property file="${basedir}/../BuildMaster/build/common.ant.properties"/>
+
+    <import file="${imports.basedir}/build/code-generator.xml"/>
+    <import file="${imports.basedir}/build/build-master.xml"/>
+    <defaultexcludes add="${cvs.excludes}"/>
+
+    <!-- Define the SonarQube project properties-->
+    <import file="sonar.properties"/>
+
+    <target name="usage">
+        <echo>
+            Usage: build target-name
+
+            Available Module Targets:
+            clean - Delete all working folders, so the next build is from source
+            get-dependencies - Builds all the dependencies, if not built already.
+            compile - Compile all classes
+            jar - Build JAR file for deployment
+            html - Build a ZIP of HTML needed for inclusion in the WAR file
+            build - Build JAR and ZIP
+            javadoc - Generate Javadoc
+
+
+            Additional Parameters
+            -Dlib.dependent.build=[ skip | download | lazy | dirty | clean ]
+        </echo>
+    </target>
+
+    <!-- =============================================================== -->
+    <!-- Generates the JAXB bindings from report-group-acess_1_0.xsd     -->
+    <!-- =============================================================== -->
+    <target name="dwr_2_0">
+        <md.xjc schemaFileName="${src.java}/org/jaffa/dwr/services/configdomain/dwr_2_0.xsd"/>
+    </target>
+
+    <!-- ====================================================================================================== -->
+    <!-- Define the SonarQube target                                                                                   -->
+    <!-- ====================================================================================================== -->
+    <target name="sonar">
+        <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
+            <!-- Update the following line, or put the "sonar-ant-task-*.jar" file in your "$HOME/.ant/lib" folder -->
+            <classpath path="/u01/apache-ant-1.9.1/lib/sonar-ant-task-*.jar"/>
+        </taskdef>
+        <!-- Execute the SonarQube analysis -->
+        <sonar:sonar/>
+    </target>
+
+</project>

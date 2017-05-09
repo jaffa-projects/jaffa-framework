@@ -1,0 +1,3 @@
+        <!-- Jaffa Roles Editor -->
+        <form-bean      name="admin_rolesEditorForm"
+                        type="org.jaffa.applications.jaffa.modules.admin.components.roleseditor.ui.RolesEditorForm"/>

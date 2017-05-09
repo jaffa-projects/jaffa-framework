@@ -1,0 +1,6 @@
+title.Jaffa.Admin.CheckPolicy=Check Policy
+label.Jaffa.Admin.CheckPolicy=Check Policy
+label.Jaffa.Admin.CheckPolicy.Components=Errors in components.xml
+label.Jaffa.Admin.CheckPolicy.Roles=Errors in roles.xml
+label.Jaffa.Admin.CheckPolicy.RoleBF=Current Loaded Policy
+exception.org.jaffa.applications.jaffa.modules.admin.components.checkpolicy.ui.exceptions.CheckPolicyException.fileReadError=Error while reading the business-function Xml File <br>{0}

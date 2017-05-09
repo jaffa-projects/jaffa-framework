@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+  <!-- ================================================= -->
+  <!-- Rules for Domain Object FlexFieldDelete -->
+  <!-- ================================================= -->
+
+  <metadata tag="jaffa.rules" class="org.jaffa.flexfields.domain.FlexFieldDelete">
+
+    <base-domain-info name="org.jaffa.flexfields.domain.FlexField"/>
+    
+    <label>[label.Jaffa.FlexFields.FlexFieldDelete]</label>
+
+    <property name="flexFieldId">
+      <label>[label.Jaffa.FlexFields.FlexFieldDelete.FlexFieldId]</label>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="objectName">
+      <label>[label.Jaffa.FlexFields.FlexField.ObjectName]</label>
+      <mandatory/>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="key1">
+      <label>[label.Jaffa.FlexFields.FlexField.Key1]</label>
+      <mandatory/>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="versionNumber">
+      <label>[label.Jaffa.FlexFields.FlexFieldDelete.VersionNumber]</label>
+      <max-length>10</max-length>
+    </property>
+
+    <property name="deletionCreatedOn">
+      <label>[label.Jaffa.FlexFields.FlexFieldDelete.DeletionCreatedOn]</label>
+    </property>
+
+  </metadata>
+</aop>

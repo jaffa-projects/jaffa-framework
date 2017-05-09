@@ -1,0 +1,25 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the next release. For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+- Moved the 'org.jaffa.soa' package from JaffaCore to the JaffaSOA module.
+- *The servlet-based SOAEventServer has been deprecated. Instead a scheduler-based SOAEventPoller has been created.
+- *Drools has been integrated into the handling of SOAEvents
+  - *The SOAEventPoller writes SOAEventQueueMessages to an "internal" Queue
+  - *The SOAEventHandler handles the SOAEventQueueMessages, by invoking Drools on the messages
+  - *Rules may be written to inspect the SOAEventQueueMessages, and under certain scenarios, publish equivalent SOAEventMessages to a Topic for invoking outbound interfaces
+
+What's Changed / Improvements
+=====================================================
+- The default AgentEventListener used by the RuleAgent writes event logs to System.err, which is highly undesirable. Modified ServiceRulesInterceptor to create a custom AgentEventListener implementation, that logs various events via Log4J.
+
+What's Deleted/Deprecated
+=====================================================
+
+Bug Fixes
+=====================================================
+- Corrected the ServiceRulesInterceptor to invoke an 'update' on an existing FactHandle, instead of modifyRetract+modifyInsert. This ensures that modifications to a Fact activate the necessary rules.

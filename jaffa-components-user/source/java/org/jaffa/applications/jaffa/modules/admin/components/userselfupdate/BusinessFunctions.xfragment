@@ -1,0 +1,3 @@
+    <business-function name="Jaffa.Admin.User.SelfUpdate">
+        <description>Able to run the UserSelfUpdate component</description>
+    </business-function>

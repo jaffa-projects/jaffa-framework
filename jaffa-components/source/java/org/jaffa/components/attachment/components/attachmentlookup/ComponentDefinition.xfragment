@@ -1,0 +1,4 @@
+    <component id="Jaffa.Attachment.AttachmentLookup">
+        <class>org.jaffa.components.attachment.components.attachmentlookup.ui.AttachmentLookupComponent</class>
+        <type>ObjectLookup</type>
+    </component>

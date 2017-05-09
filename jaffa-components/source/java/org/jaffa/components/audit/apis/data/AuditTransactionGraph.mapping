@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="US-ASCII" ?>
+<bean-mapping>
+  <graph-data-object class="org.jaffa.components.audit.apis.data.AuditTransactionGraph"/>
+  <domain-object class="org.jaffa.components.audit.domain.AuditTransaction"/>
+  <map-key-fields>
+    <field gdo="transactionId"/>
+  </map-key-fields>
+  <map-fields>
+    <field gdo="processName"/>
+    <field gdo="subProcessName"/>
+    <field gdo="reason"/>
+    <field gdo="createdBy"/>
+    <field gdo="createdOn"/>
+  </map-fields>
+  <map-aggregate-objects>
+     <field gdo="auditTransactionObjects" do="auditTransactionObjectArray"/>
+  </map-aggregate-objects>
+</bean-mapping>

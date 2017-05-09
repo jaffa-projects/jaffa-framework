@@ -1,0 +1,2 @@
+    <!-- Jaffa Log4j Config -->
+    <forward name="admin_log4jConfig" path="jaffa.admin.log4jconfig"/>

@@ -1,0 +1,4 @@
+    <!-- Jaffa FileExplorer Config -->
+    <forward name="jaffa_admin_fileExplorer" path="jaffa.admin.fileexplorer"/>
+    <forward name="jaffa_admin_fileExplorer_download" path="/jaffa/admin/fileexplorer/download"/>
+

@@ -1,0 +1,3 @@
+    <forward name="jaffa_attachment_attachmentLookupCriteria" path="jaffa.attachment.attachmentlookup.criteria"/>
+    <forward name="jaffa_attachment_attachmentLookupResults" path="jaffa.attachment.attachmentlookup.results"/>
+    <forward name="jaffa_attachment_attachmentLookupConsolidatedCriteriaAndResults" path="jaffa.attachment.attachmentlookup.consolidatedCriteriaAndResults"/>

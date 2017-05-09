@@ -1,0 +1,75 @@
+    <!-- FormTemplateFinder Criteria -->
+    <definition name="jaffa.printing.formtemplatefinder.FinderLayout.criteria"  extends="jaffa.FinderLayout">
+        <put name="body1" value="/jaffa/printing/formtemplatefinder/criteria.jsp"/>
+        <put name="body2" value=""/>
+        <put name="action" value="/jaffa_printing_formTemplateFinder"/>
+        <put name="createComponent" value="Jaffa.Printing.FormTemplateMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+            <add value="CreateFromCriteria"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.printing.formtemplatefinder.criteria"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.FormTemplateFinder.criteria]"/>
+        <put name="body" value="jaffa.printing.formtemplatefinder.FinderLayout.criteria"/>
+    </definition>
+
+    <!-- FormTemplateFinder Results -->
+    <definition name="jaffa.printing.formtemplatefinder.FinderLayout.results"  extends="jaffa.FinderLayout">
+        <put name="body1" value=""/>
+        <put name="body2" value="/jaffa/printing/formtemplatefinder/results.jsp"/>
+        <put name="action" value="/jaffa_printing_formTemplateFinder"/>
+        <put name="createComponent" value="Jaffa.Printing.FormTemplateMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="ModifySearch"/>
+            <add value="Refresh"/>
+            <add value="CreateFromResults"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="ModifySearch"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.printing.formtemplatefinder.results"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.FormTemplateFinder.results]"/>
+        <put name="body" value="jaffa.printing.formtemplatefinder.FinderLayout.results"/>
+    </definition>
+
+    <!-- FormTemplateFinder ConsolidatedCriteriaAndResults -->
+    <definition name="jaffa.printing.formtemplatefinder.FinderLayout.consolidatedCriteriaAndResults"  extends="jaffa.FinderLayout">
+        <put name="body1" value="/jaffa/printing/formtemplatefinder/criteria.jsp"/>
+        <put name="body2" value="/jaffa/printing/formtemplatefinder/results.jsp"/>
+        <put name="action" value="/jaffa_printing_formTemplateFinder"/>
+        <put name="createComponent" value="Jaffa.Printing.FormTemplateMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+            <add value="CreateFromResults"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.printing.formtemplatefinder.consolidatedCriteriaAndResults"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.FormTemplateFinder.consolidated]"/>
+        <put name="body" value="jaffa.printing.formtemplatefinder.FinderLayout.consolidatedCriteriaAndResults"/>
+    </definition>
+
+    <!-- FormTemplateFinder Results as Excel -->
+    <definition name="jaffa.printing.formtemplatefinder.FinderExcelLayout"  extends="jaffa.FinderExcelLayout">
+        <put name="body" value="/jaffa/printing/formtemplatefinder/results.jsp"/>
+        <put name="action" value="/jaffa_printing_formTemplateFinder"/>
+    </definition>
+
+    <!-- FormTemplateFinder Results as Xml -->
+    <definition name="jaffa.printing.formtemplatefinder.FinderXmlLayout"  extends="jaffa.FinderXmlLayout">
+    </definition>
+

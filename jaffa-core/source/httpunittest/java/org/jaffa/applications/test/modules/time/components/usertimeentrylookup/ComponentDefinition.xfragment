@@ -1,0 +1,4 @@
+    <component id="UserTimeEntry.UserTimeEntryLookup">
+        <class>org.jaffa.applications.test.modules.time.components.usertimeentrylookup.ui.UserTimeEntryLookupComponent</class>
+        <type>ObjectLookup</type>
+    </component>

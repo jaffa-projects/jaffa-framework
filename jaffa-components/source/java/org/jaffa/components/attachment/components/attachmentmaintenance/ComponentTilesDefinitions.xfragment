@@ -1,0 +1,14 @@
+    <!-- AttachmentMaintenance -->
+    <definition name="jaffa.attachment.attachmentmaintenance.MaintenanceLayout.main"  extends="jaffa.MaintenanceLayout">
+        <put name="body" value="/jaffa/attachment/attachmentmaintenance/main.jsp"/>
+        <put name="action" value="/jaffa_attachment_attachmentMaintenance"/>
+        <put name="currentScreenCounter" value="0"/>
+        <put name="createModeTitle" value="[title.Jaffa.Attachment.AttachmentMaintenance.maintenance]"/>
+        <put name="updateModeTitle" value="[title.Jaffa.Attachment.AttachmentMaintenance.maintenance]"/>
+        <put name="enctype" value="multipart/form-data"/>
+    </definition>
+    <definition name="jaffa.attachment.attachmentmaintenance.main"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Attachment.AttachmentMaintenance.maintenance]"/>
+        <put name="body" value="jaffa.attachment.attachmentmaintenance.MaintenanceLayout.main"/>
+    </definition>
+

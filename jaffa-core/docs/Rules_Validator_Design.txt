@@ -1,0 +1,18 @@
+		New Validation Engine
+
+
+	We have decided to add the option for field and page level validation for client side validation that can be generically added to and called by the rules engine. Also we have the requirement to lower the bandwith of html being streamed back to the client.
+
+
+	1.	We will use attributes allowing us to assign specific validation rules to an element.
+	2.	The value of the attributes will be the paramaters to pass.
+	3.	Field and Page rules will be registered in an initilizeRules.js file, with the following format
+
+		var validationRules = new rules();
+		validationRules.addFieldRule("rules-datatype" , "checkDataType");
+		validationRules.addGlobalRule("rules-mandatory" , "mandatory");
+	4. 	For core data validation we defined as follows, rules-datatype="<<datatype>>"
+	5.	For sub attributes we define them as follows, rules-datatype-maxLength="<<value>>"
+	6.	As an editbox is added to the page, its field will be registered.
+
+	The validation engine will iterate through all the registered fields on the page. For each field it will check against its registered rules for a matching attribute. If an attribute is round the rule will be executed based on that element and parameter values.

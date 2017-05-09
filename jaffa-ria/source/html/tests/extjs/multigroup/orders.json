@@ -1,0 +1,123 @@
+{
+  total: 8,
+  rows: [
+  {
+    workOrderNo: 'R200012',
+    contract: 'CX123',
+    segregationCode: 'IMOS-123',
+    topWorkOrderNo: 'R200012',
+    nhWorkOrderNo: 'R200012',
+    workOrderLevel: 1,
+    part: 'ABCD',
+    serial: 'SN1234',
+    span: '23',
+    ecd: 'Oct 1, 2008',
+    laborHours: '200',
+    materialCosts: '4002.12'
+  },
+  {
+    workOrderNo: 'R200013',
+    contract: 'CX123',
+    segregationCode: 'IMOS-123',
+    topWorkOrderNo: 'R200012',
+    nhWorkOrderNo: 'R200012',
+    workOrderLevel: 2,
+    part: 'ABCD',
+    serial: 'SN1234-1',
+    span: '23',
+    ecd: 'Sept 30, 2008',
+    laborHours: '200',
+    materialCosts: '4002.12'
+  },
+  {
+    workOrderNo: 'R200013/A',
+    contract: 'CX123',
+    segregationCode: 'IMOS-123',
+    topWorkOrderNo: 'R200012',
+    nhWorkOrderNo: 'R200013',
+    workOrderLevel: 3,
+    part: 'ABCD',
+    serial: 'SN1234-1',
+    span: '23',
+    ecd: 'Sept 30, 2008',
+    laborHours: '200',
+    materialCosts: '4002.12'
+  },
+  {
+    workOrderNo: 'R200013/B',
+    contract: 'CX123',
+    segregationCode: 'IMOS-123',
+    topWorkOrderNo: 'R200012',
+    nhWorkOrderNo: 'R200013',
+    workOrderLevel: 3,
+    part: 'ABCD',
+    serial: 'SN1234-1',
+    span: '23',
+    ecd: 'Aug 6, 2008',
+    laborHours: '200',
+    materialCosts: '4002.12'
+  },
+  {
+    workOrderNo: 'R200014',
+    contract: 'CX123',
+    segregationCode: 'IMOS-123',
+    topWorkOrderNo: 'R200012',
+    nhWorkOrderNo: 'R200012',
+    workOrderLevel: 2,
+    part: 'ABCD',
+    serial: 'SN1238',
+    span: '23',
+    ecd: 'Aug 6, 2008',
+    laborHours: '200',
+    materialCosts: '4002.12'
+  },
+  
+  {
+    workOrderNo: 'R200018',
+    contract: 'CX123',
+    segregationCode: 'IMOS-123',
+    topWorkOrderNo: 'R200018',
+    nhWorkOrderNo: 'R200018',
+    workOrderLevel: 1,
+    part: 'ABCD',
+    serial: 'SN1238',
+    span: '23',
+    ecd: 'Aug 6, 2008',
+    laborHours: '200',
+    materialCosts: '4002.12'
+  },
+  
+  {
+    workOrderNo: 'R200019',
+    contract: 'CX123',
+    segregationCode: 'IMOS-123',
+    topWorkOrderNo: 'R200018',
+    nhWorkOrderNo: 'R200018',
+    workOrderLevel: 2,
+    part: 'ABCDE',
+    serial: 'SN1238',
+    span: '23',
+    ecd: 'Aug 6, 2008',
+    laborHours: '200',
+    materialCosts: '4002.12'
+  },
+  
+  
+  {
+    workOrderNo: 'R200015',
+    contract: 'CX777',
+    segregationCode: 'IMOS-777',
+    topWorkOrderNo: 'R200015',
+    nhWorkOrderNo: 'R200015',
+    workOrderLevel: 1,
+    part: 'ABCD',
+    serial: 'SN777',
+    span: '23',
+    ecd: 'Aug 5, 2008',
+    laborHours: '100',
+    materialCosts: '100'
+  }
+  
+
+  ]
+}  

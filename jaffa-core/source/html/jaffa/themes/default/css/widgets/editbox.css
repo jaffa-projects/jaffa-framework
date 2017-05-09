@@ -1,0 +1,41 @@
+/* 
+  File name:  editbox.css
+  Author:     paule  
+
+  Description:
+    Example StyleSheet that controls the display of the editbox widget
+*/
+
+
+/* For the multi-line input boxes */
+textarea {
+}
+
+/* This is for all html input boxes, use 'input.WidgetEditBox' for just
+   the single line editbox widgets
+*/
+input {
+}
+
+/* For HTML based checkboxes */
+input.WidgetCheckBox {
+}
+
+
+/* Use this to highlight after the field */
+span.editboxMandatorySuffix {
+  display: none;
+}
+
+span.editboxOptionalSuffix {
+  display: none;
+}
+
+/* Use this to highlight in front of the field */
+span.editboxMandatoryPrefix {
+  display:none;
+  
+}
+span.editboxOptionalPrefix {
+  display:none;
+}

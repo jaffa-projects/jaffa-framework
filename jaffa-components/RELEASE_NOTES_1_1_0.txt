@@ -1,0 +1,26 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the JAFFA Components 1.1.0 Release (Since v1.0.0). For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+
+
+What's Changed / Improvements
+=====================================================
+- Modified the DefaultValueEditor, ValidationRulesEditor and ViewerHyperlinkConfig components to use the all new SkeletonLayout.jsp, instead of the custom layouts
+- The defaultNav.jsp for all the JaffaComponents have been modified to display the image as hyperlinks
+- Refactored the various components to utilize the EditBox's vertical and horizontal size percentage feature
+- Updated user and user roles domain objects to use the new domain_creator_1_1 pattern
+
+
+What's Deleted/Deprecated
+=====================================================
+
+
+Bug Fixes
+=====================================================
+- Modified the LabelEditor component to create the directory for the override file, if it doesn't already exist 
+

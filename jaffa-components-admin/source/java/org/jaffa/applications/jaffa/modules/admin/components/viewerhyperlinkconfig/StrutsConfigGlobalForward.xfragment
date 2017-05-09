@@ -1,0 +1,2 @@
+    <forward name="admin_viewerHyperlinkConfig_domainFieldViewerComponentMapping" path="jaffa.admin.viewerhyperlinkconfig.domainFieldViewerComponentMapping"/>
+    <forward name="admin_viewerHyperlinkConfig_keyFieldPerViewerComponent" path="jaffa.admin.viewerhyperlinkconfig.keyFieldPerViewerComponent"/>

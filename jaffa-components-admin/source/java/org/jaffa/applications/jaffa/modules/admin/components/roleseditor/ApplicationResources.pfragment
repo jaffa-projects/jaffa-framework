@@ -1,0 +1,6 @@
+title.Jaffa.Admin.RolesEditor=Roles Editor
+exception.org.jaffa.applications.jaffa.modules.admin.components.roleseditor.ui.exceptions.RolesEditorException.parseError=Error while parsing the Roles xml file.<br> {0}
+exception.org.jaffa.applications.jaffa.modules.admin.components.roleseditor.ui.exceptions.RolesEditorException.filereadError=There was an error in reading the file.<br> {0}
+exception.org.jaffa.applications.jaffa.modules.admin.components.roleseditor.ui.exceptions.RolesEditorException.badurlError=Can't find roles.xml .Bad URL {0} <br> {1}
+
+label.Jaffa.Admin.RoleEditor.NoContent=No Content.

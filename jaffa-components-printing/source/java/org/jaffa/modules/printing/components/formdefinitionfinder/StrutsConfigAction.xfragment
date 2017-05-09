@@ -1,0 +1,8 @@
+    <!-- FormDefinitionFinder -->
+    <action    path="/jaffa_printing_formDefinitionFinder"
+               type="org.jaffa.modules.printing.components.formdefinitionfinder.ui.FormDefinitionFinderAction"
+               name="jaffa_printing_formDefinitionFinderForm"
+               validate="false"
+               scope="request">
+    </action>
+

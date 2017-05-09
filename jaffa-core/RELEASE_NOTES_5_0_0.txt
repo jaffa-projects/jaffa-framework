@@ -1,0 +1,123 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the next release. For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+Presentation
+------------
+- Implemented GridColumnTag.register() to add widget type to css class when the cell has only one widget.
+- Modified GridTag.getInitialHtml() to add displayOnly or notDisplayOnly to css class to indicate the type of grid.
+- Reimplemented gridSort.js to handle multiple grids on same page and grids loaded through Ajax. Assumes IE 6.0 or above and Firefox 2.0 or above. The old gridSort.js is renamed as gridSort4IE4.js
+- Add globalConfig object in header.js for global settings to each page. globalConfig.focusWidgetDropDown can be used to allow promptFirstEditBox() in footer.js to use WidgetDropDown when focusing on the first widget.
+  
+Widgets
+-------
+- Encapsulated browser detection into Browser class in header.js
+- Modified header.js in insertAdjacentElement() to allow integration with ExtJs 2.0.
+- Use button instead of <a> for Calendar widget. Add in css class of Lookup and Calendar for buttons.
+
+Components & Patterns
+---------------------
+- Enhanced the Finder/Lookup components to support pagination
+  - Added 'firstRecord:Integer' and 'findTotalRecords:Boolean' properties to FinderInDto
+  - Added 'totalRecords:Integer' property to the FinderOutDto
+  - Modified the FinderTx/LookupTx patterns to 
+    - Use the 'firstResult' and 'maxResults' settings of Criteria to obtain an appropriate page of records
+    - Invoke FinderTx.findTotalRecords() for computing totalRecords and moreRecordsExist properties
+- Enhanced the navigation_1_0.dtd to support a 'target' parameter for both the component-action and url-action. Similar change was made to navigation_1_0.xsd and the corresponding bindings were regenerated.
+  - The globalNav.jsp was modified to utilize the 'target' attribute in the anchor tags for component-action and url-action
+- Enhanced the FinderTx.addCriteria() method to validate the input CriteriaField instance. An InvalidCriteriaRuntimeException will be thrown if the validation fails.
+
+Persistence
+-----------
+- Enhanced the Persistence Engine to support pagination
+  - Added 'firstResult:Integer' and 'maxResults:Integer' properties to the Criteria class
+  - Created the IPagingPlugin interface, which is invoked by the DataSource for pagination
+  - Provided Oracle, MySQL, PostgreSQL and Default implementations of the IPagingPlugin interface
+  - UnitTest has been written for the same
+- Enhanced Persistent class to expose an unmodifable view of it's modifiedFields Map
+- Enhanced UOW to allow programmatic (de)registering of PersistenceLoggingPlugin instances
+  - The 'jaffa.persistence.IPersistenceLoggingPlugin' rule now supports a comma-separated list of plugins
+  - The signature of the plugin's initialize() method has been modified to accept an UOW instance
+- The equals() and hashCode() methods have been overridden in the Persistent class, basing the logic around it's key fields.
+- To integrate database i/o and JMS in the same transaction, 'addMessage(Object payload)' method has been added to the UOW
+  - For now, the JMS messages are initially cached, and sent to the appropriate destination only after the database transaction has committed successfully
+  - NOTE it is quite possible that the database commit may succeed, while the JMS messages do not reach their destinations; in which case a FATAL message will be logged
+  - Eventually the UOW will be enhanced to utilize JTS for performing 2-phase commit on the database and JMS resources.
+- Enhanced the Persistence Engine to cache objects after retrieval. These objects can then be reused in key-based queries.
+  - The cache is maintained per UOW
+  - The cache is cleared after add/update/delete operations. This ensures that no error occurs, especially when dealing with related objects
+  - This feature can be disabled by setting the rule 'jaffa.persistence.jdbcengine.disableObjectCache' to true
+
+General
+-------
+- Changed the default RulesEngine implementation in JaffaCore's RuleEngineFactory to the new MetaDataRulesEngine
+- Upgraded to Java6
+  - Enhanced PreparedStatementProxyForDebugging to implement the new methods added to the PreparedStatement interface in Java6
+  - Removed jaxb-api.jar, jaxb-impl.jar, jaxb1-impl.jar, jsr173_1.0_api.jar
+  - Regenerated JAXB bindings
+    - Added a createSchema() method to JAXBHelper which can be used for performing validations during (un)marshalling XML via JAXB
+    - Replaced all invocations of the deprecated Unmarhsaller.setValidating() method with a setSchema invocation
+    - Refactored UserGridManager to invoke setSchema on the Marshaller for validations
+    - Enhanced the build script to include the XSDs in jaffa-core.jar
+- DataTransformer has been enhanced to utilize the findXyzCriteria() method, instead of the getXyzArray() method, for retrieving related objects. This helps avoid the caching of related objects.
+- Added new trigger points to the ITransformationHandler:
+  - 'Criteria preQuery(String path, Criteria criteria, GraphCriteria originalCriteria, Class domain)' can be used for modifying the input Criteria used for retrieving related objects.
+  - 'void endBeanLoad(String path, Object source, Object target)' is invoked after the molding of a domain object to a graph data object.
+  - The DataTransformer has been enhanced to invoke the new trigger points of the ITransformationHandler.
+- Added a 'deleteObject:Boolean' property to GraphDomainObject base class which will be used to indicate an object should be deleted. This will allow inserts, updates and deletes to be performed in one operation.
+- The DataTransformer has been enhanced to support prevalidations of graphs
+  - Added a prevalidateBean() method to ITransformationHandler, which can be used for validating and defaulting data in a graph
+  - Added a prevalidateGraph() method to DataTransformer for validating a graph
+    - Ignores a graph if the deleteObject flag is true
+    - Invokes the prevalidateBean handler after performing the validations
+  - Enhanced the TransformerUtils.updateBeanData() method to invoke the getXyzObject() method for performing foreign-key validations
+- Enhanced the DataTransformer.updateGraph() method to return a graph containing the primary-key in create-mode. This is mainly useful for scenarios where the key is auto-generated and the client-program needs a handle on the key that got generated.
+- Created a 'dateonly.shortYear.format' to display 2-character year
+- Jaffa has been enhanced to add the variation of the currently authenticated user to the locale. This allows the deployment of ApplicationResources_{language}_{country}_{variation}.properties file to support custom labels per variaton in the same deployment. The following changes were made
+  - The PortletFilter was enhanced to create a new Locale instance with the current variation, and add it to the thread-level LocaleContext. Note that the request-stream will continue to have the original variation-less locale, since there is no standard way of setting the locale on a request-stream.
+  - The custom PropertyMessageResources class was enhanced to append the variation to the locale-key
+- A cloneBean() method has been added to the BeanHelper to perform deep cloning of a bean
+- Enhanced the bean molding process to directly set fields, instead of invoking setters, during Domain to Graph molding. This ensures that unnecessary validations are not performed when the Graph object is being constructed
+- Added a 'nullify' property to GraphDataObject and DomainDAO. This can be used to nullify a set of properties for an object graph
+- Provided the 'currency.format' in locale.properties
+- Enhanced DateBase's parse routine to support input date String parameters containing timeInMilliseconds
+
+
+Bug Fixes
+=====================================================
+Presentation
+------------
+- The HistoryNav has been fixed to display LabelEditor links for the 'Home' and 'Desktop' links
+  - Corrected the HistoryNav class to use a label-token, instead of actual label, for the 'Home' link
+  - Corrected desktopNav.jsp to use label-tokens, instead of actual labels, when constructing the URLs for launching components
+- Remove changing grid column width at the initialization stage init() and initN() inside of gridSort.js This way, the column width will not change after sort.
+- Reset initialized to false at the end of buildXML() in gridConfigure.js so that the sorting on grid will work in jaffaTabs after "Default Col Setting" is selected from right clicking on the header row of the grid.
+- Corrected the checkNumericValidation() function in coreRules.js to also validate the significant-digits of a decimal value
+
+Widgets
+-------
+- Fixed the EditBoxTag to compensate for the group separators in Integer fields
+- Fixed the TextTag to not generate hyperlinks around empty Strings
+- Use <button> in LookupTag instead of <a> to solve the delima of either icon does not show on IE under certain situations or hot spot offset from icon.
+- Fixed the FoldingSectionTag to not generate an empty row having 2 cells with width='123', since that was causing the screens to appear squished
+- Enhanced the determineMaxLen() method in EditBoxTag to allow an extra character in the maxLength for the minus sign, only if the minValue is not specified or if the minValue is negative
+
+Components & Patterns
+---------------------
+
+Persistence
+-----------
+- Oracle's DATE datatype stores values only till second-level accuracy. However a key-based PreparedStatement query fails, if the original DateTime with milliseconds is used in the query. The TypeDefs has now been modified to remove the milliseconds from a DateTime before storing it, as well as in the query. This hack can be removed once we start using Oracle's TIMESTAMP datatype.
+
+General
+-------
+- Corrected the TransformerUtils to not check the hadChanged flag for related objects during updates and deletes. The presence of a related object is enough indication for it to be processed.
+- Modified the EmailerBean to use the VelocityEngine for parsing templates, instead of the Velocity class (which was raising NullPointer exceptions)
+- Fixed ListProperties to escape newline characters from keys and values
+
+What's Deleted/Deprecated
+=====================================================

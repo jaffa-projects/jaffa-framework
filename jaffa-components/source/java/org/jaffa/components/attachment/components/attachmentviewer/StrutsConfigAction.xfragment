@@ -1,0 +1,7 @@
+    <!-- AttachmentViewer Form -->
+    <action    path="/jaffa_attachment_attachmentViewer"
+               type="org.jaffa.components.attachment.components.attachmentviewer.ui.AttachmentViewerAction"
+               name="jaffa_attachment_attachmentViewerForm"
+               validate="false"
+               scope="request">
+    </action>

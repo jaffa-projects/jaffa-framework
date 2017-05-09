@@ -1,0 +1,34 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the next release. For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+- Upgraded to Java6
+  - Regenerated JAXB bindings
+- Added some JBoss JARs to JaffaComponentMessaging's distribution, to allow aspects to be preapplied to jaffa-components-messaging.jar
+- Enhanced JaffaComponentsMessaging to support POJO-based publishing of messages to Topics
+  - Similar to a Queue, a Topic name can be mapped to a dataBean class.
+  - A subsriber may be created automatically for a Topic based on the consumer-policy. Error if any, in the subscriber, will merely be logged, and will not be redirected to the ErrorQueue.
+  - The lock-check feature is not supported for a Topic
+  - The Topics are not visible in QueueList component. The jmx-console may be used to manage them
+- Enhanced JaffaComponentsMessaging to support dynamic header parameters for a Message
+  - A dataBean will need to implement the newly created IHasHeaderParams interface to supply a dynamic array of HeaderParam instances that will be added to the header of the Message
+
+What's Changed / Improvements
+=====================================================
+- Messaging.QueueList has been modified to display a configurable Grid. Removed the unnecessary dependency on JaffaCore's Finder component from QueueListForm and QueueListAction
+- Messaging.QueueViewer has been modified to display a configurable Grid. Note: The configuraton will be unique to each Queue, since each Queue can potentially display different columns.
+- Introduced a couple of index-scripts for the J_BUSINESS_EVENT_LOGS table
+- To ensure that the lock-checks do not pickup the Messages sent as part of the same JMS transaction, the JmsClientHelper has been modified to cache the Messages and send them only when JMS transaction is being committed.
+
+What's Deleted/Deprecated
+=====================================================
+
+Bug Fixes
+=====================================================
+- Corrected the BusinessEventLog viewer to display general labels for the correlationKey fields if no label has been defined for the correlationType. Else it'll continue to render a correlationKey field, only if a label has been defined for that field.
+- It is quite possible that a JMS provider may insert a JMS* property in the Message when routing it to a remote consumer. Fixed the cloneMessage() in JmsClientHelper to ignore the JMSException that may get thrown when trying to clone to such a Message.
+

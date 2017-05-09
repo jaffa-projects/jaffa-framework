@@ -1,0 +1,3 @@
+    <!-- MessageViewer Form -->
+    <form-bean      name="jaffa_messaging_messageViewerForm"
+                    type="org.jaffa.modules.messaging.components.messageviewer.ui.MessageViewerForm"/>

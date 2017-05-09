@@ -1,0 +1,2 @@
+    <form-bean      name="jaffa_printing_formEventMaintenanceForm"
+                    type="org.jaffa.modules.printing.components.formeventmaintenance.ui.FormEventMaintenanceForm"/>

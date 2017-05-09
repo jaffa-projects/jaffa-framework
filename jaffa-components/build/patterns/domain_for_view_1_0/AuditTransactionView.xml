@@ -1,0 +1,179 @@
+<?xml version="1.0"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Domain Creator Meta 1.1//EN" "http://jaffa.sourceforge.net/DTD/domain-creator-meta_1_1.dtd">
+
+<Root>
+  <DomainObject>AuditTransactionView</DomainObject>
+  <DomainPackage>org.jaffa.components.audit.domain</DomainPackage>
+  <DatabaseTable>J_AUDIT_TRANSACTIONS$VIEW</DatabaseTable>
+  <MappingPackage>resources/jdbcengine/jaffa</MappingPackage>
+  <PatternTemplate>patterns/library/domain_for_view_1_0/DomainForViewPattern.xml</PatternTemplate>
+  <Description>Audit record with associated Objects and Fields</Description>
+  <LabelToken>[label.Jaffa.Audit.AuditTransaction]</LabelToken>
+  <Fields>
+    <Field>
+      <Name>TransactionId</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>TRANSACTION_ID</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Technical Key</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransaction.TransactionId]</LabelToken>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>ProcessName</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>PROCESS_NAME</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Process Name for the transaction</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransaction.ProcessName]</LabelToken>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>SubProcessName</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>SUB_PROCESS_NAME</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>SubProcess Name for the transaction</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransaction.SubProcessName]</LabelToken>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>Reason</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>REASON</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Reason for the transaction</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransaction.Reason]</LabelToken>
+      <IntSize>250</IntSize>
+    </Field>
+    <Field>
+      <Name>CreatedBy</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>CREATED_BY</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>User Id that created the transaction</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransaction.CreatedBy]</LabelToken>
+      <IntSize>20</IntSize>
+      <StampType>CreatedUserId</StampType>
+    </Field>
+    <Field>
+      <Name>CreatedOn</Name>
+      <DataType>org.jaffa.datatypes.DateTime</DataType>
+      <DatabaseFieldName>CREATED_ON</DatabaseFieldName>
+      <DatabaseDataType>DATE_TIME</DatabaseDataType>
+      <Description>Date on which transaction was created</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransaction.CreatedOn]</LabelToken>
+      <StampType>CreatedDateTime</StampType>
+    </Field>
+    <Field>
+      <Name>ObjectId</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>OBJECT_ID</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Technical Key</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransactionObject.ObjectId]</LabelToken>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>ObjectName</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>OBJECT_NAME</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Object Name</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransactionObject.ObjectName]</LabelToken>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>ChangeType</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>CHANGE_TYPE</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Indicates (I)nsert, (U)pdate or (D)elete</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransactionObject.ChangeType]</LabelToken>
+      <IntSize>1</IntSize>
+    </Field>
+    <Field>
+      <Name>FieldId</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>FIELD_ID</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Technical Key</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransactionField.FieldId]</LabelToken>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>FieldName</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>FIELD_NAME</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Field Name</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransactionField.FieldName]</LabelToken>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>FromValue</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>FROM_VALUE</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Original value for the field</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransactionField.FromValue]</LabelToken>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>ToValue</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>TO_VALUE</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>New value for the field</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransactionField.ToValue]</LabelToken>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>Changed</Name>
+      <DataType>java.lang.Boolean</DataType>
+      <DatabaseFieldName>CHANGED</DatabaseFieldName>
+      <DatabaseDataType>BOOLEAN</DatabaseDataType>
+      <Description>Indicates if the field was changed</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransactionField.Changed]</LabelToken>
+    </Field>
+    <Field>
+      <Name>Flex</Name>
+      <DataType>java.lang.Boolean</DataType>
+      <DatabaseFieldName>FLEX</DatabaseFieldName>
+      <DatabaseDataType>BOOLEAN</DatabaseDataType>
+      <Description>Indicates if the field is a flex field</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransactionField.Flex]</LabelToken>
+    </Field>
+    <Field>
+      <Name>OverflowFlag</Name>
+      <DataType>java.lang.Boolean</DataType>
+      <DatabaseFieldName>OVERFLOW_FLAG</DatabaseFieldName>
+      <DatabaseDataType>BOOLEAN</DatabaseDataType>
+      <Description>Flag to specify that the From and To Values are more than 2000 chars and the complete values were stored in a child table</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransactionField.OverflowFlag]</LabelToken>
+    </Field>
+    <Field>
+      <Name>MultilineHtmlFlag</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>MULTILINE_HTML_FLAG</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Flag to specify if the Field being audited is a multi line or htm</Description>
+      <LabelToken>[label.Jaffa.Audit.AuditTransactionField.MultilineHtmlFlag]</LabelToken>
+      <IntSize>1</IntSize>
+    </Field>
+    <Field>
+       <Name>PK</Name>
+       <DataType>java.lang.String</DataType>
+       <DatabaseFieldName>PK</DatabaseFieldName>
+       <DatabaseDataType>STRING</DatabaseDataType>
+       <PrimaryKey>T</PrimaryKey>
+       <LabelToken>[label.Jaffa.Audit.AuditTransactionField.PK]</LabelToken>
+       <Mandatory>T</Mandatory>
+       <IntSize>32</IntSize>
+       <Layout></Layout>
+       <Pattern></Pattern>
+       <CaseType>UpperCase</CaseType>
+       <Ignore>false</Ignore>
+    </Field>
+  </Fields>
+</Root>

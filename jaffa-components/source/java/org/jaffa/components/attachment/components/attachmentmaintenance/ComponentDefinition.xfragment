@@ -1,0 +1,4 @@
+    <component id="Jaffa.Attachment.AttachmentMaintenance">
+        <class>org.jaffa.components.attachment.components.attachmentmaintenance.ui.AttachmentMaintenanceComponent</class>
+        <type>ObjectMaintenance</type>
+    </component>

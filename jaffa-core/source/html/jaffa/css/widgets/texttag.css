@@ -1,0 +1,20 @@
+.outertexttip {
+  z-index: 100;
+  border: 0 ;
+  background-color: #255e90;
+  position: absolute;
+  font-weight: bolder;
+  color: white;
+ }
+ 
+.innertexttip {
+  vertical-align:bottom;
+  z-index: 100;
+  overflow:auto;
+  background: #dfefff;
+ }
+
+.exitbutton   {
+  font-weight: bolder;
+  color: white;
+}

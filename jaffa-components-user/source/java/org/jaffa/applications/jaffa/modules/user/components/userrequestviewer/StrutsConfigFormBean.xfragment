@@ -1,0 +1,3 @@
+    <!-- UserRequestViewer Form -->
+    <form-bean      name="user_userRequestViewerForm"
+                    type="org.jaffa.applications.jaffa.modules.user.components.userrequestviewer.ui.UserRequestViewerForm"/>

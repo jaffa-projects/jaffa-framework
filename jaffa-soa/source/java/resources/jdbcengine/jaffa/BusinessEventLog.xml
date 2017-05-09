@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.modules.messaging.domain.BusinessEventLog">
+        <map-to table="J_BUSINESS_EVENT_LOGS" lockable="false"/>
+
+        <field name="LogId" use-member="m_logId" type="java.lang.String" primary-key="true">
+            <sql name="LOG_ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="CorrelationType" use-member="m_correlationType" type="java.lang.String">
+            <sql name="CORRELATION_TYPE" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="CorrelationKey1" use-member="m_correlationKey1" type="java.lang.String">
+            <sql name="CORRELATION_KEY1" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="CorrelationKey2" use-member="m_correlationKey2" type="java.lang.String">
+            <sql name="CORRELATION_KEY2" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="CorrelationKey3" use-member="m_correlationKey3" type="java.lang.String">
+            <sql name="CORRELATION_KEY3" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="ScheduledTaskId" use-member="m_scheduledTaskId" type="java.lang.String">
+            <sql name="SCHEDULED_TASK_ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="MessageId" use-member="m_messageId" type="java.lang.String">
+            <sql name="MESSAGE_ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="LoggedOn" use-member="m_loggedOn" type="org.jaffa.datatypes.DateTime">
+            <sql name="LOGGED_ON" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+        <field name="LoggedBy" use-member="m_loggedBy" type="java.lang.String">
+            <sql name="LOGGED_BY" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="ProcessName" use-member="m_processName" type="java.lang.String">
+            <sql name="PROCESS_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="SubProcessName" use-member="m_subProcessName" type="java.lang.String">
+            <sql name="SUB_PROCESS_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="MessageType" use-member="m_messageType" type="java.lang.String">
+            <sql name="MESSAGE_TYPE" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="MessageText" use-member="m_messageText" type="java.lang.String">
+            <sql name="MESSAGE_TEXT" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="SourceClass" use-member="m_sourceClass" type="java.lang.String">
+            <sql name="SOURCE_CLASS" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="SourceMethod" use-member="m_sourceMethod" type="java.lang.String">
+            <sql name="SOURCE_METHOD" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="SourceLine" use-member="m_sourceLine" type="java.lang.Long">
+            <sql name="SOURCE_LINE" type="INTEGER" dirty="ignore"/>
+        </field>
+
+        <field name="StackTrace" use-member="m_stackTrace" type="java.lang.String">
+            <sql name="STACK_TRACE" type="STRING" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+  <!-- ================================================= -->
+  <!-- Rules for Jaffa.QM module                         -->
+  <!-- ================================================= -->
+  <metadata tag="jaffa.rules" class="org.jaffa.qm.apis.data.QueueGraph">
+    <label>[label.Jaffa.QM.Queue]</label>
+    <property name="type">
+      <label>[label.Jaffa.QM.Queue.Type]</label>
+    </property>
+    <property name="openCount">
+      <label>[label.Jaffa.QM.Queue.OpenCount]</label>
+    </property>
+    <property name="successCount">
+      <label>[label.Jaffa.QM.Queue.SuccessCount]</label>
+    </property>
+    <property name="errorCount">
+      <label>[label.Jaffa.QM.Queue.ErrorCount]</label>
+    </property>
+    <property name="inProcessCount">
+      <label>[label.Jaffa.QM.Queue.InProcessCount]</label>
+    </property>
+    <property name="interruptedCount">
+      <label>[label.Jaffa.QM.Queue.InterruptedCount]</label>
+    </property>
+    <property name="status">
+      <label>[label.Jaffa.QM.Queue.Status]</label>
+      <in-list>ACTIVE=[label.Jaffa.QM.Queue.Status.ACTIVE],INACTIVE=[label.Jaffa.QM.Queue.Status.INACTIVE]</in-list>
+    </property>
+  </metadata>
+
+  <metadata tag="jaffa.rules" class="org.jaffa.qm.apis.data.QueueCriteria" extends-class="org.jaffa.qm.apis.data.QueueGraph">
+    <super/>
+  </metadata>
+
+  <metadata tag="jaffa.rules" class="org.jaffa.qm.apis.data.MessageGraph">
+    <label>[label.Jaffa.QM.Message]</label>
+    <property name="type">
+      <label>[label.Jaffa.QM.Message.Type]</label>
+    </property>
+    <property name="subType">
+      <label>[label.Jaffa.QM.Message.SubType]</label>
+    </property>
+    <property name="messageId">
+      <label>[label.Jaffa.QM.Message.MessageId]</label>
+    </property>
+    <property name="direction">
+      <label>[label.Jaffa.QM.Message.Direction]</label>
+      <in-list>IN=[label.Jaffa.QM.Message.Direction.IN],OUT=[label.Jaffa.QM.Message.Direction.OUT]</in-list>
+    </property>
+    <property name="priority">
+      <label>[label.Jaffa.QM.Message.Priority]</label>
+    </property>
+    <property name="status">
+      <label>[label.Jaffa.QM.Message.Status]</label>
+      <in-list>ERROR=[label.Jaffa.QM.Message.Status.ERROR],INTERRUPTED=[label.Jaffa.QM.Message.Status.INTERRUPTED],IN_PROCESS=[label.Jaffa.QM.Message.Status.IN_PROCESS],OPEN=[label.Jaffa.QM.Message.Status.OPEN],SUCCESS=[label.Jaffa.QM.Message.Status.SUCCESS]</in-list>
+    </property>
+    <property name="errorMessage">
+      <label>[label.Jaffa.QM.Message.ErrorMessage]</label>
+    </property>
+    <property name="payload">
+      <label>[label.Jaffa.QM.Message.Payload]</label>
+    </property>
+    <property name="createdOn">
+      <label>[label.Common.CreatedOn]</label>
+    </property>
+    <property name="createdBy">
+      <label>[label.Common.CreatedBy]</label>
+    </property>
+    <property name="lastChangedOn">
+      <label>[label.Common.LastChangedOn]</label>
+    </property>
+    <property name="lastChangedBy">
+      <label>[label.Common.LastChangedBy]</label>
+    </property>
+  </metadata>
+
+  <metadata tag="jaffa.rules" class="org.jaffa.qm.apis.data.MessageCriteria" extends-class="org.jaffa.qm.apis.data.MessageGraph">
+    <super/>
+  </metadata>
+
+  <metadata tag="jaffa.rules" class="org.jaffa.qm.apis.data.MessageField">
+    <label>[label.Jaffa.QM.MessageField]</label>
+    <property name="name">
+      <label>[label.Jaffa.QM.MessageField.Name]</label>
+    </property>
+    <property name="label">
+      <label>[label.Jaffa.QM.MessageField.Label]</label>
+    </property>
+    <property name="value">
+      <label>[label.Jaffa.QM.MessageField.Value]</label>
+    </property>
+  </metadata>
+
+  <metadata tag="jaffa.rules" class="org.jaffa.qm.apis.data.MessageFieldCriteria" extends-class="org.jaffa.qm.apis.data.MessageField">
+    <super/>
+  </metadata>
+
+  <metadata tag="jaffa.rules" class="org.jaffa.qm.apis.data.MessageDependency">
+    <label>[label.Jaffa.QM.MessageDependency]</label>
+    <property name="dependsOnId">
+      <label>[label.Jaffa.QM.MessageDependency.DependsOnId]</label>
+    </property>
+    <property name="status">
+      <label>[label.Jaffa.QM.MessageDependency.Status]</label>
+      <in-list>OPEN=[label.Jaffa.QM.MessageDependency.Status.OPEN],SUCCESS=[label.Jaffa.QM.MessageDependency.Status.SUCCESS]</in-list>
+    </property>
+  </metadata>
+</aop>

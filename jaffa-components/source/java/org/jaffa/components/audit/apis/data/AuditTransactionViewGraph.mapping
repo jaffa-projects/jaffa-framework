@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="US-ASCII" ?>
+<bean-mapping>
+  <graph-data-object class="org.jaffa.components.audit.apis.data.AuditTransactionViewGraph"/>
+  <domain-object class="org.jaffa.components.audit.domain.AuditTransactionView"/>
+  <map-fields>
+    <field gdo="transactionId"/>
+    <field gdo="processName"/>
+    <field gdo="subProcessName"/>
+    <field gdo="reason"/>
+    <field gdo="createdBy"/>
+    <field gdo="createdOn"/>
+    <field gdo="objectName"/>
+    <field gdo="changeType"/>
+    <field gdo="fieldName"/>
+    <field gdo="fromValue"/>
+    <field gdo="toValue"/>
+    <field gdo="changed"/>
+    <field gdo="flex"/>
+    <field gdo="overflowFlag"/>
+    <field gdo="multilineHtmlFlag"/>
+  </map-fields>
+</bean-mapping>

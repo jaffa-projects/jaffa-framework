@@ -1,0 +1,23 @@
+
+#----------------------------
+# Jaffa \ Messaging \ BusinessEventFinder
+#----------------------------
+
+# Finder Bundle : container.js
+jawr.js.bundle.JaffaMessagingBusinesseventfinderContainer.id=/bundles/jaffa/messaging/businesseventfinder/findercontainer.js
+jawr.js.bundle.JaffaMessagingBusinesseventfinderContainer.mappings=\
+	dwr:Jaffa_Messaging_BusinessEventLogService, \
+  /jaffa/messaging/businesseventfinder/FinderCriteriaPanels.js, \
+  /jaffa/messaging/businesseventfinder/FinderContainer.js, \
+  /jaffa/messaging/businesseventfinder/FastAccess.js
+
+# Viewport bundle : viewport.js
+jawr.js.bundle.JaffaMessagingBusinesseventfinderViewport.id=/bundles/jaffa/messaging/businesseventfinder/viewport.js
+jawr.js.bundle.JaffaMessagingBusinesseventfinderViewport.mappings=\
+        /jaffa/messaging/businesseventfinder/main.js
+
+
+# Composite bundle : finder.js
+jawr.js.bundle.JaffaMessagingBusinesseventfinder.id=/bundles/jaffa/messaging/businesseventfinder/finder.js
+jawr.js.bundle.JaffaMessagingBusinesseventfinder.composite=true
+jawr.js.bundle.JaffaMessagingBusinesseventfinder.child.names=JaffaMessagingBusinesseventfinderContainer,JaffaMessagingBusinesseventfinderViewport

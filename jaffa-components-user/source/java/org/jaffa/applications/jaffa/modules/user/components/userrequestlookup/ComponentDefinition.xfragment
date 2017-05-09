@@ -1,0 +1,4 @@
+    <component id="Jaffa.User.UserRequestLookup">
+        <class>org.jaffa.applications.jaffa.modules.user.components.userrequestlookup.ui.UserRequestLookupComponent</class>
+        <type>ObjectLookup</type>
+    </component>

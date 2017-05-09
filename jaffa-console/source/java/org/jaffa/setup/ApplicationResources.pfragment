@@ -1,0 +1,10 @@
+title.Jaffa.Setup.ValidFieldValueMaintenance=[label.Jaffa.Setup.ValidFieldValue]
+title.Jaffa.Setup.ValidFieldValueMaintenance.Criteria=[label.Jaffa.Setup.ValidFieldValue] Criteria
+title.Jaffa.Setup.ValidFieldValueMaintenance.Results=[label.Jaffa.Setup.ValidFieldValue] List
+title.Jaffa.Audit.AuditTransactionViewer.OverflowPopup=From/To Values
+label.MainMenu.Jaffa.Setup.ValidFieldValue=[title.Jaffa.Setup.ValidFieldValueMaintenance]
+
+label.Jaffa.Setup.TransactionFinder.ResultsPanel.noSelectionError=No rows are selected.
+
+label.Jaffa.Audit.AuditTransactionFinder.AuditTransactionInquiry=[label.Jaffa.Audit.AuditTransaction] [label.Common.finder.titleSuffix]
+label.Jaffa.Audit.AuditTransactionViewer.NoChange=*No Change*

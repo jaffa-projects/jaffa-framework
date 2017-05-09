@@ -1,0 +1,3 @@
+    <!-- FormEventViewer Form -->
+    <form-bean      name="jaffa_printing_formEventViewerForm"
+                    type="org.jaffa.modules.printing.components.formeventviewer.ui.FormEventViewerForm"/>

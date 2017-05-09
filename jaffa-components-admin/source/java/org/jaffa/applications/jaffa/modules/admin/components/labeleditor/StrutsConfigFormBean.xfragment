@@ -1,0 +1,3 @@
+        <!-- Jaffa Label Editor -->
+        <form-bean      name="admin_labelEditorForm"
+                        type="org.jaffa.applications.jaffa.modules.admin.components.labeleditor.ui.LabelEditorForm"/>

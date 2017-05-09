@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- javadoc
+    To Verify Software Before Checkin
+        -Dlib.dependent.build=clean verifyCheckIn compileJSPs
+        javascriptcommadetector
+    To make a release use
+        -Dlib.dependent.build=download -Ddo.release=y release-HEAD
+        -Dlib.dependent.build=clean -Ddo.release=y release-HEAD
+    To build javadocs use
+        -Dlib.dependent.build=download javadoc
+    To run unit tests use
+        -Dlib.dependent.build=lazy test-junit
+    To make a specific release to a known repository
+        -Dlib.dependent.build=clean -Drepository.publish=c:\.jaffa\repository\downloads -Drelease.version=1.0.0 -Ddo.release=y release-version
+    To build test screens
+        -Dlib.dependent.build=skip build-tests
+  -verbose build
+  -Dlib.dependent.build=clean
+  -Dlib.dependent.build=dirty
+  -Dlib.dependent.build=lazy clean build
+  -Dlib.dependent.build=download
+  -Dlib.dependent.build=skip jsp-compile
+  -Ddeploy.live=true
+-->
+<project basedir=".." default="build" name="build" xmlns:sonar="antlib:org.sonar.ant" xmlns:ivy="antlib:org.apache.ivy.ant">
+  <property name="imports.basedir" value="${basedir}/../JaffaBuild"/>
+  <property name="shared.version.propfile" value="${imports.basedir}/build/shared.version.properties"/>
+
+  <!-- make sure 'ant-contrib-1.0b1.jar' is in $ANT_HOME$/lib -->
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+
+  <property environment="env"/>
+  <property file="${imports.basedir}/build/global.ant.properties"/>
+  <property file="./build/project.ant.properties"/>
+  <property file="${config.file}"/>
+  <property file="${imports.basedir}/build/shared.ant.properties"/>
+  <property file="${shared.version.propfile}"/>
+
+  <import file="${imports.basedir}/build/build-master.xml"/>
+  <defaultexcludes add="${cvs.excludes}"/>
+
+  <!-- Define the SonarQube project properties-->
+  <import file="sonar.properties"/>
+  
+  <target name="usage">
+    <echo>
+Usage:    build target-name
+
+Available Module Targets:
+  clean            - Delete all working folders, so the next build is from source
+  get-dependencies - Builds all the dependencies, if not built already.
+  compile          - Compile all classes
+  jar              - Build JAR file for deployment
+  html             - Build a ZIP of HTML needed for inclusion in the WAR file
+  build            - Build JAR and ZIP
+  javadoc          - Generate Java Docs
+  jsdoc            - Generate Javascript Docs
+
+
+Additional Parameters
+  -Dlib.dependent.build=[ skip | download | lazy | dirty | clean ]
+    </echo>
+  </target>
+
+
+
+  <!-- ==================================== -->
+  <!-- Build HTML zip for use by the WAR    -->
+  <!-- ==================================== -->
+  <target name="html" depends="init,html-source,jsbuild"/>
+
+  <target name="html-source" depends="init">
+    <!-- this has been customized to exclude specific files for deployment -->
+    <if>
+      <available file="${src.html}" type="dir"/>
+      <then>
+        <mkdir dir="${dist.zip}"/>
+        <delete file="${dist.zip}/${appname}.zip" quiet="true"/>
+
+        <!-- Get Stuff out of ExtJS -->
+        <delete dir="${dist}/html" quiet="true"/>
+        <mkdir dir="${dist}/html"/>
+        <unzip src="${lib}/ivy/default/extjs-${extjs.version}.zip" dest="${dist}/html">
+            <patternset>
+                <include name="ext-${extjs.version}/*.txt"/>
+                <include name="ext-${extjs.version}/ext-all.js"/>
+                <include name="ext-${extjs.version}/ext-all-debug.js"/>
+                <include name="ext-${extjs.version}/adapter/ext/ext-base.js"/>
+                <include name="ext-${extjs.version}/resources/**/*.*"/>
+                <include name="ext-${extjs.version}/${extjs.src.folder}/locale/**/*.*"/>
+
+                <!-- Include all of the user extensions  only available in versions after Ext 3.2.1  -->
+                <include name="ext-${extjs.version}/examples/ux/ux-all.js"/>
+                <include name="ext-${extjs.version}/examples/ux/ux-all-debug.js"/>
+                <include name="ext-${extjs.version}/examples/ux/images/*.*"/>
+                <include name="ext-${extjs.version}/examples/ux/css/ux-all.css"/>
+                <include name="ext-${extjs.version}/examples/ux/gridfilters/images/*.*"/>
+            </patternset>
+        </unzip>
+        <move file="${dist}/html/ext-${extjs.version}/examples/ux/gridfilters/images"
+              todir="${dist}/html/ext-${extjs.version}/examples/ux"/>
+        <delete dir="${dist}/html/ext-${extjs.version}/examples/ux/gridfilters" quiet="true"/>
+
+        <zip zipfile="${dist.zip}/${appname}.zip"
+             compress="true"
+             taskname="zip/${appname}">
+
+             <zipfileset dir="${dist}/html/ext-${extjs.version}"
+                      prefix="js/extjs"
+                      excludes="${cvs.excludes},${extjs.src.folder}/**"
+                      includes="**/*"/>
+
+             <zipfileset dir="${dist}/html/ext-${extjs.version}/${extjs.src.folder}"
+                      prefix="js/extjs"
+                      excludes="${cvs.excludes}"
+                      includes="**/*"/>
+
+             <fileset dir="${src.html}"
+                      excludes="${cvs.excludes}"
+                      includes="**/*"/>
+
+        </zip>
+      </then>
+    </if>
+  </target>
+
+  <!-- ================================================================ -->
+  <!-- Run JSBuiler tool to minimize and merge all the jaffa-ria source -->
+  <!-- ================================================================ -->
+  <target name="jsbuild">
+      <echo>Build Javascript</echo>
+      <delete dir="${dist.js.stage}" quiet="true"/>
+      <mkdir dir="${dist.js.stage}"/>
+      <delete dir="${dist.js}" quiet="true"/>
+      <mkdir dir="${dist.js}"/>
+
+      <unzip src="${dist.zip}/${appname}.zip" dest="${dist.js.stage}"/>
+      <pathconvert property="builder-script">
+        <path>
+          <pathelement location="${lib}/builder/builder.js"/>
+        </path>
+      </pathconvert>
+      <java className="org.mozilla.javascript.tools.shell.Main" fork="true" dir="${basedir}">
+          <arg value="${builder-script}"/>
+          <arg value="${jsbfile}"/>
+          <arg value="${dist.js}"/>
+          <classpath>
+            <pathelement location="${lib}/builder/builder.jar"/>
+            <pathelement location="${lib}/builder/rhino.jar"/>
+            <pathelement location="${lib}/builder/commons-io-1.3.1.jar"/>
+          </classpath>
+      </java>
+
+      <echo>Add compressed Javascript to deployment</echo>
+      <zip destfile="${dist.zip}/${appname}.zip" update="true">
+        <zipfileset dir="${dist.js}" prefix="js/extjs" includes="*.js"/>
+      </zip>
+  </target>
+
+
+  <!-- ================================================================ -->
+  <!-- JaffaRIA Simple Unit Tests, for any Web Server (ie no JSPs) -->
+  <!-- ================================================================ -->
+  <target name="build-tests" depends="build">
+    <delete dir="${dist}/tests" quiet="true"/>
+    <mkdir dir="${dist}/tests"/>
+    <unzip src="${dist.zip}/${appname}.zip"
+           dest="${dist}/tests"/>
+    <copy todir="${dist}/tests">
+        <fileset dir="${src.html}" includes="tests/**/*.*" excludes="${cvs.excludes}"/>
+    </copy>
+  </target>
+
+
+
+  <!-- ================================================================ -->
+  <!-- INWORK - JavaScript Documentation, a la ExtJS -->
+  <!-- ================================================================ -->
+
+  <target name="js-stage">
+      <echo>Stage Javascript Docs</echo>
+      <delete dir="${dist.stage.jsdoc}" quiet="true"/>
+      <mkdir dir="${dist.stage.jsdoc}"/>
+
+      <!-- get the extjs source -->
+      <unzip src="${lib}/extjs-${extjs.version}.zip" dest="${dist.stage.jsdoc}">
+          <patternset>
+              <!-- For version 2.x -->
+              <include name="ext-${extjs.version}/${extjs.src.folder}/**/*.*"/>
+          </patternset>
+      </unzip>
+      <move file="${dist.stage.jsdoc}/ext-${extjs.version}/${extjs.src.folder}"
+            todir="${dist.stage.jsdoc}/source" failonerror="false"/>
+
+      <!-- get the extjs extensions -->
+      <unzip src="${lib}/extjs-${extjs.version}.zip" dest="${dist.stage.jsdoc}">
+          <patternset>
+              <!-- For version 3.x -->
+              <include name="ext-${extjs.version}/examples/ux/**/*.*"/>
+          </patternset>
+      </unzip>
+      <move file="${dist.stage.jsdoc}/ext-${extjs.version}/examples"
+            todir="${dist.stage.jsdoc}/source" failonerror="false"/>
+      <delete dir="${dist.stage.jsdoc}/ext-${extjs.version}" quiet="true"/>
+  </target>
+
+  <target name="jsdoc" depends="js-stage,build-module.jsdoc"/>
+
+   <!-- ====================================================================================================== -->
+   <!-- Define the SonarQube target                                                                                   -->
+   <!-- ====================================================================================================== -->   
+   <target name="sonar" >
+    <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
+        <!-- Update the following line, or put the "sonar-ant-task-*.jar" file in your "$HOME/.ant/lib" folder -->
+        <classpath path="/u01/apache-ant-1.9.1/lib/sonar-ant-task-*.jar" />
+    </taskdef>
+    <!-- Execute the SonarQube analysis -->
+    <sonar:sonar />
+   </target>    
+
+</project>

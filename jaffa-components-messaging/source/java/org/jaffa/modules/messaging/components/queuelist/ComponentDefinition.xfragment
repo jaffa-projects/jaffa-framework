@@ -1,0 +1,5 @@
+  <component id="Jaffa.Messaging.QueueList">
+    <class>org.jaffa.modules.messaging.components.queuelist.ui.QueueListComponent</class>
+    <type>ObjectFinder</type>
+    <optional-function name="Jaffa.Messaging.QueueAdmin"/>
+  </component>

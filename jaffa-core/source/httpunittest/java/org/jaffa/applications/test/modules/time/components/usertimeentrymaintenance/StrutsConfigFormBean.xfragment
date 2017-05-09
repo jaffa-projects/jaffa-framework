@@ -1,0 +1,2 @@
+    <form-bean      name="usertimeentry_userTimeEntryMaintenanceForm"
+                    type="org.jaffa.applications.test.modules.time.components.usertimeentrymaintenance.ui.UserTimeEntryMaintenanceForm"/>

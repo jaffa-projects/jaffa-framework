@@ -1,0 +1,11 @@
+    <!-- Roles Editor -->
+    <definition name="jaffa.admin.roleseditor.Layout"  extends="jaffa.ViewerLayout">
+        <put name="contextNav"  value="/jaffa/admin/roleseditor/contextNav.jsp"/>
+        <put name="defaultNav"  value="/jaffa/admin/roleseditor/defaultNav.jsp"/>
+        <put name="body"        value="/jaffa/admin/roleseditor/main.jsp"/>
+        <put name="action"      value="/admin_rolesEditor"/>
+    </definition>
+    <definition name="jaffa.admin.roleseditor"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Admin.RolesEditor]"/>
+        <put name="body" value="jaffa.admin.roleseditor.Layout"/>
+    </definition>

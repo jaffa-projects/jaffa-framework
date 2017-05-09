@@ -1,0 +1,19 @@
+/* 
+  File name:  tree.css
+  Author:     paule  
+
+  Description:
+    StyleSheet that controls the display of the tree widget
+*/
+
+a.WidgetTree {
+  border: none;
+}
+
+img.WidgetTree {
+  border: none;
+}
+
+img.WidgetTreeSpacer {
+  border: none;
+}

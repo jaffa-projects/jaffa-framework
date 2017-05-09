@@ -1,0 +1,7 @@
+    <!-- FormUsageViewer Form -->
+    <action    path="/jaffa_printing_formUsageViewer"
+               type="org.jaffa.modules.printing.components.formusageviewer.ui.FormUsageViewerAction"
+               name="jaffa_printing_formUsageViewerForm"
+               validate="false"
+               scope="request">
+    </action>

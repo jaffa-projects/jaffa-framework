@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.components.audit.domain.AuditTransactionField">
+        <map-to table="J_AUDIT_TRANSACTION_FIELDS" />
+
+        <field name="FieldId" use-member="m_fieldId" type="java.lang.String" primary-key="true">
+            <sql name="FIELD_ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="ObjectId" use-member="m_objectId" type="java.lang.String">
+            <sql name="OBJECT_ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="FieldName" use-member="m_fieldName" type="java.lang.String">
+            <sql name="FIELD_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="FromValue" use-member="m_fromValue" type="java.lang.String">
+            <sql name="FROM_VALUE" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="ToValue" use-member="m_toValue" type="java.lang.String">
+            <sql name="TO_VALUE" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Changed" use-member="m_changed" type="java.lang.Boolean">
+            <sql name="CHANGED" type="BOOLEAN" dirty="ignore"/>
+        </field>
+
+        <field name="Flex" use-member="m_flex" type="java.lang.Boolean">
+            <sql name="FLEX" type="BOOLEAN" dirty="ignore"/>
+        </field>
+
+        <field name="OverflowFlag" use-member="m_overflowFlag" type="java.lang.Boolean">
+            <sql name="OVERFLOW_FLAG" type="BOOLEAN" dirty="ignore"/>
+        </field>
+
+        <field name="MultilineHtmlFlag" use-member="m_multilineHtmlFlag" type="java.lang.String">
+            <sql name="MULTILINE_HTML_FLAG" type="STRING" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

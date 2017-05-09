@@ -1,0 +1,12 @@
+    <!-- FormUsageViewer -->
+    <definition name="jaffa.printing.formusageviewer.ViewerLayout"  extends="jaffa.ViewerLayout">
+        <put name="body" value="/jaffa/printing/formusageviewer/view.jsp"/>
+        <put name="action" value="/jaffa_printing_formUsageViewer"/>
+        <put name="updateComponent" value="Jaffa.Printing.FormUsageMaintenance"/>
+        <put name="deleteComponent" value="Jaffa.Printing.FormUsageMaintenance"/>
+    </definition>
+    <definition name="jaffa.printing.formusageviewer"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.FormUsageViewer.view]"/>
+        <put name="body" value="jaffa.printing.formusageviewer.ViewerLayout"/>
+    </definition>
+

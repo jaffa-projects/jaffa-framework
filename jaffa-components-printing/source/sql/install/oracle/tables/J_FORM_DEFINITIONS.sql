@@ -1,0 +1,28 @@
+CREATE TABLE "J_FORM_DEFINITIONS"(
+        "FORM_ID"          NUMBER(20) NOT NULL,
+        "FORM_NAME"          VARCHAR2(20) NOT NULL,
+        "FORM_ALTERNATE"          VARCHAR2(20),
+        "FORM_VARIATION"          VARCHAR2(20),
+        "OUTPUT_TYPE"          VARCHAR2(20),
+        "FORM_TEMPLATE"          VARCHAR2(255),
+        "FIELD_LAYOUT"          VARCHAR2(255),
+        "DESCRIPTION"          VARCHAR2(100),
+        "REMARKS"          VARCHAR2(255),
+        "DOM_FACTORY"          VARCHAR2(255),
+        "DOM_CLASS"          VARCHAR2(255),
+        "DOM_KEY1"          VARCHAR2(50),
+        "DOM_KEY2"          VARCHAR2(50),
+        "DOM_KEY3"          VARCHAR2(50),
+        "DOM_KEY4"          VARCHAR2(50),
+        "DOM_KEY5"          VARCHAR2(50),
+        "DOM_KEY6"          VARCHAR2(50),
+        "ADDITIONAL_DATA_COMPONENT"          VARCHAR2(255),
+        "FOLLOW_ON_FORM_NAME"          VARCHAR2(20),
+        "FOLLOW_ON_FORM_ALTERNATE"          VARCHAR2(20),
+        "CREATED_ON"          DATE,
+        "CREATED_BY"          VARCHAR2(20),
+        "LAST_CHANGED_ON"          DATE,
+        "LAST_CHANGED_BY"          VARCHAR2(20),
+    CONSTRAINT "J_FORM_DEFINITIONSP1" PRIMARY KEY("FORM_ID")
+)
+/

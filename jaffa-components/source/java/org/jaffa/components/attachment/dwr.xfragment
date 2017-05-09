@@ -1,0 +1,7 @@
+    <create creator="new" javascript="Jaffa_Attachment_AttachmentService">
+      <param name="class" value="org.jaffa.components.attachment.apis.AttachmentService" />
+      <include method="query"/>
+      <include method="update"/>
+    </create>
+
+    <convert converter="nnBean" match="org.jaffa.components.attachment.apis.data.*" />

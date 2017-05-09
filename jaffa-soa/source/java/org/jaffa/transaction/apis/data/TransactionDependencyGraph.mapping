@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='US-ASCII' ?>
+<bean-mapping>
+  <graph-data-object class='org.jaffa.transaction.apis.data.TransactionDependencyGraph'/>
+
+  <domain-object class='org.jaffa.transaction.domain.TransactionDependency'/>
+
+  <map-fields>
+    <field gdo='dependsOnId'/>
+    <field gdo='status'/>
+  </map-fields>
+</bean-mapping>

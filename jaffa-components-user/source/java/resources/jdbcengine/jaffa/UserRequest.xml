@@ -1,0 +1,58 @@
+<classmap>
+    <class name="org.jaffa.applications.jaffa.modules.user.domain.UserRequest">
+        <map-to table="USER_REQUEST" />
+
+        <field name="RequestId" use-member="m_requestId" type="java.lang.Long" primary-key="true" autogen-key="true">
+            <sql name="REQUEST_ID" type="INTEGER" dirty="ignore"/>
+        </field>
+
+        <field name="UserName" use-member="m_userName" type="java.lang.String">
+            <sql name="USER_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="FirstName" use-member="m_firstName" type="java.lang.String">
+            <sql name="FIRST_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="LastName" use-member="m_lastName" type="java.lang.String">
+            <sql name="LAST_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Password" use-member="m_password" type="java.lang.String">
+            <sql name="PASSWORD" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="EMailAddress" use-member="m_eMailAddress" type="java.lang.String">
+            <sql name="E_MAIL_ADDRESS" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="SecurityQuestion" use-member="m_securityQuestion" type="java.lang.Long">
+            <sql name="SECURITY_QUESTION" type="INTEGER" dirty="ignore"/>
+        </field>
+
+        <field name="SecurityAnswer" use-member="m_securityAnswer" type="java.lang.String">
+            <sql name="SECURITY_ANSWER" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Remarks" use-member="m_remarks" type="java.lang.String">
+            <sql name="REMARKS" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="CreatedOn" use-member="m_createdOn" type="org.jaffa.datatypes.DateTime">
+            <sql name="CREATED_DATETIME" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+        <field name="ProcessedDatetime" use-member="m_processedDatetime" type="org.jaffa.datatypes.DateTime">
+            <sql name="PROCESSED_DATETIME" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+        <field name="ProcessedUserId" use-member="m_processedUserId" type="java.lang.String">
+            <sql name="PROCESSED_USER" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Status" use-member="m_status" type="java.lang.String">
+            <sql name="STATUS" type="STRING" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

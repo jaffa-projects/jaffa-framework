@@ -1,0 +1,95 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+            jxb:version="1.0">
+
+  <xsd:annotation>
+    <xsd:appinfo>
+      <jxb:schemaBindings>
+        <jxb:package name="org.jaffa.modules.messaging.services.configdomain"/>
+      </jxb:schemaBindings>
+    </xsd:appinfo>
+  </xsd:annotation>
+
+  <xsd:annotation>
+    <xsd:documentation>
+      This is the schema for the configuration file used by JaffaComponentsMessaging. The following are the main configuration elements
+      <ul>
+        <li><b>jms-config</b>: provides information for connecting to JMS Provider</li>
+      </ul>
+    </xsd:documentation>
+  </xsd:annotation>
+
+<!-- **************************************************** -->
+
+  <xsd:element name="config">
+    <xsd:annotation>
+      <xsd:documentation>
+        config is the root element of the configuration file
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="jms-config" type="jms-config" minOccurs="1" maxOccurs="1"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name="jms-config">
+    <xsd:annotation>
+      <xsd:documentation>
+        jms-config provides information for connecting to JMS Provider
+        <ul>
+          <li><b>jndi-context</b>: Provides JNDI context for accessing the JMS Provider</li>
+          <li><b>connection-factory</b>: JNDI name for accessing the JMS connection factory</li>
+          <li><b>user</b>: The user for logging into the JMS Provider</li>
+          <li><b>password</b>: The password for logging into the JMS Provider</li>
+        </ul>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="jndi-context" type="jndi-context" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+    <xsd:attribute name="connection-factory" type="xsd:string" default="ConnectionFactory"/>
+    <xsd:attribute name="user" type="xsd:string" use="required"/>
+    <xsd:attribute name="password" type="xsd:string" use="required"/>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name="jndi-context">
+    <xsd:annotation>
+      <xsd:documentation>
+        jndi-context provides the parameters necessary for connecting to the messaging system
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="param" type="param" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name="param">
+    <xsd:annotation>
+      <xsd:documentation>
+        param declares a name-value pair, and is used in various elements of this schema
+        <ul>
+          <li><b>name</b>: the name of the parameter</li>
+          <li><b>value</b>: the value of the parameter. It could be a literal. Or it could be expression, which gets evaluated at runtime. JaffaMessaging utilizes the Bean Scripting Framework (BSF) for evaluating expressions. It sets up a context for BSF with the following elements
+            <ul>
+              <li><b>context</b>: contains the global context</li>
+              <li><b>bean</b>: contains the POJO</li>
+            </ul>
+          </li>
+        </ul>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+</xsd:schema>

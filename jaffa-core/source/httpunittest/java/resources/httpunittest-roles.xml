@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE roles PUBLIC "-//JAFFA//DTD Security Roles 1.0//EN" "http://jaffa.sourceforge.net/DTD/security-roles_1_0.dtd">
+
+<roles>
+    <role name="CLERK">
+        <description>This is a clerk</description>
+    </role>
+    <role name="SUPERVISOR">
+        <grant-function-access name="Function1"/>
+        <grant-function-access name="payroll.viewSalary"/>
+        <grant-function-access name="payroll.transactionOverride"/>
+    </role>
+    <role name="MANAGER">
+        <description>This is a Manager</description>
+        <grant-function-access name="Function2"/>
+        <grant-function-access name="payroll.updateSalary"/>
+        <grant-function-access name="payroll.printWages"/>
+    </role>
+</roles>

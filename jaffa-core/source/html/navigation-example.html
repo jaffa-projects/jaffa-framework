@@ -1,0 +1,143 @@
+<html>
+<head>
+  <title>Test Page For Global Menu</title>
+  <script type="text/javascript" src="jaffa/js/tiles/navigation.js"></script>
+  <link href='jaffa/css/jaffa.css' type='text/css' rel='StyleSheet'>
+</head>
+<body>
+<div class="navBar" style="width:100%" align="left">
+  <a class="navBarItem" href="http://jaffa.sf.net" onMouseOver="displayMenu(event,null)">Home</a>
+  <a class="navBarItem" href="javascript:void(0)" onMouseOver="displayMenu(event,'Runtime')">Runtime</a>
+  <a class="navBarItem" href="javascript:void(0)" onMouseOver="displayMenu(event,'Rapid Development')">Rapid Development</a>
+  <a class="navBarItem" href="javascript:void(0)" onMouseOver="displayMenu(event,'Download')">Download</a>
+  <a class="navBarItem" href="http://jaffa.sf.net/site/contactUs.html" 	onMouseOver="displayMenu(event,null)"				>Contact Us</a>
+</div>
+
+<div id="Runtime" class="navMenu">
+  <a class="navMenuItem" href="http://jaffa.sf.net/documentation/" onMouseOver="hideSubMenu(event)">
+    <span class="navMenuText">Overview</span>
+  </a>
+  <a class="navMenuItem" href="javascript:void(0)" onMouseOver="displaySubMenu(event,'Presentation');">
+    <span class="navMenuText">Presentation</span>
+    <span class="navMenuMore">&nbsp;</span>
+  </a>
+  <a class="navMenuItem" href="javascript:void(0)" onMouseOver="displaySubMenu(event,'Business');">
+    <span class="navMenuText">Business</span>
+    <span class="navMenuMore">&nbsp;</span>
+  </a>
+  <a class="navMenuItem" href="javascript:void(0)" onMouseOver="displaySubMenu(event,'Persistence');">
+    <span class="navMenuText">Persistence</span>
+    <span class="navMenuMore">&nbsp;</span>
+  </a>
+  <a class="navMenuItem" href="javascript:void(0)" onMouseOver="displaySubMenu(event,'Security');">
+    <span class="navMenuText">Security</span>
+    <span class="navMenuMore">&nbsp;</span>
+  </a>
+</div>
+
+
+<div id="Rapid Development" class="navMenu">
+  <a class="navMenuItem" href="http://jaffa.sf.net/documentation/tools/"  onMouseOver="hideSubMenu(event)">
+    <span class="navMenuText">Overview</span>
+  </a>
+  <a class="navMenuItem" href="http://jaffa.sf.net/documentation/tools/patterns/appbuilder/"  onMouseOver="hideSubMenu(event)">
+    <span class="navMenuText">App Builder</span>
+  </a>
+  <a class="navMenuItem" href="http://jaffa.sf.net/documentation/tools/patterns/" onMouseOver="hideSubMenu(event)">
+    <span class="navMenuText">Code Generation</span>
+  </a>
+  <a class="navMenuItem" href="javascript:void(0)" onMouseOver="displaySubMenu(event,'Patterns');">
+    <span class="navMenuText">Patterns</span>
+    <span class="navMenuMore">&nbsp;</span>
+  </a>
+</div>
+
+
+<div id="Download" class="navMenu">
+  <a class="navMenuItem" href="http://jaffa.sf.net/" onMouseOver="hideSubMenu(event)">
+    <span class="navMenuText">Jaffa v1.3</span>
+  </a>
+  <a class="navMenuItem" href="http://jaffa.sf.net/javadoc/1_3_0/" onMouseOver="hideSubMenu(event)">
+    <span class="navMenuText">View v1.3 Javadoc</span>
+  </a>
+  <a class="navMenuItem" href="http://jaffa.sf.net/" onMouseOver="hideSubMenu(event)">
+    <span class="navMenuText">Jaffa v1.2</span>
+  </a>
+  <a class="navMenuItem" href="http://jaffa.sf.net/javadoc/1_2_0/" onMouseOver="hideSubMenu(event)">
+    <span class="navMenuText">View v1.2 Javadoc</span>
+  </a>
+</div>
+
+<div id="Presentation" class="navMenu">
+  <a class="navMenuItem" href="http://jaffa.sf.net/" onMouseOver="hideSubMenu(event)">
+    <span class="navMenuText">Overview</span>
+  </a>
+</div>
+
+<div id="Business" class="navMenu">
+  <a class="navMenuItem" href="http://jaffa.sf.net/" onMouseOver="hideSubMenu(event)">
+    <span class="navMenuText">Overview</span>
+  </a>
+</div>
+
+<div id="Persistence" class="navMenu">
+  <a class="navMenuItem" href="http://jaffa.sf.net/" onMouseOver="hideSubMenu(event)">
+    <span class="navMenuText">Overview</span>
+  </a>
+</div>
+
+<div id="Security" class="navMenu">
+  <a class="navMenuItem" href="http://jaffa.sf.net/" onMouseOver="hideSubMenu(event)">
+    <span class="navMenuText">Overview</span>
+  </a>
+</div>
+
+<div id="Patterns" class="navMenu">
+  <a class="navMenuItem" href="javascript:void(0)" onMouseOver="displaySubMenu(event,'Domain Object');">
+    <span class="navMenuText">Domain Object</span>
+    <span class="navMenuMore">&nbsp;</span>
+  </a>
+  <a class="navMenuItem" href="http://jaffa.sf.net/documentation/tools/patterns/" onMouseOver="hideSubMenu(event)">
+    <span class="navMenuText">Object Finder</span>
+  </a>
+  <a class="navMenuItem" href="http://jaffa.sf.net/documentation/tools/patterns/" onMouseOver="hideSubMenu(event)">
+    <span class="navMenuText">Object Lookup</span>
+  </a>
+  <a class="navMenuItem" href="http://jaffa.sf.net/documentation/tools/patterns/" onMouseOver="hideSubMenu(event)">
+    <span class="navMenuText">Object Viewer</span>
+  </a>
+  <a class="navMenuItem" href="http://jaffa.sf.net/documentation/tools/patterns/" onMouseOver="hideSubMenu(event)">
+    <span class="navMenuText">Object Maintenance</span>
+  </a>
+</div>
+
+<div id="Domain Object" class="navMenu">
+  <a class="navMenuItem" href="http://jaffa.sf.net/documentation/tools/patterns/" onMouseOver="hideSubMenu(event)">
+    <span class="navMenuText">How to use the pattern</span>
+  </a>
+  <a class="navMenuItem" href="http://jaffa.sf.net/documentation/tools/patterns/" onMouseOver="hideSubMenu(event)">
+    <span class="navMenuText">XML Schema</span>
+  </a>
+  <a class="navMenuItem" href="javascript:void(0)" onMouseOver="displaySubMenu(event,'Import From');">
+    <span class="navMenuText">Import From</span>
+    <span class="navMenuMore">&nbsp;</span>
+  </a>
+</div>
+
+<div id="Import From" class="navMenu">
+  <a class="navMenuItem" href="http://jaffa.sf.net/documentation/tools/patterns/" onMouseOver="hideSubMenu(event)">
+    <span class="navMenuText">Uniface Schema</span>
+  </a>
+  <a class="navMenuItem" href="http://jaffa.sf.net/documentation/tools/patterns/" onMouseOver="hideSubMenu(event)">
+    <span class="navMenuText">Database Schema</span>
+  </a>
+  <a class="navMenuItem" href="http://jaffa.sf.net/documentation/tools/patterns/" onMouseOver="hideSubMenu(event)">
+    <span class="navMenuText">UML / XMI</span>
+  </a>
+  <a class="navMenuItem" href="http://jaffa.sf.net/documentation/tools/patterns/" onMouseOver="hideSubMenu(event)">
+    <span class="navMenuText">ErWin</span>
+  </a>
+</div>
+
+</body>
+</html>

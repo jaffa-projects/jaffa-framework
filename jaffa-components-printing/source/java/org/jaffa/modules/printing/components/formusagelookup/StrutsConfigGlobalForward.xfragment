@@ -1,0 +1,3 @@
+    <forward name="jaffa_printing_formUsageLookupCriteria" path="jaffa.printing.formusagelookup.criteria"/>
+    <forward name="jaffa_printing_formUsageLookupResults" path="jaffa.printing.formusagelookup.results"/>
+    <forward name="jaffa_printing_formUsageLookupConsolidatedCriteriaAndResults" path="jaffa.printing.formusagelookup.consolidatedCriteriaAndResults"/>

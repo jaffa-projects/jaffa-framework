@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+<!-- Application Builder For the Jaffa Application -->
+<application-builder version='2.1'>
+  <application-name>Modules</application-name>
+  <package-prefix>org.jaffa</package-prefix>
+  <full-package-names>false</full-package-names>
+
+  <output-root><<basedir>>/</output-root>
+  <output-java>source/java</output-java>
+  
+  <output-finders>build/patterns/object_finder_2_1/</output-finders>
+  <output-viewers>build/patterns/object_viewer_2_1/</output-viewers>
+  <output-lookups>build/patterns/object_lookup_2_1/</output-lookups>
+  <output-maintenance>build/patterns/object_maintenance_2_1/</output-maintenance>
+  
+  <domain-object-path><<basedir>>/build/patterns/domain_creator_1_1/</domain-object-path>
+
+ <!-- Removed so the AppBuilder will not regenerate the patterns as they have been customized
+ 
+   NOTE: the above definition puts all the code in the right place, but all the component names
+   are generated with the format of Modules.Printing.*. This needs to be manually changed so they
+   use Jaffa.Printing.*
+   
+   <module>
+    <name>Printing</name>
+    <finders-domain-pattern>org.jaffa.modules.printing.domain.*</finders-domain-pattern>
+    <viewers-domain-pattern>org.jaffa.modules.printing.domain.*</viewers-domain-pattern>
+    <maintenance-domain-pattern>org.jaffa.modules.printing.domain.*</maintenance-domain-pattern>    
+    <labels>merge</labels>
+  </module>
+ --> 
+</application-builder>
+

@@ -1,0 +1,4 @@
+    <component id="Jaffa.Printing.FormEventMaintenance">
+        <class>org.jaffa.modules.printing.components.formeventmaintenance.ui.FormEventMaintenanceComponent</class>
+        <type>ObjectMaintenance</type>
+    </component>

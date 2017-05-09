@@ -1,0 +1,18 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the next JAFFA Components Release. For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+
+What's Changed / Improvements
+=====================================================
+
+What's Deleted/Deprecated
+=====================================================
+- Deleted all the admin and user components, as they've already been moved into JaffaComponentsAdmin and JaffaComponentsUser modules
+
+Bug Fixes
+=====================================================

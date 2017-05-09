@@ -1,0 +1,36 @@
+<property environment="env"/>
+<property file="./build/Jaffa.ant.properties"/>
+<property file="${config.file}"/>
+
+<!-- ======================================================= -->
+<!-- ClassPath containing all the jars in the lib folder     -->
+<!-- and the Java libraries                                  -->
+<!-- ======================================================= -->
+<path id="project.class.path">
+	<fileset dir="${project.lib}">
+		<include name="**/*.jar"/>
+		<include name="**/*.zip"/>
+	</fileset>
+	<fileset dir="${java.home}/lib">
+		<include name="**/*.jar"/>
+		<include name="**/*.zip"/>
+	</fileset>
+	<fileset dir="${additional.libraries.folder}">
+		<include name="*.jar"/>
+		<include name="*.zip"/>
+	</fileset>
+	<fileset dir="${env.ANT_HOME}/lib">
+		<include name="**/ant.jar"/>
+	</fileset>
+</path>
+
+<condition property="SCRIPT.EXT" value="sh">
+	<and>
+		<os family="unix"/>
+	</and>
+</condition>
+<condition property="SCRIPT.EXT" value="bat">
+	<and>
+		<os family="windows"/>
+	</and>
+</condition>

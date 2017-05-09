@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+  <!-- ================================================= -->
+  <!-- Rules for Domain Object AuditTransactionObject -->
+  <!-- ================================================= -->
+
+  <metadata tag="jaffa.rules" class="org.jaffa.components.audit.domain.AuditTransactionObject">
+
+    <label>[label.Jaffa.Audit.AuditTransactionObject]</label>
+
+    <property name="objectId">
+      <label>[label.Jaffa.Audit.AuditTransactionObject.ObjectId]</label>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="transactionId">
+      <label>[label.Jaffa.Audit.AuditTransactionObject.TransactionId]</label>
+      <mandatory/>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="objectName">
+      <label>[label.Jaffa.Audit.AuditTransactionObject.ObjectName]</label>
+      <mandatory/>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="changeType">
+      <label>[label.Jaffa.Audit.AuditTransactionObject.ChangeType]</label>
+      <max-length>1</max-length>
+    </property>
+
+  </metadata>
+</aop>

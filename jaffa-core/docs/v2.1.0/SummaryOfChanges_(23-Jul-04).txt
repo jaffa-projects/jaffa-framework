@@ -1,0 +1,499 @@
+Summary of File Changes (Fri 23rd July 2004)
+=======================
+
+JaffaCore v2.0.0 -> v2.1.0
+--------------------------------
+U NEXT_ RELEASE_NOTES.txt
+U RELEASE_NOTES_2_0.txt
+U RELEASE_NOTES_2_1.txt
+P TODO.txt
+P build/Generate.xml
+P docs/Design_v2.0_Label_Editor.txt
+U docs/Object Maintenance 2.0 - HowTo.txt
+U docs/guides/Jaffa_Reference_Guide_Customizing_Jaffa.doc
+U docs/guides/Jaffa_Reference_Guide_Jaffa_Components.doc
+U docs/guides/Jaffa_Reference_Guide_Jaffa_Example1.doc
+U lib/commons-dbcp-1.1.jar
+cvs update: lib/commons-dbcp.jar is no longer in the repository
+U lib/commons-pool-1.1.jar
+P source/html/WEB-INF/jaffa-portlet.tld
+cvs update: lib/commons-pool.jar is no longer in the repository
+P source/html/jaffa/css/jaffa.css
+P source/html/jaffa/css/widgets/button.css
+U source/html/jaffa/css/widgets/tablesort.css
+U source/html/jaffa/css/widgets/tree.css
+U source/html/jaffa/js/panels/header.js
+P source/html/jaffa/js/tiles/navigation.js
+U source/html/jaffa/js/widgets/treeWidget.js
+P source/html/jaffa/js/widgets/usergridsettings.js
+P source/html/jaffa/jsp/log4j.jsp
+P source/html/jaffa/jsp/tiles/globalNav.jsp
+P source/html/jaffa/jsp/tiles/object_finder_2_0/defaultNav.jsp
+P source/html/jaffa/jsp/tiles/object_lookup_2_0/defaultNav.jsp
+P source/html/jaffa/jsp/tiles/object_maintenance_2_0/defaultNav.jsp
+P source/html/jaffa/jsp/tiles/object_viewer_2_0/defaultNav.jsp
+U source/html/jaffa/jsp/tiles/skeleton_component_2_0/SkeletonLayout.jsp
+P source/httpunittest/html/widgets/tests/dateTime.jsp
+P source/httpunittest/html/widgets/tests/editBox.jsp
+P source/httpunittest/java/ApplicationResources.properties
+P source/httpunittest/java/org/jaffa/config/framework.properties
+U source/java/ApplicationResources.pfragment
+U source/java/org/jaffa/beans/moulding/data/Generic.java
+U source/java/org/jaffa/beans/moulding/data/criteria/CriteriaDAO.java
+U source/java/org/jaffa/beans/moulding/data/criteria/package.html
+U source/java/org/jaffa/beans/moulding/data/domain/DomainDAO.java
+U source/java/org/jaffa/beans/moulding/data/domain/package.html
+U source/java/org/jaffa/beans/moulding/mapping/AbstractMouldHandler.java
+U source/java/org/jaffa/beans/moulding/mapping/ApplicationResources.pfragment
+U source/java/org/jaffa/beans/moulding/mapping/BeanMoulder.java
+U source/java/org/jaffa/beans/moulding/mapping/DataTypeMapping.java
+U source/java/org/jaffa/beans/moulding/mapping/GraphMapping.java
+U source/java/org/jaffa/beans/moulding/mapping/MappingFactory.java
+U source/java/org/jaffa/beans/moulding/mapping/MappingFilter.java
+U source/java/org/jaffa/beans/moulding/mapping/MouldException.java
+U source/java/org/jaffa/beans/moulding/mapping/MouldHandler.java
+P source/java/org/jaffa/components/codehelper/dto/CodeHelperInElementDto.java
+U source/java/org/jaffa/components/codehelper/dto/CriteriaElementDto.java
+P source/java/org/jaffa/components/codehelper/tx/CodeHelperTx.java
+P source/java/org/jaffa/components/finder/BooleanCriteriaField.java
+P source/java/org/jaffa/components/finder/CriteriaField.java
+P source/java/org/jaffa/components/finder/CurrencyCriteriaField.java
+P source/java/org/jaffa/components/finder/DateOnlyCriteriaField.java
+P source/java/org/jaffa/components/finder/DateTimeCriteriaField.java
+P source/java/org/jaffa/components/finder/DecimalCriteriaField.java
+P source/java/org/jaffa/components/finder/FinderTx.java
+P source/java/org/jaffa/components/finder/IntegerCriteriaField.java
+P source/java/org/jaffa/components/finder/RawCriteriaField.java
+P source/java/org/jaffa/components/finder/StringCriteriaField.java
+P source/java/org/jaffa/components/maint/MaintComponent2.java
+P source/java/org/jaffa/components/maint/MaintTx.java
+P source/java/org/jaffa/components/voucher/SimpleVoucherGenerator.java
+P source/java/org/jaffa/components/voucher/VoucherGeneratorException.java
+P source/java/org/jaffa/config/Config.java
+P source/java/org/jaffa/config/InitApp.java
+U source/java/org/jaffa/config/dtd.properties
+P source/java/org/jaffa/config/framework.properties
+U source/java/org/jaffa/config/locale.properties
+P source/java/org/jaffa/datatypes/DateBase.java
+P source/java/org/jaffa/datatypes/Formatter.java
+P source/java/org/jaffa/datatypes/Parser.java
+P source/java/org/jaffa/datatypes/ValidationException.java
+P source/java/org/jaffa/datatypes/exceptions/BelowMinimumException.java
+P source/java/org/jaffa/datatypes/exceptions/ExceedsMaximumException.java
+P source/java/org/jaffa/datatypes/exceptions/FormatCurrencyException.java
+P source/java/org/jaffa/datatypes/exceptions/FormatDateOnlyException.java
+P source/java/org/jaffa/datatypes/exceptions/FormatDateTimeException.java
+P source/java/org/jaffa/datatypes/exceptions/FormatDecimalException.java
+P source/java/org/jaffa/datatypes/exceptions/FormatIntegerException.java
+P source/java/org/jaffa/datatypes/exceptions/InvalidForeignKeyException.java
+P source/java/org/jaffa/datatypes/exceptions/InvalidGenericForeignKeyException.java
+P source/java/org/jaffa/datatypes/exceptions/InvalidPatternRuntimeException.java
+P source/java/org/jaffa/datatypes/exceptions/MandatoryFieldException.java
+P source/java/org/jaffa/datatypes/exceptions/PatternMismatchException.java
+P source/java/org/jaffa/datatypes/exceptions/TooLittleDataException.java
+P source/java/org/jaffa/datatypes/exceptions/TooMuchDataException.java
+P source/java/org/jaffa/datatypes/exceptions/UnknownDataTypeRuntimeException.java
+P source/java/org/jaffa/exceptions/ApplicationException.java
+U source/java/org/jaffa/exceptions/ApplicationExceptionWithContext.java
+P source/java/org/jaffa/exceptions/ApplicationExceptions.java
+P source/java/org/jaffa/exceptions/ComponentExpiredException.java
+U source/java/org/jaffa/exceptions/CustomException.java
+P source/java/org/jaffa/exceptions/CustomRuntimeException.java
+P source/java/org/jaffa/exceptions/DomainObjectChangedException.java
+P source/java/org/jaffa/exceptions/DomainObjectNotFoundException.java
+P source/java/org/jaffa/exceptions/DuplicateKeyException.java
+P source/java/org/jaffa/exceptions/FrameworkException.java
+P source/java/org/jaffa/exceptions/IncompleteKeySpecifiedException.java
+cvs update: source/java/org/jaffa/exceptions/ErrorConstants.java is no longer in the repository
+cvs update: source/java/org/jaffa/exceptions/ErrorConstants.properties is no longer in the repository
+P source/java/org/jaffa/exceptions/MiddlewareException.java
+P source/java/org/jaffa/exceptions/MultipleDomainObjectsFoundException.java
+P source/java/org/jaffa/exceptions/RelatedDomainObjectFoundException.java
+P source/java/org/jaffa/exceptions/TokenMismatchException.java
+P source/java/org/jaffa/exceptions/UOWSecurityException.java
+P source/java/org/jaffa/middleware/CreateServiceException.java
+P source/java/org/jaffa/middleware/Factory.java
+cvs update: source/java/org/jaffa/exceptions/MandatoryFieldException.java is no longer in the repository
+U source/java/org/jaffa/patterns/library/domain_creator_1_1/domain/Field.java
+U source/java/org/jaffa/patterns/library/domain_creator_1_1/domain/Fields.java
+U source/java/org/jaffa/patterns/library/domain_creator_1_1/domain/ObjectFactory.java
+U source/java/org/jaffa/patterns/library/domain_creator_1_1/domain/Relationship.java
+U source/java/org/jaffa/patterns/library/domain_creator_1_1/domain/RelationshipField.java
+U source/java/org/jaffa/patterns/library/domain_creator_1_1/domain/RelationshipFields.java
+U source/java/org/jaffa/patterns/library/domain_creator_1_1/domain/Relationships.java
+U source/java/org/jaffa/patterns/library/domain_creator_1_1/domain/Root.java
+U source/java/org/jaffa/patterns/library/domain_creator_1_1/domain/RootType.java
+U source/java/org/jaffa/patterns/library/domain_creator_1_1/domain/bgm.ser
+U source/java/org/jaffa/patterns/library/domain_creator_1_1/domain/jaxb.properties
+U source/java/org/jaffa/patterns/library/domain_creator_1_1/domain/impl/FieldImpl.java
+U source/java/org/jaffa/patterns/library/domain_creator_1_1/domain/impl/FieldsImpl.java
+U source/java/org/jaffa/patterns/library/domain_creator_1_1/domain/impl/RelationshipFieldImpl.java
+U source/java/org/jaffa/patterns/library/domain_creator_1_1/domain/impl/RelationshipFieldsImpl.java
+U source/java/org/jaffa/patterns/library/domain_creator_1_1/domain/impl/RelationshipImpl.java
+U source/java/org/jaffa/patterns/library/domain_creator_1_1/domain/impl/RelationshipsImpl.java
+U source/java/org/jaffa/patterns/library/domain_creator_1_1/domain/impl/RootImpl.java
+U source/java/org/jaffa/patterns/library/domain_creator_1_1/domain/impl/RootTypeImpl.java
+U source/java/org/jaffa/persistence/IPersistent.java
+P source/java/org/jaffa/persistence/Persistent.java
+P source/java/org/jaffa/persistence/UOW.java
+P source/java/org/jaffa/persistence/engines/IPersistenceEngine.java
+P source/java/org/jaffa/persistence/engines/PersistenceEngineFactory.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/Engine.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/IStoredProcedure.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/configservice/ClassMetaData.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/configservice/ConfigurationService.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/configservice/MappingParser.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/configservice/exceptions/ClassMetaDataValidationRuntimeException.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/configservice/exceptions/ConfigurationServiceRuntimeException.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/configservice/exceptions/InitFileNotFoundRuntimeException.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/datasource/DataSource.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/datasource/DataSourceCursor.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/datasource/DataSourceFactory.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/datasource/DbcpDataSourceConnectionFactory.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/datasource/PersistentTransaction.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/datasource/exceptions/DataSourceCreationException.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/datasource/exceptions/DataSourceCursorRuntimeException.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/interceptor/AddInterceptor.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/interceptor/DeleteInterceptor.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/interceptor/LockInterceptor.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/interceptor/QueryInterceptor.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/interceptor/UpdateInterceptor.java
+U source/java/org/jaffa/persistence/engines/jdbcengine/proxy/PersistentDelegate.java
+U source/java/org/jaffa/persistence/engines/jdbcengine/proxy/PersistentInstanceFactory.java
+U source/java/org/jaffa/persistence/engines/jdbcengine/proxy/PersistentInstanceInvocationHandler.java
+U source/java/org/jaffa/persistence/engines/jdbcengine/proxy/ProxyFieldValidatoRuntimeException.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/querygenerator/JdbcBridge.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/querygenerator/PreparedStatementHelper.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/querygenerator/QueryStatementHelper.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/querygenerator/StatementHelper.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/util/Introspection.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/util/MoldingService.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/variants/Variant.java
+P source/java/org/jaffa/persistence/engines/jdbcengine/variants/default.properties
+P source/java/org/jaffa/persistence/engines/jdbcengine/variants/mssqlserver.properties
+P source/java/org/jaffa/persistence/engines/jdbcengine/variants/mysql.properties
+P source/java/org/jaffa/persistence/engines/jdbcengine/variants/oracle.properties
+P source/java/org/jaffa/persistence/engines/jdbcengine/variants/postgresql.properties
+P source/java/org/jaffa/persistence/exceptions/AddFailedException.java
+P source/java/org/jaffa/persistence/exceptions/AlreadyLockedObjectException.java
+P source/java/org/jaffa/persistence/exceptions/CommitFailedException.java
+P source/java/org/jaffa/persistence/exceptions/DeleteFailedException.java
+P source/java/org/jaffa/persistence/exceptions/DomainObjectValidationException.java
+P source/java/org/jaffa/persistence/exceptions/EngineInstantiationException.java
+P source/java/org/jaffa/persistence/exceptions/IllegalPersistentStateRuntimeException.java
+P source/java/org/jaffa/persistence/exceptions/InactiveUowRuntimeException.java
+P source/java/org/jaffa/persistence/exceptions/InvalidUowRuntimeException.java
+U source/java/org/jaffa/persistence/exceptions/PostAddFailedException.java
+U source/java/org/jaffa/persistence/exceptions/PostDeleteFailedException.java
+P source/java/org/jaffa/persistence/exceptions/PostLoadFailedException.java
+U source/java/org/jaffa/persistence/exceptions/PostUpdateFailedException.java
+P source/java/org/jaffa/persistence/exceptions/PreAddFailedException.java
+P source/java/org/jaffa/persistence/exceptions/PreDeleteFailedException.java
+P source/java/org/jaffa/persistence/exceptions/PreUpdateFailedException.java
+P source/java/org/jaffa/persistence/exceptions/QueryFailedException.java
+P source/java/org/jaffa/persistence/exceptions/ReadOnlyObjectException.java
+P source/java/org/jaffa/persistence/exceptions/RollbackFailedException.java
+P source/java/org/jaffa/persistence/exceptions/UOWException.java
+P source/java/org/jaffa/persistence/exceptions/UpdateFailedException.java
+P source/java/org/jaffa/persistence/exceptions/UpdatePrimaryKeyException.java
+U source/java/org/jaffa/persistence/util/PersistentHelper.java
+P source/java/org/jaffa/presentation/portlet/ActionBase.java
+P source/java/org/jaffa/presentation/portlet/EventHandlerMissingRuntimeException.java
+P source/java/org/jaffa/presentation/portlet/FormBase.java
+P source/java/org/jaffa/presentation/portlet/HistoryNav.java
+U source/java/org/jaffa/presentation/portlet/PortletFilter.java
+P source/java/org/jaffa/presentation/portlet/component/ComponentCreationRuntimeException.java
+P source/java/org/jaffa/presentation/portlet/session/LocaleContext.java
+P source/java/org/jaffa/presentation/portlet/session/UserSession.java
+P source/java/org/jaffa/presentation/portlet/session/UserSessionSetupException.java
+P source/java/org/jaffa/presentation/portlet/widgets/controller/exceptions/XmlStructureRuntimeException.java
+P source/java/org/jaffa/presentation/portlet/widgets/model/CheckBoxModel.java
+P source/java/org/jaffa/presentation/portlet/widgets/model/DateTimeModel.java
+P source/java/org/jaffa/presentation/portlet/widgets/model/DropDownModel.java
+P source/java/org/jaffa/presentation/portlet/widgets/model/EditBoxModel.java
+P source/java/org/jaffa/presentation/portlet/widgets/model/RadioButtonModel.java
+P source/java/org/jaffa/presentation/portlet/widgets/model/exceptions/ColumnMismatchRuntimeException.java
+P source/java/org/jaffa/presentation/portlet/widgets/model/exceptions/DataTypeMismatchRuntimeException.java
+P source/java/org/jaffa/presentation/portlet/widgets/model/exceptions/IllegalExtensionRuntimeException.java
+P source/java/org/jaffa/presentation/portlet/widgets/taglib/ButtonTag.java
+P source/java/org/jaffa/presentation/portlet/widgets/taglib/DateTimeTag.java
+P source/java/org/jaffa/presentation/portlet/widgets/taglib/EditBoxTag.java
+P source/java/org/jaffa/presentation/portlet/widgets/taglib/FoldingSectionTag.java
+P source/java/org/jaffa/presentation/portlet/widgets/taglib/FormTag.java
+P source/java/org/jaffa/presentation/portlet/widgets/taglib/LabelTag.java
+P source/java/org/jaffa/presentation/portlet/widgets/taglib/TextTag.java
+P source/java/org/jaffa/presentation/portlet/widgets/taglib/TreeTag.java
+P source/java/org/jaffa/presentation/portlet/widgets/taglib/UserGridColumnTag.java
+P source/java/org/jaffa/presentation/portlet/widgets/taglib/UserGridTag.java
+P source/java/org/jaffa/presentation/portlet/widgets/taglib/exceptions/ColumnAlreadyExistsRuntimeException.java
+P source/java/org/jaffa/presentation/portlet/widgets/taglib/exceptions/InvalidWidgetModelReturnedRuntimeException.java
+P source/java/org/jaffa/presentation/portlet/widgets/taglib/exceptions/JspWriteRuntimeException.java
+P source/java/org/jaffa/presentation/portlet/widgets/taglib/exceptions/MissingParametersRuntimeException.java
+P source/java/org/jaffa/presentation/portlet/widgets/taglib/exceptions/OuterDropDownTagMissingRuntimeException.java
+P source/java/org/jaffa/presentation/portlet/widgets/taglib/exceptions/OuterFormTagMissingRuntimeException.java
+P source/java/org/jaffa/presentation/portlet/widgets/taglib/exceptions/OuterGridTagMissingRuntimeException.java
+P source/java/org/jaffa/presentation/portlet/widgets/taglib/exceptions/OuterTableTagMissingRuntimeException.java
+P source/java/org/jaffa/presentation/portlet/widgets/taglib/exceptions/TagCannotBeEnclosedRuntimeException.java
+P source/java/org/jaffa/presentation/portlet/widgets/taglib/exceptions/WidgetModelAccessMethodInvocationRuntimeException.java
+P source/java/org/jaffa/presentation/portlet/widgets/taglib/exceptions/WidgetModelAccessMethodNotFoundRuntimeException.java
+P source/java/org/jaffa/rules/RulesEngine.java
+P source/java/org/jaffa/rules/RulesEngineException.java
+P source/java/org/jaffa/rules/examples/domain/DomainMetaFileForValidFieldValue.xml
+U source/java/org/jaffa/rules/examples/domain/MappingFileForValidFieldValue.xml
+P source/java/org/jaffa/rules/examples/domain/ValidFieldValue.java
+P source/java/org/jaffa/rules/examples/domain/ValidFieldValueMeta.java
+P source/java/org/jaffa/rules/fieldvalidators/DateOnlyFieldValidator.java
+P source/java/org/jaffa/rules/fieldvalidators/DateTimeFieldValidator.java
+P source/java/org/jaffa/rules/fieldvalidators/ForeignKeyFieldValidator.java
+P source/java/org/jaffa/rules/fieldvalidators/GenericForeignKeyFieldValidator.java
+P source/java/org/jaffa/rules/fieldvalidators/InListFieldValidator.java
+P source/java/org/jaffa/security/CheckPolicy.java
+P source/java/org/jaffa/security/PolicyCache.java
+P source/java/org/jaffa/security/PolicyManager.java
+P source/java/org/jaffa/security/SecurityManager.java
+P source/java/org/jaffa/tools/build/ConfigFileUpdate.java
+P source/java/org/jaffa/tools/build/ValidatePropertiesFile.java
+P source/java/org/jaffa/tools/common/SourceDecomposer.java
+P source/java/org/jaffa/tools/common/SourceDecomposerUtils.java
+P source/java/org/jaffa/tools/database/SyncSchema.java
+U source/java/org/jaffa/tools/domainmeta/common/FieldBean.java
+U source/java/org/jaffa/tools/domainmeta/common/TableBean.java
+U source/java/org/jaffa/tools/domainmeta/erwin/ErWinSchemaReader.java
+U source/java/org/jaffa/tools/domainmeta/jdbc/JDBCSchemaReader.java
+P source/java/org/jaffa/tools/domainmeta/uniface/MetaInfoGenerator.java
+P source/java/org/jaffa/tools/domainmeta/uniface/UnifaceSchemaReader.java
+P source/java/org/jaffa/tools/patternengine/DomParser.java
+P source/java/org/jaffa/tools/patternengine/PatternGenerator.java
+P source/java/org/jaffa/tools/patternmetaengine/AppBuilder.java
+P source/java/org/jaffa/tools/patternmetaengine/BuildObjectFinder.java
+P source/java/org/jaffa/tools/patternmetaengine/BuildObjectFinder_1.java
+P source/java/org/jaffa/tools/patternmetaengine/BuildObjectFinder_2.java
+P source/java/org/jaffa/tools/patternmetaengine/BuildObjectLookup.java
+P source/java/org/jaffa/tools/patternmetaengine/BuildObjectLookup_1.java
+P source/java/org/jaffa/tools/patternmetaengine/BuildObjectLookup_2.java
+P source/java/org/jaffa/tools/patternmetaengine/BuildObjectMaintenance.java
+P source/java/org/jaffa/tools/patternmetaengine/BuildObjectMaintenance_1.java
+P source/java/org/jaffa/tools/patternmetaengine/BuildObjectMaintenance_2.java
+P source/java/org/jaffa/tools/patternmetaengine/BuildObjectViewer.java
+P source/java/org/jaffa/tools/patternmetaengine/BuildObjectViewer_1.java
+P source/java/org/jaffa/tools/patternmetaengine/BuildObjectViewer_2.java
+P source/java/org/jaffa/tools/patternmetaengine/DomainObjectHelper.java
+P source/java/org/jaffa/tools/website/GenerateTOC.java
+P source/java/org/jaffa/util/BeanHelper.java
+P source/java/org/jaffa/util/LocaleHelper.java
+P source/java/org/jaffa/util/LoggerHelper.java
+P source/java/org/jaffa/util/MessageHelper.java
+cvs update: source/java/org/jaffa/util/CustomException.java is no longer in the repository
+P source/java/org/jaffa/util/PropertyMessageResources.java
+P source/java/org/jaffa/util/PropertyMessageResourcesFactory.java
+P source/java/org/jaffa/util/SplitString.java
+P source/java/org/jaffa/util/StringHelper.java
+P source/java/org/jaffa/util/URLHelper.java
+U source/java/patterns/library/data_security_policy_1_1/ApplyPredicate.wm
+U source/java/patterns/library/data_security_policy_1_1/CreatePredicate.wm
+U source/java/patterns/library/data_security_policy_1_1/DropPredicate.wm
+U source/java/patterns/library/data_security_policy_1_1/SecurityDomainPattern.xml
+U source/java/patterns/library/data_security_policy_1_1/data-security-policy_1_1.dtd
+U source/java/patterns/library/domain_creator_1_1/CreateTable.wm
+U source/java/patterns/library/domain_creator_1_1/CreateTableMSSQL.wm
+U source/java/patterns/library/domain_creator_1_1/CreateTableMySQL.wm
+U source/java/patterns/library/domain_creator_1_1/DomainCreatorPattern.xml
+U source/java/patterns/library/domain_creator_1_1/DomainObject.wm
+U source/java/patterns/library/domain_creator_1_1/Mapping.wm
+U source/java/patterns/library/domain_creator_1_1/MetaObject.wm
+U source/java/patterns/library/domain_creator_1_1/Readme.txt
+U source/java/patterns/library/domain_creator_1_1/Resources.wm
+U source/java/patterns/library/domain_creator_1_1/domain-creator-meta_1_1.dtd
+U source/java/patterns/library/domain_creator_1_1/domain-creator-meta_1_1.xsd
+P source/java/patterns/library/object_finder_1_0/ComponentController.wm
+U source/java/patterns/library/object_finder_1_0/ComponentCriteriaJSP.wm
+P source/java/patterns/library/object_finder_1_0/ComponentResultsForm.wm
+P source/java/patterns/library/object_finder_1_0/ComponentResultsJSP.wm
+P source/java/patterns/library/object_finder_2_0/ComponentController.wm
+P source/java/patterns/library/object_finder_2_0/ComponentResultsJSP.wm
+P source/java/patterns/library/object_lookup_1_0/ComponentController.wm
+P source/java/patterns/library/object_lookup_1_0/ComponentResultsForm.wm
+P source/java/patterns/library/object_lookup_1_0/ComponentResultsJSP.wm
+P source/java/patterns/library/object_lookup_2_0/ComponentController.wm
+P source/java/patterns/library/object_lookup_2_0/ComponentResultsJSP.wm
+P source/java/patterns/library/object_maintenance_1_0/ComponentController.wm
+P source/java/patterns/library/object_maintenance_2_0/ComponentController.wm
+P source/java/patterns/library/object_maintenance_2_0/ComponentForm.wm
+P source/java/patterns/library/object_maintenance_2_0/ComponentJSP.wm
+P source/java/patterns/library/object_maintenance_2_0/ComponentTx.wm
+P source/java/patterns/library/object_maintenance_2_0/Readme.txt
+P source/java/patterns/library/object_viewer_1_0/ComponentController.wm
+P source/java/patterns/library/object_viewer_2_0/ComponentController.wm
+P source/java/patterns/library/object_viewer_2_0/ComponentJSP.wm
+P source/java/patterns/library/script_generator_1_0/script-generator_1_0.dtd
+P source/java/patterns/library/skeleton_component_2_0/ComponentDefaultNavJSP.wm
+P source/java/patterns/library/skeleton_component_2_0/ComponentTilesDefinitions.wm
+P source/java/patterns/library/skeleton_component_2_0/SkeletonComponentPattern.xml
+cvs update: source/java/patterns/library/skeleton_component_2_0/ComponentLayoutJSP.wm is no longer in the repository
+U source/unittest/java/helpers/ConnectionHelper.java
+P source/unittest/java/org/jaffa/config/framework.properties
+P source/unittest/java/org/jaffa/persistence/blackboxtests/AddTest.java
+P source/unittest/java/org/jaffa/persistence/blackboxtests/AllTests.java
+P source/unittest/java/org/jaffa/persistence/blackboxtests/ConcurrencyTest.java
+P source/unittest/java/org/jaffa/persistence/blackboxtests/DeleteTest.java
+P source/unittest/java/org/jaffa/persistence/blackboxtests/DynamicRulesTest.java
+P source/unittest/java/org/jaffa/persistence/blackboxtests/HitlistTest.java
+P source/unittest/java/org/jaffa/persistence/blackboxtests/LobTest.java
+P source/unittest/java/org/jaffa/persistence/blackboxtests/PerformanceTest.java
+P source/unittest/java/org/jaffa/persistence/blackboxtests/QueryTest.java
+P source/unittest/java/org/jaffa/persistence/blackboxtests/RawTest.java
+U source/unittest/java/org/jaffa/persistence/blackboxtests/RelationshipTest.java
+P source/unittest/java/org/jaffa/persistence/blackboxtests/Wrapper.java
+U source/unittest/java/org/jaffa/persistence/domainobjects/Asset.java
+P source/unittest/java/org/jaffa/persistence/domainobjects/AssetMeta.java
+P source/unittest/java/org/jaffa/persistence/domainobjects/CategoryOfInstrument.java
+P source/unittest/java/org/jaffa/persistence/domainobjects/CategoryOfInstrumentMeta.java
+cvs update: source/unittest/java/org/jaffa/persistence/domainobjects/AssetResources.properties is no longer in the repository
+P source/unittest/java/org/jaffa/persistence/domainobjects/Condition.java
+P source/unittest/java/org/jaffa/persistence/domainobjects/ConditionMeta.java
+P source/unittest/java/org/jaffa/persistence/domainobjects/Item.java
+P source/unittest/java/org/jaffa/persistence/domainobjects/ItemMeta.java
+P source/unittest/java/org/jaffa/persistence/domainobjects/Part.java
+P source/unittest/java/org/jaffa/persistence/domainobjects/PartMeta.java
+P source/unittest/java/org/jaffa/persistence/domainobjects/PartPicture.java
+P source/unittest/java/org/jaffa/persistence/domainobjects/PartPictureMeta.java
+P source/unittest/java/org/jaffa/persistence/domainobjects/PartRemarks.java
+P source/unittest/java/org/jaffa/persistence/domainobjects/PartRemarksMeta.java
+P source/unittest/java/org/jaffa/persistence/domainobjects/PartRemarksPicture.java
+P source/unittest/java/org/jaffa/persistence/domainobjects/PartRemarksPictureMeta.java
+U source/unittest/java/org/jaffa/persistence/mappingfiles/Asset.xml
+U source/unittest/java/org/jaffa/persistence/mappingfiles/CategoryOfInstrument.xml
+U source/unittest/java/org/jaffa/persistence/mappingfiles/Condition.xml
+U source/unittest/java/org/jaffa/persistence/mappingfiles/Item.xml
+U source/unittest/java/org/jaffa/persistence/mappingfiles/Part.xml
+U source/unittest/java/org/jaffa/persistence/mappingfiles/PartPicture.xml
+U source/unittest/java/org/jaffa/persistence/mappingfiles/PartRemarks.xml
+U source/unittest/java/org/jaffa/persistence/mappingfiles/PartRemarksPicture.xml
+U source/unittest/java/org/jaffa/persistence/mappingfiles/ValidFieldValue.xml
+P source/unittest/java/org/jaffa/security/AllTests.java
+U source/unittest/java/org/jaffa/security/TestDataSecurity.java
+P source/unittest/java/resources/init.xml
+U source/unittest/java/resources/tools/patternengine/executePatternGenerator.xml
+U source/unittest/java/resources/tools/patternengine/data_security_policy_1_1/ItemSecurityProfile.xml
+cvs update: source/unittest/java/resources/tools/patternengine/executeDomainCreator_1_0.xml is no longer in the repository
+U source/unittest/java/resources/tools/patternengine/domain_creator_1_1/Asset.xml
+U source/unittest/java/resources/tools/patternengine/domain_creator_1_1/CategoryOfInstrument.xml
+U source/unittest/java/resources/tools/patternengine/domain_creator_1_1/Condition.xml
+U source/unittest/java/resources/tools/patternengine/domain_creator_1_1/Item.xml
+U source/unittest/java/resources/tools/patternengine/domain_creator_1_1/Part.xml
+U source/unittest/java/resources/tools/patternengine/domain_creator_1_1/PartPicture.xml
+U source/unittest/java/resources/tools/patternengine/domain_creator_1_1/PartRemarks.xml
+U source/unittest/java/resources/tools/patternengine/domain_creator_1_1/PartRemarksPicture.xml
+
+Success, CVS operation completed
+
+
+
+JaffaBaseline v1.0.0 -> v1.1.0
+--------------------------------
+U NEXT_ RELEASE_NOTES.txt
+U build/build.xml
+P build/sandbox.ant.properties
+U build/patterns/main_2_0.xml
+U build/tomcat/server.xml.5.0.template
+P source/html/WEB-INF/web.xml
+P source/html/errorpage/error.jsp
+P source/html/jaffa/css/widgets/button.css
+U source/html/jaffa/css/widgets/tablesort.css
+P source/java/org/jaffa/config/framework.properties
+P source/java/resources/jdbc-engine.xml
+
+Success, CVS operation completed
+
+
+
+JaffaComponents v1.0.0 -> v1.1.0
+--------------------------------
+U NEXT_ RELEASE_NOTES.txt
+U build/patterns/main_2_0.xml
+cvs update: build/patterns/domain_creator_1_0/User.xml is no longer in the repository
+cvs update: build/patterns/domain_creator_1_0/UserRoles.xml is no longer in the repository
+U build/patterns/domain_creator_1_1/User.xml
+U build/patterns/domain_creator_1_1/UserRoles.xml
+P source/html/jaffa/admin/businessfunction/defaultNav.jsp
+P source/html/jaffa/admin/checkpolicy/defaultNav.jsp
+P source/html/jaffa/admin/defaultvalueeditor/componentList.jsp
+cvs update: source/html/jaffa/admin/defaultvalueeditor/Layout.jsp is no longer in the repository
+P source/html/jaffa/admin/defaultvalueeditor/defaultNav.jsp
+P source/html/jaffa/admin/defaultvalueeditor/propertyEditor.jsp
+P source/html/jaffa/admin/labeleditor/defaultNav.jsp
+P source/html/jaffa/admin/log4jconfig/defaultNav.jsp
+P source/html/jaffa/admin/log4jconfig/main.jsp
+P source/html/jaffa/admin/menunavigation/defaultNav.jsp
+P source/html/jaffa/admin/menunavigation/main.jsp
+P source/html/jaffa/admin/roleseditor/defaultNav.jsp
+P source/html/jaffa/admin/roleseditor/main.jsp
+P source/html/jaffa/admin/sessionexplorer/defaultNav.jsp
+P source/html/jaffa/admin/validationruleseditor/defaultNav0.jsp
+P source/html/jaffa/admin/validationruleseditor/defaultNav1.jsp
+cvs update: source/html/jaffa/admin/validationruleseditor/Layout.jsp is no longer in the repository
+P source/html/jaffa/admin/validationruleseditor/editor.jsp
+P source/html/jaffa/admin/viewerhyperlinkconfig/defaultNav.jsp
+P source/html/jaffa/admin/viewerhyperlinkconfig/domainFieldViewerComponentMapping.jsp
+cvs update: source/html/jaffa/admin/viewerhyperlinkconfig/Layout.jsp is no longer in the repository
+P source/html/jaffa/admin/viewerhyperlinkconfig/keyFieldPerViewerComponent.jsp
+U source/java/jdbcengine/User.xml
+U source/java/jdbcengine/UserRole.xml
+U source/java/org/jaffa/applications/jaffa/modules/admin/components/businessfunction/ui/BusinessFunctionComponent.java
+U source/java/org/jaffa/applications/jaffa/modules/admin/components/checkpolicy/ui/CheckPolicyComponent.java
+U source/java/org/jaffa/applications/jaffa/modules/admin/components/defaultvalueeditor/ApplicationResources.pfragment
+P source/java/org/jaffa/applications/jaffa/modules/admin/components/defaultvalueeditor/ComponentTilesDefinitions.xfragment
+P source/java/org/jaffa/applications/jaffa/modules/admin/components/defaultvalueeditor/ui/DefaultValueEditorAction.java
+P source/java/org/jaffa/applications/jaffa/modules/admin/components/defaultvalueeditor/ui/DefaultValueEditorComponent.java
+P source/java/org/jaffa/applications/jaffa/modules/admin/components/defaultvalueeditor/ui/DefaultValueEditorForm.java
+U source/java/org/jaffa/applications/jaffa/modules/admin/components/defaultvalueeditor/ui/exceptions/DefaultValueEditorException.java
+U source/java/org/jaffa/applications/jaffa/modules/admin/components/labeleditor/ApplicationResources.pfragment
+P source/java/org/jaffa/applications/jaffa/modules/admin/components/labeleditor/ui/LabelEditorComponent.java
+U source/java/org/jaffa/applications/jaffa/modules/admin/components/labeleditor/ui/exceptions/LabelEditorException.java
+U source/java/org/jaffa/applications/jaffa/modules/admin/components/log4jconfig/ui/Log4jConfigComponent.java
+U source/java/org/jaffa/applications/jaffa/modules/admin/components/menunavigation/ui/MenuNavigationComponent.java
+U source/java/org/jaffa/applications/jaffa/modules/admin/components/roleseditor/ui/RolesEditorComponent.java
+P source/java/org/jaffa/applications/jaffa/modules/admin/components/usermaintenance/ui/UserMaintenanceForm.java
+P source/java/org/jaffa/applications/jaffa/modules/admin/components/userviewer/ui/UserViewerComponent.java
+P source/java/org/jaffa/applications/jaffa/modules/admin/components/validationruleseditor/ComponentTilesDefinitions.xfragment
+U source/java/org/jaffa/applications/jaffa/modules/admin/components/validationruleseditor/ui/ValidationRulesEditorComponent.java
+P source/java/org/jaffa/applications/jaffa/modules/admin/components/viewerhyperlinkconfig/ComponentTilesDefinitions.xfragment
+P source/java/org/jaffa/applications/jaffa/modules/admin/components/viewerhyperlinkconfig/ui/ViewerHyperlinkConfigComponent.java
+P source/java/org/jaffa/applications/jaffa/modules/admin/domain/User.java
+P source/java/org/jaffa/applications/jaffa/modules/admin/domain/UserMeta.java
+P source/java/org/jaffa/applications/jaffa/modules/admin/domain/UserRole.java
+P source/java/org/jaffa/applications/jaffa/modules/admin/domain/UserRoleMeta.java
+U source/java/resources/presentation/usergrid/defaults/UGW_admin_defaultValueEditor.xml
+
+Success, CVS operation completed
+
+
+Example1 v1.0.0 -> v1.1.0
+--------------------------------
+P build/appbuilder/appbuilder.xml
+U build/patterns/domain_creator_1_1/Championship.xml
+U build/patterns/domain_creator_1_1/ChampionshipStatus.xml
+U build/patterns/domain_creator_1_1/Entry.xml
+U build/patterns/domain_creator_1_1/Event.xml
+U build/patterns/domain_creator_1_1/EventGender.xml
+U build/patterns/domain_creator_1_1/EventStatus.xml
+cvs update: build/patterns/domain_creator_1_0/Championship.xml is no longer in the repository
+cvs update: build/patterns/domain_creator_1_0/ChampionshipStatus.xml is no longer in the repository
+cvs update: build/patterns/domain_creator_1_0/Entry.xml is no longer in the repository
+cvs update: build/patterns/domain_creator_1_0/Event.xml is no longer in the repository
+cvs update: build/patterns/domain_creator_1_0/EventGender.xml is no longer in the repository
+cvs update: build/patterns/domain_creator_1_0/EventStatus.xml is no longer in the repository
+cvs update: build/patterns/domain_creator_1_0/EventType.xml is no longer in the repository
+cvs update: build/patterns/domain_creator_1_0/Matches.xml is no longer in the repository
+cvs update: build/patterns/domain_creator_1_0/Player.xml is no longer in the repository
+cvs update: build/patterns/domain_creator_1_0/PlayerRoles.xml is no longer in the repository
+cvs update: build/patterns/domain_creator_1_0/Team.xml is no longer in the repository
+cvs update: build/patterns/domain_creator_1_0/TeamMember.xml is no longer in the repository
+U build/patterns/domain_creator_1_1/EventType.xml
+U build/patterns/domain_creator_1_1/Matches.xml
+U build/patterns/domain_creator_1_1/Player.xml
+U build/patterns/domain_creator_1_1/PlayerRoles.xml
+U build/patterns/domain_creator_1_1/Team.xml
+U build/patterns/domain_creator_1_1/TeamMember.xml
+
+Success, CVS operation completed

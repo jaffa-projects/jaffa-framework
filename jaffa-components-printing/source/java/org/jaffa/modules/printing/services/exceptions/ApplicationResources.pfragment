@@ -1,0 +1,10 @@
+exception.org.jaffa.modules.printing.exceptions.DataBeanClassNotFoundException=Data Bean Class '{0}' Not Found
+exception.org.jaffa.modules.printing.exceptions.EngineInstantiationException=Can't Start Form Print Engine : {0}
+exception.org.jaffa.modules.printing.exceptions.EngineProcessingException=Form Processing Error : {0}
+exception.org.jaffa.modules.printing.exceptions.PrintFailedException=Can't Print Document : {0}
+exception.org.jaffa.modules.printing.exceptions.PrinterNotFoundException=Printer '{0}' NotFound
+exception.org.jaffa.modules.printing.exceptions.DataNotFoundException=No form data was available for {0} {1}
+exception.org.jaffa.modules.printing.exceptions.DataNotReadyException=The data for form {0} is not available yet
+exception.org.jaffa.modules.printing.exceptions.FormTemplateUrlNotSupportedException=Bad Form Template URL {0}
+exception.org.jaffa.modules.printing.exceptions.EmailFailedException=Failed to Email Document : {0}
+exception.org.jaffa.modules.printing.exceptions.PdfProcessingException=PDF processing failed: {0}

@@ -1,0 +1,253 @@
+<xsd:schema xmlns:xsd='http://www.w3.org/2001/XMLSchema'
+            xmlns:jxb='http://java.sun.com/xml/ns/jaxb'
+            jxb:version='1.0'>
+
+
+  <xsd:annotation>
+    <xsd:documentation>This is the schema for dwr.xml in DWR version 2.0</xsd:documentation>
+  </xsd:annotation>
+  
+  <xsd:annotation>
+    <xsd:appinfo>
+      <jxb:schemaBindings>
+        <jxb:package name='org.jaffa.dwr.services.configdomain'/>
+      </jxb:schemaBindings>
+    </xsd:appinfo>
+  </xsd:annotation>
+
+  <xsd:element name="dwr" type="dwr">
+    <xsd:annotation>
+      <xsd:documentation>Top level configuration element</xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:complexType name="dwr">
+    <xsd:sequence>
+      <xsd:element ref="init" maxOccurs="1" minOccurs="0"></xsd:element>
+      <xsd:element ref="allow" maxOccurs="1" minOccurs="0"></xsd:element>
+      <xsd:element ref="signatures" maxOccurs="1" minOccurs="0"></xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:element name="init" type="init">
+    <xsd:annotation>
+      <xsd:documentation>A list of all the classes to configure as part of dwr at startup time</xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:complexType name="init">
+    <xsd:sequence maxOccurs="unbounded" minOccurs="0">
+      <xsd:choice>
+        <xsd:element ref="creator" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+        <xsd:element ref="converter" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+      </xsd:choice>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:element name="creator" type="creator">
+    <xsd:annotation>
+      <xsd:documentation>Define a new method of creating objects for use by Javascript. We don't just allow access to any object and some may need special code to get a reference to them</xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:complexType name="creator">
+    <!-- In the DTD I could say that id was an id - i.e. unique. how do i do that here? -->
+    <xsd:attribute name="id" type="xsd:string">
+      <xsd:annotation>
+        <xsd:documentation>The unique name by which create elements refer to us</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="class" type="xsd:string">
+      <xsd:annotation>
+        <xsd:documentation>The fully qualified name of a class that implements Creator</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+
+  <xsd:element name="converter" type="converter">
+    <xsd:annotation>
+      <xsd:documentation>Define a new way of converting between javascript objects and java objects. Many classes can have default conversion mechanisms but some require more custom conversion</xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:complexType name="converter">
+    <!-- In the DTD I could say that id was an id - i.e. unique. how do i do that here? -->
+    <xsd:attribute name="id" type="xsd:string">
+      <xsd:annotation>
+        <xsd:documentation>The unique name by which convert elements refer to us</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="class" type="xsd:string">
+      <xsd:annotation>
+        <xsd:documentation>The fully qualified name of a class that implements Creator</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+
+  <xsd:element name="allow" type="allow">
+    <xsd:annotation>
+      <xsd:documentation>Security: we must define which classes we are allowed to access because a free-for-all will be very dangerous</xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:complexType name="allow">
+    <xsd:sequence maxOccurs="unbounded" minOccurs="0">
+      <xsd:choice>
+        <xsd:element ref="create" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+        <xsd:element ref="convert" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+        <xsd:element ref="filter" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+      </xsd:choice>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:element name="create" type="create">
+    <xsd:annotation>
+      <xsd:documentation>Allow the creation of a class, and give it a name in javascript land. A reference to a creator is required as are some parameters specific to each creator that define the objects it allows creation of. It would be nice to make the creator and IDREF rather than a CDATA, since it refers to an element defined elsewhere, however we allow multiple dwr.xml files and we might refer to one in another file.</xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:complexType name="create">
+    <xsd:sequence maxOccurs="unbounded" minOccurs="0">
+      <xsd:choice>
+        <xsd:element ref="param" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+        <xsd:element ref="include" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+        <xsd:element ref="exclude" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+        <xsd:element ref="auth" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+        <xsd:element ref="filter" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+      </xsd:choice>
+    </xsd:sequence>
+    <xsd:attribute name="creator" type="xsd:string">
+      <xsd:annotation>
+        <xsd:documentation>The id of the creator to use</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="javascript" type="xsd:string">
+      <xsd:annotation>
+        <xsd:documentation>The name of the object to export to the browser</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="scope">
+      <xsd:annotation>
+        <xsd:documentation>The scope of the created variable. The default is page.</xsd:documentation>
+      </xsd:annotation>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="application"></xsd:enumeration>
+          <xsd:enumeration value="session"></xsd:enumeration>
+          <xsd:enumeration value="script"></xsd:enumeration>
+          <xsd:enumeration value="request"></xsd:enumeration>
+          <xsd:enumeration value="page"></xsd:enumeration>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:attribute>
+  </xsd:complexType>
+
+  <xsd:element name="param" type="param">
+    <xsd:annotation>
+      <xsd:documentation>Some elements (currently only create although there is no hard reason why convert elements should not be the same) need customization in ways that we can't predict now, and this seems like the only way to do it.</xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:complexType name="param">
+    <xsd:attribute name="name" type="xsd:string">
+      <xsd:annotation>
+        <xsd:documentation>The name that must have meaning in the context of the parent element</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="value" type="xsd:string">
+      <xsd:annotation>
+        <xsd:documentation>The value to assign to this parameter</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+
+  <xsd:element name="include" type="include">
+    <xsd:annotation>
+      <xsd:documentation>A creator can allow and disallow access to the methods of the class that it contains. A Creator should specify EITHER a list of include elements (which implies that the default policy is denial) OR a list of exclude elements (which implies that the default policy is to allow access)</xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:complexType name="include">
+    <xsd:attribute name="method" type="xsd:string">
+      <xsd:annotation>
+        <xsd:documentation>The method to include in the list of methods allowed by the creator</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+
+  <xsd:element name="exclude" type="exclude">
+    <xsd:annotation>
+      <xsd:documentation>A creator can allow and disallow access to the methods of the class that it contains. A Creator should specify EITHER a list of include elements (which implies that the default policy is denial) OR a list of exclude elements (which implies that the default policy is to allow access)</xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:complexType name="exclude">
+    <xsd:attribute name="method" type="xsd:string">
+      <xsd:annotation>
+        <xsd:documentation>The method to exclude from the list of methods allowed by the creator</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+
+  <xsd:element name="auth" type="auth">
+    <xsd:annotation>
+      <xsd:documentation>The auth element allows you to specify that the user of a given method must be authenticated using J2EE security and authorized under a certain role.</xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:complexType name="auth">
+    <xsd:attribute name="method" type="xsd:string">
+      <xsd:annotation>
+        <xsd:documentation>The method to add role requirements to</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="role" type="xsd:string">
+      <xsd:annotation>
+        <xsd:documentation>The J2EE role required to execute the given method</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+
+  <xsd:element name="convert" type="convert">
+    <xsd:annotation>
+       <xsd:documentation>Allow conversion of a class between Java and Javascript. A convert element uses a previously defined converter and gives a class match pattern (which can end with *) to define the classes it allows conversion of. It would be nice to make the converter and IDREF rather than a CDATA, since it refers to an element defined elsewhere, however we allow multiple dwr.xml files and we might refer to one in another file.</xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:complexType name="convert">
+    <xsd:sequence>
+      <xsd:element ref="param" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="converter" type="xsd:string">
+      <xsd:annotation>
+        <xsd:documentation>The id of the converter to use</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="match" type="xsd:string">
+      <xsd:annotation>
+        <xsd:documentation>
+          A class name to match for conversion
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+    <xsd:attribute name="javascript" type="xsd:string">
+      <xsd:annotation>
+        <xsd:documentation>
+          The optional classname for the parameter
+        </xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+
+  <xsd:element name="filter" type="filter">
+    <xsd:annotation>
+      <xsd:documentation>A filter is a way to insert procesing tasks at various points during the processing of an Ajax call. See org.directwebremoting.AjaxFilter</xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:complexType name="filter">
+    <xsd:sequence>
+      <xsd:element ref="param" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="class" type="xsd:string">
+      <xsd:annotation>
+        <xsd:documentation>The class name to use to filter requests</xsd:documentation>
+      </xsd:annotation>
+    </xsd:attribute>
+  </xsd:complexType>
+
+  <xsd:element name="signatures" type="xsd:string">
+    <xsd:annotation>
+      <xsd:documentation>If we are marshalling to collections, we need to be able to specify extra type information to converters that are unable to tell from reflection what to do. This element contains some Java method definitions</xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+
+</xsd:schema>

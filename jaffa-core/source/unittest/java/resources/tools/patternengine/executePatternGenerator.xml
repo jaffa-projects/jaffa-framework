@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="../../../../../../" default="nothing" name="">
+
+  <!--
+  *************************************************************************
+  PRE-REQUISITE: JaffaTools module should be at the same level as JaffaCore
+  *************************************************************************
+  -->
+
+  <property name="gen.root" value="./source/unittest"/>
+  <property name="gen.temp" value="./dist/unittest/patterns/TempMetaData"/>
+  <property name="gen.logs" value="./dist/unittest/patterns/Logs"/>
+  <property name="gen.config" value="./dist/unittest/patterns/config"/>
+
+
+  <!--
+  ***********************************************
+  Targets for generating specific component types
+  ***********************************************
+  -->
+
+  <target name="all-domain_creator_1_0">
+    <property name="ARG_VALUE" value="resources/tools/patternengine/domain_creator_1_0"/>
+    <antcall target="executePatternGenerator"/>
+  </target>
+
+  <target name="all-domain_creator_1_1">
+    <property name="ARG_VALUE" value="resources/tools/patternengine/domain_creator_1_1"/>
+    <antcall target="executePatternGenerator"/>
+  </target>
+
+  <target name="all-domain_for_xml_1_0">
+    <property name="ARG_VALUE" value="resources/tools/patternengine/domain_for_xml_1_0"/>
+    <antcall target="executePatternGenerator"/>
+  </target>
+
+  <target name="all-data_security_policy_1_1">
+    <property name="ARG_VALUE" value="resources/tools/patternengine/data_security_policy_1_1"/>
+    <antcall target="executePatternGenerator"/>
+  </target>
+
+
+
+
+  <!--
+  ***********************************************
+  These targets should not be invoked directly
+  ***********************************************
+  -->
+
+  <!-- Invoke the PatternGenerator -->
+  <target name="executePatternGenerator" depends="init">
+    <java classname="org.jaffa.tools.patternengine.PatternGenerator" failonerror="true" fork="yes" classpathref="project.class.path">
+      <arg value="${ARG_VALUE}"/>
+    </java>
+  </target>
+
+  <!-- Initalize the generator task -->
+  <target name="init">
+    <!-- Rebuild the patterns in JaffaTools -->
+    <ant antfile="../JaffaTools/build/build.xml" inheritAll='false'/>
+
+    <!-- Ensure that the directories used by the PatternGenerator exist  -->
+    <mkdir dir="${gen.root}"/>
+    <mkdir dir="${gen.temp}"/>
+    <mkdir dir="${gen.logs}"/>
+
+    <!-- Configure the filters -->
+    <filter token="gen.root" value="${gen.root}"/>
+    <filter token="gen.temp" value="${gen.temp}"/>
+    <filter token="gen.logs" value="${gen.logs}"/>
+
+    <copy file="../JaffaBuild/build/templates/patterns/PatternGenerator.properties.template"
+      tofile="${gen.config}/patterns/PatternGenerator.properties"
+      filtering="true" overwrite="true"/>
+    <copy file="../JaffaBuild/build/templates/patterns/WebMacro.properties.template"
+      tofile="${gen.config}/patterns/WebMacro.properties"
+      filtering="true" overwrite="true"/>
+
+    <!-- Set the ClassPath for use by PatternGenerator and other Tools   -->
+    <path id="project.class.path">
+      <pathelement location="${gen.config}"/>
+      <pathelement location="./source/unittest/java"/>
+      <pathelement location="./source/java"/>
+      <pathelement location="../MyJaffa/source/java"/>
+      <fileset dir="lib">
+        <include name="**/*.jar"/>
+      </fileset>
+      <fileset dir="../JaffaTools/lib">
+        <include name="**/*.jar"/>
+      </fileset>
+      <fileset dir="dist/jar">
+        <include name="*.jar"/>
+      </fileset>
+      <fileset dir="../JaffaTools/dist/jar">
+        <include name="*.jar"/>
+      </fileset>
+    </path>
+  </target>
+
+  <!-- Displays a warning message -->    
+  <target name="nothing">
+    <echo>
+      This is the default task.
+      This prevents the user running this task by mistake and re-generating all the components.
+      Use the appropriate target for generating components.
+    </echo>
+  </target>
+
+</project>

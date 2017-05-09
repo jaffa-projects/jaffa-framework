@@ -1,0 +1,36 @@
+<ivy-module version="2.0">
+
+	<!-- The groupId, artifactId and version of the artifacts.  Update the revision to match the Jaffa version being built. -->
+    <info organisation="org.jaffa" module="jaffa-console" revision="${jaffa-version}"/>
+	
+	<!-- The pom and jar to be published to Maven repositories. -->
+	<publications>
+        <artifact name="jaffa-console" type="pom"/>
+        <artifact name="jaffa-console" type="jar"/>
+    </publications>
+
+  <dependencies>
+    <!-- Begin Quartz Scheduler dependencies -->
+    <dependency org="org.quartz-scheduler" name="quartz" rev="${quartz-version}" transitive="false"/>
+    <!-- End Quartz Scheduler dependencies -->
+
+    <!-- Begin Apache Commons dependencies -->
+    <dependency org="commons-beanutils" name="commons-beanutils" rev="${commons-beanutils-version}" transitive="false"/>
+    <!-- End Apache Commons dependencies -->
+
+    <!-- Begin javax dependencies -->
+    <dependency org="javax.servlet" name="servlet-api" rev="${servlet-api-version}" transitive="false"/>
+    <dependency org="javax.jms" name="javax.jms-api" rev="${javax.jms-api-version}" transitive="false"/>
+    <!-- End javax dependencies -->
+
+    <!-- Begin Jackson dependencies -->
+    <dependency org="com.fasterxml.jackson.core" name="jackson-core" rev="${jackson-version}" transitive="false"/>
+    <dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="${jackson-version}" transitive="false"/>
+    <!-- End Jackson dependencies -->
+
+    <!-- Begin Hibernate dependencies -->
+    <dependency org="org.hibernate" name="hibernate-core" rev="${hibernate-core-version}" transitive="false"/>
+    <dependency org="org.hibernate.javax.persistence" name="hibernate-jpa-2.1-api" rev="${hibernate-jpa-2.1-api-version}" transitive="false"/>
+    <!-- End Hibernate  dependencies -->
+  </dependencies>
+</ivy-module>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.applications.test.modules.time.domain.ProjectCode">
+        <map-to table="ProjectCode" />
+
+        <field name="ProjectCode" use-member="m_projectCode" type="java.lang.String" primary-key="true">
+            <sql name="PROJECT_CODE" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Description" use-member="m_description" type="java.lang.String">
+            <sql name="DESCRIPTION" type="STRING" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

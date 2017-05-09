@@ -1,0 +1,16 @@
+<ivy-module version="2.0">
+
+	<!-- The groupId, module and version of the artifacts.  Update the revision to match the Jaffa version being built. -->
+    <info organisation="org.jaffa" module="jaffa-core" revision="${jaffa-version}"/>
+	
+	<!-- The pom and jar to be published to Maven repositories. -->
+	<publications>
+        <artifact name="jaffa-core" type="pom"/>
+        <artifact name="jaffa-core" type="jar"/>
+    </publications>
+	
+    <dependencies>
+        <!-- Add dependencies here -->
+    </dependencies>	
+	
+</ivy-module>

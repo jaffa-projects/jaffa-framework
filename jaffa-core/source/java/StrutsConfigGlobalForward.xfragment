@@ -1,0 +1,19 @@
+    <!--  Default Jaffa Forwards --> 
+    <forward name="jaffa_pageExpired" path="/jaffa/jsp/pageExpired.jsp" /> 
+    <forward name="jaffa_noComponentAccess" path="/jaffa/jsp/noComponentAccess.jsp" /> 
+
+    <!--  GlobalForward For The Lookup --> 
+    <forward name="jaffa_lookup" path="/jaffa/jsp/lookup.jsp" /> 
+
+    <!--  GlobalForward For Closing a Browser Window --> 
+    <forward name="jaffa_closeBrowser" path="/jaffa/jsp/closeBrowser.jsp" /> 
+
+    <!--  GlobalForward For Closing a Browser Window --> 
+    <forward name="jaffa_logoffAndCloseBrowser" path="/jaffa/jsp/logoffAndCloseBrowser.jsp" /> 
+
+    <!-- Desktops -->
+    <forward name="global.desktop" path="/jaffa/jsp/tiles/desktop.jsp"/>
+    
+    <!-- GlobalForward For the Home page -->
+    <forward   name="jaffa_home"          path="/"/>
+     

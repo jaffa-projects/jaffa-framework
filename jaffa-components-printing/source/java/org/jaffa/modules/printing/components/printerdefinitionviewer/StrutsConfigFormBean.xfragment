@@ -1,0 +1,3 @@
+    <!-- PrinterDefinitionViewer Form -->
+    <form-bean      name="jaffa_printing_printerDefinitionViewerForm"
+                    type="org.jaffa.modules.printing.components.printerdefinitionviewer.ui.PrinterDefinitionViewerForm"/>

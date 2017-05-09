@@ -1,0 +1,12 @@
+    <!-- DomainModel Doc Service-->
+    <create creator="new" javascript="DomainModelDocService">
+      <param name="class" value="org.jaffa.sc.apis.DomainModelDocService" />
+      <include method="loadTree"/>
+    </create> 
+
+    <!-- SOAEvent MetaData Service -->
+    <create creator="new" javascript="SOAEventMetaDataService">
+      <param name="class" value="org.jaffa.sc.apis.SOAEventMetaDataService" />
+      <include method="loadTree"/>
+      <include method="setEnabled"/>
+    </create>

@@ -1,0 +1,10 @@
+CREATE TABLE "J_SOA_EVENTS"(
+        "EVENT_ID"          VARCHAR2(80) NOT NULL,
+        "EVENT_NAME"          VARCHAR2(100) NOT NULL,
+        "DESCRIPTION"          VARCHAR2(100),
+        "CREATED_ON"          DATE,
+        "CREATED_BY"          VARCHAR2(20),
+        "LOCAL_ID"	      VARCHAR2(80),
+    CONSTRAINT "J_SOA_EVENTSP1" PRIMARY KEY("EVENT_ID")
+)
+/

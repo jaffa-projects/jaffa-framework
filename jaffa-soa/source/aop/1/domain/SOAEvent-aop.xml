@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+  <!-- ================================================= -->
+  <!-- Rules for Domain Object SOAEvent -->
+  <!-- ================================================= -->
+
+  <metadata tag="jaffa.rules" class="org.jaffa.soa.domain.SOAEvent">
+
+    <label>[label.Jaffa.SOA.SOAEvent]</label>
+
+    <property name="eventId">
+      <label>[label.Jaffa.SOA.SOAEvent.EventId]</label>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="eventName">
+      <label>[label.Jaffa.SOA.SOAEvent.EventName]</label>
+      <mandatory/>
+      <max-length>100</max-length>
+    </property>
+
+    <property name="description">
+      <label>[label.Jaffa.SOA.SOAEvent.Description]</label>
+      <max-length>100</max-length>
+    </property>
+
+    <property name="createdOn">
+      <label>[label.Common.CreatedOn]</label>
+    </property>
+
+    <property name="createdBy">
+      <label>[label.Common.CreatedBy]</label>
+      <max-length>20</max-length>
+    </property>
+
+    <property name="localId">
+      <label>[label.Jaffa.SOA.SOAEvent.LocalId]</label>
+      <max-length>80</max-length>
+    </property>
+
+  </metadata>
+</aop>

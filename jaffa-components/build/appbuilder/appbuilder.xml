@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+<!-- Application Builder For the Jaffa Application -->
+<application-builder version='2.1'>
+  <application-name>Components</application-name>
+  <package-prefix>org.jaffa</package-prefix>
+  <full-package-names>false</full-package-names>
+
+  <output-root><<basedir>>/</output-root>
+  <output-java>source/java</output-java>
+  
+  <output-finders>build/patterns/object_finder_2_1/</output-finders>
+  <output-viewers>build/patterns/object_viewer_2_1/</output-viewers>
+  <output-lookups>build/patterns/object_lookup_2_1/</output-lookups>
+  <output-maintenance>build/patterns/object_maintenance_2_1/</output-maintenance>
+  
+  <domain-object-path><<basedir>>/build/patterns/domain_creator_1_1/</domain-object-path>
+   
+  <module>
+    <name>Attachment</name>
+    <finders-domain-pattern>org.jaffa.components.attachment.domain.*</finders-domain-pattern>
+    <viewers-domain-pattern>org.jaffa.components.attachment.domain.*</viewers-domain-pattern>
+    <maintenance-domain-pattern>org.jaffa.components.attachment.domain.*</maintenance-domain-pattern>    
+    <labels>merge</labels>
+  </module>
+
+  <module>
+    <name>Audit</name>
+    <finders-domain-pattern>org.jaffa.components.audit.domain.*</finders-domain-pattern>
+    <viewers-domain-pattern>org.jaffa.components.audit.domain.*</viewers-domain-pattern>
+    <maintenance-domain-pattern>org.jaffa.components.audit.domain.*</maintenance-domain-pattern>    
+    <labels>merge</labels>
+  </module>
+
+</application-builder>
+

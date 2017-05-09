@@ -1,0 +1,3 @@
+        <!-- Jaffa Menu Navigation -->
+        <form-bean      name="admin_menuNavigationForm"
+                        type="org.jaffa.applications.jaffa.modules.admin.components.menunavigation.ui.MenuNavigationForm"/>

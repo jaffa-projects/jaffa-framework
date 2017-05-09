@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<!DOCTYPE aop PUBLIC "-//JBoss//DTD JBOSS AOP 1.0//EN" "http://www.jboss.org/aop/dtd/jboss-aop_1_0.dtd">-->
+
+
+<aop>
+  <metadata-loader tag="jaffa.rulemeta" class="org.jaffa.rules.jbossaop.RuleLoader"/>
+
+  <metadata tag="jaffa.rulemeta" class="dummy">
+    <rule name='rule-info' extends-rule='common'>
+      <parameter name='is-class' mandatory='false'/>
+      <parameter name='is-property' mandatory='false' default='beanshell'/>
+      <parameter name='is-editable' mandatory='false'/>
+    </rule>
+
+    <rule name='template' extends-rule='common'>
+      <parameter name='value' mandatory='false'/>
+    </rule>
+  </metadata>
+</aop>

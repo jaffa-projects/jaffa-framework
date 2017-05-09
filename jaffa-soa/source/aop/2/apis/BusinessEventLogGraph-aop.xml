@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+  <metadata tag="jaffa.rules" class="org.jaffa.transaction.apis.data.BusinessEventLogGraph" extends-class="org.jaffa.modules.messaging.domain.BusinessEventLog">
+    <super/>
+  </metadata>
+  
+  <metadata tag="jaffa.rules" class="org.jaffa.transaction.apis.data.BusinessEventLogCriteria" extends-class="org.jaffa.modules.messaging.domain.BusinessEventLog">
+    <super/>
+  </metadata>
+</aop>

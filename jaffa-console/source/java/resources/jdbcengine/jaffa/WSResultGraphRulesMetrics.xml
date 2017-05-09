@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.wsapi.domain.WSResultGraphRulesMetrics">
+        <map-to table="J_WS_RULES_METRICS" />
+
+        <field name="Id" use-member="m_id" type="java.lang.String" primary-key="true">
+            <sql name="ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="WebServiceName" use-member="m_webServiceName" type="java.lang.String">
+            <sql name="WEB_SERVICE_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="ResultGraphRules" use-member="m_resultGraphRules" type="java.lang.String">
+            <sql name="RESULT_GRAPH_RULE" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="CreatedOn" use-member="m_createdOn" type="org.jaffa.datatypes.DateTime">
+            <sql name="CREATED_ON" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

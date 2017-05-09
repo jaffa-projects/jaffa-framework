@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+  <!-- ================================================= -->
+  <!-- Rules for Domain Object SavedQuery -->
+  <!-- ================================================= -->
+
+  <metadata tag="jaffa.rules" class="org.jaffa.ria.finder.domain.SavedQuery">
+
+    <label>[label.Jaffa.SavedQueries.SavedQuery]</label>
+
+    <property name="queryId">
+      <label>[label.Jaffa.SavedQueries.SavedQuery.QueryId]</label>
+      <max-length>100</max-length>
+    </property>
+
+    <property name="userId">
+      <label>[label.Jaffa.SavedQueries.SavedQuery.UserId]</label>
+      <mandatory/>
+      <max-length>20</max-length>
+    </property>
+
+    <property name="componentRef">
+      <label>[label.Jaffa.SavedQueries.SavedQuery.ComponentRef]</label>
+      <mandatory/>
+      <max-length>100</max-length>
+    </property>
+
+    <property name="contextRef">
+      <label>[label.Jaffa.SavedQueries.SavedQuery.ContextRef]</label>
+      <max-length>100</max-length>
+    </property>
+
+    <property name="queryName">
+      <label>[label.Jaffa.SavedQueries.SavedQuery.QueryName]</label>
+      <mandatory/>
+      <max-length>100</max-length>
+    </property>
+
+    <property name="isDefault">
+      <label>[label.Jaffa.SavedQueries.SavedQuery.IsDefault]</label>
+    </property>
+
+    <property name="criteria">
+      <label>[label.Jaffa.SavedQueries.SavedQuery.Criteria]</label>
+    </property>
+
+  </metadata>
+</aop>

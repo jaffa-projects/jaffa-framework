@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Domain Creator Meta 1.1//EN" "http://jaffa.sourceforge.net/DTD/domain-creator-meta_1_1.dtd">
+<Root>
+  <DomainObject>ProjectCode</DomainObject>
+  <DomainPackage>org.jaffa.applications.test.modules.time.domain</DomainPackage>
+  <DatabaseTable>ProjectCode</DatabaseTable>
+  <MappingPackage>jdbcengine</MappingPackage>
+  <PatternTemplate>patterns/library/domain_creator_1_1/DomainCreatorPattern.xml</PatternTemplate>
+  <Description>This is a test for Dependant UserGrid</Description>
+  <LabelToken>[label.Jaffa.Time.ProjectCode]</LabelToken>
+  <Fields>
+    <Field>
+      <Name>ProjectCode</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>PROJECT_CODE</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <PrimaryKey>T</PrimaryKey>
+      <Description>Project Code</Description>
+      <LabelToken>[label.Jaffa.Admin.Time.ProjectCode.ProjectCode]</LabelToken>
+      <Mandatory>T</Mandatory>
+      <Width/>
+      <IntSize>50</IntSize>
+      <CaseType>MixedCase</CaseType>
+      <Ignore>false</Ignore>
+    </Field>
+    <Field>
+      <Name>Description</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>DESCRIPTION</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <PrimaryKey>F</PrimaryKey>
+      <Description>Project Code Description</Description>
+      <LabelToken>[label.Jaffa.Admin.Time.ProjectCode.Description]</LabelToken>
+      <Mandatory>T</Mandatory>
+      <Width/>
+      <IntSize>50</IntSize>
+      <CaseType>MixedCase</CaseType>
+      <Ignore>false</Ignore>
+    </Field>
+  </Fields>
+</Root>

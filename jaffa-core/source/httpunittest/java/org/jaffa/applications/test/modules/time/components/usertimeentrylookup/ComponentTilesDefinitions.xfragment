@@ -1,0 +1,67 @@
+    <!-- UserTimeEntryLookup Criteria -->
+    <definition name="jaffa.usertimeentry.usertimeentrylookup.LookupLayout.criteria"  extends="jaffa.LookupLayout">
+        <put name="body1" value="/jaffa/usertimeentry/usertimeentrylookup/criteria.jsp"/>
+        <put name="body2" value=""/>
+        <put name="action" value="/usertimeentry_userTimeEntryLookup"/>
+        <put name="createComponent" value="UserTimeEntry.UserTimeEntryMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+            <add value="CreateFromCriteria"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.usertimeentry.usertimeentrylookup.criteria"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.UserTimeEntry.UserTimeEntryLookup.criteria]"/>
+        <put name="body" value="jaffa.usertimeentry.usertimeentrylookup.LookupLayout.criteria"/>
+    </definition>
+
+    <!-- UserTimeEntryLookup Results -->
+    <definition name="jaffa.usertimeentry.usertimeentrylookup.LookupLayout.results"  extends="jaffa.LookupLayout">
+        <put name="body1" value=""/>
+        <put name="body2" value="/jaffa/usertimeentry/usertimeentrylookup/results.jsp"/>
+        <put name="action" value="/usertimeentry_userTimeEntryLookup"/>
+        <put name="createComponent" value="UserTimeEntry.UserTimeEntryMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="ModifySearch"/>
+            <add value="Refresh"/>
+            <add value="CreateFromResults"/>
+            <add value="Close"/>
+            <add value="Select"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="ModifySearch"/>
+            <add value="Select"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.usertimeentry.usertimeentrylookup.results"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.UserTimeEntry.UserTimeEntryLookup.results]"/>
+        <put name="body" value="jaffa.usertimeentry.usertimeentrylookup.LookupLayout.results"/>
+    </definition>
+
+    <!-- UserTimeEntryLookup ConsolidatedCriteriaAndResults -->
+    <definition name="jaffa.usertimeentry.usertimeentrylookup.LookupLayout.consolidatedCriteriaAndResults"  extends="jaffa.LookupLayout">
+        <put name="body1" value="/jaffa/usertimeentry/usertimeentrylookup/criteria.jsp"/>
+        <put name="body2" value="/jaffa/usertimeentry/usertimeentrylookup/results.jsp"/>
+        <put name="action" value="/usertimeentry_userTimeEntryLookup"/>
+        <put name="createComponent" value="UserTimeEntry.UserTimeEntryMaintenance"/>
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+            <add value="CreateFromResults"/>
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="jaffa.usertimeentry.usertimeentrylookup.consolidatedCriteriaAndResults"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.UserTimeEntry.UserTimeEntryLookup.consolidated]"/>
+        <put name="body" value="jaffa.usertimeentry.usertimeentrylookup.LookupLayout.consolidatedCriteriaAndResults"/>
+    </definition>
+

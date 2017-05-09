@@ -1,0 +1,15 @@
+/*
+ * This is the master stylesheet used for all web 2.0 development in the SC Submodule
+ */
+
+/* Include Common Stuff */
+/*
+@import url(../../../css/common-extjs.css);
+*/
+
+/* Include SC Specific Stuff */
+@import url(main-core.css);
+
+/* Include SC Override Stuff incase the core application needs to be overridden */
+@import url(main-override.css);
+

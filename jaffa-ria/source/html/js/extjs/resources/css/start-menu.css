@@ -1,0 +1,146 @@
+/*****************************************************
+ Taken from desktop.css from the Desktop demo for controlling the Ext.ux.StartMenu
+ *****************************************************/
+
+.ux-start-menu {
+    background:transparent none;
+    border:0px none;
+    padding:0px;
+}
+
+.ux-start-menu-tl .x-window-header {
+    color:#f1f1f1;
+    font:bold 11px tahoma,arial,verdana,sans-serif;
+    padding:5px 0px 4px 0px;
+}
+
+.x-panel-tl .x-panel-icon, .ux-start-menu-tl .x-panel-icon {
+    background-position:0pt 4px;
+    background-repeat:no-repeat;
+    padding-left:20px !important;
+}
+
+.ux-start-menu-tl {
+    background: transparent url( ../images/taskbar/black/start-menu-left-corners.png ) no-repeat 0 0;
+    padding-left:6px;
+    zoom:1;
+    z-index:1;
+    position:relative;
+}
+
+.ux-start-menu-tr {
+    background: transparent url( ../images/taskbar/black/start-menu-right-corners.png ) no-repeat right 0;
+    padding-right:6px;
+}
+
+.ux-start-menu-tc {
+    background: transparent url( ../images/taskbar/black/start-menu-top-bottom.png ) repeat-x 0 0;
+    overflow:hidden;
+    zoom:1;
+}
+
+.ux-start-menu-ml {
+    background: transparent url( ../images/taskbar/black/start-menu-left-right.png ) repeat-y 0 0;
+    padding-left:6px;
+    zoom:1;
+}
+
+.ux-start-menu-bc {
+    background: transparent url( ../images/taskbar/black/start-menu-top-bottom.png ) repeat-x 0 bottom;
+    zoom:1;
+}
+
+.ux-start-menu-bc .x-window-footer {
+    padding-bottom:6px;
+    zoom:1;
+    font-size:0;
+    line-height:0;
+}
+
+.ux-start-menu-bl {
+    background: transparent url( ../images/taskbar/black/start-menu-left-corners.png ) no-repeat 0 bottom;
+    padding-left:6px;
+    zoom:1;
+}
+
+.ux-start-menu-br {
+    background: transparent url( ../images/taskbar/black/start-menu-right-corners.png ) no-repeat right bottom;
+    padding-right:6px;
+    zoom:1;
+}
+
+.x-panel-nofooter .ux-start-menu-bc {
+    height:6px;
+}
+
+.ux-start-menu-splitbar-h {
+    background-color:#d0d0d0;
+}
+
+
+.ux-start-menu-bwrap {
+    background:transparent none;
+    border:0px none;
+}
+
+.ux-start-menu-body {
+    background:transparent none;
+    border:0px none;
+}
+
+.ux-start-menu-apps-panel {
+    background:#ffffff none;
+    border:1px solid #1e2124;
+}
+
+.ux-start-menu-tools-panel {
+    border:0px none;
+    background:transparent url( ../images/taskbar/black/start-menu-right.png ) repeat-y scroll right 0pt;
+}
+
+.ux-start-menu-tools-panel ul.x-menu-list li.x-menu-list-item a.x-menu-item {
+    color:#ffffff;
+}
+
+.ux-start-menu-tools-panel ul.x-menu-list li.x-menu-list-item .x-menu-item-active a.x-menu-item {
+    color:#000000;
+}
+
+.ux-start-menu-tools-panel .x-menu-item-active {
+    background: #525456 url( ../images/taskbar/black/item-over.gif ) repeat-x left bottom;
+    border:1px solid #000000;
+    padding: 0px;
+}
+
+
+.ux-toolmenu-sep {
+    background-color:#18191a;
+    border-bottom:1px solid #858789;
+    display:block;
+    font-size:1px;
+    line-height:1px;
+    margin:2px 3px;
+}
+
+/* Icons used by Start Menu */
+.startMenu {
+    background-image: url( ../images/taskbar/startButton.gif ) !important;
+    height: 25px !important;
+    width: 90px !important;
+}
+.startMenu-logout {
+    background-image: url( ../images/taskbar/logout.gif ) !important;
+}
+
+.startMenu-settings {
+    background-image: url( ../images/taskbar/settings.gif ) !important;
+}
+
+.startMenu-user {
+    background-image:url( ../images/taskbar/user.gif ) !important;
+}
+
+.startMenu-screen {
+    background-image:url( ../images/taskbar/screen.gif ) !important;
+}
+/* END START MENU */

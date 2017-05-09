@@ -1,0 +1,4 @@
+    <component id="Jaffa.User.UserRequestMaintenance">
+        <class>org.jaffa.applications.jaffa.modules.user.components.userrequestmaintenance.ui.UserRequestMaintenanceComponent</class>
+        <type>ObjectMaintenance</type>
+    </component>

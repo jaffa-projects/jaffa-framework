@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Domain Creator Meta 1.1//EN" "http://jaffa.sourceforge.net/DTD/domain-creator-meta_1_1.dtd">
+<Root>
+  <DomainObject>SOAEvent</DomainObject>
+  <DomainPackage>org.jaffa.soa.domain</DomainPackage>
+  <DatabaseTable>J_SOA_EVENTS</DatabaseTable>
+  <MappingPackage>resources/jdbcengine/jaffa</MappingPackage>
+  <PatternTemplate>patterns/library/domain_creator_1_1/DomainCreatorPattern.xml</PatternTemplate>
+  <Description>Holds SOA Events raised by the application</Description>
+  <LabelToken>[label.Jaffa.SOA.SOAEvent]</LabelToken>
+  <Lockable>false</Lockable>
+  <Fields>
+    <Field>
+      <Name>EventId</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>EVENT_ID</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <PrimaryKey>T</PrimaryKey>
+      <Description>Technical Key for a SOA Event</Description>
+      <LabelToken>[label.Jaffa.SOA.SOAEvent.EventId]</LabelToken>
+      <IntSize>80</IntSize>
+    </Field>
+    <Field>
+      <Name>EventName</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>EVENT_NAME</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Name for a SOA Event</Description>
+      <LabelToken>[label.Jaffa.SOA.SOAEvent.EventName]</LabelToken>
+      <Mandatory>T</Mandatory>
+      <IntSize>100</IntSize>
+    </Field>
+    <Field>
+      <Name>Description</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>DESCRIPTION</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Description for a SOA Event</Description>
+      <LabelToken>[label.Jaffa.SOA.SOAEvent.Description]</LabelToken>
+      <IntSize>100</IntSize>
+    </Field>
+    <Field>
+      <Name>CreatedOn</Name>
+      <DataType>org.jaffa.datatypes.DateTime</DataType>
+      <DatabaseFieldName>CREATED_ON</DatabaseFieldName>
+      <DatabaseDataType>DATE_TIME</DatabaseDataType>
+      <LabelToken>[label.Common.CreatedOn]</LabelToken>
+      <StampType>CreatedDateTime</StampType>
+    </Field>
+    <Field>
+      <Name>CreatedBy</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>CREATED_BY</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <LabelToken>[label.Common.CreatedBy]</LabelToken>
+      <IntSize>20</IntSize>
+      <StampType>CreatedUserId</StampType>
+    </Field>
+    <Field>
+      <Name>LocalId</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>LOCAL_ID</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <Description>Technical Key for a SOA Event</Description>
+      <LabelToken>[label.Jaffa.SOA.SOAEvent.LocalId]</LabelToken>
+      <IntSize>80</IntSize>
+    </Field>     
+  </Fields>
+  <Relationships>
+    <Relationship>
+      <Name>SOAEventParam</Name>
+      <ToDomainObject>SOAEventParam</ToDomainObject>
+      <ToDomainPackage>org.jaffa.soa.domain</ToDomainPackage>
+      <FromCardinality>1</FromCardinality>
+      <ToCardinality>0..*</ToCardinality>
+      <Type>composition</Type>
+      <FromFields>
+        <RelationshipField>
+          <Name>EventId</Name>
+        </RelationshipField>
+      </FromFields>
+      <ToFields>
+        <RelationshipField>
+          <Name>EventId</Name>
+        </RelationshipField>
+      </ToFields>
+    </Relationship>
+  </Relationships>
+</Root>

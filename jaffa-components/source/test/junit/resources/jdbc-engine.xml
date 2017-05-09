@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE init PUBLIC "-//JAFFA//DTD JDBC Engine Init 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-init_1_0.dtd">
+<init>
+  <database name="default" engine="<<JUNIT.DATABASE.ENGINE>>">
+    <!-- 
+    The connection-factory should implement the org.jaffa.persistence.engines.jdbcengine.datasource.IConnectionFactory interface
+    
+    The following three are available in org.jaffa.persistence.engines.jdbcengine.datasource
+    - DbConnectionBrokerConnectionFactory, local pool using the DbConnectionBroker API (original Jaffa v1.2 implementation)
+    - DbcpDataSourceConnectionFactory, local pool using the jakarta-commons-pool/dbcp implementation
+    - JndiDataSourceConnectionFactory, use a pool provided by the web container
+    -->
+    <connection-factory class="<<JUNIT.DATABASE.CONNECTION.FACTORY>>">
+
+      <!-- common pool values -->
+      <param name="url"                value="<<JUNIT.DATABASE.JDBC.URL>>"/>
+      <param name="driverClass"        value="<<JUNIT.DATABASE.JDBC.DRIVER>>"/>
+      <param name="user"               value="<<JUNIT.DATABASE.USER>>"/>
+      <param name="password"           value="<<JUNIT.DATABASE.PASSWORD>>"/>
+      <param name="minimumConnections" value="<<JUNIT.DATABASE.POOL.MIN_CONNECTIONS>>"/>
+      <param name="maximumConnections" value="<<JUNIT.DATABASE.POOL.MAX_CONNECTIONS>>"/>
+
+      <!-- dbconnection broker pool values -->
+      <!--
+      <param name="debugLevel"         value="<<JUNIT.DATABASE.POOL.DEBUG_LEVEL>>"/>
+      <param name="logAppend"          value="<<JUNIT.DATABASE.POOL.LOG_APPEND>>"/>
+      <param name="logFileName"        value="<<JUNIT.DATABASE.POOL.LOG_FILE>>"/>
+      <param name="maxCheckoutSeconds" value="<<JUNIT.DATABASE.POOL.MAX_CHECKOUT_SECONDS>>"/>
+      <param name="maxConnTime"        value="<<JUNIT.DATABASE.POOL.MAX_CONNECTION_TIME>>"/>
+      -->
+      
+      <!-- DbcpDataSource pool values -->
+      <param name="maxWait" value="100"/>
+      <!-- Oracle Only! 
+      <param name="testOnBorrow" value="true"/>
+      <param name="testOnReturn" value="true"/>
+      <param name="validationQuery" value="select 1 from dual"/>
+      -->
+
+      <!-- if using a container datasource -->
+      <!--
+      <param name="jndiDataSourceName" value="java:/comp/env/jdbc/<<appname>>"/>
+      -->
+    </connection-factory>
+
+    <hitlistSize value="<<JUNIT.DATABASE.ENGINE.HIT_LIST_SIZE>>"/>
+    <!--<jdbcSecurityPlugin value="<<JUNIT.DATABASE.SECURITY.PLUGIN>>"/>-->
+    <usePreparedStatement value="true"/>
+  </database>
+  
+  <preload>
+  </preload>
+ 
+  <conf-location>
+    <dir-loc dir="classpath:///jdbcengine"/>
+    <dir-loc dir="classpath:///resources/jdbcengine"/>
+    <dir-loc dir="classpath:///resources/jdbcengine/jaffa"/>
+  </conf-location>
+</init>

@@ -1,0 +1,4 @@
+    <component id="Jaffa.Printing.OutputCommandFinder">
+        <class>org.jaffa.modules.printing.components.outputcommandfinder.ui.OutputCommandFinderComponent</class>
+        <type>ObjectFinder</type>
+    </component>

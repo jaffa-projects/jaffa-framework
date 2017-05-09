@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+  <!-- ================================================= -->
+  <!-- Rules for Domain Object FlexField -->
+  <!-- ================================================= -->
+
+  <metadata tag="jaffa.rules" class="org.jaffa.flexfields.domain.FlexField">
+
+    <delete-domain-info name="org.jaffa.flexfields.domain.FlexFieldDelete"/>
+
+    <label>[label.Jaffa.FlexFields.FlexField]</label>
+
+    <property name="flexFieldId">
+      <label>[label.Jaffa.FlexFields.FlexField.FlexFieldId]</label>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="objectName">
+      <label>[label.Jaffa.FlexFields.FlexField.ObjectName]</label>
+      <mandatory/>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="key1">
+      <label>[label.Jaffa.FlexFields.FlexField.Key1]</label>
+      <mandatory/>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="key2">
+      <label>[label.Jaffa.FlexFields.FlexField.Key2]</label>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="key3">
+      <label>[label.Jaffa.FlexFields.FlexField.Key3]</label>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="fieldName">
+      <label>[label.Jaffa.FlexFields.FlexField.FieldName]</label>
+      <mandatory/>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="value">
+      <label>[label.Jaffa.FlexFields.FlexField.Value]</label>
+      <max-length>2000</max-length>
+    </property>
+
+    <property name="versionNumber">
+      <label>[label.Jaffa.Attachment.AttachmentDelete.VersionNumber]</label>
+      <max-length>10</max-length>
+    </property>
+
+  </metadata>
+</aop>

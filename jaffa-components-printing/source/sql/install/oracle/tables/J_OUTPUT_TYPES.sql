@@ -1,0 +1,11 @@
+CREATE TABLE "J_OUTPUT_TYPES"(
+        "OUTPUT_TYPE"          VARCHAR2(20) NOT NULL,
+        "DESCRIPTION"          VARCHAR2(100),
+        "DIRECT_PRINTING"          CHAR(1) NOT NULL,
+        "CREATED_ON"          DATE,
+        "CREATED_BY"          VARCHAR2(20),
+        "LAST_CHANGED_ON"          DATE,
+        "LAST_CHANGED_BY"          VARCHAR2(20),
+    CONSTRAINT "J_OUTPUT_TYPESP1" PRIMARY KEY("OUTPUT_TYPE")
+)
+/

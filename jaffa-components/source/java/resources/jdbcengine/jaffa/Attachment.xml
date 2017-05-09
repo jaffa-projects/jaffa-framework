@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE classmap PUBLIC "-//JAFFA//DTD JDBC Engine Mapping 1.0//EN" "http://jaffa.sourceforge.net/DTD/jdbc-engine-mapping_1_0.dtd">
+
+<classmap>
+    <class name="org.jaffa.components.attachment.domain.Attachment">
+        <map-to table="J_ATTACHMENTS" />
+
+        <field name="AttachmentId" use-member="m_attachmentId" type="java.lang.String" primary-key="true">
+            <sql name="ATTACHMENT_ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="DocumentReferenceId" use-member="m_documentReferenceId" type="java.lang.String">
+            <sql name="DOCUMENT_REFERENCE_ID" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="SerializedKey" use-member="m_serializedKey" type="java.lang.String">
+            <sql name="SERIALIZED_KEY" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="OriginalFileName" use-member="m_originalFileName" type="java.lang.String">
+            <sql name="ORIGINAL_FILE_NAME" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="AttachmentType" use-member="m_attachmentType" type="java.lang.String">
+            <sql name="ATTACHMENT_TYPE" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="ContentType" use-member="m_contentType" type="java.lang.String">
+            <sql name="CONTENT_TYPE" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Description" use-member="m_description" type="java.lang.String">
+            <sql name="DESCRIPTION" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="Remarks" use-member="m_remarks" type="java.lang.String">
+            <sql name="REMARKS" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="SupercededBy" use-member="m_supercededBy" type="java.lang.String">
+            <sql name="SUPERCEDED_BY" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="CreatedOn" use-member="m_createdOn" type="org.jaffa.datatypes.DateTime">
+            <sql name="CREATED_ON" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+        <field name="CreatedBy" use-member="m_createdBy" type="java.lang.String">
+            <sql name="CREATED_BY" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="LastChangedOn" use-member="m_lastChangedOn" type="org.jaffa.datatypes.DateTime">
+            <sql name="LAST_CHANGED_ON" type="DATE_TIME" dirty="ignore"/>
+        </field>
+
+        <field name="LastChangedBy" use-member="m_lastChangedBy" type="java.lang.String">
+            <sql name="LAST_CHANGED_BY" type="STRING" dirty="ignore"/>
+        </field>
+
+        <field name="VersionNumber" use-member="m_versionNumber" type="java.lang.Long">
+            <sql name="VERSION_NUMBER" type="INTEGER" dirty="ignore"/>
+        </field>
+
+    </class>
+</classmap>

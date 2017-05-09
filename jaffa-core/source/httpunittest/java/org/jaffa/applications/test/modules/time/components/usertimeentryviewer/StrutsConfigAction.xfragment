@@ -1,0 +1,7 @@
+    <!-- UserTimeEntryViewer Form -->
+    <action    path="/usertimeentry_userTimeEntryViewer"
+               type="org.jaffa.applications.test.modules.time.components.usertimeentryviewer.ui.UserTimeEntryViewerAction"
+               name="usertimeentry_userTimeEntryViewerForm"
+               validate="false"
+               scope="request">
+    </action>

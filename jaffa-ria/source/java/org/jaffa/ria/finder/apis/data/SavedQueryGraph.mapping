@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="US-ASCII" ?>
+
+<bean-mapping>
+
+  <graph-data-object class="org.jaffa.ria.finder.apis.data.SavedQueryGraph"/>
+          
+  <domain-object class="org.jaffa.ria.finder.domain.SavedQueryCode"/>
+   <map-key-fields>
+    <field gdo="queryId"/>
+  </map-key-fields>
+  <map-fields>
+    <field gdo="userId"/>
+    <field gdo="componentRef"/>
+    <field gdo="contextRef"/>
+    <field gdo="queryName"/>
+    <field gdo="isDefault"/>
+    <field gdo="criteria"/>
+  </map-fields>
+ 
+</bean-mapping>

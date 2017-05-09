@@ -1,0 +1,16 @@
+void updateField1() {
+    System.out.println("Inside the updateField1() method of script1.bsh");
+    System.out.println("Original value of Field1 of the bean: " + bean.field1);
+    bean.setField1("NewField1");
+    System.out.println("Modified value of Field1 of the bean: " + bean.field1);
+    System.out.println("Exiting the updateField1() method of script1.bsh");
+}
+
+void updateField2() {
+    System.out.println("Inside the updateField2() method of script1.bsh");
+    System.out.println("Original value of Field2 of the bean: " + bean.field2);
+    bean.setField2("NewField2");
+    System.out.println("Modified value of Field2 of the bean: " + bean.field2);
+    System.out.println("Exiting the updateField2() method of script1.bsh");
+}
+

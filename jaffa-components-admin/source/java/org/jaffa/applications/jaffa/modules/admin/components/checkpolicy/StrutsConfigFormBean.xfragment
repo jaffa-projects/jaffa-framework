@@ -1,0 +1,3 @@
+        <!-- Jaffa Check Policy -->
+        <form-bean      name="admin_checkPolicyForm"
+                        type="org.jaffa.applications.jaffa.modules.admin.components.checkpolicy.ui.CheckPolicyForm"/>

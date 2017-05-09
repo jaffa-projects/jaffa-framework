@@ -1,0 +1,20 @@
+/* 
+  File name:  label.css
+  Author:     paule  
+
+  Description:
+    Example StyleSheet that controls the display of the label, and label editor icon
+*/
+
+A.LabelEditor,
+A.LabelEditor:hover { 
+  background : url(../../../../imgs/label/editLabel.gif) no-repeat left; 
+  font-family :Times New Roman, Times, serif;    
+  font-weight : normal;    
+  font-variant : normal;    
+  font-style : normal;  
+  font-size : small;    
+  vertical-align : middle;  
+  text-decoration:none;
+  width:16px;  
+} 

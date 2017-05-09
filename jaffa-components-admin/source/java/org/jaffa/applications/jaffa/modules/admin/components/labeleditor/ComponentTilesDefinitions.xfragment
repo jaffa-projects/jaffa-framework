@@ -1,0 +1,11 @@
+    <!-- Label Editor -->
+    <definition name="jaffa.admin.labeleditor.Layout"  extends="jaffa.ViewerLayout">
+        <put name="contextNav"  value="/jaffa/admin/labeleditor/contextNav.jsp"/>
+        <put name="defaultNav"  value="/jaffa/admin/labeleditor/defaultNav.jsp"/>
+        <put name="body"        value="/jaffa/admin/labeleditor/main.jsp"/>
+        <put name="action"      value="/admin_labelEditor"/>
+    </definition>
+    <definition name="jaffa.admin.labeleditor"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Admin.LabelEditor]"/>
+        <put name="body" value="jaffa.admin.labeleditor.Layout"/>
+    </definition>

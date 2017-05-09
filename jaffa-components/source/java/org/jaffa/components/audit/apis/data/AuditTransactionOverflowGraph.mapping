@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="US-ASCII" ?>
+<bean-mapping>
+  <graph-data-object class="org.jaffa.components.audit.apis.data.AuditTransactionOverflowGraph"/>
+  <domain-object class="org.jaffa.components.audit.domain.AuditTransactionOverflow"/>
+  <map-key-fields>
+    <field gdo="fieldId"/>
+  </map-key-fields>
+  <map-fields>
+    <field gdo="fieldName"/>
+    <field gdo="fromValue"/>
+    <field gdo="toValue"/>
+  </map-fields>
+</bean-mapping>

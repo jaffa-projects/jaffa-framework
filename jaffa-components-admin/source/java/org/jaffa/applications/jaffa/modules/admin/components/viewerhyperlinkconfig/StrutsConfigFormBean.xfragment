@@ -1,0 +1,2 @@
+    <form-bean      name="admin_viewerHyperlinkConfigForm"
+                    type="org.jaffa.applications.jaffa.modules.admin.components.viewerhyperlinkconfig.ui.ViewerHyperlinkConfigForm"/>

@@ -1,0 +1,895 @@
+How To Use The Maintenance Pattern
+=================================
+
+Basic
+=====
+
+
+What does a basic pattern need ?
+--------------------------------
+The easy answer is to look at the DTD/XSD, but here is a simple two field maintenance 
+template for a userId and userName
+
+<Root>
+  <PatternTemplate>patterns/library/object_maintenance_2_0/ObjectMaintenancePattern.xml</PatternTemplate> 
+  <Application>jaffa</Application> 
+  <Module>examples</Module> 
+  <Component>UserMaintenance</Component> 
+  <BasePackage>org.jaffa.examples</BasePackage> 
+  <DomainObject>User</DomainObject> 
+  <DomainPackage>org.jaffa.examples.domain</DomainPackage> 
+  <KeyFields>
+    <KeyField>
+      <Name>UserId</Name> 
+      <DataType>STRING</DataType> 
+      <DomainField>UserId</DomainField> 
+    </KeyField>
+  </KeyFields>
+  <Fields>
+    <Field>
+      <Name>UserId</Name> 
+      <DataType>STRING</DataType> 
+      <Display>true</Display> 
+      <DomainField>UserId</DomainField> 
+    </Field>
+    <Field>
+      <Name>UserName</Name> 
+      <DataType>STRING</DataType> 
+      <Display>true</Display> 
+      <DomainField>UserName</DomainField> 
+    </Field>
+  </Fields>
+  <Screens>
+    <Screen Name="initial"
+            AvailableInUpdateMode="true"
+            AvailableInCreateMode="true"
+            SaveActionAvailableInCreateMode="true"
+            PerformTxValidationOnNextAction="true">
+      <References>
+        <FieldReference Name="UserId" /> 
+        <FieldReference Name="UserName" /> 
+      </References>
+    </Screen>
+  </Screens>
+</Root>
+
+
+
+
+How to i create a maintenance screen as a multi screen wizard ?
+---------------------------------------------------------------
+TBD
+
+
+
+How do i prompt default values into the fields ?
+------------------------------------------------
+a) initial values from the default properties file
+   TBD
+b) use a ValidateFieldHandler
+   TBD
+c) Retreive fields from foreign objects has hidden, and use custom 
+   code to set them in the primary obejcts's fields
+
+
+How do i implement automatic time stamping of updates ?
+-------------------------------------------------------
+<StampType>CreatedUserId</StampType> 
+<StampType>CreatedDateTime</StampType> 
+<StampType>LastUpdatedUserId</StampType> 
+<StampType>LastUpdatedDateTime</StampType> 
+
+In Create mode, these fields are not shown
+In update mode, if display = false, this are not shown, if display = true,
+this are shown as text, not editable fields
+
+TBD
+
+
+
+How do i implement dirty read checking ?
+----------------------------------------
+<UseForDirtyReadCheck>true</UseForDirtyReadCheck> 
+TBD
+
+
+
+How do i use different layout tiles if i don't like the Jaffa ones ?
+------------------------------------------------------------------
+<MainLayout>myapp.module1.MainLayout</MainLayout> 
+<MaintenanceLayout>myapp.module1.MaintenanceLayout</MaintenanceLayout> 
+
+TBD
+
+
+
+How do i add a 'comments' field ?
+---------------------------------
+The maintenance pattern has a cool feature whereby a large string field can be
+used as a comments field. In this case each comment added is appended to the 
+underlying field with datetime/user id stamp. There is no way to edit previous
+comments, you may only add to them.
+
+Add the tag <Comment Lifo="true" /> to any field to support this feature.
+Example
+<Field>
+  <Name>Comments</Name> 
+  <DataType>CLOB</DataType> 
+  <Display>true</Display> 
+  <Mandatory>false</Mandatory> 
+  <DomainField>Remarks</DomainField> 
+  <Comment Lifo="true" /> 
+</Field>
+
+The attribute 'Lifo' stands for Last-In-First-Out, if this is true, new comments are
+added at the start of the existing comments, so older comments are further down the page. 
+If false, new comments are added at the end, so the comments are listed in data sequence.
+
+If you change this values, already stored comments are NOT reordered, so its wise to get this 
+set correctly for your patterns up front.
+
+
+
+How to a represent a field as a set of checkboxes ?
+---------------------------------------------------
+If a field contains a comma separated list of options the maintenance pattern
+can represent each of those values as a checkbox.
+
+The checkboxes values can be defined as static values, or can be dynamically 
+read from another domain object (if you find your self doing the latter, think about
+normalizing your model with a resolving entity :-) )
+
+
+<Field>
+  <Name>SupportedTypes</Name> 
+  <DataType>STRING</DataType>
+  <Display>true</Display> 
+  <Mandatory>false</Mandatory> 
+  <DomainField>SupportedTypes</DomainField> 
+  <Breakup>
+    <WidgetType>CheckBox</WidgetType>
+    <StaticValues>
+      <StaticValue>
+        <Code>txt</Code>
+        <Description>[label.FileTypes.txt]</Description>
+      </StaticValue>
+      <StaticValue>
+        <Code>pdf</Code>
+        <Description>[label.FileTypes.pdf]</Description>
+      </StaticValue>
+      <StaticValue>
+        <Code>html</Code>
+        <Description>[label.FileTypes.html]</Description>
+      </StaticValue>
+    </StaticValues>
+  </Breakup>
+</Field>
+
+If this list of codes and descriptions are available in a table, you can use the <DynamicValues>
+definition and read them in. The example below uses Jaffa's generic code table 'ValidFieldValue'
+that is part of the rules engine.
+
+<DynamicValues>
+  <DomainClassName>org.jaffa.rules.examples.domain.ValidFieldValue</DomainClassName> 
+  <CodeFieldName>LegalValue</CodeFieldName> 
+  <DescriptionFieldName>Description</DescriptionFieldName> 
+  <BreakupCriteriaFields>
+    <BreakupCriteriaField>
+      <DataType>STRING</DataType> 
+      <DomainField>TableName</DomainField> 
+      <Operator>RELATIONAL_EQUALS</Operator> 
+      <Values>MyTable</Values> 
+    </BreakupCriteriaField>
+    <BreakupCriteriaField>
+      <DataType>STRING</DataType> 
+      <DomainField>FieldName</DomainField> 
+      <Operator>RELATIONAL_EQUALS</Operator> 
+      <Values>MyField</Values> 
+    </BreakupCriteriaField>
+  </BreakupCriteriaFields>
+  <AppendCodeAndDescription>false</AppendCodeAndDescription> 
+</DynamicValues>
+
+
+How can i filter out some records in a drop down?
+------------------------------------------------
+Use the <BreakupCriteriaFields> to limit the retrieve on the domain object
+
+We want a drop down of UserName, but exclude users with status!='Active'  
+
+<DynamicValues>
+  <DomainClassName>User</DomainClassName> 
+  <CodeFieldName>UserId</CodeFieldName> 
+  <DescriptionFieldName>UserId</DescriptionFieldName> 
+  <BreakupCriteriaFields>
+    <BreakupCriteriaField>
+      <DataType>STRING</DataType> 
+      <DomainField>Status</DomainField> 
+      <Operator>RELATIONAL_EQUALS</Operator> 
+      <Values>Active</Values> 
+    </BreakupCriteriaField>
+  </BreakupCriteriaFields>
+</DynamicValues>
+
+
+How do customize the drop down display ?
+---------------------------------------
+
+In the <DynamicValues> section you have some control over display with the
+<AppendCodeAndDescription> tag, but if you wanted 'code-description' instead
+of 'code (description)'
+
+We also can use the tags (after <AppendCodeAndDescription>)
+<AppendBeginMarker> and <AppendEndMarker>. These can define what extra strings
+are displayed around the description. The default is AppendBeginMarker=' (' and
+AppendEndMarker=')' but to achieve the above format we could use
+
+   <AppendCodeAndDescription>true<AppendCodeAndDescription>
+   <AppendBeginMarker>-</AppendBeginMarker>
+   <AppendEndMarker></AppendEndMarker>
+
+
+If we just wanted a description we could use 
+   <AppendCodeAndDescription>false<AppendCodeAndDescription>
+
+Note that the <AppendBeginMarker> and <AppendEndMarker> are not used if
+we are not appending the code and description
+
+
+What if i need to do some custom work to get the real code/descriptions ?
+-------------------------------------------------------------------------
+By default Jaffa uses the implementation in org.jaffa.components.codehelper.tx.CodeHelperTx to get all the 
+drop down values for a maintenance component
+
+You can create a interface that implements 'org.jaffa.components.codehelper.ICodeHelper' and 
+then create a Transaction Controller that will then implement the method
+   public CodeHelperOutDto getCodes(CodeHelperInDto input)
+
+For example we could have 
+
+  org.jaffa.examples.components.customformatter
+  +-- ICustomFormatter.java (extends org.jaffa.components.codehelper.ICodeHelper)
+  +-- tx
+      +-- CustomFormatterTx.java (implements org.jaffa.examples.components.customformatter.ICustomFormatter)
+      
+It would be the job of this Tx to go and read the data format both the code and descriptions values, and 
+return them to the maintenance screens component controller.
+
+The maintenance pattern would be modified to look like
+
+  <DynamicValues>
+    <DomainClassName>XXX</DomainClassName> 
+    <CodeFieldName>YYY</CodeFieldName> 
+    <DescriptionFieldName>ZZZ</DescriptionFieldName>
+    <CodeHelperInterface>org.jaffa.examples.components.customformatter.ICustomFormatter</CodeHelperInterface>
+    <AppendCodeAndDescription>true</AppendCodeAndDescription> 
+  </DynamicValues>
+  
+Note that normally the XXX,YYY,ZZZ values are passed into the default CodeHelperTx, in this case the custom
+one doesn't need these values, but you could use them if you want!
+
+
+
+How can i auto-voucher the technical key ?
+------------------------------------------
+TBD
+
+
+
+Foreign Objects
+===============
+
+How do i define a Foreign Key Field With a Lookup ?
+---------------------------------------------------
+<ForeignObject>
+  <Name>Catalog</Name> 
+  <Object>Catalog</Object> 
+  <Package>org.jaffa.examples.domain</Package>
+  <ForeignFields>
+    <ForeignField>
+      <Name>Part</Name> 
+      <DataType>STRING</DataType> 
+      <Display>true</Display> 
+      <Mandatory>false</Mandatory> 
+      <DomainField>Part</DomainField> 
+      <DomainFieldInForeignObject>PartNo</DomainFieldInForeignObject> 
+      <KeyType>Primary</KeyType> 
+      </ForeignField>
+  </ForeignFields>
+  <Lookup>
+    <Component>Catalog.PartLookup</Component> 
+    <TargetFields>part=partNo</TargetFields> 
+    <BypassCriteriaScreen>true</BypassCriteriaScreen> 
+    <StaticParameters>partNoDd=BeginsWith</StaticParameters> 
+    <DynamicParameters>partNo=part</DynamicParameters> 
+  </Lookup>
+</ForeignObject>
+
+TBD
+
+
+
+How do i add a drop down with related database values ?
+------------------------------------------------------
+A drop down with related values is still considered a foreign key, normally in this case
+we display an editbox, with the option of a lookup, but where there are a few values it
+makes sense to just show a drop down with the values coming from the database.
+
+I will refer to the example use above with Item and Category
+      [Category] (1) ---- (*) [Item]
+
+<ForeignObject>
+  <Name>Category</Name> 
+  <Object>Category</Object> 
+  <Package>org.jaffa.examples.domain</Package>
+  <ForeignFields>
+    <ForeignField>
+      <Name>CategoryCode</Name> 
+      <DataType>STRING</DataType> 
+      <Display>true</Display> 
+      <Mandatory>true</Mandatory> 
+      <DomainField>CategoryCode</DomainField> 
+      <DomainFieldInForeignObject>CategoryCode</DomainFieldInForeignObject> 
+      <KeyType>Primary</KeyType> 
+      <Breakup>
+        <WidgetType>DropDown</WidgetType> 
+        <DynamicValues>
+          <DomainClassName>org.jaffa.examples.domain.Category</DomainClassName> 
+          <CodeFieldName>CategoryCode</CodeFieldName> 
+          <DescriptionFieldName>Description</DescriptionFieldName> 
+          <AppendCodeAndDescription>true</AppendCodeAndDescription> <-- if false just the 'description' is displayed,
+                                                                        if true we get 'code (description)' displayed.
+        </DynamicValues>
+      </Breakup>
+    </ForeignField>
+  </ForeignFields>
+</ForeignObject>
+
+This example the field is mandatory, if its an optional field we need to do two things...
+i) change it to have <Mandatory>false</Mandatory> 
+ii) provide a '(blank)' option in the drop down, otherwise there is no way to 'unset' this
+    value even though it is optional! Here's how to add a static option to this list
+    
+    <WidgetType>DropDown</WidgetType> 
+    <StaticValues>
+      <StaticValue>
+        <Code /> 
+        <Description>(none)</Description> <-- this could be a label too like [label.DropDown.Optional]
+      </StaticValue>
+    </StaticValues>
+    <DynamicValues>
+      ...
+
+
+Why use a foreign Object for a drop down Field ?
+------------------------------------------------
+
+In the above example of adding a drop down for the Category field, we could have 
+just defined this as a simple field with a drop down like this....
+
+<Field>
+  <Name>CategoryCode</Name> 
+  <DataType>STRING</DataType> 
+  <Display>true</Display> 
+  <Mandatory>true</Mandatory> 
+  <DomainField>CategoryCode</DomainField> 
+  <Breakup>
+    <WidgetType>DropDown</WidgetType> 
+    <DynamicValues>
+      <DomainClassName>org.jaffa.examples.domain.Category</DomainClassName> 
+      <CodeFieldName>CategoryCode</CodeFieldName> 
+      <DescriptionFieldName>Description</DescriptionFieldName> 
+      <AppendCodeAndDescription>true</AppendCodeAndDescription>
+    </DynamicValues>
+  </Breakup>
+</Field>
+
+And the user interface will look the same. The difference here is that the business
+logic that check to make sure that the CategoryCode value being store in Item, exists
+as a key in the Category table, will not be implemented if it is not defined as a 
+Foreign Object.
+
+If that is fine with you, then don't use a foreign object, but if you expect that other 
+services may want use the Transaction Controller (ie exposing it as a web service), then 
+you don't want to rely on the User Interface as the way to guarantee data integrity!
+
+
+What are the different KeyTypes used to link to a foreign object ?
+----------------------------------------------------------------
+a) Primary
+
+   This is where the primary key of the foreign object is the same key that
+   is stored in the main object, and is also the field being displayed
+   
+   This is the most common scenario, and normally the field is either defined
+   as an editbox with a lookup, or as a drop down list
+   
+   See (# above) for an example of the basic field and lookup, or
+   (# below) for how to use a drop down
+   
+b) Technical & Candidate
+
+This is where the foreign object has a technical key, that is then stored in the
+main object. The technical key is normally hidden from a user, and the user just 
+knows about a 'functional' key. An example might be that have a User table, keyed on
+EmployeeNo, but there is another field UserName which is unique. We refer to this field
+as a Candidate key.
+
+In this assumption, assume we have an [Order] object with a field 'OrderedBy' which
+contains the 'EmployeeNo' which is the technical key to [User]. This would be the
+fragment needed in OrderLineMaintenence.xml
+
+<ForeignObject>
+  <Object>User</Object>
+  <Package>org.jaffa.examples.domain</Package>
+  <ForeignFields>
+    <ForeignField>
+      <Name>OrderedBy</Name>
+      <DataType>String</DataType>
+      <Display>false</Display>
+      <Mandatory>false</Mandatory> <-- We don't want to display this technical key!
+      <DomainField>OrderedBy</DomainField>
+      <DomainFieldInForeignObject>EmployeeNo</DomainFieldInForeignObject>
+      <KeyType>Technical</KeyType> <-- Must specify this is the technical key
+    </ForeignField>
+    <ForeignField>
+      <Name>OrderedByName</Name>
+      <DataType>String</DataType>
+      <Display>true</Display>
+      <Mandatory>false</Mandatory>
+      <DomainField></DomainField> <-- There is no field on the main domain object that this related to!
+      <DomainFieldInForeignObject>UserName</DomainFieldInForeignObject>
+      <KeyType>Candidate</KeyType> <-- Must specify this is the candidate key
+    </ForeignField>
+  </ForeignFields>
+  <Lookup>
+    <Component>Examples.UserLookup</Component>
+    <BypassCriteriaScreen>true</BypassCriteriaScreen>
+    <StaticParameters></StaticParameters>
+    <DynamicParameters>userName=userName</DynamicParameters>
+    <TargetFields>userName=userName</TargetFields>
+  </Lookup>
+</ForeignObject>
+
+
+
+This scenario is more common for tables that might have a composite candidate key,
+for example the [Item] object might have a technical key ItemTK, with a candidate
+key of Part,Serial. So when we have a maintenance program to create say and [OrderLine]
+and it is related to an [Item] via ItemTK, on the maintenance screen we want to prompt 
+for Part and Serial instead, and have this validate and resolve to actual ItemTK.
+
+
+<ForeignObject>
+  <Object>Item</Object>
+  <Package>org.jaffa.examples.domain</Package>
+  <ForeignFields>
+    <ForeignField>
+      <Name>ItemTK</Name>
+      <DataType>String</DataType>
+      <Display>false</Display>
+      <Mandatory>true</Mandatory>
+      <DomainField>ItemTK</DomainField>
+      <DomainFieldInForeignObject>ItemTK</DomainFieldInForeignObject>
+      <KeyType>Technical</KeyType>
+    </ForeignField>
+    <ForeignField>
+      <Name>Part</Name>
+      <DataType>String</DataType>
+      <Display>true</Display>
+      <Mandatory>true</Mandatory>
+      <DomainField></DomainField>
+      <DomainFieldInForeignObject>Part</DomainFieldInForeignObject>
+      <KeyType>Candidate</KeyType>
+    </ForeignField>
+    <ForeignField>
+      <Name>Serial</Name>
+      <DataType>String</DataType>
+      <Display>true</Display>
+      <Mandatory>true</Mandatory>
+      <DomainField></DomainField>
+      <DomainFieldInForeignObject>Serial</DomainFieldInForeignObject>
+      <KeyType>Candidate</KeyType>
+    </ForeignField>
+  </ForeignFields>
+  <Lookup>
+    <Component>Examples.ItemLookup</Component>
+    <BypassCriteriaScreen>true</BypassCriteriaScreen>
+    <StaticParameters>partDd=Like;serialDd=Like</StaticParameters> <-- make the lookup wildcard
+    <DynamicParameters>part=part;serial=serial</DynamicParameters>
+    <TargetFields>part=part;serial=serial</TargetFields>
+  </Lookup>
+</ForeignObject>
+
+
+Note: when there are multiple fields being displayed for a foreign object, and that
+object has a lookup, the lookup will be displayed next to the first field.
+
+Note: The pattern does allow multiple fields in the Technical Key, for this just define
+each foreign field as a TechnicalKey. So you could have a four part technical key, that is 
+represented by a single candidate key field, or any combination of the above
+TBD
+
+c) What if no KeyType is specified?
+
+There is always a <KeyType>, as its required, but it can be blank. In this case 
+the field with no key type is brought back with the foreign object and can be used
+for display only purposes. So in update mode, if we use the above example we may
+want to retrieve and display the 'Status' field from item in this case we could 
+include the field like this...
+    <ForeignField>
+      <Name>ItemStatus</Name>
+      <DataType>String</DataType>
+      <Display>true</Display>
+      <Mandatory>false</Mandatory>
+      <DomainField></DomainField>
+      <DomainFieldInForeignObject>Status</DomainFieldInForeignObject>
+      <KeyType/>
+    </ForeignField>
+
+d) Displaying the foreign Fields
+
+When a foreign object is referenced in a screen like so...
+  <Screens>
+    <Screen ..>
+      ...
+      <ForeignObjectReference Object='Item'/>
+      ...
+    </Screen>  
+      
+All fields specified as 'Display=true' will be displayed.
+
+The display fields get updated only on save, or on a transition to the next screen
+if the current screen has been defined with the attribute 'PerformTxValidationOnNextAction=true'
+
+
+e) Summary
+
+			Key Type
+Action		Primary		Technical	Candidate	Null
+---------------+---------------+---------------+---------------+-----
+Persisted	yes		yes		
+Validated	yes				yes
+Hidden				yes
+Display Only							yes
+
+
+
+
+
+Related Objects
+===============
+
+Notation Uses
+-------------
+i) Relationships
+	- Association  [A] ------ [B]
+	- Aggregation  [A] <>---- [B]
+	- Composition  [A] <#>--- [B]
+ii) Cardinality is in parenthesis
+	- Association  [A] (1)------(*) [B]
+	- B has to point to one-and-only-one A
+	- A has zero or more B's
+	- Typical notations are	(1), (*), (0..1), (1..*), etc
+
+
+
+How do i add different types of related objects ?
+-------------------------------------------------
+
+a) A related object that is not part of the maintenance, but can restrict its deletion.
+   In addition to this the relationship is an association, so the related object is not
+   really part of the maintenance, beyond restricting the delete.
+   
+   This is typical in an association where X is a foreign key in Y, so Y should not be 
+   deleted if any X's refer to it.
+   
+      [Category] (1) ---- (*) [Item]
+
+   In this example an Item belongs to a Category, there are many Items in a Category, Category
+   can't be deleted if any items exist in it.
+   
+   In this example we are looking at the Category maintenance XML and need to restrict its 
+   deletion if an item exists.
+
+   Key points to note in the <RelatedObject> tag
+   i) RelationshipToDomainObject is 'Many', we assume that one-to-one entries are normally 
+      compositions, not associations.
+   ii) We don't have a <RelatedObjectFields> tag, as were are not creating or modifying
+       Item records as a many entity to Categories!
+       
+   The XML fragment to do this will look like    
+
+   <RelatedObject>
+     <Name>Item</Name>
+     <ObjectName>Item</ObjectName>
+     <Package>org.jaffa.examples.domain</Package>
+     <RelationshipToDomainObject>Many</RelationshipToDomainObject> 
+     <DeleteConstraint>Restricted</DeleteConstraint>
+     <RelatedObjectJoinFields>
+       <RelatedObjectJoinBetween>
+         <Name>Sc</Name> 
+         <DomainField>Sc</DomainField> 
+         <RelatedObjectFieldName>Sc</RelatedObjectFieldName> 
+         <RelatedObjectDomainField>Sc</RelatedObjectDomainField> 
+       </RelatedObjectJoinBetween>
+     </RelatedObjectJoinFields
+     <RelatedObjectKeyFields>
+       <RelatedObjectKeyField>
+         <RelatedObjectFieldName>Sc</RelatedObjectFieldName> 
+         <DataType>STRING</DataType> 
+         <FieldNameInTargetComponent>Sc</FieldNameInTargetComponent> 
+       </RelatedObjectKeyField>
+     </RelatedObjectKeyFields>
+  </RelatedObject>
+
+
+b) A related object that has its own component for add/remove/delete operations.
+   Typically this is used when the main object has an aggregation with the related object.
+   
+   An example could be an Order and Order Lines (in this case we'll assume this has been
+   modelled as an aggregation not a composition!)
+   
+   [Order] (1) <>--------- (*) [OrderLine]
+   
+   In this case we should have a OrderMainenance.xml and an OrderLineMaintenance.xml pattern.
+   
+   In the Order Maintenance component on creation we have no visibility of order lines. In 
+   update mode we see a 'user-grid' containing a list of OrderLines. The related object definition
+   will list the fields that are displayed in the user-grid.
+   
+   Each line can have a View, Update and Delete Action. Outside the grid is a 'Create New' option.
+   All of this options are serviced by the related OrderLineMaintenance component.
+
+   The XML fragment to do this will look like...
+   
+   <RelatedObject>
+     <Name>OrderLine</Name> 
+     <ObjectName>OrderLine</ObjectName> 
+     <Package>org.jaffa.examples.domain</Package>
+     <RelationshipToDomainObject>Many</RelationshipToDomainObject> 
+     <DeleteConstraint>Restricted</DeleteConstraint> <-- The only difference between an association and composition is
+                                                         whether its a restricted or cascading delete
+     <RelatedObjectJoinFields> <-- this is the join used to list the related objects,
+                                   normally this is a partial key retrieve of the related object
+                                   based on the primary object key
+       <RelatedObjectJoinBetween>
+         <Name>OrderNo</Name>
+         <DomainField>OrderNo</DomainField> 
+         <RelatedObjectFieldName>OrderNo</RelatedObjectFieldName> 
+         <RelatedObjectDomainField>OrderNo</RelatedObjectDomainField> 
+       </RelatedObjectJoinBetween>
+     </RelatedObjectJoinFields>
+     <RelatedObjectFields>
+       <RelatedObjectField>
+         <Name>OrderNo</Name>
+         <DataType>STRING</DataType> 
+         <Display>false</Display> <-- Note this is false
+         <Label>[label.Jaffa.Example.Order.OrderNo]</Label> 
+         <DomainField>LineNo</DomainField>
+       </RelatedObjectField>
+       <RelatedObjectField>
+         <Name>LineNo</Name>
+         <DataType>STRING</DataType> 
+         <Display>true</Display> 
+         <DisplayAsKey>true</DisplayAsKey> <-- This is the rest of the key
+         <Label>[label.Jaffa.Example.OrderLine.LineNo]</Label> 
+         <DomainField>LineNo</DomainField>
+       </RelatedObjectField>
+       <RelatedObjectField>
+         <Name>Part</Name>
+         <DataType>STRING</DataType> 
+         <Display>true</Display> 
+         <Label>[label.Jaffa.Example.OrderLine.Part]</Label> 
+         <DomainField>Part</DomainField>
+       </RelatedObjectField>
+       <RelatedObjectField>
+         <Name>Qty</Name>
+         <DataType>STRING</DataType> 
+         <Display>true</Display> 
+         <Label>[label.Jaffa.Example.OrderLine.Qty]</Label> 
+         <DomainField>Qty</DomainField>
+       </RelatedObjectField>
+     </RelatedObjectFields>
+     <OrderByFields>
+       <OrderByField>
+         <DomainFieldName>LineNo</DomainFieldName> 
+         <sortAscending>true</sortAscending> 
+       </OrderByField>
+     </OrderByFields>
+     <RelatedObjectCreator>
+       <ComponentName>Example.OrderLineMaintenance</ComponentName>
+       <ClassName>OrderLineMaintenanceComponent</ClassName>
+       <Package>org.jaffa.examples.components.orderlinemaintenance.ui</Package> 
+     </RelatedObjectCreator>
+     <RelatedObjectUpdator>
+       <ComponentName>Example.OrderLineMaintenance</ComponentName>
+       <ClassName>OrderLineMaintenanceComponent</ClassName>
+       <Package>org.jaffa.examples.components.orderlinemaintenance.ui</Package> 
+     </RelatedObjectUpdator>
+     <RelatedObjectDeletor>
+       <ComponentName>Example.OrderLineMaintenance</ComponentName>
+       <ClassName>OrderLineMaintenanceComponent</ClassName>
+       <Package>org.jaffa.examples.components.orderlinemaintenance.ui</Package> 
+       <TxClass>org.jaffa.examples.components.orderlinemaintenance.tx.OrderLineMaintenanceTx</TxClass> 
+       <DeleteInDtoClass>org.jaffa.examples.components.orderlinemaintenance.dto.OrderLineMaintenanceDeleteInDto</DeleteInDtoClass> 
+     </RelatedObjectDeletor>
+     <RelatedObjectKeyFields> <-- this is all the key fields of the related object 
+       <RelatedObjectKeyField>
+         <RelatedObjectFieldName>OrderNo</RelatedObjectFieldName> 
+         <DataType>STRING</DataType> 
+         <FieldNameInTargetComponent>OrderNo</FieldNameInTargetComponent> 
+       </RelatedObjectKeyField>
+       <RelatedObjectKeyField>
+         <RelatedObjectFieldName>LineNo</RelatedObjectFieldName> 
+         <DataType>STRING</DataType> 
+         <FieldNameInTargetComponent>LineNo</FieldNameInTargetComponent> 
+       </RelatedObjectKeyField>
+     </RelatedObjectKeyFields>
+   </RelatedObject>
+
+
+c) In the above case (b) if this is a composition between order and orderline, then 
+   we change the delete constraint to Cascading.
+   
+      <RelatedObject>
+        <Name>OrderLine</Name> 
+        <ObjectName>OrderLine</ObjectName> 
+        <Package>org.jaffa.examples.domain</Package>
+        <RelationshipToDomainObject>Many</RelationshipToDomainObject> 
+        <DeleteConstraint>Cascade</DeleteConstraint> <-- The only difference between an association and composition is
+                                                            whether its a restricted or cascading delete
+
+
+d) There is another scenario where the related object is 
+   a resolving entity, where we used a 'multi-select' lookup to 
+   mass create related objects, rather then add them one by one.
+   
+   In this case the fields for that related object can be edited 'in-line'
+   
+   This is typically only used on composite entities where there are only
+   a few additional fields to be added
+   
+   In this case the related object updates are scoped with in the primary      
+   maintenance component, not a secondary one.
+   
+   
+   Currently this can only be achieved by customizing the generated component,
+   It is planned for this to be added to the maintenance pattern at a later date.
+   
+   
+e) one-to-one relationships
+
+   You can defining a one-to-one relationship the same as a one to many but there
+   are some obvious flaws
+   i) it will appear in the main screen as a list of fields in a usergrid
+   ii) it will have a create new option, and if added as delete option on the row
+   iii) a separate maintenance component will be needed for create/update/delete functions
+   iv) it still shows 'create new' after a row has been added, obviously if you
+       try and add another you'll get a duplicate key exception!
+       
+   For this reason we developed the concept of 'in-line' one-to-one domain objects
+   Typically  a one-to-one is modelled to hold extra info about an object, but the
+   data has been split into related tables. (some persistence layers will amalgamate 
+   multiple one-to-one rows into a single Java object, but our JDBCEngine is a one-for-one
+   mapping of tables to Java objects).
+   
+   So an 'in-line' one-to-one allows the object to be specified as a 'related object',
+   but we don't specify any inner fields.
+   
+   The field are specified at the same level the normal primary entity fields are, except
+   they use an extra tag <RelatedObjectName> in the <Field> tag.
+   
+   
+   Suppose we have an Item, and a ItemRemarks table that contains a large string (and hence
+   split off on a one-to-one table, as per Oracle's recommended modelling).
+   
+   [Item] (1) <#>------- (0..1) [ItemRemarks]
+   
+   Inside the ItemMaintenace we would have
+   <Root>
+     ...
+     <KeyFields>
+       ...
+     </KeyFields>
+     <Fields>
+       ...
+       <Field>
+         <Name>Remarks</Name> 
+         <DataType>STRING</DataType> 
+         <Display>true</Display> 
+         <Mandatory>false</Mandatory> 
+         <DomainField>Remarks</DomainField> 
+         <RelatedObjectName>ItemRemarks</RelatedObjectName> <-- This specified its from a related object
+       </Field>
+       ...
+     </Fields>  
+     <ForeignObjects>
+       ...
+     </ForeignObjects>  
+     <RelatedObjects>
+       <RelatedObject>
+         <Name>ItemRemarks</Name> 
+         <ObjectName>ItemRemarks</ObjectName> 
+         <Package>org.jaffa.examples.domain</Package>
+         <RelationshipToDomainObject>One</RelationshipToDomainObject> 
+         <DeleteConstraint>Cascading</DeleteConstraint> 
+         <RelatedObjectJoinFields>  <-- joins is on the key of the primary object
+           <RelatedObjectJoinBetween>
+             <Name>ItemKey</Name> 
+             <DomainField>ItemKey</DomainField> 
+             <RelatedObjectFieldName>ItemKey</RelatedObjectFieldName> 
+             <RelatedObjectDomainField>ItemKey</RelatedObjectDomainField> 
+           </RelatedObjectJoinBetween>
+         </RelatedObjectJoinFields>
+         <RelatedObjectKeyFields> <-- the key of the related object is the same as the primary one
+           <RelatedObjectKeyField>
+             <RelatedObjectFieldName>ItemKey</RelatedObjectFieldName> 
+             <DataType>STRING</DataType> 
+             <FieldNameInTargetComponent>ItemKey</FieldNameInTargetComponent> 
+           </RelatedObjectKeyField>
+         </RelatedObjectKeyFields>
+       </RelatedObject>
+     </RelatedObjects>
+     ...
+     <Screens>
+       <Screen ...>
+         <References>
+           ...
+           <FieldReference Name="Remarks" /> <-- fields from the related object are referenced like normal fields
+           ...
+         </References>
+       </Screen>
+     </Screens>
+   <Root>  
+
+
+
+How does the app builder deal with relationships ?
+--------------------------------------------------
+
+a) one-to-many associations
+   A related object fragment will be created
+   It will be specified as a restricted delete constraint
+   No fields will be included
+   A Join definition will be provided
+   The related objects key will be specified
+
+b) one-to-many aggregations
+   A related object fragment will be created
+   It will be specified as a restricted delete constraint
+   All fields (except the join field) will be included
+   A Join definition will be provided
+   The related objects key will be specified
+
+c) one-to-many compositions
+   A related object fragment will be created
+   It will be specified as a cascading delete constraint
+   All fields (except the join field) will be included
+   A Join definition will be provided
+   The related objects key will be specified
+
+d) one-to-one? Treats it as a one to many :-(
+TBD
+
+
+What is a the meaning of a 'OneAndMany' relationship ?
+------------------------------------------------------
+It is possible to defined a relationship as One and Many using the following definition
+<RelationshipToDomainObject>OneAndMany</RelationshipToDomainObject>.
+
+This is used .... TBD
+OneAndMany: Use this in the rare case where the RelatedObject can be, based on custom
+business logic, in one-to-one or one-to-many relationships with the domain object.
+
+Creates all the one-to-one code as well as one-to-many
+Need custom logic to disable one or the other in the
+- JSP's (via a struts <logic:xxx> tag or scriptlet code)
+- Tx (via customization points in template)  
+
+
+How do i display data from other domain objects, when displaying
+fields in a Foriegn or Related Object?
+----------------------------------------------------------------
+<SourceChain>
+TBD

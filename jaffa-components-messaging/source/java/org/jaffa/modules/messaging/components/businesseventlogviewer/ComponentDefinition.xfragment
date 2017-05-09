@@ -1,0 +1,4 @@
+    <component id="Jaffa.Messaging.BusinessEventLogViewer">
+        <class>org.jaffa.modules.messaging.components.businesseventlogviewer.ui.BusinessEventLogViewerComponent</class>
+        <type>ObjectViewer</type>
+    </component>

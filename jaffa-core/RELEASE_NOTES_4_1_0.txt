@@ -1,0 +1,106 @@
+Welcome to JAFFA - Java Application Framework For All
+=====================================================
+
+These are the changes made for the next JAFFA Release. For more information visit us at http://jaffa.sourceforge.net
+
+
+What's New
+=====================================================
+Presentation
+------------
+- Added the ability to pass URL parameters to a component that is embedded in a desktop.
+  - These parameters are reflected on the component after the parameters provided in the navigation.xml are set, so they take priority
+  - A new parameter 'newInstance=true' will kill the current instance of the desktop component and restart a new one, otherwise none of the parameters will be used.
+  - Allows a portal to now link into a desktop component as if it were a regular one. I.E. http://localhost:10700/MyApp/jaffa/jsp/tiles/desktop.jsp?desktopId=5&part=ABC&useDefaultQuery=false&newInstance=true 
+  - Allows a portal to show/remove the shortcuts of saved queries. Shortcuts of saved queries can only be created from queires of Inquiry type. 
+  - Add a global foward and its JSP to logoff the session and close the browser window.
+  - Add tooltip attribute to CheckBox tag such that, mouseover a check box will popup a float box displaying whatever is assigned to the tooltip attribute.
+  - Modified EditBoxTag.java to set comment as "" rather than 'null' when there is no comments to display.
+  - Add redirect. It operates when the forward url has parameters or "://" in it.
+  - Add 'ajaxForward' switch in request parameters to ActionBase.java, such that if 'ajaxForward' is specified, ActionBase will forward to what 'ajaxForward' is pointed to.
+- Enhanced object_maintenance_2_0/contextNav.jsp to support 'componentGuard' and 'functionGuard' attributes for rendering custom-buttoms, defined via the tiles-attribute 'contextNavLinks'
+- Enhanced object_viewer_2_0/contextNav.jsp to support custom-buttoms, defined via the tiles-attribute 'contextNavLinks'
+- Enhanced GridTag and GridRowTag to allow user to define attributes in <tr> tags by specifying the new attribute in the body of GridRowTag in key and value property pairs.
+- Added removeWidgetForm() function in widgetCache.js to flush out the form from the cache before the same form is reloaded from ajax.
+- Added handling of Long, Float, and Double to QuerySaver.java and NullPointerException handling in FinderComponent2.setQueryData()
+- Modified the SimpleWidgetModel to not format Number instances. This was done to avoid the doValidateN() method inside a multi-screen Maintenance component from formatting a value based on the default layout, without taking into account the layout that might have been declared via AOP, and hence losing precision. The TagHandlers will continue to format the object, based on the appropriate layout.
+  
+Widgets
+-------
+- The getImage.jsp was being used to render image (binary) data, a task that JSPs are not designed for
+  - Replaced the JSP with GetImageServlet
+  - The ImageTag has been modified to point to the new servlet
+  - Added servlet and servlet-mapping definitions to web.xml
+- The DropDownTag and RadioButtonTag have been enhanced to support a 'displayOnly' attribute, which will cause the tag handler to render a text-only representation
+- Enhanced the object_maintenance_2_0/contextNav.jsp to support the 'confirm' attribute
+- Add 'htmlName' attribute to FormTag.java and jaffa-portlet.tld to allow user to specify htmlName and id. This is useful when ajax calls in jsp fragment with form insided. The default auto index id will always return forms with j1.
+- Add application rule of jaffa.widgets.text.preformated into TextTag.java to wrap <pre> around the output.
+
+Components & Patterns
+---------------------
+- Created VoucherGeneratorFactory, which returns an IVoucherGenerator implementation, to be used for generating vouchers.
+  - The implementation class is obtained by looking up the rule 'jaffa.voucher.voucherGenerator' in the context.
+  - If not found, it returns an instance of the SimpleVoucherGenerator.
+  - The IVoucherGenerator interface has been enhanced with the connection, domainClassName, fieldName and type properties
+- Modified the component Loader to ignore components which have not been deployed, i.e. which cannot be located by the ClassLoader. This check can be quite time consuming. It is enforced if the 'jaffa.component.checkClassExistenceOnStartup' business rule is true.
+
+Persistence
+-----------
+- Enhanced the UOW class with addSpecial, updateSpecial and deleteSpecial methods. These methods perform the add, update and delete operations respectively, but without invoking the lifecycle events. They should be used sparingly and in specialized cases only.
+- Added JAXB annotations to the fields of the Persistent class, so that its internals are not serialized when marshalling to XML.
+- Enhanced the Criteria to support RELATIONAL_NOT_BEGINS_WITH, RELATIONAL_NOT_ENDS_WITH and RELATIONAL_NOT_LIKE operators
+- Enhanced the 'order by' feature in QueryStatementHelper to support the sql-function elements
+- Optimized the JdbcEngine to utilize PreparedStatements when a query involves the primary-key criteria only, and when doing a count(*) based on the primary-key
+- Modified the JdbcEngine to use the more efficient 'SELECT 1 FROM' construct instead of 'SELECT * FROM', when executing a query to obtain a lock
+- Modified the setAppObject() method of the TypeDefs class to perform the necessary datatype conversion before setting a value on the PreparedStatement. This change has been necessitated by the recent optimization to primary-key based queries, which may break existing code containing the use of erroneous datatypes in queries, and which worked well using regular Statements.
+
+General
+-------
+- Updated JAXB Jars from 1.0 to 2.1 as we now have some JAXB annotations in the code generator for domain objects
+- Modified the ContextManager.getThreadContext() method to  return a GlobalContext, in case a thread context has not been created yet. This may be useful, if a global setting is required for setting up the thread context.
+- Created a JAXBHelper to provide convenience methods related to JAXB
+- Added a destroy() method to the OsScriptingBean, which can be used to terminate a long running OS process
+- Enhanced the BeanHelper to support Enums
+- Added a decimal5.format to locale.properties. This will be useful for formatting a number upto 5 decimal places
+- Allowed usernames to have special characters, such as (space)'@&^><?/|}{][=+%^$#!()_-=`~:;*. These characters will be URLEncoded for the user preference directory names.
+- Added PaternExclusionException.java to handle the exception from NotInListPropertyRule.java.
+- EmailHelper and EmailerBean have been enhanced to allow more than one Excel files to be sent as attachments.
+- Enhanced the MessageHelper to support escaping the '[]' characters with a back-slash '\' character
+- Enhanced the IRulesEngine to support virtual classes
+- Enhanced the IObjectRuleIntrospector to support the primary-key rule
+- Enhanced the RulesEngineFactory to obtain the IRulesEngine implementation from the JVM parameter 'org.jaffa.rules.RulesEngineFactory'
+- Enhanced the ExceptionHelper to support extraction of an ApplicationException instance from within an ApplicationExceptions instance
+
+Bug Fixes
+=====================================================
+Presentation
+------------
+- Modified gridSort_gb.js to allow uk locale dates parsed correctly.
+- Added error detection to sendAjaxRequest() in header.js to handle the raised error pop up box in ajax and the logon screen after session expired.
+- Removed the functional code of validateTrapKey() in header.js. The progress bar screen breaks the javascript validation code implemented in methods overwrite postForm(). On the other hand, validation will be taken in postForm(). It is not clear why trapKey() needs to do the validation to skip postForm().
+- Corrected rulesValidator.js to handle the exception that gets thrown in Firefox when checking the 'selectionStart' attribute of a TextArea inside a closed FoldingSection
+- Modified escape character replacement in jaffa/jsp/lookup.jsp to handle '\' properly.
+Widgets
+-------
+- The hyperlink generated by a TextTag (provided the hyperlink rule is defined) inside the Grid widget of a Finder component's Results page, may not work under certain scenarios when the data is exported to Excel. This happens because, unlike the browsers, Excel treats even incomplete entities as entities. For example it treats '&part' as '&part;', which is the entity for the partial differential symbol. Hence the hyperlink doesn't work if a parameter for the hyperlinked component is named 'part' for example. The TextTag has now been modified to generate '&amp;' instead of just '&' to work around the issue.
+- Removed replacement of space to &nbsp; in TextTag.java. (fixed the sorting bug on date and time)
+- Added input string test to null and "" in Date parsers in gridSort_??.js to allow return null when date is not set. (fixed sorting bug on date, which is discovered by developer)
+- Modified RaiseErrorTag.java to perform text to html string conversion on message strings using StringHelper.conterToHTML().
+- Replace escape() with encodeURIComponent() in LookupTag.java so that the value string can have all the special URL characters encoded.
+
+Components & Patterns
+---------------------
+
+Persistence
+-----------
+- Corrected the rollback() method of the UOW class to always close the Database Connection, no matter what the outcome of the rollback() operation on the Database Connection was.
+- Removed the finalize() method from the DataSourceCursor, since it could concurrently modify the statements cache of the corresponding DataSource, while a commit or a rollback operation is being performed on that DataSource in a client-thread.
+
+General
+-------
+- Corrected the LoggedHelper to pass a URL to the DOMConfigurator for configuring Log4J. Else it fails to work with a configuration file, that's packaged inside a JAR
+- Modified SecurityTag.hasComponentAccess() method to return a false, instead of throwing a SecurityException, if the component is not defined.
+- Added property string for save query error. 
+
+What's Deleted/Deprecated
+=====================================================

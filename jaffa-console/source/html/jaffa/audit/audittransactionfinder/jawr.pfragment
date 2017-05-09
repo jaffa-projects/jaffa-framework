@@ -1,0 +1,15 @@
+#--------------------------------------------------
+# Audit \ Transaction \ AuditTransactionFinder
+#--------------------------------------------------
+
+# Allowed Dependencies: Material,ContractWarehouse,CatalogVendor,Commons,UserSecurity,Structure
+jawr.js.bundle.AuditTransactionAudittransactionfinder.id=/bundles/jaffa/audit/audittransactionfinder/auditTransactionFinder.js
+jawr.js.bundle.AuditTransactionAudittransactionfinder.mappings=\
+        dwr:Jaffa_Audit_AuditTransactionService, \
+        dwr:Jaffa_Audit_AuditTransactionViewService, \
+        /jaffa/audit/audittransactionfinder/main.js, \
+        /jaffa/audit/audittransactionfinder/AuditTransactionFastAccess.js, \
+        /jaffa/audit/audittransactionfinder/AuditTransactionSearchTabs.js, \
+        /jaffa/audit/audittransactionfinder/AuditTransactionCriteriaPanel.js, \
+        /jaffa/audit/audittransactionfinder/AuditTransactionGrid.js
+        

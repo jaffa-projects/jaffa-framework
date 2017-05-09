@@ -1,0 +1,12 @@
+    <!-- FormTemplateViewer -->
+    <definition name="jaffa.printing.formtemplateviewer.ViewerLayout"  extends="jaffa.ViewerLayout">
+        <put name="body" value="/jaffa/printing/formtemplateviewer/view.jsp"/>
+        <put name="action" value="/jaffa_printing_formTemplateViewer"/>
+        <put name="updateComponent" value="Jaffa.Printing.FormTemplateMaintenance"/>
+        <put name="deleteComponent" value="Jaffa.Printing.FormTemplateMaintenance"/>
+    </definition>
+    <definition name="jaffa.printing.formtemplateviewer"  extends="jaffa.MainLayout">
+        <put name="title" value="[title.Jaffa.Printing.FormTemplateViewer.view]"/>
+        <put name="body" value="jaffa.printing.formtemplateviewer.ViewerLayout"/>
+    </definition>
+

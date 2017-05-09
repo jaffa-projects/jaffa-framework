@@ -1,0 +1,8 @@
+    <!-- FormSelectionMaintenance -->
+    <action    path="/jaffa_printing_formSelectionMaintenance"
+               type="org.jaffa.modules.printing.components.formselectionmaintenance.ui.FormSelectionMaintenanceAction"
+               name="jaffa_printing_formSelectionMaintenanceForm"
+               validate="false"
+               scope="request">
+    </action>
+

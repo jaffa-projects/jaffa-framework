@@ -1,0 +1,33 @@
+/* 
+  File name:  lookup.css
+  Author:     paule  
+
+  Description:
+    Example StyleSheet that controls the display of the lookup widget
+*/
+
+A.Lookup { 
+  font-family :Times New Roman, Times, serif;    
+  font-weight : normal;    
+  font-variant : normal;    
+  font-style : normal;  
+  font-size : small;    
+  background-repeat : no-repeat;    
+  background :  url(../../imgs/lookup/lookup.gif) no-repeat left; 
+    vertical-align : middle;  
+    letter-spacing : 1px;
+    width="30";  
+ }
+ 
+ A.Lookup:hover { 
+  font-family :Times New Roman, Times, serif;    
+  font-weight : normal;    
+  font-variant : normal;    
+  font-style : normal;  
+  font-size : small;    
+  background-repeat : no-repeat;    
+  background :  url(../../imgs/lookup/lookup.gif) no-repeat left; 
+    vertical-align : middle;  
+    letter-spacing : 1px;
+    width="30";  
+ }

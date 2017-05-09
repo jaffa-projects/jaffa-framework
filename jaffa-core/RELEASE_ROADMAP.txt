@@ -1,0 +1,34 @@
+Jaffa Project
+=============
+
+
+Major Release Points - September 2006
+ - Built with JSK 1.4.2
+ - CVS Tags for each module were
+   - JaffaCore                 RELEASE_3_1_0 from BRANCH_3_1_0
+   - JaffaTools                RELEASE_2_2_0 from HEAD
+   - JaffaRules                RELEASE_1_1_0 from HEAD
+   - JaffaBuild                no release from HEAD
+   - JaffaComponentsUser       RELEASE_1_0_0 from HEAD
+   - JaffaComponentsAdmin      RELEASE_1_0_0 from HEAD
+   - JaffaComponentsPrinting   no release for JDK 1.4
+   
+Major Release Points - November 2006
+ - Built with JSK 1.5.0
+ - Move to consolidate version numbers
+   - Core,Tools,Rules,Build will be released as 3.2.0
+   - Components for User,Admin and Printing will be release as 1.2.0
+ - Branches BRANCH_3_2_X and BRANCH_1_2_X will be created for future support of this code base
+ - Tags RELEASE_3_2_0 and RELEASE_1_2_0 will be created for the initial RC of this build
+ - JaffaCore will be branch will be based off current 3_1_0 branch
+ - The other branches will be based on either the previous tagged version or HEAD, with any changes that are incompatible with the 3_2_X rolled back.
+
+Major Release Points - December 2006
+ - Built with JSK 1.5.0
+ - New version numbers will be 4.0.0 and 2.0.0
+ - Includes major refactoring of DateTime Class
+ 
+Current HEAD and Next Major Release - Q1 2007
+ - Includes new JAXB XML marshalling and UOW Logging
+ - New version numbers will be 4.1.0 and 2.1.0
+ - Review and upgrade to later dependent libs, JAX 2.0, iText, etc

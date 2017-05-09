@@ -1,0 +1,12 @@
+# Labels For Module Rules. 
+label.Jaffa.Rules.Comments.FirstSeparator=------- Comments from {0} on {1} -------
+label.Jaffa.Rules.Comments.AdditionalSeparator=------- Additional Comments from {0} on {1} -------
+
+# Error Messages
+exception.org.jaffa.rules.JaffaRulesFrameworkException.parseError=Error in parsing the metadata from {0}
+exception.org.jaffa.rules.JaffaRulesFrameworkException.invalidParameter=Invalid value '{0}' passed for parameter '{1}' in {2}. Valid values are {3}
+exception.org.jaffa.rules.JaffaRulesFrameworkException.invalidRule=Invalid Rule '{0}'
+exception.org.jaffa.rules.JaffaRulesFrameworkException.invalidUrl=Invalid URL passed for loading metadata:  {0}
+exception.org.jaffa.rules.JaffaRulesFrameworkException.missingParameter=Parameter '{0}' is missing in {1}
+exception.org.jaffa.rules.JaffaRulesFrameworkException.unknownParameter=Unknown parameter '{0}' passed in rule {1}
+exception.org.jaffa.rules.JaffaRulesFrameworkException.writeError=Error in writing AOP bindings to {0}

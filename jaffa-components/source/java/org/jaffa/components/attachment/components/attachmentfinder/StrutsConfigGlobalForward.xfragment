@@ -1,0 +1,5 @@
+    <forward name="jaffa_attachment_attachmentFinderCriteria" path="jaffa.attachment.attachmentfinder.criteria"/>
+    <forward name="jaffa_attachment_attachmentFinderResults" path="jaffa.attachment.attachmentfinder.results"/>
+    <forward name="jaffa_attachment_attachmentFinderConsolidatedCriteriaAndResults" path="jaffa.attachment.attachmentfinder.consolidatedCriteriaAndResults"/>
+    <forward name="jaffa_attachment_attachmentFinderExcelResults" path="jaffa.attachment.attachmentfinder.FinderExcelLayout"/>
+    <forward name="jaffa_attachment_attachmentFinderXmlResults" path="jaffa.attachment.attachmentfinder.FinderXmlLayout"/>

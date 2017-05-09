@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+  <!-- ================================================= -->
+  <!-- Rules for Domain Object AttachmentDelete -->
+  <!-- ================================================= -->
+
+  <metadata tag="jaffa.rules" class="org.jaffa.components.attachment.domain.AttachmentDelete">
+
+    <base-domain-info name="org.jaffa.components.attachment.domain.Attachment"/>
+    
+    <label>[label.Jaffa.Attachment.AttachmentDelete]</label>
+
+    <property name="attachmentId">
+      <label>[label.Jaffa.Attachment.AttachmentDelete.AttachmentId]</label>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="serializedKey">
+      <label>[label.Jaffa.Attachment.Attachment.SerializedKey]</label>
+      <mandatory/>
+      <max-length>500</max-length>
+    </property>
+
+    <property name="versionNumber">
+      <label>[label.Jaffa.Attachment.AttachmentDelete.VersionNumber]</label>
+      <max-length>10</max-length>
+    </property>
+
+    <property name="deletionCreatedOn">
+      <label>[label.Jaffa.Attachment.AttachmentDelete.DeletionCreatedOn]</label>
+    </property>
+
+  </metadata>
+</aop>

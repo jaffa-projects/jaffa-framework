@@ -1,0 +1,6 @@
+Java is trademark of Sun Microsystems, Inc., and refer to Sun's Java programming language technology, The jaffa project is not sponsored by or affiliated with Sun Microsystems, Inc. 
+
+This project uses software developed by Sun Microsystems, Inc. (http://servlet.java.sun.com/help/legal_and_licensing).
+J2SE1.4 SDK is required to compile the programs.
+JRE is required to execute the programs
+In addition, j2ee.jar, jaxb-rt-1.0-ea.jar, jaxb-xjc-1.0-ea.jar are also used in the project.    

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+  <!-- ================================================= -->
+  <!-- Rules for Domain Object TransactionSweeperView -->
+  <!-- ================================================= -->
+
+  <metadata tag="jaffa.rules" class="org.jaffa.transaction.domain.TransactionSweeperView">
+
+    <label>[label.Jaffa.Transaction.Transaction]</label>
+
+    <property name="id">
+      <label>[label.Jaffa.Transaction.Transaction.Id]</label>
+      <max-length>80</max-length>
+    </property>
+
+    <property name="createdOn">
+      <label>[label.Common.CreatedOn]</label>
+    </property>
+
+    <property name="createdBy">
+      <label>[label.Common.CreatedBy]</label>
+      <max-length>20</max-length>
+    </property>
+
+  </metadata>
+</aop>

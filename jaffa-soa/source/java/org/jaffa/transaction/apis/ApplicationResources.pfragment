@@ -1,0 +1,14 @@
+error.Jaffa.Transaction.Transaction.cannnotDeleteINT=An Interrupted Transaction cannot be deleted
+error.Jaffa.Transaction.Transaction.invalidStatusChange=Status can only be changed from E to O
+error.Jaffa.Transaction.Transaction.invalidStatusOnCreate=A Transaction can be created in O or H status only
+error.Jaffa.Transaction.Transaction.lockError=An existing Transaction blocks the submission of any more Transactions that need a lock-check
+error.Jaffa.Transaction.Transaction.noAdminAccess=You do not have access to administer Transactions of the Type {0}
+
+email.subject.transaction.failureNotification=Failure notification for Transaction #if($type)of the Type ${type}#end
+email.body.transaction.failureNotification=<html>There was a failure in processing a Transaction#if($type) of the Type ${type}#end #if($errorMessage)<p>${errorMessage}#end <p>Check <a href='${appUrl}/jaffa/transaction/transactionmaintenance/main.jsp?id=${transaction.id}'/>Transaction Details</a></html>
+
+label.Jaffa.Transaction.TransactionConsumer.start=Processing Transaction
+label.Jaffa.Transaction.TransactionConsumer.success=Successfully processed Transaction
+label.Jaffa.Transaction.TransactionConsumer.error=Error in processing Transaction
+
+exception.exception.org.jaffa.transaction.services.InterruptedException.interrupted=User aborted. {0}

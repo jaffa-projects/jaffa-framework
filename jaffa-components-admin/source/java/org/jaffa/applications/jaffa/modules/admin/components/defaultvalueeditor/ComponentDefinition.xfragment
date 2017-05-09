@@ -1,0 +1,5 @@
+    <component id="Jaffa.Admin.DefaultValueEditor">
+        <class>org.jaffa.applications.jaffa.modules.admin.components.defaultvalueeditor.ui.DefaultValueEditorComponent</class>
+        <type>Skeleton</type>
+        <mandatory-function name="Jaffa.Admin.EditDefaultValue"/>
+    </component>

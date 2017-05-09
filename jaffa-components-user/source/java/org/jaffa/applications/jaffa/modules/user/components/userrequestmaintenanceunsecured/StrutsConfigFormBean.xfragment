@@ -1,0 +1,2 @@
+    <form-bean      name="nonsecure_userRequestMaintenanceForm"
+                    type="org.jaffa.applications.jaffa.modules.user.components.userrequestmaintenanceunsecured.ui.UserRequestMaintenanceForm"/>

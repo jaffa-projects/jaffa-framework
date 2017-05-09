@@ -1,0 +1,24 @@
+/*
+ * This is the CORE stylesheet used for all web 2.0 development in the Purchasing Module
+ */
+ 
+/********************************
+ *
+ * Custom MIRO stuff for UserSecurity
+ * 
+ **********************************/
+
+.headerTitle{
+	text-align:center;
+}
+
+
+.headerTitle span{
+	color:#15428B;
+	font-family:tahoma,arial,helvetica;
+	font-size:18px !important;
+	font-size-adjust:none;
+	font-stretch:normal;
+	font-style:normal;
+	font-variant:normal;
+}

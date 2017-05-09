@@ -1,0 +1,52 @@
+/* 
+  File name:  lookup.css
+  Author:     paule  
+
+  Description:
+    StyleSheet that controls the display of the lookup widget
+*/
+
+A.Lookup,
+A.Lookup:hover { 
+  background-repeat: no-repeat;    
+  background-position: left;
+  background-image: url(../../../../imgs/lookup/lookup.gif);
+  text-decoration: none;
+  padding-left:6px;
+  vertical-align: text-top;  
+}
+  
+A.Calendar,
+A.Calendar:hover { 
+  background-repeat: no-repeat;    
+  background-position: left;
+  background-image: url(../../../../imgs/datetime/calendar_32b.gif);
+  text-decoration: none;
+  padding-left:15px;
+  padding-top:5px;
+  vertical-align: text-top;  
+}
+
+/* use button to solve the delima of disappearing icon or padding to make hot spot off-set from the icon. */
+button.Lookup, button.Lookup:hover {
+  background-color:transparent;
+  background-position:0pt 2px;
+  background-repeat:no-repeat;
+  background-image:url(../../../../imgs/lookup/lookup.gif) !important;
+  border:0pt none;
+  cursor:pointer;
+  padding-top: 1px;
+  padding-left: 18px;
+}
+
+/* use button to solve the delima of disappearing icon or padding to make hot spot off-set from the icon. */
+button.Calendar, button.Calendar:hover {
+  background-color:transparent;
+  background-position:0pt 2px;
+  background-repeat:no-repeat;
+  background-image:url(../../../../imgs/datetime/calendar_32b.gif) !important;
+  border:0pt none;
+  cursor:pointer;
+  padding-top: 1px;
+  padding-left: 18px;
+}

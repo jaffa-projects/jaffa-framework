@@ -1,0 +1,234 @@
+<xsd:schema xmlns:xsd='http://www.w3.org/2001/XMLSchema'
+            xmlns:jxb='http://java.sun.com/xml/ns/jaxb'
+            jxb:version='1.0'>
+
+  <xsd:annotation>
+    <xsd:appinfo>
+      <jxb:schemaBindings>
+        <jxb:package name='org.jaffa.transaction.services.configdomain'/>
+      </jxb:schemaBindings>
+    </xsd:appinfo>
+  </xsd:annotation>
+
+  <xsd:annotation>
+    <xsd:documentation>
+      This is the schema for the configuration file used by JaffaTransaction. The following are the main configuration elements
+      <ul>
+        <li><b>transaction</b>: maps a POJO to a Transaction Type, and declares the Transaction handler</li>
+        <li><b>type</b>: provides additional information for a Transaction Type</li>
+      </ul>
+    </xsd:documentation>
+  </xsd:annotation>
+
+<!-- **************************************************** -->
+
+  <xsd:element name='config'>
+    <xsd:annotation>
+      <xsd:documentation>
+        The root element of the configuration file
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:choice minOccurs='0' maxOccurs='unbounded'>
+          <xsd:element name='transaction' type='transactionInfo'/>
+          <xsd:element name='type' type='typeInfo'/>
+        </xsd:choice>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name='transactionInfo'>
+    <xsd:annotation>
+      <xsd:documentation>
+        Maps a POJO to a Transaction Type, and declares the Transaction handler
+        <ul>
+          <li><b>lock-check</b>: lists the elements to check in the Headers of existing Transactions, the presence of which would result in a LockingServiceException. The check is performed before writing the Transaction.</li>
+          <li><b>header</b>: lists the elements to add to the Transaction header</li>
+          <li><b>dataBean</b>: the fully qualified class name of the POJO</li>
+          <li><b>type</b>: the Transaction Type</li>
+          <li><b>subType</b>: the Transaction subType</li>
+          <li><b>toClass</b>: the fully qualified class name of the handler. This attribute need not be specified for an Outbound Transaction</li>
+          <li><b>toMethod</b>: the handler method, which gets invoked by the TransactionConsumer, which consumes the Transaction. The method signature should have the POJO as an input argument.</li>
+          <li><b>description</b>: the description</li>
+        </ul>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name='lock-check' type='lock-check' minOccurs='0' maxOccurs='1'/>
+      <xsd:element name='header' type='header' minOccurs='0' maxOccurs='1'/>
+    </xsd:sequence>
+    <xsd:attribute name='dataBean' type='xsd:string' use='required'/>
+    <xsd:attribute name='type' type='xsd:string' use='required'/>
+    <xsd:attribute name='subType' type='xsd:string'/>
+    <xsd:attribute name='toClass' type='xsd:string'/>
+    <xsd:attribute name='toMethod' type='xsd:string'/>
+    <xsd:attribute name='description' type='xsd:string'/>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name='typeInfo'>
+    <xsd:annotation>
+      <xsd:documentation>
+        Provides additional information for a Transaction Type
+        <ul>
+          <li><b>display-param</b>: lists the header elements to display when viewing Transactions of this Type</li>
+          <li><b>security</b>: controls access to viewing and maintaining Transactions of this Type</li>
+          <li><b>name</b>: the name of this Transaction Type</li>
+          <li><b>description</b>: the description</li>
+          <li><b>queueName</b>: the name of the JMS queue to which Transactions of this type will be written</li>
+          <li><b>singleton</b>: message needs to be processed in sequence</li>
+          <li><b>label</b>: the the label to be shown on the UI</li>
+        </ul>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name='display-param' type='display-param' minOccurs='0' maxOccurs='unbounded'/>
+      <xsd:element name='security' type='security' minOccurs='0' maxOccurs='1'/>
+    </xsd:sequence>
+    <xsd:attribute name='name' type='xsd:string' use='required'/>
+    <xsd:attribute name='description' type='xsd:string'/>
+    <xsd:attribute name='queueName' type='xsd:string'/>
+    <xsd:attribute name='singleton' type='xsd:boolean' default="false"/>
+    <xsd:attribute name='label' type='xsd:string' use='required'/>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name='lock-check'>
+    <xsd:annotation>
+      <xsd:documentation>
+        Lists the elements to check in the Headers of existing Transactions, the presence of which would result in a LockingServiceException. The check is performed before writing the Transaction.
+        <ul>
+          <li><b>param</b>: Contains the list of header elements</li>
+          <li><b>filter</b>: In case of complex checks, specify a filter. This will load in a filterClass to add the additional complex criteria</li>
+        </ul>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:choice>
+      <xsd:element name='param' type='param' minOccurs='0' maxOccurs='unbounded'/>
+      <xsd:element name="filter" type="filter" minOccurs="0" maxOccurs="1"/>
+    </xsd:choice>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name='header'>
+    <xsd:annotation>
+      <xsd:documentation>
+        Lists the elements to add to the Transaction header
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name='param' type='param' minOccurs='0' maxOccurs='unbounded'/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name='param'>
+    <xsd:annotation>
+      <xsd:documentation>
+        Declares a name-value pair, and is used in various elements of this schema
+        <ul>
+          <li><b>name</b>: the name of the parameter</li>
+          <li><b>value</b>: the value of the parameter. It could be a literal. Or it could be expression, which gets evaluated at runtime. JaffaTransaction utilizes Java Scripting for evaluating expressions. It sets up a context with the following elements
+            <ul>
+              <li><b>context</b>: contains the global context</li>
+              <li><b>bean</b>: contains the POJO</li>
+            </ul>
+          </li>
+          <li><b>loggingName</b>: the name to use, if this element is to be added to the Map Diagnostic Context (MDC) of Log4J. It can then be used for writing BusinessEventLog records</li>
+          <li><b>expression</b>: a flag to indicate if the value contains a literal, or an expression that should evaluated at runtime</li>
+          <li><b>language</b>: indicates the scripting language used for writing the expression, if any. It should be compatible with Java Scripting. It defaults to beanshell</li>
+        </ul>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleContent>
+      <xsd:extension base='xsd:string'>
+        <xsd:attribute name='name' type='xsd:string' use='required'/>
+        <xsd:attribute name='expression' type='xsd:boolean' default='false'/>
+        <xsd:attribute name='language' type='xsd:string' default='beanshell'/>
+        <xsd:attribute name='loggingName' type='loggingName'/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+<xsd:complexType name="filter">
+    <xsd:annotation>
+      <xsd:documentation>
+        In case of complex checks, specify a filter. This will load in a filterClass to add the additional complex criteria
+        <ul>
+          <li><b>className</b>: the name of the filter class.</li> 
+        </ul>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="className" type="xsd:string" use='required'/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name='display-param'>
+    <xsd:annotation>
+      <xsd:documentation>
+        Lists the header elements to display when viewing the Transactions of a certain Type
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name='name' type='xsd:string' use='required'/>
+    <xsd:attribute name='label' type='xsd:string' use='required'/>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:complexType name='security'>
+    <xsd:annotation>
+      <xsd:documentation>
+        Controls access to viewing and maintaining Transactions of a certain Type
+        <ul>
+          <li><b>browse</b>: contains the business-function for controlling access
+            <ul>
+              <li><b>attribute absent</b>: All users have access to Transactions of a certain Type</li>
+              <li><b>attribute empty</b>: No user will have access to Transactions of a certain Type</li>
+            </ul>
+          </li>
+          <li><b>admin</b>: contains the business-function for controlling access to the delete and resubmit actions on the accessible Transactions of a certain Type
+            <ul>
+              <li><b>attribute absent</b>: All users can Delete and Resubmit</li>
+              <li><b>attribute empty</b>: No user can Delete and Resubmit</li>
+            </ul>
+          </li>
+        </ul>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name='browse' type='xsd:string'/>
+    <xsd:attribute name='admin' type='xsd:string'/>
+  </xsd:complexType>
+
+<!-- **************************************************** -->
+
+  <xsd:simpleType name='loggingName'>
+    <xsd:annotation>
+      <xsd:documentation>
+        An enumeration of allowed values for the loggingName attribute
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base='xsd:string'>
+      <xsd:enumeration value='CorrelationType'/>
+      <xsd:enumeration value='CorrelationKey1'/>
+      <xsd:enumeration value='CorrelationKey2'/>
+      <xsd:enumeration value='CorrelationKey3'/>
+      <xsd:enumeration value='ProcessName'/>
+      <xsd:enumeration value='SubProcessName'/>
+   </xsd:restriction>
+  </xsd:simpleType>
+
+</xsd:schema>
