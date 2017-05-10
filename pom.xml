@@ -233,6 +233,7 @@
         <version.org.codehaus.janino>2.5.16</version.org.codehaus.janino>
         <version.org.codehaus.janino.commons-compiler>2.6.1</version.org.codehaus.janino.commons-compiler>
         <version.org.codehaus.groovy-all>1.7.4</version.org.codehaus.groovy-all>
+        <version.org.codehaus.janino>2.5.16</version.org.codehaus.janino>
         <version.org.directwebremoting.dwr-osgi>2.0.5</version.org.directwebremoting.dwr-osgi>
         <version.org.drools.drools-compiler>4.0.7</version.org.drools.drools-compiler>
         <version.org.drools.drools-core>4.0.7</version.org.drools.drools-core>
@@ -407,6 +408,7 @@
     </prerequisites>
 
     <build>
+	    <sourceDirectory>${project.basedir}/source/java</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
         <testResources>
             <testResource>
@@ -443,6 +445,11 @@
                         <!-- *********************************************************** -->
                         <!-- 3rd Party Libraries                                         -->
                         <!-- *********************************************************** -->
+                        <dependency>
+                            <groupId>org.codehaus.janino</groupId>
+                            <artifactId>janino</artifactId>
+                            <version>${version.org.codehaus.janino}</version>
+                        </dependency>
                         <dependency>
                             <groupId>commons-beanutils</groupId>
                             <artifactId>commons-beanutils</artifactId>

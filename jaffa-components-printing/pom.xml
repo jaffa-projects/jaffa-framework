@@ -74,14 +74,14 @@
       <groupId>jfree</groupId>
       <artifactId>jcommon</artifactId>
     </dependency>
-    <!--<dependency>
+    <dependency>
       <groupId>com.pdflib</groupId>
       <artifactId>pdflib</artifactId>
     </dependency>
     <dependency>    
       <groupId>de.lohndirekt</groupId>
       <artifactId>jipsi</artifactId>
-    </dependency>-->
+    </dependency>
 
     <dependency>
       <groupId>org.hibernate</groupId>

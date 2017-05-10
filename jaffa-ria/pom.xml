@@ -35,6 +35,10 @@
     <!-- 3rd Party Libraries                                                 -->
     <!-- ******************************************************************* -->
     <dependency>
+      <groupId>org.directwebremoting</groupId>
+      <artifactId>dwr-osgi</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi</artifactId>
     </dependency>

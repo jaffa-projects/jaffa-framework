@@ -18,14 +18,6 @@
 
   <dependencies>
     <!-- ******************************************************************* -->
-    <!-- GOLDesp JDBC Plus API                                               -->
-    <!-- ******************************************************************* -->
-    <!--<dependency>
-      <groupId>com.tapestrysolutions.goldesp.components</groupId>
-      <artifactId>goldesp-components-jdbcplus</artifactId>
-      <version>1.0.0</version>
-    </dependency>-->
-    <!-- ******************************************************************* -->
     <!-- Jaffa Core                                                          -->
     <!-- ******************************************************************* -->
     <dependency>
@@ -45,6 +37,12 @@
     <dependency>
       <groupId>org.springframework.data</groupId>
       <artifactId>spring-data-jpa</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.codehaus.janino</groupId>
+      <artifactId>janino</artifactId>
+      <version>${version.org.codehaus.janino}</version>
     </dependency>
     <!-- ******************************************************************* -->
     <!-- Provided Libraries                                                  -->
