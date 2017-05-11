@@ -47,7 +47,6 @@ Temporary Items
 .idea
 .apdisk
 *.iml
-
 # Maven temp files ignore.
 target
 
@@ -55,3 +54,5 @@ target
 .classpath
 .settings
 .project
+
+
