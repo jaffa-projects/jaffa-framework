@@ -53,7 +53,6 @@ import java.io.InputStream;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.directwebremoting.impl.DwrXmlConfigurator;
 import org.directwebremoting.util.LocalUtil;
 import org.directwebremoting.util.Messages;
 import org.springframework.core.io.Resource;
@@ -66,7 +65,7 @@ import org.xml.sax.SAXException;
  * from resources(meta-inf/dwr.xml)
  * 
  */
-public class DwrXmlConfigurator extends DwrXmlConfigurator {
+public class DwrXmlConfigurator extends org.directwebremoting.impl.DwrXmlConfigurator {
 
 	/**
 	 * Load the configuration from classpath resource 
