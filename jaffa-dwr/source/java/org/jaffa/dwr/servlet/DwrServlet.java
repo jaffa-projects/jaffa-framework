@@ -53,6 +53,7 @@ import java.util.Enumeration;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.annotation.WebInitParam;
+import javax.servlet.ServletConfig;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
@@ -71,6 +72,7 @@ import org.xml.sax.SAXException;
  * 
  * Note: Set initial parameter skipDefaultConfig to true to skip the default
  * config load
+ * Refer: http://directwebremoting.org/dwr/documentation/server/configuration/servlet/multiconfig.html
  * 
  */
 @WebServlet(
@@ -91,7 +93,7 @@ public class DwrServlet extends org.directwebremoting.servlet.DwrServlet {
 	private Resource[] resources;
 
 	@Override
-	public void init(javax.servlet.ServletConfig servletConfig) throws javax.servlet.ServletException {
+	public void init(ServletConfig servletConfig) throws javax.servlet.ServletException {
 		super.init(servletConfig);
 
 		if (log.isDebugEnabled()) {
