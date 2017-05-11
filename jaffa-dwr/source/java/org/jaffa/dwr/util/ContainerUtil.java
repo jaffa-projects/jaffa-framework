@@ -58,6 +58,8 @@ import org.springframework.core.io.Resource;
 
 import org.xml.sax.SAXException;
 
+import org.jaffa.dwr.util.DwrXmlConfigurator;
+
 /**
  * This Utility called from Dwr Extension to load the resources into container.
  */
@@ -85,7 +87,7 @@ public class ContainerUtil {
 			if (log.isDebugEnabled()) {
 				log.debug("jar!dwr.xml resource: " + resource.getURL());
 			}
-			org.jaffa.dwr.util.DwrXmlConfigurator local = new org.jaffa.dwr.util.DwrXmlConfigurator();
+			DwrXmlConfigurator local = new DwrXmlConfigurator();
 			local.setServletResourceName(resource);
 			local.configure(container);
 		}
