@@ -59,6 +59,14 @@ import java.io.IOException;
 public class Fragments {
 
 
+    /**
+     * Base class Utility method to merge fragments
+     * @param mergedFile
+     * @param frag
+     * @param startTag
+     * @param endTag
+     * @throws IOException
+     */
     public static void merge(File mergedFile, File frag, String startTag, String endTag) throws IOException {
         if(!mergedFile.exists() && frag!=null){
             FileUtils.writeStringToFile(mergedFile, startTag, true);

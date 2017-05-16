@@ -57,9 +57,22 @@ import java.io.IOException;
 public class JawrResourceFragments extends Fragments {
 
 
+    /**
+     * Default Start Tag for JAWR merged file
+     */
     private static String START_TAG = "#---------------------------\n #Merging Jawr from pfragments START \n#---------------------------\n";
+
+    /**
+     * Default End Tag for JAWR merged files
+     */
     private static String END_TAG = "\n#---------------------------\n #Merging Jawr from pfragments END \n#---------------------------";
 
+    /**
+     * Utility method to merge jawr fragments
+     * @param mergedFile
+     * @param frag
+     * @throws IOException
+     */
     public static void merge(File mergedFile, File frag) throws IOException {
         merge(mergedFile, frag, START_TAG, END_TAG);
     }

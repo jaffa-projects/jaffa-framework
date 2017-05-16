@@ -115,6 +115,10 @@ public class FragmentMergeMojo extends AbstractMojo{
     private MavenSession session;
 
 
+    /**
+     * Execute method for Fragment Merging
+     * @throws MojoExecutionException
+     */
     public void execute() throws MojoExecutionException {
         getLog().info("Initialize Fragment Merging Process");
         try {
@@ -128,7 +132,6 @@ public class FragmentMergeMojo extends AbstractMojo{
             if (target.exists()) {
                 Collection<File> fragFiles = FileUtils.listFiles(new File(project.getBuild().getDirectory()), new String[]{"pfragment", "xfragment"}, true);
 
-                getLog().info("Files in build directory " + target.getAbsolutePath() + " : " + fragFiles.size());
                 Iterator<File> iter = fragFiles.iterator();
                 while (iter.hasNext()) {
                     File frag = iter.next();

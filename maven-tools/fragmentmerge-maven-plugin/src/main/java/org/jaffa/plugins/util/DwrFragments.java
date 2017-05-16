@@ -56,14 +56,26 @@ import java.io.IOException;
  */
 public class DwrFragments extends Fragments {
 
+    /**
+     * Start Tag to make the merged dwr.xml, a valid xml literal
+     */
     private static String START_TAG = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
             "<!DOCTYPE dwr PUBLIC \"-//GetAhead Limited//DTD Direct Web Remoting 2.0//EN\" \"http://getahead.org/dwr/dwr20.dtd\">\n" +
             "<dwr>\n" +
             "  <allow>\n";
 
+    /**
+     * End Tag to make the merged dwr.xml, a valid xml literal
+     */
     private static String END_TAG = "  </allow>\n" +
             "</dwr>";
 
+    /**
+     * Utility method to merge dwr xfragments
+     * @param mergedFile
+     * @param frag
+     * @throws IOException
+     */
     public static void merge(File mergedFile, File frag) throws IOException {
         merge(mergedFile, frag, START_TAG, END_TAG);
     }

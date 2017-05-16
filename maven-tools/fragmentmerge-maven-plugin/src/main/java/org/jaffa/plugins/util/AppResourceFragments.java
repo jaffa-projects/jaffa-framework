@@ -57,9 +57,21 @@ import java.io.IOException;
 public class AppResourceFragments extends Fragments {
 
 
+    /**
+     * Default start tag for merged ApplicationResources.properties
+     */
     private static String START_TAG = "## Merging Resources from pfragments START ##\n";
+    /**
+     * Default end tag for merged ApplicationResources.properties
+     */
     private static String END_TAG = "\n## Merging Resources from pfragments END ##";
 
+    /**
+     * Utility method for merging ApplicationResource pfragments
+     * @param mergedFile
+     * @param frag
+     * @throws IOException
+     */
     public static void merge(File mergedFile, File frag) throws IOException {
         merge(mergedFile, frag, START_TAG, END_TAG);
     }
