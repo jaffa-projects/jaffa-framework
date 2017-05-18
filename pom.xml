@@ -63,6 +63,7 @@
         <!-- Jaffa Version                                                       -->
         <!-- ******************************************************************* -->
         <jaffa.version>6.0.0-SNAPSHOT</jaffa.version>
+        <jaffa.maven.tools.version>1.0.0-SNAPSHOT</jaffa.maven.tools.version>
 
         <!-- ******************************************************************* -->
         <!-- JAVA Compiler Options                                               -->
@@ -409,6 +410,14 @@
 
     <build>
 	    <sourceDirectory>${project.basedir}/source/java</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/source/java</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+            </resource>
+        </resources>
         <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
         <testResources>
             <testResource>
@@ -437,6 +446,19 @@
         </extensions>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.jaffa.maven</groupId>
+                    <artifactId>fragmentmerge-maven-plugin</artifactId>
+                    <version>${jaffa.maven.tools.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>fragmentmerge</goal>
+                            </goals>
+                            <phase>compile</phase>
+                        </execution>
+                    </executions>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-antrun-plugin</artifactId>
@@ -582,95 +604,6 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>properties-maven-plugin</artifactId>
                     <version>${version.properties.plugin}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-assembly-plugin</artifactId>
-                    <version>${version.assembly.plugin}</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.jaffa.assemblies</groupId>
-                            <artifactId>jaffa-assemblies-aop-descriptor</artifactId>
-                            <version>${jaffa.version}</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.jaffa.assemblies</groupId>
-                            <artifactId>jaffa-assemblies-resources-fragment-descriptor</artifactId>
-                            <version>${jaffa.version}</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.jaffa.assemblies</groupId>
-                            <artifactId>jaffa-assemblies-resources-descriptor</artifactId>
-                            <version>${jaffa.version}</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.jaffa.assemblies</groupId>
-                            <artifactId>jaffa-assemblies-webapp-descriptor</artifactId>
-                            <version>${jaffa.version}</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.jaffa.assemblies</groupId>
-                            <artifactId>jaffa-assemblies-web-fragment-descriptor</artifactId>
-                            <version>${jaffa.version}</version>
-                        </dependency>
-                    </dependencies>
-                    <executions>
-                        <execution>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>single</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <archive>
-                            <index>true</index>
-                            <manifest>
-                                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                                <addClasspath>true</addClasspath>
-                            </manifest>
-                            <manifestEntries>
-                                <Implementation-URL>${project.url}</Implementation-URL>
-                                <Java-Version>${java.version}</Java-Version>
-                                <Java-Vendor>${java.vendor}</Java-Vendor>
-                                <Os-Name>${os.name}</Os-Name>
-                                <Os-Arch>${os.arch}</Os-Arch>
-                                <Os-Version>${os.version}</Os-Version>
-                                <Scm-Url>${project.scm.url}</Scm-Url>
-                                <Scm-Connection>${project.scm.connection}</Scm-Connection>
-                                <Scm-Revision>${buildNumber}</Scm-Revision>
-                                <Specification-Title>${manifest.specification.title}</Specification-Title>
-                                <Specification-Version>${manifest.specification.version}</Specification-Version>
-                                <Specification-Vendor>${manifest.specification.vendor}</Specification-Vendor>
-                                <Specification-Vendor-Id>${manifest.implementation.vendor.id}</Specification-Vendor-Id>
-                                <Implementation-Title>${manifest.implementation.title}</Implementation-Title>
-                                <Implementation-Version>${manifest.implementation.version}</Implementation-Version>
-                                <Implementation-Vendor>${manifest.implementation.vendor}</Implementation-Vendor>
-                                <Implementation-Vendor-Id>${manifest.implementation.vendor.id}
-                                </Implementation-Vendor-Id>
-
-                                <Bundle-Name>${project.name}</Bundle-Name>
-                                <Bundle-Description>${project.description}</Bundle-Description>
-                                <Bundle-Title>${project.name}</Bundle-Title>
-                                <Bundle-SymbolicName>${manifest.bundle.symbolic.name}</Bundle-SymbolicName>
-                                <Bundle-Vendor>${manifest.bundle.vendor}</Bundle-Vendor>
-                                <Bundle-Vendor-Id>${manifest.bundle.vendor.id}</Bundle-Vendor-Id>
-                                <Bundle-Copyright>${manifest.bundle.copyright}</Bundle-Copyright>
-                                <Bundle-License>${manifest.bundle.license}</Bundle-License>
-                                <Bundle-DocURL>${manifest.bundle.docurl}</Bundle-DocURL>
-                                <Bundle-Version>${manifest.bundle.version}</Bundle-Version>
-                                <Bundle-ManifestVersion>${manifest.bundle.manifest.version}</Bundle-ManifestVersion>
-                                <Bundle-ClassPath>${manifest.bundle.classpath}</Bundle-ClassPath>
-                                <DynamicImport-Package>*</DynamicImport-Package>
-                                <Bnd-LastModified>${maven.build.timestamp}</Bnd-LastModified>
-                                <Export-Package>${manifest.export.package}</Export-Package>
-
-                                <Built-By>${manifest.built.by}</Built-By>
-                                <Build-Timestamp>${build.datetime}</Build-Timestamp>
-                            </manifestEntries>
-                        </archive>
-                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -1247,6 +1180,11 @@
             </plugins>
         </pluginManagement>
         <plugins>
+            <plugin>
+                <groupId>org.jaffa.maven</groupId>
+                <artifactId>fragmentmerge-maven-plugin</artifactId>
+            </plugin>
+
             <!-- Check for the minimum version of Java and Maven.  Runs during the validate phase. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -1288,37 +1226,37 @@
             </plugin>
 
             <!-- Set properties containing the scm revision and build timestamp -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>buildnumber-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>get-build-timestamp</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>create-timestamp</goal>
-                        </goals>
-                        <configuration>
-                            <!-- Example date: Wed, 4 Jul 2001 12:08:56 -0700 -->
-                            <timestampFormat>EEE, d MMM yyyy HH:mm:ss Z</timestampFormat>
-                            <timestampPropertyName>build.datetime</timestampPropertyName>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>get-scm-revision</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>create</goal>
-                        </goals>
-                        <configuration>
-                            <doCheck>false</doCheck>
-                            <doUpdate>false</doUpdate>
-                            <revisionOnScmFailure>UNKNOWN</revisionOnScmFailure>
-                            <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.codehaus.mojo</groupId>-->
+                <!--<artifactId>buildnumber-maven-plugin</artifactId>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>get-build-timestamp</id>-->
+                        <!--<phase>initialize</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>create-timestamp</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--&lt;!&ndash; Example date: Wed, 4 Jul 2001 12:08:56 -0700 &ndash;&gt;-->
+                            <!--<timestampFormat>EEE, d MMM yyyy HH:mm:ss Z</timestampFormat>-->
+                            <!--<timestampPropertyName>build.datetime</timestampPropertyName>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                    <!--<execution>-->
+                        <!--<id>get-scm-revision</id>-->
+                        <!--<phase>initialize</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>create</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<doCheck>false</doCheck>-->
+                            <!--<doUpdate>false</doUpdate>-->
+                            <!--<revisionOnScmFailure>UNKNOWN</revisionOnScmFailure>-->
+                            <!--<getRevisionOnlyOnce>true</getRevisionOnlyOnce>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
 
             <!--<plugin>-->
             <!--<groupId>org.codehaus.mojo</groupId>-->
@@ -2068,26 +2006,6 @@
             <!-- Jaffa Libraries                                                     -->
             <!-- ******************************************************************* -->
             <dependency>
-                <groupId>org.jaffa.aop</groupId>
-                <artifactId>jaffa-aop-core</artifactId>
-                <version>${jaffa.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jaffa.assemblies</groupId>
-                <artifactId>jaffa-assemblies-resources-fragment-descriptor</artifactId>
-                <version>${jaffa.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jaffa.assemblies</groupId>
-                <artifactId>jaffa-assemblies-resources-descriptor</artifactId>
-                <version>${jaffa.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jaffa.assemblies</groupId>
-                <artifactId>jaffa-assemblies-web-fragment-descriptor</artifactId>
-                <version>${jaffa.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-components-admin</artifactId>
                 <version>${jaffa.version}</version>
@@ -2145,16 +2063,6 @@
             <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-rules</artifactId>
-                <version>${jaffa.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jaffa</groupId>
-                <artifactId>jaffa-tools</artifactId>
-                <version>${jaffa.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jaffa</groupId>
-                <artifactId>jaffa-patterns</artifactId>
                 <version>${jaffa.version}</version>
             </dependency>
             <!-- ******************************************************************* -->
@@ -2239,8 +2147,7 @@
                 <module>jaffa-rules</module>
                 <module>jaffa-soa</module>
                 <module>jaffa-dwr</module>
-                <!--<module>jaffa-tools</module>
-                <module>patterns</module>-->
+                <!--<module>patterns</module>-->
             </modules>
         </profile>
     </profiles>
