@@ -118,7 +118,7 @@ public class DwrServlet extends org.directwebremoting.servlet.DwrServlet {
 
 				// skipDefaultConfig
 				if (paramName.startsWith("skipDefaultConfig") && paramValue != null && !"".equals(paramValue.trim())) {
-					skipDefaultConfig = Boolean.getBoolean(paramValue);
+					skipDefaultConfig = Boolean.parseBoolean(paramValue);
 				}
 				
 			}
