@@ -99,10 +99,6 @@ public class JawrServletTest {
 
 		jawrServlet.init();
 
-		Enumeration<String> en = servletContext.getAttributeNames();
-
-		System.out.println(en.hasMoreElements());
-
 		String result = servletContext.getAttribute(JawrConstant.JS_CONTEXT_ATTRIBUTE) != null
 				? "Jawr Initialization Successful" : "Jawr Initialization Failed";
 
