@@ -46,66 +46,61 @@
  * SUCH DAMAGE.
  * ====================================================================
  */
-package org.jaffa.ria.listener;
 
+package org.jaffa.dwr.mock;
+
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.Map;
+
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletRegistration;
-import javax.servlet.annotation.WebListener;
-
-import net.jawr.web.JawrConstant;
 
 /**
  * 
- * This listener will initialize the JawrServlet for both JS and CSS.
- * 
- * This will eliminate the need of the JawrServlet Mapping configuration in
- * web.xml
+ * Mock ServletConfig for unit test
  *
  */
-@WebListener
-public class JawrInitializer implements ServletContextListener {
+public class MockServletConfig implements ServletConfig {
 
-	/*
-	 * (non-Javadoc)
+	private ServletContext servletContext;
+	private String name;
+	private Map<String, String> initParameters;
+
+	/**
 	 * 
-	 * @see
-	 * javax.servlet.ServletContextListener#contextInitialized(javax.servlet
-	 * .ServletContextEvent)
+	 * @param name
+	 * @param context
+	 * @param initParameters
 	 */
-	@Override
-	public void contextInitialized(ServletContextEvent evt) {
-		ServletContext sc = evt.getServletContext();
-
-		// Jawr Servlet initialization for JS
-		ServletRegistration.Dynamic servletReg = sc.addServlet("JavascriptServlet", "net.jawr.web.servlet.JawrServlet");
-		//TO-DO: Do we need a default jawr.properties to enable and disable the debug mode?
-		// sr.setInitParameter("configLocation", "resources/jawr.properties");
-		servletReg.setInitParameter("configPropertiesSourceClass", "org.jaffa.ria.util.PropsFilePropertiesSource");
-		servletReg.setInitParameter("mapping", "/jsJawrPath/");
-		servletReg.addMapping("/jsJawrPath/*"); // url-pattern
-		servletReg.setLoadOnStartup(3);
-
-		// Jawr Servlet initialization for CSS
-		servletReg = sc.addServlet("CSSServlet", "net.jawr.web.servlet.JawrServlet");
-		//TO-DO: Do we need a default jawr.properties to enable and disable the debug mode?
-		// sr.setInitParameter("configLocation", "resources/jawr.properties");
-		servletReg.setInitParameter("configPropertiesSourceClass", "org.jaffa.ria.util.PropsFilePropertiesSource");
-		servletReg.setInitParameter("type", JawrConstant.CSS_TYPE);
-		servletReg.setInitParameter("mapping", "/cssJawrPath");
-		servletReg.addMapping("/cssJawrPath/*");// url-pattern
-		servletReg.setLoadOnStartup(4);
-
+	public MockServletConfig(String name, ServletContext context, Map<String, String> initParameters) {
+		this.name = name;
+		this.servletContext = context;
+		this.initParameters = initParameters;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.
-	 * ServletContextEvent)
-	 */
-	@Override
-	public void contextDestroyed(ServletContextEvent evt) {
+	public void setInitParameter(String name, String value) {
+		initParameters.put(name, value);
 	}
+
+	@Override
+	public String getServletName() {
+		return name;
+	}
+
+	@Override
+	public ServletContext getServletContext() {
+		return this.servletContext;
+	}
+
+	@Override
+	public Enumeration<String> getInitParameterNames() {
+		return Collections.enumeration(initParameters.keySet());
+	}
+
+	@Override
+	public String getInitParameter(String key) {
+		return initParameters.get(key);
+	}
+
 }
