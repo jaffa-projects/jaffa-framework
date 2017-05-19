@@ -86,19 +86,30 @@ public class PropsFilePropertiesSource extends net.jawr.web.resource.bundle.fact
 
 	private static final Logger log = Logger.getLogger(PropsFilePropertiesSource.class);
 	private static final String JAWR_PROPS_NOT_FOUND = "jawr configuration could not be found at JAR!META-INF/jawr.properties";
-
+	private static final String NO_JAWR_PROPS = "jawr configuration could not be found either in default location or in JAR!META-INF/jawr.properties";
+	private String defaultConfigLocation;
+	
 	/**
 	 * This overridden method reads the jawr.properties from
 	 * Jar!META-INF/jawr.properties.
 	 */
 	@Override
 	protected Properties doReadConfig() {
-
 		if (log.isDebugEnabled()) {
 			log.debug("PropsFilePropertiesSource::doReadConfig");
 		}
 
-		Properties properties = super.doReadConfig();
+		Properties properties;
+		/**
+		 * Call super class doReadConfig If there is default configLocation
+		 * location specified in Servlet Init Params
+		 */
+		if (defaultConfigLocation != null) {
+			properties = super.doReadConfig();
+		} else {
+			properties = new Properties();
+		}
+
 		try {
 			PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 			Resource[] resources = resolver.getResources("classpath*:META-INF/jawr.properties");
@@ -117,7 +128,18 @@ public class PropsFilePropertiesSource extends net.jawr.web.resource.bundle.fact
 		} catch (IOException e) {
 			throw new RuntimeException(JAWR_PROPS_NOT_FOUND);
 		}
+
+		if (properties.size() == 0) {
+			throw new RuntimeException(NO_JAWR_PROPS);
+		}
 		return properties;
 	}
 
+	/**
+	 * Overridden to see whether configLocation is given in Servlet Init Params.
+	 */
+	protected Properties readConfigFile(String path) {
+		defaultConfigLocation = path;
+		return super.readConfigFile(path);
+	}
 }
