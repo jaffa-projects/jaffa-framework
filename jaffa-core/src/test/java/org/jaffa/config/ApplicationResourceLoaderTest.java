@@ -2,7 +2,7 @@
  * ====================================================================
  * JAFFA - Java Application Framework For All
  *
- * Copyright (C) 2014 JAFFA Development Group
+ * Copyright (C) 2002 JAFFA Development Group
  *
  *     This library is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU Lesser General Public
@@ -46,83 +46,70 @@
  * SUCH DAMAGE.
  * ====================================================================
  */
-package org.jaffa.util;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+package org.jaffa.config;
 
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.util.Locale;
+
+import org.jaffa.util.MessageHelper;
+import org.junit.Test;
 
 /**
- * This class is extension of the spring PathMatchingResourcePatternResolver.
  * 
- * This class provide the default Asc order of the resources collection.
+ * Unit test for ApplicationResourceLoader
  * 
+ * This test class test both ApplicationResourceLoader and
+ * PropertyMessageResources
+ *
  */
-public class OrderedPathMatchingResourcePatternResolver extends PathMatchingResourcePatternResolver {
+public class ApplicationResourceLoaderTest {
 
-	private boolean ascending = true;
+	@Test
+	public void testApplicationResourceLoader() {
 
-	public boolean isAscending() {
-		return ascending;
-	}
+		/*
+		 * ApplicationResourceLoader Test
+		 */
+		ApplicationResourceLoader resourceLoader = ApplicationResourceLoader.getInstance();
 
-	public void setAscending(boolean ascending) {
-		this.ascending = ascending;
-	}
+		String defaultResourceLoadResult = (resourceLoader.getApplicationResources().get("") == null
+				|| resourceLoader.getApplicationResources().get("").size() < 1) ? "Default Resource Load Fail"
+						: "Default Resource Load Success";
 
-	public OrderedPathMatchingResourcePatternResolver() {
-		super();
-	}
+		String localeResourceLoadResult = (resourceLoader.getApplicationResources().get("ar_OM") == null
+				|| resourceLoader.getApplicationResources().get("ar_OM").size() < 1) ? "Locale Resource Load Fail"
+						: "Locale Resource Load Success";
 
-	public OrderedPathMatchingResourcePatternResolver(ClassLoader classLoader) {
-		super(classLoader);
-	}
+		// Checking provided two resources available in memory
+		assertEquals(2, resourceLoader.getApplicationResources().size());
 
-	public OrderedPathMatchingResourcePatternResolver(ResourceLoader resourceLoader) {
-		super(resourceLoader);
-	}
+		// Default Resource
+		assertEquals("Default Resource Load Success", defaultResourceLoadResult);
 
-	/**
-	 * Custom comparator to sort the result based on asc or desc. Default Asc
-	 */
-	protected final Comparator<Resource> resourceComparator = new Comparator<Resource>() {
-		public int compare(Resource r1, Resource r2) {
-			int compareResult = 0;
-			try {
-				compareResult = r1.getURL().getPath().compareTo(r2.getURL().getPath());
-			} catch (IOException io) {
-				throw new RuntimeException("Error in resource comparator", io);
-			}
-			return ascending ? compareResult : -compareResult;
-		}
-	};
+		// Locale Specific Resource
+		assertEquals("Locale Resource Load Success", localeResourceLoadResult);
 
-	/** {@inheritDoc} */
-	@Override
-	protected Set<Resource> doFindPathMatchingFileResources(Resource rootDirResource, String subPattern)
-			throws IOException {
-		Set<Resource> matchingResources = super.doFindPathMatchingFileResources(rootDirResource, subPattern);
-		List<Resource> list = new ArrayList<Resource>(matchingResources);
-		Collections.sort(list, resourceComparator);
-		return new LinkedHashSet<Resource>(list);
-	}
+		// Override resource check
+		assertEquals("Printer Name", resourceLoader.getApplicationResources().get("")
+				.getProperty("label.Jaffa.Printing.PrinterDefinition.RealPrinterName"));
 
-	/** {@inheritDoc} */
-	@Override
-	protected Set<Resource> doFindPathMatchingJarResources(Resource rootDirResource, String subPattern)
-			throws IOException {
-		Set<Resource> matchingJarResources = super.doFindPathMatchingJarResources(rootDirResource, subPattern);
-		List<Resource> list = new ArrayList<Resource>(matchingJarResources);
-		Collections.sort(list, resourceComparator);
-		return new LinkedHashSet<Resource>(list);
+		assertEquals("Edit Label",
+				resourceLoader.getApplicationResources().get("").getProperty("label.Jaffa.Admin.LabelEditor.Label"));
+
+		/*
+		 * PropertyMessageResources Test
+		 */
+
+		// Default Language Test
+		assertEquals("Edit Label", MessageHelper.findMessage("label.Jaffa.Admin.LabelEditor.Label", null));
+
+		// Locale ar_OM Test
+		Locale.setDefault(new Locale.Builder().setLanguage("ar").setRegion("OM").build());
+		assertNotNull(MessageHelper.findMessage("label.Jaffa.Admin.LabelEditor.Label", null));
+
 	}
 
 }

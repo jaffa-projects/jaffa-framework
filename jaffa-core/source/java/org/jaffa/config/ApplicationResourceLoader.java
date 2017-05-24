@@ -49,11 +49,11 @@
 package org.jaffa.config;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
-import org.jaffa.config.Config;
 import org.jaffa.util.OrderedPathMatchingResourcePatternResolver;
 import org.springframework.core.io.Resource;
 
@@ -68,12 +68,17 @@ public class ApplicationResourceLoader {
 
 	private static final Logger log = Logger.getLogger(ApplicationResourceLoader.class);
 
+	// Default Errors
 	private static final String APP_RESOURCES_NOT_FOUND = "ApplicationResources.properties not found in jar!META-INF";
 	private static final String ERROR_READING_APP_RESOURCES = "Error reading jar!META-INF/ApplicationResources.properties";
+
+	// Override Errors
 	private static final String APP_RESOURCES_OVERRIDE_NOT_FOUND = "ApplicationResources.override not found in jar!META-INF";
 	private static final String ERROR_READING_APP_RESOURCES_OVERRIDE = "Error reading jar!META-INF/ApplicationResources.override";
-	private static final String ERROR_READING_APP_RESOURCES_LOCALE = "Error reading jar!META-INF/ApplicationResources_*_*.properties";
-	private static final String APP_RESOURCES_LOCALE_NOT_FOUND = "ApplicationResources_*_*.properties not found in jar!META-INF";
+
+	// Locale Errors
+	private static final String APP_RESOURCES_LOCALE_NOT_FOUND = "ApplicationResource_{language}_{country}.properties not found in jar!META-INF";
+	private static final String ERROR_READING_APP_RESOURCES_LOCALE = "Error reading jar!META-INF/ApplicationResource_{language}_{country}.properties";
 
 	/**
 	 * singleton instance of the ApplicationResourceLoader
@@ -83,7 +88,7 @@ public class ApplicationResourceLoader {
 	/**
 	 * The collection of properties per locale.
 	 */
-	private Map<String, Properties> applicationResources;
+	private Map<String, Properties> applicationResources = new HashMap<String, Properties>();
 
 	/**
 	 * This method gets the properties object based on input locale.
@@ -160,6 +165,7 @@ public class ApplicationResourceLoader {
 				log.error(APP_RESOURCES_NOT_FOUND);
 			}
 		} catch (IOException e) {
+			log.error(ERROR_READING_APP_RESOURCES_OVERRIDE, e);
 			throw new RuntimeException(ERROR_READING_APP_RESOURCES, e);
 		}
 
@@ -182,7 +188,7 @@ public class ApplicationResourceLoader {
 		if (log.isDebugEnabled()) {
 			log.debug("ApplicationResourceLoader::loadOverrideResources");
 		}
-		
+
 		try {
 			// First load the override resource from customer jar/blue print jar
 			/*
@@ -211,6 +217,7 @@ public class ApplicationResourceLoader {
 			}
 
 		} catch (IOException e) {
+			log.error(ERROR_READING_APP_RESOURCES_OVERRIDE, e);
 			throw new RuntimeException(ERROR_READING_APP_RESOURCES_OVERRIDE, e);
 		}
 	}
@@ -234,7 +241,7 @@ public class ApplicationResourceLoader {
 			 * folder in jar? Based on above question we need to consider
 			 * changing the resource path.
 			 */
-			Resource[] resources = resolver.getResources("resources/ApplicationResources_*.properties");
+			Resource[] resources = resolver.getResources("classpath*:META-INF/ApplicationResources_*.properties");
 			if (resources != null && resources.length > 0) {
 				for (Resource resource : resources) {
 					Properties localeProperties = new Properties();
@@ -258,6 +265,7 @@ public class ApplicationResourceLoader {
 				log.error(APP_RESOURCES_LOCALE_NOT_FOUND);
 			}
 		} catch (IOException e) {
+			log.error(ERROR_READING_APP_RESOURCES_OVERRIDE, e);
 			throw new RuntimeException(ERROR_READING_APP_RESOURCES_LOCALE, e);
 		}
 	}

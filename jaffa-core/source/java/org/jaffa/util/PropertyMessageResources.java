@@ -55,6 +55,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Properties;
 import org.apache.struts.util.MessageResourcesFactory;
+import org.jaffa.config.ApplicationResourceLoader;
 import org.jaffa.security.VariationContext;
 
 /**
@@ -100,7 +101,7 @@ public class PropertyMessageResources extends org.apache.struts.util.PropertyMes
      * @param returnNull The returnNull property we should initialize with
      */
     public PropertyMessageResources(MessageResourcesFactory factory, String config, boolean returnNull) {
-        super(factory, config, returnNull);
+        super(factory, config, returnNull);        
     }
     
     
@@ -152,7 +153,7 @@ public class PropertyMessageResources extends org.apache.struts.util.PropertyMes
         }
         name += ".properties";
         InputStream is = null;
-        Properties props = new Properties();
+        Properties props = null;
         
         // Load the specified property resource
         if (log.isTraceEnabled()) {
@@ -175,7 +176,8 @@ public class PropertyMessageResources extends org.apache.struts.util.PropertyMes
         
         if (is != null) {
             try {
-                props.load(is);
+				props = new Properties();
+				props.load(is);
                 
             } catch (IOException e) {
                 log.error("loadLocale()", e);
@@ -192,8 +194,14 @@ public class PropertyMessageResources extends org.apache.struts.util.PropertyMes
             log.trace("  Loading resource completed");
         }
         
+		// If the props not loaded from File I/O, then load it from
+		// ApplicationResourceLoader.
+		if (props == null) {
+			props = ApplicationResourceLoader.getInstance().getLocaleProperties(localeKey);
+		}
+        
         // Copy the corresponding values into our cache
-        if (props.size() < 1) {
+        if (props==null || props.size() < 1) {
             return;
         }
         
