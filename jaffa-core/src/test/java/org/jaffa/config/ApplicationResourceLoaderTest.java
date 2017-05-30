@@ -83,8 +83,9 @@ public class ApplicationResourceLoaderTest {
 				|| resourceLoader.getApplicationResources().get("ar_OM").size() < 1) ? "Locale Resource Load Fail"
 						: "Locale Resource Load Success";
 
-		// Checking provided two resources available in memory
-		assertEquals(2, resourceLoader.getApplicationResources().size());
+		// Checking provided two resources available in memory(this include
+		// extra one for default to use it in label editor)
+		assertEquals(3, resourceLoader.getApplicationResources().size());
 
 		// Default Resource
 		assertEquals("Default Resource Load Success", defaultResourceLoadResult);
@@ -99,6 +100,13 @@ public class ApplicationResourceLoaderTest {
 		assertEquals("Edit Label",
 				resourceLoader.getApplicationResources().get("").getProperty("label.Jaffa.Admin.LabelEditor.Label"));
 
+		assertEquals("Label",
+				resourceLoader.getApplicationResourcesDefault().get("label.Jaffa.Admin.LabelEditor.Label"));
+
+		assertEquals("Edit Label",
+				resourceLoader.getApplicationResourcesOverride().get("label.Jaffa.Admin.LabelEditor.Label"));
+
+		
 		/*
 		 * PropertyMessageResources Test
 		 */
@@ -109,7 +117,6 @@ public class ApplicationResourceLoaderTest {
 		// Locale ar_OM Test
 		Locale.setDefault(new Locale.Builder().setLanguage("ar").setRegion("OM").build());
 		assertNotNull(MessageHelper.findMessage("label.Jaffa.Admin.LabelEditor.Label", null));
-
 	}
 
 }

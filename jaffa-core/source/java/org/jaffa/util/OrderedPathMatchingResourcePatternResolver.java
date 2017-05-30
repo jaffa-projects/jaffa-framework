@@ -49,12 +49,10 @@
 package org.jaffa.util;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -104,25 +102,15 @@ public class OrderedPathMatchingResourcePatternResolver extends PathMatchingReso
 			return ascending ? compareResult : -compareResult;
 		}
 	};
-
-	/** {@inheritDoc} */
+	
 	@Override
-	protected Set<Resource> doFindPathMatchingFileResources(Resource rootDirResource, String subPattern)
-			throws IOException {
-		Set<Resource> matchingResources = super.doFindPathMatchingFileResources(rootDirResource, subPattern);
-		List<Resource> list = new ArrayList<Resource>(matchingResources);
-		Collections.sort(list, resourceComparator);
-		return new LinkedHashSet<Resource>(list);
+	public Resource[] getResources(String locationPattern) throws IOException {
+		Resource[] resources = super.getResources(locationPattern);
+		if(resources!=null){
+			List<Resource> resourceList = Arrays.asList(resources);
+			Collections.sort(resourceList, resourceComparator);
+			return resourceList.toArray(new Resource[resourceList.size()]);
+		}
+		return resources;
 	}
-
-	/** {@inheritDoc} */
-	@Override
-	protected Set<Resource> doFindPathMatchingJarResources(Resource rootDirResource, String subPattern)
-			throws IOException {
-		Set<Resource> matchingJarResources = super.doFindPathMatchingJarResources(rootDirResource, subPattern);
-		List<Resource> list = new ArrayList<Resource>(matchingJarResources);
-		Collections.sort(list, resourceComparator);
-		return new LinkedHashSet<Resource>(list);
-	}
-
 }

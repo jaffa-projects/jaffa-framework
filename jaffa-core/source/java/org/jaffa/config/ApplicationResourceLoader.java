@@ -68,6 +68,10 @@ public class ApplicationResourceLoader {
 
 	private static final Logger log = Logger.getLogger(ApplicationResourceLoader.class);
 
+	public static final String PROP_APPLICATION_RESOURCES_DEFAULT = "ApplicationResourcesDefault";
+	
+	public static final String DEFAULT_PROP_LOCALE_KEY = "";
+
 	// Default Errors
 	private static final String APP_RESOURCES_NOT_FOUND = "ApplicationResources.properties not found in jar!META-INF";
 	private static final String ERROR_READING_APP_RESOURCES = "Error reading jar!META-INF/ApplicationResources.properties";
@@ -98,6 +102,26 @@ public class ApplicationResourceLoader {
 	 */
 	public Properties getLocaleProperties(String locale) {
 		return applicationResources.get(locale);
+	}
+
+	/**
+	 * This method gets the properties object for default application resources.
+	 * 
+	 * @return ApplicationResourceDefault
+	 */
+	public Properties getApplicationResourcesDefault() {
+		return applicationResources.get(PROP_APPLICATION_RESOURCES_DEFAULT);
+	}
+
+	/**
+	 * This method gets the properties object for override application resources
+	 * .
+	 * 
+	 * @return ApplicationResourceOverride
+	 */
+	public Properties getApplicationResourcesOverride() {
+		OrderedPathMatchingResourcePatternResolver resolver = new OrderedPathMatchingResourcePatternResolver();
+		return loadOverrideResources(resolver);
 	}
 
 	/**
@@ -153,28 +177,53 @@ public class ApplicationResourceLoader {
 		if (log.isDebugEnabled()) {
 			log.debug("ApplicationResourceLoader::loadDefaultResources");
 		}
-		Properties properties = new Properties();
+
+		Properties defaultProperties = getDefaultResources(resolver);
+		Properties overriddeProperties = loadOverrideResources(resolver);
+
+		Properties appResourceProperties = new Properties();
+
+		if (defaultProperties != null && defaultProperties.size() > 0) {
+			appResourceProperties.putAll(defaultProperties);
+		}
+
+		if (overriddeProperties != null && overriddeProperties.size() > 0) {
+			appResourceProperties.putAll(overriddeProperties);
+		}
+
+		if (appResourceProperties.size() > 0) {
+			// loading the ApplicationResource.properties(default)
+			applicationResources.put("", appResourceProperties);
+		}
+	}
+
+	private Properties getDefaultResources(OrderedPathMatchingResourcePatternResolver resolver) {
+		Properties properties = null;
 
 		try {
 			Resource[] resources = resolver.getResources("classpath*:META-INF/ApplicationResources.properties");
 			if (resources != null) {
 				for (Resource resource : resources) {
+					if (properties == null) {
+						properties = new Properties();
+					}
 					loadProperties(resource, properties);
 				}
 			} else {
 				log.error(APP_RESOURCES_NOT_FOUND);
 			}
+
+			// Storing default resource in memory to use it in label editor
+			if (properties != null && properties.size() > 0) {
+				applicationResources.put(PROP_APPLICATION_RESOURCES_DEFAULT, properties);
+			}
+
 		} catch (IOException e) {
 			log.error(ERROR_READING_APP_RESOURCES_OVERRIDE, e);
 			throw new RuntimeException(ERROR_READING_APP_RESOURCES, e);
 		}
 
-		loadOverrideResources(resolver, properties);
-
-		if (properties.size() > 0) {
-			// loading the ApplicationResource.properties(default)
-			applicationResources.put("", properties);
-		}
+		return properties;
 	}
 
 	/**
@@ -184,11 +233,11 @@ public class ApplicationResourceLoader {
 	 * @param resolver
 	 * @param properties
 	 */
-	private void loadOverrideResources(OrderedPathMatchingResourcePatternResolver resolver, Properties properties) {
+	private Properties loadOverrideResources(OrderedPathMatchingResourcePatternResolver resolver) {
 		if (log.isDebugEnabled()) {
 			log.debug("ApplicationResourceLoader::loadOverrideResources");
 		}
-
+		Properties properties = null;
 		try {
 			// First load the override resource from customer jar/blue print jar
 			/*
@@ -201,6 +250,9 @@ public class ApplicationResourceLoader {
 			Resource[] resources = resolver.getResources("classpath*:META-INF/ApplicationResources.override");
 			if (resources != null) {
 				for (Resource resource : resources) {
+					if (properties == null) {
+						properties = new Properties();
+					}
 					loadProperties(resource, properties);
 				}
 			} else {
@@ -220,6 +272,7 @@ public class ApplicationResourceLoader {
 			log.error(ERROR_READING_APP_RESOURCES_OVERRIDE, e);
 			throw new RuntimeException(ERROR_READING_APP_RESOURCES_OVERRIDE, e);
 		}
+		return properties;
 	}
 
 	/**
