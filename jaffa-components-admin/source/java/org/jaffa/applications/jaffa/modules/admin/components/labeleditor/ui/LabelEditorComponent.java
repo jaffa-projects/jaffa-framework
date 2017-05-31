@@ -57,6 +57,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResources;
 import org.jaffa.util.PropertyMessageResources;
+import org.jaffa.config.ApplicationResourceLoader;
 import org.jaffa.config.Config;
 import org.jaffa.config.InitApp;
 import org.jaffa.presentation.portlet.component.Component;
@@ -193,16 +194,6 @@ public class LabelEditorComponent extends Component {
      * @throws FrameworkException if any error ocurrs in obtaining the labels from ApplicationResources.properties and the default and override files.
      */
     public FormKey display() throws FrameworkException {
-        String applicationResourcesLocation = (String) Config.getProperty(Config.PROP_APPLICATION_RESOURCES_LOCATION, null);
-        String applicationResourcesDefaultLocation = (String) Config.getProperty(Config.PROP_APPLICATION_RESOURCES_DEFAULT_LOCATION, null);
-        String applicationResourcesOverrideLocation = (String) Config.getProperty(Config.PROP_APPLICATION_RESOURCES_OVERRIDE_LOCATION, null);
-        if (applicationResourcesLocation == null ||
-                applicationResourcesDefaultLocation == null || applicationResourcesOverrideLocation == null) {
-            String str = "The locations have not been set for ApplicationResources.properties and its default, override files. The Label Editor component cannot be used";
-            log.error(str);
-            throw new LabelEditorException(LabelEditorException.CONFIG_ERROR);
-        }
-        
         retrieveLabels();
         return getLabelEditorFormKey();
     }
@@ -220,8 +211,16 @@ public class LabelEditorComponent extends Component {
         
         if (getLabelFilter() != null || (getDisplayOverridesOnly() != null && getDisplayOverridesOnly().booleanValue())) {
             try {
-                Properties applicationResourcesDefaultProperties = loadPropertiesFromFile((String) Config.getProperty(Config.PROP_APPLICATION_RESOURCES_DEFAULT_LOCATION, null), false);
-                Properties applicationResourcesOverrideProperties = loadPropertiesFromFile((String) Config.getProperty(Config.PROP_APPLICATION_RESOURCES_OVERRIDE_LOCATION, null), false);
+                Properties applicationResourcesDefaultProperties = ApplicationResourceLoader.getInstance().getApplicationResourcesDefault();
+                Properties applicationResourcesOverrideProperties = ApplicationResourceLoader.getInstance().getApplicationResourcesOverride();
+                
+				if (applicationResourcesDefaultProperties == null || applicationResourcesDefaultProperties.size() < 1
+						|| applicationResourcesOverrideProperties == null
+						|| applicationResourcesOverrideProperties.size() < 1) {
+					String str = "There is no default, override properties. The Label Editor component cannot be used";
+					log.error(str);
+					throw new LabelEditorException(LabelEditorException.CONFIG_ERROR);
+				}
                 
                 for (Enumeration defaultLabels = applicationResourcesDefaultProperties.propertyNames(); defaultLabels.hasMoreElements(); ) {
                     String label = (String) defaultLabels.nextElement();
@@ -244,7 +243,7 @@ public class LabelEditorComponent extends Component {
                     if (getLabelFilter() != null && (getDisplayOverridesOnly() == null || !getDisplayOverridesOnly().booleanValue()))
                         addInnerTokens(map.get(DEFAULT), m_labels, applicationResourcesDefaultProperties, applicationResourcesOverrideProperties);
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 String str = "Exception thrown while reading the ApplicationResources default and override files";
                 log.error(str, e);
                 throw new LabelEditorException(LabelEditorException.READ_FAILED, null, e);
@@ -289,26 +288,37 @@ public class LabelEditorComponent extends Component {
             // load the ApplicationResources.override file
             Properties applicationResourcesOverrideProperties = loadPropertiesFromFile(applicationResourcesOverrideLocation, true);
             
+            ApplicationResourceLoader appResourceLoader = ApplicationResourceLoader.getInstance();
+            
             // Either update or remove a property
             for (Iterator itr = m_labels.keySet().iterator(); itr.hasNext(); ) {
                 String label = (String) itr.next();
                 Map map = (Map) m_labels.get(label);
                 String override = (String) map.get(OVERRIDE);
-                if (override != null)
-                    applicationResourcesOverrideProperties.setProperty(label, override);
-                else
-                    applicationResourcesOverrideProperties.remove(label);
+				if (override != null) {
+					//setting the override label into override file
+					applicationResourcesOverrideProperties.setProperty(label, override);
+					//Applying the changes into ApplicationResources in memory
+					appResourceLoader.getLocaleProperties(ApplicationResourceLoader.DEFAULT_PROP_LOCALE_KEY)
+							.setProperty(label, override);
+				} else {
+					//removing the override from file if there is any
+					applicationResourcesOverrideProperties.remove(label);
+					//reverting/leaving the default value if the override removed.
+					appResourceLoader.getLocaleProperties(ApplicationResourceLoader.DEFAULT_PROP_LOCALE_KEY)
+							.setProperty(label, appResourceLoader.getApplicationResourcesDefault().getProperty(label));
+				}
             }
             
             // Sort the  ApplicationResources.override file
             if (applicationResourcesOverrideProperties instanceof ListProperties)
                 ((ListProperties) applicationResourcesOverrideProperties).sort();
             
-            // Now save the ApplicationResources.override file
+            // Now save the ApplicationResources.override file into user data directory
             storePropertiesToFile(applicationResourcesOverrideProperties, applicationResourcesOverrideLocation);
             
             // Migrate all changes to the ApplicationResources.properties file by invoking InitApp.generateApplicationResources()
-            InitApp.generateApplicationResources();
+            //InitApp.generateApplicationResources();            
             
             // Flush the struts properties cache by invoking the flushCache() method on the MessageResources, provided its an instance of 'org.jaffa.util.PropertyMessageResources'
             if (messageResources != null && messageResources instanceof PropertyMessageResources) {
@@ -359,8 +369,8 @@ public class LabelEditorComponent extends Component {
         
         try {
             // load the ApplicationResources.default and ApplicationResources.override files
-            Properties applicationResourcesDefaultProperties = loadPropertiesFromFile(applicationResourcesDefaultLocation, false);
-            Properties applicationResourcesOverrideProperties = loadPropertiesFromFile(applicationResourcesOverrideLocation, true);
+            Properties applicationResourcesDefaultProperties = ApplicationResourceLoader.getInstance().getApplicationResourcesDefault();
+            Properties applicationResourcesOverrideProperties = ApplicationResourceLoader.getInstance().getApplicationResourcesOverride();
             
             // Migrate all the displayed override values to the appropriate fragment file
             if (m_searchPathForSourceFragments != null && m_sourceFragmentName != null) {
@@ -380,7 +390,7 @@ public class LabelEditorComponent extends Component {
                                     // Migrate to the source file and ApplicationResources.default file
                                     // Delete from the ApplicationResources.override file
                                     properties.setProperty(label, override);
-                                    applicationResourcesDefaultProperties.setProperty(label, override);
+                                    //applicationResourcesDefaultProperties.setProperty(label, override);
                                     applicationResourcesOverrideProperties.remove(label);
                                     if (log.isInfoEnabled())
                                         log.info(file.getPath() + ": Migrated the override value: " + label + '=' + override);
@@ -396,11 +406,11 @@ public class LabelEditorComponent extends Component {
             }
             
             // Save the ApplicationResources.default and ApplicationResources.override files
-            storePropertiesToFile(applicationResourcesDefaultProperties, applicationResourcesDefaultLocation);
+            //storePropertiesToFile(applicationResourcesDefaultProperties, applicationResourcesDefaultLocation);
             storePropertiesToFile(applicationResourcesOverrideProperties, applicationResourcesOverrideLocation);
             
             // Migrate all changes to the ApplicationResources.properties file by invoking InitApp.generateApplicationResources()
-            InitApp.generateApplicationResources();
+            //InitApp.generateApplicationResources();
             
             // Flush the struts properties cache by invoking the flushCache() method on the MessageResources, provided its an instance of 'org.jaffa.util.PropertyMessageResources'
             if (messageResources != null && messageResources instanceof PropertyMessageResources) {

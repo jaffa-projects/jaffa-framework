@@ -62,6 +62,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
+import org.jaffa.config.ApplicationResourceLoader;
 import org.jaffa.config.Config;
 import org.jaffa.config.InitApp;
 import org.jaffa.exceptions.FrameworkException;
@@ -102,16 +103,27 @@ public class LabelHelper {
         try {
             // load the ApplicationResources.override file
             Properties applicationResourcesOverrideProperties = loadPropertiesFromFile(applicationResourcesOverrideLocation, true);
+            
+            ApplicationResourceLoader appResourceLoader = ApplicationResourceLoader.getInstance();
 
             // Either update or remove a property
             for (Iterator itr = labels.keySet().iterator(); itr.hasNext(); ) {
                 String label = (String) itr.next();
                 Map map = (Map) labels.get(label);
                 String override = (String) map.get(OVERRIDE);
-                if (override != null)
+                if (override != null){
+                	//setting the override label into override file
                     applicationResourcesOverrideProperties.setProperty(label, override);
-                else
+					//Applying the changes into ApplicationResources in memory
+					appResourceLoader.getLocaleProperties(ApplicationResourceLoader.DEFAULT_PROP_LOCALE_KEY)
+							.setProperty(label, override);
+                }else{
+                	//removing the override from file if there is any
                     applicationResourcesOverrideProperties.remove(label);
+					//reverting/leaving the default value if the override removed.
+					appResourceLoader.getLocaleProperties(ApplicationResourceLoader.DEFAULT_PROP_LOCALE_KEY)
+							.setProperty(label, appResourceLoader.getApplicationResourcesDefault().getProperty(label));               
+                }
             }
 
             // Sort the  ApplicationResources.override file
@@ -122,7 +134,7 @@ public class LabelHelper {
             storePropertiesToFile(applicationResourcesOverrideProperties, applicationResourcesOverrideLocation);
 
             // Migrate all changes to the ApplicationResources.properties file by invoking InitApp.generateApplicationResources()
-            InitApp.generateApplicationResources();
+            //InitApp.generateApplicationResources();
 
             ((PropertyMessageResources) PropertyMessageResourcesFactory.getDefaultMessageResources()).flushCache();
             if (log.isDebugEnabled())
