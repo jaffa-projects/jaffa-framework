@@ -169,6 +169,9 @@ public class PropertyMessageResources extends org.apache.struts.util.PropertyMes
         // Try to load the file using ClassLoader.getResource(name).openStream()
         // This allows us to view the changes to the file, without having to reload the webapp
         try {
+			// Note: TODO- This one finds a ApplicationResource.properties from
+			// inside jar resources folder. We need to move
+			// ApplicationResource.properties to META-INF if there is one.
             is = URLHelper.getInputStream(name);
         } catch (Exception e) {
             log.error("loadLocale()", e);

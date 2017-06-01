@@ -304,6 +304,8 @@ public class LabelEditorComponent extends Component {
 				} else {
 					//removing the override from file if there is any
 					applicationResourcesOverrideProperties.remove(label);
+					//remove it from memory
+					appResourceLoader.getApplicationResourcesOverride().remove(label);
 					//reverting/leaving the default value if the override removed.
 					appResourceLoader.getLocaleProperties(ApplicationResourceLoader.DEFAULT_PROP_LOCALE_KEY)
 							.setProperty(label, appResourceLoader.getApplicationResourcesDefault().getProperty(label));

@@ -85,7 +85,7 @@ public class ApplicationResourceLoaderTest {
 
 		// Checking provided two resources available in memory(this include
 		// extra one for default to use it in label editor)
-		assertEquals(3, resourceLoader.getApplicationResources().size());
+		assertEquals(4, resourceLoader.getApplicationResources().size());
 
 		// Default Resource
 		assertEquals("Default Resource Load Success", defaultResourceLoadResult);
