@@ -69,8 +69,12 @@ public class ApplicationResourceLoader {
 	private static final Logger log = Logger.getLogger(ApplicationResourceLoader.class);
 
 	public static final String PROP_APPLICATION_RESOURCES_DEFAULT = "ApplicationResourcesDefault";
+	public static final String PROP_APPLICATION_RESOURCES_DEFAULT_OVERRIDE = "ApplicationResourcesDefaultOverride";
 	
 	public static final String DEFAULT_PROP_LOCALE_KEY = "";
+	
+	public static final String FILE_PREFIX = "file:///";
+	
 
 	// Default Errors
 	private static final String APP_RESOURCES_NOT_FOUND = "ApplicationResources.properties not found in jar!META-INF";
@@ -247,24 +251,39 @@ public class ApplicationResourceLoader {
 			 * path.
 			 * 
 			 */
-			Resource[] resources = resolver.getResources("classpath*:META-INF/ApplicationResources.override");
-			if (resources != null) {
-				for (Resource resource : resources) {
-					if (properties == null) {
-						properties = new Properties();
+			//The default override from jar will not be loaded again if its loaded already.
+			properties = applicationResources.get(PROP_APPLICATION_RESOURCES_DEFAULT_OVERRIDE);
+			if (properties == null) {
+				Resource[] resources = resolver.getResources("classpath*:META-INF/ApplicationResources.override");
+				if (resources != null) {
+					for (Resource resource : resources) {
+						if (properties == null) {
+							properties = new Properties();
+						}
+						loadProperties(resource, properties);
 					}
-					loadProperties(resource, properties);
+				} else {
+					log.error(APP_RESOURCES_OVERRIDE_NOT_FOUND);
 				}
-			} else {
-				log.error(APP_RESOURCES_OVERRIDE_NOT_FOUND);
 			}
+
+			//Storing override resource in memory to use it in label editor
+			if (properties != null && properties.size() > 0) {
+				applicationResources.put(PROP_APPLICATION_RESOURCES_DEFAULT_OVERRIDE, properties);
+			}			
 
 			String applicationResourcesOverrideLocation = (String) Config
 					.getProperty(Config.PROP_APPLICATION_RESOURCES_OVERRIDE_LOCATION, null);
 
-			// Next load the override resource from customer data directory
+			/*
+			 * * TODO: PROP_APPLICATION_RESOURCES_OVERRIDE_LOCATION is not set
+			 * in Config when this first invoked,so we need to make sure to set
+			 * the override location before this point
+			 */
+			// Next load the override resource from customer data directory. Always reload the data directory override
 			if (applicationResourcesOverrideLocation != null && !"".equals(applicationResourcesOverrideLocation)) {
-				Resource resource = resolver.getResource(applicationResourcesOverrideLocation);
+				//added file prefix for ant style search pattern to search the file from I/O File
+				Resource resource = resolver.getResource(FILE_PREFIX+applicationResourcesOverrideLocation);
 				loadProperties(resource, properties);
 			}
 
