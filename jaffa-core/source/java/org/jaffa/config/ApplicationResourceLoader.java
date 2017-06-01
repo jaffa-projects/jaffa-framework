@@ -69,7 +69,7 @@ public class ApplicationResourceLoader {
 	private static final Logger log = Logger.getLogger(ApplicationResourceLoader.class);
 
 	public static final String PROP_APPLICATION_RESOURCES_DEFAULT = "ApplicationResourcesDefault";
-	public static final String PROP_APPLICATION_RESOURCES_DEFAULT_OVERRIDE = "ApplicationResourcesDefaultOveridde";
+	public static final String PROP_APPLICATION_RESOURCES_DEFAULT_OVERRIDE = "ApplicationResourcesDefaultOverride";
 	
 	public static final String DEFAULT_PROP_LOCALE_KEY = "";
 	
