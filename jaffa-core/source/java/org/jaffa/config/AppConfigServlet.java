@@ -83,6 +83,7 @@ import java.util.Properties;
 		displayName = "AppConfigServlet",
 		urlPatterns = "/",
 		loadOnStartup = 1
+	//@todo include location of ApplicationResources.override from data directory (userpref) as a initParam
 )
 public class AppConfigServlet extends HttpServlet {
 
