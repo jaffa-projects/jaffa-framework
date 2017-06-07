@@ -113,7 +113,7 @@ public class ApplicationRulesLoader {
 		}
 		return instance;
 	}
-	
+
 	/**
 	 * @return ApplicationRules.global properties
 	 */
@@ -129,17 +129,13 @@ public class ApplicationRulesLoader {
 	public Properties getApplicationRulesVariation(String variation) {
 
 		/**
-		 * Check in cache first, If its already loaded into cache then don't
-		 * reload.
+		 * Check in cache first, If its already not loaded into cache then load
 		 */
-		Properties variationRule = applicationRules.get(variation);
-		if (variationRule == null) {
+		if (!applicationRules.containsKey(variation)) {
 			loadVariationRules(variation);
-			variationRule = applicationRules.get(variation);
 		}
-		return variationRule;
-
-	}	
+		return applicationRules.get(variation);
+	}
 
 	/**
 	 * This will load the all blueprint and customer specific global properties

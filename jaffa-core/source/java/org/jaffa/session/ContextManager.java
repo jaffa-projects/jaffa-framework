@@ -76,6 +76,7 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
+import org.jaffa.config.ApplicationRulesLoader;
 import org.jaffa.presentation.portlet.session.UserSession;
 import org.jaffa.util.NestedMap;
 import org.jaffa.util.URLHelper;
@@ -340,10 +341,11 @@ public class ContextManager implements IContextManager {
                     // Read global settings
                     String location = LOCATION + "global";
                     InputStream input = null;
-                    Properties props = new Properties();
+                    Properties props = null;
                     try {
                         input = URLHelper.getInputStream(location);
                         if (input != null) {
+                        	props = new Properties();
                             props.load(input);
                             if (log.isDebugEnabled()) {
                                 if (props.size() < 1) {
@@ -358,7 +360,7 @@ public class ContextManager implements IContextManager {
                             }
                         }
                     } catch (Exception e) {
-                        // No global rules avilable;
+                        // No global rules available;
                         if (log.isInfoEnabled()) {
                             log.info("No Global Rules Found. Error in loading file " + location, e);
                         }
@@ -373,6 +375,15 @@ public class ContextManager implements IContextManager {
                             }
                         }
                     }
+
+					/**
+					 * If nothing loaded from I/O file. Load it from
+					 * ApplicationRulesLoader
+					 */
+					if (props == null || props.size() == 0) {
+						props = ApplicationRulesLoader.getInstance().getApplicatioRulesGlobal();
+					}
+                    
                     // Cache an unmodifiable view
                     m_global = Collections.unmodifiableMap(props);
                 }
@@ -394,10 +405,11 @@ public class ContextManager implements IContextManager {
                     // Read variation settings
                     String location = LOCATION + variation;
                     InputStream input = null;
-                    Properties props = new Properties();
+                    Properties props = null;
                     try {
                         input = URLHelper.getInputStream(location);
                         if (input != null) {
+                        	props = new Properties();
                             props.load(input);
                             if (log.isDebugEnabled()) {
                                 if (props.size() < 1) {
@@ -427,6 +439,15 @@ public class ContextManager implements IContextManager {
                             }
                         }
                     }
+                    
+					/**
+					 * If nothing loaded from I/O file. Load it from
+					 * ApplicationRulesLoader
+					 */
+					if (props == null || props.size() == 0) {
+						props = ApplicationRulesLoader.getInstance().getApplicationRulesVariation(variation);
+					}
+                    
                     // Cache an unmodifiable view
                     m_variation.put(variation, Collections.unmodifiableMap(props));
                 }
