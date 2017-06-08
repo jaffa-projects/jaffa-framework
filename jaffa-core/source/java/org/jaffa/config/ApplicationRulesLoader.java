@@ -59,9 +59,17 @@ import org.springframework.core.io.Resource;
 
 /**
  * This class loads the
- * ApplicationRules.global,ApplicationRules_(variation).global into memory on
- * startup by Servlet listener and loads ApplicationRules.{variation} into
- * memory based on SessionContext.variation.
+ * ApplicationRules_global.properties,ApplicationRules_(variation).properties
+ * into memory on container startup.
+ * 
+ * <p>
+ * The cache looks like below given e.g.
+ * 
+ * {key} | {value} 
+ * ------------------- 
+ * {global} | {properties of ApplicationRules_global} 
+ * {WOL}    | {properties of ApplicationRules_WOL}
+ * 
  * 
  */
 public class ApplicationRulesLoader {
@@ -70,13 +78,8 @@ public class ApplicationRulesLoader {
 
 	private static final String APP_RULE_GLOBAL = "global";
 
-	// global rule errors
-	private static final String GLOBAL_RULE_NOT_FOUND = "ApplicationRules.global not found in jar!META-INF";
-	private static final String ERROR_READING_APP_RULES_GLOBAL = "Error reading jar!META-INF/ApplicationRules.global";
-
-	// variation rule errors
-	private static final String VARIATION_RULE_NOT_FOUND = "ApplicationRules not found in jar!META-INF for variation: ";
-	private static final String ERROR_READING_VARIATION_RULE = "Error reading jar!META-INF/ApplicationRules";
+	private static final String APP_RULE_NOT_FOUND = "ApplicationRules_*.properties not found in jar!META-INF";
+	private static final String ERROR_READING_APP_RULES = "Error reading jar!META-INF/ApplicationRules_*.properties";
 
 	/**
 	 * singleton instance of the ApplicationResourceLoader
@@ -84,8 +87,7 @@ public class ApplicationRulesLoader {
 	private static ApplicationRulesLoader instance;
 
 	/**
-	 * The cache per application rules. e.g. {global} -
-	 * {ApplicationRules.global} {variation} - {ApplicationRules.variation}
+	 * The cache per application rules. 
 	 */
 	private Map<String, Properties> applicationRules = new HashMap<String, Properties>();
 
@@ -94,9 +96,11 @@ public class ApplicationRulesLoader {
 	 * method
 	 */
 	private ApplicationRulesLoader() {
-		// load resources from class path/META-INF/Data Directory(if we user
-		// rules editor)
-		loadGlobalRules();
+		/**
+		 * load resources from class path/META-INF/Data Directory(if we user
+		 ** rules editor)
+		 */
+		loadApplicationRules();
 	}
 
 	/**
@@ -115,7 +119,7 @@ public class ApplicationRulesLoader {
 	}
 
 	/**
-	 * @return ApplicationRules.global properties
+	 * @return ApplicationRules_global properties
 	 */
 	public Properties getApplicatioRulesGlobal() {
 		return applicationRules.get(APP_RULE_GLOBAL);
@@ -124,110 +128,60 @@ public class ApplicationRulesLoader {
 	/**
 	 * 
 	 * @param variation
-	 * @return ApplicationRules.{variation} properties
+	 * @return ApplicationRules_{variation} properties
 	 */
 	public Properties getApplicationRulesVariation(String variation) {
-
-		/**
-		 * Check in cache first, If its already not loaded into cache then load
-		 */
-		if (!applicationRules.containsKey(variation)) {
-			loadVariationRules(variation);
-		}
 		return applicationRules.get(variation);
 	}
 
 	/**
-	 * This will load the all blueprint and customer specific global properties
-	 * files into cache with key=global
-	 */
-	private void loadGlobalRules() {
-
-		if (log.isDebugEnabled()) {
-			log.debug("ApplicationRulesLoader::loadGlobalRules");
-		}
-
-		OrderedPathMatchingResourcePatternResolver resolver = new OrderedPathMatchingResourcePatternResolver();
-		try {
-
-			Properties properties = new Properties();
-
-			/**
-			 * This find the resources for ApplicationRules.global from
-			 * blueprint jar
-			 */
-			Resource[] resources = resolver.getResources("classpath*:META-INF/ApplicationRules.global");
-			if (resources != null) {
-				for (Resource resource : resources) {
-					loadProperties(resource, properties);
-				}
-			} else {
-				log.error(GLOBAL_RULE_NOT_FOUND);
-			}
-
-			/**
-			 * This find the resources for ApplicationRules_{customer}.global
-			 * from customer jar and load if there is anything specific to that
-			 * customer. This will override the global one already located from
-			 * blueprint
-			 */
-			resources = resolver.getResources("classpath*:META-INF/ApplicationRules_*.global");
-			if (resources != null) {
-				for (Resource resource : resources) {
-					loadProperties(resource, properties);
-				}
-			}
-
-			if (properties != null && properties.size() > 0) {
-				applicationRules.put(APP_RULE_GLOBAL, properties);
-			}
-
-		} catch (IOException e) {
-			log.error(ERROR_READING_APP_RULES_GLOBAL, e);
-			throw new RuntimeException(ERROR_READING_APP_RULES_GLOBAL, e);
-		}
-
-	}
-
-	/**
-	 * This will load the ApplicationRules files for user variation and this is
-	 * associated with SessionContext. The User Variation Rules get loaded into
-	 * cache with key=variation
+	 * This will load the ApplicationRules files for global and user variation
 	 * 
 	 */
-	private void loadVariationRules(String variation) {
+	private void loadApplicationRules() {
 
 		if (log.isDebugEnabled()) {
-			log.debug("ApplicationRulesLoader::loadVariationRules::" + variation);
-		}
-
-		if (variation == null) {
-			return;
+			log.debug("ApplicationRulesLoader::loadApplicationRules");
 		}
 
 		OrderedPathMatchingResourcePatternResolver resolver = new OrderedPathMatchingResourcePatternResolver();
 		try {
 
-			Properties properties = new Properties();
-
-			Resource[] resources = resolver.getResources("classpath*:META-INF/ApplicationRules." + variation);
+			Resource[] resources = resolver.getResources("classpath*:META-INF/ApplicationRules_*.properties");
 			if (resources != null) {
 				for (Resource resource : resources) {
+
+					if (resource == null) {
+						continue;
+					}
+
+					Properties properties = new Properties();
+
+					// derives variation from resource file name(e.g. global,WOL,BIM)
+					String ruleVariation = resource.getFilename();
+
+					if (ruleVariation != null && ruleVariation.indexOf("_") > 0) {
+						ruleVariation = ruleVariation.substring(ruleVariation.indexOf("_") + 1);
+					}
+					if (ruleVariation != null && ruleVariation.indexOf(".") > 0) {
+						ruleVariation = ruleVariation.substring(0, ruleVariation.indexOf("."));
+					}
+
 					loadProperties(resource, properties);
+
+					if (properties != null && properties.size() > 0) {
+						applicationRules.put(ruleVariation, properties);
+					}
 				}
 			} else {
-				log.error(VARIATION_RULE_NOT_FOUND + variation);
-			}
-
-			if (properties != null && properties.size() > 0) {
-				applicationRules.put(variation, properties);
+				log.error(APP_RULE_NOT_FOUND);
+				throw new RuntimeException(APP_RULE_NOT_FOUND);
 			}
 
 		} catch (IOException e) {
-			log.error(ERROR_READING_VARIATION_RULE + variation, e);
-			throw new RuntimeException(ERROR_READING_VARIATION_RULE + variation, e);
+			log.error(ERROR_READING_APP_RULES, e);
+			throw new RuntimeException(ERROR_READING_APP_RULES, e);
 		}
-
 	}
 
 	private void loadProperties(Resource resource, Properties properties) throws IOException {

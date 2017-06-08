@@ -385,7 +385,9 @@ public class ContextManager implements IContextManager {
 					}
                     
                     // Cache an unmodifiable view
-                    m_global = Collections.unmodifiableMap(props);
+					if (props != null) {
+						m_global = Collections.unmodifiableMap(props);
+					}
                 }
             }
         }
@@ -449,7 +451,9 @@ public class ContextManager implements IContextManager {
 					}
                     
                     // Cache an unmodifiable view
-                    m_variation.put(variation, Collections.unmodifiableMap(props));
+					if (props != null) {
+						m_variation.put(variation, Collections.unmodifiableMap(props));
+					}
                 }
             }
         }
