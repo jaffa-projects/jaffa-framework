@@ -97,8 +97,10 @@ public class ApplicationRulesLoader {
 	 */
 	private ApplicationRulesLoader() {
 		/**
-		 * load resources from class path/META-INF/Data Directory(if we user
-		 ** rules editor)
+		 * load resources from class jar!/META-INF
+		 * 
+		 * @TODO - Needs to think about adding the load function to load the
+		 *       rules from Data Directory for Rules Editor
 		 */
 		loadApplicationRules();
 	}
