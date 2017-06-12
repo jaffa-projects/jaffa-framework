@@ -121,7 +121,7 @@ public class ApplicationRulesLoader {
 	/**
 	 * @return ApplicationRules_global properties
 	 */
-	public Properties getApplicatioRulesGlobal() {
+	public Properties getApplicationRulesGlobal() {
 		return applicationRules.get(APP_RULE_GLOBAL);
 	}
 
