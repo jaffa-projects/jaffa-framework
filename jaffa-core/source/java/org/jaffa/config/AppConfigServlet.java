@@ -101,6 +101,7 @@ public class AppConfigServlet extends HttpServlet {
 		//checkUserGridSettingsUrls();
 
 		initApplicationResourcesParameters();
+		initApplicationRulesParameters();
 	}
 
 
@@ -110,6 +111,13 @@ public class AppConfigServlet extends HttpServlet {
 	private void initApplicationResourcesParameters() {
 		ApplicationResourceLoader.getInstance();
 	}
+	
+	/**
+	 * Initialize applicationrules
+	 */
+	private void initApplicationRulesParameters() {
+		ApplicationRulesLoader.getInstance();
+	}		
 
 	/** This is invoked by the servlet container when the servlet is destroyed.
 	 * It clears up the settings related to the logging API.

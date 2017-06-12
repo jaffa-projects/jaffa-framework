@@ -223,7 +223,7 @@ public class ApplicationResourceLoader {
 			}
 
 		} catch (IOException e) {
-			log.error(ERROR_READING_APP_RESOURCES_OVERRIDE, e);
+			log.error(ERROR_READING_APP_RESOURCES, e);
 			throw new RuntimeException(ERROR_READING_APP_RESOURCES, e);
 		}
 
