@@ -1,6 +1,6 @@
 /*
  * ====================================================================
- * JAFFA - Java Application Framework For All
+	 * JAFFA - Java Application Framework For All
  *
  * Copyright (C) 2014 JAFFA Development Group
  *
@@ -49,60 +49,53 @@
 package org.jaffa.config;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
 
 import org.apache.log4j.Logger;
+import org.jaffa.presentation.portlet.component.componentdomain.Components;
+import org.jaffa.util.JAXBHelper;
 import org.jaffa.util.OrderedPathMatchingResourcePatternResolver;
+import org.jaffa.util.XmlHelper;
 import org.springframework.core.io.Resource;
 
 /**
- * This class loads the
- * ApplicationRules_global.properties,ApplicationRules_(variation).properties
- * into memory on container startup.
- * 
- * <p>
- * The cache looks like below given e.g.
- * 
- * {key} | {value} 
- * ------------------- 
- * {global} | {properties of ApplicationRules_global} 
- * {WOL}    | {properties of ApplicationRules_WOL}
- * 
- * 
+ * This Loader class scan through all jar!META-INF for components.xml and load
+ * it in memory on container startup to use it in application
  */
-public class ApplicationRulesLoader {
 
-	private static final Logger log = Logger.getLogger(ApplicationRulesLoader.class);
+public class ComponentLoader {
 
-	private static final String APP_RULE_GLOBAL = "global";
+	private static final Logger log = Logger.getLogger(ComponentLoader.class);
+	private Components m_components = null;
+	private static final String SCHEMA = "org/jaffa/presentation/portlet/component/componentdomain/component-definitions_1_1.xsd";
+	private static final String JAXB_CONTEXT = "org.jaffa.presentation.portlet.component.componentdomain";
 
-	private static final String APP_RULE_NOT_FOUND = "ApplicationRules_*.properties not found in jar!META-INF";
-	private static final String ERROR_READING_APP_RULES = "Error reading jar!META-INF/ApplicationRules_*.properties";
-
-	/**
-	 * singleton instance of the ApplicationResourceLoader
-	 */
-	private static ApplicationRulesLoader instance;
+	// error
+	private static final String ERROR_COMP_READING = "Error in Reading Components Definition";
 
 	/**
-	 * The cache per application rules. 
+	 * singleton instance of the ComponentLoader
 	 */
-	private Map<String, Properties> applicationRules = new HashMap<String, Properties>();
+	private static ComponentLoader instance;
+
+	public Components getComponents() {
+		if (m_components == null) {
+			loadComponent();
+		}
+		return m_components;
+	}
 
 	/**
 	 * private constructor and it can be only instantiated via getInstance()
 	 * method
 	 */
-	private ApplicationRulesLoader() {
+	private ComponentLoader() {
 		/**
-		 * load resources from class jar!/META-INF
-		 * 
-		 * @TODO - Needs to think about adding the load function to load the
-		 *       rules from Data Directory for Rules Editor
+		 * load components.xml from class jar!/META-INF
 		 */
-		loadApplicationRules();
+		loadComponent();
 	}
 
 	/**
@@ -110,91 +103,67 @@ public class ApplicationRulesLoader {
 	 * 
 	 * @return ApplicationRulesLoader
 	 */
-	public static ApplicationRulesLoader getInstance() {
+	public static ComponentLoader getInstance() {
 		if (instance == null) {
-			instance = new ApplicationRulesLoader();
+			instance = new ComponentLoader();
 			if (log.isDebugEnabled()) {
-				log.debug("Singleton ApplicationRulesLoader Created");
+				log.debug("Singleton ComponentLoader Created");
 			}
 		}
 		return instance;
 	}
 
 	/**
-	 * @return ApplicationRules_global properties
+	 * This will load the components.
 	 */
-	public Properties getApplicationRulesGlobal() {
-		return applicationRules.get(APP_RULE_GLOBAL);
-	}
-
-	/**
-	 * 
-	 * @param variation
-	 * @return ApplicationRules_{variation} properties
-	 */
-	public Properties getApplicationRulesVariation(String variation) {
-		return applicationRules.get(variation);
-	}
-
-	/**
-	 * This will load the ApplicationRules files for global and user variation
-	 * 
-	 */
-	private void loadApplicationRules() {
+	private void loadComponent() {
 
 		if (log.isDebugEnabled()) {
-			log.debug("ApplicationRulesLoader::loadApplicationRules");
+			log.debug("ApplicationRulesLoader::loadComponent");
 		}
 
 		OrderedPathMatchingResourcePatternResolver resolver = new OrderedPathMatchingResourcePatternResolver();
 		try {
 
-			Resource[] resources = resolver.getResources("classpath*:META-INF/ApplicationRules_*.properties");
+			Resource[] resources = resolver.getResources("classpath*:META-INF/components.xml");
 			if (resources != null) {
+				m_components = new Components();
 				for (Resource resource : resources) {
 
 					if (resource == null) {
 						continue;
 					}
 
-					Properties properties = new Properties();
+					try {
+						// create a JAXBContext capable of handling classes
+						// generated into the package
+						JAXBContext jc = JAXBContext.newInstance(JAXB_CONTEXT);
 
-					// derives variation from resource file name(e.g. global,WOL,BIM)
-					String ruleVariation = resource.getFilename();
+						// create an Unmarshaller
+						Unmarshaller u = jc.createUnmarshaller();
 
-					if (ruleVariation != null && ruleVariation.indexOf("_") > 0) {
-						ruleVariation = ruleVariation.substring(ruleVariation.indexOf("_") + 1);
-					}
-					if (ruleVariation != null && ruleVariation.indexOf(".") > 0) {
-						ruleVariation = ruleVariation.substring(0, ruleVariation.indexOf("."));
-					}
+						// enable validation
+						u.setSchema(JAXBHelper.createSchema(SCHEMA));
 
-					loadProperties(resource, properties);
+						Components comp = (Components) u
+								.unmarshal(XmlHelper.stripDoctypeDeclaration(resource.getInputStream()));
 
-					if (properties != null && properties.size() > 0) {
-						applicationRules.put(ruleVariation, properties);
+						m_components.getComponent().addAll(comp.getComponent());
+
+					} catch (Exception e) {
+						String s = ERROR_COMP_READING.concat(" :") + resource.getURL();
+						log.fatal(s, e);
+						throw new SecurityException(s, e);
 					}
 				}
 			} else {
-				log.error(APP_RULE_NOT_FOUND);
-				throw new RuntimeException(APP_RULE_NOT_FOUND);
+				log.error(ERROR_COMP_READING);
+				throw new SecurityException(ERROR_COMP_READING);
 			}
 
 		} catch (IOException e) {
-			log.error(ERROR_READING_APP_RULES, e);
-			throw new RuntimeException(ERROR_READING_APP_RULES, e);
+			log.error(ERROR_COMP_READING, e);
+			throw new SecurityException(ERROR_COMP_READING, e);
 		}
 	}
-
-	private void loadProperties(Resource resource, Properties properties) throws IOException {
-		if (resource != null) {
-			if (log.isDebugEnabled()) {
-				log.debug("Properties Resource Location: " + resource.getURL());
-			}
-			if (resource != null && resource.getInputStream() != null) {
-				properties.load(resource.getInputStream());
-			}
-		}
-	}
-
 }
