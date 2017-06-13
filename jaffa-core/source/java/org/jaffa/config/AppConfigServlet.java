@@ -102,6 +102,7 @@ public class AppConfigServlet extends HttpServlet {
 
 		initApplicationResourcesParameters();
 		initApplicationRulesParameters();
+		initComponents();
 	}
 
 
@@ -117,7 +118,14 @@ public class AppConfigServlet extends HttpServlet {
 	 */
 	private void initApplicationRulesParameters() {
 		ApplicationRulesLoader.getInstance();
-	}		
+	}	
+	
+	/**
+	 * Initialize ComponentDefinition
+	 */
+	private void initComponents() {
+		ComponentLoader.getInstance();
+	}
 
 	/** This is invoked by the servlet container when the servlet is destroyed.
 	 * It clears up the settings related to the logging API.

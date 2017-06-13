@@ -63,6 +63,7 @@ import java.util.Map;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import org.apache.log4j.*;
+import org.jaffa.config.ComponentLoader;
 import org.jaffa.config.Config;
 import org.jaffa.presentation.portlet.component.ComponentDefinition;
 import org.jaffa.presentation.portlet.component.ComponentDefinitionException;
@@ -72,7 +73,7 @@ import org.jaffa.util.URLHelper;
 import org.jaffa.util.XmlHelper;
 
 /** This class is used to load the domain information from the Domain Objects based
- * on the XML data, into definiion objects that can be used by the rest of the architecture
+ * on the XML data, into definition objects that can be used by the rest of the architecture
  *
  * @author  paule
  * @version 1.0
@@ -97,32 +98,37 @@ public class Loader {
         return c_componentPool;
     }
 
-    /** Read in the xml component definitions. Used by the component manager to aquire
-     * all the component definitions. This abstracts the component manager from dealing with
-     * the specifics of where the definitions are held and in what format.
-     * @return Returns a Map where the key is the component name, and the value is a ComponentDefinition object
-     */
-    private static synchronized void buildComponentPool() {
-        if (c_componentPool == null) {
-            final Components compList = readComponents();
-            final Map<String, ComponentDefinition> pool = new HashMap<String, ComponentDefinition>();
+	/**
+	 * Read in the xml component definitions. Used by the component manager to
+	 * aquire all the component definitions. This abstracts the component
+	 * manager from dealing with the specifics of where the definitions are held
+	 * and in what format.
+	 * 
+	 * @return Returns a Map where the key is the component name, and the value
+	 *         is a ComponentDefinition object
+	 */
+	private static synchronized void buildComponentPool() {
+		if (c_componentPool == null) {
+			final Components compList = readComponents();
+			final Map<String, ComponentDefinition> pool = new HashMap<String, ComponentDefinition>();
 
-            // Now go through the component list and build a Map of Component Definitions
-            for (final Component c : compList.getComponent()) {
-                ComponentDefinition cd;
-        try {
-          cd = new ComponentDefinition(c);
-                  // Add it to the pool.
-                  pool.put(cd.getComponentName(), cd);
-        } catch (Exception e) {
-          LOGGER.fatal(e);
-        }
-            }
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug("Loaded Component Definitions - Total=" + pool.size());
-            c_componentPool = pool;
-        }
-    }
+			// Now go through the component list and build a Map of Component
+			// Definitions
+			for (final Component c : compList.getComponent()) {
+				ComponentDefinition cd;
+				try {
+					cd = new ComponentDefinition(c);
+					// Add it to the pool.
+					pool.put(cd.getComponentName(), cd);
+				} catch (Exception e) {
+					LOGGER.fatal(e);
+				}
+			}
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug("Loaded Component Definitions - Total=" + pool.size());
+			c_componentPool = pool;
+		}
+	}
 
     /** Reads the componentx.xml file.
      * @return the Object representation of components.xml file.
@@ -133,10 +139,20 @@ public class Loader {
             LOGGER.debug("Loading in the Components Definition File - " + name);
         InputStream stream = null;
         try {
-            final URL xmlFile = URLHelper.newExtendedURL(name);
+			try {
+				final URL xmlFile = URLHelper.newExtendedURL(name);
 
-            stream = xmlFile.openStream();
-
+				stream = xmlFile.openStream();
+			} catch (MalformedURLException e) {
+				String s = "Can't Find Components Definition File. Bad URL - " + name;
+				LOGGER.error(s, e);
+			}
+			
+        	if(stream == null ){
+        		return ComponentLoader.getInstance().getComponents();
+        	}
+        	
+        	
             // create a JAXBContext capable of handling classes generated into the package
             JAXBContext jc = JAXBContext.newInstance("org.jaffa.presentation.portlet.component.componentdomain");
 
@@ -148,10 +164,6 @@ public class Loader {
 
             // unmarshal a document into a tree of Java content objects composed of classes from the package.
             return (Components) u.unmarshal(XmlHelper.stripDoctypeDeclaration(stream));
-        } catch (MalformedURLException e) {
-            String s = "Can't Find Components Definition File. Bad URL - " + name;
-            LOGGER.fatal(s, e);
-            throw new SecurityException(s, e);
         } catch (Exception e) {
             String s = "Error in Reading Components Definition File - " + name;
             LOGGER.fatal(s, e);
