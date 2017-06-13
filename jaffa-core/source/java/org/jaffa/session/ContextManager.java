@@ -381,7 +381,7 @@ public class ContextManager implements IContextManager {
 					 * ApplicationRulesLoader
 					 */
 					if (props == null || props.size() == 0) {
-						props = ApplicationRulesLoader.getInstance().getApplicatioRulesGlobal();
+						props = ApplicationRulesLoader.getInstance().getApplicationRulesGlobal();
 					}
                     
                     // Cache an unmodifiable view
