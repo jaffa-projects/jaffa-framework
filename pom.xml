@@ -17,7 +17,7 @@
         JAFFA is a Java web application development stack,
         build around Web 2.0 technologies (ExtJS, DWR, JAWR) with an extensive
         service architecture, meta-data layer
-        and rules engine (based on JBoss AOP and Drools).
+        and rules engine.
         It provides an event driven SOA infrastructure
         with advanced scheduling and queue sub-systems.
     </description>
@@ -233,7 +233,6 @@
         <version.org.beanshell.bsh>2.0b5</version.org.beanshell.bsh>
         <version.org.codehaus.janino>2.5.16</version.org.codehaus.janino>
         <version.org.codehaus.janino.commons-compiler>2.6.1</version.org.codehaus.janino.commons-compiler>
-        <version.org.codehaus.groovy-all>1.7.4</version.org.codehaus.groovy-all>
         <version.org.codehaus.janino>2.5.16</version.org.codehaus.janino>
         <version.org.directwebremoting.dwr-osgi>2.0.5</version.org.directwebremoting.dwr-osgi>
         <version.org.drools.drools-compiler>4.0.7</version.org.drools.drools-compiler>
@@ -243,7 +242,6 @@
         <version.org.fusesource.hawtbuf>1.9</version.org.fusesource.hawtbuf>
         <version.org.mvel.mvel2>2.1.6.Final</version.org.mvel.mvel2>
         <version.org.quartz-scheduler.quartz>2.2.3</version.org.quartz-scheduler.quartz>
-        <version.org.quartz-scheduler.quartz-jboss>2.1.7</version.org.quartz-scheduler.quartz-jboss>
         <version.org.quartz-scheduler.quartz-oracle>2.1.7</version.org.quartz-scheduler.quartz-oracle>
         <version.org.javassist>3.18.1-GA</version.org.javassist>
         <version.org.jrobin>1.5.9</version.org.jrobin>
@@ -256,10 +254,6 @@
         <version.org.osgi.core>5.0.0</version.org.osgi.core>
         <version.org.osgi.enterprise>5.0.0</version.org.osgi.enterprise>
 
-        <version.org.jboss.msc.jboss-msc>1.2.0.Final</version.org.jboss.msc.jboss-msc>
-        <version.org.jboss.spec.javax.ejb>1.0.0.Final</version.org.jboss.spec.javax.ejb>
-        <version.org.jboss.spec.javax.annotation>1.0.0.Final</version.org.jboss.spec.javax.annotation>
-        <version.org.jboss.ejb3.ext-api>2.1.0</version.org.jboss.ejb3.ext-api>
 
         <!-- ******************************************************************* -->
         <!-- Plugins Versions                                                    -->
@@ -779,24 +773,6 @@
                     <version>${version.idea.plugin}</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.jboss.as.plugins</groupId>
-                    <artifactId>jboss-as-maven-plugin</artifactId>
-                    <version>7.4.Final</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.jboss.maven.plugins</groupId>
-                    <artifactId>maven-injection-plugin</artifactId>
-                    <version>${version.injection.plugin}</version>
-                    <executions>
-                        <execution>
-                            <phase>compile</phase>
-                            <goals>
-                                <goal>bytecode</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-install-plugin</artifactId>
                     <version>${version.install.plugin}</version>
@@ -840,6 +816,33 @@
                             </manifestEntries>
                         </archive>
                     </configuration>
+                </plugin>
+                <!-- Create the UI package as a ZIP to include in the WAR -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <configuration>
+                        <finalName>${project.artifactId}-${project.version}</finalName>
+                        <descriptorRefs>
+                            <descriptorRef>ui-descriptor</descriptorRef>
+                        </descriptorRefs>
+                        <appendAssemblyId>false</appendAssemblyId>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.jaffa.assemblies</groupId>
+                            <artifactId>jaffa-ui-assembly-descriptor</artifactId>
+                            <version>${jaffa.version}</version>
+                        </dependency>
+                    </dependencies>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>single</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -1184,7 +1187,6 @@
                 <groupId>org.jaffa.maven</groupId>
                 <artifactId>fragmentmerge-maven-plugin</artifactId>
             </plugin>
-
             <!-- Check for the minimum version of Java and Maven.  Runs during the validate phase. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -1855,7 +1857,7 @@
             <dependency>
                 <groupId>org.codehaus.groovy</groupId>
                 <artifactId>groovy-all</artifactId>
-                <version>${version.org.codehaus.groovy-all}</version>
+                <version>${version.groovy-all}</version>
             </dependency>
             <dependency>
                 <groupId>org.directwebremoting</groupId>
@@ -1906,11 +1908,6 @@
                 <groupId>org.quartz-scheduler</groupId>
                 <artifactId>quartz-jobs</artifactId>
                 <version>${version.org.quartz-scheduler.quartz}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.quartz-scheduler</groupId>
-                <artifactId>quartz-jboss</artifactId>
-                <version>${version.org.quartz-scheduler.quartz-jboss}</version>
             </dependency>
             <dependency>
                 <groupId>org.quartz-scheduler</groupId>
@@ -2065,64 +2062,6 @@
                 <artifactId>jaffa-rules</artifactId>
                 <version>${jaffa.version}</version>
             </dependency>
-            <!-- ******************************************************************* -->
-            <!-- JBoss Libraries                                                     -->
-            <!-- ******************************************************************* -->
-            <dependency>
-                <groupId>jboss</groupId>
-                <artifactId>jbosssx</artifactId>
-                <version>3.2.3</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.msc</groupId>
-                <artifactId>jboss-msc</artifactId>
-                <version>${version.org.jboss.msc.jboss-msc}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.ejb3</groupId>
-                <artifactId>jboss-ejb3-ext-api</artifactId>
-                <version>${version.org.jboss.ejb3.ext-api}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.spec.javax.ejb</groupId>
-                <artifactId>jboss-ejb-api_3.2_spec</artifactId>
-                <version>${version.org.jboss.spec.javax.ejb}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.spec.javax.annotation</groupId>
-                <artifactId>jboss-annotations-api_1.2_spec</artifactId>
-                <version>${version.org.jboss.spec.javax.annotation}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.ws</groupId>
-                <artifactId>jbossws-spi</artifactId>
-                <version>2.2.1.Final</version>
-            </dependency>
-            <dependency>
-                <groupId>jboss</groupId>
-                <artifactId>jbossall-client</artifactId>
-                <version>4.2.2.GA</version>
-            </dependency>
-            <dependency>
-                <groupId>jboss</groupId>
-                <artifactId>jboss-system</artifactId>
-                <version>4.2.2.GA</version>
-            </dependency>
-            <dependency>
-                <groupId>org.picketbox</groupId>
-                <artifactId>picketbox</artifactId>
-                <version>4.0.19.Final</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wildfly</groupId>
-                <artifactId>wildfly-clustering-common</artifactId>
-                <version>${wildfly.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wildfly</groupId>
-                <artifactId>wildfly-clustering-singleton</artifactId>
-                <version>${wildfly.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
     <!-- Profiles -->
@@ -2135,6 +2074,7 @@
                 </property>
             </activation>
             <modules>
+                <module>jaffa-assemblies</module>
                 <module>jaffa-components</module>
                 <module>jaffa-components-admin</module>
                 <module>jaffa-components-messaging</module>
@@ -2143,10 +2083,11 @@
                 <module>jaffa-components-user</module>
                 <module>jaffa-console</module>
                 <module>jaffa-core</module>
+                <module>jaffa-dwr</module>
                 <module>jaffa-ria</module>
                 <module>jaffa-rules</module>
                 <module>jaffa-soa</module>
-                <module>jaffa-dwr</module>
+
                 <!--<module>patterns</module>-->
             </modules>
         </profile>

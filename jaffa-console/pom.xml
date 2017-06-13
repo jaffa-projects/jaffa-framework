@@ -71,21 +71,12 @@
     </dependency>
     <dependency>
       <groupId>org.quartz-scheduler</groupId>
-      <artifactId>quartz-jboss</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.quartz-scheduler</groupId>
       <artifactId>quartz-oracle</artifactId>
     </dependency>
 	
     <!-- ******************************************************************* -->
     <!-- Provided Libraries                                                  -->
     <!-- ******************************************************************* -->
-    <dependency>
-      <groupId>jboss</groupId>
-      <artifactId>jboss-system</artifactId>
-      <scope>provided</scope>
-    </dependency>
     <dependency>
       <groupId>javax.ejb</groupId>
       <artifactId>javax.ejb-api</artifactId>
@@ -127,4 +118,16 @@
       <scope>provided</scope>
     </dependency>
   </dependencies>
+
+
+  <build>
+    <plugins>
+      <!-- Create the UI package as a ZIP to include in the WAR -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
  </project>
