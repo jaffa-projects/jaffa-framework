@@ -62,6 +62,9 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -81,7 +84,6 @@ import java.util.Properties;
 		name = "appconfig",
 		description = "Application Configuration Servlet",
 		displayName = "AppConfigServlet",
-		urlPatterns = "/",
 		loadOnStartup = 1
 	//@todo include location of ApplicationResources.override from data directory (userpref) as a initParam
 )
