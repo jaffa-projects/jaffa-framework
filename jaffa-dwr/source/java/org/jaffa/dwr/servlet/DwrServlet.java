@@ -80,9 +80,10 @@ import org.xml.sax.SAXException;
 		description = "DWR Servlet", 
 		displayName = "DWR Servlet", 
 		urlPatterns = "/dwr/*", 
+		loadOnStartup=2,
 		initParams = {
 				//@WebInitParam(name = "debug", value = "true"),				
-				//@WebInitParam(name = "skipDefaultConfig", value = "true"),
+				@WebInitParam(name = "skipDefaultConfig", value = "true"),
 				@WebInitParam(name = "meta-config", value = "classpath*:META-INF/dwr.xml") 
 		}
 )

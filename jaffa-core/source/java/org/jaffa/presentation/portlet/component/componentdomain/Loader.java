@@ -54,6 +54,7 @@
  */
 package org.jaffa.presentation.portlet.component.componentdomain;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -144,6 +145,9 @@ public class Loader {
 
 				stream = xmlFile.openStream();
 			} catch (MalformedURLException e) {
+				String s = "Can't Find Components Definition File. Bad URL - " + name;
+				LOGGER.error(s, e);
+			} catch(FileNotFoundException e){
 				String s = "Can't Find Components Definition File. Bad URL - " + name;
 				LOGGER.error(s, e);
 			}
