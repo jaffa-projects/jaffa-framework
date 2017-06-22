@@ -52,6 +52,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
+import org.jaffa.util.OrderedPathMatchingResourcePatternResolver;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
@@ -111,7 +112,7 @@ public class PropsFilePropertiesSource extends net.jawr.web.resource.bundle.fact
 		}
 
 		try {
-			PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+			PathMatchingResourcePatternResolver resolver = OrderedPathMatchingResourcePatternResolver.getInstance();
 			Resource[] resources = resolver.getResources("classpath*:META-INF/jawr.properties");
 			if (resources != null) {
 				for (Resource resource : resources) {
