@@ -51,6 +51,8 @@ package org.jaffa.dwr;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,51 +60,56 @@ import java.util.Map;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 
-import org.jaffa.dwr.mock.MockServletConfig;
-import org.jaffa.dwr.mock.MockServletContext;
 import org.junit.Test;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import net.jawr.web.JawrConstant;
 import net.jawr.web.servlet.JawrServlet;
 
 /**
  * 
- * Test for JawrServlet.
+ * Tests whether JawrServlet gets initialized correctly.
  *
  */
 public class JawrServletTest {
 
+	/**
+	 * tests Jawr Properties load
+	 * @throws Exception
+     */
 	@Test
 	public void testJawrPropertiesLoad() throws Exception {
 
+		//initialize
 		Map<String, String> initParameters = new HashMap<String, String>();
 		initParameters.put("configLocation", "/jawr.properties");
 		initParameters.put("configPropertiesSourceClass", "org.jaffa.ria.util.PropsFilePropertiesSource");
 		initParameters.put("mapping", "/jsJawrPath/");
 
-		final MockServletContext servletContext = new MockServletContext("test/jawr");
-		final MockServletConfig servletConfig = new MockServletConfig("jwr-invoker", servletContext, initParameters);
+		ServletContext servletContext = mock(ServletContext.class);
+		ServletConfig servletConfig = mock(ServletConfig.class);
 
-		JawrServlet jawrServlet = new JawrServlet() {
+		when(servletConfig.getServletContext()).thenReturn(servletContext);
+		when(servletConfig.getInitParameterNames()).thenReturn(Collections.enumeration(initParameters.keySet()));
+		when(servletConfig.getInitParameter("configLocation")).thenReturn("/jawr.properties");
+		when(servletConfig.getInitParameter("configPropertiesSourceClass")).thenReturn("org.jaffa.ria.util.PropsFilePropertiesSource");
+		when(servletConfig.getInitParameter("mapping")).thenReturn("/jsJawrPath/");
 
-			private static final long serialVersionUID = -4741949097608180675L;
+		when(servletContext.getAttribute("javax.servlet.context.tempdir")).thenReturn(new File("abc"));
 
-			public ServletContext getServletContext() {
-				return servletContext;
-			}
 
-			public ServletConfig getServletConfig() {
-				return servletConfig;
-			}
+		//test
+		JawrServlet jawrServlet = new JawrServlet();
 
-		};
+		jawrServlet.init(servletConfig);
 
-		jawrServlet.init();
 
-		String result = servletContext.getAttribute(JawrConstant.JS_CONTEXT_ATTRIBUTE) != null
-				? "Jawr Initialization Successful" : "Jawr Initialization Failed";
-
-		assertEquals("Jawr Initialization Successful", result);
+		//verify
+		verify(servletContext).setAttribute(eq(JawrConstant.JS_CONTEXT_ATTRIBUTE), any());
 
 	}
 
