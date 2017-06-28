@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.config.FormBeanConfig;
 import org.apache.struts.config.ModuleConfig;
 import org.apache.struts.config.ModuleConfigFactory;
+import org.jaffa.util.OrderedPathMatchingResourcePatternResolver;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.xml.sax.SAXException;
@@ -38,7 +39,7 @@ public class ActionServlet extends org.apache.struts.action.ActionServlet {
 
 		Digester digester = initConfigDigester();
 
-		PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+		PathMatchingResourcePatternResolver resolver = OrderedPathMatchingResourcePatternResolver.getInstance();
 		try {
 			Resource[] resources = resolver.getResources(paths);
 			if (resources != null && resources.length > 0) {
