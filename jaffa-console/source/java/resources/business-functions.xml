@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<business-functions>
+   <business-function name="Jaffa.QM.QueueManager.Inquiry"/>
+   <business-function name="Jaffa.QM.QueueManager.QueueAdmin"/>
+   <business-function name="Jaffa.Transaction.Transaction.Finder"/>
+   <business-function name="Jaffa.Transaction.Transaction.Finder"/>
+   <business-function name="Jaffa.Setup.ValidFieldValue.Inquiry"/>
+</business-functions>

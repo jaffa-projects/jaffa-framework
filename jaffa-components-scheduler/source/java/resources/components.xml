@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<components>
+ <component id="Jaffa.Scheduler.TaskFinder">
+    <class>org.jaffa.modules.scheduler.components.taskfinder.ui.TaskFinderComponent</class>
+    <type>Inquiry</type>
+    <mandatory-function name="Jaffa.Scheduler.Task.Inquiry" />
+    <optional-function name="Jaffa.Scheduler.SchedulerAdmin" />
+    <optional-function name="Jaffa.Scheduler.Task.InquiryAll" />
+    <optional-function name="Jaffa.Scheduler.Task.MaintenanceDirect" />
+  </component>
+  <component id="Jaffa.SC.SystemConfigDesktop">
+    <class>jaffa/sc/systemconfigdesktop/main.jsp</class>
+    <mandatory-function name="Jaffa.SC.SystemConfig.Inquiry" />
+    <optional-function name="Jaffa.SC.SystemConfig.RuleAdmin" />
+  </component>
+  <component id="Jaffa.Scheduler.TaskMaintenance">
+    <class>org.jaffa.modules.scheduler.components.taskmaintenance.ui.TaskMaintenanceComponent</class>
+    <type>ObjectMaintenance</type>
+    <mandatory-function name="Jaffa.Scheduler.Task.Maintenance" />
+    <optional-function name="Jaffa.Scheduler.Task.MaintenanceDirect" />
+  </component>
+  <component id="Jaffa.Scheduler.TaskViewer">
+    <class>org.jaffa.modules.scheduler.components.taskviewer.ui.TaskViewerComponent</class>
+    <type>ObjectViewer</type>
+    <mandatory-function name="Jaffa.Scheduler.Task.Details" />
+  </component>
+</components>

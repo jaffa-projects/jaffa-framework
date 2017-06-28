@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<business-functions>
+   <business-function name="Jaffa.Scheduler.Task.Inquiry"/>
+   <business-function name="Jaffa.Scheduler.SchedulerAdmin"/>
+   <business-function name="Jaffa.Scheduler.Task.InquiryAll"/>
+   <business-function name="Jaffa.Scheduler.Task.MaintenanceDirect"/>
+   <business-function name="Jaffa.SC.SystemConfig.Inquiry"/>
+   <business-function name="Jaffa.SC.SystemConfig.RuleAdmin"/>
+   <business-function name="Jaffa.Scheduler.Task.Maintenance"/>
+   <business-function name="Jaffa.Scheduler.Task.MaintenanceDirect"/>
+   <business-function name="Jaffa.Scheduler.Task.Details"/>
+</business-functions>

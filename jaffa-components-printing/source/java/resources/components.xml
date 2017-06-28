@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<components>
+  <component id="Jaffa.Printing.FormDefinitionFinder">
+    <class>org.jaffa.modules.printing.components.formdefinitionfinder.ui.FormDefinitionFinderComponent</class>
+    <type>Setup</type>
+    <mandatory-function name="Jaffa.Printing.FormDefinition.Inquiry" />
+  </component>
+  <component id="Jaffa.Printing.FormDefinitionMaintenance">
+    <class>org.jaffa.modules.printing.components.formdefinitionmaintenance.ui.FormDefinitionMaintenanceComponent</class>
+    <type>Setup</type>
+    <mandatory-function name="Jaffa.Printing.FormDefinition.Maintenance" />
+  </component>
+  <component id="Jaffa.Printing.FormDefinitionViewer">
+    <class>org.jaffa.modules.printing.components.formdefinitionviewer.ui.FormDefinitionViewerComponent</class>
+    <type>ObjectViewer</type>
+    <mandatory-function name="Jaffa.Printing.FormDefinition.Details" />
+  </component>
+  <component id="Jaffa.Printing.FormEventFinder">
+    <class>org.jaffa.modules.printing.components.formeventfinder.ui.FormEventFinderComponent</class>
+    <type>Setup</type>
+    <mandatory-function name="Jaffa.Printing.FormEvent.Inquiry" />
+  </component>
+  <component id="Jaffa.Printing.FormEventLookup">
+    <class>org.jaffa.modules.printing.components.formeventlookup.ui.FormEventLookupComponent</class>
+    <type>ObjectLookup</type>
+    <mandatory-function name="Jaffa.Printing.FormEvent.Lookup" />
+  </component>
+  <component id="Jaffa.Printing.FormEventMaintenance">
+    <class>org.jaffa.modules.printing.components.formeventmaintenance.ui.FormEventMaintenanceComponent</class>
+    <type>Setup</type>
+    <mandatory-function name="Jaffa.Printing.FormEvent.Maintenance" />
+  </component>
+  <component id="Jaffa.Printing.FormEventViewer">
+    <class>org.jaffa.modules.printing.components.formeventviewer.ui.FormEventViewerComponent</class>
+    <type>ObjectViewer</type>
+    <mandatory-function name="Jaffa.Printing.FormEvent.Details" />
+  </component>
+  <component id="Jaffa.Printing.FormGroupFinder">
+    <class>org.jaffa.modules.printing.components.formgroupfinder.ui.FormGroupFinderComponent</class>
+    <type>Setup</type>
+    <mandatory-function name="Jaffa.Printing.FormGroup.Inquiry" />
+  </component>
+  <component id="Jaffa.Printing.FormGroupLookup">
+    <class>org.jaffa.modules.printing.components.formgrouplookup.ui.FormGroupLookupComponent</class>
+    <type>ObjectLookup</type>
+    <mandatory-function name="Jaffa.Printing.FormGroup.Inquiry" />
+  </component>
+  <component id="Jaffa.Printing.FormGroupMaintenance">
+    <class>org.jaffa.modules.printing.components.formgroupmaintenance.ui.FormGroupMaintenanceComponent</class>
+    <type>Setup</type>
+    <mandatory-function name="Jaffa.Printing.FormGroup.Maintenance" />
+  </component>
+  <component id="Jaffa.Printing.FormGroupViewer">
+    <class>org.jaffa.modules.printing.components.formgroupviewer.ui.FormGroupViewerComponent</class>
+    <type>ObjectViewer</type>
+    <mandatory-function name="Jaffa.Printing.FormGroup.Details" />
+  </component>
+  <component id="Jaffa.Printing.FormSelectionMaintenance">
+    <class>org.jaffa.modules.printing.components.formselectionmaintenance.ui.FormSelectionMaintenanceComponent</class>
+    <type>Setup</type>
+    <mandatory-function name="Jaffa.Printing.FormSelection.Maintenance" />
+  </component>
+  <component id="Jaffa.Printing.OutputCommandMaintenance">
+    <class>org.jaffa.modules.printing.components.outputcommandmaintenance.ui.OutputCommandMaintenanceComponent</class>
+    <type>Setup</type>
+    <mandatory-function name="Jaffa.Printing.OutputCommand.Maintenance" />
+  </component>
+  <component id="Jaffa.Printing.PrinterDefinitionFinder">
+    <class>org.jaffa.modules.printing.components.printerdefinitionfinder.ui.PrinterDefinitionFinderComponent</class>
+    <type>Setup</type>
+    <mandatory-function name="Jaffa.Printing.PrinterDefinition.Inquiry" />
+  </component>
+  <component id="Jaffa.Printing.PrinterDefinitionLookup">
+    <class>org.jaffa.modules.printing.components.printerdefinitionlookup.ui.PrinterDefinitionLookupComponent</class>
+    <type>ObjectLookup</type>
+    <mandatory-function name="Jaffa.Printing.PrinterDefinition.Lookup" />
+  </component>
+  <component id="Jaffa.Printing.PrinterDefinitionMaintenance">
+    <class>org.jaffa.modules.printing.components.printerdefinitionmaintenance.ui.PrinterDefinitionMaintenanceComponent</class>
+    <type>Setup</type>
+    <mandatory-function name="Jaffa.Printing.PrinterDefinition.Maintenance" />
+  </component>
+  <component id="Jaffa.Printing.PrinterDefinitionViewer">
+    <class>org.jaffa.modules.printing.components.printerdefinitionviewer.ui.PrinterDefinitionViewerComponent</class>
+    <type>ObjectViewer</type>
+    <mandatory-function name="Jaffa.Printing.PrinterDefinition.Details" />
+  </component>
+  <component id="Jaffa.Printing.PrinterOutputTypeFinder">
+    <class>org.jaffa.modules.printing.components.printeroutputtypefinder.ui.PrinterOutputTypeFinderComponent</class>
+    <type>Setup</type>
+    <mandatory-function name="Jaffa.Printing.PrinterOutputType.Inquiry" />
+  </component>
+  <component id="Jaffa.Printing.PrinterOutputTypeLookup">
+    <class>org.jaffa.modules.printing.components.printeroutputtypelookup.ui.PrinterOutputTypeLookupComponent</class>
+    <type>ObjectLookup</type>
+    <mandatory-function name="Jaffa.Printing.PrinterOutputType.Inquiry" />
+  </component>
+  <component id="Jaffa.Printing.PrinterOutputTypeMaintenance">
+    <class>org.jaffa.modules.printing.components.printeroutputtypemaintenance.ui.PrinterOutputTypeMaintenanceComponent</class>
+    <type>Setup</type>
+    <mandatory-function name="Jaffa.Printing.PrinterOutputType.Maintenance" />
+  </component>
+  <component id="Jaffa.Printing.PrinterOutputTypeViewer">
+    <class>org.jaffa.modules.printing.components.printeroutputtypeviewer.ui.PrinterOutputTypeViewerComponent</class>
+    <type>ObjectViewer</type>
+    <mandatory-function name="Jaffa.Printing.PrinterOutputType.Details" />
+  </component>
+</components>
