@@ -27,7 +27,7 @@ Should be included in the main JSP that loads all the java script using the foll
 
     // Get the message and replace special characters
     String getMsg(String token) {
-        return MessageHelper.findMessage(token, null).replace("\"","'").replace("\n", "\\n").replace("\\\n", "\\n");
+        return MessageHelper.findMessage(token, null)!=null ? MessageHelper.findMessage(token, null).replace("\"","'").replace("\n", "\\n").replace("\\\n", "\\n") : "{"+token+"}";
     }
 
     // Get the full path of where the labels are for this refering page
