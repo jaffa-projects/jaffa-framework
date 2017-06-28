@@ -54,6 +54,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -66,6 +67,8 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
  */
 public class OrderedPathMatchingResourcePatternResolver extends PathMatchingResourcePatternResolver {
 
+	private static final Logger log = Logger.getLogger(OrderedPathMatchingResourcePatternResolver.class);
+
 	private boolean ascending = true;
 
 	public boolean isAscending() {
@@ -76,7 +79,7 @@ public class OrderedPathMatchingResourcePatternResolver extends PathMatchingReso
 		this.ascending = ascending;
 	}
 
-	public OrderedPathMatchingResourcePatternResolver() {
+	private OrderedPathMatchingResourcePatternResolver() {
 		super();
 	}
 
@@ -86,6 +89,27 @@ public class OrderedPathMatchingResourcePatternResolver extends PathMatchingReso
 
 	public OrderedPathMatchingResourcePatternResolver(ResourceLoader resourceLoader) {
 		super(resourceLoader);
+	}
+
+	/* Singleton instance of this class */
+	private static volatile OrderedPathMatchingResourcePatternResolver resolver;
+
+	/**
+	 * Creates an instance of OrderedPathMatchingResourcePatternResolver, if not already instantiated.
+	 * @return An instance of the OrderedPathMatchingResourcePatternResolver.
+	 */
+	public static OrderedPathMatchingResourcePatternResolver getInstance() {
+		if (resolver == null)
+			createResolverInstance();
+		return resolver;
+	}
+
+	private static synchronized void createResolverInstance() {
+		if (resolver == null) {
+			resolver = new OrderedPathMatchingResourcePatternResolver();
+			if (log.isDebugEnabled())
+				log.debug("An instance of the ResourceFinder has been created");
+		}
 	}
 
 	/**

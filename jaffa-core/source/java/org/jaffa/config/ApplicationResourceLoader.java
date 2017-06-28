@@ -124,7 +124,7 @@ public class ApplicationResourceLoader {
 	 * @return ApplicationResourceOverride
 	 */
 	public Properties getApplicationResourcesOverride() {
-		OrderedPathMatchingResourcePatternResolver resolver = new OrderedPathMatchingResourcePatternResolver();
+		OrderedPathMatchingResourcePatternResolver resolver = OrderedPathMatchingResourcePatternResolver.getInstance();
 		return loadOverrideResources(resolver);
 	}
 
@@ -165,7 +165,7 @@ public class ApplicationResourceLoader {
 	 * Load all resources from properties files.
 	 */
 	private void loadResources() {
-		OrderedPathMatchingResourcePatternResolver resolver = new OrderedPathMatchingResourcePatternResolver();
+		OrderedPathMatchingResourcePatternResolver resolver = OrderedPathMatchingResourcePatternResolver.getInstance();
 		loadDefaultResources(resolver);
 		loadLocaleResources(resolver);
 	}
