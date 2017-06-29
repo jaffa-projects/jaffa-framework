@@ -3,19 +3,17 @@
   --                                                               --
   -- The JAFFA Project can be found at http://jaffa.sourceforge.net--
   -- and is available under the Lesser GNU Public License          --
-  -- ------------------------------------------------------------- --%><%@
+  -- ------------------------------------------------------------- --%>
+<%@ page import = "java.util.*"%>
+<%@ page import = "org.jaffa.util.MessageHelper"%>
+<%@ page import = "org.jaffa.session.*"%>
+<%@ page import = "org.apache.log4j.Logger"%>
 
-page import = "java.util.*,org.jaffa.session.*,org.jaffa.util.MessageHelper,org.apache.log4j.Logger,com.mirotechnologies.localization.UserProfileClientWrapper"
+<%@ taglib prefix="jwr" uri="/WEB-INF/jawr-el.tld"%>
 
-%><%@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-taglib prefix="jwr" uri="/WEB-INF/jawr-el.tld"
-
-%><%@
-
-taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"
-
-%><%!
+<%!
 private static Logger log = Logger.getLogger("extjs");
 public static final String[] SUPPORTED_LOCALES = new String[] {"af","ar_OM","bg","ca","cs","da","de","el_GR","en_GB","en_US","en","es","fa","fr_CA","fr","gr","he","hr","hu","id","it","ja","ko","lt","lv","mk","nl","no_NB","no_NN","pl","pt_BR","pt","ro","ru","sk","sl","sr_RS","sr","sv_SE","th","tr","ukr","vn","zh_CN","zh_TW"};
 public static final String SYMBOL_RULE = "jaffa.datatypes.defaultCurrencySymbol";
@@ -58,14 +56,14 @@ public static final String DEFAULT_TIME_FORMAT = "jaffa.datatypes.defaultTimeFor
     Ext.BLANK_IMAGE_URL = "<%=request.getContextPath()%>/js/extjs/resources/images/default/s.gif";
   </script>
 <%
-String currentLocale = UserProfileClientWrapper.getInstance().getUserLanguage(request);
+String currentLocale = request.getSession().getAttribute("jaffa.user.prefLocale")!=null ? (String)request.getSession().getAttribute("jaffa.user.prefLocale") : null;
 if(currentLocale != null){
 		log.debug("Request ExtJS Language Resources for " + currentLocale);
 %>
 		<!-- Locale Resources for <%= currentLocale %>] -->
 		<jwr:script src="/js/extjs/locale/ext-lang-<%= currentLocale %>.js"/><%
 }
-if(currentLocale !=null && currentLocale.equals("ar_OM")){
+if("ar_OM".equals(currentLocale)){
 	%>
 	<jwr:script src="/js/extjs/locale/ext-lang-ar_OM.js"/>
 	<%

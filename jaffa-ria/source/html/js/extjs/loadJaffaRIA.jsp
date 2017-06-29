@@ -3,20 +3,22 @@
   --                                                               --
   -- The JAFFA Project can be found at http://jaffa.sourceforge.net--
   -- and is available under the Lesser GNU Public License          --
-  -- ------------------------------------------------------------- --%><%@
-page import = "org.apache.log4j.Logger,org.jaffa.session.ContextManagerFactory,org.jaffa.security.SecurityManager,com.mirotechnologies.localization.UserProfileClientWrapper"
+  -- ------------------------------------------------------------- --%>
+<%@ page import = "org.apache.log4j.Logger"%>
+<%@ page import = "org.jaffa.session.ContextManagerFactory"%>
+<%@ page import = "org.jaffa.security.SecurityManager"%>
+<%@ page import = "org.jaffa.util.LocalizationRTL"%>
+<%@ page import = "org.jaffa.presentation.portlet.session.UserSession"%>
 
-%>
 
-<%@
+<%@ taglib uri="/WEB-INF/jawr-el.tld" prefix="jwr"%>
 
-taglib uri="/WEB-INF/jawr-el.tld" prefix="jwr"
-
-%><%! // Add properties/methods to the class
+<%! // Add properties/methods to the class
 
 private static Logger log = Logger.getLogger("extjs");
 
-%><%-- -------------------------------------------------------------
+%>
+<%-- -------------------------------------------------------------
 
 Supported Parameters
 
@@ -31,14 +33,8 @@ Supported Parameters
 
 ------------------------------------------------------------- --%>
 
-<!--
-	This LocalizationRTL class is used for invoking isRTL() which validates whether input language is Arabic or not
--->
-<jsp:useBean id='localizationRTL' class='com.mirotechnologies.localization.LocalizationRTL' type='com.mirotechnologies.localization.LocalizationRTL' />
-
 <%
-	String userLocale = UserProfileClientWrapper.getInstance().getUserLanguage(request);
-	if(userLocale == null) userLocale = "";
+	String userLocale = request.getSession().getAttribute("jaffa.user.prefLocale")!=null ? (String)request.getSession().getAttribute("jaffa.user.prefLocale") : "";
 	
 	/**
 	*	Passing the userLocale to isRTL() which returns true if it is arabic language
@@ -46,7 +42,7 @@ Supported Parameters
 	*	i.e., 	Arabic (true) = Loading jaffaRiaRTL.js bundle - which refers in jawr.properties file
 	*	   		English (false) = Loading jaffaRia.js bundle - which refers in jawr.properties file
 	*/
-	if(localizationRTL.isRtlLanguage(userLocale)){
+	if(LocalizationRTL.isRtlLanguage(userLocale)){
 %>
 		<!--
 			Loading Arabic JS bundle
