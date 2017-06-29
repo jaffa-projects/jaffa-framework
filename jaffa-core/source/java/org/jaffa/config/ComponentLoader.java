@@ -122,7 +122,7 @@ public class ComponentLoader {
 			log.debug("ApplicationRulesLoader::loadComponent");
 		}
 
-		OrderedPathMatchingResourcePatternResolver resolver = new OrderedPathMatchingResourcePatternResolver();
+		OrderedPathMatchingResourcePatternResolver resolver = OrderedPathMatchingResourcePatternResolver.getInstance();
 		try {
 
 			Resource[] resources = resolver.getResources("classpath*:META-INF/components.xml");

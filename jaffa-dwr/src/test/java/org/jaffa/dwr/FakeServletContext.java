@@ -52,6 +52,7 @@ package org.jaffa.dwr;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.jaffa.util.OrderedPathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 /**
@@ -73,7 +74,7 @@ public class FakeServletContext extends org.directwebremoting.util.FakeServletCo
 	public InputStream getResourceAsStream(String path) {
 		InputStream inputStream = null;
 		try {
-			PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+			PathMatchingResourcePatternResolver resolver = OrderedPathMatchingResourcePatternResolver.getInstance();
 			inputStream = resolver.getResource("/dwr.xml").getInputStream();
 		} catch (IOException e) {
 			throw new RuntimeException(e);

@@ -59,6 +59,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.log4j.Logger;
 import org.directwebremoting.impl.ContainerUtil;
 import org.directwebremoting.util.Messages;
+import org.jaffa.util.OrderedPathMatchingResourcePatternResolver;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.xml.sax.SAXException;
@@ -113,7 +114,7 @@ public class DwrServlet extends org.directwebremoting.servlet.DwrServlet {
 
 				// meta-config
 				if (paramName.startsWith("meta-config") && paramValue != null && !"".equals(paramValue.trim())) {
-					PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+					PathMatchingResourcePatternResolver resolver = OrderedPathMatchingResourcePatternResolver.getInstance();
 					resources = resolver.getResources(paramValue);
 				}
 

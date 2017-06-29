@@ -5,6 +5,7 @@ import org.apache.struts.tiles.DefinitionsFactoryException;
 import org.apache.struts.tiles.xmlDefinition.DefinitionsFactory;
 import org.apache.struts.tiles.xmlDefinition.XmlDefinitionsSet;
 import org.apache.struts.tiles.xmlDefinition.XmlParser;
+import org.jaffa.util.OrderedPathMatchingResourcePatternResolver;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.xml.sax.SAXException;
@@ -119,7 +120,7 @@ public class JaffaI18nFactorySet extends org.apache.struts.tiles.xmlDefinition.I
         try {
             List<Resource> resourceList = new ArrayList<>();
             for(String filename : filenames) {
-                PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+                PathMatchingResourcePatternResolver resolver = OrderedPathMatchingResourcePatternResolver.getInstance();
                 resourceList.addAll(Arrays.asList(resolver.getResources(filename)));
             }
             // Check if parser already exist.
