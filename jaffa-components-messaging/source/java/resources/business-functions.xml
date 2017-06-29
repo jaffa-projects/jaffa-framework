@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<business-functions>
+   <business-function name="Jaffa.Messaging.BusinessEventLog.Inquiry"/>
+   <business-function name="Jaffa.Messaging.BusinessEventLog.Details"/>
+   <business-function name="Jaffa.Messaging.Message.Details"/>
+   <business-function name="Jaffa.Messaging.Queue.Details"/>
+   <business-function name="Jaffa.Messaging.Queue.Inquiry"/>
+   <business-function name="Jaffa.Messaging.QueueAdmin"/>
+</business-functions>

@@ -1,0 +1,33 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <components>
+    <component id="Jaffa.Attachment.AttachmentFinder">
+    <class>org.jaffa.components.attachment.components.attachmentfinder.ui.AttachmentFinderComponent</class>
+    <type>ObjectFinder</type>
+    <mandatory-function name="Jaffa.Attachment.Attachment.Inquiry" />
+  </component>
+  <component id="Jaffa.Attachment.AttachmentLookup">
+    <class>org.jaffa.components.attachment.components.attachmentlookup.ui.AttachmentLookupComponent</class>
+    <type>ObjectLookup</type>
+    <mandatory-function name="Jaffa.Attachment.Attachment.Inquiry" />
+  </component>
+  <component id="Jaffa.Attachment.AttachmentMaintenance">
+    <class>org.jaffa.components.attachment.components.attachmentmaintenance.ui.AttachmentMaintenanceComponent</class>
+    <type>ObjectMaintenance</type>
+    <mandatory-function name="Jaffa.Attachment.Attachment.Maintenance" />
+  </component>
+  <component id="Jaffa.Attachment.AttachmentViewer">
+    <class>org.jaffa.components.attachment.components.attachmentviewer.ui.AttachmentViewerComponent</class>
+    <type>ObjectViewer</type>
+    <mandatory-function name="Jaffa.Attachment.Attachment.Details" />
+  </component>
+  <component id="Jaffa.Audit.AuditTransactionFinder">
+    <class>jaffa/audit/audittransactionfinder/main.jsp</class>
+    <type>Inquiry</type>
+    <mandatory-function name="Jaffa.Audit.AuditTransaction.Inquiry" />
+  </component>
+  <component id="Jaffa.Audit.AuditTransactionViewer">
+    <class>jaffa/audit/audittransactionviewer/main.jsp</class>
+    <type>ObjectViewer</type>
+    <mandatory-function name="Jaffa.Audit.AuditTransaction.Details" />
+  </component>
+</components>

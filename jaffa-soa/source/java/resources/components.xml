@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<components>
+  <component id="Jaffa.Webservices.WebServiceApi">
+    <class>jaffa/ws/wsdoc/main.jsp</class>
+    <type>Inquiry</type>
+    <mandatory-function name="Jaffa.WebServices.WebServiceMaintenance" />
+  </component>
+</components>
