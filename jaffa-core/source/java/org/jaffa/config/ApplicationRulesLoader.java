@@ -146,7 +146,7 @@ public class ApplicationRulesLoader {
 			log.debug("ApplicationRulesLoader::loadApplicationRules");
 		}
 
-		OrderedPathMatchingResourcePatternResolver resolver = new OrderedPathMatchingResourcePatternResolver();
+		OrderedPathMatchingResourcePatternResolver resolver = OrderedPathMatchingResourcePatternResolver.getInstance();
 		try {
 
 			Resource[] resources = resolver.getResources("classpath*:META-INF/ApplicationRules_*.properties");
