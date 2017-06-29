@@ -284,7 +284,7 @@ public class CheckPolicy extends HttpServlet {
 
     private static List readFunctionsFromMetainf() {
         ArrayList bflist = new ArrayList();
-        OrderedPathMatchingResourcePatternResolver resolver = new OrderedPathMatchingResourcePatternResolver();
+        OrderedPathMatchingResourcePatternResolver resolver = OrderedPathMatchingResourcePatternResolver.getInstance();
         try {
 
             Resource[] resources = resolver.getResources("classpath*:META-INF/business-functions.xml");
