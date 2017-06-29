@@ -49,16 +49,26 @@
 
 package org.jaffa.dwr;
 
-import static org.junit.Assert.assertNotEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.directwebremoting.impl.ContainerUtil;
-import org.directwebremoting.util.FakeServletConfig;
-import org.junit.Test;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 
 import org.jaffa.dwr.servlet.DwrServlet;
+import org.jaffa.util.OrderedPathMatchingResourcePatternResolver;
+import org.junit.Test;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import junit.framework.TestCase;
 
@@ -72,22 +82,49 @@ public class DwrServletTest extends TestCase {
 	@Test
 	public void testDwrLoad() throws Exception {
 
-		FakeServletContext servletContext = new FakeServletContext("test/dwr");
-
-		DwrServlet dwrServlet = new DwrServlet();
+		ServletContext servletContext = mock(ServletContext.class);
+		ServletConfig servletConfig = mock(ServletConfig.class);
 
 		Map<String, String> initParameters = new HashMap<String, String>();
 		initParameters.put("meta-config", "classpath*:dummy*-dwr.xml");
 		//initParameters.put("skipDefaultConfig", "true");
 
-		FakeServletConfig config = new FakeServletConfig("dwr-invoker", servletContext, initParameters);
+		when(servletContext.getResourceAsStream("/WEB-INF/dwr.xml")).thenReturn(getResourceAsStream("/dwr.xml"));
+		when(servletContext.getAttribute("javax.servlet.context.tempdir")).thenReturn(new File("abc"));
 
-		dwrServlet.init(config);
+		when(servletConfig.getServletContext()).thenReturn(servletContext);
+		when(servletConfig.getServletContext().getServerInfo()).thenReturn("dwr");
+		when(servletConfig.getServletName()).thenReturn("dwr-invoker");
+		when(servletConfig.getInitParameterNames()).thenReturn(Collections.enumeration(initParameters.keySet()));
+		when(servletConfig.getInitParameter("meta-config")).thenReturn("classpath*:dummy*-dwr.xml");
+		//when(servletConfig.getInitParameter("skipDefaultConfig")).thenReturn("true");
+
+		
+		DwrServlet dwrServlet = new DwrServlet();
+		dwrServlet.init(servletConfig);
 		
 		//There are three DWR files in the classpath. Checking all three loaded successfully.
-		String result = ContainerUtil.getAllPublishedContainers(servletContext).size() > 0 ? "Dwr Xml Loaded" : "Dwr Xml Not Loaded";
+		verify(servletContext).setAttribute(eq("org.directwebremoting.ContainerList"), any());
 
-		assertEquals("Dwr Xml Loaded", result);
+		//String result = ContainerUtil.getAllPublishedContainers(servletContext).size() > 0 ? "Dwr Xml Loaded" : "Dwr Xml Not Loaded";
 
+		//assertEquals("Dwr Xml Loaded", result);
+	}
+	
+	/** 
+	 * Overriden to reset the default path from "/WEB-INF/dwr.xml" to
+	 * "/dwr.xml".
+	 */
+	public InputStream getResourceAsStream(String path) {
+		InputStream inputStream = null;
+		try {
+			PathMatchingResourcePatternResolver resolver = OrderedPathMatchingResourcePatternResolver.getInstance();
+			inputStream = resolver.getResource(path).getInputStream();
+			System.out.println("path:"+path);
+			System.out.println("inputStream:"+inputStream);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		return inputStream;
 	}
 }
