@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+<struts-config>
+
+  <!-- ========== Form Bean Definitions =================================== -->
+  <form-beans>
+  
+    <!-- Code Generated Form-Beans //GEN-BEGIN:StrutsConfigFormBean.xfragment -->
+    <!-- //GEN-END:StrutsConfigFormBean.xfragment -->
+    
+    <!-- Forms For Testing Portlet Widgets -->
+    <form-bean      name="editBoxForm"
+                    type="org.jaffa.presentation.portlet.widgets.tests.EditBoxForm"/>
+    <form-bean      name="gridForm"
+                    type="org.jaffa.presentation.portlet.widgets.tests.GridForm"/>
+    <form-bean      name="userGridForm"
+                    type="org.jaffa.presentation.portlet.widgets.tests.UserGridForm"/>
+    <form-bean      name="textForm"
+                    type="org.jaffa.presentation.portlet.widgets.tests.TextForm"/>
+    <form-bean      name="buttonForm"
+                    type="org.jaffa.presentation.portlet.widgets.tests.ButtonForm"/>
+    <form-bean      name="dateTimeForm"
+                    type="org.jaffa.presentation.portlet.widgets.tests.DateTimeForm"/>
+    <form-bean      name="checkBoxForm"
+                    type="org.jaffa.presentation.portlet.widgets.tests.CheckBoxForm"/>
+    <form-bean      name="imageForm"
+                    type="org.jaffa.presentation.portlet.widgets.tests.ImageForm"/>
+    <form-bean      name="radioButtonForm"
+                    type="org.jaffa.presentation.portlet.widgets.tests.RadioButtonForm"/>
+    <form-bean      name="dropDownForm"
+                    type="org.jaffa.presentation.portlet.widgets.tests.DropDownForm"/>
+    <form-bean      name="tableForm"
+                    type="org.jaffa.presentation.portlet.widgets.tests.TableForm"/>
+    <form-bean      name="lookupClientForm"
+                    type="org.jaffa.presentation.portlet.widgets.tests.LookupClientForm"/>
+    <form-bean      name="lookupForm"
+                    type="org.jaffa.presentation.portlet.widgets.tests.LookupForm"/>
+    <form-bean      name="labelForm"
+                    type="org.jaffa.presentation.portlet.widgets.tests.LabelForm"/>
+
+    <form-bean      name="foldingSectionForm"
+                    type="org.jaffa.presentation.portlet.widgets.tests.FoldingSectionForm"/>                    
+
+    <form-bean      name="treeForm"
+                    type="org.jaffa.presentation.portlet.widgets.tests.TreeForm"/>
+
+
+    <!-- Forms For Testing Security -->
+    <form-bean      name="test_security_page1"
+                    type="org.jaffa.applications.test.modules.security.components.test1.ui.Page1Form"/>
+  </form-beans>
+
+
+
+  <!-- ========== Global Forward Definitions ============================== -->
+  <global-forwards>
+  
+     <!-- Code Generated Global Forwards //GEN-BEGIN:StrutsConfigGlobalForward.xfragment -->
+     <!-- //GEN-END:StrutsConfigGlobalForward.xfragment -->
+    
+     <!-- GlobalForwards For Testing Portlet Widgets -->
+     <forward   name="editBoxForm"        path="/widgets/tests/editBox.jsp"/>
+     <forward   name="gridForm"        path="/widgets/tests/grid.jsp"/>
+     <forward   name="userGridForm"        path="/widgets/tests/userGrid.jsp"/>     
+     <forward   name="textForm"        path="/widgets/tests/text.jsp"/>
+     <forward   name="buttonForm"        path="/widgets/tests/button.jsp"/>
+     <forward   name="dateTimeForm"        path="/widgets/tests/dateTime.jsp"/>
+     <forward   name="checkBoxForm"        path="/widgets/tests/checkBox.jsp"/>
+     <forward   name="imageForm"        path="/widgets/tests/image.jsp"/>
+     <forward   name="radioButtonForm"        path="/widgets/tests/radioButton.jsp"/>
+     <forward   name="dropDownForm"        path="/widgets/tests/dropDown.jsp"/>
+     <forward   name="tableForm"        path="/widgets/tests/table.jsp"/>
+     <forward   name="lookupClientForm"        path="/widgets/tests/lookupClient.jsp"/>
+     <forward   name="lookupForm"        path="/widgets/tests/lookup.jsp"/>
+     <forward   name="labelForm"        path="/widgets/tests/label.jsp"/>
+
+     <forward   name="foldingSectionForm"        path="/widgets/tests/foldingSection.jsp"/>     
+
+     <forward   name="treeForm"        path="/widgets/tests/tree.jsp"/>
+     
+
+     <!-- GlobalForwards For Testing Security Widgets -->
+     <forward   name="test_security_page1"        path="/test/security/test1/page1.jsp"/>
+     
+
+     <!-- Used if a the user has no component access -->
+     <forward   name="jaffa_noComponentAccess"     path="/jaffa/jsp/noComponentAccess.jsp"/>
+
+     <!-- Jaffa Session Explorer -->
+     <forward   name="jaffa_sessionExplorerForm"        path="/jaffa/jsp/sessionExplorer.jsp"/>
+     <forward   name="jaffa_componentExplorerForm"      path="/jaffa/jsp/componentExplorer.jsp"/>
+     <forward   name="jaffa_componentDetailsForm"       path="/jaffa/jsp/componentDetails.jsp"/>
+
+     <!-- GlobalForward For The Lookup -->
+     <forward   name="jaffa_lookup"                path="/jaffa/jsp/lookup.jsp"/>
+     
+     <!-- GlobalForward For Closing a Browser Window -->
+     <forward   name="jaffa_closeBrowser"          path="/jaffa/jsp/closeBrowser.jsp"/>
+    
+     <!-- GlobalForward For the Home page -->
+     <forward   name="jaffa_home"          path="/"/>
+
+     <!--  Desktops --> 
+     <forward name="global.desktop" path="/jaffa/jsp/tiles/desktop.jsp" />
+     
+  </global-forwards>
+
+
+  <!-- ========== Action Mapping Definitions ============================== -->
+  <action-mappings>
+  
+    <!-- Code Generated Actions //GEN-BEGIN:StrutsConfigAction.xfragment -->
+    <!-- //GEN-END:StrutsConfigAction.xfragment -->
+    
+    <action    path="/startComponent"
+               type="org.jaffa.presentation.portlet.StartComponentAction">
+    </action>
+    
+    <!-- Actions For Testing Portlet Widgets -->
+    <action    path="/editBox"
+               type="org.jaffa.presentation.portlet.widgets.tests.EditBoxAction"
+               name="editBoxForm"
+               validate="false"
+               scope="request">
+    </action>
+    <action    path="/grid"
+               type="org.jaffa.presentation.portlet.widgets.tests.GridAction"
+               name="gridForm"
+               validate="false"
+               scope="request">
+    </action>
+    <action    path="/userGrid"
+               type="org.jaffa.presentation.portlet.widgets.tests.UserGridAction"
+               name="userGridForm"
+               validate="false"
+               scope="request">
+    </action>    
+    <action    path="/text"
+               type="org.jaffa.presentation.portlet.widgets.tests.TextAction"
+               name="textForm"
+               validate="false"
+               scope="request">
+    </action>
+    <action    path="/button"
+               type="org.jaffa.presentation.portlet.widgets.tests.ButtonAction"
+               name="buttonForm"
+               validate="false"
+               scope="request">
+    </action>
+    <action    path="/dateTime"
+               type="org.jaffa.presentation.portlet.widgets.tests.DateTimeAction"
+               name="dateTimeForm"
+               validate="false"
+               scope="request">
+    </action>
+    <action    path="/checkBox"
+               type="org.jaffa.presentation.portlet.widgets.tests.CheckBoxAction"
+               name="checkBoxForm"
+               validate="false"
+               scope="request">
+    </action>
+    <action    path="/image"
+               type="org.jaffa.presentation.portlet.widgets.tests.ImageAction"
+               name="imageForm"
+               validate="false"
+               scope="request">
+    </action>
+    <action    path="/radioButton"
+               type="org.jaffa.presentation.portlet.widgets.tests.RadioButtonAction"
+               name="radioButtonForm"
+               validate="false"
+               scope="request">
+    </action>
+    <action    path="/dropDown"
+               type="org.jaffa.presentation.portlet.widgets.tests.DropDownAction"
+               name="dropDownForm"
+               validate="false"
+               scope="request">
+    </action>
+    <action    path="/table"
+               type="org.jaffa.presentation.portlet.widgets.tests.TableAction"
+               name="tableForm"
+               validate="false"
+               scope="request">
+    </action>
+    <action    path="/lookupClient"
+               type="org.jaffa.presentation.portlet.widgets.tests.LookupClientAction"
+               name="lookupClientForm"
+               validate="false"
+               scope="request">
+    </action>
+    <action    path="/lookup"
+               type="org.jaffa.presentation.portlet.widgets.tests.LookupAction"
+               name="lookupForm"
+               validate="false"
+               scope="request">
+    </action>
+    <action    path="/label"
+               type="org.jaffa.presentation.portlet.widgets.tests.LabelAction"
+               name="labelForm"
+               validate="false"
+               scope="request">
+    </action>
+    <action    path="/foldingSection"
+               type="org.jaffa.presentation.portlet.widgets.tests.FoldingSectionAction"
+               name="foldingSectionForm"
+               validate="false"
+               scope="request">
+    </action>
+
+    <action    path="/tree"
+               type="org.jaffa.presentation.portlet.widgets.tests.TreeAction"
+               name="treeForm"
+               validate="false"
+               scope="request">
+    </action>
+
+
+
+    <!-- Actions For Testing Security -->
+    <action    path="/test_security_page1"
+               type="org.jaffa.applications.test.modules.security.components.test1.ui.Page1Action"
+               name="test_security_page1"
+               validate="false"
+               scope="request">
+    </action>
+
+  </action-mappings>
+
+  <plug-in className="org.apache.struts.tiles.TilesPlugin" >
+    <set-property property="definitions-config" value="/WEB-INF/tiles-defs.xml" />
+    <set-property property="moduleAware" value="false" />
+  </plug-in>
+
+</struts-config>

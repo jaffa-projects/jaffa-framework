@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<components>
+  <component id="Jaffa.QM.QueueManager">
+    <class>jaffa/qm/queuemanager/main.jsp</class>
+    <type>Inquiry</type>
+    <mandatory-function name="Jaffa.QM.QueueManager.Inquiry" />
+    <optional-function name="Jaffa.QM.QueueManager.QueueAdmin" />
+  </component>
+   <component id="Jaffa.Transaction.TransactionFinder">
+    <class>jaffa/transaction/transactionfinder/main.jsp</class>
+    <type>Inquiry</type>
+    <mandatory-function name="Jaffa.Transaction.Transaction.Finder" />
+  </component>
+  <component id="Jaffa.Transaction.TransactionMaintenance">
+    <class>jaffa/transaction/transactionmaintenance/main.jsp</class>
+    <type>ObjectMaintenance</type>
+    <mandatory-function name="Jaffa.Transaction.Transaction.Finder" />
+  </component>
+  <component id="Jaffa.Setup.ValidFieldValueMaintenance">
+    <class>jaffa/setup/validfieldvaluemaintenance/main.jsp</class>
+    <type>Inquiry</type>
+    <mandatory-function name="Jaffa.Setup.ValidFieldValue.Inquiry" />
+  </component>
+</components>

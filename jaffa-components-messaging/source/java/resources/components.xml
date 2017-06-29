@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<components>
+  <component id="Jaffa.Messaging.BusinessEventLogFinder">
+    <class>jaffa/messaging/businesseventfinder/main.jsp</class>
+    <type>ObjectFinder</type>
+    <mandatory-function name="Jaffa.Messaging.BusinessEventLog.Inquiry" />
+  </component>
+  <component id="Jaffa.Messaging.BusinessEventLogViewer">
+    <class>org.jaffa.modules.messaging.components.businesseventlogviewer.ui.BusinessEventLogViewerComponent</class>
+    <type>ObjectViewer</type>
+    <mandatory-function name="Jaffa.Messaging.BusinessEventLog.Details" />
+  </component>
+  <component id="Jaffa.Messaging.MessageViewer">
+    <class>org.jaffa.modules.messaging.components.messageviewer.ui.MessageViewerComponent</class>
+    <type>ObjectViewer</type>
+    <mandatory-function name="Jaffa.Messaging.Message.Details" />
+  </component>
+  <component id="Jaffa.Messaging.QueueViewer">
+    <class>org.jaffa.modules.messaging.components.queueviewer.ui.QueueViewerComponent</class>
+    <type>ObjectViewer</type>
+    <mandatory-function name="Jaffa.Messaging.Queue.Details" />
+  </component>
+   <component id="Jaffa.Messaging.QueueList">
+    <class>org.jaffa.modules.messaging.components.queuelist.ui.QueueListComponent</class>
+    <type>Inquiry</type>
+    <mandatory-function name="Jaffa.Messaging.Queue.Inquiry" />
+    <optional-function name="Jaffa.Messaging.QueueAdmin" />
+  </component>
+</components>

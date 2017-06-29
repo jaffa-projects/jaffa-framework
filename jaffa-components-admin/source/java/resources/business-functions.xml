@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<business-functions>
+   <business-function name="Jaffa.Admin.ViewBusinessFunction"/>
+   <business-function name="Jaffa.Admin.RunCheckPolicy"/>
+   <business-function name="Jaffa.Admin.EditDefaultValue"/>
+   <business-function name="Jaffa.Admin.Labels"/>
+   <business-function name="Jaffa.Admin.Labels.Developer"/>
+   <business-function name="Jaffa.Admin.EditLog4jConfig"/>
+   <business-function name="Jaffa.Admin.EditMenu"/>
+   <business-function name="Jaffa.Admin.EditRoles"/>
+   <business-function name="Jaffa.Admin.Session"/>
+   <business-function name="Jaffa.Admin.EditViewerHyperlinkConfig"/>
+   <business-function name="Jaffa.Admin.EditValidationRules"/>
+</business-functions>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<business-functions>
+   <business-function name="Jaffa.Attachment.Attachment.Inquiry"/>
+   <business-function name="Jaffa.Attachment.Attachment.Inquiry"/>
+   <business-function name="Jaffa.Attachment.Attachment.Maintenance"/>
+   <business-function name="Jaffa.Attachment.Attachment.Details"/>
+   <business-function name="Jaffa.Audit.AuditTransaction.Inquiry"/>
+   <business-function name="Jaffa.Audit.AuditTransaction.Details"/>
+</business-functions>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<business-functions>
+   <business-function name="Jaffa.Printing.FormDefinition.Inquiry"/>
+   <business-function name="Jaffa.Printing.FormDefinition.Maintenance"/>
+   <business-function name="Jaffa.Printing.FormDefinition.Details"/>
+   <business-function name="Jaffa.Printing.FormEvent.Inquiry"/>
+   <business-function name="Jaffa.Printing.FormEvent.Lookup"/>
+   <business-function name="Jaffa.Printing.FormEvent.Maintenance"/>
+   <business-function name="Jaffa.Printing.FormEvent.Details"/>
+   <business-function name="Jaffa.Printing.FormGroup.Inquiry"/>
+   <business-function name="Jaffa.Printing.FormGroup.Inquiry"/>
+   <business-function name="Jaffa.Printing.FormGroup.Maintenance"/>
+   <business-function name="Jaffa.Printing.FormGroup.Details"/>
+   <business-function name="Jaffa.Printing.FormSelection.Maintenance"/>
+   <business-function name="Jaffa.Printing.OutputCommand.Maintenance"/>
+   <business-function name="Jaffa.Printing.PrinterDefinition.Inquiry"/>
+   <business-function name="Jaffa.Printing.PrinterDefinition.Lookup"/>
+   <business-function name="Jaffa.Printing.PrinterDefinition.Maintenance"/>
+   <business-function name="Jaffa.Printing.PrinterDefinition.Details"/>
+   <business-function name="Jaffa.Printing.PrinterOutputType.Inquiry"/>
+   <business-function name="Jaffa.Printing.PrinterOutputType.Inquiry"/>
+   <business-function name="Jaffa.Printing.PrinterOutputType.Maintenance"/>
+   <business-function name="Jaffa.Printing.PrinterOutputType.Details"/>
+</business-functions>
