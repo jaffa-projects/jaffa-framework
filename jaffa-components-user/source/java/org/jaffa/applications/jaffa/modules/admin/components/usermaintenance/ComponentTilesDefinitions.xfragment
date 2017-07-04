@@ -1,7 +1,7 @@
     <!-- UserMaintenance -->
     <definition name="jaffa.admin.usermaintenance.MaintenanceLayout.main"  extends="jaffa.MaintenanceLayout">
         <put name="body" value="/jaffa/admin/usermaintenance/main.jsp"/>
-        <put name="action" value="/admin_userMaintenance"/>
+        <put name="action" value="/jaffa_admin_userMaintenance"/>
         <put name="currentScreenCounter" value="0"/>
         <put name="createModeTitle" value="[title.Jaffa.Admin.UserMaintenance.create]"/>
         <put name="updateModeTitle" value="[title.Jaffa.Admin.UserMaintenance.update]"/>
