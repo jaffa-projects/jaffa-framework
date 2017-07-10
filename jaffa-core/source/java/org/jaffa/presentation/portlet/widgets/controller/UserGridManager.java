@@ -367,10 +367,12 @@ public class UserGridManager {
         }
 
         String encodedUserId = userId;
-        try {
-            encodedUserId = URLEncoder.encode(userId, "UTF-8");
-        } catch (UnsupportedEncodingException ex) {
-            log.error("UserId encoding error.", ex);
+        if(userId!=null) {
+            try {
+                encodedUserId = URLEncoder.encode(userId, "UTF-8");
+            } catch (UnsupportedEncodingException ex) {
+                log.error("UserId encoding error.", ex);
+            }
         }
         // build url
         if (userFile) {

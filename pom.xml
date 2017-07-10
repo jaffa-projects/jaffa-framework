@@ -241,7 +241,7 @@
         <version.org.drools.knowledge-internal-api>5.6.0.Final</version.org.drools.knowledge-internal-api>
         <version.org.fusesource.hawtbuf>1.9</version.org.fusesource.hawtbuf>
         <version.org.mvel.mvel2>2.1.6.Final</version.org.mvel.mvel2>
-        <version.org.quartz-scheduler.quartz>2.2.3</version.org.quartz-scheduler.quartz>
+        <version.org.quartz-scheduler.quartz>2.3.0</version.org.quartz-scheduler.quartz>
         <version.org.quartz-scheduler.quartz-oracle>2.1.7</version.org.quartz-scheduler.quartz-oracle>
         <version.org.javassist>3.18.1-GA</version.org.javassist>
         <version.org.jrobin>1.5.9</version.org.jrobin>
@@ -2087,7 +2087,6 @@
                 <module>jaffa-ria</module>
                 <module>jaffa-rules</module>
                 <module>jaffa-soa</module>
-
                 <!--<module>patterns</module>-->
             </modules>
         </profile>
