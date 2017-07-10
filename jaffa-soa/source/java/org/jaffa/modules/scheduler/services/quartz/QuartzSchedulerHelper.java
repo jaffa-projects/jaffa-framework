@@ -594,7 +594,7 @@ public class QuartzSchedulerHelper implements SchedulerHelper {
     // Triggers point to it)
     // Create the Job
     return JobBuilder
-            .newJob(GOLDespTransactionInvokerJob.class)
+            .newJob(TransactionInvokerJob.class)
             .withIdentity(task.getScheduledTaskId(), JOB_GROUP)
             .withDescription(task.getDescription()).usingJobData(jobDataMap)
             .storeDurably(true).build();
