@@ -9,7 +9,7 @@
   <fileSets>
     <fileSet>
       <outputDirectory>/</outputDirectory>
-      <directory>${project.basedir}/source/html</directory>
+      <directory>${project.basedir}/${ui.sourcedir}</directory>
       <includes>
         <include>**/*.*</include>
       </includes>

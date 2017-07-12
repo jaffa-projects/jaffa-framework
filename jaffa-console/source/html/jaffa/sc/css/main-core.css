@@ -56,6 +56,37 @@
     background-image: url(../imgs/event_summary.gif) !important;
 }
 
+.icon-tick {
+    background-image: url(../imgs/tick.png) !important;
+}	
+
+.icon-expand-all {
+    background-image: url(../imgs/expand-all.gif) !important;
+}
+
+.icon-collapse-all {
+    background-image: url(../imgs/collapse-all.gif) !important;
+}
+
+.icon-filter-enabled {
+    background-image: url(../imgs/filter-enabled.png) !important;
+    background-size: 16px 16px;
+}
+
+.icon-filter-disabled {
+    background-image: url(../imgs/filter-disabled.png) !important;
+    background-size: 16px 16px;
+}
+
+.icon-filter-all {
+    background-image: url(../imgs/filter-all.png) !important;
+    background-size: 16px 16px;
+}
+
+.icon-test {
+    background-image: url(../imgs/brick.png) !important;
+}
+
 .intro-img {
     vertical-align:top;
     float: left;

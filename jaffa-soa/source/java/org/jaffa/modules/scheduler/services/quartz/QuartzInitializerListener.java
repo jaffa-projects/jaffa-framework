@@ -15,21 +15,20 @@ package org.jaffa.modules.scheduler.services.quartz;
 
 import org.jaffa.modules.scheduler.services.SchedulerHelperFactory;
 import org.apache.log4j.Logger;
-import org.quartz.ee.servlet.QuartzInitializerListener;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
-public class GOLDespQuartzInitializerListener extends QuartzInitializerListener {
+public class QuartzInitializerListener extends org.quartz.ee.servlet.QuartzInitializerListener {
 
-    private static final Logger LOGGER = Logger.getLogger(GOLDespQuartzInitializerListener.class);
+    private static final Logger LOGGER = Logger.getLogger(QuartzInitializerListener.class);
 
     private static final String WAIT_ON_SHUTDOWN = System.getProperty(
             "org.quartz.wait.on.shutdown", "true");
 
     private boolean waitOnShutdown;
 
-    public GOLDespQuartzInitializerListener() {
+    public QuartzInitializerListener() {
     }
 
     public void contextInitialized(final ServletContextEvent sce) {

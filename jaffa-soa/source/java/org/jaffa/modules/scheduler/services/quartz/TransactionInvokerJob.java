@@ -33,7 +33,7 @@ import java.util.List;
  * It will then determine use the JobDataMap to retrieve the job information
  * and send an appropriate JMS message.
  */
-public class GOLDespTransactionInvokerJob implements Job {
+public class TransactionInvokerJob implements Job {
 
   /**
    * This constant contains the id of the context variable that will be inserted in the threadcontext,
@@ -42,7 +42,7 @@ public class GOLDespTransactionInvokerJob implements Job {
    */
   public static final String CONTEXT_SCHEDULED_TASK_ID = "Jaffa.Scheduler.JaffaTransactionInvokerJob.ScheduledTaskId";
 
-  private static final Logger log = Logger.getLogger(GOLDespTransactionInvokerJob.class);
+  private static final Logger log = Logger.getLogger(TransactionInvokerJob.class);
 
   /**
    * Called by the <code>{@link org.quartz.Scheduler}</code> when a
