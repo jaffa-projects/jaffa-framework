@@ -16,6 +16,9 @@ var messageList = new Array();
 function addMessage(ermsg) {messageList[messageList.length] = ermsg;}
 
 function openDOMBrowser(activeElement) {
+  if(!jaffaMessageRoot){
+    jaffaMessageRoot = {};
+  }
   var errorTop = (self.screen.availHeight / 2) - 100;
   var errorLeft = (self.screen.availWidth / 2) - 150;  
   // opens/reopens the window

@@ -334,7 +334,7 @@ public class ApplicationResourceLoader {
 					applicationResources.put(localeKey, localeProperties);
 				}
 			} else {
-				log.error(APP_RESOURCES_LOCALE_NOT_FOUND);
+				log.info(APP_RESOURCES_LOCALE_NOT_FOUND);
 			}
 		} catch (IOException e) {
 			log.error(ERROR_READING_APP_RESOURCES_OVERRIDE, e);

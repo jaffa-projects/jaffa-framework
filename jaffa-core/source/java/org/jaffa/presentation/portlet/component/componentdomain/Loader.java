@@ -149,8 +149,8 @@ public class Loader {
 				String s = "Can't Find Components Definition File. Bad URL - " + name;
 				LOGGER.error(s, e);
 			} catch(FileNotFoundException e){
-				String s = "Can't Find Components Definition File. Bad URL - " + name;
-				LOGGER.error(s, e);
+				String s = "Can't Find Default Components Definition File - " + name;
+				LOGGER.info(s);
 			}
 			
         	if(stream != null ){

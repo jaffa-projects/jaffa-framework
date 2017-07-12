@@ -1,7 +1,7 @@
     <!-- UserViewer -->
     <definition name="jaffa.admin.userviewer.ViewerLayout"  extends="jaffa.ViewerLayout">
         <put name="body" value="/jaffa/admin/userviewer/view.jsp"/>
-        <put name="action" value="/admin_userViewer"/>
+        <put name="action" value="/jaffa_admin_userViewer"/>
         <put name="updateComponent" value="Jaffa.Admin.UserMaintenance"/>
     </definition>
     <definition name="jaffa.admin.userviewer"  extends="jaffa.MainLayout">
