@@ -67,8 +67,10 @@ import org.jaffa.components.navigation.domain.GlobalMenu;
 import org.jaffa.config.Config;
 import org.jaffa.security.VariationContext;
 import org.jaffa.util.JAXBHelper;
+import org.jaffa.util.OrderedPathMatchingResourcePatternResolver;
 import org.jaffa.util.URLHelper;
 import org.jaffa.util.XmlHelper;
+import org.springframework.core.io.Resource;
 
 /** This singleton class loads in the global navigation xml and caches it
  * to in can be used for constructing instances of NavAccessor's
@@ -80,6 +82,7 @@ public class NavCache {
 
     private static final Logger log = Logger.getLogger(NavCache.class);
     private static final String DEFAULT_NAVIGATION_LOCATION = "classpath:///resources/navigation.xml";
+    private static final String MODULE_NAVIGATION_LOCATION = "classpath*:META-INF/navigation.xml";
     private static final String SCHEMA = "org/jaffa/components/navigation/navigation_1_0.xsd";
     private static final ConcurrentMap<String, NavCache> c_navCacheByVariation = new ConcurrentHashMap<String, NavCache>();
     private static final String DEFAULT_KEY = ""; //this key will used to put the NavCache instance for the default navigation.xml file
@@ -122,28 +125,56 @@ public class NavCache {
             log.debug("Creating an instance of NavCache using '" + initFile + '\'');
         InputStream stream = null;
         URL navUrl = null;
-        try {
-            // Create a URL for the resource file...
-            navUrl = URLHelper.newExtendedURL(initFile);
-        } catch (MalformedURLException e) {
-            log.fatal("Can't Find Navigation File, Bad URL - " + initFile, e);
-            throw new SecurityException();
-        }
 
         try {
-            stream = navUrl.openStream();
+            try {
+                // Create a URL for the resource file...
+                navUrl = URLHelper.newExtendedURL(initFile);
+            } catch (MalformedURLException e) {
+                if(log.isDebugEnabled())
+                    log.debug("Can't Find Navigation File from " + initFile + " Trying to find in classpath.");
+            }
+            if(navUrl!=null) {
+                stream = navUrl.openStream();
 
-            // create a JAXBContext capable of handling classes generated into the package
-            JAXBContext jc = JAXBContext.newInstance("org.jaffa.components.navigation.domain");
+                // create a JAXBContext capable of handling classes generated into the package
+                JAXBContext jc = JAXBContext.newInstance("org.jaffa.components.navigation.domain");
 
-            // create an Unmarshaller
-            Unmarshaller u = jc.createUnmarshaller();
+                // create an Unmarshaller
+                Unmarshaller u = jc.createUnmarshaller();
 
-            // enable validation
-            u.setSchema(JAXBHelper.createSchema(SCHEMA));
+                // enable validation
+                u.setSchema(JAXBHelper.createSchema(SCHEMA));
 
-            // unmarshal a document into a tree of Java content objects composed of classes from the package.
-            m_menu = (GlobalMenu) u.unmarshal(XmlHelper.stripDoctypeDeclaration(stream));
+                // unmarshal a document into a tree of Java content objects composed of classes from the package.
+                m_menu = (GlobalMenu) u.unmarshal(XmlHelper.stripDoctypeDeclaration(stream));
+            }else{
+                //try finding navigation from modules
+                OrderedPathMatchingResourcePatternResolver resolver = OrderedPathMatchingResourcePatternResolver.getInstance();
+                try {
+
+                    Resource[] resources = resolver.getResources(MODULE_NAVIGATION_LOCATION);
+                    if (resources != null && resources.length == 1) {
+                        Resource resource = resources[0];
+                        // create a JAXBContext capable of handling classes generated into the package
+                        JAXBContext jc = JAXBContext.newInstance("org.jaffa.components.navigation.domain");
+
+                        // create an Unmarshaller
+                        Unmarshaller u = jc.createUnmarshaller();
+
+                        // enable validation
+                        u.setSchema(JAXBHelper.createSchema(SCHEMA));
+
+                        // unmarshal a document into a tree of Java content objects composed of classes from the package.
+                        m_menu = (GlobalMenu) u.unmarshal(XmlHelper.stripDoctypeDeclaration(resource.getInputStream()));
+                    }else{
+                        throw new SecurityException("More than one navigation.xml found");
+                    }
+                } catch (IOException e) {
+                    log.error("Error in Reading Policy", e);
+                    throw new SecurityException("Error in Reading Policy", e);
+                }
+            }
 
         } catch (Exception e) {
             String str = "Error while parsing the Navigation file " + initFile;

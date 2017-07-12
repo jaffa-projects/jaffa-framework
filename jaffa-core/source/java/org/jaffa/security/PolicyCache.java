@@ -61,6 +61,7 @@ import org.jaffa.security.securityrolesdomain.Role;
 import org.jaffa.security.securityrolesdomain.GrantFunctionAccess;
 import java.net.MalformedURLException;
 import org.apache.log4j.Logger;
+import org.jaffa.util.OrderedPathMatchingResourcePatternResolver;
 import org.jaffa.util.URLHelper;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -69,6 +70,7 @@ import org.jaffa.util.XmlHelper;
 import java.io.IOException;
 import java.io.InputStream;
 import org.jaffa.util.JAXBHelper;
+import org.springframework.core.io.Resource;
 import org.xml.sax.SAXException;
 
 /** This class is the interface between the policy domain classes
@@ -81,6 +83,7 @@ public class PolicyCache {
 
     private static Logger log = Logger.getLogger(PolicyCache.class);
     private static final String DEFAULT_POLICY_LOCATION = "classpath:///resources/roles.xml";
+    private static final String MODULE_POLICY_LOCATION = "classpath*:META-INF/roles.xml";
     private static final String SCHEMA = "org/jaffa/security/securityrolesdomain/security-roles_1_0.xsd";
     private static final ConcurrentMap<String, PolicyCache> c_policyCacheByVariation = new ConcurrentHashMap<String, PolicyCache>();
     private static final String DEFAULT_KEY = ""; //this key will used to put the PolicyCache instance for the default roles.xml file
@@ -148,24 +151,67 @@ public class PolicyCache {
         InputStream stream = null;
         try {
             // Create a URL for the resource file...
-            URL roleUrl = URLHelper.newExtendedURL(initFile);
+            URL roleUrl = null;
+            try {
+                roleUrl = URLHelper.newExtendedURL(initFile);
 
-            stream = roleUrl.openStream();
+                stream = roleUrl.openStream();
 
-            // create a JAXBContext capable of handling classes generated into the package
-            JAXBContext jc = JAXBContext.newInstance("org.jaffa.security.securityrolesdomain");
+                // create a JAXBContext capable of handling classes generated into the package
+                JAXBContext jc = JAXBContext.newInstance("org.jaffa.security.securityrolesdomain");
 
-            // create an Unmarshaller
-            Unmarshaller u = jc.createUnmarshaller();
+                // create an Unmarshaller
+                Unmarshaller u = jc.createUnmarshaller();
 
-            // enable validation
-            u.setSchema(JAXBHelper.createSchema(SCHEMA));
+                // enable validation
+                u.setSchema(JAXBHelper.createSchema(SCHEMA));
 
-            // unmarshal a document into a tree of Java content objects composed of classes from the package.
-            m_roles = (Roles) u.unmarshal(XmlHelper.stripDoctypeDeclaration(stream));
-            if (log.isInfoEnabled()) {
-                log.info("Loaded Policy File From : " + roleUrl.toExternalForm());
-                log.info("Policy Contains " + m_roles.getRole().size() + " Role Entries");
+                // unmarshal a document into a tree of Java content objects composed of classes from the package.
+                m_roles = (Roles) u.unmarshal(XmlHelper.stripDoctypeDeclaration(stream));
+                if (log.isInfoEnabled()) {
+                    log.info("Loaded Policy File From : " + roleUrl.toExternalForm());
+                    log.info("Policy Contains " + m_roles.getRole().size() + " Role Entries");
+                }
+            }catch (MalformedURLException e){
+                if(log.isDebugEnabled()){
+                    log.debug("Unable to find resource file from'" + initFile + '\''+" Creating instance of policy cache from /META-INF");
+                }
+            }
+
+            // Try to find roles from each module
+            if(m_roles == null){
+
+                OrderedPathMatchingResourcePatternResolver resolver = OrderedPathMatchingResourcePatternResolver.getInstance();
+                try {
+
+                    Resource[] resources = resolver.getResources(MODULE_POLICY_LOCATION);
+                    if (resources != null) {
+                        m_roles = new Roles();
+                        for (Resource resource : resources) {
+
+                            if (resource == null) {
+                                continue;
+                            }
+
+                            // create a JAXBContext capable of handling classes
+                            // generated into the package
+                            JAXBContext jc = JAXBContext.newInstance("org.jaffa.security.securityrolesdomain");
+
+                            // create an Unmarshaller
+                            Unmarshaller u = jc.createUnmarshaller();
+
+                            // enable validation
+                            u.setSchema(JAXBHelper.createSchema(SCHEMA));
+
+                            Roles roles = (Roles) u.unmarshal(XmlHelper.stripDoctypeDeclaration(resource.getInputStream()));
+                            m_roles.getRole().addAll(roles.getRole());
+
+                        }
+                    }
+                } catch (IOException e) {
+                    log.error("Error in Reading Policy", e);
+                    throw new SecurityException("Error in Reading Policy", e);
+                }
             }
 
             // build list of functions per role

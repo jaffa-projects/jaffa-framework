@@ -293,6 +293,15 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.jaffa.maven</groupId>
+                <artifactId>fragmentmerge-maven-plugin</artifactId>
+                <configuration>
+                    <skipConfigFiles>
+                        <skipConfigFile>navigation</skipConfigFile>
+                    </skipConfigFiles>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

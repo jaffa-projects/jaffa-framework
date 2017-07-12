@@ -139,6 +139,7 @@ public class Loader {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Loading in the Components Definition File - " + name);
         InputStream stream = null;
+        Components components = null;
         try {
 			try {
 				final URL xmlFile = URLHelper.newExtendedURL(name);
@@ -152,22 +153,23 @@ public class Loader {
 				LOGGER.info(s);
 			}
 			
-        	if(stream == null ){
-        		return ComponentLoader.getInstance().getComponents();
-        	}
-        	
-        	
-            // create a JAXBContext capable of handling classes generated into the package
-            JAXBContext jc = JAXBContext.newInstance("org.jaffa.presentation.portlet.component.componentdomain");
+        	if(stream != null ){
+				// create a JAXBContext capable of handling classes generated into the package
+				JAXBContext jc = JAXBContext.newInstance("org.jaffa.presentation.portlet.component.componentdomain");
 
-            // create an Unmarshaller
-            Unmarshaller u = jc.createUnmarshaller();
+				// create an Unmarshaller
+				Unmarshaller u = jc.createUnmarshaller();
 
-            // enable validation
-            u.setSchema(JAXBHelper.createSchema(SCHEMA));
+				// enable validation
+				u.setSchema(JAXBHelper.createSchema(SCHEMA));
 
-            // unmarshal a document into a tree of Java content objects composed of classes from the package.
-            return (Components) u.unmarshal(XmlHelper.stripDoctypeDeclaration(stream));
+				// unmarshal a document into a tree of Java content objects composed of classes from the package.
+				components = (Components) u.unmarshal(XmlHelper.stripDoctypeDeclaration(stream));
+        	}else {
+        		//Load components from modules
+				components = ComponentLoader.getInstance().getComponents();
+			}
+			return components;
         } catch (Exception e) {
             String s = "Error in Reading Components Definition File - " + name;
             LOGGER.fatal(s, e);

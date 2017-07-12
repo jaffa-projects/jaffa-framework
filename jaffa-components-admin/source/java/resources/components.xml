@@ -1,4 +1,4 @@
- <?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
  <components>
   <component id="Jaffa.Admin.BusinessFunction">
     <class>org.jaffa.applications.jaffa.modules.admin.components.businessfunction.ui.BusinessFunctionComponent</class>
