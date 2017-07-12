@@ -83,7 +83,7 @@ public class SchedulerConfiguration {
     /**
      * The location of the schema for the configuration file.
      */
-    private static final String CONFIGURATION_SCHEMA_FILE = "goldesp-scheduler-config_1_0.xsd";
+    private static final String CONFIGURATION_SCHEMA_FILE = "jaffa-scheduler-config_1_0.xsd";
 
     /**
      * The singleton instance of this class.

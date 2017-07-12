@@ -1,0 +1,74 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+            jxb:version="1.0">
+
+  <xsd:annotation>
+    <xsd:appinfo>
+      <jxb:schemaBindings>
+        <jxb:package name="org.jaffa.modules.scheduler.services.configdomain"/>
+      </jxb:schemaBindings>
+    </xsd:appinfo>
+  </xsd:annotation>
+
+  <xsd:annotation>
+    <xsd:documentation>
+      This is the schema for the configuration file used by GOLDespScheduler. The following are the main configuration elements
+      <ul>
+        <li><b>task</b>: maps data beans with task types</li>
+      </ul>
+    </xsd:documentation>
+  </xsd:annotation>
+
+  <!-- **************************************************** -->
+
+  <xsd:element name="config">
+    <xsd:annotation>
+      <xsd:documentation>
+        config is the root element of the configuration file
+        <ul>
+          <li><b>task</b>: maps data beans with task types</li>
+        </ul>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="task" type="task" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <!-- **************************************************** -->
+
+  <xsd:complexType name="task">
+    <xsd:annotation>
+      <xsd:documentation>
+        task maps databeans with task types
+        <ul>
+          <li><b>type</b>: describes a Task. Should be unique within a configuration</li>
+          <li><b>dataBean</b>: is the corresponding dataBean className. Should be Serializable and configured in JaffaMessaging</li>
+          <li><b>autoCreateDataBean</b>: if true, the dataBean is autocreated by the Scheduler, else an instance should be passed in by the client application</li>
+        </ul>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="type" type="xsd:string" use="required"/>
+    <xsd:attribute name="dataBean" type="xsd:string" use="required"/>
+    <xsd:attribute name="autoCreateDataBean" type="xsd:boolean" default="true"/>
+  </xsd:complexType>
+
+  <!-- **************************************************** -->
+
+  <xsd:complexType name="param">
+    <xsd:annotation>
+      <xsd:documentation>
+        param declares a name-value pair
+        <ul>
+          <li><b>name</b>: the name of the parameter</li>
+          <li><b>value</b>: the value of the parameter</li>
+        </ul>
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:attribute name="name" type="xsd:string" use="required"/>
+    <xsd:attribute name="value" type="xsd:string" use="required"/>
+  </xsd:complexType>
+
+</xsd:schema>
