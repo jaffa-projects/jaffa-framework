@@ -11,4 +11,14 @@
 		<type>Skeleton</type>
 		<mandatory-function name="Jaffa.Admin.EditViewerHyperlinkConfig" />
 	</component>
+  <component id="Jaffa.UnitTest.TestFunctionFinder">
+    <class>jaffa/unittest/testfunctionfinder/main.jsp</class>
+    <type>Inquiry</type>
+    <mandatory-function name="Jaffa.UnitTest.TestFunction.Inquiry" />
+  </component>
+  <component id="Jaffa.UnitTest.TestFunctionViewer">
+    <class>jaffa/unittest/testfunctionviewer/main.jsp</class>
+    <type>ObjectViewer</type>
+    <mandatory-function name="Jaffa.UnitTest.TestFunction.Details" />
+  </component>
 </components>    

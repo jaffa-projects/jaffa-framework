@@ -61,38 +61,52 @@ import javax.servlet.http.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+
 import org.jaffa.presentation.portlet.component.ComponentManager;
-import org.jaffa.util.URLHelper;
+import org.jaffa.presentation.portlet.component.componentdomain.Components;
+import org.jaffa.util.*;
+
 import java.util.Iterator;
 import java.io.StringWriter;
+
 import org.apache.log4j.Logger;
+
 import java.util.HashMap;
-import org.jaffa.util.StringHelper;
 import java.io.PrintWriter;
+
 import org.jaffa.security.businessfunctionsdomain.*;
+import org.springframework.core.io.Resource;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
-import org.jaffa.util.JAXBHelper;
-import org.jaffa.util.XmlHelper;
 
 /**
  * This servlet can be used on start-up to make ssure there are no rogue entries
  * in the components and roles files.
  *
- * @author  paule
+ * @author paule
  * @version 1.0
  */
 public class CheckPolicy extends HttpServlet {
 
-    /** Set up Logging for Log4J */
+    /**
+     * Set up Logging for Log4J
+     */
     private static Logger log = Logger.getLogger(CheckPolicy.class);
     private static final String SCHEMA = "org/jaffa/security/businessfunctionsdomain/business-functions_1_0.xsd";
-    /** Stores the list of component errors for display */
+    /**
+     * Stores the list of component errors for display
+     */
     private static HashMap m_compErrors = new HashMap();
-    /** Stores the list of role errors for display */
+    /**
+     * Stores the list of role errors for display
+     */
     private static HashMap m_roleErrors = new HashMap();
+    // error
+    private static final String ERROR_FUNCTION_READING = "Error in Reading Business Functions";
 
-    /** Initializes the servlet.
+    /**
+     * Initializes the servlet.
      */
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -100,14 +114,17 @@ public class CheckPolicy extends HttpServlet {
         checkPolicy();
     }
 
-    /** Destroys the servlet.
+    /**
+     * Destroys the servlet.
      */
     public void destroy() {
 
     }
 
-    /** Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-     * @param request servlet request
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+     *
+     * @param request  servlet request
      * @param response servlet response
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -126,7 +143,7 @@ public class CheckPolicy extends HttpServlet {
             out.println("No Errors Detected!");
         } else {
             out.println("<ul>");
-            for (Iterator i = m_compErrors.keySet().iterator(); i.hasNext();) {
+            for (Iterator i = m_compErrors.keySet().iterator(); i.hasNext(); ) {
                 String comp = (String) i.next();
                 out.println("<li>Component <b>" + comp + "</b> has invalid business function <b>" + m_compErrors.get(comp) + "</b> defined.");
             }
@@ -138,7 +155,7 @@ public class CheckPolicy extends HttpServlet {
             out.println("No Errors Detected!");
         } else {
             out.println("<ul>");
-            for (Iterator i = m_roleErrors.keySet().iterator(); i.hasNext();) {
+            for (Iterator i = m_roleErrors.keySet().iterator(); i.hasNext(); ) {
                 String role = (String) i.next();
                 out.println("<li>Role <b>" + role + "</b> has invalid business function <b>" + m_roleErrors.get(role) + "</b> specified.");
             }
@@ -156,8 +173,10 @@ public class CheckPolicy extends HttpServlet {
         out.close();
     }
 
-    /** Handles the HTTP <code>GET</code> method.
-     * @param request servlet request
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request  servlet request
      * @param response servlet response
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -165,8 +184,10 @@ public class CheckPolicy extends HttpServlet {
         processRequest(request, response);
     }
 
-    /** Handles the HTTP <code>POST</code> method.
-     * @param request servlet request
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request  servlet request
      * @param response servlet response
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -174,7 +195,8 @@ public class CheckPolicy extends HttpServlet {
         processRequest(request, response);
     }
 
-    /** Returns a short description of the servlet.
+    /**
+     * Returns a short description of the servlet.
      */
     public String getServletInfo() {
         return "Check Security Policy";
@@ -188,7 +210,7 @@ public class CheckPolicy extends HttpServlet {
         Map compList = ComponentManager.getComponentRequirements();
 
         // For Each component make sure that the business functions are valid
-        for (Iterator it = compList.keySet().iterator(); it.hasNext();) {
+        for (Iterator it = compList.keySet().iterator(); it.hasNext(); ) {
             String comp = (String) it.next();
             String[] funcs = (String[]) compList.get(comp);
             if (funcs == null) {
@@ -207,10 +229,10 @@ public class CheckPolicy extends HttpServlet {
 
 
         // For Each role make sure that the business functions are valid
-        for (Iterator it2 = roleMap.keySet().iterator(); it2.hasNext();) {
+        for (Iterator it2 = roleMap.keySet().iterator(); it2.hasNext(); ) {
             String role = (String) it2.next();
             List roleList = (List) roleMap.get(role);
-            for (Iterator it3 = roleList.iterator(); it3.hasNext();) {
+            for (Iterator it3 = roleList.iterator(); it3.hasNext(); ) {
                 String func = (String) it3.next();
                 if (!bfuncs.contains(func)) {
                     m_roleErrors.put(role, func);
@@ -221,7 +243,7 @@ public class CheckPolicy extends HttpServlet {
     }
 
     private static List readFunctions() {
-        ArrayList bflist = new ArrayList();
+        List bflist = new ArrayList();
         InputStream stream = null;
         try {
             stream = URLHelper.newExtendedURL("resources/business-functions.xml").openStream();
@@ -237,7 +259,7 @@ public class CheckPolicy extends HttpServlet {
 
             // unmarshal a document into a tree of Java content objects composed of classes from the package.
             BusinessFunctions businessFunctions = (BusinessFunctions) u.unmarshal(XmlHelper.stripDoctypeDeclaration(stream));
-            for (Iterator i = businessFunctions.getBusinessFunction().iterator(); i.hasNext();) {
+            for (Iterator i = businessFunctions.getBusinessFunction().iterator(); i.hasNext(); ) {
                 bflist.add(((BusinessFunction) i.next()).getName());
             }
 
@@ -249,10 +271,55 @@ public class CheckPolicy extends HttpServlet {
                     stream.close();
                 }
             } catch (IOException e) {
-            // do nothing
+                // do nothing
             }
         }
+
+        if (bflist.size() == 0) {
+            bflist = readFunctionsFromMetainf();
+        }
         System.out.println("Read Function List. Count = " + bflist.size());
+        return bflist;
+    }
+
+    private static List readFunctionsFromMetainf() {
+        ArrayList bflist = new ArrayList();
+        OrderedPathMatchingResourcePatternResolver resolver = OrderedPathMatchingResourcePatternResolver.getInstance();
+        try {
+
+            Resource[] resources = resolver.getResources("classpath*:META-INF/business-functions.xml");
+            if (resources != null) {
+                for (Resource resource : resources) {
+                    if (resource == null) {
+                        continue;
+                    }
+                    try {
+                        // create a JAXBContext capable of handling classes generated into the package
+                        JAXBContext jc = JAXBContext.newInstance("org.jaffa.security.businessfunctionsdomain");
+
+                        // create an Unmarshaller
+                        Unmarshaller u = jc.createUnmarshaller();
+
+                        // enable validation
+                        u.setSchema(JAXBHelper.createSchema(SCHEMA));
+
+                        // unmarshal a document into a tree of Java content objects composed of classes from the package.
+                        BusinessFunctions businessFunctions = (BusinessFunctions) u.unmarshal(XmlHelper.stripDoctypeDeclaration(resource.getInputStream()));
+                        for (Iterator i = businessFunctions.getBusinessFunction().iterator(); i.hasNext(); ) {
+                            bflist.add(((BusinessFunction) i.next()).getName());
+                        }
+                    } catch (Exception e) {
+                        String s = ERROR_FUNCTION_READING.concat(" :") + resource.getURL();
+                        log.fatal(s, e);
+                        throw new SecurityException(s, e);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            log.error(ERROR_FUNCTION_READING, e);
+            throw new SecurityException(ERROR_FUNCTION_READING, e);
+        }
+
         return bflist;
     }
 
@@ -263,7 +330,7 @@ public class CheckPolicy extends HttpServlet {
         if (m_compErrors == null || m_compErrors.size() == 0) {
             System.out.println("--- No Errors Detected!");
         } else {
-            for (Iterator i = m_compErrors.keySet().iterator(); i.hasNext();) {
+            for (Iterator i = m_compErrors.keySet().iterator(); i.hasNext(); ) {
                 String comp = (String) i.next();
                 System.out.println("--- Component " + comp + " has invalid business function " + m_compErrors.get(comp) + " defined.");
             }
@@ -272,10 +339,19 @@ public class CheckPolicy extends HttpServlet {
         if (m_roleErrors == null || m_roleErrors.size() == 0) {
             System.out.println("--- No Errors Detected!");
         } else {
-            for (Iterator i = m_roleErrors.keySet().iterator(); i.hasNext();) {
+            for (Iterator i = m_roleErrors.keySet().iterator(); i.hasNext(); ) {
                 String role = (String) i.next();
                 System.out.println("--- Role " + role + " has invalid business function " + m_roleErrors.get(role) + " specified.");
             }
         }
     }
+
+    public static HashMap getCompErrors() {
+        return m_compErrors;
+    }
+
+    public static HashMap getRoleErrors() {
+        return m_roleErrors;
+    }
+
 }
