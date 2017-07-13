@@ -99,10 +99,10 @@ public class QuartzSchedulerHelper implements SchedulerHelper {
     try {
       if (scheduler == null || scheduler.isShutdown()) {
         instantiateSchedulerFactory();
-        scheduler.start();
+        scheduler.startDelayed(600 /*seconds to delay the start = 10 min*/);
         LOGGER.info("GOLDesp Scheduler has been started.");
       } else if (scheduler.isInStandbyMode()) {
-        scheduler.start();
+        scheduler.startDelayed(600 /*seconds to delay the start = 10 min*/);
         LOGGER.info("GOLDesp Scheduler has been started.");
       }
     } catch (SchedulerException e) {
