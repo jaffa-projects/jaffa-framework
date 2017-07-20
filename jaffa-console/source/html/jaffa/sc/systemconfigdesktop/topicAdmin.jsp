@@ -10,7 +10,6 @@
 <%@page import="java.util.PropertyResourceBundle"%>
 <%@page import="javax.management.MBeanServer"%>
 <%@page import="javax.management.ObjectName"%>
-<%@page import="org.jboss.mx.util.MBeanServerLocator"%>
 <%@page import="javax.jms.Connection"%>
 <%@page import="javax.jms.ConnectionFactory"%>
 <%@page import="javax.jms.Destination"%>
@@ -121,8 +120,9 @@
 
             connection = connector.getMBeanServerConnection();
         }catch(Exception ioe){
-          //e.printStackTrace();
-		}
+          //ioe.printStackTrace();
+	}
+
         return connection;
     }
 
@@ -232,28 +232,6 @@
         }
     }
 
-
-    public List listDurableMessages(String clientID, String subscriptionName, String topicName) {
-
-
-        List durableMessageList = null;
-        try {
-
-            //locate the mbean server
-            MBeanServer server = MBeanServerLocator.locate();
-
-            //create the objectname for topic
-            ObjectName name = new ObjectName("jboss.mq.destination:service=Topic,name=" + topicName);
-
-            // invoke the listDurableSubscriptions method in mbean and get list of durable subscriber
-            durableMessageList = (List) server.invoke(name, "listDurableMessages", new Object[]{clientID, subscriptionName}, createStandardValveTypes);
-
-        } catch (Exception e) {
-            // Ideally catch the 3 exact exceptions
-            e.printStackTrace();
-        }
-        return durableMessageList;
-    }
 
     public List<TextMessage> consume(String topicName, String clientId, String subscriptionName,String selector,int numberOfMessageToConsume,int pendingMessageSize) throws Exception {
         
