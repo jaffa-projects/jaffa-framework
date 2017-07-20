@@ -18,6 +18,8 @@ package org.apache.log4j.jdbcplus;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+import javax.sql.DataSource;
+
 /**
  * This is a default JDBCConnectionHandler used by JDBCAppender
  * 
@@ -35,12 +37,19 @@ public class JDBCDefaultConnectionHandler implements JDBCPoolConnectionHandler {
 	String username = null;
 
 	String password = null;
+	
+	String datasourceJNDIName = null;
 
 	public JDBCDefaultConnectionHandler(String aUrl, String aUsername, String aPassword) {
 		this.setUrl(aUrl);
 		this.setUsername(aUsername);
 		this.setPassword(aPassword);
 	}
+	
+	public JDBCDefaultConnectionHandler(String datasourceJNDIName) {
+		this.datasourceJNDIName = datasourceJNDIName;
+	}
+	
 
 	/**
 	 * Gets the Connection attribute of the JDBCDefaultConnectionHandler object
@@ -50,8 +59,12 @@ public class JDBCDefaultConnectionHandler implements JDBCPoolConnectionHandler {
 	public Connection getConnection() throws Exception {
 		// test original connection.
 		if (this.con == null || this.con.isClosed()) {
-			this.con = this.getConnection(this.getUrl(), this.getUsername(), this.getPassword());
-		}
+			if (this.datasourceJNDIName != null) {
+				this.con = this.getConnection(this.datasourceJNDIName);
+			} else {
+				this.con = this.getConnection(this.getUrl(), this.getUsername(), this.getPassword());
+			}
+		} 
 		return this.con;
 	}
 
@@ -85,6 +98,20 @@ public class JDBCDefaultConnectionHandler implements JDBCPoolConnectionHandler {
 		}
 
 		return con;
+	}
+	
+	public Connection getConnection(String datasourceJNDIName) {
+		Connection conn = null;
+		DataSource ds;
+		javax.naming.Context context;
+		try {
+			context = new javax.naming.InitialContext();
+			ds = (DataSource) context.lookup(datasourceJNDIName);
+			conn = ds.getConnection();
+		} catch (Exception e) {
+			throw new RuntimeException("Error from JDBC Logger creating datasource connection " + e.getMessage());
+		}
+		return conn;
 	}
 
 	/**
@@ -138,5 +165,5 @@ public class JDBCDefaultConnectionHandler implements JDBCPoolConnectionHandler {
 	public void setUsername(String string) {
 		username = string;
 	}
-
+	
 }

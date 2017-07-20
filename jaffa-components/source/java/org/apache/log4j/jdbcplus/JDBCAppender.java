@@ -207,6 +207,9 @@ import org.apache.log4j.spi.LoggingEvent;
 public class JDBCAppender extends AppenderSkeleton {
 
 	//Variables to store the options values setted by setXXX()-methods :
+	
+	private String datasourceJNDIName;
+	
 	/**
 	 * Stores a database url of the form jdbc:subprotocol:subname
 	 */
@@ -433,6 +436,25 @@ public class JDBCAppender extends AppenderSkeleton {
 	public void setSqlHandler(JDBCSqlHandler sqlHandler) throws Exception {
 		if (sqlHandler == null) return;
 		this.sqlHandler = sqlHandler;
+	}
+	
+	/**
+	 * Sets datasourceJNDIName to get connection
+	 *
+	 * @param datasourceJNDIName
+	 */
+	public void setDatasourceJNDIName(String datasourceJNDIName) {
+		if (datasourceJNDIName == null) {
+			return;
+		}
+
+		datasourceJNDIName = datasourceJNDIName.trim();
+
+		if (datasourceJNDIName.length() == 0) {
+			return;
+		}
+
+		this.datasourceJNDIName = datasourceJNDIName;
 	}
 
 	/**
@@ -723,6 +745,15 @@ public class JDBCAppender extends AppenderSkeleton {
 	}
 
 	/**
+	 * Gets the datasourceJNDIName attribute of the JDBCAppender object
+	 *
+	 * @return The datasourceJNDIName value
+	 */
+	public String getDatasourceJNDIName() {
+		return this.datasourceJNDIName;
+	}
+	
+	/**
 	 * Gets the Url attribute of the JDBCAppender object
 	 *
 	 * @return The Url value
@@ -937,16 +968,23 @@ public class JDBCAppender extends AppenderSkeleton {
 		try {
 			if (connectionHandler == null) {
 				if (connector == null) {
-					if (url == null) { throw new Exception(
-							"JDBCAppender::connect(), No URL defined."); }
+					if (datasourceJNDIName != null) {
+						connectionHandler = new JDBCDefaultConnectionHandler(datasourceJNDIName);
+					} else {
+						if (url == null) {
+							throw new Exception("JDBCAppender::connect(), No URL defined.");
+						}
 
-					if (username == null) { throw new Exception(
-							"JDBCAppender::connect(), No USERNAME defined."); }
+						if (username == null) {
+							throw new Exception("JDBCAppender::connect(), No USERNAME defined.");
+						}
 
-					if (password == null) { throw new Exception(
-							"JDBCAppender::connect(), No PASSWORD defined."); }
+						if (password == null) {
+							throw new Exception("JDBCAppender::connect(), No PASSWORD defined.");
+						}
 
-					connectionHandler = new JDBCDefaultConnectionHandler(url, username, password);
+						connectionHandler = new JDBCDefaultConnectionHandler(url, username, password);
+					}
 				} else {
 					connectionHandler = (JDBCConnectionHandler) (Class.forName(connector)
 							.newInstance());
