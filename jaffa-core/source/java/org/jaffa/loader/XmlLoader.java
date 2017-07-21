@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Loads the Xml Config files to the Repository.
+ * Loads the Xml Config files and registers them to the Repository.
  */
 public class XmlLoader<T extends IManager> {
 
@@ -20,17 +20,25 @@ public class XmlLoader<T extends IManager> {
     private ArrayList<String> defaultContexts = new ArrayList<>();
 
     /**
-     * gets the Manager
-     * @return
+     * gets the Manager from the XmlLoader
+     * @return Manager Object identified ny T
      */
     public T getManager() {
         return manager;
     }
 
+    /**
+     * sets the manager on the XmlLoader
+     * @param manager Object identified by T
+     */
     public void setManager(T manager) {
         this.manager = manager;
     }
 
+    /**
+     * loads all the Xml files with xml file name in the manager from all the jars
+     * where package contains META-INF/*
+      */
     public void loadXmls() {
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         try {
@@ -48,6 +56,11 @@ public class XmlLoader<T extends IManager> {
         }
     }
 
+    /**
+     * gets the context associated with the path
+     * @param path where the resource is located
+     * @return context associated with the path
+     */
     public String getContext(String path){
         String context = "default";
 
@@ -63,10 +76,18 @@ public class XmlLoader<T extends IManager> {
         return context;
     }
 
+    /**
+     * gets the defaultContexts for configuration
+     * @return List of String
+     */
     public List<String> getDefaultContexts() {
         return defaultContexts;
     }
 
+    /**
+     * sets the defaultContexts on XmlLoader
+     * @param defaultContexts List containing defaultContexts
+     */
     public void setDefaultContexts(ArrayList<String> defaultContexts) {
         this.defaultContexts = defaultContexts;
     }
