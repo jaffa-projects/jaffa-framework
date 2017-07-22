@@ -15,7 +15,7 @@ public class AllXmlLoadTest {
 
     private static AnnotationConfigApplicationContext xmlLoaderConfig = new AnnotationConfigApplicationContext(XmlLoaderConfig.class);
 
-    @Test
+    //@Test
     public void testXmlLoad(){
 
         TransactionManager transactionManager = xmlLoaderConfig.getBean(TransactionManager.class);
