@@ -59,7 +59,6 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import org.apache.log4j.Logger;
-import org.jaffa.loader.TransactionManager;
 import org.jaffa.transaction.services.configdomain.Config;
 import org.jaffa.transaction.services.configdomain.TransactionInfo;
 import org.jaffa.transaction.services.configdomain.TypeInfo;
@@ -117,8 +116,17 @@ import org.xml.sax.SAXException;
 public final class ConfigurationService {
 
     private static final Logger log = Logger.getLogger(ConfigurationService.class);
+    /** The location of the configuration file. */
+    private static final String DEFAULT_CONFIGURATION_FILE = "resources/jaffa-transaction-config.xml";
+    private static final String CONFIGURATION_FILE = System.getProperty(ConfigurationService.class.getName(), DEFAULT_CONFIGURATION_FILE);
+    /** The location of the schema for the configuration file. */
+    private static final String CONFIGURATION_SCHEMA_FILE = "org/jaffa/transaction/services/configdomain/jaffa-transaction-config_1_0.xsd";
+    /** The singleton instance of this class. */
     private static volatile ConfigurationService c_singleton;
-    private static TransactionManager transactionManager;
+    /** Map of dataBeanClassName and corresponding TransactionInfo instance. */
+    private final Map<String, TransactionInfo> m_transactionInfoMap = new LinkedHashMap<>();
+    /** Map of typeName and corresponding TypeInfo instance. */
+    private final Map<String, TypeInfo> m_typeInfoMap = new LinkedHashMap<>();
 
     /**
      * Creates an instance of ConfigurationService, if not already instantiated.
@@ -146,7 +154,35 @@ public final class ConfigurationService {
      *   - If the configuration file has invalid XML
      */
     private ConfigurationService() {
+        try {
+            // un-marshal the configuration file
+            final Config m_config = parseConfigurationFile();
 
+            // build up the maps/list
+            if (m_config.getTransactionOrType() != null) {
+                for (final Object o : m_config.getTransactionOrType()) {
+                    if (o.getClass() == TransactionInfo.class) {
+                        final TransactionInfo transactionInfo = (TransactionInfo) o;
+                        m_transactionInfoMap.put(transactionInfo.getDataBean(), transactionInfo);
+                    } else if (o.getClass() == TypeInfo.class) {
+                        final TypeInfo typeInfo = (TypeInfo) o;
+                        m_typeInfoMap.put(typeInfo.getName(), typeInfo);
+                    }
+                }
+            }
+        } catch (JAXBException e) {
+            final String s = "Error in parsing the configuration file " + CONFIGURATION_FILE;
+            log.fatal(s, e);
+            throw new RuntimeException(s, e);
+        } catch (MalformedURLException e) {
+            final String s = "Error in locating the configuration file " + CONFIGURATION_FILE;
+            log.fatal(s, e);
+            throw new RuntimeException(s, e);
+        } catch (SAXException e) {
+            final String s = "Error in loading the schema for the configuration file " + CONFIGURATION_SCHEMA_FILE;
+            log.fatal(s, e);
+            throw new RuntimeException(s, e);
+        }
     }
 
     /**
@@ -165,7 +201,7 @@ public final class ConfigurationService {
      * @throws ClassNotFoundException if dataBeanClassName is not found on the classpath
      */
     public TransactionInfo getTransactionInfo(String dataBeanClassName) throws ClassNotFoundException {
-        return transactionManager.getTransactionInfo(dataBeanClassName, null);
+        return getTransactionInfo(Class.forName(dataBeanClassName));
     }
 
     /**
@@ -174,7 +210,24 @@ public final class ConfigurationService {
      * @return the TransactionInfo object for the input dataBeanClass, as defined in the configuration file.
      */
     public TransactionInfo getTransactionInfo(Class dataBeanClass) {
-        return transactionManager.getTransactionInfo(dataBeanClass, null);
+        final String dataBeanClassName = dataBeanClass.getName();
+        TransactionInfo transactionInfo = m_transactionInfoMap.get(dataBeanClassName);
+        if (transactionInfo == null && !m_transactionInfoMap.containsKey(dataBeanClassName)) {
+            // Lookup the class heirarchy. Add a NULL for the dataBeanClassName, even if a TransactionInfo is not found
+            synchronized (m_transactionInfoMap) {
+                transactionInfo = m_transactionInfoMap.get(dataBeanClassName);
+                if (transactionInfo == null && !m_transactionInfoMap.containsKey(dataBeanClassName)) {
+                    while (dataBeanClass.getSuperclass() != null) {
+                        dataBeanClass = dataBeanClass.getSuperclass();
+                        transactionInfo = m_transactionInfoMap.get(dataBeanClass.getName());
+                        if (transactionInfo != null)
+                            break;
+                    }
+                    m_transactionInfoMap.put(dataBeanClassName, transactionInfo);
+                }
+            }
+        }
+        return transactionInfo;
     }
 
     /**
@@ -182,7 +235,7 @@ public final class ConfigurationService {
      * @return all TransactionInfo objects, as defined in the configuration file.
      */
     public TransactionInfo[] getAllTransactionInfo() {
-        return transactionManager.getAllTransactionInfo(null);
+        return m_transactionInfoMap.values().toArray(new TransactionInfo[m_transactionInfoMap.size()]);
     }
 
     /** 
@@ -191,7 +244,7 @@ public final class ConfigurationService {
      * @return the TypeInfo object for the input typeName, as defined in the configuration file.
      */
     public TypeInfo getTypeInfo(String typeName) {
-        return transactionManager.getTypeInfo(typeName, null);
+        return m_typeInfoMap.get(typeName);
     }
 
     /**
@@ -210,14 +263,29 @@ public final class ConfigurationService {
      * @return an array of type names, as defined in the configuration file.
      */
     public String[] getTypeNames() {
-        return transactionManager.getTypeNames();
+        return m_typeInfoMap.keySet().toArray(new String[m_typeInfoMap.size()]);
     }
 
-    public static TransactionManager getTransactionManager() {
-        return transactionManager;
-    }
-
-    public static void setTransactionManager(TransactionManager transactionManager) {
-        ConfigurationService.transactionManager = transactionManager;
+    /**
+     * Loads the configurationFile using JAXB.
+     * The XML is validated as per the schema 'org/jaffa/transaction/services/configdomain/jaffa-transaction-config_1_0.xsd'.
+     * The XML is then parsed to return a corresponding Java object.
+     * @return the Java representation of the XML inside the configuration file.
+     * @throws MalformedURLException if the configuration file is not found.
+     * @throws JAXBException if any error occurs during the unmarshalling of XML.
+     * @throws SAXException if the schema file cannot be loaded.
+     */
+    private Config parseConfigurationFile()
+            throws MalformedURLException, JAXBException, SAXException {
+        if (log.isDebugEnabled())
+            log.debug("Un-marshalling the configuration file " + CONFIGURATION_FILE);
+        final URL configFileUrl = URLHelper.newExtendedURL(CONFIGURATION_FILE);
+        final URL configSchemaFileUrl = URLHelper.newExtendedURL(CONFIGURATION_SCHEMA_FILE);
+        final JAXBContext jc = JAXBHelper.obtainJAXBContext(Config.class);
+        final Unmarshaller unmarshaller = jc.createUnmarshaller();
+        final SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        final Schema schema = sf.newSchema(configSchemaFileUrl);
+        unmarshaller.setSchema(schema);
+        return (Config) unmarshaller.unmarshal(configFileUrl);
     }
 }

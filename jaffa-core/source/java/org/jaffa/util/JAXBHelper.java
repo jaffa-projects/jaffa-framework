@@ -74,7 +74,6 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import org.apache.log4j.Logger;
-import org.springframework.core.io.Resource;
 import org.xml.sax.SAXException;
 
 /** This has convenience methods for dealing with JAXB.
@@ -213,28 +212,5 @@ public class JAXBHelper {
      */
     public static Schema createSchema(String url) throws IOException, SAXException {
         return SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(URLHelper.newExtendedURL(url));
-    }
-
-    /**
-     * Unmarshalls the Config file which is as part of resource.
-     * @param clazz Name of class used for unmarshalling.
-     * @param resource contains the input file.
-     * @param configurationSchemaFile which contains the schema of xml file to be processed.
-     * @param <T>
-     * @return Unmarshalled Object of T
-     * @throws IOException
-     * @throws JAXBException
-     * @throws SAXException
-     */
-    public static <T> T unmarshalConfigFile(Class clazz, Resource resource, String configurationSchemaFile)
-            throws IOException, JAXBException, SAXException {
-
-        // Convert the file names to URLs since we don't know where they would be in the deployed application.
-        JAXBContext jc = JAXBContext.newInstance(new Class[] {clazz});
-        Unmarshaller unmarshaller = jc.createUnmarshaller();
-        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        Schema schema = schemaFactory.newSchema(URLHelper.newExtendedURL(configurationSchemaFile));
-        unmarshaller.setSchema(schema);
-        return (T) unmarshaller.unmarshal(XmlHelper.stripDoctypeDeclaration(resource.getInputStream()));
     }
 }
