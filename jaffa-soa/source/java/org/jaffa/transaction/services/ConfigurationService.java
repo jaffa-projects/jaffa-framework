@@ -48,24 +48,10 @@
  */
 package org.jaffa.transaction.services;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import javax.xml.XMLConstants;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
 import org.apache.log4j.Logger;
-import org.jaffa.loader.TransactionManager;
-import org.jaffa.transaction.services.configdomain.Config;
+import org.jaffa.loader.transaction.TransactionManager;
 import org.jaffa.transaction.services.configdomain.TransactionInfo;
 import org.jaffa.transaction.services.configdomain.TypeInfo;
-import org.jaffa.util.JAXBHelper;
-import org.jaffa.util.URLHelper;
-import org.xml.sax.SAXException;
 
 /**
  * This class implements the Singleton pattern. Use the getInstance() method to get an instance of this class.

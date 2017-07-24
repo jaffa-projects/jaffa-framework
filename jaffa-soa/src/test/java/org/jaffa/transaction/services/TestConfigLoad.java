@@ -1,6 +1,6 @@
 package org.jaffa.transaction.services;
 
-import org.jaffa.loader.XmlLoaderConfig;
+import org.jaffa.loader.transaction.XmlLoaderConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;

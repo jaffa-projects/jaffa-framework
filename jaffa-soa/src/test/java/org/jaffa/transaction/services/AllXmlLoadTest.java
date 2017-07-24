@@ -1,7 +1,6 @@
 package org.jaffa.transaction.services;
 
-import org.jaffa.loader.TransactionManager;
-import org.jaffa.loader.XmlLoaderConfig;
+import org.jaffa.loader.transaction.TransactionManager;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
