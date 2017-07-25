@@ -47,17 +47,17 @@
  * ====================================================================
  */
 
-package org.jaffa.loader.transaction;
+package org.jaffa.loader;
 
-import org.jaffa.loader.MapRepository;
-import org.jaffa.loader.XmlLoader;
-import org.jaffa.transaction.services.ConfigurationService;
+import javax.annotation.PostConstruct;
+
+import org.jaffa.loader.soa.SoaEventManager;
+import org.jaffa.loader.transaction.TransactionManager;
+import org.jaffa.soa.services.configdomain.SoaEventInfo;
 import org.jaffa.transaction.services.configdomain.TransactionInfo;
 import org.jaffa.transaction.services.configdomain.TypeInfo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.annotation.PostConstruct;
 
 /**
  * Contains all the Beans related to the Loader Architecture for the Jaffa-SOA
@@ -65,9 +65,12 @@ import javax.annotation.PostConstruct;
 @Configuration
 public class XmlLoaderConfig {
 
+	/****************************************************/
+	/*************  Transaction Manager    **************/
+	/****************************************************/
     @Bean
     public XmlLoader<TransactionManager> transactionManagerXmlLoader() {
-        XmlLoader transactionManagerXmlLoader = new XmlLoader() ;
+        XmlLoader<TransactionManager> transactionManagerXmlLoader = new XmlLoader<TransactionManager>() ;
         transactionManagerXmlLoader.setManager(transactionManager());
         return  transactionManagerXmlLoader;
     }
@@ -75,7 +78,7 @@ public class XmlLoaderConfig {
     @Bean
     public TransactionManager transactionManager() {
         TransactionManager transactionManager = new TransactionManager();
-        ConfigurationService.setTransactionManager(transactionManager);
+        org.jaffa.transaction.services.ConfigurationService.setTransactionManager(transactionManager);
         transactionManager.setTransactionRepository(transactionInfoRepository());
         transactionManager.setTypeInfoRepository(typeInfoRepository());
         return transactionManager;
@@ -90,10 +93,35 @@ public class XmlLoaderConfig {
         MapRepository<String, TypeInfo> mapRepository= new MapRepository<>();
         return mapRepository;
     }
+    
+	/****************************************************/
+	/*************   Soa Event Manager     **************/
+	/****************************************************/
+    @Bean
+    public XmlLoader<SoaEventManager> soaEventManagerXmlLoader() {
+        XmlLoader<SoaEventManager> soaEventManagerXmlLoader = new XmlLoader<SoaEventManager>() ;
+        soaEventManagerXmlLoader.setManager(soaEventManager());
+        return  soaEventManagerXmlLoader;
+    }
+
+    @Bean
+    public SoaEventManager soaEventManager() {
+    	SoaEventManager soaEventManager = new SoaEventManager();
+    	org.jaffa.soa.services.ConfigurationService.setSoaEventManager(soaEventManager);
+        soaEventManager.setSoaEventRepository(soaEventInfoRepository());
+        return soaEventManager;
+    }
+
+    private MapRepository<String, SoaEventInfo> soaEventInfoRepository(){
+        MapRepository<String, SoaEventInfo> mapRepository= new MapRepository<>();
+        return mapRepository;
+    }
+    
 
     @PostConstruct
     public void loadXmls(){
         transactionManagerXmlLoader().loadXmls();
+        soaEventManagerXmlLoader().loadXmls();
     }
 
 }
