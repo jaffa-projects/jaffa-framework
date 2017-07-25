@@ -4,9 +4,7 @@
 - Add key, collectionNames, Record information to the classmetadata
 - Automatically pull in findermetadata
 --%>
-<%@ page import='gnu.trove.TLongObjectHashMap,
-gnu.trove.TLongObjectIterator,
-java.beans.BeanInfo,
+<%@ page import='java.beans.BeanInfo,
 java.beans.Introspector,
 java.beans.PropertyDescriptor,
 java.util.Arrays,
@@ -36,7 +34,6 @@ org.jaffa.persistence.util.PersistentHelper,
 org.jaffa.rules.IObjectRuleIntrospector,
 org.jaffa.rules.IPropertyRuleIntrospector,
 org.jaffa.rules.RulesEngineFactory,
-org.jaffa.rules.jbossaop.interceptors.AbstractRuleInterceptor,
 org.jaffa.rules.meta.MetaDataRepository,
 org.jaffa.rules.rulemeta.RuleRepository,
 org.jaffa.security.SecurityManager,
@@ -47,13 +44,7 @@ org.jaffa.soa.dataaccess.MappingFilter,
 org.jaffa.soa.graph.GraphDataObject,
 org.jaffa.util.BeanHelper,
 org.jaffa.util.MessageHelper,
-org.jaffa.util.StringHelper,
-org.jboss.aop.Advised,
-org.jboss.aop.AspectManager,
-org.jboss.aop.ClassAdvisor,
-org.jboss.aop.ConstructionInfo,
-org.jboss.aop.MethodInfo,
-org.jboss.aop.advice.Interceptor' %>
+org.jaffa.util.StringHelper' %>
 
 <%!
 private static final Logger log = Logger.getLogger("js.extjs.jaffa.metadata.classMetaData");
