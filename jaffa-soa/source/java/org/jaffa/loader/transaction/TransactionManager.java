@@ -47,8 +47,10 @@
  * ====================================================================
  */
 
-package org.jaffa.loader;
+package org.jaffa.loader.transaction;
 
+import org.jaffa.loader.IManager;
+import org.jaffa.loader.IRepository;
 import org.jaffa.transaction.services.configdomain.Config;
 import org.jaffa.transaction.services.configdomain.TransactionInfo;
 import org.jaffa.transaction.services.configdomain.TypeInfo;
