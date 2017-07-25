@@ -11,9 +11,6 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.jaffa.config.Config;
 import org.jaffa.util.URLHelper;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -32,13 +29,12 @@ import org.springframework.context.annotation.Configuration;
  * 
  */
 @Configuration
-public class JDBCAppenderConfig implements ApplicationContextAware{
+public class JDBCAppenderConfig {
 
-	private static Logger log = null;
-	private ApplicationContext applicationContext;
+	private static Logger log = Logger.getLogger(JDBCAppenderConfig.class);;
 
 	/**
-	 * Initialize log4j using the file specified in the 'framework.Log4JConfig'
+	 * Initialise log4j using the file specified in the 'framework.Log4JConfig'
 	 * property in the config.properties file. This will be set to either
 	 * 'none', 'default' or a classpath-relative file name. If there is no
 	 * configuration setting 'default' will be assumed.
@@ -47,52 +43,41 @@ public class JDBCAppenderConfig implements ApplicationContextAware{
 	 */
 	@PostConstruct
 	private void initLog4j() {
-		if (applicationContext == null) {
-			return;
-		}
+
 		// Read setting from configuration file
 		String fileName = (String) Config.getProperty(Config.PROP_LOG4J_CONFIG, "default");
 
 		if (fileName.equalsIgnoreCase("none")) {
-			// do nothing.. Assume that log4j would have been initialized by
-			// some other container
-			initializeLogField();
+			/*
+			 * do nothing. Assume that log4j would have been initialised by some
+			 * other container
+			 */
 			log.info("Skipped log4j configuration. Should be done by Web/J2EE Server first!");
 		} else if (fileName.equalsIgnoreCase("default")) {
 			defaultLog4j();
 		} else {
-			try {
-				URL u = URLHelper.newExtendedURL(fileName);
-				DOMConfigurator.configureAndWatch(u.getPath());
-				initializeLogField();
-				if (log.isInfoEnabled())
-					log.info("Configured log4j using the configuration file (relative to classpath): " + fileName);
-			} catch (Exception e) {
-				log.error("Error in initializing Log4j using the configFile (relative to classpath): " + fileName);
-				e.printStackTrace();
-				defaultLog4j();
-			}
+			appLog4j(fileName);
 		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.applicationContext = applicationContext;
 	}
 
 	private void defaultLog4j() {
 		BasicConfigurator.configure();
-		initializeLogField();
 		if (log.isInfoEnabled()) {
 			log.info("Configured log4j using the Basic Configurator");
 		}
 	}
 
-	private void initializeLogField() {
-		if (log == null)
-			log = Logger.getLogger(JDBCAppenderConfig.class);
+	private void appLog4j(String fileName) {
+		try {
+			URL u = URLHelper.newExtendedURL(fileName);
+			DOMConfigurator.configureAndWatch(u.getPath());
+			if (log.isInfoEnabled()) {
+				log.info("Configured log4j using the configuration file (relative to classpath): " + fileName);
+			}
+		} catch (Exception e) {
+			log.error("Error in initializing Log4j using the configFile" + fileName + "(relative to classpath):" + e);
+			defaultLog4j();
+		}
 	}
 
 	@PreDestroy
