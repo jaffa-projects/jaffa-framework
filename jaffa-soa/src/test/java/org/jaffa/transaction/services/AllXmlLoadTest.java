@@ -1,5 +1,6 @@
 package org.jaffa.transaction.services;
 
+import org.jaffa.loader.soa.SoaEventManager;
 import org.jaffa.loader.transaction.TransactionManager;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -15,9 +16,15 @@ public class AllXmlLoadTest {
     private static AnnotationConfigApplicationContext xmlLoaderConfig = new AnnotationConfigApplicationContext(TestConfigLoad.class);
 
     @Test
-    public void testXmlLoad(){
+    public void testTransactionXmlLoad(){
 
         TransactionManager transactionManager = xmlLoaderConfig.getBean(TransactionManager.class);
         assertNotNull(transactionManager.getTransactionInfo("org.jaffa.transaction.tester.TestMessageSingleton", null));
     }
+    
+    @Test
+    public void testSoaEventsXmlLoad(){
+        SoaEventManager soaEventManager = xmlLoaderConfig.getBean(SoaEventManager.class);
+        assertNotNull(soaEventManager.getAllSoaEventInfo(null));
+    }    
 }

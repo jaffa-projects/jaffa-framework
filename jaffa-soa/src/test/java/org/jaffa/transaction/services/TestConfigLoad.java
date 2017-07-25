@@ -1,6 +1,6 @@
 package org.jaffa.transaction.services;
 
-import org.jaffa.loader.transaction.XmlLoaderConfig;
+import org.jaffa.loader.XmlLoaderConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * Created by pbagirthi on 7/24/2017.
  */
 @Configuration
-@Import(XmlLoaderConfig.class)
+@Import({XmlLoaderConfig.class})
 public class TestConfigLoad {
 
     @Bean

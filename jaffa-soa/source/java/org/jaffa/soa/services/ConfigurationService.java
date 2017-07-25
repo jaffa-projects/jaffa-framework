@@ -48,27 +48,15 @@
  */
 package org.jaffa.soa.services;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import javax.xml.XMLConstants;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
 import org.apache.log4j.Logger;
+import org.jaffa.loader.soa.SoaEventManager;
 import org.jaffa.soa.services.configdomain.SoaEventInfo;
-import org.jaffa.soa.services.configdomain.SoaEvents;
-import org.jaffa.util.JAXBHelper;
-import org.jaffa.util.URLHelper;
-import org.xml.sax.SAXException;
 
 /**
  * This class implements the Singleton pattern. Use the getInstance() method to get an instance of this class.
- * The Configuration Service reads the 'resources/soa-events.xml' file. It then performs the initializations.
- * It provides methods to extract information from the configuration file.
+ * The Configuration Service reads the soaEventInfo from SoaEventManager which has been build by JavaConfig. 
+ * It provides methods to extract information from the SoaEventManager.
+ * 
  * <p>
  * An example configuration file
  *     <?xml version="1.0" encoding="UTF-8"?>
@@ -91,14 +79,25 @@ import org.xml.sax.SAXException;
 public class ConfigurationService {
 
     private static final Logger log = Logger.getLogger(ConfigurationService.class);
-    private static final String DEFAULT_CONFIGURATION_FILE = "resources/soa-events.xml";
-    private static final String CONFIGURATION_FILE = System.getProperty(ConfigurationService.class.getName(), DEFAULT_CONFIGURATION_FILE);
-    private static final String CONFIGURATION_SCHEMA_FILE = "org/jaffa/soa/services/configdomain/soa-events_1_0.xsd";
+
     private static volatile ConfigurationService c_singleton = null;
-    private SoaEvents m_config = null;
-    private final Map<String, SoaEventInfo> m_soaEventInfoMap = new LinkedHashMap<String, SoaEventInfo>();
+    private static SoaEventManager soaEventManager;
 
     /**
+	 * @return the soaEventManager
+	 */
+	public static SoaEventManager getSoaEventManager() {
+		return soaEventManager;
+	}
+
+	/**
+	 * @param soaEventManager the soaEventManager to set
+	 */
+	public static void setSoaEventManager(SoaEventManager soaEventManager) {
+		ConfigurationService.soaEventManager = soaEventManager;
+	}
+
+	/**
      * Creates an instance of ConfigurationService, if not already instantiated.
      * @return An instance of the ConfigurationService.
      */
@@ -115,84 +114,35 @@ public class ConfigurationService {
                 log.debug("An instance of the ConfigurationService has been created");
         }
     }
-
+    
     /**
-     * Parses the configuration file.
-     * <p>
-     * A RuntimeException is thrown
-     *   - If the configuration file is not found
-     *   - If the configuration file has invalid XML
+     * private constructor to control instance.
      */
     private ConfigurationService() {
-        try {
-            // unmarshal the configuration file
-            m_config = parseConfigurationFile();
-
-            // build up the maps/list
-            if (m_config.getSoaEvent() != null) {
-                for (SoaEventInfo soaEventInfo : m_config.getSoaEvent())
-                    m_soaEventInfoMap.put(soaEventInfo.getName(), soaEventInfo);
-            }
-        } catch (JAXBException e) {
-            String s = "Error in parsing the configuration file " + CONFIGURATION_FILE;
-            log.fatal(s, e);
-            throw new RuntimeException(s, e);
-        } catch (MalformedURLException e) {
-            String s = "Error in locating the configuration file " + CONFIGURATION_FILE;
-            log.fatal(s, e);
-            throw new RuntimeException(s, e);
-        } catch (SAXException e) {
-            String s = "Error in loading the schema for the configuration file " + CONFIGURATION_SCHEMA_FILE;
-            log.fatal(s, e);
-            throw new RuntimeException(s, e);
-        }
     }
 
     /**
-     * Returns the SoaEventInfo object for the input soaEventName, as defined in the configuration file.
+     * Returns the SoaEventInfo object for the input soaEventName, as defined in the soa event manager.
      * @param soaEventName the name of a SOA Event.
-     * @return the SoaEventInfo object for the input soaEventName, as defined in the configuration file.
+     * @return the SoaEventInfo object for the input soaEventName, as defined in the soa event manager.
      */
     public SoaEventInfo getSoaEventInfo(String soaEventName) {
-        return m_soaEventInfoMap.get(soaEventName);
+		return soaEventManager != null ? soaEventManager.getSoaEventInfo(soaEventName, null) : null;
     }
 
     /**
-     * Returns all SoaEventInfo objects, as defined in the configuration file.
-     * @return all SoaEventInfo objects, as defined in the configuration file.
+     * Returns all SoaEventInfo objects, as defined in the soa event manager.
+     * @return all SoaEventInfo objects, as defined in the soa event manager.
      */
     public SoaEventInfo[] getAllSoaEventInfo() {
-        return m_soaEventInfoMap.values().toArray(new SoaEventInfo[m_soaEventInfoMap.size()]);
+		return soaEventManager != null ? soaEventManager.getAllSoaEventInfo(null) : null;
     }
 
     /**
-     * Returns an array of SOA Event names, as defined in the configuration file.
-     * @return an array of SOA Event names, as defined in the configuration file.
+     * Returns an array of SOA Event names, as defined in the soa event manager.
+     * @return an array of SOA Event names, as defined in the soa event manager.
      */
     public String[] getSoaEventNames() {
-        return m_soaEventInfoMap.keySet().toArray(new String[m_soaEventInfoMap.size()]);
-    }
-
-    /**
-     * Loads the configurationFile using JAXB.
-     * The XML is validated as per the schema 'org/jaffa/soa/services/configdomain/soa-events_1_0.xsd'.
-     * The XML is then parsed to return a corresponding Java object.
-     * @return the Java representation of the XML inside the configuration file.
-     * @throws MalformedURLException if the configuration file is not found.
-     * @throws JAXBException if any error occurs during the unmarshalling of XML.
-     * @throws SAXException if the schema file cannot be loaded.
-     */
-    private SoaEvents parseConfigurationFile()
-            throws MalformedURLException, JAXBException, SAXException {
-        if (log.isDebugEnabled())
-            log.debug("Unmarshalling the configuration file " + CONFIGURATION_FILE);
-        URL configFileUrl = URLHelper.newExtendedURL(CONFIGURATION_FILE);
-        URL configSchemaFileUrl = URLHelper.newExtendedURL(CONFIGURATION_SCHEMA_FILE);
-        JAXBContext jc = JAXBHelper.obtainJAXBContext(SoaEvents.class);
-        Unmarshaller unmarshaller = jc.createUnmarshaller();
-        SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        Schema schema = sf.newSchema(configSchemaFileUrl);
-        unmarshaller.setSchema(schema);
-        return (SoaEvents) unmarshaller.unmarshal(configFileUrl);
+		return soaEventManager != null ? soaEventManager.getSoaEventNames() : null;
     }
 }
