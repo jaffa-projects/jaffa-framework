@@ -4,23 +4,22 @@
  */
 package org.jaffa.sc.apis;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+ import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import javax.xml.bind.JAXBContext;
+
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+
+import org.apache.log4j.Logger;
+import org.jaffa.soa.services.ConfigurationService;
+import org.jaffa.soa.services.SOAEventEnabledConfigurationFactory;
+import org.jaffa.soa.services.configdomain.Param;
+import org.jaffa.soa.services.configdomain.SoaEventInfo;
 
 import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONSerializer;
-import org.apache.log4j.Logger;
-import org.jaffa.soa.services.configdomain.SoaEventInfo;
-import org.jaffa.soa.services.configdomain.SoaEvents;
-import org.jaffa.soa.services.configdomain.Param;
-import org.jaffa.soa.services.SOAEventEnabledConfigurationFactory;
-import org.jaffa.util.JAXBHelper;
-import org.jaffa.util.URLHelper;
 
 /**
  * @author Saravanan
@@ -31,8 +30,6 @@ public class SOAEventMetaDataService {
      * enable logging for WebServiceDocService
      */
     private static Logger log = Logger.getLogger(SOAEventMetaDataService.class);
-    private static final String DEFAULT_CONFIGURATION_FILE = "resources/soa-events.xml";
-    private static final String CONFIGURATION_FILE = System.getProperty(SOAEventMetaDataService.class.getName(), DEFAULT_CONFIGURATION_FILE);
 
     /**
      * @return JSONArray. The JSON array of deployed web service in application.
@@ -178,13 +175,9 @@ public class SOAEventMetaDataService {
 
     private List<SoaEventInfo> getSoaEventInfo() throws JAXBException, MalformedURLException {
 
-        URL configFileUrl = URLHelper.newExtendedURL(CONFIGURATION_FILE);
-        JAXBContext jc = JAXBHelper.obtainJAXBContext(SoaEvents.class);
-        Unmarshaller unmarshaller = jc.createUnmarshaller();
-        SoaEvents soaEvents = (SoaEvents) unmarshaller.unmarshal(configFileUrl);
+    	SoaEventInfo[] soaEventInfo = ConfigurationService.getInstance().getAllSoaEventInfo();
 
-        return soaEvents.getSoaEvent();
-
+        return soaEventInfo!=null ? Arrays.asList(soaEventInfo) : new ArrayList<SoaEventInfo>();
     }
 
     private String getParams(SoaEventInfo soaEvent) {
