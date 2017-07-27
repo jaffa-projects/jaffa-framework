@@ -57,6 +57,7 @@ import org.jaffa.transaction.services.configdomain.TypeInfo;
 import org.jaffa.util.JAXBHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.xml.sax.SAXException;
 import org.springframework.core.io.Resource;
 
@@ -159,11 +160,21 @@ public class TransactionManager implements IManager {
      * unregisters all the transactions and typeInfo in the xml from the repository
      * @param uri for the xml location
      */
-    public void unregisterXML(String uri) {
-        //read XML
-        //parse XML
-        //call unregisterTransactionInfo
-        //call unregisterTypeInfo
+    public void unregisterXML(String uri, String context) throws JAXBException, SAXException, IOException {
+        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        Config config = JAXBHelper.unmarshalConfigFile(Config.class, resolver.getResource(uri), CONFIGURATION_SCHEMA_FILE);
+
+        if (config.getTransactionOrType() != null) {
+            for (final Object o : config.getTransactionOrType()) {
+                if (o.getClass() == TransactionInfo.class) {
+                    final TransactionInfo transactionInfo = (TransactionInfo) o;
+                    unregisterTransactionInfo(transactionInfo.getDataBean(), context);
+                } else if (o.getClass() == TypeInfo.class) {
+                    final TypeInfo typeInfo = (TypeInfo) o;
+                    unregisterTypeInfo(typeInfo.getName(), context);
+                }
+            }
+        }
     }
 
     /**

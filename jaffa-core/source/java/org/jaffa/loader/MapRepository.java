@@ -56,20 +56,20 @@ import java.util.*;
  */
 public class MapRepository<K, T> implements IRepository<K, T> {
 
-    Map<K, Map<String,T>> repositoryMap = new HashMap<>();
+    Map<K, Map<String, T>> repositoryMap = new HashMap<>();
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void register(K repositoryKey, T repository, String context) {
-        context = (context == null || context.length() ==0) ? "default" : context;
+        context = (context == null || context.length() == 0) ? "default" : context;
         Map<String, T> infoMap = repositoryMap.get(repositoryKey);
-        if(infoMap == null){
+        if (infoMap == null) {
             infoMap = new HashMap<>();
         }
         infoMap.put(context, repository);
-        repositoryMap.put(repositoryKey , infoMap);
+        repositoryMap.put(repositoryKey, infoMap);
     }
 
     /**
@@ -77,12 +77,12 @@ public class MapRepository<K, T> implements IRepository<K, T> {
      */
     @Override
     public void unregister(K repositoryKey, String context) {
-        context = (context == null || context.length() ==0) ? "default" : context;
+        context = (context == null || context.length() == 0) ? "default" : context;
         Map<String, T> infoMap = repositoryMap.get(repositoryKey);
-        if(infoMap != null){
+        if (infoMap != null) {
             infoMap.remove(context);
         }
-        if(infoMap != null && infoMap.isEmpty()){
+        if (infoMap != null && infoMap.isEmpty()) {
             repositoryMap.remove(repositoryKey);
         }
     }
@@ -92,15 +92,15 @@ public class MapRepository<K, T> implements IRepository<K, T> {
      */
     @Override
     public T query(K repositoryKey, List<String> contextOrder) {
-        if(contextOrder == null || contextOrder.isEmpty()){
+        if (contextOrder == null || contextOrder.isEmpty()) {
             contextOrder = new ArrayList<>();
             contextOrder.add("default");
         }
 
         Map<String, T> infoMap = repositoryMap.get(repositoryKey);
-        if(infoMap != null) {
+        if (infoMap != null) {
             for (String context : contextOrder) {
-                if(infoMap.get(context) != null)
+                if (infoMap.get(context) != null)
                     return infoMap.get(context);
             }
         }
@@ -121,8 +121,10 @@ public class MapRepository<K, T> implements IRepository<K, T> {
     @Override
     public List<T> getAllValues(List<String> contextOrder) {
         List<T> repositoryInfos = new ArrayList<>();
-        for(K key:repositoryMap.keySet()){
-            repositoryInfos.add(query(key, contextOrder));
+        for (K key : repositoryMap.keySet()) {
+            T value = query(key, contextOrder);
+            if (value != null)
+                repositoryInfos.add(value);
         }
         return repositoryInfos;
     }
