@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+==================== NOTES ====================================
+
+1) The dataBean for a task should implement the java.io.Serializable interface.
+
+2) The dataBean should be mapped to an appropriate Queue in jaffa-messaging-config.xml.
+
+3) The attribute 'autoCreateDataBean' should be set to false, if the dataBean instance contains mandatory properties.
+In this scneario the dataBean instance should be passed by a client program to the TaskMaintenance component via
+the setBusinessObject() method.
+
+4) The attribute 'autoCreateDataBean' may be set to true, if the dataBean instance does not have any mandatory properties,
+or if its mandatory properties can be initialzed to default values. JaffaScheduler will simply instantiate the dataBean,
+if it has not been passed.
+
+===============================================================
+-->
+<config>
+  <task type='SOAEventPoller' dataBean='org.jaffa.soa.services.SOAEventPoller' autoCreateDataBean='true'/>
+  <task type='TransactionDependencySweeper' dataBean='org.jaffa.transaction.services.TransactionDependencySweeper' autoCreateDataBean='true'/>
+</config>

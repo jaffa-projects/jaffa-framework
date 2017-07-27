@@ -49,41 +49,17 @@
 
 package org.jaffa.modules.scheduler.services;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import javax.xml.XMLConstants;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
 import org.apache.log4j.Logger;
-import org.jaffa.modules.scheduler.services.configdomain.Config;
+import org.jaffa.config.loader.scheduler.SchedulerManager;
 import org.jaffa.modules.scheduler.services.configdomain.Task;
-import org.jaffa.util.JAXBHelper;
-import org.jaffa.util.URLHelper;
-import org.xml.sax.SAXException;
 
 /**
  * This class implements the Singleton pattern. Use the getInstance() method to get an instance of this class.
- * The Configuration Service reads the 'resources/jaffa-scheduler-config.xml' file.
- * It provides methods to extract information from the configuration file.
+ * It provides methods to extract information from the SchedulerManager class.
  */
 public class SchedulerConfiguration {
 
     private static final Logger log = Logger.getLogger(SchedulerConfiguration.class);
-
-    /**
-     * The location of the configuration file.
-     */
-    private static final String CONFIGURATION_FILE = "resources/jaffa-scheduler-config.xml";
-
-    /**
-     * The location of the schema for the configuration file.
-     */
-    private static final String CONFIGURATION_SCHEMA_FILE = "jaffa-scheduler-config_1_0.xsd";
 
     /**
      * The singleton instance of this class.
@@ -91,14 +67,9 @@ public class SchedulerConfiguration {
     private static SchedulerConfiguration c_singleton;
 
     /**
-     * Map of type and corresponding Task instance.
+     * Provides access to the schedulerManager from the SchedulerConfiguration
      */
-    private static Map<String, Task> m_taskMap = new LinkedHashMap<String, Task>();
-
-    /**
-     * Map of dataBean class name and corresponding Task instance.
-     */
-    private static final Map<String, Task> m_taskByDataBeanMap = new LinkedHashMap<String, Task>();
+    private static SchedulerManager schedulerManager;
 
     /**
      * Creates an instance of SchedulerConfiguration, if not already instantiated.
@@ -112,22 +83,13 @@ public class SchedulerConfiguration {
     }
 
     /**
-     * Returns the Java representation of the Task configuration.
-     *
-     * @return the Java representation of the Task configuration.
-     */
-    public String[] getTaskTypes() {
-        return m_taskMap.keySet().toArray(new String[m_taskMap.size()]);
-    }
-
-    /**
      * Returns the Java representation of the Task configuration for the given type.
      *
      * @param type the task type.
      * @return the Java representation of the Task configuration for the given type.
      */
     public Task getTask(String type) {
-        return m_taskMap.get(type);
+        return schedulerManager.getSchedulerTaskByTypeName(type,null);
     }
 
     /**
@@ -138,35 +100,20 @@ public class SchedulerConfiguration {
      * @throws ClassNotFoundException if dataBeanClassName is not found on the classpath
      */
     public Task getTaskByDataBean(String dataBeanClassName) throws ClassNotFoundException {
-        Task task = m_taskByDataBeanMap.get(dataBeanClassName);
-        if (task == null && !m_taskByDataBeanMap.containsKey(dataBeanClassName)) {
-            // Lookup the class hierarchy. Add a NULL for the dataBeanClassName, even if a Task is not found
-            synchronized (m_taskByDataBeanMap) {
-                task = m_taskByDataBeanMap.get(dataBeanClassName);
-                if (task == null && !m_taskByDataBeanMap.containsKey(dataBeanClassName)) {
-                    Class clazz = Class.forName(dataBeanClassName);
-                    while (clazz.getSuperclass() != null) {
-                        clazz = clazz.getSuperclass();
-                        task = m_taskByDataBeanMap.get(clazz.getName());
-                        if (task != null)
-                            break;
-                    }
-                    m_taskByDataBeanMap.put(dataBeanClassName, task);
-                }
-            }
-        }
-        return task;
+        return schedulerManager.getSchedulerTask(dataBeanClassName, null );
     }
 
     /**
      * Returns the Java representation of the Task configuration for the given type.
-     *
      * @return the Java representation of the Task configuration for the given type.
      */
     public Task[] getTasks() {
-        return m_taskMap.values().toArray(new Task[m_taskMap.size()]);
+        return schedulerManager.getAllSchedulerTasks(null);
     }
 
+    /**
+     * Creates the singleton instance of the SchedulerConfiguration
+     */
     private static synchronized void createSchedulerConfigurationInstance() {
         if (c_singleton == null) {
             c_singleton = new SchedulerConfiguration();
@@ -175,40 +122,25 @@ public class SchedulerConfiguration {
         }
     }
 
+    /**
+     * private constructor of the SchedulerConfiguration
+     */
     private SchedulerConfiguration() {
-        try {
-            if (log.isDebugEnabled())
-                log.debug("Unmarshalling the configuration file " + CONFIGURATION_FILE);
-            URL configFileUrl = URLHelper.newExtendedURL(CONFIGURATION_FILE);
-            URL configSchemaFileUrl = URLHelper.newExtendedURL(CONFIGURATION_SCHEMA_FILE);
-            JAXBContext jc = JAXBHelper.obtainJAXBContext(Config.class);
-            Unmarshaller unmarshaller = jc.createUnmarshaller();
-            SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema schema = sf.newSchema(configSchemaFileUrl);
-            unmarshaller.setSchema(schema);
-            final Config m_config = (Config) unmarshaller.unmarshal(configFileUrl);
+    }
 
-            // Creates a Map of type and corresponding Task instance
-            if (m_config.getTask() != null) {
-                for (Task task : m_config.getTask()) {
-                    m_taskMap.put(task.getType(), task);
-                    m_taskByDataBeanMap.put(task.getDataBean(), task);
-                    if (log.isDebugEnabled())
-                        log.debug("Loaded Task for " + task.getType());
-                }
-            }
-        } catch (JAXBException e) {
-            String s = "Error in parsing the configuration file " + CONFIGURATION_FILE;
-            log.fatal(s, e);
-            throw new RuntimeException(s, e);
-        } catch (MalformedURLException e) {
-            String s = "Error in locating the configuration file " + CONFIGURATION_FILE;
-            log.fatal(s, e);
-            throw new RuntimeException(s, e);
-        } catch (SAXException e) {
-            String s = "Error in loading the schema for the configuration file " + CONFIGURATION_SCHEMA_FILE;
-            log.fatal(s, e);
-            throw new RuntimeException(s, e);
-        }
+    /**
+     * Returns the scheduler manager
+     * @return
+     */
+    public static SchedulerManager getSchedulerManager() {
+        return schedulerManager;
+    }
+
+    /**
+     * Sets the scheduler manager
+     * @param schedulerManager
+     */
+    public static void setSchedulerManager(SchedulerManager schedulerManager) {
+        SchedulerConfiguration.schedulerManager = schedulerManager;
     }
 }
