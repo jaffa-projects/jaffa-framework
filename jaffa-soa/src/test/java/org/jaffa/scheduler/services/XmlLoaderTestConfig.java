@@ -93,7 +93,6 @@ public class XmlLoaderTestConfig extends XmlLoaderConfig {
         SchedulerManager schedulerManager = new SchedulerManager();
         SchedulerConfiguration.getInstance().setSchedulerManager(schedulerManager);
         schedulerManager.setContextOrder(contextOrder());
-        schedulerManager.setSchedulerTaskRepository(schedulerTaskRepository());
         return schedulerManager;
     }
 

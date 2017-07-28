@@ -51,6 +51,7 @@ package org.jaffa.config.loader.scheduler;
 
 import org.jaffa.loader.IManager;
 import org.jaffa.loader.IRepository;
+import org.jaffa.loader.MapRepository;
 import org.jaffa.modules.scheduler.services.configdomain.Config;
 import org.jaffa.modules.scheduler.services.configdomain.Task;
 import org.jaffa.util.JAXBHelper;
@@ -79,7 +80,7 @@ public class SchedulerManager implements IManager {
      */
     private static final String CONFIGURATION_SCHEMA_FILE = "org/jaffa/modules/scheduler/services/configdomain/jaffa-scheduler-config_1_0.xsd";
 
-    private IRepository<String, Task> schedulerTaskRepository;
+    private IRepository<String, Task> schedulerTaskRepository = new MapRepository<>();
 
     @Autowired
     @Qualifier("contextOrder")

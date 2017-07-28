@@ -49,10 +49,8 @@
 
 package org.jaffa.config.loader.scheduler;
 
-import org.jaffa.loader.MapRepository;
 import org.jaffa.loader.XmlLoader;
 import org.jaffa.modules.scheduler.services.SchedulerConfiguration;
-import org.jaffa.modules.scheduler.services.configdomain.Task;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -71,7 +69,7 @@ public class XmlLoaderConfig {
      */
     @Bean
     public XmlLoader<SchedulerManager> schedulerManagerXmlLoader() {
-        XmlLoader schedulerManagerXmlLoader = new XmlLoader();
+        XmlLoader<SchedulerManager> schedulerManagerXmlLoader = new XmlLoader<>();
         schedulerManagerXmlLoader.setManager(schedulerManager());
         return schedulerManagerXmlLoader;
     }
@@ -85,21 +83,10 @@ public class XmlLoaderConfig {
     public SchedulerManager schedulerManager() {
         SchedulerManager schedulerManager = new SchedulerManager();
         SchedulerConfiguration.getInstance().setSchedulerManager(schedulerManager);
-        schedulerManager.setSchedulerTaskRepository(schedulerTaskRepository());
         return schedulerManager;
     }
 
-    /**
-     * Returns the repository of Scheduler tasks within the MapRepository object.
-     *
-     * @return
-     */
-    protected MapRepository<String, Task> schedulerTaskRepository() {
-        MapRepository<String, Task> mapRepository = new MapRepository<>();
-        return mapRepository;
-    }
-
-    /**
+   /**
      * Loads the xmls after constructing the XMLLoaderConfig class.
      */
     @PostConstruct
