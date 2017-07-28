@@ -81,8 +81,8 @@ public class MapRepositoryTest {
         mapRepository.unregister("key1", "jwl");
         mapRepository.unregister("key1", "saf");
         assertEquals("value3", mapRepository.query("key1", jwlContextOrder)) ;
-        assertEquals("value1", mapRepository.query("key1", safContextOrder)) ;
-        assertEquals("value5", mapRepository.query("key2", safContextOrder)) ;
+        assertEquals("value3", mapRepository.query("key1", safContextOrder)) ;
+        assertEquals("value6", mapRepository.query("key2", safContextOrder)) ;
     }
 
     /**
