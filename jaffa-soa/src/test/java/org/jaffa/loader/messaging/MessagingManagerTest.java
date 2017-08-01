@@ -1,4 +1,4 @@
-package org.jaffa.config.loader.messaging;
+package org.jaffa.loader.messaging;
 
 import org.jaffa.modules.messaging.services.configdomain.*;
 import org.junit.After;
@@ -111,7 +111,7 @@ public class MessagingManagerTest {
         QueueInfo qInfo = new QueueInfo();
         String queueName = "q1";
         qInfo.setName(queueName);
-        messagingManager.registerQueueInfo(queueName, qInfo, null);
+        messagingManager.registerQueueInfo(queueName, qInfo, "0-PLATFORM");
         queueNames = messagingManager.getQueueNames();
         assertEquals(1, queueNames.length);
 
@@ -121,7 +121,7 @@ public class MessagingManagerTest {
         TopicInfo topicInfo = new TopicInfo();
         String topicName = "t1";
         topicInfo.setName(topicName);
-        messagingManager.registerTopicInfo(topicName, topicInfo, null);
+        messagingManager.registerTopicInfo(topicName, topicInfo, "0-PLATFORM");
         topicNames = messagingManager.getTopicNames();
         assertEquals(1, topicNames.length);
 
@@ -142,7 +142,7 @@ public class MessagingManagerTest {
         QueueInfo qInfo = new QueueInfo();
         String commonName = "q1";
         qInfo.setName(commonName);
-        messagingManager.registerQueueInfo(commonName, qInfo, null);
+        messagingManager.registerQueueInfo(commonName, qInfo, "0-PLATFORM");
         queueNames = messagingManager.getQueueNames();
         assertEquals(1, queueNames.length);
 
@@ -151,7 +151,7 @@ public class MessagingManagerTest {
 
         TopicInfo topicInfo = new TopicInfo();
         topicInfo.setName(commonName);
-        messagingManager.registerTopicInfo(commonName, topicInfo, null);
+        messagingManager.registerTopicInfo(commonName, topicInfo, "0-PLATFORM");
         topicNames = messagingManager.getTopicNames();
         assertEquals(1, topicNames.length);
 
@@ -191,18 +191,18 @@ public class MessagingManagerTest {
         QueueInfo info = new QueueInfo();
         String queueName = "q1";
         info.setName(queueName);
-        messagingManager.registerQueueInfo(queueName, info, null);
+        messagingManager.registerQueueInfo(queueName, info, "0-PLATFORM");
         queueNames = messagingManager.getQueueNames();
         assertEquals(1, queueNames.length);
 
         QueueInfo info2 = new QueueInfo();
         String queueName2 = "q2";
         info2.setName(queueName2);
-        messagingManager.registerQueueInfo(queueName2, info2, null);
+        messagingManager.registerQueueInfo(queueName2, info2, "0-PLATFORM");
         queueNames = messagingManager.getQueueNames();
         assertEquals(2, queueNames.length);
 
-        messagingManager.unregisterQueueInfo(queueName, null);
+        messagingManager.unregisterQueueInfo(queueName, "0-PLATFORM");
         queueNames = messagingManager.getQueueNames();
         assertEquals(1, queueNames.length);
     }
@@ -220,18 +220,18 @@ public class MessagingManagerTest {
         TopicInfo info = new TopicInfo();
         String topicName = "q1";
         info.setName(topicName);
-        messagingManager.registerTopicInfo(topicName, info, null);
+        messagingManager.registerTopicInfo(topicName, info, "0-PLATFORM");
         topicNames = messagingManager.getTopicNames();
         assertEquals(1, topicNames.length);
 
         TopicInfo info2 = new TopicInfo();
         String topicName2 = "q2";
         info2.setName(topicName2);
-        messagingManager.registerTopicInfo(topicName2, info2, null);
+        messagingManager.registerTopicInfo(topicName2, info2, "0-PLATFORM");
         topicNames = messagingManager.getTopicNames();
         assertEquals(2, topicNames.length);
 
-        messagingManager.unregisterTopicInfo(topicName, null);
+        messagingManager.unregisterTopicInfo(topicName, "0-PLATFORM");
         topicNames = messagingManager.getTopicNames();
         assertEquals(1, topicNames.length);
     }
@@ -248,18 +248,18 @@ public class MessagingManagerTest {
         MessageFilter info = new MessageFilter();
         String filterName = "q1";
         info.setFilterName(filterName);
-        messagingManager.registerMessageFilter(filterName, info, null);
+        messagingManager.registerMessageFilter(filterName, info, "0-PLATFORM");
         filterNames = messagingManager.getMessageFilters();
         assertEquals(1, filterNames.size());
 
         MessageFilter info2 = new MessageFilter();
         String filterName2 = "q2";
         info2.setFilterName(filterName2);
-        messagingManager.registerMessageFilter(filterName2, info2, null);
+        messagingManager.registerMessageFilter(filterName2, info2, "0-PLATFORM");
         filterNames = messagingManager.getMessageFilters();
         assertEquals(2, filterNames.size());
 
-        messagingManager.unregisterMessageFilter(filterName, null);
+        messagingManager.unregisterMessageFilter(filterName, "0-PLATFORM");
         filterNames = messagingManager.getMessageFilters();
         assertEquals(1, filterNames.size());
     }
@@ -273,7 +273,7 @@ public class MessagingManagerTest {
         MessageFilter info = new MessageFilter();
         String name = "q1";
         info.setFilterName(name);
-        messagingManager.registerMessageFilter(name, info, null);
+        messagingManager.registerMessageFilter(name, info, "0-PLATFORM");
         List<MessageFilter> filters = messagingManager.getMessageFilters();
         assertEquals(1, filters.size());
         MessageFilter filter1 = filters.get(0);
@@ -289,7 +289,7 @@ public class MessagingManagerTest {
         MessageInfo info = new MessageInfo();
         String queueName = "q1";
         info.setQueueName(queueName);
-        messagingManager.registerMessageInfo(queueName, info, null);
+        messagingManager.registerMessageInfo(queueName, info, "0-PLATFORM");
         MessageInfo retrievedInfo =
                 messagingManager.getMessageInfo(queueName, null);
         Assert.assertEquals(info, retrievedInfo);

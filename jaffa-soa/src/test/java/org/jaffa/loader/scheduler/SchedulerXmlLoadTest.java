@@ -1,6 +1,7 @@
-package org.jaffa.scheduler.services;
+package org.jaffa.loader.scheduler;
 
-import org.jaffa.config.loader.scheduler.SchedulerManager;
+import org.jaffa.loader.XmlLoaderConfig;
+import org.jaffa.loader.scheduler.SchedulerManager;
 import org.jaffa.modules.scheduler.services.configdomain.Task;
 import org.jaffa.soa.services.SOAEventPoller;
 import org.jaffa.transaction.services.TransactionDependencySweeper;
@@ -13,11 +14,11 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 /**
- * AllXmlLoadTest - Verifies the Scheduler beans can be loaded from the SchedulerManager implementation.
+ * MessagingXmlLoadTest - Verifies the Scheduler beans can be loaded from the SchedulerManager implementation.
  */
-public class AllXmlLoadTest {
+public class SchedulerXmlLoadTest {
 
-    private static AnnotationConfigApplicationContext xmlLoaderConfig = new AnnotationConfigApplicationContext(XmlLoaderTestConfig.class);
+    private static AnnotationConfigApplicationContext xmlLoaderConfig = new AnnotationConfigApplicationContext(XmlLoaderConfig.class);
 
     /**
      * Test load the XML config for the scheduler task repository.

@@ -50,7 +50,7 @@
 package org.jaffa.modules.scheduler.services;
 
 import org.apache.log4j.Logger;
-import org.jaffa.config.loader.scheduler.SchedulerManager;
+import org.jaffa.loader.scheduler.SchedulerManager;
 import org.jaffa.modules.scheduler.services.configdomain.Task;
 
 /**

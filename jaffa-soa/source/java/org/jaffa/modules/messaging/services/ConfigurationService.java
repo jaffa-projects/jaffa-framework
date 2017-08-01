@@ -49,8 +49,8 @@
 package org.jaffa.modules.messaging.services;
 
 import org.apache.log4j.Logger;
-import org.jaffa.config.loader.messaging.JndiJmsManager;
-import org.jaffa.config.loader.messaging.MessagingManager;
+import org.jaffa.loader.messaging.JndiJmsManager;
+import org.jaffa.loader.messaging.MessagingManager;
 import org.jaffa.modules.messaging.services.configdomain.*;
 
 import java.util.List;

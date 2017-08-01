@@ -1,6 +1,7 @@
-package org.jaffa.messaging.services;
+package org.jaffa.loader.messaging;
 
-import org.jaffa.config.loader.messaging.MessagingManager;
+import org.jaffa.loader.XmlLoaderConfig;
+import org.jaffa.loader.messaging.MessagingManager;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -10,13 +11,13 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 /**
- * AllXmlLoadTest - Verifies the Messaging beans can be loaded from the MessageManager implementation.
+ * MessagingXmlLoadTest - Verifies the Messaging beans can be loaded from the MessageManager implementation.
  */
-public class AllXmlLoadTest {
+public class MessagingXmlLoadTest {
 
 
     private static AnnotationConfigApplicationContext xmlLoaderConfig =
-            new AnnotationConfigApplicationContext(XmlLoaderTestConfig.class);
+            new AnnotationConfigApplicationContext(XmlLoaderConfig.class);
 
     /**
      * Test load the XML config for the scheduler task repository.

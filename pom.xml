@@ -175,6 +175,7 @@
         <manifest.bundle.manifest.version>2</manifest.bundle.manifest.version>
         <manifest.bundle.classpath>.</manifest.bundle.classpath>
         <manifest.export.package>.</manifest.export.package>
+        <manifest.product.context>0-PLATFORM</manifest.product.context>
         <donotcopy.bundle.plugin>(CVS|.svn)</donotcopy.bundle.plugin>
 
         <!-- ******************************************************************* -->
@@ -658,6 +659,8 @@
                                 <Implementation-Vendor-Id>${manifest.implementation.vendor.id}
                                 </Implementation-Vendor-Id>
 
+                                <Context-Salience>${manifest.product.context}</Context-Salience>
+
                                 <!-- <Bundle-Activator>org.jaffa.osgi.framework.JaffaBundleActivator</Bundle-Activator> -->
 
                                 <Bundle-Vendor-Id>${manifest.bundle.vendor.id}</Bundle-Vendor-Id>
@@ -818,6 +821,7 @@
                                 </Implementation-Vendor-Id>
                                 <Built-By>${manifest.built.by}</Built-By>
                                 <Build-Timestamp>${build.datetime}</Build-Timestamp>
+                                <Context-Salience>${manifest.product.context}</Context-Salience>
                             </manifestEntries>
                         </archive>
                     </configuration>
@@ -905,7 +909,7 @@
                                 <DynamicImport-Package>*</DynamicImport-Package>
                                 <Bnd-LastModified>${maven.build.timestamp}</Bnd-LastModified>
                                 <Export-Package>${manifest.export.package}</Export-Package>
-
+                                <Context-Salience>${manifest.product.context}</Context-Salience>
                                 <Built-By>${manifest.built.by}</Built-By>
                                 <Build-Timestamp>${build.datetime}</Build-Timestamp>
                             </manifestEntries>
@@ -1020,6 +1024,7 @@
                                 <Bnd-LastModified>${maven.build.timestamp}</Bnd-LastModified>
                                 <Export-Package>${manifest.export.package}</Export-Package>
 
+                                <Context-Salience>${manifest.product.context}</Context-Salience>
                                 <Built-By>${manifest.built.by}</Built-By>
                                 <Build-Timestamp>${build.datetime}</Build-Timestamp>
                             </manifestEntries>
@@ -1076,6 +1081,7 @@
                                 <Implementation-Vendor>${manifest.implementation.vendor}</Implementation-Vendor>
                                 <Implementation-Vendor-Id>${manifest.implementation.vendor.id}
                                 </Implementation-Vendor-Id>
+                                <Context-Salience>${manifest.product.context}</Context-Salience>
                                 <Built-By>${manifest.built.by}</Built-By>
                                 <Build-Timestamp>${build.datetime}</Build-Timestamp>
                             </manifestEntries>

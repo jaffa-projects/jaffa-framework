@@ -49,10 +49,12 @@
 
 package org.jaffa.loader;
 
-import javax.annotation.PostConstruct;
-
+import org.jaffa.loader.messaging.MessagingManager;
+import org.jaffa.loader.scheduler.SchedulerManager;
 import org.jaffa.loader.soa.SoaEventManager;
 import org.jaffa.loader.transaction.TransactionManager;
+import org.jaffa.modules.messaging.services.ConfigurationService;
+import org.jaffa.modules.scheduler.services.SchedulerConfiguration;
 import org.jaffa.soa.services.configdomain.SoaEventInfo;
 import org.jaffa.transaction.services.configdomain.TransactionInfo;
 import org.jaffa.transaction.services.configdomain.TypeInfo;
@@ -68,10 +70,11 @@ public class XmlLoaderConfig {
 	/****************************************************/
 	/*************  Transaction Manager    **************/
 	/****************************************************/
-    @Bean
+    @Bean(name = "transactionManagerXmlLoader")
     public XmlLoader<TransactionManager> transactionManagerXmlLoader() {
         XmlLoader<TransactionManager> transactionManagerXmlLoader = new XmlLoader<TransactionManager>() ;
         transactionManagerXmlLoader.setManager(transactionManager());
+        System.out.println("My Bean created");
         return  transactionManagerXmlLoader;
     }
 
@@ -97,7 +100,7 @@ public class XmlLoaderConfig {
 	/****************************************************/
 	/*************   Soa Event Manager     **************/
 	/****************************************************/
-    @Bean
+    @Bean(name = "soaEventManagerXmlLoader")
     public XmlLoader<SoaEventManager> soaEventManagerXmlLoader() {
         XmlLoader<SoaEventManager> soaEventManagerXmlLoader = new XmlLoader<SoaEventManager>() ;
         soaEventManagerXmlLoader.setManager(soaEventManager());
@@ -112,16 +115,55 @@ public class XmlLoaderConfig {
         return soaEventManager;
     }
 
+    /**
+     * @return the messaging manager's XML loader
+     */
+    @Bean(name = "messagingManagerXmlLoader")
+    public XmlLoader<MessagingManager> messagingManagerXmlLoader() {
+        XmlLoader<MessagingManager> messagingManagerXmlLoader =
+                new XmlLoader<>() ;
+        messagingManagerXmlLoader.setManager(messagingManager());
+        return messagingManagerXmlLoader;
+    }
+
+    /**
+     * Creates and initializes the messaging manager.
+     * @return the newly created MessagingManager
+     */
+    @Bean
+    public MessagingManager messagingManager() {
+        MessagingManager messagingManager = new MessagingManager();
+        ConfigurationService.getInstance().setMessagingManager(messagingManager);
+        return messagingManager;
+    }
+
     private MapRepository<String, SoaEventInfo> soaEventInfoRepository(){
         MapRepository<String, SoaEventInfo> mapRepository= new MapRepository<>();
         return mapRepository;
     }
-    
 
-    @PostConstruct
-    public void loadXmls(){
-        transactionManagerXmlLoader().loadXmls();
-        soaEventManagerXmlLoader().loadXmls();
+    /**
+     * Loads the SchedulerManager
+     *
+     * @return
+     */
+    @Bean(name = "schedulerManagerXmlLoader")
+    public XmlLoader<SchedulerManager> schedulerManagerXmlLoader() {
+        XmlLoader<SchedulerManager> schedulerManagerXmlLoader = new XmlLoader<>();
+        schedulerManagerXmlLoader.setManager(schedulerManager());
+        return schedulerManagerXmlLoader;
+    }
+
+    /**
+     * Initializes the schedulerManager class.
+     *
+     * @return
+     */
+    @Bean
+    public SchedulerManager schedulerManager() {
+        SchedulerManager schedulerManager = new SchedulerManager();
+        SchedulerConfiguration.getInstance().setSchedulerManager(schedulerManager);
+        return schedulerManager;
     }
 
 }
