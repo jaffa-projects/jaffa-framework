@@ -47,85 +47,77 @@
  * ====================================================================
  */
 
-package org.jaffa.loader;
+package org.jaffa.config.loader;
 
-import java.util.*;
+import org.jaffa.config.loader.messaging.MessagingManager;
+import org.jaffa.loader.MapRepository;
+import org.jaffa.loader.XmlLoader;
+import org.jaffa.loader.soa.SoaEventManager;
+import org.jaffa.modules.messaging.services.ConfigurationService;
+import org.jaffa.soa.services.configdomain.SoaEventInfo;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import javax.annotation.PostConstruct;
 
 /**
- * Java Map Implementation of IRepository
+ * Contains all the Beans related to the Loader Architecture for the Jaffa-SOA
  */
-public class MapRepository<K, T> implements IRepository<K, T> {
+@Configuration
+public class XmlLoaderConfig {
 
-    Map<K, Map<String, T>> repositoryMap = new HashMap<>();
-
-    /**
-     * {@inheritDoc}
+	/**
+     * @return the messaging manager's XML loader
      */
-    @Override
-    public void register(K repositoryKey, T repository, String context) {
-        context = (context == null || context.length() == 0) ? "default" : context;
-        Map<String, T> infoMap = repositoryMap.get(repositoryKey);
-        if (infoMap == null) {
-            infoMap = new HashMap<>();
-        }
-        infoMap.put(context, repository);
-        repositoryMap.put(repositoryKey, infoMap);
+    @Bean
+    public XmlLoader<MessagingManager> messagingManagerXmlLoader() {
+        XmlLoader<MessagingManager> messagingManagerXmlLoader =
+                new XmlLoader<>() ;
+        messagingManagerXmlLoader.setManager(messagingManager());
+        return messagingManagerXmlLoader;
     }
 
     /**
-     * {@inheritDoc}
+     * Creates and initializes the messaging manager.
+     * @return the newly created MessagingManager
      */
-    @Override
-    public void unregister(K repositoryKey, String context) {
-        context = (context == null || context.length() == 0) ? "default" : context;
-        Map<String, T> infoMap = repositoryMap.get(repositoryKey);
-        if (infoMap != null) {
-            infoMap.remove(context);
-        }
-        if (infoMap != null && infoMap.isEmpty()) {
-            repositoryMap.remove(repositoryKey);
-        }
+    @Bean
+    public MessagingManager messagingManager() {
+        MessagingManager messagingManager = new MessagingManager();
+        ConfigurationService.getInstance().setMessagingManager(messagingManager);
+        return messagingManager;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public T query(K repositoryKey, List<String> contextOrder) {
-        if (contextOrder == null || contextOrder.isEmpty()) {
-            contextOrder = new ArrayList<>();
-            contextOrder.add("default");
-        }
-
-        Map<String, T> infoMap = repositoryMap.get(repositoryKey);
-        if (infoMap != null) {
-            for (String context : contextOrder) {
-                if (infoMap.get(context) != null)
-                    return infoMap.get(context);
-            }
-        }
-        return null;
+	/* **************************************************/
+	/*************   Soa Event Manager     **************/
+	/****************************************************/
+    @Bean
+    public XmlLoader<SoaEventManager> soaEventManagerXmlLoader() {
+        XmlLoader<SoaEventManager> soaEventManagerXmlLoader =
+                new XmlLoader<SoaEventManager>() ;
+        soaEventManagerXmlLoader.setManager(soaEventManager());
+        return soaEventManagerXmlLoader;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Set<K> getAllKeys() {
-        return repositoryMap.keySet();
+    @Bean
+    public SoaEventManager soaEventManager() {
+    	SoaEventManager soaEventManager = new SoaEventManager();
+    	org.jaffa.soa.services.ConfigurationService.setSoaEventManager(soaEventManager);
+        soaEventManager.setSoaEventRepository(soaEventInfoRepository());
+        return soaEventManager;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<T> getAllValues(List<String> contextOrder) {
-        List<T> repositoryInfos = new ArrayList<>();
-        for (K key : repositoryMap.keySet()) {
-            T value = query(key, contextOrder);
-            if (value != null)
-                repositoryInfos.add(value);
-        }
-        return repositoryInfos;
+    private MapRepository<String, SoaEventInfo> soaEventInfoRepository(){
+        MapRepository<String, SoaEventInfo> mapRepository= new MapRepository<>();
+        return mapRepository;
     }
+    
+
+    @PostConstruct
+    public void loadXmls(){
+        messagingManagerXmlLoader().loadXmls();
+        soaEventManagerXmlLoader().loadXmls();
+    }
+
 }
+

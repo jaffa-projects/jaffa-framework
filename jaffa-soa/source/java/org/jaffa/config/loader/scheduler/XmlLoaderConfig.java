@@ -47,85 +47,52 @@
  * ====================================================================
  */
 
-package org.jaffa.loader;
+package org.jaffa.config.loader.scheduler;
 
-import java.util.*;
+import org.jaffa.loader.XmlLoader;
+import org.jaffa.modules.scheduler.services.SchedulerConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import javax.annotation.PostConstruct;
 
 /**
- * Java Map Implementation of IRepository
+ * Contains all the Beans related to the Scheduler Loader Architecture for the Jaffa-SOA
  */
-public class MapRepository<K, T> implements IRepository<K, T> {
-
-    Map<K, Map<String, T>> repositoryMap = new HashMap<>();
+@Configuration
+public class XmlLoaderConfig {
 
     /**
-     * {@inheritDoc}
+     * Loads the SchedulerManager
+     *
+     * @return
      */
-    @Override
-    public void register(K repositoryKey, T repository, String context) {
-        context = (context == null || context.length() == 0) ? "default" : context;
-        Map<String, T> infoMap = repositoryMap.get(repositoryKey);
-        if (infoMap == null) {
-            infoMap = new HashMap<>();
-        }
-        infoMap.put(context, repository);
-        repositoryMap.put(repositoryKey, infoMap);
+    @Bean
+    public XmlLoader<SchedulerManager> schedulerManagerXmlLoader() {
+        XmlLoader<SchedulerManager> schedulerManagerXmlLoader = new XmlLoader<>();
+        schedulerManagerXmlLoader.setManager(schedulerManager());
+        return schedulerManagerXmlLoader;
     }
 
     /**
-     * {@inheritDoc}
+     * Initializes the schedulerManager class.
+     *
+     * @return
      */
-    @Override
-    public void unregister(K repositoryKey, String context) {
-        context = (context == null || context.length() == 0) ? "default" : context;
-        Map<String, T> infoMap = repositoryMap.get(repositoryKey);
-        if (infoMap != null) {
-            infoMap.remove(context);
-        }
-        if (infoMap != null && infoMap.isEmpty()) {
-            repositoryMap.remove(repositoryKey);
-        }
+    @Bean
+    public SchedulerManager schedulerManager() {
+        SchedulerManager schedulerManager = new SchedulerManager();
+        SchedulerConfiguration.getInstance().setSchedulerManager(schedulerManager);
+        return schedulerManager;
     }
 
-    /**
-     * {@inheritDoc}
+   /**
+     * Loads the xmls after constructing the XMLLoaderConfig class.
      */
-    @Override
-    public T query(K repositoryKey, List<String> contextOrder) {
-        if (contextOrder == null || contextOrder.isEmpty()) {
-            contextOrder = new ArrayList<>();
-            contextOrder.add("default");
-        }
-
-        Map<String, T> infoMap = repositoryMap.get(repositoryKey);
-        if (infoMap != null) {
-            for (String context : contextOrder) {
-                if (infoMap.get(context) != null)
-                    return infoMap.get(context);
-            }
-        }
-        return null;
+    @PostConstruct
+    public void loadXmls() {
+        schedulerManagerXmlLoader().loadXmls();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Set<K> getAllKeys() {
-        return repositoryMap.keySet();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<T> getAllValues(List<String> contextOrder) {
-        List<T> repositoryInfos = new ArrayList<>();
-        for (K key : repositoryMap.keySet()) {
-            T value = query(key, contextOrder);
-            if (value != null)
-                repositoryInfos.add(value);
-        }
-        return repositoryInfos;
-    }
 }
+
