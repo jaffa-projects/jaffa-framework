@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <jms-config connection-factory='ConnectionFactory' user="JMS.USER" password="JMS.PASSWORD">
+        <jndi-context>
+            <param name="java.naming.factory.initial">org.apache.activemq.jndi.ActiveMQInitialContextFactory</param>
+            <param name="java.naming.provider.url">ACTIVEMQ_BROKER_URL</param>
+            <param name="topic.topic/OutboundEvents">topic/OutboundEvents</param>
+            <param name="topic.topic/PublicEvents">topic/PublicEvents</param>
+        </jndi-context>
+    </jms-config>
+</config>

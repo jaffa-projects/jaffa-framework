@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-  <!-- TODO uncomment JNDI section
+  <!--
   <jms-config connection-factory='ConnectionFactory' user='someUser' password='somePassword'>
     <jndi-context>
       <param name='java.naming.factory.initial'>org.jnp.interfaces.NamingContextFactory</param>
@@ -9,7 +9,6 @@
     </jndi-context>
   </jms-config>
 -->
-
   <message dataBean='org.jaffa.modules.messaging.services.BaseMessage'
       queueName='jaffa/queue'
       toClass='org.jaffa.modules.messaging.services.BaseService'
@@ -55,5 +54,9 @@
     <display-param name='JMSMessageID' label='Message ID'/>
     <display-param name='JMSMessagePriority' label='Message Priority'/>
   </queue>
+
+  <topic name='topic1' consumerPolicy='none'/>
+
+  <topic name='topic2' consumerPolicy='none'/>
 
 </config>
