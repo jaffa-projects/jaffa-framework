@@ -74,7 +74,6 @@ public class XmlLoaderConfig {
     public XmlLoader<TransactionManager> transactionManagerXmlLoader() {
         XmlLoader<TransactionManager> transactionManagerXmlLoader = new XmlLoader<TransactionManager>() ;
         transactionManagerXmlLoader.setManager(transactionManager());
-        System.out.println("My Bean created");
         return  transactionManagerXmlLoader;
     }
 
