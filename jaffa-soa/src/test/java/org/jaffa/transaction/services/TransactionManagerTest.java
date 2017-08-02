@@ -1,7 +1,7 @@
 package org.jaffa.transaction.services;
 
 import org.jaffa.loader.IRepository;
-import org.jaffa.loader.transaction.TransactionManager;
+import org.jaffa.config.loader.transaction.TransactionManager;
 import org.jaffa.transaction.services.configdomain.TransactionInfo;
 import org.jaffa.transaction.services.configdomain.TypeInfo;
 import org.junit.Before;
@@ -14,8 +14,6 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;

@@ -1,7 +1,8 @@
 package org.jaffa.transaction.services;
 
-import org.jaffa.loader.soa.SoaEventManager;
-import org.jaffa.loader.transaction.TransactionManager;
+import org.jaffa.config.TestConfigLoad;
+import org.jaffa.config.loader.soa.SoaEventManager;
+import org.jaffa.config.loader.transaction.TransactionManager;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

@@ -1,5 +1,6 @@
-package org.jaffa.config.loader.messaging;
+package org.jaffa.messaging.services;
 
+import org.jaffa.config.loader.messaging.MessagingManager;
 import org.jaffa.modules.messaging.services.configdomain.*;
 import org.junit.After;
 import org.junit.Assert;
