@@ -49,16 +49,21 @@
 
 package org.jaffa.config.loader;
 
+import javax.annotation.PostConstruct;
+
 import org.jaffa.config.loader.messaging.MessagingManager;
+import org.jaffa.config.loader.scheduler.SchedulerManager;
+import org.jaffa.config.loader.soa.SoaEventManager;
+import org.jaffa.config.loader.transaction.TransactionManager;
 import org.jaffa.loader.MapRepository;
 import org.jaffa.loader.XmlLoader;
-import org.jaffa.loader.soa.SoaEventManager;
 import org.jaffa.modules.messaging.services.ConfigurationService;
+import org.jaffa.modules.scheduler.services.SchedulerConfiguration;
 import org.jaffa.soa.services.configdomain.SoaEventInfo;
+import org.jaffa.transaction.services.configdomain.TransactionInfo;
+import org.jaffa.transaction.services.configdomain.TypeInfo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.annotation.PostConstruct;
 
 /**
  * Contains all the Beans related to the Loader Architecture for the Jaffa-SOA
@@ -66,37 +71,43 @@ import javax.annotation.PostConstruct;
 @Configuration
 public class XmlLoaderConfig {
 
-	/**
-     * @return the messaging manager's XML loader
-     */
+	/****************************************************/
+	/*************  Transaction Manager    **************/
+	/****************************************************/
     @Bean
-    public XmlLoader<MessagingManager> messagingManagerXmlLoader() {
-        XmlLoader<MessagingManager> messagingManagerXmlLoader =
-                new XmlLoader<>() ;
-        messagingManagerXmlLoader.setManager(messagingManager());
-        return messagingManagerXmlLoader;
+    public XmlLoader<TransactionManager> transactionManagerXmlLoader() {
+        XmlLoader<TransactionManager> transactionManagerXmlLoader = new XmlLoader<TransactionManager>() ;
+        transactionManagerXmlLoader.setManager(transactionManager());
+        return  transactionManagerXmlLoader;
     }
 
-    /**
-     * Creates and initializes the messaging manager.
-     * @return the newly created MessagingManager
-     */
     @Bean
-    public MessagingManager messagingManager() {
-        MessagingManager messagingManager = new MessagingManager();
-        ConfigurationService.getInstance().setMessagingManager(messagingManager);
-        return messagingManager;
+    public TransactionManager transactionManager() {
+        TransactionManager transactionManager = new TransactionManager();
+        org.jaffa.transaction.services.ConfigurationService.setTransactionManager(transactionManager);
+        transactionManager.setTransactionRepository(transactionInfoRepository());
+        transactionManager.setTypeInfoRepository(typeInfoRepository());
+        return transactionManager;
     }
 
-	/* **************************************************/
+    private MapRepository<String, TransactionInfo> transactionInfoRepository(){
+        MapRepository<String, TransactionInfo> mapRepository= new MapRepository<>();
+        return mapRepository;
+    }
+
+    private MapRepository<String, TypeInfo> typeInfoRepository(){
+        MapRepository<String, TypeInfo> mapRepository= new MapRepository<>();
+        return mapRepository;
+    }
+    
+	/****************************************************/
 	/*************   Soa Event Manager     **************/
 	/****************************************************/
     @Bean
     public XmlLoader<SoaEventManager> soaEventManagerXmlLoader() {
-        XmlLoader<SoaEventManager> soaEventManagerXmlLoader =
-                new XmlLoader<SoaEventManager>() ;
+        XmlLoader<SoaEventManager> soaEventManagerXmlLoader = new XmlLoader<SoaEventManager>() ;
         soaEventManagerXmlLoader.setManager(soaEventManager());
-        return soaEventManagerXmlLoader;
+        return  soaEventManagerXmlLoader;
     }
 
     @Bean
@@ -111,12 +122,66 @@ public class XmlLoaderConfig {
         MapRepository<String, SoaEventInfo> mapRepository= new MapRepository<>();
         return mapRepository;
     }
-    
+
+    /****************************************************/
+    /*************   Messaging Manager     **************/
+    /****************************************************/
+    /**
+     * @return the messaging manager's XML loader
+     */
+    @Bean
+    public XmlLoader<MessagingManager> messagingManagerXmlLoader() {
+        XmlLoader<MessagingManager> messagingManagerXmlLoader =
+                new XmlLoader<>();
+        messagingManagerXmlLoader.setManager(messagingManager());
+        return messagingManagerXmlLoader;
+    }
+
+    /**
+     * Creates and initializes the messaging manager.
+     *
+     * @return the newly created MessagingManager
+     */
+    @Bean
+    public MessagingManager messagingManager() {
+        MessagingManager messagingManager = new MessagingManager();
+        ConfigurationService.getInstance().setMessagingManager(messagingManager);
+        return messagingManager;
+    }
+
+    /****************************************************/
+    /*************   Scheduler Manager     **************/
+    /****************************************************/
+    /**
+     * Loads the SchedulerManager
+     *
+     * @return
+     */
+    @Bean
+    public XmlLoader<SchedulerManager> schedulerManagerXmlLoader() {
+        XmlLoader<SchedulerManager> schedulerManagerXmlLoader = new XmlLoader<>();
+        schedulerManagerXmlLoader.setManager(schedulerManager());
+        return schedulerManagerXmlLoader;
+    }
+
+    /**
+     * Initializes the schedulerManager class.
+     *
+     * @return
+     */
+    @Bean
+    public SchedulerManager schedulerManager() {
+        SchedulerManager schedulerManager = new SchedulerManager();
+        SchedulerConfiguration.getInstance().setSchedulerManager(schedulerManager);
+        return schedulerManager;
+    }
 
     @PostConstruct
     public void loadXmls(){
-        messagingManagerXmlLoader().loadXmls();
+        transactionManagerXmlLoader().loadXmls();
         soaEventManagerXmlLoader().loadXmls();
+        messagingManagerXmlLoader().loadXmls();
+        schedulerManagerXmlLoader().loadXmls();
     }
 
 }
