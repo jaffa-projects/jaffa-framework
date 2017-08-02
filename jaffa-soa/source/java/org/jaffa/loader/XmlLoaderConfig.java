@@ -49,10 +49,12 @@
 
 package org.jaffa.loader;
 
-import javax.annotation.PostConstruct;
-
+import org.jaffa.loader.messaging.MessagingManager;
+import org.jaffa.loader.scheduler.SchedulerManager;
 import org.jaffa.loader.soa.SoaEventManager;
 import org.jaffa.loader.transaction.TransactionManager;
+import org.jaffa.modules.messaging.services.ConfigurationService;
+import org.jaffa.modules.scheduler.services.SchedulerConfiguration;
 import org.jaffa.soa.services.configdomain.SoaEventInfo;
 import org.jaffa.transaction.services.configdomain.TransactionInfo;
 import org.jaffa.transaction.services.configdomain.TypeInfo;
@@ -112,16 +114,55 @@ public class XmlLoaderConfig {
         return soaEventManager;
     }
 
+    /**
+     * @return the messaging manager's XML loader
+     */
+    @Bean
+    public XmlLoader<MessagingManager> messagingManagerXmlLoader() {
+        XmlLoader<MessagingManager> messagingManagerXmlLoader =
+                new XmlLoader<>() ;
+        messagingManagerXmlLoader.setManager(messagingManager());
+        return messagingManagerXmlLoader;
+    }
+
+    /**
+     * Creates and initializes the messaging manager.
+     * @return the newly created MessagingManager
+     */
+    @Bean
+    public MessagingManager messagingManager() {
+        MessagingManager messagingManager = new MessagingManager();
+        ConfigurationService.getInstance().setMessagingManager(messagingManager);
+        return messagingManager;
+    }
+
     private MapRepository<String, SoaEventInfo> soaEventInfoRepository(){
         MapRepository<String, SoaEventInfo> mapRepository= new MapRepository<>();
         return mapRepository;
     }
-    
 
-    @PostConstruct
-    public void loadXmls(){
-        transactionManagerXmlLoader().loadXmls();
-        soaEventManagerXmlLoader().loadXmls();
+    /**
+     * Loads the SchedulerManager
+     *
+     * @return
+     */
+    @Bean
+    public XmlLoader<SchedulerManager> schedulerManagerXmlLoader() {
+        XmlLoader<SchedulerManager> schedulerManagerXmlLoader = new XmlLoader<>();
+        schedulerManagerXmlLoader.setManager(schedulerManager());
+        return schedulerManagerXmlLoader;
+    }
+
+    /**
+     * Initializes the schedulerManager class.
+     *
+     * @return
+     */
+    @Bean
+    public SchedulerManager schedulerManager() {
+        SchedulerManager schedulerManager = new SchedulerManager();
+        SchedulerConfiguration.getInstance().setSchedulerManager(schedulerManager);
+        return schedulerManager;
     }
 
 }

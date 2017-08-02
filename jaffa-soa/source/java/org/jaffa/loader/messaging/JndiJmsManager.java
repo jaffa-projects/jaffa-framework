@@ -1,4 +1,4 @@
-package org.jaffa.config.loader.messaging;
+package org.jaffa.loader.messaging;
 
 import org.jaffa.loader.IManager;
 import org.jaffa.loader.IRepository;

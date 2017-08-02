@@ -47,7 +47,7 @@
  * ====================================================================
  */
 
-package org.jaffa.config.loader.scheduler;
+package org.jaffa.loader.scheduler;
 
 import org.jaffa.loader.IManager;
 import org.jaffa.loader.IRepository;
@@ -55,14 +55,11 @@ import org.jaffa.loader.MapRepository;
 import org.jaffa.modules.scheduler.services.configdomain.Config;
 import org.jaffa.modules.scheduler.services.configdomain.Task;
 import org.jaffa.util.JAXBHelper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -81,10 +78,6 @@ public class SchedulerManager implements IManager {
     private static final String CONFIGURATION_SCHEMA_FILE = "org/jaffa/modules/scheduler/services/configdomain/jaffa-scheduler-config_1_0.xsd";
 
     private IRepository<String, Task> schedulerTaskRepository = new MapRepository<>();
-
-    @Autowired
-    @Qualifier("contextOrder")
-    private ArrayList<String> contextOrder = new ArrayList<>();
 
     /**
      * Register the scheduler task to the repository.
@@ -137,9 +130,6 @@ public class SchedulerManager implements IManager {
      * @return
      */
     public Task getSchedulerTaskByTypeName(String typeName, List<String> contextOrderParam) {
-        if (contextOrderParam == null)
-            contextOrderParam = contextOrder;
-
         List<Task> tasks = schedulerTaskRepository.getAllValues(contextOrderParam);
         for (Task task : tasks) {
             if (typeName.equalsIgnoreCase(task.getType())) return task;
@@ -155,9 +145,6 @@ public class SchedulerManager implements IManager {
      * @return
      */
     public Task getSchedulerTask(String taskName, List<String> contextOrderParam) {
-        if (contextOrderParam == null)
-            contextOrderParam = contextOrder;
-
         return schedulerTaskRepository.query(taskName, contextOrderParam);
     }
 
@@ -169,19 +156,7 @@ public class SchedulerManager implements IManager {
      * @return List of all values
      */
     public Task[] getAllSchedulerTasks(List<String> contextOrderParam) {
-        if (contextOrderParam == null)
-            contextOrderParam = contextOrder;
-
         return schedulerTaskRepository.getAllValues(contextOrderParam).toArray(new Task[0]);
-    }
-
-    /**
-     * Returns the contextOrder
-     *
-     * @return List containing contextOrder
-     */
-    public List<String> getContextOrder() {
-        return contextOrder;
     }
 
 
@@ -202,15 +177,6 @@ public class SchedulerManager implements IManager {
             registerSchedulerTask(dataBeanClassName, schedulerTask, null);
         }
         return schedulerTask;
-    }
-
-    /**
-     * Sets the context order
-     *
-     * @param contextOrder
-     */
-    public void setContextOrder(ArrayList<String> contextOrder) {
-        this.contextOrder = contextOrder;
     }
 
     /**
