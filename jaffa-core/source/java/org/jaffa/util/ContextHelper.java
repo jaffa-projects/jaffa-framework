@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -21,6 +23,8 @@ public class ContextHelper {
 
     public static final String META_INF_MANIFEST_FILE = "/META-INF/MANIFEST.MF";
 
+    private static Map<String, String> defaultContextsMap = new HashMap<>();
+
     private static Logger logger = Logger.getLogger(ContextHelper.class);
 
     public static String getDefaultContext(String contextPath) throws IOException {
@@ -31,10 +35,15 @@ public class ContextHelper {
             logger.warn("The Context Path is not frm the JAR");
         } else {
             String manifestPath = contextPath.substring(0, contextPath.lastIndexOf("!") + 1) + META_INF_MANIFEST_FILE;
-            if (logger.isDebugEnabled())
-                logger.debug("manifestPath={}" + manifestPath);
-            manifestPath = getDefaultContextFromManifest(manifestPath);
-            defaultContext = manifestPath != null ? manifestPath : defaultContext;
+            if(!defaultContextsMap.containsKey(manifestPath)) {
+                if (logger.isDebugEnabled())
+                    logger.debug("manifestPath={}" + manifestPath);
+                manifestPath = getDefaultContextFromManifest(manifestPath);
+                defaultContext = manifestPath != null ? manifestPath : defaultContext;
+                defaultContextsMap.put(manifestPath, defaultContext);
+            }else {
+                defaultContext = defaultContextsMap.get(manifestPath);
+            }
         }
 
         return defaultContext;

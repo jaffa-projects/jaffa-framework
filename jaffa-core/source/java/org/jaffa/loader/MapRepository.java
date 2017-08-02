@@ -58,7 +58,7 @@ public class MapRepository<K, T> implements IRepository<K, T> {
 
     Map<K, Map<String, T>> repositoryMap = new HashMap<>();
 
-    TreeSet<String> contextOrder = new TreeSet<>();
+    public static TreeSet<String> contextOrder = new TreeSet<>();
 
     /**
      * {@inheritDoc}
