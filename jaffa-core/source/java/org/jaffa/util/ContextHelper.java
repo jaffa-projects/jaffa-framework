@@ -33,7 +33,8 @@ public class ContextHelper {
             String manifestPath = contextPath.substring(0, contextPath.lastIndexOf("!") + 1) + META_INF_MANIFEST_FILE;
             if (logger.isDebugEnabled())
                 logger.debug("manifestPath={}" + manifestPath);
-            defaultContext = getDefaultContextFromManifest(manifestPath);
+            manifestPath = getDefaultContextFromManifest(manifestPath);
+            defaultContext = manifestPath != null ? manifestPath : defaultContext;
         }
 
         return defaultContext;

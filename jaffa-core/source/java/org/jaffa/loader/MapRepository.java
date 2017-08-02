@@ -65,6 +65,9 @@ public class MapRepository<K, T> implements IRepository<K, T> {
      */
     @Override
     public void register(K repositoryKey, T repository, String context) {
+        if(context == null){
+            throw new RuntimeException("Context Cannot be Null");
+        }
         Map infoMap = repositoryMap.get(repositoryKey);
         if (infoMap == null) {
             infoMap = new HashMap<>();
@@ -79,6 +82,9 @@ public class MapRepository<K, T> implements IRepository<K, T> {
      */
     @Override
     public void unregister(K repositoryKey, String context) {
+        if(context == null){
+            throw new RuntimeException("Context Cannot be Null");
+        }
         Map infoMap = repositoryMap.get(repositoryKey);
         if (infoMap != null) {
             infoMap.remove(context);

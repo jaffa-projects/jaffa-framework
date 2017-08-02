@@ -94,7 +94,7 @@ public class XmlLoader<T extends IManager> {
                     if (resource == null) {
                         continue;
                     }
-                    manager.registerXML(resource, ContextHelper.getDefaultContext(resource.getURL().getPath()));
+                    manager.registerXML(resource, ContextHelper.getDefaultContext(resource.getURI().toString()));
                 }
             }
         }catch(Exception w){

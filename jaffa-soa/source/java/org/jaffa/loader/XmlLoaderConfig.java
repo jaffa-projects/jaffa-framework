@@ -70,7 +70,7 @@ public class XmlLoaderConfig {
 	/****************************************************/
 	/*************  Transaction Manager    **************/
 	/****************************************************/
-    @Bean(name = "transactionManagerXmlLoader")
+    @Bean
     public XmlLoader<TransactionManager> transactionManagerXmlLoader() {
         XmlLoader<TransactionManager> transactionManagerXmlLoader = new XmlLoader<TransactionManager>() ;
         transactionManagerXmlLoader.setManager(transactionManager());
@@ -100,7 +100,7 @@ public class XmlLoaderConfig {
 	/****************************************************/
 	/*************   Soa Event Manager     **************/
 	/****************************************************/
-    @Bean(name = "soaEventManagerXmlLoader")
+    @Bean
     public XmlLoader<SoaEventManager> soaEventManagerXmlLoader() {
         XmlLoader<SoaEventManager> soaEventManagerXmlLoader = new XmlLoader<SoaEventManager>() ;
         soaEventManagerXmlLoader.setManager(soaEventManager());
@@ -118,7 +118,7 @@ public class XmlLoaderConfig {
     /**
      * @return the messaging manager's XML loader
      */
-    @Bean(name = "messagingManagerXmlLoader")
+    @Bean
     public XmlLoader<MessagingManager> messagingManagerXmlLoader() {
         XmlLoader<MessagingManager> messagingManagerXmlLoader =
                 new XmlLoader<>() ;
@@ -147,7 +147,7 @@ public class XmlLoaderConfig {
      *
      * @return
      */
-    @Bean(name = "schedulerManagerXmlLoader")
+    @Bean
     public XmlLoader<SchedulerManager> schedulerManagerXmlLoader() {
         XmlLoader<SchedulerManager> schedulerManagerXmlLoader = new XmlLoader<>();
         schedulerManagerXmlLoader.setManager(schedulerManager());
