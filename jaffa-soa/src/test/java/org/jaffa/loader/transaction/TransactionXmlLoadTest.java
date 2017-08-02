@@ -11,7 +11,7 @@ import static org.junit.Assert.assertNotNull;
 
 
 /**
- * Created by pbagirthi on 7/14/2017.
+ * Tests the Transaction Xml Loader.
  */
 public class TransactionXmlLoadTest {
 
