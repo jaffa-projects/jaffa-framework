@@ -90,7 +90,7 @@ public class ContextHelper {
             // Class not from JAR
             logger.warn("The Context Path is not frm the JAR");
         } else {
-            String manifestPath = contextPath.substring(0, contextPath.lastIndexOf("!") + 1) + File.separator + META_INF_MANIFEST_FILE;
+            String manifestPath = contextPath.substring(0, contextPath.lastIndexOf("!") + 1) + "/" + META_INF_MANIFEST_FILE;
             if(!contextSalienceMap.containsKey(manifestPath)) {
                 if (logger.isDebugEnabled())
                     logger.debug("manifestPath={}" + manifestPath);
