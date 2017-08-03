@@ -1,4 +1,4 @@
-package org.jaffa.config.loader.messaging;
+package org.jaffa.loader.messaging;
 
 import org.apache.log4j.Logger;
 import org.jaffa.loader.IManager;
@@ -6,14 +6,11 @@ import org.jaffa.loader.IRepository;
 import org.jaffa.loader.MapRepository;
 import org.jaffa.modules.messaging.services.configdomain.*;
 import org.jaffa.util.JAXBHelper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -60,10 +57,6 @@ public class MessagingManager implements IManager {
      *  the value in the MessageFilter object. */
     private IRepository<String, MessageFilter> messageFilterRepository =
             new MapRepository<>();
-
-    @Autowired
-    @Qualifier("contextOrder")
-    public ArrayList<String> contextOrder;
 
     /**
      * Unmarshall the contents of the configuration to create and register
@@ -183,9 +176,6 @@ public class MessagingManager implements IManager {
      */
     public MessageInfo getMessageInfo(String dataBeanClassName,
                                       List<String> contextOrderParam) {
-        if (contextOrderParam == null) {
-            contextOrderParam = contextOrder;
-        }
         return messageInfoRepository.query(dataBeanClassName, contextOrderParam);
     }
 
@@ -197,9 +187,6 @@ public class MessagingManager implements IManager {
      */
     public QueueInfo getQueueInfo(String dataBeanClassName,
                                       List<String> contextOrderParam) {
-        if (contextOrderParam == null) {
-            contextOrderParam = contextOrder;
-        }
         return queueInfoRepository.query(dataBeanClassName, contextOrderParam);
     }
 
@@ -211,9 +198,6 @@ public class MessagingManager implements IManager {
      */
     public TopicInfo getTopicInfo(String dataBeanClassName,
                                   List<String> contextOrderParam) {
-        if (contextOrderParam == null) {
-            contextOrderParam = contextOrder;
-        }
         return topicInfoRepository.query(dataBeanClassName, contextOrderParam);
     }
 

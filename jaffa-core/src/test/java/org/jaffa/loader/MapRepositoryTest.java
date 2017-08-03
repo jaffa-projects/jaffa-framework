@@ -22,37 +22,39 @@ public class MapRepositoryTest {
      * initialize jwlContextOrder and safContextOrder
      */
     @Before
-    public void setup(){
+    public void setup() {
 
         //initialize map repository
-        mapRepository.register("key1", "value1", "saf");
-        mapRepository.register("key1", "value2", "jwl");
-        mapRepository.register("key1", "value3", "default");
-        mapRepository.register("key2", "value6", "saf");
-        mapRepository.register("key3", "valueX", "saf");
-        mapRepository.register("key3", "valueY", "default");
+        mapRepository.register("key1", "value1", "1-PRODUCT");
+        mapRepository.register("key1", "value2", "2-SAF");
+        mapRepository.register("key1", "value3", "0-PLATFORM");
+        mapRepository.register("key2", "value6", "1-PRODUCT");
+        mapRepository.register("key3", "valueX", "1-PRODUCT");
+        mapRepository.register("key3", "valueY", "0-PLATFORM");
 
         //initialize jwl context order
-        jwlContextOrder.add("jwl");
-        jwlContextOrder.add("default");
+        jwlContextOrder.add("2-JWL");
+        jwlContextOrder.add("1-PRODUCT");
+        jwlContextOrder.add("0-PLATFORM");
 
         //initialize saf context order
-        safContextOrder.add("saf");
-        safContextOrder.add("default");
+        safContextOrder.add("2-SAF");
+        safContextOrder.add("1-PRODUCT");
+        safContextOrder.add("0-PLATFORM");
     }
 
     /**
      * tests the Query() method by passing various combinations
      */
     @Test
-    public void testQuery(){
-        assertEquals("value2", mapRepository.query("key1", jwlContextOrder)) ;
-        assertEquals(null, mapRepository.query("key2", jwlContextOrder)) ;
-        assertEquals("valueY", mapRepository.query("key3", jwlContextOrder)) ;
+    public void testQuery() {
+        assertEquals("value1", mapRepository.query("key1", jwlContextOrder));
+        assertEquals("value6", mapRepository.query("key2", jwlContextOrder));
+        assertEquals("valueX", mapRepository.query("key3", jwlContextOrder));
 
-        assertEquals("value1", mapRepository.query("key1", safContextOrder)) ;
-        assertEquals("value6", mapRepository.query("key2", safContextOrder)) ;
-        assertEquals("valueX", mapRepository.query("key3", safContextOrder)) ;
+        assertEquals("value2", mapRepository.query("key1", null));
+        assertEquals("value6", mapRepository.query("key2", null));
+        assertEquals("valueX", mapRepository.query("key3", null));
     }
 
     /**
@@ -60,16 +62,16 @@ public class MapRepositoryTest {
      * and also tests whether overriding of certain keys function correctly
      */
     @Test
-    public void testRegister(){
-        mapRepository.register("key1", "valueA", "jwl");
-        mapRepository.register("key2", "valueB", "jwl");
-        assertEquals("valueA", mapRepository.query("key1", jwlContextOrder)) ;
-        assertEquals("valueB", mapRepository.query("key2", jwlContextOrder)) ;
-        assertEquals("valueY", mapRepository.query("key3", jwlContextOrder)) ;
+    public void testRegister() {
+        mapRepository.register("key1", "valueA", "2-JWL");
+        mapRepository.register("key2", "valueB", "2-JWL");
+        assertEquals("valueA", mapRepository.query("key1", jwlContextOrder));
+        assertEquals("valueB", mapRepository.query("key2", jwlContextOrder));
+        assertEquals("valueX", mapRepository.query("key3", jwlContextOrder));
 
-        assertEquals("value1", mapRepository.query("key1", safContextOrder)) ;
-        assertEquals("value6", mapRepository.query("key2", safContextOrder)) ;
-        assertEquals("valueX", mapRepository.query("key3", safContextOrder)) ;
+        assertEquals("value2", mapRepository.query("key1", safContextOrder));
+        assertEquals("value6", mapRepository.query("key2", safContextOrder));
+        assertEquals("valueX", mapRepository.query("key3", safContextOrder));
 
     }
 
@@ -77,19 +79,19 @@ public class MapRepositoryTest {
      * tests the unregister() method by passing various combinations
      */
     @Test
-    public void testUnregister(){
-        mapRepository.unregister("key1", "jwl");
-        mapRepository.unregister("key1", "saf");
-        assertEquals("value3", mapRepository.query("key1", jwlContextOrder)) ;
-        assertEquals("value3", mapRepository.query("key1", safContextOrder)) ;
-        assertEquals("value6", mapRepository.query("key2", safContextOrder)) ;
+    public void testUnregister() {
+        mapRepository.unregister("key1", "2-JWL");
+        mapRepository.unregister("key1", "2-JWL");
+        assertEquals("value1", mapRepository.query("key1", jwlContextOrder));
+        assertEquals("value2", mapRepository.query("key1", safContextOrder));
+        assertEquals("value6", mapRepository.query("key2", safContextOrder));
     }
 
     /**
      * tests getAllKeys() method and does different checks
      */
     @Test
-    public void testGetAllKeys(){
+    public void testGetAllKeys() {
         assertNotNull(mapRepository.getAllKeys());
         assertEquals(3, mapRepository.getAllKeys().size());
         assertTrue(mapRepository.getAllKeys().contains("key3"));
@@ -99,9 +101,9 @@ public class MapRepositoryTest {
      * tests getAllValues() method and does different checks
      */
     @Test
-    public void testGetAllValues(){
+    public void testGetAllValues() {
         assertNotNull(mapRepository.getAllValues(jwlContextOrder));
-        assertEquals(2, mapRepository.getAllValues(jwlContextOrder).size());
-        assertFalse(mapRepository.getAllValues(jwlContextOrder).contains("value6"));
+        assertEquals(3, mapRepository.getAllValues(jwlContextOrder).size());
+        assertTrue(mapRepository.getAllValues(jwlContextOrder).contains("value6"));
     }
 }

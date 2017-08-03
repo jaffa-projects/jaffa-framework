@@ -55,15 +55,12 @@ import org.jaffa.transaction.services.configdomain.Config;
 import org.jaffa.transaction.services.configdomain.TransactionInfo;
 import org.jaffa.transaction.services.configdomain.TypeInfo;
 import org.jaffa.util.JAXBHelper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.xml.sax.SAXException;
 import org.springframework.core.io.Resource;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -84,10 +81,6 @@ public class TransactionManager implements IManager {
 
     private IRepository<String, TransactionInfo> transactionRepository;
     private IRepository<String, TypeInfo> typeInfoRepository;
-
-    @Autowired
-    @Qualifier("contextOrder")
-    public ArrayList<String> contextOrder;
 
     /**
      * register TransactionInfo to the repository
@@ -184,9 +177,6 @@ public class TransactionManager implements IManager {
      * @return TransactionInfo
      */
     public TransactionInfo getTransactionInfo(String dataBeanClassName, List<String> contextOrderParam) {
-        if (contextOrderParam == null)
-            contextOrderParam = contextOrder;
-
         return transactionRepository.query(dataBeanClassName, contextOrderParam);
     }
 
@@ -197,9 +187,6 @@ public class TransactionManager implements IManager {
      * @return TypeInfo
      */
     public TypeInfo getTypeInfo(String typeName, List<String> contextOrderParam) {
-        if (contextOrderParam == null)
-            contextOrderParam = contextOrder;
-
         return typeInfoRepository.query(typeName, contextOrderParam);
     }
 
@@ -210,9 +197,6 @@ public class TransactionManager implements IManager {
      * @return List of all values
      */
     public TransactionInfo[] getAllTransactionInfo(List<String> contextOrderParam) {
-        if (contextOrderParam == null)
-            contextOrderParam = contextOrder;
-
         return transactionRepository.getAllValues(contextOrderParam).toArray(new TransactionInfo[0]);
     }
 
@@ -222,15 +206,6 @@ public class TransactionManager implements IManager {
      */
     public String[] getTypeNames() {
         return typeInfoRepository.getAllKeys().toArray(new String[0]);
-    }
-
-
-    /**
-     * gets the contextOrder
-     * @return List containing contextOrder
-     */
-    public List<String> getContextOrder() {
-        return contextOrder;
     }
 
 
@@ -254,14 +229,6 @@ public class TransactionManager implements IManager {
             registerTransactionInfo(dataBeanClassName, transactionInfo, null);
         }
         return transactionInfo;
-    }
-
-    /**
-     *
-     * @param contextOrder
-     */
-    public void setContextOrder(ArrayList<String> contextOrder) {
-        this.contextOrder = contextOrder;
     }
 
     /**

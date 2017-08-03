@@ -1,4 +1,4 @@
-package org.jaffa.transaction.services;
+package org.jaffa.loader.transaction;
 
 import org.jaffa.loader.IRepository;
 import org.jaffa.config.loader.transaction.TransactionManager;

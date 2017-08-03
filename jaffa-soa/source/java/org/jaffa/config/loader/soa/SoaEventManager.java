@@ -11,8 +11,6 @@ import org.jaffa.loader.IRepository;
 import org.jaffa.soa.services.configdomain.SoaEventInfo;
 import org.jaffa.soa.services.configdomain.SoaEvents;
 import org.jaffa.util.JAXBHelper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.xml.sax.SAXException;
 
@@ -39,26 +37,6 @@ public class SoaEventManager implements IManager {
 	 */
 	private static final String CONFIGURATION_SCHEMA_FILE = "org/jaffa/soa/services/configdomain/soa-events_1_0.xsd";
 
-	@Autowired
-	@Qualifier("contextOrder")
-	public ArrayList<String> contextOrder;
-
-	/**
-	 * gets the contextOrder
-	 * 
-	 * @return List containing contextOrder
-	 */
-	public List<String> getContextOrder() {
-		return contextOrder;
-	}
-
-	/**
-	 *
-	 * @param contextOrder
-	 */
-	public void setContextOrder(ArrayList<String> contextOrder) {
-		this.contextOrder = contextOrder;
-	}
 
     /**
 	 * @return the soaEventRepository
@@ -101,10 +79,6 @@ public class SoaEventManager implements IManager {
      * @return SoaEventInfo
      */
 	public SoaEventInfo getSoaEventInfo(String soaEventName, List<String> contextOrderParam) {
-		if (contextOrderParam == null) {
-			contextOrderParam = contextOrder;
-		}
-
 		return soaEventRepository.query(soaEventName, contextOrderParam);
 	}
     
@@ -115,10 +89,6 @@ public class SoaEventManager implements IManager {
      * @return List of all values
      */
 	public SoaEventInfo[] getAllSoaEventInfo(List<String> contextOrderParam) {
-		if (contextOrderParam == null){
-			contextOrderParam = contextOrder;
-		}
-
 		return soaEventRepository.getAllValues(contextOrderParam).toArray(new SoaEventInfo[0]);
 	}
 	
