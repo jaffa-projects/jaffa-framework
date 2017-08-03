@@ -49,7 +49,7 @@
 package org.jaffa.soa.services;
 
 import org.apache.log4j.Logger;
-import org.jaffa.loader.soa.SoaEventManager;
+import org.jaffa.config.loader.soa.SoaEventManager;
 import org.jaffa.soa.services.configdomain.SoaEventInfo;
 
 /**

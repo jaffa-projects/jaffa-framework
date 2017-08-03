@@ -1,5 +1,6 @@
 package org.jaffa.loader.scheduler;
 
+
 import org.jaffa.loader.XmlLoaderConfig;
 import org.jaffa.loader.scheduler.SchedulerManager;
 import org.jaffa.modules.scheduler.services.configdomain.Task;
@@ -17,6 +18,7 @@ import static org.junit.Assert.*;
  * MessagingXmlLoadTest - Verifies the Scheduler beans can be loaded from the SchedulerManager implementation.
  */
 public class SchedulerXmlLoadTest {
+
 
     private static AnnotationConfigApplicationContext xmlLoaderConfig = new AnnotationConfigApplicationContext(XmlLoaderConfig.class);
 

@@ -104,7 +104,7 @@ public class MessagingManager implements IManager {
      * Check whether the proposed MessageInfo object is adequately specified.
      * @param messageInfo the object to check
      */
-    void validateMessageInfo(MessageInfo messageInfo) {
+    public void validateMessageInfo(MessageInfo messageInfo) {
         if (messageInfo.getQueueName() == null
                 && messageInfo.getTopicName() == null) {
             String s = "Either queueName or topicName should be specified for dataBean '"
@@ -127,7 +127,7 @@ public class MessagingManager implements IManager {
      * Ensure that there is no name-clash between Queues and Topics.  If there
      * is, throw a runtime exception
      */
-    void checkForQueueAndTopicNamingConflicts() {
+    public void checkForQueueAndTopicNamingConflicts() {
         // Ensure that there is no name-clash between Queues and Topics
         Set<String> queueNames = new HashSet<>(queueInfoRepository.getAllKeys());
         Set<String> topicInfoKeys = topicInfoRepository.getAllKeys();

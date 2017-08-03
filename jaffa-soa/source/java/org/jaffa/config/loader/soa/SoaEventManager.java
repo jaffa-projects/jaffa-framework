@@ -1,4 +1,4 @@
-package org.jaffa.loader.soa;
+package org.jaffa.config.loader.soa;
 
 import java.io.IOException;
 import java.util.ArrayList;

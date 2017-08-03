@@ -49,7 +49,7 @@
 package org.jaffa.transaction.services;
 
 import org.apache.log4j.Logger;
-import org.jaffa.loader.transaction.TransactionManager;
+import org.jaffa.config.loader.transaction.TransactionManager;
 import org.jaffa.transaction.services.configdomain.TransactionInfo;
 import org.jaffa.transaction.services.configdomain.TypeInfo;
 
