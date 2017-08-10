@@ -76,7 +76,7 @@ public class SchedulerConfiguration {
      *
      * @return An instance of the SchedulerConfiguration.
      */
-    public static SchedulerConfiguration getInstance() {
+    public static synchronized SchedulerConfiguration getInstance() {
         if (c_singleton == null)
             createSchedulerConfigurationInstance();
         return c_singleton;

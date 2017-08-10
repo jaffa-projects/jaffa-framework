@@ -54,31 +54,20 @@
  */
 package org.jaffa.security;
 
-import java.io.IOException;
-import java.io.InputStream;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-
-import org.jaffa.presentation.portlet.component.ComponentManager;
-import org.jaffa.presentation.portlet.component.componentdomain.Components;
-import org.jaffa.util.*;
-
-import java.util.Iterator;
-import java.io.StringWriter;
-
 import org.apache.log4j.Logger;
+import org.jaffa.loader.policy.BusinessFunctionManager;
+import org.jaffa.presentation.portlet.component.ComponentManager;
+import org.jaffa.util.StringHelper;
+import org.jaffa.util.URLHelper;
 
-import java.util.HashMap;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
-
-import org.jaffa.security.businessfunctionsdomain.*;
-import org.springframework.core.io.Resource;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
+import java.io.StringWriter;
+import java.util.*;
 
 /**
  * This servlet can be used on start-up to make ssure there are no rogue entries
@@ -93,7 +82,6 @@ public class CheckPolicy extends HttpServlet {
      * Set up Logging for Log4J
      */
     private static Logger log = Logger.getLogger(CheckPolicy.class);
-    private static final String SCHEMA = "org/jaffa/security/businessfunctionsdomain/business-functions_1_0.xsd";
     /**
      * Stores the list of component errors for display
      */
@@ -102,15 +90,22 @@ public class CheckPolicy extends HttpServlet {
      * Stores the list of role errors for display
      */
     private static HashMap m_roleErrors = new HashMap();
-    // error
-    private static final String ERROR_FUNCTION_READING = "Error in Reading Business Functions";
+
+    private static BusinessFunctionManager businessFunctionManager;
+
+    public static BusinessFunctionManager getBusinessFunctionManager() {
+        return businessFunctionManager;
+    }
+
+    public static void setBusinessFunctionManager(BusinessFunctionManager businessFunctionManager) {
+        CheckPolicy.businessFunctionManager = businessFunctionManager;
+    }
 
     /**
      * Initializes the servlet.
      */
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        // Check the policy by reading the busniess functions
         checkPolicy();
     }
 
@@ -202,9 +197,12 @@ public class CheckPolicy extends HttpServlet {
         return "Check Security Policy";
     }
 
+    /**
+     * checkPolicy() - Compares the business functions from the businessFunctionManager with the contents of m_compoErrors.
+     */
     private static synchronized void checkPolicy() {
         // Read the business function file
-        List bfuncs = readFunctions();
+        List<String> bfuncs = readFunctions();
 
         // Get mandatory functions per component
         Map compList = ComponentManager.getComponentRequirements();
@@ -227,7 +225,6 @@ public class CheckPolicy extends HttpServlet {
         // Get list of functions per role
         Map roleMap = PolicyCache.getRoleMap();
 
-
         // For Each role make sure that the business functions are valid
         for (Iterator it2 = roleMap.keySet().iterator(); it2.hasNext(); ) {
             String role = (String) it2.next();
@@ -242,87 +239,21 @@ public class CheckPolicy extends HttpServlet {
         }
     }
 
-    private static List readFunctions() {
-        List bflist = new ArrayList();
-        InputStream stream = null;
-        try {
-            stream = URLHelper.newExtendedURL("resources/business-functions.xml").openStream();
-
-            // create a JAXBContext capable of handling classes generated into the package
-            JAXBContext jc = JAXBContext.newInstance("org.jaffa.security.businessfunctionsdomain");
-
-            // create an Unmarshaller
-            Unmarshaller u = jc.createUnmarshaller();
-
-            // enable validation
-            u.setSchema(JAXBHelper.createSchema(SCHEMA));
-
-            // unmarshal a document into a tree of Java content objects composed of classes from the package.
-            BusinessFunctions businessFunctions = (BusinessFunctions) u.unmarshal(XmlHelper.stripDoctypeDeclaration(stream));
-            for (Iterator i = businessFunctions.getBusinessFunction().iterator(); i.hasNext(); ) {
-                bflist.add(((BusinessFunction) i.next()).getName());
-            }
-
-        } catch (Exception e) {
-            System.out.println("Can't Read File : " + e.getMessage());
-        } finally {
-            try {
-                if (stream != null) {
-                    stream.close();
-                }
-            } catch (IOException e) {
-                // do nothing
-            }
-        }
-
-        if (bflist.size() == 0) {
-            bflist = readFunctionsFromMetainf();
-        }
-        System.out.println("Read Function List. Count = " + bflist.size());
-        return bflist;
+    /**
+     * Returns a list of businessFunctions from the businessFunctionManager.
+     * @return a list of business functions as strings
+     */
+    private static List<String> readFunctions() {
+        BusinessFunctionManager businessFunctionManager = getBusinessFunctionManager();
+        if (null != businessFunctionManager)
+            return businessFunctionManager.getAllBusinessFunctionsStrings();
+        return Collections.emptyList();
     }
 
-    private static List readFunctionsFromMetainf() {
-        ArrayList bflist = new ArrayList();
-        OrderedPathMatchingResourcePatternResolver resolver = OrderedPathMatchingResourcePatternResolver.getInstance();
-        try {
-
-            Resource[] resources = resolver.getResources("classpath*:META-INF/business-functions.xml");
-            if (resources != null) {
-                for (Resource resource : resources) {
-                    if (resource == null) {
-                        continue;
-                    }
-                    try {
-                        // create a JAXBContext capable of handling classes generated into the package
-                        JAXBContext jc = JAXBContext.newInstance("org.jaffa.security.businessfunctionsdomain");
-
-                        // create an Unmarshaller
-                        Unmarshaller u = jc.createUnmarshaller();
-
-                        // enable validation
-                        u.setSchema(JAXBHelper.createSchema(SCHEMA));
-
-                        // unmarshal a document into a tree of Java content objects composed of classes from the package.
-                        BusinessFunctions businessFunctions = (BusinessFunctions) u.unmarshal(XmlHelper.stripDoctypeDeclaration(resource.getInputStream()));
-                        for (Iterator i = businessFunctions.getBusinessFunction().iterator(); i.hasNext(); ) {
-                            bflist.add(((BusinessFunction) i.next()).getName());
-                        }
-                    } catch (Exception e) {
-                        String s = ERROR_FUNCTION_READING.concat(" :") + resource.getURL();
-                        log.fatal(s, e);
-                        throw new SecurityException(s, e);
-                    }
-                }
-            }
-        } catch (IOException e) {
-            log.error(ERROR_FUNCTION_READING, e);
-            throw new SecurityException(ERROR_FUNCTION_READING, e);
-        }
-
-        return bflist;
-    }
-
+    /**
+     * Allows the policy checker to be run from outside of a web container.
+     * @param args
+     */
     public static void main(String[] args) {
         System.out.println("Running Policy Checker...");
         checkPolicy();
@@ -346,10 +277,18 @@ public class CheckPolicy extends HttpServlet {
         }
     }
 
+    /**
+     * Returns the hashmap of compErrors
+     * @return the hash map of CompErrors
+     */
     public static HashMap getCompErrors() {
         return m_compErrors;
     }
 
+    /**
+     * Returns the hashmap of roleErrors.
+     * @return the hash map of role errors
+     */
     public static HashMap getRoleErrors() {
         return m_roleErrors;
     }

@@ -1,7 +1,11 @@
 package org.jaffa.security;
 
+import org.jaffa.loader.XmlLoaderConfig;
+import org.jaffa.loader.policy.BusinessFunctionManager;
+import org.jaffa.loader.policy.RoleManager;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import javax.servlet.ServletException;
 import java.util.Map;
@@ -15,6 +19,9 @@ import static org.junit.Assert.assertNull;
 public class CheckPolicyTest {
 
     CheckPolicy checkPolicy;
+    PolicyCache policyCache;
+
+    private static AnnotationConfigApplicationContext xmlLoaderConfig = new AnnotationConfigApplicationContext(XmlLoaderConfig.class);
 
     /**
      * setting the up objects/properties before a Test is run
@@ -23,7 +30,11 @@ public class CheckPolicyTest {
     @Before
     public void setup(){
         //initialize
+        BusinessFunctionManager businessFunctionManager = xmlLoaderConfig.getBean(BusinessFunctionManager.class);
         checkPolicy = new CheckPolicy();
+        checkPolicy.setBusinessFunctionManager(businessFunctionManager);
+        RoleManager roleManager = xmlLoaderConfig.getBean(RoleManager.class);
+        policyCache.setRoleManager(roleManager);
     }
 
 
