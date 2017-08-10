@@ -48,32 +48,20 @@
  */
 package org.jaffa.security;
 
-import java.util.LinkedList;
+import org.apache.log4j.Logger;
+import org.jaffa.config.Config;
+import org.jaffa.loader.policy.RoleManager;
+import org.jaffa.security.securityrolesdomain.Roles;
+import org.jaffa.util.URLHelper;
+
+import java.net.MalformedURLException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import org.jaffa.config.Config;
-import org.jaffa.security.securityrolesdomain.Roles;
-import java.util.HashMap;
-import java.net.URL;
-import java.util.List;
-import org.jaffa.security.securityrolesdomain.Role;
-import org.jaffa.security.securityrolesdomain.GrantFunctionAccess;
-import java.net.MalformedURLException;
-import org.apache.log4j.Logger;
-import org.jaffa.util.OrderedPathMatchingResourcePatternResolver;
-import org.jaffa.util.URLHelper;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import org.jaffa.util.XmlHelper;
-import java.io.IOException;
-import java.io.InputStream;
-import org.jaffa.util.JAXBHelper;
-import org.springframework.core.io.Resource;
-import org.xml.sax.SAXException;
 
-/** This class is the interface between the policy domain classes
+/**
+ * This class is the interface between the policy domain classes
  * and the Policy manager, it provide the data to the PolicyManager
  * in a more native format then in the domain objects
  * It also caches the policy information for multiple
@@ -82,37 +70,46 @@ import org.xml.sax.SAXException;
 public class PolicyCache {
 
     private static Logger log = Logger.getLogger(PolicyCache.class);
-    private static final String DEFAULT_POLICY_LOCATION = "classpath:///resources/roles.xml";
-    private static final String MODULE_POLICY_LOCATION = "classpath*:META-INF/roles.xml";
-    private static final String SCHEMA = "org/jaffa/security/securityrolesdomain/security-roles_1_0.xsd";
+    private static final String DEFAULT_POLICY_LOCATION = "classpath:///META-INF/roles.xml";
     private static final ConcurrentMap<String, PolicyCache> c_policyCacheByVariation = new ConcurrentHashMap<String, PolicyCache>();
     private static final String DEFAULT_KEY = ""; //this key will used to put the PolicyCache instance for the default roles.xml file
-    private Roles m_roles = null;
     private Map<String, List<String>> m_roleMap = null; // Mapping of roleName and functionLists
 
-    /** Returns the Roles domain objects. This are the objects created from the XML file. This is a cached copy and should not be modified.
+    private static RoleManager roleManager;
+
+    /**
+     * Returns the list Role domain objects. This are the objects created from the XML file. This is a cached copy and should not be modified.
      * Changing this will not effect the contents of the loaded policy, as the
      * policy will load on application startup.
+     *
      * @return The root Roles domain object for the current policy
      */
     public static Roles getRoles() {
-        return getInstance().m_roles;
+        RoleManager roleManager = getInstance().getRoleManager();
+        if (null != roleManager)
+            return roleManager.getRoles();
+        return new Roles();
     }
 
-    /** Get the list of roles and what functions are in each role.
+    /**
+     * Get the list of roles and what functions are in each role.
+     *
      * @return The returned Map is keyed on Role name (String), and each entry is a List of business function names.
      */
     static Map<String, List<String>> getRoleMap() {
         return getInstance().m_roleMap;
     }
 
-    /** Clear the cached policy. Will be reloaded on the next access.
+    /**
+     * Clear the cached policy. Will be reloaded on the next access.
      */
     static void clearCache() {
         c_policyCacheByVariation.clear();
     }
 
-    /** Creates an instance of PolicyCache, if not already instantiated.
+    /**
+     * Creates an instance of PolicyCache, if not already instantiated.
+     *
      * @return An instance of the PolicyCache.
      */
     private static PolicyCache getInstance() {
@@ -127,11 +124,22 @@ public class PolicyCache {
         return policyCache;
     }
 
-    private static PolicyCache createPolicyCacheInstance() {
+    /**
+     * Creates the synchronized instance of the PolicyCache
+     *
+     * @return
+     */
+    private synchronized static PolicyCache createPolicyCacheInstance() {
         String fileLocation = getFileLocation();
-        return fileLocation.equals(getDefaultFileLocation()) ? getDefaultInstance() : new PolicyCache(fileLocation);
+        String defaultFileLocation = getDefaultFileLocation();
+        return fileLocation.equals(defaultFileLocation) ? getDefaultInstance() : new PolicyCache(fileLocation);
     }
 
+    /**
+     * Returns the default instance of the PolicyCache
+     *
+     * @return
+     */
     private static PolicyCache getDefaultInstance() {
         String variation = DEFAULT_KEY;
         PolicyCache policyCache = c_policyCacheByVariation.get(variation);
@@ -144,134 +152,21 @@ public class PolicyCache {
         return policyCache;
     }
 
-    /** Read the roles in from the XMLdocument and cache them. */
+    /**
+     * Read the roles in from the XMLdocument and cache them.
+     */
     private PolicyCache(String initFile) {
-        if (log.isDebugEnabled())
-            log.debug("Creating an instance of PolicyCache using '" + initFile + '\'');
-        InputStream stream = null;
-        try {
-            // Create a URL for the resource file...
-            URL roleUrl = null;
-            try {
-                roleUrl = URLHelper.newExtendedURL(initFile);
-
-                stream = roleUrl.openStream();
-
-                // create a JAXBContext capable of handling classes generated into the package
-                JAXBContext jc = JAXBContext.newInstance("org.jaffa.security.securityrolesdomain");
-
-                // create an Unmarshaller
-                Unmarshaller u = jc.createUnmarshaller();
-
-                // enable validation
-                u.setSchema(JAXBHelper.createSchema(SCHEMA));
-
-                // unmarshal a document into a tree of Java content objects composed of classes from the package.
-                m_roles = (Roles) u.unmarshal(XmlHelper.stripDoctypeDeclaration(stream));
-                if (log.isInfoEnabled()) {
-                    log.info("Loaded Policy File From : " + roleUrl.toExternalForm());
-                    log.info("Policy Contains " + m_roles.getRole().size() + " Role Entries");
-                }
-            }catch (MalformedURLException e){
-                if(log.isDebugEnabled()){
-                    log.debug("Unable to find resource file from'" + initFile + '\''+" Creating instance of policy cache from /META-INF");
-                }
-            }
-
-            // Try to find roles from each module
-            if(m_roles == null){
-
-                OrderedPathMatchingResourcePatternResolver resolver = OrderedPathMatchingResourcePatternResolver.getInstance();
-                try {
-
-                    Resource[] resources = resolver.getResources(MODULE_POLICY_LOCATION);
-                    if (resources != null) {
-                        m_roles = new Roles();
-                        for (Resource resource : resources) {
-
-                            if (resource == null) {
-                                continue;
-                            }
-
-                            // create a JAXBContext capable of handling classes
-                            // generated into the package
-                            JAXBContext jc = JAXBContext.newInstance("org.jaffa.security.securityrolesdomain");
-
-                            // create an Unmarshaller
-                            Unmarshaller u = jc.createUnmarshaller();
-
-                            // enable validation
-                            u.setSchema(JAXBHelper.createSchema(SCHEMA));
-
-                            Roles roles = (Roles) u.unmarshal(XmlHelper.stripDoctypeDeclaration(resource.getInputStream()));
-                            m_roles.getRole().addAll(roles.getRole());
-
-                        }
-                    }
-                } catch (IOException e) {
-                    log.error("Error in Reading Policy", e);
-                    throw new SecurityException("Error in Reading Policy", e);
-                }
-            }
-
-            // build list of functions per role
-            m_roleMap = buildRoleMap(m_roles);
-        } catch (MalformedURLException e) {
-            String s = "Can't Find Security Policy File, Bad URL - " + initFile;
-            log.fatal(s, e);
-            throw new SecurityException(s, e);
-        } catch (JAXBException e) {
-            String s = "Can't Load Security Policy File, Malformed XML Document - " + initFile;
-            log.fatal(s, e);
-            throw new SecurityException(s, e);
-        } catch (SAXException e) {
-            String s = "Can't Load Security Policy File, Malformed XML Document - " + initFile;
-            log.fatal(s, e);
-            throw new SecurityException(s, e);
-        } catch (IOException e) {
-            String s = "Can't Load Security Policy File, I/O Error in reading XML Document - " + initFile;
-            log.fatal(s, e);
-            throw new SecurityException(s, e);
-        } finally {
-            try {
-                if (stream != null)
-                    stream.close();
-            } catch (IOException e) {
-                // do nothing
-                log.warn("Unable to close the InputStream associated to the URL - " + initFile, e);
-            }
+        if (m_roleMap == null) {
+            RoleManager roleManager = getRoleManager();
+            if (null != roleManager)
+                m_roleMap = roleManager.buildRoleMap();
         }
     }
 
-    /** Get the list of roles and what functions are in each role. */
-    private static Map<String, List<String>> buildRoleMap(Roles roles) {
-        Map<String, List<String>> m = new HashMap<String, List<String>>();
-        List<Role> roleList = roles.getRole();
-        if (roleList != null) {
-            // Loop of all the role objects
-            for (Role role : roleList) {
-                if (log.isDebugEnabled())
-                    log.debug("Processing Role: " + role.getName());
-                List<GrantFunctionAccess> access = role.getGrantFunctionAccess();
-                List<String> funcs = null;
-                if (access != null) {
-                    funcs = new LinkedList<String>();
-                    // Add all the names in all of the GrantAccess objects to the list.
-                    for (GrantFunctionAccess gfa : access) {
-                        funcs.add(gfa.getName());
-                        if (log.isDebugEnabled())
-                            log.debug("Processing Role: " + role.getName() + " has function " + gfa.getName());
-                    }
-                }
-                // If there are some functions, add it to the master Map
-                if (funcs != null)
-                    m.put(role.getName(), funcs);
-            }
-        }
-        return m;
-    }
-
-    /** Returns the location of the default roles.xml file. */
+    /**
+     * Returns the location of the default roles.xml file.
+     */
+    @Deprecated
     public static String getDefaultFileLocation() {
         return (String) Config.getProperty(Config.PROP_SECURITY_POLICY_URL, DEFAULT_POLICY_LOCATION);
     }
@@ -280,6 +175,7 @@ public class PolicyCache {
      * Returns the location of roles_{VAR}.xml file.
      * NOTE: This file may not exist in the file-system.
      */
+    @Deprecated
     public static String getVariationFileLocation() {
         String defaultFileLocation = getDefaultFileLocation();
 
@@ -298,6 +194,7 @@ public class PolicyCache {
      * Returns the variation file-location, if it exists in the file-system.
      * Else the default file-location will be returned.
      */
+    @Deprecated
     public static String getFileLocation() {
         String variationFileLocation = getVariationFileLocation();
         try {
@@ -311,5 +208,23 @@ public class PolicyCache {
                 log.debug("FileLocation is the default '" + defaultFileLocation + "', since variation file '" + variationFileLocation + "' does not exist");
             return defaultFileLocation;
         }
+    }
+
+    /**
+     * Provides the local instance of the RoleManager
+     *
+     * @return Returns a RoleManager instance
+     */
+    public static RoleManager getRoleManager() {
+        return roleManager;
+    }
+
+    /**
+     * Allows the local roleManager to be set from a public setter.
+     *
+     * @param roleManager
+     */
+    public static void setRoleManager(RoleManager roleManager) {
+        PolicyCache.roleManager = roleManager;
     }
 }
