@@ -49,12 +49,15 @@
 
 package org.jaffa.loader;
 
+import org.jaffa.loader.drools.DroolLoader;
+import org.jaffa.loader.drools.DroolManager;
 import org.jaffa.loader.messaging.MessagingManager;
 import org.jaffa.loader.scheduler.SchedulerManager;
 import org.jaffa.loader.soa.SoaEventManager;
 import org.jaffa.loader.transaction.TransactionManager;
 import org.jaffa.modules.messaging.services.ConfigurationService;
 import org.jaffa.modules.scheduler.services.SchedulerConfiguration;
+import org.jaffa.soa.rules.ServiceRulesInterceptor;
 import org.jaffa.soa.services.configdomain.SoaEventInfo;
 import org.jaffa.transaction.services.configdomain.TransactionInfo;
 import org.jaffa.transaction.services.configdomain.TypeInfo;
@@ -165,5 +168,22 @@ public class XmlLoaderConfig {
         return schedulerManager;
     }
 
+    /**
+     * Drools Files Configuration
+     */
+
+    @Bean
+    public DroolLoader droolLoader(){
+        DroolLoader droolLoader = new DroolLoader();
+        droolLoader.setManager(droolManager());
+        return  droolLoader;
+    }
+
+    @Bean
+    public DroolManager droolManager(){
+        DroolManager droolManager = new DroolManager();
+        ServiceRulesInterceptor.setDroolManager(droolManager);
+        return  droolManager;
+    }
 }
 

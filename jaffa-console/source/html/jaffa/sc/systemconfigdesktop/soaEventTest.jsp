@@ -19,9 +19,9 @@
          org.jaffa.modules.messaging.services.HeaderParam,
          org.jaffa.persistence.util.UOWHelper,
          java.util.Date,java.net.URLDecoder,
-         org.jaffa.soa.services.RaiseEventService;'
+         org.jaffa.soa.services.RaiseEventService,
+         org.jaffa.soa.rules.ServiceRulesInterceptor'
          %>
-
 
 
 <%!
@@ -38,7 +38,9 @@ private void createSoaEvent(String eventName,String description,String soaEventP
     try{
 
         uow = new UOW();
-        
+
+
+        uow.addPersistenceLoggingPlugin(0, new ServiceRulesInterceptor("soaeventservice"));
         for(int i=0;i<postMessageTimes;i++){
             
             // Create a SOAEvent

@@ -108,37 +108,7 @@
     <dependency>
       <groupId>org.drools</groupId>
       <artifactId>drools-compiler</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>org.antlr</groupId>
-          <artifactId>antlr-runtime</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.antlr</groupId>
-          <artifactId>antlr</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.antlr</groupId>
-          <artifactId>stringtemplate</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.codehaus.janino</groupId>
-          <artifactId>janino</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>janino</groupId>
-          <artifactId>janino</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.eclipse.jdt</groupId>
-          <artifactId>core</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>xerces</groupId>
-          <artifactId>xercesImpl</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
+     </dependency>
     <dependency>
       <groupId>org.drools</groupId>
       <artifactId>knowledge-api</artifactId>

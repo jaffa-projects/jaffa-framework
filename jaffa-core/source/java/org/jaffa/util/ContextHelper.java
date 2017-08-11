@@ -51,6 +51,7 @@ package org.jaffa.util;
 
 
 import org.apache.log4j.Logger;
+import org.jaffa.security.VariationContext;
 
 import java.io.File;
 import java.io.IOException;
@@ -70,10 +71,12 @@ import java.util.jar.Manifest;
 public class ContextHelper {
 
     public static final String CONTEXT_SALIENCE = "Context-Salience";
+    public static final String VARIATION_SALIENCE = "Variation-Salience";
 
     public static final String META_INF_MANIFEST_FILE = "META-INF/MANIFEST.MF";
 
     public static Map<String, String> contextSalienceMap = new HashMap<>();
+    public static Map<String, String> variationSalienceMap = new HashMap<>();
 
     private static Logger logger = Logger.getLogger(ContextHelper.class);
 
@@ -94,7 +97,7 @@ public class ContextHelper {
             if(!contextSalienceMap.containsKey(manifestPath)) {
                 if (logger.isDebugEnabled())
                     logger.debug("manifestPath={}" + manifestPath);
-                String contextSalienceRead = getContextSalienceFromManifestPath(manifestPath);
+                String contextSalienceRead = getManifestParameter(manifestPath, true);
                 contextSalience = contextSalienceRead != null ? contextSalienceRead : contextSalience;
                 contextSalienceMap.put(manifestPath, contextSalience);
             }else {
@@ -105,6 +108,34 @@ public class ContextHelper {
         return contextSalience;
     }
 
+    /**
+     * retrieves the context salience from the path supplied
+     * @param contextPath
+     * @return string containing context salience
+     * @throws IOException
+     */
+    public static String getVariationSalience(String contextPath) throws IOException {
+        String variationSalience = VariationContext.DEFAULT_VARIATION;
+
+        if (!contextPath.startsWith("jar")) {
+            // Class not from JAR
+            logger.warn("The Context Path is not frm the JAR");
+        } else {
+            String manifestPath = contextPath.substring(0, contextPath.lastIndexOf("!") + 1) + "/" + META_INF_MANIFEST_FILE;
+            if(!variationSalienceMap.containsKey(manifestPath)) {
+                if (logger.isDebugEnabled())
+                    logger.debug("manifestPath={}" + manifestPath);
+                String variationSalienceRead = getManifestParameter(manifestPath, false);
+                variationSalience = variationSalienceRead != null ? variationSalienceRead : variationSalience;
+                variationSalienceMap.put(manifestPath, variationSalience);
+            }else {
+                variationSalience = variationSalienceMap.get(manifestPath);
+            }
+        }
+
+        return variationSalience;
+    }
+
 
     /**
      * retrieves the context salience from the path supplied
@@ -112,7 +143,7 @@ public class ContextHelper {
      * @return string containing context salience
      * @throws IOException
      */
-    public static String getContextSalienceFromManifestPath(String manifestPath) throws IOException {
+    public static String getManifestParameter(String manifestPath, boolean readContextSalience) throws IOException {
         Manifest manifest;
         try {
             manifest = new Manifest(new URL(manifestPath).openStream());
@@ -121,7 +152,7 @@ public class ContextHelper {
             return null;
         }
 
-        return getContextSalienceFromManifest(manifest);
+        return getManifestParameter(manifest, readContextSalience);
     }
 
     /**
@@ -130,11 +161,11 @@ public class ContextHelper {
      * @return string containing context salience
      * @throws IOException
      */
-    public static String getContextSalienceFromClass(Class clazz) throws IOException {
+    public static String getManifestParameter(Class clazz) throws IOException {
         Manifest mf = new Manifest();
         mf.read(clazz.getClassLoader().getResourceAsStream(META_INF_MANIFEST_FILE));
 
-        return getContextSalienceFromManifest(mf);
+        return getManifestParameter(mf, true);
     }
 
     /**
@@ -142,8 +173,8 @@ public class ContextHelper {
      * @param manifest
      * @return string containing context salience
      */
-    public static String getContextSalienceFromManifest(Manifest manifest) {
+    public static String getManifestParameter(Manifest manifest, boolean readContextSalience) {
         Attributes attributes = manifest.getMainAttributes();
-        return attributes.getValue(CONTEXT_SALIENCE);
+        return attributes.getValue(readContextSalience ? CONTEXT_SALIENCE : VARIATION_SALIENCE);
     }
 }

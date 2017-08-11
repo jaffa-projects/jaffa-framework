@@ -74,6 +74,7 @@ import org.drools.event.DebugWorkingMemoryEventListener;
 import org.drools.spi.ConsequenceException;
 import org.jaffa.exceptions.ApplicationExceptions;
 import org.jaffa.exceptions.FrameworkException;
+import org.jaffa.loader.drools.DroolManager;
 import org.jaffa.metadata.FieldMetaData;
 import org.jaffa.persistence.IPersistent;
 import org.jaffa.persistence.UOW;
@@ -121,17 +122,15 @@ import org.jaffa.util.ExceptionHelper;
 public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
 
     private static final Logger log = Logger.getLogger(ServiceRulesInterceptor.class);
-    private static final String DROOLS_COMPILER_PROPERTY = "drools.dialect.java.compiler";
-    private static final String DROOLS_JANINO_COMPILER = "JANINO";
     private static final String FACT_NOT_ADDED_MESSAGE = "Session Not Initialized. FACT [%s] NOT ADDED...";
-    
-    private static final Map<RuleAgentKey,RuleAgent> c_agents = new HashMap<RuleAgentKey,RuleAgent>();
-    
+
     private static final ObjectFilter PROCESS_EVENT_GRAPH_OBJECT_FILTER = new ObjectFilter() {
         public boolean accept(Object object) {
             return object instanceof ProcessEventGraph;
         }
     };
+
+    private static DroolManager droolManager;
 
     /**
      * This is the rules session that may be used by super-classes
@@ -381,20 +380,6 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
         RuleAgent agent = getAgent();
         return (agent != null) ? agent.getRuleBase() : null;
     }
-    
-    /** Static method that can be used to tell any cached agent that they should 
-     * refresh there rules base. This can be used by any code that is specifically changing
-     * rule files that the agent may have cached. If not used the Agent will automatically
-     * refresh the rules based on its polling period and out-of-date file stamps
-     */
-    public static synchronized void refreshAgent(String serviceName) {
-    	RuleAgentKey key = new RuleAgentKey(serviceName,VariationContext.getVariation());
-        synchronized (c_agents) {
-        	if(c_agents.containsKey(key)) {
-            	c_agents.remove(key);
-        	}
-    	}
-    }
 
     //***************************************************************
     //
@@ -404,143 +389,10 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
     /** Get the RuleAgent used to supply the RuleBase
      */
     protected synchronized RuleAgent getAgent() {
-    	RuleAgentKey key = new RuleAgentKey(m_serviceName,VariationContext.getVariation());
-        synchronized (c_agents) {
-    		if(c_agents.containsKey(key)) {
-    			return c_agents.get(key);
-    		} else {
-            	RuleAgent r = createAgent();
-            	c_agents.put(key,r);
-            	return r;
-            }
-        }
+    	return droolManager.getAgent(m_serviceName, VariationContext.getVariation());
     }
 
-        
-    /** Create the RuleAgent
-     */
-    protected RuleAgent createAgent() {
-        // Look for specific config file for this service
-        String ruleName = "jaffa.soa.droolsAgentConfigFile." + m_serviceName;
-        String fileName = (String) ContextManagerFactory.instance().getProperty(ruleName);
-        Properties prop = new Properties();
-        if (fileName != null) {
-            // If the rule is set, make sure the file exists
-            InputStream in = this.getClass().getResourceAsStream(fileName);
-            if (in == null) {
-                String err = "Can't find " + m_serviceName + " agent from property file: " + fileName;
-                log.error(err);
-                throw new RuntimeException(err);
-            } else {
-                // Load properties
-                try {
-                    prop.load(in);
-                } catch (IOException e) {
-                    String err = "Can't load " + m_serviceName + " agent from property file: " + fileName;
-                    log.error(err, e);
-                    throw new RuntimeException(err, e);
-                }
-            }
-        } else {
-            // Load the generic file
-            ruleName = "jaffa.soa.droolsAgentConfigFile";
-            fileName = (String) ContextManagerFactory.instance().getProperty(ruleName);
-            if (fileName != null) {
-                // If the rule is set, make sure the file exists
-                InputStream in = this.getClass().getResourceAsStream(fileName);
-                if (in == null) {
-                    String err = "Can't find " + m_serviceName + " agent from property file: " + fileName;
-                    log.error(err);
-                    throw new RuntimeException(err);
-                } else {
-                    // Load properties
-                    try {
-                        prop.load(in);
-                    } catch (IOException e) {
-                        String err = "Can't load " + m_serviceName + " agent from property file: " + fileName;
-                        log.error(err, e);
-                        throw new RuntimeException(err, e);
-                    }
-                }
-            } else {
-                if (log.isInfoEnabled())
-                    log.info("No default Agent Config defined, assume empty config");
-            }
-        }
-        
-        
-        // Override some of the generic properties, if there was no default then this must be enough for the Agent to work!
 
-        // Set the Configuration Name if not set
-        if(!prop.containsKey(RuleAgent.CONFIG_NAME)) 
-            prop.setProperty(RuleAgent.CONFIG_NAME, m_serviceName);
-        
-        // See if there is a DIR override, and apply it
-        ruleName = "jaffa.soa.droolsAgentConfig." + m_serviceName + ".dir";
-        String dir = (String) ContextManagerFactory.instance().getProperty(ruleName);
-        if (dir != null)
-            prop.setProperty(RuleAgent.DIRECTORY, dir);
-        
-        // Make sure this is a vaild directory and create if it does not exist, else the Agent will fail!
-        if(prop.containsKey(RuleAgent.DIRECTORY)) {
-            File d = new File(prop.getProperty(RuleAgent.DIRECTORY));
-            if (d.exists()) {
-                if(!d.isDirectory())
-                    log.error("Rule Directory " + dir + " is not a directory, can't add it to agent");
-            } else {
-                if (!d.exists()) {
-                    log.warn("Rule Directory " + dir + " does not exist, creating it now.");
-                    d.mkdirs();
-                }
-            }
-        }
-
-        // See if there is a FILES override, and apply it
-        ruleName = "jaffa.soa.droolsAgentConfig." + m_serviceName + ".file";
-        String file = (String) ContextManagerFactory.instance().getProperty(ruleName);
-        if (file != null)
-            prop.setProperty(RuleAgent.FILES, file);
-
-        // See if there is a URLS override, and apply it
-        ruleName = "jaffa.soa.droolsAgentConfig." + m_serviceName + ".url";
-        String url = (String) ContextManagerFactory.instance().getProperty(ruleName);
-        if (url != null)
-            prop.setProperty(RuleAgent.URLS, url);
-
-        // Set the Polling Interval if not set for DIR or URL
-        if(!prop.containsKey(RuleAgent.POLL_INTERVAL) && (prop.containsKey(RuleAgent.DIRECTORY)||prop.containsKey(RuleAgent.URLS))) 
-            prop.setProperty(RuleAgent.POLL_INTERVAL,"60");
-
-
-        // We can now create the Agent, based on the properties
-        try {
-            // To avoid conflict with Tomcat's JDT compiler, override the default compiler with JANINO (see http://wiki.jboss.org/wiki/RulesTomcat)
-            String droolsCompiler = System.getProperty(DROOLS_COMPILER_PROPERTY);
-            if (droolsCompiler == null || droolsCompiler.length() == 0) {
-                System.setProperty(DROOLS_COMPILER_PROPERTY, DROOLS_JANINO_COMPILER);
-                if (log.isDebugEnabled())
-                    log.debug("To avoid conflicts with an existing JDT compiler, drools has been configured to use " + System.getProperty(DROOLS_COMPILER_PROPERTY));
-            }
-
-            // Turn off Shadow Rules Proxy Objects, and enable object Equality checks for uniqueness
-            RuleBaseConfiguration conf = new RuleBaseConfiguration();
-            conf.setShadowProxy(false);
-            conf.setAssertBehaviour(AssertBehaviour.EQUALITY);
-
-            // Now load the Agent, based on the properties
-            if (log.isDebugEnabled())
-                log.debug("Create Agent Based on properties - " + prop);
-            RuleAgent agent = RuleAgent.newRuleAgent(prop, getAgentEventListener(), conf);
-            if (agent == null) {
-                log.error("Didn't create agent from property file: " + fileName);
-                throw new RuntimeException("Didn't create agent from property file: " + fileName);
-            }
-            return agent;
-        } catch (Exception e) {
-            log.error("Can't create agent from property file: " + fileName, e);
-            throw new RuntimeException("Can't create agent from property file: " + fileName, e);
-        }
-    }
 
     //***************************************************************
     //
@@ -595,40 +447,6 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
         return null;
     }
 
-    /** Returns a custom AgentEventListener implementation.
-     * The default AgentEventListener implementation in Drools writes the various Events to the System.err stream.
-     * This custom implementation instead logs the various Events via Log4J.
-     * @return a custom AgentEventListener implementation.
-     */
-    private AgentEventListener getAgentEventListener() {
-        return new AgentEventListener() {
-
-            private String prefix;
-
-            public void setAgentName(String name) {
-                prefix = "RuleAgent(" + name + "): ";
-            }
-
-            public void debug(String message) {
-                if (log.isDebugEnabled())
-                    log.debug(prefix + message);
-            }
-
-            public void info(String message) {
-                if (log.isInfoEnabled())
-                    log.info(prefix + message);
-            }
-
-            public void warning(String message) {
-                log.warn(prefix + message);
-            }
-
-            public void exception(Exception e) {
-                log.error(prefix + e.getMessage(), e);
-            }
-        };
-    }
-
     private void checkForPendingEvents() throws ApplicationExceptions {
         ApplicationExceptions applicationExceptions = new ApplicationExceptions();
         // Build up set of all events that have been executed
@@ -667,5 +485,13 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
             m_session.set(null);
             m_session = null;
         }
+    }
+
+    public static DroolManager getDroolManager() {
+        return droolManager;
+    }
+
+    public static void setDroolManager(DroolManager droolManager) {
+        ServiceRulesInterceptor.droolManager = droolManager;
     }
 }
