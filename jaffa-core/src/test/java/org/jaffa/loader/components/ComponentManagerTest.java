@@ -2,7 +2,7 @@
  * ====================================================================
  * JAFFA - Java Application Framework For All
  *
- * Copyright (C) 2002 JAFFA Development Group
+ * Copyright (C) 2012 JAFFA Development Group
  *
  *     This library is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU Lesser General Public
@@ -47,93 +47,89 @@
  * ====================================================================
  */
 
-/*
- * Loader.java
- *
- * Created on April 17, 2002, 11:53 AM
- */
-package org.jaffa.presentation.portlet.component.componentdomain;
+package org.jaffa.loader.components;
 
-import org.apache.log4j.Logger;
 import org.jaffa.loader.IRepository;
-import org.jaffa.loader.components.ComponentManager;
+import org.jaffa.loader.MapRepository;
 import org.jaffa.presentation.portlet.component.ComponentDefinition;
+import org.jaffa.presentation.portlet.component.componentdomain.Component;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import static org.junit.Assert.*;
 
-/** This class is used to load the domain information from the Domain Objects based
- * on the XML data, into definition objects that can be used by the rest of the architecture
- *
- * @author  paule
- * @version 1.0
+/**
+ * Tests the methods of ComponentManager
+ * Created by kcassell on 8/8/2017.
  */
-public class Loader {
+public class ComponentManagerTest {
+    
+    /** The manager being tested. */
+    private ComponentManager manager;
 
-    private static final Logger LOGGER = Logger.getLogger(Loader.class);
+    @Before
+    public void setUp() throws Exception {
+        manager = new ComponentManager();
+    }
 
-	/** This caches the component definitions from the ComponentManager. */
-    private static Map<String, ComponentDefinition> c_componentPool = null;
+    @After
+    public void tearDown() throws Exception {
+        manager = null;
+    }
 
-	/** The singleton Loader. */
-	private static Loader loaderSingleton = null;
-
-	/** The ComponentManager that maintains the registered components.  */
-	private static ComponentManager componentManager = null;
-
-	/**
-	 * Returns the singleton Loader, creating it if necessary.
-	 * @return the singleton
+    /**
+     * Tests registration of ComponentDefinition objects
+     * @throws Exception
      */
-	public static Loader getInstance() {
-		if (loaderSingleton == null) {
-			synchronized (Loader.class) {
-				if (loaderSingleton == null) {
-					loaderSingleton = new Loader();
-				}
-			}
-		}
-		return loaderSingleton;
-	}
+    @Test
+    public void testRegisterComponentDefinition() throws Exception {
+        Component component = new Component();
+        String name = "q1";
+        component.setId(name);
+        ComponentDefinition definition = new ComponentDefinition(component);
+        manager.registerComponentDefinition(name, definition, "0-PLATFORM");
+        ComponentDefinition retrievedDefinition =
+                manager.getComponentDefinition(name, null);
+        assertEquals(definition, retrievedDefinition);
+    }
 
-	/** The private no-arg constructor forces use of getInstance() to
-	 * obtain the singleton Loader.
-	 */
-	private Loader() {
-	}
-
-    /** Returns the component definitions that were defined in XML.
-     * @return Returns a Map where the key is the component name,
-	 * and the value is a ComponentDefinition object
+    /**
+     * Test that the message repository is retrievable
+     * @throws Exception
      */
-	public static synchronized Map<String, ComponentDefinition> getComponentPool() {
-		// componentPool serves as a cache for the information stored in the
-		// ComponentManager
-		if (c_componentPool == null) {
-			final Map<String, ComponentDefinition> pool = new HashMap<>();
+    @Test
+    public void testGetComponentRepository() throws Exception {
+        assertNotNull(manager.getComponentRepository());
+    }
 
-			IRepository<String, ComponentDefinition> repository =
-					componentManager.getComponentRepository();
+    /**
+     * Tests that a set repository can be retrieved.
+     * @throws Exception
+     */
+    @Test
+    public void setComponentRepository() throws Exception {
+        IRepository<String, ComponentDefinition> origRepository =
+                manager.getComponentRepository();
+        assertNotNull(origRepository);
+        IRepository<String, ComponentDefinition> componentRepository1 =
+                new MapRepository<>();
+        manager.setComponentRepository(componentRepository1);
+        IRepository<String, ComponentDefinition> retrievedRepository =
+                manager.getComponentRepository();
+        assertEquals(componentRepository1, retrievedRepository);
+        assertNotEquals(origRepository, retrievedRepository);
+    }
 
-			List<ComponentDefinition> values = repository.getAllValues(null);
-
-			// Now go through the component list and build a Map of Component
-			// Definitions
-			for (final ComponentDefinition definition : values) {
-				try {
-					pool.put(definition.getComponentName(), definition);
-				} catch (Exception e) {
-					LOGGER.fatal(e);
-				}
-			}
-			c_componentPool = pool;
-		}
-		return c_componentPool;
-	}
-
-	public static void setComponentManager(ComponentManager componentManager) {
-		Loader.componentManager = componentManager;
-	}
+    /**
+     * Tests that getXmlFileName returns an XML file by default.
+     * @throws Exception
+     */
+    @Test
+    public void getXmlFileName() throws Exception {
+        String xmlFileName = manager.getXmlFileName();
+        assertNotNull(xmlFileName);
+        assertTrue(xmlFileName.contains(".xml"));
+    }
 
 }

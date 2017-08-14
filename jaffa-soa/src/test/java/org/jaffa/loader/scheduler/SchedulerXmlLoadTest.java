@@ -1,7 +1,7 @@
 package org.jaffa.loader.scheduler;
 
 import org.jaffa.loader.XmlLoaderConfig;
-import org.jaffa.loader.scheduler.SchedulerManager;
+import org.jaffa.loader.components.ComponentXmlLoaderConfig;
 import org.jaffa.modules.scheduler.services.configdomain.Task;
 import org.jaffa.soa.services.SOAEventPoller;
 import org.jaffa.transaction.services.TransactionDependencySweeper;
@@ -14,11 +14,13 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 /**
- * MessagingXmlLoadTest - Verifies the Scheduler beans can be loaded from the SchedulerManager implementation.
+ * MessagingXmlLoadTest - Verifies the Scheduler beans can be loaded from the
+ * SchedulerManager implementation.
  */
 public class SchedulerXmlLoadTest {
 
-    private static AnnotationConfigApplicationContext xmlLoaderConfig = new AnnotationConfigApplicationContext(XmlLoaderConfig.class);
+    private static AnnotationConfigApplicationContext xmlLoaderConfig =
+            new AnnotationConfigApplicationContext(XmlLoaderConfig.class);
 
     /**
      * Test load the XML config for the scheduler task repository.
@@ -29,7 +31,7 @@ public class SchedulerXmlLoadTest {
         assertNull(schedulerManager.getSchedulerTask("org.jaffa.scheduler.tester.TestMessageSingleton", null));
         assertNotNull(schedulerManager.getSchedulerTask("org.jaffa.soa.services.SOAEventPoller", null));
         assertNotNull(schedulerManager.getSchedulerTask("org.jaffa.transaction.services.TransactionDependencySweeper", null));
-        assertNull(schedulerManager.getSchedulerTask(new String(), null));
+        assertNull(schedulerManager.getSchedulerTask("", null));
     }
 
     /**

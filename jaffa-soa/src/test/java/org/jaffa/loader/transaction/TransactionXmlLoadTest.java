@@ -2,7 +2,6 @@ package org.jaffa.loader.transaction;
 
 import org.jaffa.loader.XmlLoaderConfig;
 import org.jaffa.loader.soa.SoaEventManager;
-import org.jaffa.loader.transaction.TransactionManager;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -15,7 +14,8 @@ import static org.junit.Assert.assertNotNull;
  */
 public class TransactionXmlLoadTest {
 
-    private static AnnotationConfigApplicationContext xmlLoaderConfig = new AnnotationConfigApplicationContext(XmlLoaderConfig.class);
+    private static AnnotationConfigApplicationContext xmlLoaderConfig =
+            new AnnotationConfigApplicationContext(XmlLoaderConfig.class);
 
     @Test
     public void testTransactionXmlLoad(){

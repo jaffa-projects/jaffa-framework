@@ -120,7 +120,8 @@ public class AppConfigServlet extends HttpServlet {
 	 * Initialize ComponentDefinition
 	 */
 	private void initComponents() {
-		ComponentLoader.getInstance();
+		// Initialization now occurs via the ComponentManager Spring bean
+//		ComponentLoader.getInstance();
 	}
 
 	/** This is invoked by the servlet container when the servlet is destroyed.
