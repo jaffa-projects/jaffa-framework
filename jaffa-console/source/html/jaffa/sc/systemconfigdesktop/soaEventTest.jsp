@@ -19,7 +19,7 @@
          org.jaffa.modules.messaging.services.HeaderParam,
          org.jaffa.persistence.util.UOWHelper,
          java.util.Date,java.net.URLDecoder,
-         org.jaffa.soa.services.RaiseEventService;'
+         org.jaffa.soa.services.RaiseEventService'
          %>
 
 

@@ -29,7 +29,7 @@ public class ContextHelperTest {
 
     @Test
     public void testGetContextFromClass() throws IOException {
-        String contextSalience = ContextHelper.getContextSalienceFromClass(ContextHelper.class);
+        String contextSalience = ContextHelper.getManifestParameter(ContextHelper.class);
 
         assertNull(contextSalience);
     }
