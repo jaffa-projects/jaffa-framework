@@ -51,8 +51,12 @@ package org.jaffa.config;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import org.jaffa.loader.components.ComponentXmlLoaderTestConfig;
 import org.jaffa.presentation.portlet.component.ComponentManager;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.context.annotation
+		.AnnotationConfigApplicationContext;
 
 /**
  * 
@@ -61,8 +65,15 @@ import org.junit.Test;
  */
 public class ComponentLoaderTest {
 
+	private static AnnotationConfigApplicationContext xmlLoaderConfig =
+			new AnnotationConfigApplicationContext(ComponentXmlLoaderTestConfig.class);
+
+
 	@Test
 	public void testComponentLoader() throws Exception {
+		// It's necessary to load component XML via
+		// org.jaffa.loader.components.ComponentManager before testing
+		xmlLoaderConfig.getBean(org.jaffa.loader.components.ComponentManager.class);
 
 		assertNotNull(ComponentManager.find("Jaffa.Admin.RolesEditor"));
 		

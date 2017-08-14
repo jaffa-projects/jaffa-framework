@@ -1,7 +1,6 @@
 package org.jaffa.loader.messaging;
 
 import org.jaffa.loader.XmlLoaderConfig;
-import org.jaffa.loader.messaging.MessagingManager;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
