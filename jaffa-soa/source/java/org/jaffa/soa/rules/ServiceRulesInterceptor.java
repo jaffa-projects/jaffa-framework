@@ -381,6 +381,15 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
         return (agent != null) ? agent.getRuleBase() : null;
     }
 
+    /** Static method that can be used to tell any cached agent that they should
+     * refresh there rules base. This can be used by any code that is specifically changing
+     * rule files that the agent may have cached. If not used the Agent will automatically
+     * refresh the rules based on its polling period and out-of-date file stamps
+     */
+    public static synchronized void refreshAgent(String serviceName) {
+        droolManager.refreshAgent(serviceName);
+    }
+
     //***************************************************************
     //
     //  P R O T E C T E D   M E T H O D S
