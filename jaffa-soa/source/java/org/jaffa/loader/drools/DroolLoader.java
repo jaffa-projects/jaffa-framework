@@ -7,7 +7,8 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import javax.annotation.PostConstruct;
 
 /**
- * Created by pbagirthi on 8/7/2017.
+ * A Loader class for handling all the Drools Files
+ * A Drool file is any file that ends with .drl extension.
  */
 public class DroolLoader {
 
@@ -24,6 +25,7 @@ public class DroolLoader {
     /**
      * sets the manager on the DroolLoader
      * @param manager Object identified by T
+     *
      */
     public void setManager(DroolManager manager) {
         this.manager = manager;
@@ -37,7 +39,7 @@ public class DroolLoader {
     public void loadDrools() {
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         try {
-            Resource[] resources = resolver.getResources("classpath*:META-INF/**/*.drl");
+            Resource[] resources = resolver.getResources("classpath*:META-INF/rules/**/*.drl");
             if (resources != null) {
                 for (Resource resource : resources) {
                     if (resource == null) {

@@ -52,15 +52,11 @@ import org.apache.log4j.Logger;
 import org.drools.RuleBaseConfiguration;
 import org.drools.agent.AgentEventListener;
 import org.drools.agent.RuleAgent;
-import org.jaffa.loader.IManager;
 import org.jaffa.security.VariationContext;
 import org.jaffa.session.ContextManagerFactory;
 import org.jaffa.soa.rules.RuleAgentKey;
-import org.jaffa.soa.rules.ServiceRulesInterceptor;
 import org.springframework.core.io.Resource;
-import org.xml.sax.SAXException;
 
-import javax.xml.bind.JAXBException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -69,7 +65,8 @@ import java.nio.file.Paths;
 import java.util.*;
 
 /**
- * Created by pbagirthi on 8/7/2017.
+ * Manager for Drools Loading and encapsulates all the methods required for Drools Management
+ * Any spring config can use this class to register/unregister drool files.
  */
 public class DroolManager {
 
@@ -77,138 +74,241 @@ public class DroolManager {
     private static final String DROOLS_COMPILER_PROPERTY = "drools.dialect.java.compiler";
     private static final String DROOLS_JANINO_COMPILER = "JANINO";
 
-    Map<RuleAgentKey, StringBuilder> droolsFiles = new HashMap<>();
+    private Map<String, List<RuleAgentKey>> serviceNameMap = new HashMap<>();
 
-    Map<RuleAgentKey, RuleAgent> ruleAgents = new HashMap<>();
+    private Map<RuleAgentKey, StringBuilder> droolsFiles = new HashMap<>();
 
+    private Map<RuleAgentKey, RuleAgent> ruleAgents = new HashMap<>();
 
-    public void registerDrool(Resource resource, String variation) throws JAXBException, SAXException, IOException {
+    /**
+     * register Drool File using the Resource parameter
+     *
+     * @param resource  the object that contains the drool file.
+     * @param variation key with which drool file to be registered.
+     * @throws IOException if drool file is not found.
+     */
+    public void registerDrool(Resource resource, String variation) throws IOException {
 
         String serviceName = getServiceName(resource.getURL().getPath());
-        RuleAgentKey ruleAgentKey = new RuleAgentKey(serviceName, variation);
-        Path newPath = Paths.get(Files.createDirectories(Paths.get(serviceName+ "/" + variation )).toString() + "/" + resource.getFilename()) ;
-        try{
+        Path newPath = Paths.get(Files.createDirectories(Paths.get(serviceName + "/" + variation)).toString() + "/" + resource.getFilename());
+        try {
             Files.delete(newPath);
-        }catch(Exception e){
+        } catch (Exception e) {
             log.debug("File does not exist");
         }
-        Files.copy(resource.getInputStream(), newPath );
+        Files.copy(resource.getInputStream(), newPath);
+
+        registerDrool(serviceName, newPath.toString(), variation);
+    }
+
+    /**
+     * register Drool File using the serviceName
+     *
+     * @param serviceName with which Drool File will be registered
+     * @param path        the full path of the drool file
+     * @param variation   key with which drool file to be registered.
+     * @throws IOException if drool file is not found.
+     */
+    public void registerDrool(String serviceName, String path, String variation) throws IOException {
+
+        RuleAgentKey ruleAgentKey = new RuleAgentKey(serviceName, variation);
 
         StringBuilder droolPath = droolsFiles.get(ruleAgentKey);
         if (droolPath == null) {
             droolPath = new StringBuilder();
         }
-        droolPath.append(" " + newPath.toString());
+        droolPath.append(" " + path);
 
         droolsFiles.put(ruleAgentKey, droolPath);
+        List<RuleAgentKey> ruleAgentKeys = serviceNameMap.get(serviceName);
+        if (ruleAgentKeys == null) {
+            ruleAgentKeys = new ArrayList<>();
+        }
+
+        ruleAgentKeys.add(ruleAgentKey);
+        serviceNameMap.put(serviceName, ruleAgentKeys);
     }
 
+
+    /**
+     * unregisters a particular drool file resource from the Drool Repository
+     *
+     * @param resource  containing the location of drool file
+     * @param variation key with which drool file to be registered.
+     * @throws IOException if drool file is not found.
+     */
+    public void unRegisterDrool(Resource resource, String variation) throws IOException {
+
+        String serviceName = getServiceName(resource.getURL().getPath());
+        RuleAgentKey ruleAgentKey = new RuleAgentKey(serviceName, variation);
+        Path newPath = Paths.get(Files.createDirectories(Paths.get(serviceName + "/" + variation)).toString() + "/" + resource.getFilename());
+        try {
+            Files.delete(newPath);
+        } catch (Exception e) {
+            log.debug("File does not exist");
+        }
+
+        StringBuilder droolPath = droolsFiles.get(ruleAgentKey);
+        if (droolPath != null) {
+            int index = droolPath.indexOf(newPath.toString());
+            droolPath = droolPath.replace(index, newPath.toString().length() + 1, "");
+        }
+
+        droolsFiles.put(ruleAgentKey, droolPath);
+
+        refreshAgent(serviceName);
+    }
+
+    /**
+     * Returns a RuleAgent from the Drool repository
+     *
+     * @param serviceName drool file service name
+     * @param variation   String representing the customer variation
+     * @return RuleAgent
+     */
     public RuleAgent getAgent(String serviceName, String variation) {
-        return ruleAgents.get(new RuleAgentKey(serviceName, variation));
+        RuleAgentKey ruleAgentKey = new RuleAgentKey(serviceName, variation);
+        if (ruleAgents.get(ruleAgentKey) == null)
+            createAgent(ruleAgentKey);
+
+        return ruleAgents.get(ruleAgentKey);
     }
 
-    /** Static method that can be used to tell any cached agent that they should
+    /**
+     * Static method that can be used to tell any cached agent that they should
      * refresh there rules base. This can be used by any code that is specifically changing
      * rule files that the agent may have cached. If not used the Agent will automatically
      * refresh the rules based on its polling period and out-of-date file stamps
      */
     public synchronized void refreshAgent(String serviceName) {
-        RuleAgentKey key = new RuleAgentKey(serviceName,VariationContext.getVariation());
-        synchronized (ruleAgents) {
-            if(ruleAgents.containsKey(key)) {
+        if (VariationContext.getVariation().equals(VariationContext.DEFAULT_VARIATION)) {
+            if (serviceNameMap.get(serviceName) != null) {
+                for (RuleAgentKey ruleAgentKey1 : serviceNameMap.get(serviceName)) {
+                    synchronized (ruleAgents) {
+                        ruleAgents.remove(ruleAgentKey1);
+                    }
+                }
+            }
+        } else {
+            RuleAgentKey key = new RuleAgentKey(serviceName, VariationContext.getVariation());
+            synchronized (ruleAgents) {
                 ruleAgents.remove(key);
             }
         }
     }
 
+    /**
+     * creates all the RuleAgents and adds it to the ruleAgents Map
+     */
     public void createAgents() {
         for (Map.Entry<RuleAgentKey, StringBuilder> entry : droolsFiles.entrySet()) {
             RuleAgentKey ruleAgentKey = entry.getKey();
-            if(ruleAgentKey.getVariant() != null){
-                Properties prop = new Properties();
-
-                prop.setProperty(RuleAgent.FILES, getDroolsFilesRepo(ruleAgentKey, droolsFiles));
-
-                prop.setProperty(RuleAgent.CONFIG_NAME, ruleAgentKey.getServiceName());
-
-                // See if there is a DIR override, and apply it
-                String ruleName = "jaffa.soa.droolsAgentConfig." + entry.getKey() + ".dir";
-                String dir = (String) ContextManagerFactory.instance().getProperty(ruleName);
-                if (dir != null)
-                    prop.setProperty(RuleAgent.DIRECTORY, dir);
-
-                // Make sure this is a vaild directory and create if it does not exist, else the Agent will fail!
-                if (prop.containsKey(RuleAgent.DIRECTORY)) {
-                    File d = new File(prop.getProperty(RuleAgent.DIRECTORY));
-                    if (d.exists()) {
-                        if (!d.isDirectory())
-                            log.error("Rule Directory " + dir + " is not a directory, can't add it to agent");
-                    } else {
-                        if (!d.exists()) {
-                            log.warn("Rule Directory " + dir + " does not exist, creating it now.");
-                            d.mkdirs();
-                        }
-                    }
-                }
-
-                // Set the Polling Interval if not set for DIR or URL
-                if (!prop.containsKey(RuleAgent.POLL_INTERVAL) && (prop.containsKey(RuleAgent.DIRECTORY) || prop.containsKey(RuleAgent.URLS)))
-                    prop.setProperty(RuleAgent.POLL_INTERVAL, "60");
-
-
-                // We can now create the Agent, based on the properties
-                try {
-                    // To avoid conflict with Tomcat's JDT compiler, override the default compiler with JANINO (see http://wiki.jboss.org/wiki/RulesTomcat)
-                    String droolsCompiler = System.getProperty(DROOLS_COMPILER_PROPERTY);
-                    if (droolsCompiler == null || droolsCompiler.length() == 0) {
-                        System.setProperty(DROOLS_COMPILER_PROPERTY, DROOLS_JANINO_COMPILER);
-                        if (log.isDebugEnabled())
-                            log.debug("To avoid conflicts with an existing JDT compiler, drools has been configured to use " + System.getProperty(DROOLS_COMPILER_PROPERTY));
-                    }
-
-                    // Turn off Shadow Rules Proxy Objects, and enable object Equality checks for uniqueness
-                    RuleBaseConfiguration conf = new RuleBaseConfiguration();
-                    conf.setShadowProxy(false);
-                    conf.setAssertBehaviour(RuleBaseConfiguration.AssertBehaviour.EQUALITY);
-
-                    // Now load the Agent, based on the properties
-                    if (log.isDebugEnabled())
-                        log.debug("Create Agent Based on properties - " + prop);
-                    RuleAgent agent = RuleAgent.newRuleAgent(prop, getAgentEventListener(), conf);
-                    if (agent == null) {
-                        log.error("Didn't create agent from property file: " + ruleAgentKey.getServiceName());
-                        throw new RuntimeException("Didn't create agent from property file: " + ruleAgentKey.getServiceName());
-                    }
-                    ruleAgents.put(ruleAgentKey, agent);
-                } catch (Exception e) {
-                    log.error("Can't create agent from property file: " + ruleAgentKey.getServiceName(), e);
-                    throw new RuntimeException("Can't create agent from property file: " + ruleAgentKey.getServiceName(), e);
-                }
+            if (ruleAgentKey.getVariant() != null) {
+                createAgent(ruleAgentKey);
             }
         }
     }
 
-    private String getDroolsFilesRepo(RuleAgentKey ruleAgentKey, Map<RuleAgentKey, StringBuilder> droolsFiles) {
+    /**
+     * creates an RuleAgent based on the ruleAgentKey and adds it to the ruleAgents Map
+     *
+     * @param ruleAgentKey
+     */
+    private void createAgent(RuleAgentKey ruleAgentKey) {
+        Properties prop = new Properties();
+
+        prop.setProperty(RuleAgent.FILES, getDroolsFilesRepo(ruleAgentKey));
+
+        prop.setProperty(RuleAgent.CONFIG_NAME, ruleAgentKey.getServiceName());
+
+        // See if there is a DIR override, and apply it
+        String ruleName = "jaffa.soa.droolsAgentConfig." + ruleAgentKey.getServiceName() + ".dir";
+        String dir = (String) ContextManagerFactory.instance().getProperty(ruleName);
+        if (dir != null)
+            prop.setProperty(RuleAgent.DIRECTORY, dir);
+
+        // Make sure this is a vaild directory and create if it does not exist, else the Agent will fail!
+        if (prop.containsKey(RuleAgent.DIRECTORY)) {
+            File d = new File(prop.getProperty(RuleAgent.DIRECTORY));
+            if (d.exists()) {
+                if (!d.isDirectory())
+                    log.error("Rule Directory " + dir + " is not a directory, can't add it to agent");
+            } else {
+                if (!d.exists()) {
+                    log.warn("Rule Directory " + dir + " does not exist, creating it now.");
+                    d.mkdirs();
+                }
+            }
+        }
+
+        // Set the Polling Interval if not set for DIR or URL
+        if (!prop.containsKey(RuleAgent.POLL_INTERVAL) && (prop.containsKey(RuleAgent.DIRECTORY) || prop.containsKey(RuleAgent.URLS)))
+            prop.setProperty(RuleAgent.POLL_INTERVAL, "60");
+
+
+        // We can now create the Agent, based on the properties
+        try {
+            // To avoid conflict with Tomcat's JDT compiler, override the default compiler with JANINO (see http://wiki.jboss.org/wiki/RulesTomcat)
+            String droolsCompiler = System.getProperty(DROOLS_COMPILER_PROPERTY);
+            if (droolsCompiler == null || droolsCompiler.length() == 0) {
+                System.setProperty(DROOLS_COMPILER_PROPERTY, DROOLS_JANINO_COMPILER);
+                if (log.isDebugEnabled())
+                    log.debug("To avoid conflicts with an existing JDT compiler, drools has been configured to use " + System.getProperty(DROOLS_COMPILER_PROPERTY));
+            }
+
+            // Turn off Shadow Rules Proxy Objects, and enable object Equality checks for uniqueness
+            RuleBaseConfiguration conf = new RuleBaseConfiguration();
+            conf.setShadowProxy(false);
+            conf.setAssertBehaviour(RuleBaseConfiguration.AssertBehaviour.EQUALITY);
+
+            // Now load the Agent, based on the properties
+            if (log.isDebugEnabled())
+                log.debug("Create Agent Based on properties - " + prop);
+            RuleAgent agent = RuleAgent.newRuleAgent(prop, getAgentEventListener(), conf);
+            if (agent == null) {
+                log.error("Didn't create agent from property file: " + ruleAgentKey.getServiceName());
+                throw new RuntimeException("Didn't create agent from property file: " + ruleAgentKey.getServiceName());
+            }
+            ruleAgents.put(ruleAgentKey, agent);
+        } catch (Exception e) {
+            log.error("Can't create agent from property file: " + ruleAgentKey.getServiceName(), e);
+            throw new RuntimeException("Can't create agent from property file: " + ruleAgentKey.getServiceName(), e);
+        }
+    }
+
+    /**
+     * gets the combined drools file path by appending default and variant drool path
+     *
+     * @param ruleAgentKey
+     * @return String containing various drool file paths for that service name
+     */
+    private String getDroolsFilesRepo(RuleAgentKey ruleAgentKey) {
+
         StringBuilder droolsVariantPath = droolsFiles.get(ruleAgentKey);
-        if(droolsVariantPath == null){
+        if (droolsVariantPath == null) {
             droolsVariantPath = new StringBuilder();
         }
-        StringBuilder droolsDefaultPath = droolsFiles.get(new RuleAgentKey(ruleAgentKey.getServiceName(), null));
-        if(droolsDefaultPath != null)
-            droolsVariantPath.append(droolsDefaultPath.toString());
+        if (!ruleAgentKey.getVariant().equals(VariationContext.DEFAULT_VARIATION)) {
+            StringBuilder droolsDefaultPath = droolsFiles.get(new RuleAgentKey(ruleAgentKey.getServiceName(), VariationContext.DEFAULT_VARIATION));
+            if (droolsDefaultPath != null)
+                droolsVariantPath.append(droolsDefaultPath.toString());
+        }
 
         return droolsVariantPath.toString();
     }
 
     /**
-     * gets the ServiceName from the context Path
-     *
+     * gets the ServiceName from the context Path     *
      * @param path
      * @return service name
      */
     public String getServiceName(String path) {
-        String temp = path.substring(0, path.lastIndexOf("/"));
-        return temp.substring(temp.lastIndexOf("/") + 1);
+        if (path != null && !"".equals(path) && path.contains("/")) {
+            String temp = path.substring(0, path.lastIndexOf("/"));
+            return temp.substring(temp.lastIndexOf("/") + 1);
+        }
+
+        return null;
     }
 
     /**
@@ -247,4 +347,39 @@ public class DroolManager {
         };
     }
 
+    /**
+     * getter for droolFiles
+     *
+     * @return
+     */
+    public Map<RuleAgentKey, StringBuilder> getDroolsFiles() {
+        return droolsFiles;
+    }
+
+    /**
+     * setter for droolFiles
+     *
+     * @param droolsFiles
+     */
+    public void setDroolsFiles(Map<RuleAgentKey, StringBuilder> droolsFiles) {
+        this.droolsFiles = droolsFiles;
+    }
+
+    /**
+     * getter method for ruleAgents
+     *
+     * @return
+     */
+    public Map<RuleAgentKey, RuleAgent> getRuleAgents() {
+        return ruleAgents;
+    }
+
+    /**
+     * setter method for ruleAgents
+     *
+     * @param ruleAgents
+     */
+    public void setRuleAgents(Map<RuleAgentKey, RuleAgent> ruleAgents) {
+        this.ruleAgents = ruleAgents;
+    }
 }

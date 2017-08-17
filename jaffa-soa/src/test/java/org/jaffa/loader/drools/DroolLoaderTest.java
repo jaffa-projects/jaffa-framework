@@ -8,14 +8,17 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import static org.junit.Assert.assertNotNull;
 
 /**
- * Created by pbagirthi on 8/8/2017.
+ * Integration Test for Drools Loader
  */
 public class DroolLoaderTest {
 
     private static AnnotationConfigApplicationContext droolLoaderConfig = new AnnotationConfigApplicationContext(XmlLoaderConfig.class);
 
+    /**
+     * tests the drools files are loaded correctly
+     */
     @Test
-    public void testRegisterDrool(){
+    public void testDroolLoading(){
         DroolManager droolManager = droolLoaderConfig.getBean(DroolManager.class);
         assertNotNull(droolManager.getAgent("testservice", VariationContext.getVariation()));
     }
