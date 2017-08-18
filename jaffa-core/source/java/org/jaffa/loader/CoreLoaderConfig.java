@@ -62,7 +62,7 @@ import org.springframework.context.annotation.Configuration;
  * Contains all the Beans related to the BusinessFunctionManager and RoleManager Loader Architecture for the Jaffa-SOA
  */
 @Configuration
-public class XmlLoaderConfig {
+public class CoreLoaderConfig {
 
     /****************************************************/
     /*************  Role & BusinessFunction Manager  ****/
