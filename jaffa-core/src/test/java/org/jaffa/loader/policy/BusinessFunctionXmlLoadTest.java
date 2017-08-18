@@ -1,6 +1,6 @@
 package org.jaffa.loader.policy;
 
-import org.jaffa.loader.XmlLoaderConfig;
+import org.jaffa.loader.CoreLoaderConfig;
 import org.jaffa.security.businessfunctionsdomain.BusinessFunction;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
  */
 public class BusinessFunctionXmlLoadTest {
 
-    private static AnnotationConfigApplicationContext xmlLoaderConfig = new AnnotationConfigApplicationContext(XmlLoaderConfig.class);
+    private static AnnotationConfigApplicationContext xmlLoaderConfig = new AnnotationConfigApplicationContext(CoreLoaderConfig.class);
 
     /**
      * testXmlLoad - Verifies that the loading of xml files occurs correctly.

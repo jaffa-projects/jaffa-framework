@@ -1,6 +1,6 @@
 package org.jaffa.loader.messaging;
 
-import org.jaffa.loader.XmlLoaderConfig;
+import org.jaffa.loader.SoaLoaderConfig;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -16,7 +16,7 @@ public class MessagingXmlLoadTest {
 
 
     private static AnnotationConfigApplicationContext xmlLoaderConfig =
-            new AnnotationConfigApplicationContext(XmlLoaderConfig.class);
+            new AnnotationConfigApplicationContext(SoaLoaderConfig.class);
 
     /**
      * Test load the XML config for the scheduler task repository.

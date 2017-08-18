@@ -10,24 +10,24 @@ import javax.annotation.PostConstruct;
  * A Loader class for handling all the Drools Files
  * A Drool file is any file that ends with .drl extension.
  */
-public class DroolLoader {
+public class DroolsLoader {
 
-    private DroolManager manager ;
+    private DroolsManager manager ;
 
     /**
-     * gets the Manager from the DroolLoader
+     * gets the Manager from the DroolsLoader
      * @return Manager Object identified ny T
      */
-    public DroolManager getManager() {
+    public DroolsManager getManager() {
         return manager;
     }
 
     /**
-     * sets the manager on the DroolLoader
+     * sets the manager on the DroolsLoader
      * @param manager Object identified by T
      *
      */
-    public void setManager(DroolManager manager) {
+    public void setManager(DroolsManager manager) {
         this.manager = manager;
     }
 

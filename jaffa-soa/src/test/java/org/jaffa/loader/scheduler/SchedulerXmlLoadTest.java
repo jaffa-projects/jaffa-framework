@@ -1,7 +1,6 @@
 package org.jaffa.loader.scheduler;
 
-import org.jaffa.loader.XmlLoaderConfig;
-import org.jaffa.loader.components.ComponentXmlLoaderConfig;
+import org.jaffa.loader.SoaLoaderConfig;
 import org.jaffa.modules.scheduler.services.configdomain.Task;
 import org.jaffa.soa.services.SOAEventPoller;
 import org.jaffa.transaction.services.TransactionDependencySweeper;
@@ -20,7 +19,7 @@ import static org.junit.Assert.*;
 public class SchedulerXmlLoadTest {
 
     private static AnnotationConfigApplicationContext xmlLoaderConfig =
-            new AnnotationConfigApplicationContext(XmlLoaderConfig.class);
+            new AnnotationConfigApplicationContext(SoaLoaderConfig.class);
 
     /**
      * Test load the XML config for the scheduler task repository.

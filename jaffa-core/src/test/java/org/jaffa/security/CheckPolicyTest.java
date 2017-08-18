@@ -1,6 +1,6 @@
 package org.jaffa.security;
 
-import org.jaffa.loader.XmlLoaderConfig;
+import org.jaffa.loader.CoreLoaderConfig;
 import org.jaffa.loader.policy.BusinessFunctionManager;
 import org.jaffa.loader.policy.RoleManager;
 import org.junit.Before;
@@ -21,7 +21,7 @@ public class CheckPolicyTest {
     CheckPolicy checkPolicy;
     PolicyCache policyCache;
 
-    private static AnnotationConfigApplicationContext xmlLoaderConfig = new AnnotationConfigApplicationContext(XmlLoaderConfig.class);
+    private static AnnotationConfigApplicationContext xmlLoaderConfig = new AnnotationConfigApplicationContext(CoreLoaderConfig.class);
 
     /**
      * setting the up objects/properties before a Test is run

@@ -49,8 +49,8 @@
 
 package org.jaffa.loader;
 
-import org.jaffa.loader.drools.DroolLoader;
-import org.jaffa.loader.drools.DroolManager;
+import org.jaffa.loader.drools.DroolsLoader;
+import org.jaffa.loader.drools.DroolsManager;
 import org.jaffa.loader.messaging.MessagingManager;
 import org.jaffa.loader.scheduler.SchedulerManager;
 import org.jaffa.loader.soa.SoaEventManager;
@@ -68,7 +68,7 @@ import org.springframework.context.annotation.Configuration;
  * Contains all the Beans related to the Loader Architecture for the Jaffa-SOA
  */
 @Configuration
-public class XmlLoaderConfig {
+public class SoaLoaderConfig {
 
 	/****************************************************/
 	/*************  Transaction Manager    **************/
@@ -173,17 +173,17 @@ public class XmlLoaderConfig {
      */
 
     @Bean
-    public DroolLoader droolLoader(){
-        DroolLoader droolLoader = new DroolLoader();
-        droolLoader.setManager(droolManager());
-        return  droolLoader;
+    public DroolsLoader droolLoader(){
+        DroolsLoader droolsLoader = new DroolsLoader();
+        droolsLoader.setManager(droolManager());
+        return droolsLoader;
     }
 
     @Bean
-    public DroolManager droolManager(){
-        DroolManager droolManager = new DroolManager();
-        ServiceRulesInterceptor.setDroolManager(droolManager);
-        return  droolManager;
+    public DroolsManager droolManager(){
+        DroolsManager droolsManager = new DroolsManager();
+        ServiceRulesInterceptor.setDroolsManager(droolsManager);
+        return droolsManager;
     }
 }
 

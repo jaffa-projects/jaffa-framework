@@ -68,16 +68,26 @@ import java.util.*;
  * Manager for Drools Loading and encapsulates all the methods required for Drools Management
  * Any spring config can use this class to register/unregister drool files.
  */
-public class DroolManager {
+public class DroolsManager {
 
-    private static final Logger log = Logger.getLogger(DroolManager.class);
+    private static final Logger log = Logger.getLogger(DroolsManager.class);
     private static final String DROOLS_COMPILER_PROPERTY = "drools.dialect.java.compiler";
     private static final String DROOLS_JANINO_COMPILER = "JANINO";
+    private static final String DROOLS_FILE_DIRECTORY = ".." + File.separator + "data" + File.separator + "rules" + File.separator;
 
+    /**
+     * Map holding service name with list of RuleAgentKeys, used in refreshAgent method.
+     */
     private Map<String, List<RuleAgentKey>> serviceNameMap = new HashMap<>();
 
+    /**
+     * Map containing RuleAgentKey and StringBuilder, used by registerDrool method.
+     */
     private Map<RuleAgentKey, StringBuilder> droolsFiles = new HashMap<>();
 
+    /**
+     * Map containing RuleAgentKey and RuleAgent, used by createAgents.
+     */
     private Map<RuleAgentKey, RuleAgent> ruleAgents = new HashMap<>();
 
     /**
@@ -90,7 +100,9 @@ public class DroolManager {
     public void registerDrool(Resource resource, String variation) throws IOException {
 
         String serviceName = getServiceName(resource.getURL().getPath());
-        Path newPath = Paths.get(Files.createDirectories(Paths.get(serviceName + "/" + variation)).toString() + "/" + resource.getFilename());
+
+        Path newPath = Paths.get(createDroolDirectoryPath(serviceName,variation) + File.separator + resource.getFilename());
+
         try {
             Files.delete(newPath);
         } catch (Exception e) {
@@ -141,7 +153,8 @@ public class DroolManager {
 
         String serviceName = getServiceName(resource.getURL().getPath());
         RuleAgentKey ruleAgentKey = new RuleAgentKey(serviceName, variation);
-        Path newPath = Paths.get(Files.createDirectories(Paths.get(serviceName + "/" + variation)).toString() + "/" + resource.getFilename());
+        Path newPath = Paths.get(createDroolDirectoryPath(serviceName,variation) + File.separator + resource.getFilename());
+
         try {
             Files.delete(newPath);
         } catch (Exception e) {
@@ -234,10 +247,8 @@ public class DroolManager {
                 if (!d.isDirectory())
                     log.error("Rule Directory " + dir + " is not a directory, can't add it to agent");
             } else {
-                if (!d.exists()) {
-                    log.warn("Rule Directory " + dir + " does not exist, creating it now.");
-                    d.mkdirs();
-                }
+                log.warn("Rule Directory " + dir + " does not exist, creating it now.");
+                d.mkdirs();
             }
         }
 
@@ -299,16 +310,28 @@ public class DroolManager {
 
     /**
      * gets the ServiceName from the context Path     *
+     *
      * @param path
      * @return service name
      */
     public String getServiceName(String path) {
-        if (path != null && !"".equals(path) && path.contains("/")) {
-            String temp = path.substring(0, path.lastIndexOf("/"));
-            return temp.substring(temp.lastIndexOf("/") + 1);
+        if (path != null && !"".equals(path)) {
+            String temp = new File(path).getParent();
+            return temp.substring(temp.lastIndexOf(File.separator) + 1);
         }
 
         return null;
+    }
+
+    /**
+     * creates the drool directory path where drool files to be placed
+     * @param serviceName
+     * @param variation
+     * @return drool Directory path
+     * @throws IOException
+     */
+    private String createDroolDirectoryPath(String serviceName, String variation) throws IOException {
+        return Files.createDirectories(Paths.get(DROOLS_FILE_DIRECTORY + serviceName + File.separator + variation)).toString();
     }
 
     /**

@@ -49,7 +49,7 @@
 
 package org.jaffa.loader.policy;
 
-import org.jaffa.loader.XmlLoaderConfig;
+import org.jaffa.loader.CoreLoaderConfig;
 import org.jaffa.security.securityrolesdomain.GrantFunctionAccess;
 import org.jaffa.security.securityrolesdomain.Role;
 import org.junit.Test;
@@ -65,7 +65,7 @@ import static org.junit.Assert.*;
  */
 public class RoleXmlLoadTest {
 
-    private static AnnotationConfigApplicationContext xmlLoaderConfig = new AnnotationConfigApplicationContext(XmlLoaderConfig.class);
+    private static AnnotationConfigApplicationContext xmlLoaderConfig = new AnnotationConfigApplicationContext(CoreLoaderConfig.class);
 
     /**
      * Verifies that we can load the roles from the roles.xml file into our role repository.

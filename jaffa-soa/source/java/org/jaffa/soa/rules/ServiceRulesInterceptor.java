@@ -48,40 +48,30 @@
  */
 package org.jaffa.soa.rules;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.drools.FactHandle;
 import org.drools.ObjectFilter;
 import org.drools.RuleBase;
-import org.drools.RuleBaseConfiguration;
-import org.drools.RuleBaseConfiguration.AssertBehaviour;
 import org.drools.StatefulSession;
-import org.drools.agent.AgentEventListener;
 import org.drools.agent.RuleAgent;
-import org.drools.audit.WorkingMemoryConsoleLogger;
 import org.drools.event.DebugAgendaEventListener;
 import org.drools.event.DebugWorkingMemoryEventListener;
 import org.drools.spi.ConsequenceException;
 import org.jaffa.exceptions.ApplicationExceptions;
 import org.jaffa.exceptions.FrameworkException;
-import org.jaffa.loader.drools.DroolManager;
+import org.jaffa.loader.drools.DroolsManager;
 import org.jaffa.metadata.FieldMetaData;
 import org.jaffa.persistence.IPersistent;
 import org.jaffa.persistence.UOW;
 import org.jaffa.persistence.logging.IPersistenceLoggingPlugin;
 import org.jaffa.persistence.util.PersistentHelper;
 import org.jaffa.security.VariationContext;
-import org.jaffa.session.ContextManagerFactory;
 import org.jaffa.soa.events.ProcessEventGraph;
 import org.jaffa.util.BeanHelper;
 import org.jaffa.util.ExceptionHelper;
@@ -130,7 +120,7 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
         }
     };
 
-    private static DroolManager droolManager;
+    private static DroolsManager droolsManager;
 
     /**
      * This is the rules session that may be used by super-classes
@@ -387,7 +377,7 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
      * refresh the rules based on its polling period and out-of-date file stamps
      */
     public static synchronized void refreshAgent(String serviceName) {
-        droolManager.refreshAgent(serviceName);
+        droolsManager.refreshAgent(serviceName);
     }
 
     //***************************************************************
@@ -398,7 +388,7 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
     /** Get the RuleAgent used to supply the RuleBase
      */
     protected synchronized RuleAgent getAgent() {
-    	return droolManager.getAgent(m_serviceName, VariationContext.getVariation());
+    	return droolsManager.getAgent(m_serviceName, VariationContext.getVariation());
     }
 
 
@@ -496,11 +486,11 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
         }
     }
 
-    public static DroolManager getDroolManager() {
-        return droolManager;
+    public static DroolsManager getDroolsManager() {
+        return droolsManager;
     }
 
-    public static void setDroolManager(DroolManager droolManager) {
-        ServiceRulesInterceptor.droolManager = droolManager;
+    public static void setDroolsManager(DroolsManager droolsManager) {
+        ServiceRulesInterceptor.droolsManager = droolsManager;
     }
 }

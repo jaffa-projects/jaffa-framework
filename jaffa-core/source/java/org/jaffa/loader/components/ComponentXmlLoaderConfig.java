@@ -52,11 +52,13 @@ package org.jaffa.loader.components;
 import org.jaffa.loader.XmlLoader;
 import org.jaffa.presentation.portlet.component.componentdomain.Loader;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * This class is used to help configure the ComponentManager from an XML file.
  * Created by kcassell on 8/7/2017.
  */
+@Configuration
 public class ComponentXmlLoaderConfig {
     /**
      * @return the messaging manager's XML loader
