@@ -27,10 +27,10 @@ public class SchedulerXmlLoadTest {
     @Test
     public void testXmlLoad() {
         SchedulerManager schedulerManager = xmlLoaderConfig.getBean(SchedulerManager.class);
-        assertNull(schedulerManager.getSchedulerTask("org.jaffa.scheduler.tester.TestMessageSingleton", null));
-        assertNotNull(schedulerManager.getSchedulerTask("org.jaffa.soa.services.SOAEventPoller", null));
-        assertNotNull(schedulerManager.getSchedulerTask("org.jaffa.transaction.services.TransactionDependencySweeper", null));
-        assertNull(schedulerManager.getSchedulerTask("", null));
+        assertNull(schedulerManager.getSchedulerTask("org.jaffa.scheduler.tester.TestMessageSingleton"));
+        assertNotNull(schedulerManager.getSchedulerTask("org.jaffa.soa.services.SOAEventPoller"));
+        assertNotNull(schedulerManager.getSchedulerTask("org.jaffa.transaction.services.TransactionDependencySweeper"));
+        assertNull(schedulerManager.getSchedulerTask(""));
     }
 
     /**
@@ -40,32 +40,21 @@ public class SchedulerXmlLoadTest {
     public void testGetAllSchedulerTasks() {
         SchedulerManager schedulerManager = xmlLoaderConfig.getBean(SchedulerManager.class);
 
-        assertEquals(2, schedulerManager.getAllSchedulerTasks(null).length);
+        assertEquals(2, schedulerManager.getAllSchedulerTasks().length);
         List<String> schedulerTasks = Arrays.asList("org.jaffa.soa.services.SOAEventPoller",
                 "org.jaffa.transaction.services.TransactionDependencySweeper");
-        Task[] allScheduledTasks = schedulerManager.getAllSchedulerTasks(null);
+        Task[] allScheduledTasks = schedulerManager.getAllSchedulerTasks();
         assertTrue(schedulerTasks.contains(allScheduledTasks[0].getDataBean()));
         assertTrue(schedulerTasks.contains(allScheduledTasks[1].getDataBean()));
     }
 
-    /**
-     * Verify that we can retrieve the scheduler task from the repository by class.
-     */
-    @Test
-    public void testGetSchedulerTaskByClass() {
-        SchedulerManager schedulerManager = xmlLoaderConfig.getBean(SchedulerManager.class);
-
-        assertEquals("org.jaffa.soa.services.SOAEventPoller", schedulerManager.getSchedulerTask( SOAEventPoller.class , null).getDataBean());
-        assertEquals("org.jaffa.transaction.services.TransactionDependencySweeper",
-                schedulerManager.getSchedulerTask( TransactionDependencySweeper.class , null).getDataBean());
-    }
 
     @Test
     public void testGetSchedulerTaskByTaskName() {
         SchedulerManager schedulerManager = xmlLoaderConfig.getBean(SchedulerManager.class);
 
-        assertEquals("org.jaffa.soa.services.SOAEventPoller", schedulerManager.getSchedulerTaskByTypeName( "SOAEventPoller" , null).getDataBean());
+        assertEquals("org.jaffa.soa.services.SOAEventPoller", schedulerManager.getSchedulerTaskByTypeName( "SOAEventPoller").getDataBean());
         assertEquals("org.jaffa.transaction.services.TransactionDependencySweeper",
-                schedulerManager.getSchedulerTaskByTypeName( "TransactionDependencySweeper" , null).getDataBean());
+                schedulerManager.getSchedulerTaskByTypeName( "TransactionDependencySweeper").getDataBean());
     }
 }

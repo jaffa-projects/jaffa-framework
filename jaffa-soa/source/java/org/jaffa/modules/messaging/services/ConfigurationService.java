@@ -130,7 +130,7 @@ public class ConfigurationService {
    */
   public MessageInfo getMessageInfo(String dataBeanClassName)
           throws ClassNotFoundException {
-    return messagingManager.getMessageInfo(dataBeanClassName, null);
+    return messagingManager.getMessageInfo(dataBeanClassName);
   }
 
   /**
@@ -150,7 +150,7 @@ public class ConfigurationService {
    * as defined in the configuration file.
    */
   public QueueInfo getQueueInfo(String queueName) {
-    return messagingManager.getQueueInfo(queueName, null);
+    return messagingManager.getQueueInfo(queueName);
   }
 
   /**
@@ -168,7 +168,7 @@ public class ConfigurationService {
    * @return the TopicInfo object for the input topicName, as defined in the configuration file.
    */
   public TopicInfo getTopicInfo(String topicName) {
-    return messagingManager.getTopicInfo(topicName, null);
+    return messagingManager.getTopicInfo(topicName);
   }
 
   /**

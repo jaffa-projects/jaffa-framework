@@ -22,25 +22,25 @@ public class MessagingXmlLoadTest {
      * Test load the XML config for the scheduler task repository.
      */
     @Test
-    public void testXmlLoad() {
+    public void testXmlLoad(){
         MessagingManager messagingManager = xmlLoaderConfig.getBean(MessagingManager.class);
 
-        assertNull(messagingManager.getMessageInfo("org.jaffa.scheduler.tester.TestMessageSingleton", null));
-        assertNotNull(messagingManager.getMessageInfo("org.jaffa.modules.messaging.services.BaseMessage", null));
-        assertNotNull(messagingManager.getMessageInfo("org.jaffa.modules.messaging.services.Example1Message", null));
-        assertNull(messagingManager.getMessageInfo("", null));
+        assertNull(messagingManager.getMessageInfo("org.jaffa.scheduler.tester.TestMessageSingleton"));
+        assertNotNull(messagingManager.getMessageInfo("org.jaffa.modules.messaging.services.BaseMessage"));
+        assertNotNull(messagingManager.getMessageInfo("org.jaffa.modules.messaging.services.Example1Message"));
+        assertNull(messagingManager.getMessageInfo(""));
 
-        assertNull(messagingManager.getQueueInfo("jaffa/junkQueue", null));
-        assertNotNull(messagingManager.getQueueInfo("jaffa/queue", null));
-        assertNotNull(messagingManager.getQueueInfo("jaffa/queue1", null));
-        assertNotNull(messagingManager.getQueueInfo("jaffa/queue2", null));
-        assertNotNull(messagingManager.getQueueInfo("jaffa/errorQueue", null));
-        assertNull(messagingManager.getQueueInfo("", null));
+        assertNull(messagingManager.getQueueInfo("jaffa/junkQueue"));
+        assertNotNull(messagingManager.getQueueInfo("jaffa/queue"));
+        assertNotNull(messagingManager.getQueueInfo("jaffa/queue1"));
+        assertNotNull(messagingManager.getQueueInfo("jaffa/queue2"));
+        assertNotNull(messagingManager.getQueueInfo("jaffa/errorQueue"));
+        assertNull(messagingManager.getQueueInfo(""));
 
-        assertNull(messagingManager.getTopicInfo("topic info", null));
-        assertNotNull(messagingManager.getTopicInfo("topic1", null));
-        assertNotNull(messagingManager.getTopicInfo("topic2", null));
-        assertNull(messagingManager.getTopicInfo("", null));
+        assertNull(messagingManager.getTopicInfo("topic info"));
+        assertNotNull(messagingManager.getTopicInfo("topic1"));
+        assertNotNull(messagingManager.getTopicInfo("topic2"));
+        assertNull(messagingManager.getTopicInfo(""));
     }
 
     /**

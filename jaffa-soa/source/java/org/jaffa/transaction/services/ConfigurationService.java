@@ -151,7 +151,7 @@ public final class ConfigurationService {
      * @throws ClassNotFoundException if dataBeanClassName is not found on the classpath
      */
     public TransactionInfo getTransactionInfo(String dataBeanClassName) throws ClassNotFoundException {
-        return transactionManager.getTransactionInfo(dataBeanClassName, null);
+        return transactionManager.getTransactionInfo(dataBeanClassName);
     }
 
     /**
@@ -160,7 +160,7 @@ public final class ConfigurationService {
      * @return the TransactionInfo object for the input dataBeanClass, as defined in the configuration file.
      */
     public TransactionInfo getTransactionInfo(Class dataBeanClass) {
-        return transactionManager.getTransactionInfo(dataBeanClass, null);
+        return transactionManager.getTransactionInfo(dataBeanClass);
     }
 
     /**
@@ -168,7 +168,7 @@ public final class ConfigurationService {
      * @return all TransactionInfo objects, as defined in the configuration file.
      */
     public TransactionInfo[] getAllTransactionInfo() {
-        return transactionManager.getAllTransactionInfo(null);
+        return transactionManager.getAllTransactionInfo();
     }
 
     /** 
@@ -177,7 +177,7 @@ public final class ConfigurationService {
      * @return the TypeInfo object for the input typeName, as defined in the configuration file.
      */
     public TypeInfo getTypeInfo(String typeName) {
-        return transactionManager.getTypeInfo(typeName, null);
+        return transactionManager.getTypeInfo(typeName);
     }
 
     /**

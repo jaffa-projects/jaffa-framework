@@ -1,5 +1,6 @@
 package org.jaffa.loader.policy;
 
+import org.jaffa.loader.ContextKey;
 import org.jaffa.loader.CoreLoaderConfig;
 import org.jaffa.security.businessfunctionsdomain.BusinessFunction;
 import org.junit.Test;
@@ -23,10 +24,10 @@ public class BusinessFunctionXmlLoadTest {
     @Test
     public void testXmlLoad() {
         BusinessFunctionManager businessFunctionManager = xmlLoaderConfig.getBean(BusinessFunctionManager.class);
-        assertNull(businessFunctionManager.getBusinessFunction("Jaffa.WebServices.WebServiceMaintenance.TEST", null));
-        assertNotNull(businessFunctionManager.getBusinessFunction("Jaffa.WebServices.WebServiceMaintenance", null));
-        assertNotNull(businessFunctionManager.getBusinessFunction("FunctionAll", null));
-        assertNull(businessFunctionManager.getBusinessFunction(new String(), null));
+        assertNull(businessFunctionManager.getBusinessFunction("Jaffa.WebServices.WebServiceMaintenance.TEST"));
+        assertNotNull(businessFunctionManager.getBusinessFunction("Jaffa.WebServices.WebServiceMaintenance"));
+        assertNotNull(businessFunctionManager.getBusinessFunction("FunctionAll"));
+        assertNull(businessFunctionManager.getBusinessFunction(new String()));
     }
 
     /**
@@ -45,12 +46,13 @@ public class BusinessFunctionXmlLoadTest {
     @Test
     public void testGetBusinessFunctionRegistration() {
         BusinessFunctionManager businessFunctionManager = xmlLoaderConfig.getBean(BusinessFunctionManager.class);
-        assertNull(businessFunctionManager.getBusinessFunction("Jaffa.WebServices.Test", null));
+        assertNull(businessFunctionManager.getBusinessFunction("Jaffa.WebServices.Test"));
         BusinessFunction businessFunction = new BusinessFunction();
-        businessFunctionManager.registerBusinessFunction("Jaffa.WebServices.Test", businessFunction, "100-Test");
-        assertNotNull(businessFunctionManager.getBusinessFunction("Jaffa.WebServices.Test", Arrays.asList("100-Test")));
-        businessFunctionManager.unregisterBusinessFunction("Jaffa.WebServices.Test", "100-Test");
-        assertNull(businessFunctionManager.getBusinessFunction("Jaffa.WebServices.Test", null));
+        ContextKey key = new ContextKey("Jaffa.WebServices.Test", "business-functions.xml", "DEF", "100-Highest");
+        businessFunctionManager.registerBusinessFunction(key, businessFunction);
+        assertNotNull(businessFunctionManager.getBusinessFunction("Jaffa.WebServices.Test"));
+        businessFunctionManager.unregisterBusinessFunction(key);
+        assertNull(businessFunctionManager.getBusinessFunction("Jaffa.WebServices.Test"));
     }
 
 }

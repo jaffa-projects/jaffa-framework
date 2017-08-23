@@ -49,6 +49,7 @@
 
 package org.jaffa.loader.components;
 
+import org.jaffa.loader.ContextKey;
 import org.jaffa.loader.IManager;
 import org.jaffa.loader.IRepository;
 import org.jaffa.loader.MapRepository;
@@ -56,6 +57,7 @@ import org.jaffa.presentation.portlet.component.ComponentDefinition;
 import org.jaffa.presentation.portlet.component.ComponentDefinitionException;
 import org.jaffa.presentation.portlet.component.componentdomain.Component;
 import org.jaffa.presentation.portlet.component.componentdomain.Components;
+import org.jaffa.security.VariationContext;
 import org.jaffa.util.JAXBHelper;
 import org.springframework.core.io.Resource;
 import org.xml.sax.SAXException;
@@ -84,14 +86,14 @@ public class ComponentManager implements IManager {
 
     /** The ComponentDefinition repository.  The key is the component name of
      * the value in the ComponentDefinition object. */
-    private IRepository<String, ComponentDefinition> componentRepository =
-            new MapRepository<>();
+    private IRepository<ComponentDefinition> componentRepository = new MapRepository<>();
 
     /**
      * Unmarshall the contents of the configuration to create and register
      * ComponentDefinition, QueueInfo, TopicInfo, and/or MessageFilter objects.
      * @param resource the object that contains the xml config file.
      * @param context key with which config file to be registered.
+     * @param variation with which config file to be registered.
      * @throws JAXBException
      * @throws SAXException
      * @throws IOException for file opening or reading errors, or when an
@@ -99,7 +101,7 @@ public class ComponentManager implements IManager {
      * ComponentDefinitionException
      */
     @Override
-    public void registerXML(Resource resource, String context)
+    public void registerXML(Resource resource, String context, String variation)
             throws JAXBException, SAXException, IOException {
 
         Components components = JAXBHelper.unmarshalConfigFile(Components.class,
@@ -117,21 +119,19 @@ public class ComponentManager implements IManager {
                     // to the interface
                     throw new IOException(e.getMessage(), e);
                 }
-                registerComponentDefinition(definition.getComponentName(),
-                        definition, context);
-            }   // for
+                ContextKey contextKey = new ContextKey(definition.getComponentName(), resource.getURI().toString(), variation, context);
+                registerComponentDefinition(contextKey, definition);
+            }
         }
     }
 
     /**
      * retrieves the ComponentDefinition from the repository
      * @param name key used for the repository
-     * @param contextOrderParam Order of the contexts used for retrieval
      * @return ComponentDefinition
      */
-    public ComponentDefinition getComponentDefinition(String name,
-                                      List<String> contextOrderParam) {
-        return componentRepository.query(name, contextOrderParam);
+    public ComponentDefinition getComponentDefinition(String name) {
+        return componentRepository.query(name);
     }
 
 
@@ -141,22 +141,18 @@ public class ComponentManager implements IManager {
 
     /**
      * Register ComponentDefinition in the repository
-     * @param key the key associated with the value in the repository
-     * @param context with which repository to be associated with
-     * @param value the object to store
+     * @param contextKey the key associated with the value in the repository
      */
-    public void registerComponentDefinition(
-            String key, ComponentDefinition value, String context) {
-        componentRepository.register(key, value, context);
+    public void registerComponentDefinition(ContextKey contextKey, ComponentDefinition value){
+        componentRepository.register(contextKey, value);
     }
 
     /**
      * Unregister a ComponentDefinition object from the repository
-     * @param key the key for the value being removed from the repository
-     * @param context with which repository to be associated with
+     * @param contextKey the key for the value being removed from the repository
      */
-    public void unregisterComponentDefinition(String key, String context) {
-        componentRepository.unregister(key, context);
+    public void unregisterComponentDefinition(ContextKey contextKey) {
+        componentRepository.unregister(contextKey);
     }
 
     ////////////////////////////////////////////////////////////////////////
@@ -168,12 +164,12 @@ public class ComponentManager implements IManager {
         return configurationFile;
     }
 
-    public IRepository<String, ComponentDefinition> getComponentRepository() {
+    public IRepository<ComponentDefinition> getComponentRepository() {
         return componentRepository;
     }
 
     public void setComponentRepository(
-            IRepository<String, ComponentDefinition> repository) {
+            IRepository<ComponentDefinition> repository) {
         this.componentRepository = repository;
     }
 

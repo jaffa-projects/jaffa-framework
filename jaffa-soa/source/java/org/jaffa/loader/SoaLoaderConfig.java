@@ -89,13 +89,13 @@ public class SoaLoaderConfig {
         return transactionManager;
     }
 
-    private MapRepository<String, TransactionInfo> transactionInfoRepository(){
-        MapRepository<String, TransactionInfo> mapRepository= new MapRepository<>();
+    private MapRepository<TransactionInfo> transactionInfoRepository(){
+        MapRepository<TransactionInfo> mapRepository= new MapRepository<>();
         return mapRepository;
     }
 
-    private MapRepository<String, TypeInfo> typeInfoRepository(){
-        MapRepository<String, TypeInfo> mapRepository= new MapRepository<>();
+    private MapRepository<TypeInfo> typeInfoRepository(){
+        MapRepository<TypeInfo> mapRepository= new MapRepository<>();
         return mapRepository;
     }
     
@@ -139,8 +139,8 @@ public class SoaLoaderConfig {
         return messagingManager;
     }
 
-    private MapRepository<String, SoaEventInfo> soaEventInfoRepository(){
-        MapRepository<String, SoaEventInfo> mapRepository= new MapRepository<>();
+    private MapRepository<SoaEventInfo> soaEventInfoRepository(){
+        MapRepository<SoaEventInfo> mapRepository= new MapRepository<>();
         return mapRepository;
     }
 

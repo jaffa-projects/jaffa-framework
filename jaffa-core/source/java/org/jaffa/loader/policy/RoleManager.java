@@ -50,6 +50,7 @@
 package org.jaffa.loader.policy;
 
 import org.apache.log4j.Logger;
+import org.jaffa.loader.ContextKey;
 import org.jaffa.loader.IManager;
 import org.jaffa.loader.IRepository;
 import org.jaffa.loader.MapRepository;
@@ -87,7 +88,7 @@ public class RoleManager implements IManager {
     /**
      * The repository of the role names as keys and Roles as values.
      */
-    private IRepository<String, Role> roleRepository = new MapRepository<>();
+    private IRepository<Role> roleRepository = new MapRepository<>();
 
     private static Logger log = Logger.getLogger(PolicyCache.class);
 
@@ -101,12 +102,13 @@ public class RoleManager implements IManager {
      * @throws IOException
      */
     @Override
-    public void registerXML(Resource resource, String context) throws JAXBException, SAXException, IOException {
+    public void registerXML(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
 
         Roles roles = JAXBHelper.unmarshalConfigFile(Roles.class, resource, CONFIGURATION_SCHEMA_FILE);
         if (roles.getRole() != null) {
             for (final Role role : roles.getRole()) {
-                registerRole(role.getName(), role, context);
+                ContextKey key = new ContextKey(role.getName(), resource.getURI().toString(), variation, context);
+                registerRole(key, role);
             }
         }
     }
@@ -123,11 +125,10 @@ public class RoleManager implements IManager {
     /**
      * getRole - Returns the Role object based on the key or name of the role
      * @param roleName
-     * @param contextOrderParam
      * @return return the Role being queried.
      */
-    public Role getRole(String roleName, List<String> contextOrderParam) {
-        return roleRepository.query(roleName, contextOrderParam);
+    public Role getRole(String roleName) {
+        return roleRepository.query(roleName);
     }
 
     /**
@@ -145,7 +146,7 @@ public class RoleManager implements IManager {
      * @return returns a list of all Roles
      */
     public List<Role> getAllRoles() {
-        return roleRepository.getAllValues(null);
+        return roleRepository.getAllValues();
     }
 
     /**
@@ -179,28 +180,26 @@ public class RoleManager implements IManager {
 
     /**
      * registerRole - Registers a role in the roles repository by name and values.
-     * @param roleName
+     * @param contextKey
      * @param role
-     * @param context
      */
-    public void registerRole(String roleName, Role role, String context) {
-        getRoleRepository().register(roleName, role, context);
+    public void registerRole(ContextKey contextKey, Role role) {
+        getRoleRepository().register(contextKey, role);
     }
 
     /**
      * unregisterRole - Removes the role in the roles repository by name.
-     * @param roleName
-     * @param context
+     * @param contextKey
      */
-    public void unregisterRole(String roleName, String context) {
-        getRoleRepository().unregister(roleName, context);
+    public void unregisterRole(ContextKey contextKey) {
+        getRoleRepository().unregister(contextKey);
     }
 
     /**
      * getRoleRepository - Returns an instance of the role repository.
      * @return Returns an instance of the role repository
      */
-    public IRepository<String, Role> getRoleRepository() {
+    public IRepository<Role> getRoleRepository() {
         return roleRepository;
     }
 
@@ -208,7 +207,7 @@ public class RoleManager implements IManager {
      * setRoleRepository - Allows the role repository to be set to a new instance of the role repository.
      * @param roleRepository
      */
-    public void setRoleRepository(IRepository<String, Role> roleRepository) {
+    public void setRoleRepository(IRepository<Role> roleRepository) {
         this.roleRepository = roleRepository;
     }
 }

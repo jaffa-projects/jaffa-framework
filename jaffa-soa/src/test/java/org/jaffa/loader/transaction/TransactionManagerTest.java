@@ -1,5 +1,6 @@
 package org.jaffa.loader.transaction;
 
+import org.jaffa.loader.ContextKey;
 import org.jaffa.loader.IRepository;
 import org.jaffa.loader.transaction.TransactionManager;
 import org.jaffa.transaction.services.configdomain.TransactionInfo;
@@ -48,20 +49,20 @@ public class TransactionManagerTest {
 
         Resource resource = pathMatchingResourcePatternResolver.getResource("classpath:META-INF/jaffa-transaction-config.xml");
         //test
-        transactionManager.registerXML(resource, "jwl");
+        transactionManager.registerXML(resource, "cust-code", "DEF");
 
         //verify
-        verify(transactionRepoMock).register(eq("org.jaffa.soa.services.SOAEventPoller"), Matchers.anyObject(), eq("jwl"));
-        verify(transactionRepoMock).register(eq("org.jaffa.soa.services.SOAEventQueueMessage"), Matchers.anyObject(), eq("jwl"));
-        verify(transactionRepoMock).register(eq("org.jaffa.transaction.services.TransactionDependencySweeper"), Matchers.anyObject(), eq("jwl"));
-        verify(transactionRepoMock).register(eq("org.jaffa.transaction.tester.TestMessage"), Matchers.anyObject(), eq("jwl"));
-        verify(transactionRepoMock).register(eq("org.jaffa.transaction.tester.TestMessageSingleton"), Matchers.anyObject(), eq("jwl"));
+        verify(transactionRepoMock).register(eq(new ContextKey("org.jaffa.soa.services.SOAEventPoller", null, "DEF", "cust-code")), Matchers.anyObject());
+        verify(transactionRepoMock).register(eq(new ContextKey("org.jaffa.soa.services.SOAEventQueueMessage", null, "DEF", "cust-code")), Matchers.anyObject());
+        verify(transactionRepoMock).register(eq(new ContextKey("org.jaffa.transaction.services.TransactionDependencySweeper", null, "DEF", "cust-code")), Matchers.anyObject());
+        verify(transactionRepoMock).register(eq(new ContextKey("org.jaffa.transaction.tester.TestMessage", null, "DEF", "cust-code")), Matchers.anyObject());
+        verify(transactionRepoMock).register(eq(new ContextKey("org.jaffa.transaction.tester.TestMessageSingleton", null, "DEF", "cust-code")), Matchers.anyObject());
 
-        verify(typeInfoRepoMock).register(eq("Internal"), Matchers.anyObject(), eq("jwl"));
-        verify(typeInfoRepoMock).register(eq("Poller"), Matchers.anyObject(), eq("jwl"));
-        verify(typeInfoRepoMock).register(eq("Event"), Matchers.anyObject(), eq("jwl"));
-        verify(typeInfoRepoMock).register(eq("Locks"), Matchers.anyObject(), eq("jwl"));
-        verify(typeInfoRepoMock).register(eq("TransactionSingleton"), Matchers.anyObject(), eq("jwl"));
+        verify(typeInfoRepoMock).register(eq(new ContextKey("Internal", null, "DEF", "cust-code")), Matchers.anyObject());
+        verify(typeInfoRepoMock).register(eq(new ContextKey("Poller", null, "DEF", "cust-code")), Matchers.anyObject());
+        verify(typeInfoRepoMock).register(eq(new ContextKey("Event", null, "DEF", "cust-code")), Matchers.anyObject());
+        verify(typeInfoRepoMock).register(eq(new ContextKey("Locks", null, "DEF", "cust-code")), Matchers.anyObject());
+        verify(typeInfoRepoMock).register(eq(new ContextKey("TransactionSingleton", null, "DEF", "cust-code")), Matchers.anyObject());
     }
 
     /**
@@ -70,20 +71,20 @@ public class TransactionManagerTest {
     @Test
     public void testUnregisterXml() throws Exception {
         //test
-        transactionManager.unregisterXML("classpath:META-INF/jaffa-transaction-config.xml", "jwl");
+        transactionManager.unregisterXML("classpath:META-INF/jaffa-transaction-config.xml", "cust-code", "DEF");
 
         //verify
-        verify(transactionRepoMock).unregister(eq("org.jaffa.soa.services.SOAEventPoller"), eq("jwl"));
-        verify(transactionRepoMock).unregister(eq("org.jaffa.soa.services.SOAEventQueueMessage"), eq("jwl"));
-        verify(transactionRepoMock).unregister(eq("org.jaffa.transaction.services.TransactionDependencySweeper"), eq("jwl"));
-        verify(transactionRepoMock).unregister(eq("org.jaffa.transaction.tester.TestMessage"), eq("jwl"));
-        verify(transactionRepoMock).unregister(eq("org.jaffa.transaction.tester.TestMessageSingleton"), eq("jwl"));
+        verify(transactionRepoMock).unregister(eq(new ContextKey("org.jaffa.soa.services.SOAEventPoller", null, "DEF", "cust-code")));
+        verify(transactionRepoMock).unregister(eq(new ContextKey("org.jaffa.soa.services.SOAEventQueueMessage", null, "DEF", "cust-code")));
+        verify(transactionRepoMock).unregister(eq(new ContextKey("org.jaffa.transaction.services.TransactionDependencySweeper", null, "DEF", "cust-code")));
+        verify(transactionRepoMock).unregister(eq(new ContextKey("org.jaffa.transaction.tester.TestMessage", null, "DEF", "cust-code")));
+        verify(transactionRepoMock).unregister(eq(new ContextKey("org.jaffa.transaction.tester.TestMessageSingleton", null, "DEF", "cust-code")));
 
-        verify(typeInfoRepoMock).unregister(eq("Internal"), eq("jwl"));
-        verify(typeInfoRepoMock).unregister(eq("Poller"), eq("jwl"));
-        verify(typeInfoRepoMock).unregister(eq("Event"), eq("jwl"));
-        verify(typeInfoRepoMock).unregister(eq("Locks"), eq("jwl"));
-        verify(typeInfoRepoMock).unregister(eq("TransactionSingleton"), eq("jwl"));
+        verify(typeInfoRepoMock).unregister(eq(new ContextKey("Internal", null, "DEF", "cust-code")));
+        verify(typeInfoRepoMock).unregister(eq(new ContextKey("Poller", null, "DEF", "cust-code")));
+        verify(typeInfoRepoMock).unregister(eq(new ContextKey("Event", null, "DEF", "cust-code")));
+        verify(typeInfoRepoMock).unregister(eq(new ContextKey("Locks", null, "DEF", "cust-code")));
+        verify(typeInfoRepoMock).unregister(eq(new ContextKey("TransactionSingleton", null, "DEF", "cust-code")));
     }
 
 
@@ -93,10 +94,10 @@ public class TransactionManagerTest {
     @Test
     public void testRegisterTransactionInfo() {
         //test
-        transactionManager.registerTransactionInfo("testBean", new TransactionInfo(), "jwl");
+        transactionManager.registerTransactionInfo(new ContextKey("testBean", null, "DEF", "cust-code"), new TransactionInfo());
 
         //verify
-        verify(transactionRepoMock).register(eq("testBean"), Matchers.anyObject(), eq("jwl"));
+        verify(transactionRepoMock).register(eq(new ContextKey("testBean", null, "DEF", "cust-code")), Matchers.anyObject());
     }
 
     /**
@@ -107,12 +108,12 @@ public class TransactionManagerTest {
         //initialize
         TypeInfo typeInfo = new TypeInfo();
         typeInfo.setName("typeInfoName");
-
+        ContextKey key = new ContextKey("typeInfoName", null, "DEF", "cust-code");
         //test
-        transactionManager.registerTypeInfo(typeInfo, "jwl");
+        transactionManager.registerTypeInfo(key, typeInfo);
 
         //verify
-        verify(typeInfoRepoMock).register(eq("typeInfoName"), Matchers.anyObject(), eq("jwl"));
+        verify(typeInfoRepoMock).register(eq(key), Matchers.anyObject());
     }
 
     /**
@@ -121,10 +122,10 @@ public class TransactionManagerTest {
     @Test
     public void testUnRegisterTransactionInfo() {
         //test
-        transactionManager.unregisterTransactionInfo("testBean", "jwl");
+        transactionManager.unregisterTransactionInfo(new ContextKey("testBean", null, "DEF", "cust-code"));
 
         //verify
-        verify(transactionRepoMock).unregister(eq("testBean"), eq("jwl"));
+        verify(transactionRepoMock).unregister(eq(new ContextKey("testBean", null, "DEF", "cust-code")));
     }
 
     /**
@@ -135,12 +136,12 @@ public class TransactionManagerTest {
         //initialize
         TypeInfo typeInfo = new TypeInfo();
         typeInfo.setName("typeInfoName");
-
+        ContextKey key = new ContextKey("typeInfoName", null, "DEF", "cust-code");
         //test
-        transactionManager.unregisterTypeInfo("typeInfoName", "jwl");
+        transactionManager.unregisterTypeInfo(key);
 
         //verify
-        verify(typeInfoRepoMock).unregister(eq("typeInfoName"), eq("jwl"));
+        verify(typeInfoRepoMock).unregister(eq(key));
     }
 
     /**
@@ -157,10 +158,10 @@ public class TransactionManagerTest {
     @Test
     public void testGetTransactionInfo() {
 
-        transactionManager.getTransactionInfo("testBean", null);
+        transactionManager.getTransactionInfo("testBean");
 
         //verify
-        verify(transactionRepoMock).query(eq("testBean"), eq((List<?>) null));
+        verify(transactionRepoMock).query(eq("testBean"));
     }
 
     /**
@@ -169,10 +170,10 @@ public class TransactionManagerTest {
     @Test
     public void testGetTypeInfo() {
 
-        transactionManager.getTypeInfo("testBeanName", null);
+        transactionManager.getTypeInfo("testBeanName");
 
         //verify
-        verify(typeInfoRepoMock).query(eq("testBeanName"), eq((List<?>) null));
+        verify(typeInfoRepoMock).query(eq("testBeanName"));
     }
 
     /**
@@ -181,10 +182,10 @@ public class TransactionManagerTest {
     @Test
     public void testGetAllTransactionInfo() {
 
-        transactionManager.getAllTransactionInfo(null);
+        transactionManager.getAllTransactionInfo();
 
         //verify
-        verify(transactionRepoMock).getAllValues(eq((List<?>) null));
+        verify(transactionRepoMock).getAllValues();
     }
 
     /**
@@ -196,6 +197,6 @@ public class TransactionManagerTest {
         transactionManager.getTypeNames();
 
         //verify
-        verify(typeInfoRepoMock).getAllKeys();
+        verify(typeInfoRepoMock).getAllKeyIds();
     }
 }

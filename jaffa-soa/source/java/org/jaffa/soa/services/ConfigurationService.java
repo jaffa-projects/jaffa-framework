@@ -127,7 +127,7 @@ public class ConfigurationService {
      * @return the SoaEventInfo object for the input soaEventName, as defined in the soa event manager.
      */
     public SoaEventInfo getSoaEventInfo(String soaEventName) {
-		return soaEventManager != null ? soaEventManager.getSoaEventInfo(soaEventName, null) : null;
+		return soaEventManager != null ? soaEventManager.getSoaEventInfo(soaEventName) : null;
     }
 
     /**

@@ -21,18 +21,18 @@ public class TransactionXmlLoadTest {
     public void testTransactionXmlLoad(){
 
         TransactionManager transactionManager = xmlLoaderConfig.getBean(TransactionManager.class);
-        assertNotNull(transactionManager.getAllTransactionInfo(null));
-        assertEquals(5, transactionManager.getAllTransactionInfo(null).length);
+        assertNotNull(transactionManager.getAllTransactionInfo());
+        assertEquals(5, transactionManager.getAllTransactionInfo().length);
         assertNotNull(transactionManager.getTypeNames());
         assertEquals(5, transactionManager.getTypeNames().length);
 
-        assertNotNull(transactionManager.getTransactionInfo("org.jaffa.transaction.tester.TestMessageSingleton", null));
-        assertNotNull(transactionManager.getTransactionInfo("org.jaffa.soa.services.SOAEventQueueMessage", null));
-        assertNotNull(transactionManager.getTransactionInfo("org.jaffa.transaction.tester.TestMessage", null));
+        assertNotNull(transactionManager.getTransactionInfo("org.jaffa.transaction.tester.TestMessageSingleton"));
+        assertNotNull(transactionManager.getTransactionInfo("org.jaffa.soa.services.SOAEventQueueMessage"));
+        assertNotNull(transactionManager.getTransactionInfo("org.jaffa.transaction.tester.TestMessage"));
 
-        assertNotNull(transactionManager.getTypeInfo("Internal", null));
-        assertNotNull(transactionManager.getTypeInfo("Poller", null));
-        assertNotNull(transactionManager.getTypeInfo("Locks", null));
+        assertNotNull(transactionManager.getTypeInfo("Internal"));
+        assertNotNull(transactionManager.getTypeInfo("Poller"));
+        assertNotNull(transactionManager.getTypeInfo("Locks"));
     }
     
     @Test

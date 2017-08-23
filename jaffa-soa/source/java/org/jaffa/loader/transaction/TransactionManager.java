@@ -49,6 +49,7 @@
 
 package org.jaffa.loader.transaction;
 
+import org.jaffa.loader.ContextKey;
 import org.jaffa.loader.IManager;
 import org.jaffa.loader.IRepository;
 import org.jaffa.transaction.services.configdomain.Config;
@@ -79,34 +80,33 @@ public class TransactionManager implements IManager {
      */
     private static final String CONFIGURATION_SCHEMA_FILE = "org/jaffa/transaction/services/configdomain/jaffa-transaction-config_1_0.xsd";
 
-    private IRepository<String, TransactionInfo> transactionRepository;
-    private IRepository<String, TypeInfo> typeInfoRepository;
+    private IRepository<TransactionInfo> transactionRepository;
+    private IRepository<TypeInfo> typeInfoRepository;
 
     /**
      * register TransactionInfo to the repository
-     * @param dataBeanClassName key for the repository to be used for registering
      * @param transactionInfo registers to the repository
-     * @param context with which repository to be associated with
+     * @param contextKey with which repository to be associated with
      */
-    public void registerTransactionInfo(String dataBeanClassName, TransactionInfo transactionInfo, String context) {
-        transactionRepository.register(dataBeanClassName, transactionInfo, context);
+    public void registerTransactionInfo(ContextKey contextKey, TransactionInfo transactionInfo) {
+        transactionRepository.register(contextKey, transactionInfo);
 
     }
 
     /**
      * register TypeInfo to the repository
      * @param typeInfo registers to the repository
-     * @param context with which repository to be associated with
+     * @param contextKey with which repository to be associated with
      */
-    public void registerTypeInfo(TypeInfo typeInfo, String context) {
-        typeInfoRepository.register(typeInfo.getName(), typeInfo, context);
+    public void registerTypeInfo(ContextKey contextKey, TypeInfo typeInfo) {
+        typeInfoRepository.register(contextKey, typeInfo);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void registerXML(Resource resource, String context) throws JAXBException, SAXException, IOException {
+    public void registerXML(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
 
         Config config = JAXBHelper.unmarshalConfigFile(Config.class, resource, CONFIGURATION_SCHEMA_FILE);
 
@@ -114,10 +114,12 @@ public class TransactionManager implements IManager {
             for (final Object o : config.getTransactionOrType()) {
                 if (o.getClass() == TransactionInfo.class) {
                     final TransactionInfo transactionInfo = (TransactionInfo) o;
-                    registerTransactionInfo(transactionInfo.getDataBean(), transactionInfo, context);
+                    ContextKey contextKey = new ContextKey(transactionInfo.getDataBean(), resource.getURI().toString(), variation, context);
+                    registerTransactionInfo(contextKey, transactionInfo);
                 } else if (o.getClass() == TypeInfo.class) {
                     final TypeInfo typeInfo = (TypeInfo) o;
-                    registerTypeInfo(typeInfo, context);
+                    ContextKey contextKey = new ContextKey(typeInfo.getName(), resource.getURI().toString(), variation, context);
+                    registerTypeInfo(contextKey, typeInfo);
                 }
             }
         }
@@ -133,27 +135,25 @@ public class TransactionManager implements IManager {
 
     /**
      * un register TransactionInfo from the repository
-     * @param dataBeanClassName key for the repository to be used for registering
-     * @param context with which repository to be associated with
+     * @param contextKey with which repository to be associated with
      */
-    public void unregisterTransactionInfo(String dataBeanClassName, String context) {
-        transactionRepository.unregister(dataBeanClassName, context);
+    public void unregisterTransactionInfo(ContextKey contextKey) {
+        transactionRepository.unregister(contextKey);
     }
 
     /**
      * un register TypeInfo from the repository
-     * @param typeInfoName key for the repository to be used for registering
-     * @param context with which repository to be associated with
+     * @param contextKey with which repository to be associated with
      */
-    public void unregisterTypeInfo(String typeInfoName, String context) {
-        typeInfoRepository.unregister(typeInfoName, context);
+    public void unregisterTypeInfo(ContextKey contextKey) {
+        typeInfoRepository.unregister(contextKey);
     }
 
     /**
      * unregisters all the transactions and typeInfo in the xml from the repository
      * @param uri for the xml location
      */
-    public void unregisterXML(String uri, String context) throws JAXBException, SAXException, IOException {
+    public void unregisterXML(String uri, String context, String variation) throws JAXBException, SAXException, IOException {
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         Config config = JAXBHelper.unmarshalConfigFile(Config.class, resolver.getResource(uri), CONFIGURATION_SCHEMA_FILE);
 
@@ -161,10 +161,12 @@ public class TransactionManager implements IManager {
             for (final Object o : config.getTransactionOrType()) {
                 if (o.getClass() == TransactionInfo.class) {
                     final TransactionInfo transactionInfo = (TransactionInfo) o;
-                    unregisterTransactionInfo(transactionInfo.getDataBean(), context);
+                    ContextKey contextKey = new ContextKey(transactionInfo.getDataBean(), uri, variation, context);
+                    unregisterTransactionInfo(contextKey);
                 } else if (o.getClass() == TypeInfo.class) {
                     final TypeInfo typeInfo = (TypeInfo) o;
-                    unregisterTypeInfo(typeInfo.getName(), context);
+                    ContextKey contextKey = new ContextKey(typeInfo.getName(), uri, variation, context);
+                    unregisterTypeInfo(contextKey);
                 }
             }
         }
@@ -173,31 +175,28 @@ public class TransactionManager implements IManager {
     /**
      * retrives the TransactionInfo from the repository
      * @param dataBeanClassName key used for the repository
-     * @param contextOrderParam Order of the contexts used for retrieval
      * @return TransactionInfo
      */
-    public TransactionInfo getTransactionInfo(String dataBeanClassName, List<String> contextOrderParam) {
-        return transactionRepository.query(dataBeanClassName, contextOrderParam);
+    public TransactionInfo getTransactionInfo(String dataBeanClassName) {
+        return transactionRepository.query(dataBeanClassName);
     }
 
     /**
      * retrives the TypeInfo from the repository
      * @param typeName key used for the repository
-     * @param contextOrderParam Order of the contexts used for retrieval
      * @return TypeInfo
      */
-    public TypeInfo getTypeInfo(String typeName, List<String> contextOrderParam) {
-        return typeInfoRepository.query(typeName, contextOrderParam);
+    public TypeInfo getTypeInfo(String typeName) {
+        return typeInfoRepository.query(typeName);
     }
 
     /**
      * retrieves all the TransactionInfo from the repository based on the contextOrder provided
      * assumes defaultContextOrder from the configuration when contextOrder is not provided
-     * @param contextOrderParam order of the contexts to be searched
      * @return List of all values
      */
-    public TransactionInfo[] getAllTransactionInfo(List<String> contextOrderParam) {
-        return transactionRepository.getAllValues(contextOrderParam).toArray(new TransactionInfo[0]);
+    public TransactionInfo[] getAllTransactionInfo() {
+        return transactionRepository.getAllValues().toArray(new TransactionInfo[0]);
     }
 
     /**
@@ -205,7 +204,7 @@ public class TransactionManager implements IManager {
      * @return Set of all Type Names
      */
     public String[] getTypeNames() {
-        return typeInfoRepository.getAllKeys().toArray(new String[0]);
+        return typeInfoRepository.getAllKeyIds().toArray(new String[0]);
     }
 
 
@@ -215,18 +214,23 @@ public class TransactionManager implements IManager {
      * @param dataBeanClass the class for a dataBean.
      * @return the TransactionInfo object for the input dataBeanClass, as defined in the configuration file.
      */
-    public TransactionInfo getTransactionInfo(Class dataBeanClass, List<String> contextOrder) {
+    public TransactionInfo getTransactionInfo(Class dataBeanClass) {
         final String dataBeanClassName = dataBeanClass.getName();
-        TransactionInfo transactionInfo = getTransactionInfo(dataBeanClassName, contextOrder);
+        TransactionInfo transactionInfo = getTransactionInfo(dataBeanClassName);
         if (transactionInfo == null) {
             // Lookup the class heirarchy. Add a NULL for the dataBeanClassName, even if a TransactionInfo is not found
+            ContextKey superClassContextKey = null;
             while (dataBeanClass.getSuperclass() != null) {
                 dataBeanClass = dataBeanClass.getSuperclass();
-                transactionInfo = getTransactionInfo(dataBeanClass.getName(), contextOrder);
+                transactionInfo = getTransactionInfo(dataBeanClass.getName());
+                superClassContextKey = getTransactionRepository().findKey(dataBeanClass.getName());
                 if (transactionInfo != null)
                     break;
             }
-            registerTransactionInfo(dataBeanClassName, transactionInfo, null);
+            if(superClassContextKey!=null) {
+                registerTransactionInfo(new ContextKey(transactionInfo.getDataBean(), superClassContextKey.getFileName()
+                        ,superClassContextKey.getVariation(), superClassContextKey.getPrecedence()), transactionInfo);
+            }
         }
         return transactionInfo;
     }
@@ -235,7 +239,7 @@ public class TransactionManager implements IManager {
      *
      * @return
      */
-    public IRepository<String, TransactionInfo> getTransactionRepository() {
+    public IRepository<TransactionInfo> getTransactionRepository() {
         return transactionRepository;
     }
 
@@ -243,7 +247,7 @@ public class TransactionManager implements IManager {
      *
      * @param transactionRepository
      */
-    public void setTransactionRepository(IRepository<String, TransactionInfo> transactionRepository) {
+    public void setTransactionRepository(IRepository<TransactionInfo> transactionRepository) {
         this.transactionRepository = transactionRepository;
     }
 
@@ -251,7 +255,7 @@ public class TransactionManager implements IManager {
      *
      * @return
      */
-    public IRepository<String, TypeInfo> getTypeInfoRepository() {
+    public IRepository<TypeInfo> getTypeInfoRepository() {
         return typeInfoRepository;
     }
 
@@ -259,7 +263,7 @@ public class TransactionManager implements IManager {
      *
      * @param typeInfoRepository
      */
-    public void setTypeInfoRepository(IRepository<String, TypeInfo> typeInfoRepository) {
+    public void setTypeInfoRepository(IRepository<TypeInfo> typeInfoRepository) {
         this.typeInfoRepository = typeInfoRepository;
     }
 }

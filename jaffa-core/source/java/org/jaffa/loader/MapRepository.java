@@ -49,64 +49,64 @@
 
 package org.jaffa.loader;
 
+import org.apache.commons.collections.list.TreeList;
+import org.jaffa.security.VariationContext;
+
 import java.util.*;
 
 /**
  * Java Map Implementation of IRepository
  */
-public class MapRepository<K, T> implements IRepository<K, T> {
+public class MapRepository<T> implements IRepository<T> {
 
-    Map<K, Map<String, T>> repositoryMap = new HashMap<>();
+    private Map<ContextKey, T> repositoryMap = new TreeMap<>();
 
-    public static TreeSet<String> contextOrder = new TreeSet<>();
+    private Map<String, TreeSet<ContextKey>> contextKeyCache = new HashMap<>();
+
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void register(K repositoryKey, T repository, String context) {
-        if(context == null){
-            throw new RuntimeException("Context Cannot be Null");
-        }
-        Map infoMap = repositoryMap.get(repositoryKey);
-        if (infoMap == null) {
-            infoMap = new HashMap<>();
-        }
-        infoMap.put(context, repository);
-        repositoryMap.put(repositoryKey, infoMap);
-        contextOrder.add(context);
+    public void register(ContextKey repositoryKey, T repositoryElement) {
+        repositoryMap.put(repositoryKey, repositoryElement);
+
+        addToContextKeyCache(repositoryKey);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void unregister(K repositoryKey, String context) {
-        if(context == null){
-            throw new RuntimeException("Context Cannot be Null");
-        }
-        Map infoMap = repositoryMap.get(repositoryKey);
-        if (infoMap != null) {
-            infoMap.remove(context);
-        }
-        if (infoMap != null && infoMap.isEmpty()) {
-            repositoryMap.remove(repositoryKey);
-        }
+    public void unregister(ContextKey contextKey) {
+        repositoryMap.remove(contextKey);
+
+        removeFromContextKeyCache(contextKey);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public T query(K repositoryKey, List<String> contextOrder) {
+    public T query(ContextKey contextKey) {
+        return repositoryMap.get(contextKey);
+    }
 
-        Map<String, T> infoMap = repositoryMap.get(repositoryKey);
-        if (infoMap != null) {
-            Iterator descendingOrder = contextOrder!= null ? contextOrder.iterator() : this.contextOrder.descendingIterator();
-            while(descendingOrder.hasNext()) {
-                T value = infoMap.get(descendingOrder.next());
-                if (value != null)
-                    return value;
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public T query(String id) {
+        if(id!=null) {
+            TreeSet<ContextKey> contextKeysForId = contextKeyCache.get(id);
+            if (contextKeysForId!=null && contextKeysForId.size() > 0) {
+                for (ContextKey contextKey : contextKeysForId) {
+                    if ((contextKey.getVariation() != null && contextKey.getVariation().equals(VariationContext.getVariation()))
+                            || contextKey.getVariation().equals(VariationContext.DEFAULT_VARIATION)) {
+                        return repositoryMap.get(contextKey);
+                    }
+
+                }
             }
         }
         return null;
@@ -116,7 +116,28 @@ public class MapRepository<K, T> implements IRepository<K, T> {
      * {@inheritDoc}
      */
     @Override
-    public Set<K> getAllKeys() {
+    public ContextKey findKey(String id){
+        if(id!=null) {
+            TreeSet<ContextKey> contextKeysForId = contextKeyCache.get(id);
+            if (contextKeysForId!=null && contextKeysForId.size() > 0) {
+                for (ContextKey contextKey : contextKeysForId) {
+                    if ((contextKey.getVariation() != null && contextKey.getVariation().equals(VariationContext.getVariation()))
+                            || contextKey.getVariation().equals(VariationContext.DEFAULT_VARIATION)) {
+                        return contextKey;
+                    }
+
+                }
+            }
+        }
+        return null;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<ContextKey> getAllKeys() {
         return repositoryMap.keySet();
     }
 
@@ -124,21 +145,54 @@ public class MapRepository<K, T> implements IRepository<K, T> {
      * {@inheritDoc}
      */
     @Override
-    public List<T> getAllValues(List<String> contextOrder) {
-        List<T> repositoryInfos = new ArrayList<>();
-        for (K key : repositoryMap.keySet()) {
-            T value = query(key, contextOrder);
-            if (value != null)
-                repositoryInfos.add(value);
+    public Set<String> getAllKeyIds() {
+        Set<ContextKey> contextKeys = repositoryMap.keySet();
+        Set<String> ids = new HashSet<>();
+        for(ContextKey contextKey : contextKeys){
+            ids.add(contextKey.getId());
         }
-        return repositoryInfos;
+        return ids;
     }
 
-    public TreeSet<String> getContextOrder() {
-        return contextOrder;
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<T> getAllValues() { return new ArrayList(repositoryMap.values());}
+
+
+    /**
+     * Adds repositoryKey to contextKeyCache
+     * @param repositoryKey
+     */
+    private void addToContextKeyCache(ContextKey repositoryKey){
+        updateContextKeyCache(repositoryKey, true);
     }
 
-    public void setContextOrder(TreeSet<String> contextOrder) {
-        this.contextOrder = contextOrder;
+    /**
+     * Removes repositoryKey from contextKeyCache
+     * @param repositoryKey
+     */
+    private void removeFromContextKeyCache(ContextKey repositoryKey){
+        updateContextKeyCache(repositoryKey, false);
+    }
+
+    /**
+     * Updates the contextKeyCache with Id and repositoryKey
+     * @param repositoryKey
+     * @param add
+     */
+    private void updateContextKeyCache(ContextKey repositoryKey, boolean add){
+        TreeSet<ContextKey> contextKeyCacheValue = contextKeyCache.get(repositoryKey.getId());
+        if(contextKeyCacheValue == null){
+            contextKeyCacheValue = new TreeSet<>(Collections.<ContextKey>reverseOrder());
+        }
+        if(add) {
+            contextKeyCacheValue.add(repositoryKey);
+            contextKeyCache.put(repositoryKey.getId(), contextKeyCacheValue);
+        }else{
+            contextKeyCache.remove(repositoryKey.getId());
+        }
+
     }
 }

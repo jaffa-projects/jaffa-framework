@@ -63,12 +63,12 @@ public interface IManager {
     /**
      * registers the XML config file to repository.
      * @param resource the object that contains the xml config file.
-     * @param context key with which config file to be registered.
+     * @param precedence key with which config file to be registered.
      * @throws JAXBException if xml file is not valid.
      * @throws SAXException if xml file is not valid.
      * @throws IOException if resource does not found.
      */
-    void registerXML(Resource resource, String context) throws JAXBException, SAXException, IOException;
+    void registerXML(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException;
 
     /**
      * gets the name of xml config file.

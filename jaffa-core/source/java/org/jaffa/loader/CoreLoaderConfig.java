@@ -113,16 +113,16 @@ public class CoreLoaderConfig {
     /**
      * @return Returns a repository of Roles
      */
-    private MapRepository<String, Role> roleRepository() {
-        MapRepository<String, Role> roleMapRepository = new MapRepository<>();
+    private MapRepository<Role> roleRepository() {
+        MapRepository<Role> roleMapRepository = new MapRepository<>();
         return roleMapRepository;
     }
 
     /**
      * @return Returns a repository of BusinessFunctions
      */
-    private MapRepository<String, BusinessFunction> businessFunctionRepository() {
-        MapRepository<String, BusinessFunction> businessFunctionMapRepository = new MapRepository<>();
+    private MapRepository<BusinessFunction> businessFunctionRepository() {
+        MapRepository<BusinessFunction> businessFunctionMapRepository = new MapRepository<>();
         return businessFunctionMapRepository;
     }
 

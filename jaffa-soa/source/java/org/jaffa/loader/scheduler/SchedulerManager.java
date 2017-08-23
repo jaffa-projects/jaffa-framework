@@ -49,6 +49,8 @@
 
 package org.jaffa.loader.scheduler;
 
+import org.apache.log4j.Logger;
+import org.jaffa.loader.ContextKey;
 import org.jaffa.loader.IManager;
 import org.jaffa.loader.IRepository;
 import org.jaffa.loader.MapRepository;
@@ -67,6 +69,7 @@ import java.util.List;
  */
 public class SchedulerManager implements IManager {
 
+    private static final Logger log = Logger.getLogger(SchedulerManager.class);
     /**
      * The name of the configuration file which this class handles.
      */
@@ -77,29 +80,29 @@ public class SchedulerManager implements IManager {
      */
     private static final String CONFIGURATION_SCHEMA_FILE = "org/jaffa/modules/scheduler/services/configdomain/jaffa-scheduler-config_1_0.xsd";
 
-    private IRepository<String, Task> schedulerTaskRepository = new MapRepository<>();
+    private IRepository<Task> schedulerTaskRepository = new MapRepository<>();
 
     /**
      * Register the scheduler task to the repository.
      *
-     * @param dataBeanClassName
      * @param schedulerTask
-     * @param context
+     * @param contextKey
      */
-    public void registerSchedulerTask(String dataBeanClassName, Task schedulerTask, String context) {
-        schedulerTaskRepository.register(dataBeanClassName, schedulerTask, context);
+    public void registerSchedulerTask(ContextKey contextKey, Task schedulerTask) {
+        schedulerTaskRepository.register(contextKey, schedulerTask);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void registerXML(Resource resource, String context) throws JAXBException, SAXException, IOException {
+    public void registerXML(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
 
         Config config = JAXBHelper.unmarshalConfigFile(Config.class, resource, CONFIGURATION_SCHEMA_FILE);
         if (config.getTask() != null) {
             for (final Task schedulerTask : config.getTask()) {
-                registerSchedulerTask(schedulerTask.getDataBean(), schedulerTask, context);
+                ContextKey contextKey = new ContextKey(schedulerTask.getDataBean(), resource.getURI().toString(), variation, context);
+                registerSchedulerTask(contextKey, schedulerTask);
             }
         }
     }
@@ -115,48 +118,35 @@ public class SchedulerManager implements IManager {
     /**
      * Unregister the scheduler task name from the repository.
      *
-     * @param dataBeanClassName
-     * @param context
+     * @param contextKey
      */
-    public void unregisterSchedulerTask(String dataBeanClassName, String context) {
-        schedulerTaskRepository.unregister(dataBeanClassName, context);
+    public void unregisterSchedulerTask(ContextKey contextKey) {
+        schedulerTaskRepository.unregister(contextKey);
     }
 
     /**
      * Returns a scheduler task by name
      *
      * @param typeName
-     * @param contextOrderParam
      * @return
      */
-    public Task getSchedulerTaskByTypeName(String typeName, List<String> contextOrderParam) {
-        List<Task> tasks = schedulerTaskRepository.getAllValues(contextOrderParam);
+    public Task getSchedulerTaskByTypeName(String typeName) {
+        List<Task> tasks = schedulerTaskRepository.getAllValues();
         for (Task task : tasks) {
             if (typeName.equalsIgnoreCase(task.getType())) return task;
         }
         return null;
     }
 
-    /**
-     * Returns the scheduler task by name from the repository.
-     *
-     * @param taskName
-     * @param contextOrderParam
-     * @return
-     */
-    public Task getSchedulerTask(String taskName, List<String> contextOrderParam) {
-        return schedulerTaskRepository.query(taskName, contextOrderParam);
-    }
 
     /**
      * Retrieves all the scheduler tasks from the repository based on the contextOrder provided
      * assumes defaultContextOrder from the configuration when contextOrder is not provided
      *
-     * @param contextOrderParam order of the contexts to be searched
      * @return List of all values
      */
-    public Task[] getAllSchedulerTasks(List<String> contextOrderParam) {
-        return schedulerTaskRepository.getAllValues(contextOrderParam).toArray(new Task[0]);
+    public Task[] getAllSchedulerTasks() {
+        return schedulerTaskRepository.getAllValues().toArray(new Task[0]);
     }
 
 
@@ -166,30 +156,47 @@ public class SchedulerManager implements IManager {
      * @param dataBeanClass the class for a dataBean.
      * @return the TransactionInfo object for the input dataBeanClass, as defined in the configuration file.
      */
-    public Task getSchedulerTask(Class dataBeanClass, List<String> contextOrder) {
-        final String dataBeanClassName = dataBeanClass.getName();
-        Task schedulerTask = getSchedulerTask(dataBeanClassName, contextOrder);
-        if (schedulerTask == null) {
-            while (schedulerTask == null && dataBeanClass.getSuperclass() != null) {
-                dataBeanClass = dataBeanClass.getSuperclass();
-                schedulerTask = getSchedulerTask(dataBeanClass.getName(), contextOrder);
+    public Task getSchedulerTask(String dataBeanClass){
+        Task task = schedulerTaskRepository.query(dataBeanClass);
+        if (task == null) {
+            // Lookup the class hierarchy. Add a NULL for the dataBeanClassName, even if a Task is not found
+            synchronized (schedulerTaskRepository) {
+                task = schedulerTaskRepository.query(dataBeanClass);
+                try{
+                    if (task == null) {
+                        Class clazz = Class.forName(dataBeanClass);
+                        ContextKey superClassContextKey = null;
+                        while (clazz.getSuperclass() != null) {
+                            clazz = clazz.getSuperclass();
+                            task = schedulerTaskRepository.query(clazz.getName());
+                            superClassContextKey = schedulerTaskRepository.findKey(clazz.getName());
+                            if (task != null)
+                                break;
+                        }
+                        if(superClassContextKey!=null) {
+                            schedulerTaskRepository.register(new ContextKey(dataBeanClass, superClassContextKey.getFileName(),
+                                    superClassContextKey.getVariation(), superClassContextKey.getVariation()), task);
+                        }
+                    }
+                }catch (ClassNotFoundException e){
+                    log.error("Unable to find class definition for "+dataBeanClass, e);
+                }
             }
-            registerSchedulerTask(dataBeanClassName, schedulerTask, null);
         }
-        return schedulerTask;
+        return task;
     }
 
     /**
      * @return
      */
-    public IRepository<String, Task> getSchedulerTaskRepository() {
+    public IRepository<Task> getSchedulerTaskRepository() {
         return schedulerTaskRepository;
     }
 
     /**
      * @param schedulerTaskRepository
      */
-    public void setSchedulerTaskRepository(IRepository<String, Task> schedulerTaskRepository) {
+    public void setSchedulerTaskRepository(IRepository<Task> schedulerTaskRepository) {
         this.schedulerTaskRepository = schedulerTaskRepository;
     }
 }

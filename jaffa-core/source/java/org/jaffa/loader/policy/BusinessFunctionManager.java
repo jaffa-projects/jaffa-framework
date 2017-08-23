@@ -49,11 +49,13 @@
 
 package org.jaffa.loader.policy;
 
+import org.jaffa.loader.ContextKey;
 import org.jaffa.loader.IManager;
 import org.jaffa.loader.IRepository;
 import org.jaffa.loader.MapRepository;
 import org.jaffa.security.businessfunctionsdomain.BusinessFunction;
 import org.jaffa.security.businessfunctionsdomain.BusinessFunctions;
+import org.jaffa.util.ContextHelper;
 import org.jaffa.util.JAXBHelper;
 import org.springframework.core.io.Resource;
 import org.xml.sax.SAXException;
@@ -78,7 +80,7 @@ public class BusinessFunctionManager implements IManager {
      */
     private static final String CONFIGURATION_SCHEMA_FILE = "org/jaffa/security/businessfunctionsdomain/business-functions_1_0.xsd";
 
-    private IRepository<String, BusinessFunction> businessFunctionRepository = new MapRepository<>();
+    private IRepository<BusinessFunction> businessFunctionRepository = new MapRepository<>();
 
     /**
      * registerXML - Registers the roles into the business function repository from the business-functions.xml files found in META-INF/roles.xml
@@ -89,11 +91,12 @@ public class BusinessFunctionManager implements IManager {
      * @throws IOException
      */
     @Override
-    public void registerXML(Resource resource, String context) throws JAXBException, SAXException, IOException {
+    public void registerXML(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
         BusinessFunctions businessFunctions = JAXBHelper.unmarshalConfigFile(BusinessFunctions.class, resource, CONFIGURATION_SCHEMA_FILE);
         if (businessFunctions.getBusinessFunction() != null) {
             for (final BusinessFunction businessFunction : businessFunctions.getBusinessFunction()) {
-                registerBusinessFunction(businessFunction.getName(), businessFunction, context);
+                ContextKey contextKey = new ContextKey(businessFunction.getName(), resource.getURI().toString(), variation, context);
+                registerBusinessFunction(contextKey, businessFunction);
             }
         }
     }
@@ -112,7 +115,7 @@ public class BusinessFunctionManager implements IManager {
      * @return a list of all BusinessFunctions
      */
     public List<BusinessFunction> getAllBusinessFunctions() {
-        return getBusinessFunctionRepository().getAllValues(null);
+        return getBusinessFunctionRepository().getAllValues();
     }
 
     /**
@@ -131,37 +134,33 @@ public class BusinessFunctionManager implements IManager {
     /**
      * getBusinessFunction - Returns a business function by name.
      * @param businessFunctionName
-     * @param contextOrderParam
      * @return the business function being requested
      */
-    public BusinessFunction getBusinessFunction(String businessFunctionName, List<String> contextOrderParam) {
-        return businessFunctionRepository.query(businessFunctionName, contextOrderParam);
+    public BusinessFunction getBusinessFunction(String businessFunctionName) {
+        return businessFunctionRepository.query(businessFunctionName);
     }
 
     /**
      * registerBusinessFunction - Registers a business function in the business function repository.
-     * @param businessFunctionName
-     * @param businessFunction
-     * @param context
+     * @param contextKey
      */
-    public void registerBusinessFunction(String businessFunctionName, BusinessFunction businessFunction, String context) {
-        getBusinessFunctionRepository().register(businessFunctionName, businessFunction, context);
+    public void registerBusinessFunction(ContextKey contextKey, BusinessFunction businessFunction) {
+        getBusinessFunctionRepository().register(contextKey, businessFunction);
     }
 
     /**
      * unregisterBusinessFunction - Removes a business function from the business function repository.
-     * @param businessFunctionName
-     * @param context
+     * @param contextKey
      */
-    public void unregisterBusinessFunction(String businessFunctionName, String context) {
-        getBusinessFunctionRepository().unregister(businessFunctionName, context);
+    public void unregisterBusinessFunction(ContextKey contextKey) {
+        getBusinessFunctionRepository().unregister(contextKey);
     }
 
     /**
      * getBusinessFunctionRepository - Returns an instance oif the business function repository.
      * @return the repository of business functions
      */
-    public IRepository<String, BusinessFunction> getBusinessFunctionRepository() {
+    public IRepository<BusinessFunction> getBusinessFunctionRepository() {
         return businessFunctionRepository;
     }
 
@@ -169,7 +168,7 @@ public class BusinessFunctionManager implements IManager {
      * setBusinessFunctionRepository - Allows the business function repository to be set outside of the BusinessFunctionManager class.
      * @param businessFunctionRepository
      */
-    public void setBusinessFunctionRepository(IRepository<String, BusinessFunction> businessFunctionRepository) {
+    public void setBusinessFunctionRepository(IRepository<BusinessFunction> businessFunctionRepository) {
         this.businessFunctionRepository = businessFunctionRepository;
     }
 }

@@ -50,10 +50,12 @@
 package org.jaffa.loader.messaging;
 
 import org.apache.log4j.Logger;
+import org.jaffa.loader.ContextKey;
 import org.jaffa.loader.IManager;
 import org.jaffa.loader.IRepository;
 import org.jaffa.loader.MapRepository;
 import org.jaffa.modules.messaging.services.configdomain.*;
+import org.jaffa.util.ContextHelper;
 import org.jaffa.util.JAXBHelper;
 import org.springframework.core.io.Resource;
 import org.xml.sax.SAXException;
@@ -89,22 +91,22 @@ public class MessagingManager implements IManager {
 
     /** The MessageInfo repository.  The key is the data bean;
      *  the value in the MessageInfo object. */
-    private IRepository<String, MessageInfo> messageInfoRepository =
+    private IRepository<MessageInfo> messageInfoRepository =
             new MapRepository<>();
 
     /** The QueueInfo repository.  The key is the name;
      *  the value in the QueueInfo object. */
-    private IRepository<String, QueueInfo> queueInfoRepository =
+    private IRepository<QueueInfo> queueInfoRepository =
             new MapRepository<>();
 
     /** The TopicInfo repository.  The key is the name;
      *  the value in the TopicInfo object. */
-    private IRepository<String, TopicInfo> topicInfoRepository =
+    private IRepository<TopicInfo> topicInfoRepository =
             new MapRepository<>();
 
     /** The MessageFilter repository.  The key is the filter name;
      *  the value in the MessageFilter object. */
-    private IRepository<String, MessageFilter> messageFilterRepository =
+    private IRepository<MessageFilter> messageFilterRepository =
             new MapRepository<>();
 
     /**
@@ -112,12 +114,13 @@ public class MessagingManager implements IManager {
      * MessageInfo, QueueInfo, TopicInfo, and/or MessageFilter objects.
      * @param resource the object that contains the xml config file.
      * @param context key with which config file to be registered.
+     * @param variation key with which config file to be registered.
      * @throws JAXBException
      * @throws SAXException
      * @throws IOException
      */
     @Override
-    public void registerXML(Resource resource, String context)
+    public void registerXML(Resource resource, String context, String variation)
             throws JAXBException, SAXException, IOException {
 
         Config config = JAXBHelper.unmarshalConfigFile(Config.class, resource,
@@ -131,16 +134,20 @@ public class MessagingManager implements IManager {
                 if (o instanceof MessageInfo) {
                     final MessageInfo info = (MessageInfo) o;
                     validateMessageInfo(info);
-                    registerMessageInfo(info.getDataBean(), info, context);
+                    ContextKey contextKey = new ContextKey(info.getDataBean(), resource.getURI().toString(), variation, context);
+                    registerMessageInfo(contextKey, info);
                 } else if (o instanceof QueueInfo) {
                     final QueueInfo info = (QueueInfo) o;
-                    registerQueueInfo(info.getName(), info, context);
+                    ContextKey contextKey = new ContextKey(info.getName(), resource.getURI().toString(), variation, context);
+                    registerQueueInfo(contextKey, info);
                 } else if (o instanceof TopicInfo) {
                     final TopicInfo info = (TopicInfo) o;
-                    registerTopicInfo(info.getName(), info, context);
+                    ContextKey contextKey = new ContextKey(info.getName(), resource.getURI().toString(), variation, context);
+                    registerTopicInfo(contextKey, info);
                 } else if (o instanceof MessageFilter) {
                     final MessageFilter filter = (MessageFilter) o;
-                    registerMessageFilter(filter.getFilterName(), filter, context);
+                    ContextKey contextKey = new ContextKey(filter.getFilterName(), resource.getURI().toString(), variation, context);
+                    registerMessageFilter(contextKey, filter);
                 } else {
                     log.warn("MessagingObject.registerXML, unexpected object: " + o);
                 }
@@ -178,8 +185,8 @@ public class MessagingManager implements IManager {
      */
     void checkForQueueAndTopicNamingConflicts() {
         // Ensure that there is no name-clash between Queues and Topics
-        Set<String> queueNames = new HashSet<>(queueInfoRepository.getAllKeys());
-        Set<String> topicInfoKeys = topicInfoRepository.getAllKeys();
+        Set<ContextKey> queueNames = new HashSet<>(queueInfoRepository.getAllKeys());
+        Set<ContextKey> topicInfoKeys = topicInfoRepository.getAllKeys();
 
         // queueNames will contain the intersection of the two sets
         queueNames.retainAll(topicInfoKeys);
@@ -197,57 +204,55 @@ public class MessagingManager implements IManager {
     /**
      * Returns the MessageInfo object for the input dataBeanClass,
      * as defined in the configuration file.
-     * @param dataBeanClass the class for a dataBean.
+     * @param dataBeanClass key used for the repository
      * @return the MessageInfo object for the input dataBeanClass
      */
-    public MessageInfo getMessageInfo(Class dataBeanClass, List<String>
-            contextOrder) {
-        final String dataBeanClassName = dataBeanClass.getName();
-        MessageInfo messageInfo =
-                getMessageInfo(dataBeanClassName, contextOrder);
-        // Lookup the class hierarchy. Add a NULL for the dataBeanClassName,
-        // even if a MessageInfo is not found
-        while (messageInfo == null
-                && dataBeanClass.getSuperclass() != null) {
-            dataBeanClass = dataBeanClass.getSuperclass();
-            messageInfo = getMessageInfo(dataBeanClass.getName(),
-                    contextOrder);
-            registerMessageInfo(dataBeanClassName, messageInfo, null);
+    public MessageInfo getMessageInfo(String dataBeanClass){
+        MessageInfo messageInfo = messageInfoRepository.query(dataBeanClass);
+        if (messageInfo == null) {
+            // Lookup the class heirarchy. Add a NULL for the dataBeanClassName, even if a MessageInfo is not found
+            synchronized (messageInfoRepository) {
+                messageInfo = messageInfoRepository.query(dataBeanClass);
+                try {
+                    if (messageInfo == null) {
+                        Class clazz = Class.forName(dataBeanClass);
+                        ContextKey superClassContextKey = null;
+                        while (clazz.getSuperclass() != null) {
+                            clazz = clazz.getSuperclass();
+                            messageInfo = messageInfoRepository.query(clazz.getName());
+                            superClassContextKey = messageInfoRepository.findKey(clazz.getName());
+                            if (messageInfo != null)
+                                break;
+                        }
+                        if (superClassContextKey != null) {
+                            messageInfoRepository.register(new ContextKey(dataBeanClass, superClassContextKey.getFileName(),
+                                    superClassContextKey.getVariation(), superClassContextKey.getPrecedence()), messageInfo);
+                        }
+                    }
+                }catch (ClassNotFoundException e){
+                    log.error("Unable to find class definition for "+dataBeanClass, e);
+                }
+            }
         }
         return messageInfo;
     }
 
     /**
-     * retrieves the MessageInfo from the repository
-     * @param dataBeanClassName key used for the repository
-     * @param contextOrderParam Order of the contexts used for retrieval
-     * @return MessageInfo
-     */
-    public MessageInfo getMessageInfo(String dataBeanClassName,
-                                      List<String> contextOrderParam) {
-        return messageInfoRepository.query(dataBeanClassName, contextOrderParam);
-    }
-
-    /**
      * retrieves the QueueInfo from the repository
      * @param dataBeanClassName key used for the repository
-     * @param contextOrderParam Order of the contexts used for retrieval
      * @return QueueInfo
      */
-    public QueueInfo getQueueInfo(String dataBeanClassName,
-                                      List<String> contextOrderParam) {
-        return queueInfoRepository.query(dataBeanClassName, contextOrderParam);
+    public QueueInfo getQueueInfo(String dataBeanClassName) {
+        return queueInfoRepository.query(dataBeanClassName);
     }
 
     /**
      * retrieves the TopicInfo from the repository
      * @param dataBeanClassName key used for the repository
-     * @param contextOrderParam Order of the contexts used for retrieval
      * @return TopicInfo
      */
-    public TopicInfo getTopicInfo(String dataBeanClassName,
-                                  List<String> contextOrderParam) {
-        return topicInfoRepository.query(dataBeanClassName, contextOrderParam);
+    public TopicInfo getTopicInfo(String dataBeanClassName) {
+        return topicInfoRepository.query(dataBeanClassName);
     }
 
     /**
@@ -255,7 +260,7 @@ public class MessagingManager implements IManager {
      * @return all Queue Names
      */
     public String[] getQueueNames() {
-        return queueInfoRepository.getAllKeys().toArray(new String[0]);
+        return queueInfoRepository.getAllKeyIds().toArray(new String[0]);
     }
 
     /**
@@ -263,7 +268,7 @@ public class MessagingManager implements IManager {
      * @return all Topic Names
      */
     public String[] getTopicNames() {
-        return topicInfoRepository.getAllKeys().toArray(new String[0]);
+        return topicInfoRepository.getAllKeyIds().toArray(new String[0]);
     }
 
     /**
@@ -271,7 +276,7 @@ public class MessagingManager implements IManager {
      * @return list of all message filters
      */
     public List<MessageFilter> getMessageFilters() {
-        return messageFilterRepository.getAllValues(null);
+        return messageFilterRepository.getAllValues();
     }
 
     ////////////////////////////////////////////////////////////////////////
@@ -282,76 +287,68 @@ public class MessagingManager implements IManager {
      * Register TypeInfo in the repository
      * @param key the key associated with the value in the repository
      * @param value the object to store
-     * @param context with which repository to be associated with
      */
-    public void registerMessageFilter(String key, MessageFilter value, String context) {
-        messageFilterRepository.register(key, value, context);
+    public void registerMessageFilter(ContextKey key, MessageFilter value) {
+        messageFilterRepository.register(key, value);
     }
 
     /**
      * Register TopicInfo in the repository
      * @param key the key associated with the value in the repository
      * @param value the object to store
-     * @param context with which repository to be associated with
      */
-    public void registerTopicInfo(String key, TopicInfo value, String context) {
-        topicInfoRepository.register(key, value, context);
+    public void registerTopicInfo(ContextKey key, TopicInfo value) {
+        topicInfoRepository.register(key, value);
     }
 
     /**
      * Register QueueInfo in the repository
      * @param key the key associated with the value in the repository
      * @param value the object to store
-     * @param context with which repository to be associated with
      */
-    public void registerQueueInfo(String key, QueueInfo value, String context) {
-        queueInfoRepository.register(key, value, context);
+    public void registerQueueInfo(ContextKey key, QueueInfo value) {
+        queueInfoRepository.register(key, value);
     }
 
     /**
      * Register MessageInfo in the repository
      * @param key the key associated with the value in the repository
-     * @param context with which repository to be associated with
      * @param value the object to store
      */
-    public void registerMessageInfo(String key, MessageInfo value, String context) {
-        messageInfoRepository.register(key, value, context);
+    public void registerMessageInfo(ContextKey key, MessageInfo value) {
+        messageInfoRepository.register(key, value);
     }
 
     /**
      * Unregister a MessageFilter object from the repository
      * @param key the key for the value being removed from the repository
-     * @param context with which repository to be associated with
      */
-    public void unregisterMessageFilter(String key, String context) {
-        messageFilterRepository.unregister(key, context);
+    public void unregisterMessageFilter(ContextKey key) {
+        messageFilterRepository.unregister(key);
     }
 
     /**
      * Unregister a TopicInfo object from the repository
      * @param key the key for the value being removed from the repository
-     * @param context with which repository to be associated with
      */
-    public void unregisterTopicInfo(String key, String context) {
-        topicInfoRepository.unregister(key, context);
+    public void unregisterTopicInfo(ContextKey key) {
+        topicInfoRepository.unregister(key);
     }
 
     /**
      * Unregister a QueueInfo object from the repository
      * @param key the key for the value being removed from the repository
-     * @param context with which repository to be associated with
      */
-    public void unregisterQueueInfo(String key, String context) {
-        queueInfoRepository.unregister(key, context);
+    public void unregisterQueueInfo(ContextKey key) {
+        queueInfoRepository.unregister(key);
     }
 
     /**
      * Unregister a MessageInfo object from the repository
      * @param key the key for the value being removed from the repository
-     * @param context with which repository to be associated with
      */
-    public void unregisterMessageInfo(String key, String context) {
-        messageInfoRepository.unregister(key, context);
+    public void unregisterMessageInfo(ContextKey key) {
+        messageInfoRepository.unregister(key);
     }
 
     ////////////////////////////////////////////////////////////////////////
@@ -363,36 +360,36 @@ public class MessagingManager implements IManager {
         return DEFAULT_CONFIGURATION_FILE;
     }
 
-    public IRepository<String, MessageInfo> getMessageInfoRepository() {
+    public IRepository<MessageInfo> getMessageInfoRepository() {
         return messageInfoRepository;
     }
 
-    public void setMessageInfoRepository(IRepository<String, MessageInfo>
+    public void setMessageInfoRepository(IRepository<MessageInfo>
                                                  messageInfoRepository) {
         this.messageInfoRepository = messageInfoRepository;
     }
 
-    public IRepository<String, QueueInfo> getQueueInfoRepository() {
+    public IRepository<QueueInfo> getQueueInfoRepository() {
         return queueInfoRepository;
     }
 
-    public void setQueueInfoRepository(IRepository<String, QueueInfo> repo) {
+    public void setQueueInfoRepository(IRepository<QueueInfo> repo) {
         this.queueInfoRepository = repo;
     }
 
-    public IRepository<String, TopicInfo> getTopicInfoRepository() {
+    public IRepository<TopicInfo> getTopicInfoRepository() {
         return topicInfoRepository;
     }
 
-    public void setTopicInfoRepository(IRepository<String, TopicInfo> topicInfoRepository) {
+    public void setTopicInfoRepository(IRepository<TopicInfo> topicInfoRepository) {
         this.topicInfoRepository = topicInfoRepository;
     }
 
-    public IRepository<String, MessageFilter> getMessageFilterRepository() {
+    public IRepository<MessageFilter> getMessageFilterRepository() {
         return messageFilterRepository;
     }
 
-    public void setMessageFilterRepository(IRepository<String, MessageFilter> messageFilterRepository) {
+    public void setMessageFilterRepository(IRepository<MessageFilter> messageFilterRepository) {
         this.messageFilterRepository = messageFilterRepository;
     }
 

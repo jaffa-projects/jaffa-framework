@@ -38,7 +38,7 @@ public class XmlLoaderTest {
     @Test
     public void testLoadXmls() throws Exception {
         xmlLoader.loadXmls();
-        verify(iManager).registerXML((Resource) anyObject(), anyString());
+        verify(iManager).registerXML((Resource) anyObject(), anyString(), anyString());
     }
 
     /**

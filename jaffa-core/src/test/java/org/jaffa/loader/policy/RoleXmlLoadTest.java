@@ -49,6 +49,7 @@
 
 package org.jaffa.loader.policy;
 
+import org.jaffa.loader.ContextKey;
 import org.jaffa.loader.CoreLoaderConfig;
 import org.jaffa.security.securityrolesdomain.GrantFunctionAccess;
 import org.jaffa.security.securityrolesdomain.Role;
@@ -73,11 +74,11 @@ public class RoleXmlLoadTest {
     @Test
     public void testXmlLoad() {
         RoleManager roleManager = xmlLoaderConfig.getBean(RoleManager.class);
-        assertNull(roleManager.getRole("CONTRACTOR", null));
-        assertNotNull(roleManager.getRole("CLERK", null));
-        assertNotNull(roleManager.getRole("SUPERVISOR", null));
+        assertNull(roleManager.getRole("CONTRACTOR"));
+        assertNotNull(roleManager.getRole("CLERK"));
+        assertNotNull(roleManager.getRole("SUPERVISOR"));
         assertEquals(3,roleManager.getRoles().getRole().size());
-        assertNull(roleManager.getRole(new String(), null));
+        assertNull(roleManager.getRole(new String()));
     }
 
     /**
@@ -98,14 +99,15 @@ public class RoleXmlLoadTest {
     @Test
     public void testRoleRegistration() {
         RoleManager roleManager = xmlLoaderConfig.getBean(RoleManager.class);
-        assertNull(roleManager.getRole("CONTRACTOR", null));
+        assertNull(roleManager.getRole("CONTRACTOR"));
         Role contractorRole = new Role();
         GrantFunctionAccess grantFunctionAccess = new GrantFunctionAccess();
         grantFunctionAccess.setName("Function 1");
         contractorRole.getGrantFunctionAccess().add(grantFunctionAccess);
-        roleManager.registerRole("CONTRACTOR", contractorRole, "100-Test");
-        assertNotNull(roleManager.getRole("CONTRACTOR", Arrays.asList("100-Test")));
-        roleManager.unregisterRole("CONTRACTOR", "100-Test");
-        assertNull(roleManager.getRole("CONTRACTOR", null));
+        ContextKey key = new ContextKey("CONTRACTOR", "roles.xml", "DEF", "100-Highest");
+        roleManager.registerRole(key, contractorRole);
+        assertNotNull(roleManager.getRole("CONTRACTOR"));
+        roleManager.unregisterRole(key);
+        assertNull(roleManager.getRole("CONTRACTOR"));
     }
 }

@@ -49,6 +49,7 @@
 
 package org.jaffa.loader.components;
 
+import org.jaffa.loader.ContextKey;
 import org.jaffa.loader.IRepository;
 import org.jaffa.loader.MapRepository;
 import org.jaffa.presentation.portlet.component.ComponentDefinition;
@@ -88,9 +89,9 @@ public class ComponentManagerTest {
         String name = "q1";
         component.setId(name);
         ComponentDefinition definition = new ComponentDefinition(component);
-        manager.registerComponentDefinition(name, definition, "0-PLATFORM");
-        ComponentDefinition retrievedDefinition =
-                manager.getComponentDefinition(name, null);
+        ContextKey key = new ContextKey(name, "components.xml", "DEF", "0-PLATFORM");
+        manager.registerComponentDefinition(key, definition);
+        ComponentDefinition retrievedDefinition = manager.getComponentDefinition(name);
         assertEquals(definition, retrievedDefinition);
     }
 
@@ -109,13 +110,13 @@ public class ComponentManagerTest {
      */
     @Test
     public void setComponentRepository() throws Exception {
-        IRepository<String, ComponentDefinition> origRepository =
+        IRepository<ComponentDefinition> origRepository =
                 manager.getComponentRepository();
         assertNotNull(origRepository);
-        IRepository<String, ComponentDefinition> componentRepository1 =
+        IRepository<ComponentDefinition> componentRepository1 =
                 new MapRepository<>();
         manager.setComponentRepository(componentRepository1);
-        IRepository<String, ComponentDefinition> retrievedRepository =
+        IRepository<ComponentDefinition> retrievedRepository =
                 manager.getComponentRepository();
         assertEquals(componentRepository1, retrievedRepository);
         assertNotEquals(origRepository, retrievedRepository);

@@ -89,7 +89,7 @@ public class SchedulerConfiguration {
      * @return the Java representation of the Task configuration for the given type.
      */
     public Task getTask(String type) {
-        return schedulerManager.getSchedulerTaskByTypeName(type,null);
+        return schedulerManager.getSchedulerTaskByTypeName(type);
     }
 
     /**
@@ -100,7 +100,7 @@ public class SchedulerConfiguration {
      * @throws ClassNotFoundException if dataBeanClassName is not found on the classpath
      */
     public Task getTaskByDataBean(String dataBeanClassName) throws ClassNotFoundException {
-        return schedulerManager.getSchedulerTask(dataBeanClassName, null );
+        return schedulerManager.getSchedulerTask(dataBeanClassName);
     }
 
     /**
@@ -108,7 +108,7 @@ public class SchedulerConfiguration {
      * @return the Java representation of the Task configuration for the given type.
      */
     public Task[] getTasks() {
-        return schedulerManager.getAllSchedulerTasks(null);
+        return schedulerManager.getAllSchedulerTasks();
     }
 
     /**

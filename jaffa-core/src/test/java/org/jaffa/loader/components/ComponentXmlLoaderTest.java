@@ -49,6 +49,7 @@
 
 package org.jaffa.loader.components;
 
+import org.jaffa.loader.ContextKey;
 import org.jaffa.loader.IRepository;
 import org.jaffa.presentation.portlet.component.ComponentDefinition;
 import org.junit.Ignore;
@@ -79,22 +80,24 @@ public class ComponentXmlLoaderTest {
     public void testXmlLoad() {
         ComponentManager componentManager =
                 xmlLoaderConfig.getBean(ComponentManager.class);
-        assertNull(componentManager.getComponentDefinition(null, null));
-        assertNull(componentManager.getComponentDefinition("", null));
+        assertNull(componentManager.getComponentDefinition(null));
+        assertNull(componentManager.getComponentDefinition(""));
 
-        IRepository<String, ComponentDefinition> repository =
+        IRepository<ComponentDefinition> repository =
                 componentManager.getComponentRepository();
-        List<ComponentDefinition> values = repository.getAllValues(null);
+        List<ComponentDefinition> values = repository.getAllValues();
         assertEquals(4, values.size());
 
-        Set<String> keys = repository.getAllKeys();
+        Set<ContextKey> keys = repository.getAllKeys();
         String rolesEditorKey = "Jaffa.Admin.RolesEditor";
-        assertTrue(keys.contains(rolesEditorKey));
+        ContextKey rolesEditorContextKey = new ContextKey(rolesEditorKey, "different-file.xml", "DEF", "100-Highest");
+        assertTrue(keys.contains(rolesEditorContextKey));
         String testFunctionViewerKey = "Jaffa.UnitTest.TestFunctionViewer";
-        assertTrue(keys.contains(testFunctionViewerKey));
+        ContextKey testFunctionViewerContextKey = new ContextKey(testFunctionViewerKey, "different-file.xml", "DEF", "100-Highest");
+        assertTrue(keys.contains(testFunctionViewerContextKey));
 
         ComponentDefinition reComponentDefinition =
-                componentManager.getComponentDefinition(rolesEditorKey, null);
+                componentManager.getComponentDefinition(rolesEditorKey);
         String reType = reComponentDefinition.getComponentType();
         assertEquals("Custom", reType);
         String[] optionals = reComponentDefinition.getOptionalFunctions();

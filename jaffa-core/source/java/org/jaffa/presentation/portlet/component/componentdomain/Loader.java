@@ -113,10 +113,10 @@ public class Loader {
 		if (c_componentPool == null) {
 			final Map<String, ComponentDefinition> pool = new HashMap<>();
 
-			IRepository<String, ComponentDefinition> repository =
+			IRepository<ComponentDefinition> repository =
 					componentManager.getComponentRepository();
 
-			List<ComponentDefinition> values = repository.getAllValues(null);
+			List<ComponentDefinition> values = repository.getAllValues();
 
 			// Now go through the component list and build a Map of Component
 			// Definitions
