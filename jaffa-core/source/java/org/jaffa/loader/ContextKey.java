@@ -8,7 +8,7 @@ package org.jaffa.loader;
 public class ContextKey implements Comparable<ContextKey>{
 
     /**
-     * Unique Key to identify the repository element
+     * Key to identify the repository element.
      */
     private String id;
 
@@ -123,7 +123,7 @@ public class ContextKey implements Comparable<ContextKey>{
 
         ContextKey that = (ContextKey) o;
 
-        if (!getId().equals(that.getId())) return false;
+        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
         if (getVariation() != null ? !getVariation().equals(that.getVariation()) : that.getVariation() != null)
             return false;
         return getPrecedence() != null ? getPrecedence().equals(that.getPrecedence()) : that.getPrecedence() == null;
@@ -131,7 +131,7 @@ public class ContextKey implements Comparable<ContextKey>{
 
     @Override
     public int hashCode() {
-        int result = getId().hashCode();
+        int result = getId() != null ? getId().hashCode() : 0;
         result = 31 * result + (getVariation() != null ? getVariation().hashCode() : 0);
         result = 31 * result + (getPrecedence() != null ? getPrecedence().hashCode() : 0);
         return result;

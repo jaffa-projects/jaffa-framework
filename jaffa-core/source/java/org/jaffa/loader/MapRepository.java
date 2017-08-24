@@ -49,7 +49,6 @@
 
 package org.jaffa.loader;
 
-import org.apache.commons.collections.list.TreeList;
 import org.jaffa.security.VariationContext;
 
 import java.util.*;
@@ -59,8 +58,14 @@ import java.util.*;
  */
 public class MapRepository<T> implements IRepository<T> {
 
+    /**
+     * Repository Map holds ContextKey and associated Repository Element
+     */
     private Map<ContextKey, T> repositoryMap = new TreeMap<>();
 
+    /**
+     * ContextKeyCache is the cache of Repository key(id) element and its associated Contexts
+     */
     private Map<String, TreeSet<ContextKey>> contextKeyCache = new HashMap<>();
 
 
@@ -68,7 +73,7 @@ public class MapRepository<T> implements IRepository<T> {
      * {@inheritDoc}
      */
     @Override
-    public void register(ContextKey repositoryKey, T repositoryElement) {
+    public synchronized void register(ContextKey repositoryKey, T repositoryElement) {
         repositoryMap.put(repositoryKey, repositoryElement);
 
         addToContextKeyCache(repositoryKey);
@@ -78,7 +83,7 @@ public class MapRepository<T> implements IRepository<T> {
      * {@inheritDoc}
      */
     @Override
-    public void unregister(ContextKey contextKey) {
+    public synchronized void unregister(ContextKey contextKey) {
         repositoryMap.remove(contextKey);
 
         removeFromContextKeyCache(contextKey);
@@ -88,7 +93,7 @@ public class MapRepository<T> implements IRepository<T> {
      * {@inheritDoc}
      */
     @Override
-    public T query(ContextKey contextKey) {
+    public synchronized T query(ContextKey contextKey) {
         return repositoryMap.get(contextKey);
     }
 
@@ -96,7 +101,7 @@ public class MapRepository<T> implements IRepository<T> {
      * {@inheritDoc}
      */
     @Override
-    public T query(String id) {
+    public synchronized T query(String id) {
         if(id!=null) {
             TreeSet<ContextKey> contextKeysForId = contextKeyCache.get(id);
             if (contextKeysForId!=null && contextKeysForId.size() > 0) {
@@ -116,10 +121,10 @@ public class MapRepository<T> implements IRepository<T> {
      * {@inheritDoc}
      */
     @Override
-    public ContextKey findKey(String id){
+    public synchronized ContextKey findKey(String id){
         if(id!=null) {
             TreeSet<ContextKey> contextKeysForId = contextKeyCache.get(id);
-            if (contextKeysForId!=null && contextKeysForId.size() > 0) {
+            if (contextKeysForId!=null) {
                 for (ContextKey contextKey : contextKeysForId) {
                     if ((contextKey.getVariation() != null && contextKey.getVariation().equals(VariationContext.getVariation()))
                             || contextKey.getVariation().equals(VariationContext.DEFAULT_VARIATION)) {
@@ -137,7 +142,7 @@ public class MapRepository<T> implements IRepository<T> {
      * {@inheritDoc}
      */
     @Override
-    public Set<ContextKey> getAllKeys() {
+    public synchronized Set<ContextKey> getAllKeys() {
         return repositoryMap.keySet();
     }
 
@@ -145,7 +150,7 @@ public class MapRepository<T> implements IRepository<T> {
      * {@inheritDoc}
      */
     @Override
-    public Set<String> getAllKeyIds() {
+    public synchronized Set<String> getAllKeyIds() {
         Set<ContextKey> contextKeys = repositoryMap.keySet();
         Set<String> ids = new HashSet<>();
         for(ContextKey contextKey : contextKeys){
@@ -158,7 +163,7 @@ public class MapRepository<T> implements IRepository<T> {
      * {@inheritDoc}
      */
     @Override
-    public List<T> getAllValues() { return new ArrayList(repositoryMap.values());}
+    public synchronized List<T> getAllValues() { return new ArrayList(repositoryMap.values());}
 
 
     /**
@@ -166,7 +171,12 @@ public class MapRepository<T> implements IRepository<T> {
      * @param repositoryKey
      */
     private void addToContextKeyCache(ContextKey repositoryKey){
-        updateContextKeyCache(repositoryKey, true);
+        TreeSet<ContextKey> contextKeyCacheValue = contextKeyCache.get(repositoryKey.getId());
+        if(contextKeyCacheValue == null){
+            contextKeyCacheValue = new TreeSet<>(Collections.<ContextKey>reverseOrder());
+        }
+        contextKeyCacheValue.add(repositoryKey);
+        contextKeyCache.put(repositoryKey.getId(), contextKeyCacheValue);
     }
 
     /**
@@ -174,25 +184,19 @@ public class MapRepository<T> implements IRepository<T> {
      * @param repositoryKey
      */
     private void removeFromContextKeyCache(ContextKey repositoryKey){
-        updateContextKeyCache(repositoryKey, false);
+        contextKeyCache.remove(repositoryKey.getId());
     }
 
     /**
-     * Updates the contextKeyCache with Id and repositoryKey
-     * @param repositoryKey
-     * @param add
+     * {@inheritDoc}
      */
-    private void updateContextKeyCache(ContextKey repositoryKey, boolean add){
-        TreeSet<ContextKey> contextKeyCacheValue = contextKeyCache.get(repositoryKey.getId());
-        if(contextKeyCacheValue == null){
-            contextKeyCacheValue = new TreeSet<>(Collections.<ContextKey>reverseOrder());
+    @Override
+    public synchronized Map<String, T> getMyRepository(){
+        Map<String, T> myRepository = new HashMap<>();
+        Set<String> repoKeys = contextKeyCache.keySet();
+        for(String repoKey : repoKeys){
+            myRepository.put(repoKey, query(repoKey));
         }
-        if(add) {
-            contextKeyCacheValue.add(repositoryKey);
-            contextKeyCache.put(repositoryKey.getId(), contextKeyCacheValue);
-        }else{
-            contextKeyCache.remove(repositoryKey.getId());
-        }
-
+        return myRepository;
     }
 }

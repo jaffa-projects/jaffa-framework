@@ -63,7 +63,8 @@ public interface IManager {
     /**
      * registers the XML config file to repository.
      * @param resource the object that contains the xml config file.
-     * @param precedence key with which config file to be registered.
+     * @param precedence associated with the module based on its definition in manifest
+     * @param variation associated with the module based on its definition in manifest
      * @throws JAXBException if xml file is not valid.
      * @throws SAXException if xml file is not valid.
      * @throws IOException if resource does not found.

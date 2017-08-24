@@ -166,12 +166,10 @@ public class SchedulerManager implements IManager {
                     if (task == null) {
                         Class clazz = Class.forName(dataBeanClass);
                         ContextKey superClassContextKey = null;
-                        while (clazz.getSuperclass() != null) {
+                        while (clazz.getSuperclass() != null && task == null) {
                             clazz = clazz.getSuperclass();
                             task = schedulerTaskRepository.query(clazz.getName());
                             superClassContextKey = schedulerTaskRepository.findKey(clazz.getName());
-                            if (task != null)
-                                break;
                         }
                         if(superClassContextKey!=null) {
                             schedulerTaskRepository.register(new ContextKey(dataBeanClass, superClassContextKey.getFileName(),

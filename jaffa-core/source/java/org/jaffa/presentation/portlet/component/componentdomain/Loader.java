@@ -73,9 +73,6 @@ public class Loader {
 
     private static final Logger LOGGER = Logger.getLogger(Loader.class);
 
-	/** This caches the component definitions from the ComponentManager. */
-    private static Map<String, ComponentDefinition> c_componentPool = null;
-
 	/** The singleton Loader. */
 	private static Loader loaderSingleton = null;
 
@@ -108,28 +105,8 @@ public class Loader {
 	 * and the value is a ComponentDefinition object
      */
 	public static synchronized Map<String, ComponentDefinition> getComponentPool() {
-		// componentPool serves as a cache for the information stored in the
-		// ComponentManager
-		if (c_componentPool == null) {
-			final Map<String, ComponentDefinition> pool = new HashMap<>();
-
-			IRepository<ComponentDefinition> repository =
-					componentManager.getComponentRepository();
-
-			List<ComponentDefinition> values = repository.getAllValues();
-
-			// Now go through the component list and build a Map of Component
-			// Definitions
-			for (final ComponentDefinition definition : values) {
-				try {
-					pool.put(definition.getComponentName(), definition);
-				} catch (Exception e) {
-					LOGGER.fatal(e);
-				}
-			}
-			c_componentPool = pool;
-		}
-		return c_componentPool;
+        IRepository<ComponentDefinition> repository = componentManager.getComponentRepository();
+		return repository.getMyRepository();
 	}
 
 	public static void setComponentManager(ComponentManager componentManager) {

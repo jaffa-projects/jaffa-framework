@@ -217,12 +217,10 @@ public class MessagingManager implements IManager {
                     if (messageInfo == null) {
                         Class clazz = Class.forName(dataBeanClass);
                         ContextKey superClassContextKey = null;
-                        while (clazz.getSuperclass() != null) {
+                        while (clazz.getSuperclass() != null && messageInfo == null) {
                             clazz = clazz.getSuperclass();
                             messageInfo = messageInfoRepository.query(clazz.getName());
                             superClassContextKey = messageInfoRepository.findKey(clazz.getName());
-                            if (messageInfo != null)
-                                break;
                         }
                         if (superClassContextKey != null) {
                             messageInfoRepository.register(new ContextKey(dataBeanClass, superClassContextKey.getFileName(),

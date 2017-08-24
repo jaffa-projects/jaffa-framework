@@ -50,6 +50,7 @@
 package org.jaffa.loader;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -111,4 +112,9 @@ public interface IRepository<T> {
      */
     List<T> getAllValues();
 
+    /**
+     * Returns the MapRepository for based on the context of User
+     * @return Map
+     */
+    Map<String, T> getMyRepository();
 }
