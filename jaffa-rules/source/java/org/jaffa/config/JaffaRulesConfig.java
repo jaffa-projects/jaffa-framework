@@ -49,20 +49,29 @@
 package org.jaffa.config;
 
 import org.jaffa.beans.factory.InitializerFactory;
+import org.jaffa.rules.JaffaRulesFrameworkException;
+import org.jaffa.rules.commons.AopConstants;
 import org.jaffa.rules.initializers.RuleInitializerFactory;
+import org.jaffa.rules.jbossaop.AopXmlLoader;
 import org.jaffa.rules.rulemeta.DefaultRuleHelper;
 import org.jaffa.rules.rulemeta.IRuleEvaluator;
 import org.jaffa.rules.validators.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.env.Environment;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Java Configuration class for the Jaffa Rules
  */
 @Configuration
 public class JaffaRulesConfig {
+
     /**
      * Configure the validator factory
      *
@@ -73,8 +82,8 @@ public class JaffaRulesConfig {
     public RuleValidatorFactory ruleValidatorFactory() {
         RuleValidatorFactory factory = new RuleValidatorFactory();
         factory.addValidatorTypes("mandatory", "max-length", "min-length", "case-type", "max-value", "min-value",
-                                  "candidate-key", "comment", "foreign-key", "generic-foreign-key", "in-list",
-                                  "not-in-list", "partial-foreign-key", "pattern", "primary-key");
+                "candidate-key", "comment", "foreign-key", "generic-foreign-key", "in-list",
+                "not-in-list", "partial-foreign-key", "pattern", "primary-key");
         return factory;
     }
 
@@ -292,5 +301,29 @@ public class JaffaRulesConfig {
         PrimaryKeyValidator validator = new PrimaryKeyValidator();
         validator.setRuleEvaluator(ruleHelper());
         return validator;
+    }
+
+    /**
+     * Configures the AOP file System watcher to observe the paths passed in for the
+     * jboss aop folder.
+     */
+    @Bean
+    @Scope(BeanDefinition.SCOPE_SINGLETON)
+    @Autowired
+    public AopXmlLoader aopFolderWatcher(Environment env) throws JaffaRulesFrameworkException {
+
+        // Check to see if this is supported. If explicitly disabled, then return early.
+        if (env.containsProperty("jaffa.aop.springconfig.disabled") &&
+                env.getProperty("jaffa.aop.springconfig.disabled").equals("true")) {
+            return null;
+        }
+
+        String aopPath =
+                env.containsProperty("jboss.aop.path") ?
+                        env.getProperty("jboss.aop.path") :
+                        AopConstants.DEFAULT_AOP_PATTERN;
+
+        List<String> paths = Arrays.asList(aopPath.split(";"));
+        return new AopXmlLoader(paths);
     }
 }

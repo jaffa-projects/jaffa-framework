@@ -47,82 +47,90 @@
  * ====================================================================
  */
 
-package org.jaffa.rules.jbossaop;
+package org.jaffa.rules.testmodels;
 
-import javassist.CtConstructor;
-import javassist.CtField;
-import javassist.CtMethod;
-import org.apache.log4j.Logger;
-import org.jboss.aop.Advisor;
-import org.jboss.aop.metadata.ClassMetaDataBinding;
-import org.jboss.aop.metadata.ClassMetaDataLoader;
-import org.w3c.dom.Element;
+import java.util.HashMap;
+import java.util.Map;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+public class CommentBusinessBean {
+    private Map<String, String> changes = new HashMap<>();
+    private String field1 = null;
+    private String field2 = null;
+    private String field3 = null;
 
+    public String getField1() {
+        return field1;
+    }
 
-/**
- * This class previous used JBoss AOP to load Rules for classes. It is no longer used as
- * this information is loaded via the {link #AopXmlLoader.class} class, which is responsible
- * for providing information to the respective repositories.
- *
- * @deprecated This class is only here for legacy purposes, and will be removed in the near future
- */
-@Deprecated
-public class RuleLoader implements ClassMetaDataLoader {
-    private static final Logger log = Logger.getLogger(RuleLoader.class);
-    private static ClassMetaDataBinding c_classMetaDataBinding = null;
-    public static final Object lockOjbect = new Object();
+    public void setField1(String f) {
+        if (!changes.containsKey("field1")) changes.put("field1", field1);
+        field1 = f;
+    }
 
-    /**
-     * Previously imported metadata from the AOP XML files.
-     *
-     * @return an instance of DummyClassMetaDataBinding.
-     * @throws Exception if any error occurs.
-     * @deprecated This method is deprecated and support will be removed in the future
-     */
-    @Deprecated
-    public ClassMetaDataBinding importMetaData(Element element, String fileName, String tagName, String className)
-            throws Exception {
+    public String getField2() {
+        return field2;
+    }
 
-        if (log.isDebugEnabled()) {
-            log.debug("Deprecated AOP rule import called for " + fileName + " / " + tagName + " / " + className);
-        }
+    public void setField2(String f) {
+        if (!changes.containsKey("field2")) changes.put("field2", field2);
+        field2 = f;
+    }
 
-        // Return a singleton instance of ClassMetaDataBinding
-        if (c_classMetaDataBinding == null) {
-            synchronized (lockOjbect) {
-                // Create an anonymous binding which merely extends ClassMetaDataBinding
-                if (c_classMetaDataBinding == null)
-                    c_classMetaDataBinding = new ClassMetaDataBinding(this, fileName, tagName, className) {
-                    };
-            }
-        }
-        return c_classMetaDataBinding;
+    public String getField3() {
+        return field3;
+    }
+
+    public void setField3(String f) {
+        if (!changes.containsKey("field3")) changes.put("field3", field3);
+        field3 = f;
+    }
+
+    public String xgetField3() {
+        return field3;
     }
 
     /**
-     * Dummy No-Op implementation that implements the required interface
-     *
-     * @deprecated This method is deprecated and support will be removed in the future
+     * Clear all the changes on this bean. Will cause all future calls to
+     * {@link #hasChanged(String)} to return false
      */
-    @Deprecated
-    public void bind(Advisor classAdvisor, ClassMetaDataBinding data,
-                     CtMethod[] ctMethod, CtField[] ctField, CtConstructor[] ctConstructor)
-            throws java.lang.Exception {
+    public void clearChanges() {
+        changes.clear();
     }
 
     /**
-     * Dummy No-Op implementation that implements the required interface
+     * Has the bean changed since it was created or last cleared.
      *
-     * @deprecated This method is deprecated and support will be removed in the future
+     * @return true if the bean has been modified
      */
-    @Deprecated
-    public void bind(Advisor classAdvisor, ClassMetaDataBinding data,
-                     Method[] methods, Field[] fields, Constructor[] constructors)
-            throws Exception {
+    public boolean hasChanged() {
+        return changes != null && changes.size() > 0;
     }
 
+    /**
+     * Has the specified bean property been changed since the bean was
+     * created or last cleared
+     *
+     * @param property Name of bean property to check
+     * @return true if the property has been modified
+     */
+    public boolean hasChanged(String property) {
+        return changes.containsKey(property);
+    }
+
+    /**
+     * Get the original value for this field.
+     *
+     * @param property Name of bean property to check
+     * @return The object representing the original values. Primitives are return as their
+     * Object counterparts.
+     */
+    public Object getOriginalValue(String property) {
+        return changes.get(property);
+    }
+
+    /**
+     * This method is used for binding various validation interceptors.
+     */
+    public void validate() {
+    }
 }
