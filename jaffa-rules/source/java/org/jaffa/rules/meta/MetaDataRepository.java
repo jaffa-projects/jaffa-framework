@@ -112,8 +112,9 @@ public class MetaDataRepository extends AbstractLoader {
      * @param source   the name of the source file.
      * @throws JaffaRulesFrameworkException if any internal error occurs.
      */
-    @Override
-    public void load(Document document, String source) throws JaffaRulesFrameworkException {
+    //@Override
+    @Deprecated
+    /*public void load(Document document, String source) throws JaffaRulesFrameworkException {
         //Ensure that metadata identified by the source is not reloaded
         if (!m_classMetaDataListBySource.containsKey(source)) {
             synchronized (this) {
@@ -121,7 +122,7 @@ public class MetaDataRepository extends AbstractLoader {
                     super.load(document, source);
             }
         }
-    }
+    }*/
 
     /**
      * Imports meta data.

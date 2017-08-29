@@ -79,6 +79,7 @@ import java.net.URISyntaxException;
 /**
  * A helper class to interact with meta data.
  */
+@Deprecated
 public class MetaDataWriter {
 
 	private static Logger log = Logger.getLogger(MetaDataWriter.class);
@@ -86,6 +87,7 @@ public class MetaDataWriter {
 	/**
 	 * Writes the supplied meta data into the supplied source file
 	 */
+	@Deprecated
 	public static void write(ClassMetaDataDto cmd) throws MetaDataWriterException {
 		if (cmd.getSourceFileName()==null){
 			log.error("No source folder was supplied for meta data export.");
@@ -229,14 +231,15 @@ public class MetaDataWriter {
 			log.error("Source path could not be converted to URI");
 			throw new MetaDataWriterException(MetaDataWriterException.SOURCE_NOT_FOUND, null, se);
 		}
-		
-		try {
+        //Deprecated
+		/*try {
+
 			MetaDataRepository.instance().unload(file);
 			MetaDataRepository.instance().load(file);
 		} catch (JaffaRulesFrameworkException jrfe){
 			log.error("Error loading/unloading class meta data from file.");
 			throw new MetaDataWriterException(MetaDataWriterException.FILE_ERROR, null, jrfe);
-		}
+		}*/
 
 	}
 
