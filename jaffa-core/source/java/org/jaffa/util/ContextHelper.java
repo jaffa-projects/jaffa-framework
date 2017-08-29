@@ -82,26 +82,30 @@ public class ContextHelper {
 
     /**
      * retrieves the context salience from the path supplied
+     *
      * @param contextPath
      * @return string containing context salience
-     * @throws IOException
      */
-    public static String getContextSalience(String contextPath) throws IOException {
+    public static String getContextSalience(String contextPath) {
         String contextSalience = "100-Highest";
 
         if (!contextPath.startsWith("jar")) {
             // Class not from JAR
             logger.warn("The Context Path is not frm the JAR");
         } else {
-            String manifestPath = contextPath.substring(0, contextPath.lastIndexOf("!") + 1) + File.separator + META_INF_MANIFEST_FILE;
-            if(!contextSalienceMap.containsKey(manifestPath)) {
-                if (logger.isDebugEnabled())
-                    logger.debug("manifestPath={}" + manifestPath);
-                String contextSalienceRead = getManifestParameter(manifestPath, true);
-                contextSalience = contextSalienceRead != null ? contextSalienceRead : contextSalience;
-                contextSalienceMap.put(manifestPath, contextSalience);
-            }else {
-                contextSalience = contextSalienceMap.get(manifestPath);
+            try {
+                String manifestPath = contextPath.substring(0, contextPath.lastIndexOf("!") + 1) + "/" + META_INF_MANIFEST_FILE;
+                if (!contextSalienceMap.containsKey(manifestPath)) {
+                    if (logger.isDebugEnabled())
+                        logger.debug("manifestPath={}" + manifestPath);
+                    String contextSalienceRead = getManifestParameter(manifestPath, true);
+                    contextSalience = contextSalienceRead != null ? contextSalienceRead : contextSalience;
+                    contextSalienceMap.put(manifestPath, contextSalience);
+                } else {
+                    contextSalience = contextSalienceMap.get(manifestPath);
+                }
+            } catch (Exception w) {
+                logger.error("Exception occurred while getting context salience " + w);
             }
         }
 
@@ -110,26 +114,30 @@ public class ContextHelper {
 
     /**
      * retrieves the context salience from the path supplied
+     *
      * @param contextPath
      * @return string containing context salience
-     * @throws IOException
      */
-    public static String getVariationSalience(String contextPath) throws IOException {
+    public static String getVariationSalience(String contextPath)  {
         String variationSalience = VariationContext.DEFAULT_VARIATION;
 
         if (!contextPath.startsWith("jar")) {
             // Class not from JAR
             logger.warn("The Context Path is not frm the JAR");
         } else {
-            String manifestPath = contextPath.substring(0, contextPath.lastIndexOf("!") + 1) + File.separator + META_INF_MANIFEST_FILE;
-            if(!variationSalienceMap.containsKey(manifestPath)) {
-                if (logger.isDebugEnabled())
-                    logger.debug("manifestPath={}" + manifestPath);
-                String variationSalienceRead = getManifestParameter(manifestPath, false);
-                variationSalience = variationSalienceRead != null ? variationSalienceRead : variationSalience;
-                variationSalienceMap.put(manifestPath, variationSalience);
-            }else {
-                variationSalience = variationSalienceMap.get(manifestPath);
+            try {
+                String manifestPath = contextPath.substring(0, contextPath.lastIndexOf("!") + 1) + "/" + META_INF_MANIFEST_FILE;
+                if (!variationSalienceMap.containsKey(manifestPath)) {
+                    if (logger.isDebugEnabled())
+                        logger.debug("manifestPath={}" + manifestPath);
+                    String variationSalienceRead = getManifestParameter(manifestPath, false);
+                    variationSalience = variationSalienceRead != null ? variationSalienceRead : variationSalience;
+                    variationSalienceMap.put(manifestPath, variationSalience);
+                } else {
+                    variationSalience = variationSalienceMap.get(manifestPath);
+                }
+            } catch (Exception w) {
+                logger.error("Excpetion occurred while getting variation salience " + w);
             }
         }
 
@@ -139,15 +147,16 @@ public class ContextHelper {
 
     /**
      * retrieves the context salience from the path supplied
+     *
      * @param manifestPath
      * @return string containing context salience
      * @throws IOException
      */
-    public static String getManifestParameter(String manifestPath, boolean readContextSalience) throws IOException {
+    public static String getManifestParameter(String manifestPath, boolean readContextSalience)  {
         Manifest manifest;
         try {
             manifest = new Manifest(new URL(manifestPath).openStream());
-        }catch(IOException ee){
+        } catch (Exception ee) {
             logger.error(ee.getMessage(), ee);
             return null;
         }
@@ -157,6 +166,7 @@ public class ContextHelper {
 
     /**
      * retrieves the context salience from the class provided
+     *
      * @param clazz
      * @return string containing context salience
      * @throws IOException
@@ -170,6 +180,7 @@ public class ContextHelper {
 
     /**
      * retrieves the context salience from the Manifest object provided
+     *
      * @param manifest
      * @return string containing context salience
      */
