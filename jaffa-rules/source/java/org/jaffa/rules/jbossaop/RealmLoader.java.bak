@@ -49,90 +49,80 @@
 
 package org.jaffa.rules.jbossaop;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import javassist.CtConstructor;
 import javassist.CtField;
 import javassist.CtMethod;
 import org.apache.log4j.Logger;
-import org.jaffa.rules.realm.RealmRepository;
 import org.jboss.aop.Advisor;
 import org.jboss.aop.metadata.ClassMetaDataBinding;
 import org.jboss.aop.metadata.ClassMetaDataLoader;
 import org.w3c.dom.Element;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
-/** This class is used to import the realms.
+
+/**
+ * This class previous used JBoss AOP to load realms for classes. It is no longer used as
+ * this information is loaded via the {link #AopXmlLoader.class} class, which is responsible
+ * for providing information to the respective repositories.
+ *
+ * @deprecated This class is only here for legacy purposes, and will be removed in the near future
  */
+@Deprecated
 public class RealmLoader implements ClassMetaDataLoader {
-    
-    private static Logger log = Logger.getLogger(RealmLoader.class);
-    
+    private static final Logger log = Logger.getLogger(RealmLoader.class);
     private static ClassMetaDataBinding c_classMetaDataBinding = null;
-    
-    /** Imports realms into the RealmRepository.
-     * This method is invoked by the AopC task during preapplication of aspects.
-     * It is also called at runtime during application startup.
-     * @param element the element we are processing within an aop file.
-     * @param fileName the fileName of the aop file.
-     * @param tagName the tagName that this element belongs to.
-     * @param className this will typically contain the classname for which we've defined the rules.
+    public static final Object lockObject = new Object();
+
+    /**
+     * Previously imported metadata from the AOP XML files.
+     *
      * @return an instance of DummyClassMetaDataBinding.
      * @throws Exception if any error occurs.
+     * @deprecated This method is deprecated and support will be removed in the future
      */
+    @Deprecated
     public ClassMetaDataBinding importMetaData(Element element, String fileName, String tagName, String className)
-    throws Exception {
-        if (log.isDebugEnabled())
-            log.debug("Load realm for " + fileName + " / " + tagName + " / " + className);
-        
-        // Extract the actual fileName
-        fileName = MetaDataLoader.extractFileName(fileName);
-        
-        // Delegate the loading of realm to RealmRepository
-        RealmRepository.instance().load(element, fileName);
-        
+            throws Exception {
+
+        if (log.isDebugEnabled()) {
+            log.debug("Deprecated AOP realm import called for " + fileName + " / " + tagName + " / " + className);
+        }
+
         // Return a singleton instance of ClassMetaDataBinding
         if (c_classMetaDataBinding == null) {
-            synchronized(this.getClass()) {
+            synchronized (lockObject) {
                 // Create an anonymous binding which merely extends ClassMetaDataBinding
                 if (c_classMetaDataBinding == null)
-                    c_classMetaDataBinding = new ClassMetaDataBinding(this, fileName, tagName, className) {};
+                    c_classMetaDataBinding = new ClassMetaDataBinding(this, fileName, tagName, className) {
+                    };
             }
         }
         return c_classMetaDataBinding;
     }
-    
-    /** This method is used to prepare the required pointcuts, so that Interceptors can be bound to them.
-     * It is invoked by the AopC task during preapplication of aspects, after loading the metadata.
-     * It is called at runtime only in DynamicAOP-mode, when loading the class.
-     * @param classAdvisor The class advisor.
-     * @param data the meta data.
-     * @param ctMethod the advised methods.
-     * @param ctField the advised fields.
-     * @param ctConstructor the advised constructors.
-     * @throws Exception if any error occurs.
+
+    /**
+     * Dummy No-Op implementation that implements the required interface
+     *
+     * @deprecated This method is deprecated and support will be removed in the future
      */
+    @Deprecated
     public void bind(Advisor classAdvisor, ClassMetaDataBinding data,
-            CtMethod[] ctMethod, CtField[] ctField, CtConstructor[] ctConstructor)
+                     CtMethod[] ctMethod, CtField[] ctField, CtConstructor[] ctConstructor)
             throws java.lang.Exception {
-        // Do nothing
     }
-    
-    /** This method can be used to bind Interceptors to the pointcuts.
-     * It is method is invoked only at runtime, when the class is loaded.
-     * In DynamicAOP-mode, it is called after the prebind stage.
-     * @param classAdvisor The class advisor.
-     * @param data the meta data.
-     * @param methods the advised methods.
-     * @param fields the advised fields.
-     * @param constructors the advised constructors.
-     * @throws Exception if any error occurs.
+
+    /**
+     * Dummy No-Op implementation that implements the required interface
+     *
+     * @deprecated This method is deprecated and support will be removed in the future
      */
+    @Deprecated
     public void bind(Advisor classAdvisor, ClassMetaDataBinding data,
-            Method[] methods, Field[] fields, Constructor[] constructors)
+                     Method[] methods, Field[] fields, Constructor[] constructors)
             throws Exception {
-        // Do nothing
     }
-    
+
 }

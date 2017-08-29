@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+    <!-- ================================================= -->
+    <!-- Rules used by the test case test.rules.ExtensionTest -->
+    <!-- ================================================= -->
+
+    <metadata tag="jaffa.rules" class="org.jaffa.rules.testmodels.Extension1">
+        <property name="field3">
+            <initialize>value2</initialize>
+            <min-length>2</min-length>
+            <max-length>20</max-length>
+        </property>
+    </metadata>
+
+
+</aop>

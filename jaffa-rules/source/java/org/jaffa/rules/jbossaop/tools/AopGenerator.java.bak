@@ -49,21 +49,12 @@
 
 package org.jaffa.rules.jbossaop.tools;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.jaffa.datatypes.DateTime;
 import org.jaffa.exceptions.FrameworkException;
 import org.jaffa.presentation.portlet.FormBase;
 import org.jaffa.rules.JaffaRulesFrameworkException;
+import org.jaffa.rules.jbossaop.AopXmlLoader;
 import org.jaffa.rules.jbossaop.interceptors.IRuleInterceptor;
 import org.jaffa.rules.jbossaop.mixins.Mixin;
 import org.jaffa.rules.meta.ClassMetaData;
@@ -75,12 +66,20 @@ import org.jaffa.rules.rulemeta.Rule;
 import org.jaffa.rules.rulemeta.RuleHelperFactory;
 import org.jaffa.rules.rulemeta.RuleRepository;
 import org.jaffa.rules.variation.VariationRepository;
-import org.jaffa.util.FileHelper;
 import org.jboss.aop.AspectManager;
-import org.jboss.aop.AspectXmlLoader;
 import org.jboss.aop.expressions.MethodExpression;
 
-/** This class is used to generate a file containing JBossAOP-specific bindings based on the metadata.
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * This class is used to generate a file containing JBossAOP-specific bindings based on the metadata.
  * It can also be used to reload the entire Repository.
  * <p>
  * The following configuration parameters are required:
@@ -92,67 +91,73 @@ import org.jboss.aop.expressions.MethodExpression;
 public class AopGenerator {
 
     private static Logger log = Logger.getLogger(AopGenerator.class);
-    private static final String FILE_SUFFIX = "-aop.xml";
     private static int c_nextInterceptorName = 1;
 
     private String m_sourceNames;
     private String m_generatedFileName;
 
-    private File[] m_sources;
     private File m_generatedFile;
 
     private List<String> m_generatedClassNames;
 
-    /** The Jaffa interceptors generally create pointcuts of the format:
-     *      "execution(* "+ className + "->" + output[i] + ")"
-     *      "execution(* "+className+"->get"+property+"())"
-     *      "execution(* "+className+"->is"+property+"())"
-     *      "execution(* "+className+"->validate())"
-     *      "execution(java.lang.String "+className+"->lookupLabel())"
-     *      "execution(java.lang.String "+className+"->lookupLabel(java.lang.String))"
-     *      "execution(java.lang.String "+className+"->lookupLayout(java.lang.String))"
-     *      "execution(java.lang.String "+className+"->returnFormatted(java.lang.String))"
-     *      "execution(void "+className+"->set"+property+"(*))"
-     *      "execution(void "+className+"->set"+property+"(java.lang.String))"
+    /**
+     * The Jaffa interceptors generally create pointcuts of the format:
+     * "execution(* "+ className + "->" + output[i] + ")"
+     * "execution(* "+className+"->get"+property+"())"
+     * "execution(* "+className+"->is"+property+"())"
+     * "execution(* "+className+"->validate())"
+     * "execution(java.lang.String "+className+"->lookupLabel())"
+     * "execution(java.lang.String "+className+"->lookupLabel(java.lang.String))"
+     * "execution(java.lang.String "+className+"->lookupLayout(java.lang.String))"
+     * "execution(java.lang.String "+className+"->returnFormatted(java.lang.String))"
+     * "execution(void "+className+"->set"+property+"(*))"
+     * "execution(void "+className+"->set"+property+"(java.lang.String))"
      * This pattern will be used to extract returnType, className, methodName and parameters from the above expression.
      * <p>
      * So if 'm' is a Matcher for the given pattern, the orignal pointcut can then be recreated by:
-     *      "execution(" + m.group(1) + " " + m.group(2) + "->" + m.group(3) + "(" + m.group(4) + "))"
+     * "execution(" + m.group(1) + " " + m.group(2) + "->" + m.group(3) + "(" + m.group(4) + "))"
      * <p>
      * For example, if the pointcut is "execution(java.lang.String org.example.SomeClass->lookupLabel(java.lang.String))", then:
-     *     group(1) = "java.lang.String"
-     *     group(2) = "org.example.SomeClass"
-     *     group(3) = "lookupLabel"
-     *     group(4) = "java.lang.String"
+     * group(1) = "java.lang.String"
+     * group(2) = "org.example.SomeClass"
+     * group(3) = "lookupLabel"
+     * group(4) = "java.lang.String"
      * <p>
      * This pattern is used by the InheritanceHack to transform a pointcut if required.
      */
     private static Pattern c_pointcutPattern = Pattern.compile("^execution\\s*\\((.+)\\s+(.+)\\s*->\\s*(.+)\\((.*)\\)\\)$");
 
 
-    /** Getter for property sourceNames.
+    /**
+     * Getter for property sourceNames.
+     *
      * @return Value of property sourceNames.
      */
     public String getSourceNames() {
         return m_sourceNames;
     }
 
-    /** Setter for property sourceNames.
+    /**
+     * Setter for property sourceNames.
+     *
      * @param sourceNames Value of property sourceNames.
      */
     public void setSourceNames(String sourceNames) {
         m_sourceNames = sourceNames;
-        m_sources = null;
     }
 
-    /** Getter for property generatedFileName.
+    /**
+     * Getter for property generatedFileName.
+     *
      * @return Value of property generatedFileName.
      */
     public String getGeneratedFileName() {
         return m_generatedFileName;
     }
 
-    /** Setter for property generatedFileName.
+    /**
+     * Setter for property generatedFileName.
+     *
      * @param generatedFileName Value of property generatedFileName.
      */
     public void setGeneratedFileName(String generatedFileName) {
@@ -167,7 +172,7 @@ public class AopGenerator {
      */
     public void setGeneratedClassNames(String classNames) {
         //Remove all whitespace and split on commas
-        m_generatedClassNames = Arrays.asList(classNames.replaceAll("\\s","").split(","));
+        m_generatedClassNames = Arrays.asList(classNames.replaceAll("\\s", "").split(","));
     }
 
     /**
@@ -180,42 +185,46 @@ public class AopGenerator {
         return m_generatedClassNames.contains(clazz.getSimpleName());
     }
 
-    /** Generates the file containing JBossAOP-specific bindings based on the metadata.
+    /**
+     * Generates the file containing JBossAOP-specific bindings based on the metadata.
+     *
      * @throws FrameworkException if any internal error occurs.
      */
     public void generate() throws FrameworkException {
         if (log.isInfoEnabled())
             log.info("Generating '" + getGeneratedFileName() + "' from metadata in '" + getSourceNames() + '\'');
         validate();
-        if (isFileGenerationRequired()) {
-            // Clear the existing Repository and reload the source files
-            reloadRepository();
 
-            // Create various elements that get incorporated into the generation of the AOP file
-            AopElements aopElements = createAopElementsFromRepository();
+        // Clear the existing Repository and reload the source files
+        reloadRepository();
 
-            // Generate the file from the AopElements
-            generate(aopElements);
-        } else {
-            if (log.isInfoEnabled())
-                log.info(getGeneratedFileName() + " already exists, is newer than the source and hence will not be generated");
-        }
+        // Create various elements that get incorporated into the generation of the AOP file
+        AopElements aopElements = createAopElementsFromRepository();
+
+        // Generate the file from the AopElements
+        generate(aopElements);
+
     }
 
-    /** Clears the existing Repository and reloads the source files.
+    /**
+     * Clears the existing Repository and reloads the source files.
+     *
      * @throws FrameworkException if any internal error occurs.
      */
     public void reloadRepository() throws FrameworkException {
         validate();
         clearRepository();
-        for (File source : m_sources)
-            loadSourceFiles(source);
+
+        List<String> sourceNames = Arrays.asList(m_sourceNames.split(","));
+        List<String> excludedFiles = Collections.singletonList(getGeneratedFileName());
+
+        new AopXmlLoader(sourceNames, excludedFiles);
     }
 
 
-
-
-    /** Clears the entire Repository. */
+    /**
+     * Clears the entire Repository.
+     */
     private void clearRepository() throws FrameworkException {
         if (log.isDebugEnabled())
             log.debug("Clearing existing Repository");
@@ -225,7 +234,9 @@ public class AopGenerator {
         VariationRepository.instance().clear();
     }
 
-    /** Validates the configuration settings. */
+    /**
+     * Validates the configuration settings.
+     */
     private void validate() throws FrameworkException {
         if (getSourceNames() == null || getGeneratedFileName() == null)
             throw new IllegalArgumentException("The parameters sourceNames and generatedFileName are mandatory");
@@ -236,92 +247,11 @@ public class AopGenerator {
             if (m_generatedFile.exists() && !m_generatedFile.isFile())
                 throw new IllegalArgumentException("The generatedFileName '" + getGeneratedFileName() + "' is not a file");
         }
-
-        // Generate an array of File objects based on the comma-separated sourceNames
-        if (m_sources == null) {
-            Collection<File> sources = new LinkedList<File>();
-            for (String sourceName : getSourceNames().split(",")) {
-                File source = new File(sourceName);
-                if (source.exists() && !source.equals(m_generatedFile))
-                    sources.add(source);
-            }
-            m_sources = sources.toArray(new File[sources.size()]);
-        }
     }
 
-    /** Returns true if the file doesn't already exist or is older than the source. */
-    private boolean isFileGenerationRequired() {
-        boolean required = !m_generatedFile.exists();
-        if (!required) {
-            // Return true if the existing file is older than the source files
-            DateTime lastModifiedOfGeneratedFile = new DateTime(m_generatedFile.lastModified());
-            for (File source : m_sources) {
-                if (isFileGenerationRequired(lastModifiedOfGeneratedFile, source))
-                    return true;
-            }
-        }
-        return required;
-    }
-
-    /** Returns true a source file is newer than the lastModifiedOfGeneratedFile. */
-    private boolean isFileGenerationRequired(DateTime lastModifiedOfGeneratedFile, File source) {
-        if (source.isDirectory()) {
-            File[] children = source.listFiles();
-            if (children != null) {
-                for (File child : children) {
-                    if (child.isDirectory()) {
-                        if (isFileGenerationRequired(lastModifiedOfGeneratedFile, child))
-                            return true;
-                    } else if (child.isFile() && child.getName().endsWith(FILE_SUFFIX) && !child.equals(m_generatedFile)) {
-                        DateTime lastModifiedOfSourceFile = new DateTime(child.lastModified());
-                        if (lastModifiedOfSourceFile.isAfter(lastModifiedOfGeneratedFile))
-                            return true;
-                    }
-                }
-            }
-        } else {
-            if (!source.equals(m_generatedFile)) {
-                DateTime lastModifiedOfSourceFile = new DateTime(source.lastModified());
-                if (lastModifiedOfSourceFile.isAfter(lastModifiedOfGeneratedFile))
-                    return true;
-            }
-        }
-        return false;
-    }
-
-    /** Load the source files, creating the repository in the process. */
-    private void loadSourceFiles(File source) throws FrameworkException {
-        if (source.isDirectory()) {
-            File[] children = source.listFiles();
-            if (children != null) {
-                // Perform an alphabetical sort
-                FileHelper.sortFiles(children);
-                for (File child : children) {
-                    if (child.isDirectory()) {
-                        loadSourceFiles(child);
-                    } else if (child.isFile() && child.getName().endsWith(FILE_SUFFIX) && !child.equals(m_generatedFile)) {
-                        loadSourceFile(child);
-                    }
-                }
-            }
-        } else {
-            if (!source.equals(m_generatedFile))
-                loadSourceFile(source);
-        }
-    }
-
-    /** Load the source file, creating the repository in the process. */
-    private void loadSourceFile(File source) throws FrameworkException {
-        try {
-            URL url = source.toURI().toURL();
-            AspectXmlLoader.deployXML(url);
-        } catch (Exception e) {
-            log.error("Error in loading the source file " + source, e);
-            throw new JaffaRulesFrameworkException(JaffaRulesFrameworkException.PARSE_ERROR, new Object[] {source}, e);
-        }
-    }
-
-    /** Create various elements that get incorporated into the generation of the AOP file. */
+    /**
+     * Create various elements that get incorporated into the generation of the AOP file.
+     */
     private AopElements createAopElementsFromRepository() {
         AopElements aopElements = new AopElements();
         Map<String, List<ClassMetaData>> repository = MetaDataRepository.instance().getRepository();
@@ -432,11 +362,11 @@ public class AopGenerator {
     /**
      * Gets the point cuts for the interceptor if the class has not been replaced by Spring DI
      *
-     * @param interceptor    the instance of the interceptor
-     * @param pointCutClass  the class that the interceptor will generate the point cut for
-     * @param propertyName   the property name
-     * @param rule           the Rules Meta Data
-     * @return  The point cut class and method name or null if the interceptor was replaced by Spring DI
+     * @param interceptor   the instance of the interceptor
+     * @param pointCutClass the class that the interceptor will generate the point cut for
+     * @param propertyName  the property name
+     * @param rule          the Rules Meta Data
+     * @return The point cut class and method name or null if the interceptor was replaced by Spring DI
      */
     private String[] getPointcuts(IRuleInterceptor interceptor, Class pointCutClass, String propertyName, RuleMetaData rule) {
         if (isGeneratedClass(interceptor.getClass())) {
@@ -455,8 +385,10 @@ public class AopGenerator {
                 m_generatedFile.getParentFile().mkdirs();
 
             writer = new BufferedWriter(new FileWriter(m_generatedFile));
-            writer.write("<?xml version='1.0' encoding='UTF-8'?>");writer.newLine();
-            writer.write("<aop>"); writer.newLine();
+            writer.write("<?xml version='1.0' encoding='UTF-8'?>");
+            writer.newLine();
+            writer.write("<aop>");
+            writer.newLine();
             // generate introductions
             for (Map.Entry<String, Collection<Mixin>> me : aopElements.introductions.entrySet()) {
                 String className = me.getKey();
@@ -466,26 +398,43 @@ public class AopGenerator {
             // generate bindings
             for (Map<String, Collection<String>> pointcutMap : aopElements.bindings.values()) {
                 for (Map.Entry<String, Collection<String>> me : pointcutMap.entrySet()) {
-                    writer.write("  <bind pointcut='"); writer.write(me.getKey()); writer.write("'>"); writer.newLine();
+                    writer.write("  <bind pointcut='");
+                    writer.write(me.getKey());
+                    writer.write("'>");
+                    writer.newLine();
                     for (String interceptorName : me.getValue()) {
                         int i = interceptorName.indexOf(';');
-                        if (i > 0 && i < interceptorName.length()-1) {
+                        if (i > 0 && i < interceptorName.length() - 1) {
                             String interceptorClassName = interceptorName.substring(0, i);
-                            String targetClassName = interceptorName.substring(i+1);
-                            writer.write("    <interceptor name='"); writer.write(nextInterceptorName()); writer.write("' class='"); writer.write(interceptorClassName); writer.write("'>"); writer.newLine();
-                            writer.write("      <attribute name='targetClassName'>"); writer.write(targetClassName); writer.write("</attribute>"); writer.newLine();
-                            writer.write("    </interceptor>"); writer.newLine();
+                            String targetClassName = interceptorName.substring(i + 1);
+                            writer.write("    <interceptor name='");
+                            writer.write(nextInterceptorName());
+                            writer.write("' class='");
+                            writer.write(interceptorClassName);
+                            writer.write("'>");
+                            writer.newLine();
+                            writer.write("      <attribute name='targetClassName'>");
+                            writer.write(targetClassName);
+                            writer.write("</attribute>");
+                            writer.newLine();
+                            writer.write("    </interceptor>");
+                            writer.newLine();
                         } else {
-                            writer.write("    <interceptor-ref name='"); writer.write(interceptorName); writer.write("'/>"); writer.newLine();
+                            writer.write("    <interceptor-ref name='");
+                            writer.write(interceptorName);
+                            writer.write("'/>");
+                            writer.newLine();
                         }
                     }
-                    writer.write("  </bind>"); writer.newLine();
+                    writer.write("  </bind>");
+                    writer.newLine();
                 }
             }
-            writer.write("</aop>"); writer.newLine();
+            writer.write("</aop>");
+            writer.newLine();
         } catch (IOException e) {
             log.error("Error in writing JBossAOP-specific bindings to " + m_generatedFile, e);
-            throw new JaffaRulesFrameworkException(JaffaRulesFrameworkException.WRITE_ERROR, new Object[] {m_generatedFile}, e);
+            throw new JaffaRulesFrameworkException(JaffaRulesFrameworkException.WRITE_ERROR, new Object[]{m_generatedFile}, e);
         } finally {
             try {
                 if (writer != null)
@@ -496,7 +445,8 @@ public class AopGenerator {
         }
     }
 
-    /** This is a hack to bind interceptors for a class, even when the underlying method is implemented only in a base class
+    /**
+     * This is a hack to bind interceptors for a class, even when the underlying method is implemented only in a base class
      * It changes the className specified in the input pointcut, to the class which implements the method to be intercepted.
      * It returns an array containing the Class and pointcut to be used.
      */
@@ -524,7 +474,7 @@ public class AopGenerator {
                                 log.debug("Changed pointcut '" + pointcut + "' to '" + hackedPointcut + "', since the method '" + methodName + "' has only been implemented in the base class");
                             pointcut = hackedPointcut;
                         }
-                        return new Object[] {currentClass, pointcut};
+                        return new Object[]{currentClass, pointcut};
                     }
                 }
                 currentClass = currentClass.getSuperclass();
@@ -535,23 +485,29 @@ public class AopGenerator {
         } else {
             if (log.isDebugEnabled())
                 log.debug("Pointcut '" + pointcut + "' does not follow the commmon pattern and hence the check for applicable method cannot be performed. Will be used as is");
-            return new Object[] {clazz, pointcut};
+            return new Object[]{clazz, pointcut};
         }
     }
 
-    /** Lookups up the singleton interceptor instance, and returns the className for that instance. */
+    /**
+     * Lookups up the singleton interceptor instance, and returns the className for that instance.
+     */
     private String determineInterceptorClassName(String interceptorName) {
         return AspectManager.instance().getPerVMAspect(interceptorName).getClass().getName();
     }
 
-    /** Returns a unique name to be used in interceptor declarations. */
+    /**
+     * Returns a unique name to be used in interceptor declarations.
+     */
     private static synchronized String nextInterceptorName() {
         return "jaffa.pointcut." + c_nextInterceptorName++;
     }
 
 
-    /** Returns true if the input Method matches the given pointcut.
-     * @param method A Method instance to be matched.
+    /**
+     * Returns true if the input Method matches the given pointcut.
+     *
+     * @param method   A Method instance to be matched.
      * @param pointcut A pointcut.
      * @return true if the input Method matches the given pointcut.
      */
@@ -581,8 +537,10 @@ public class AopGenerator {
         }
     }
 
-    /** This will create an instance of the AopGenerator, passing the input arguments.
+    /**
+     * This will create an instance of the AopGenerator, passing the input arguments.
      * It will then invoke the 'generate()' method.
+     *
      * @param args This expects at two arguments to be passed in, viz. sourceNames and generatedFileName.
      */
     public static void main(String[] args) {
@@ -613,11 +571,17 @@ public class AopGenerator {
         System.exit(1);
     }
 
-    /** A class to hold the various elements that get incorporated into the generation of the AOP file. */
+    /**
+     * A class to hold the various elements that get incorporated into the generation of the AOP file.
+     */
     private static class AopElements {
-        /** Map containing the className + (Collection of introductions for that class) pairs. */
+        /**
+         * Map containing the className + (Collection of introductions for that class) pairs.
+         */
         private Map<String, Collection<Mixin>> introductions = new LinkedHashMap<String, Collection<Mixin>>();
-        /** Map containing the className + (Map containing pointcut and Collection of bindings for that pointcut) pairs. */
+        /**
+         * Map containing the className + (Map containing pointcut and Collection of bindings for that pointcut) pairs.
+         */
         private Map<String, Map<String, Collection<String>>> bindings = new LinkedHashMap<String, Map<String, Collection<String>>>();
     }
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+The rules in this file, unless overridden by explicit variation attributes, are applicable
+for VAR1 or VAR2 only, since that is the mapping specified in the variations-aop.xml
+-->
+
+<aop>
+    <metadata tag="jaffa.rules" class="org.jaffa.rules.testmodels.VariationBean">
+        <property name="field1">
+            <hidden/>
+        </property>
+
+        <!-- The following property overrides the mapping of variation-aop.xml -->
+        <property name="field2" variation='VAR3'>
+            <hidden/>
+        </property>
+    </metadata>
+
+</aop>
