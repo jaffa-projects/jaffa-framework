@@ -1,0 +1,17 @@
+package resources.rules.testservice.TestService;
+
+import org.jaffa.soa.services.SOAEventQueueMessage;
+import org.apache.log4j.Logger;
+
+rule "rule-MyTestService"
+	no-loop
+	salience 10
+	when
+		 item: SOAEventQueueMessage()
+	then
+		System.out.println("rule-MyTestService Customer -invoked");
+		Logger log = Logger.getLogger("resources.rules.testservice.TestService");
+		if (log.isInfoEnabled())
+		      log.info("rule-MyTestService -Customer-invoked");
+
+end

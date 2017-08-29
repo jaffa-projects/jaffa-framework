@@ -49,6 +49,7 @@
 
 package org.jaffa.loader;
 
+import org.apache.log4j.Logger;
 import org.jaffa.util.ContextHelper;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -61,6 +62,8 @@ import java.util.List;
  * Loads the Xml Config files and registers them to the Repository.
  */
 public class XmlLoader<T extends IManager> {
+
+    private static Logger logger = Logger.getLogger(ContextHelper.class);
 
     private T manager ;
 
@@ -94,8 +97,12 @@ public class XmlLoader<T extends IManager> {
                     if (resource == null) {
                         continue;
                     }
-                    manager.registerXML(resource, ContextHelper.getContextSalience(resource.getURI().toString()),
-                            ContextHelper.getVariationSalience(resource.getURI().toString()));
+                    try {
+                        manager.registerXML(resource, ContextHelper.getContextSalience(resource.getURI().toString()),
+                                ContextHelper.getVariationSalience(resource.getURI().toString()));
+                    }catch(Exception e){
+                        logger.error("Exception occurred while registering XML " + resource.getURI().toString() + " exception " + e);
+                    }
                 }
             }
         }catch(Exception w){

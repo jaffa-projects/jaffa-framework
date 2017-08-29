@@ -97,7 +97,7 @@ public class DroolsManager {
      * @param variation key with which drool file to be registered.
      * @throws IOException if drool file is not found.
      */
-    public void registerDrool(Resource resource, String variation) throws IOException {
+    public synchronized void registerDrool(Resource resource, String variation) throws IOException {
 
         String serviceName = getServiceName(resource.getURL().getPath());
 
@@ -121,7 +121,7 @@ public class DroolsManager {
      * @param variation   key with which drool file to be registered.
      * @throws IOException if drool file is not found.
      */
-    public void registerDrool(String serviceName, String path, String variation) throws IOException {
+    public synchronized void registerDrool(String serviceName, String path, String variation) throws IOException {
 
         RuleAgentKey ruleAgentKey = new RuleAgentKey(serviceName, variation);
 
@@ -149,7 +149,7 @@ public class DroolsManager {
      * @param variation key with which drool file to be registered.
      * @throws IOException if drool file is not found.
      */
-    public void unRegisterDrool(Resource resource, String variation) throws IOException {
+    public synchronized void unRegisterDrool(Resource resource, String variation) throws IOException {
 
         String serviceName = getServiceName(resource.getURL().getPath());
         RuleAgentKey ruleAgentKey = new RuleAgentKey(serviceName, variation);
@@ -179,7 +179,7 @@ public class DroolsManager {
      * @param variation   String representing the customer variation
      * @return RuleAgent
      */
-    public RuleAgent getAgent(String serviceName, String variation) {
+    public synchronized RuleAgent getAgent(String serviceName, String variation) {
         RuleAgentKey ruleAgentKey = new RuleAgentKey(serviceName, variation);
         if (ruleAgents.get(ruleAgentKey) == null)
             createAgent(ruleAgentKey);
@@ -211,7 +211,8 @@ public class DroolsManager {
     }
 
     /**
-     * creates all the RuleAgents and adds it to the ruleAgents Map
+     * This method is called from DroolsLoader when all the drools files are loaded in Repository
+     * This method creates all the RuleAgents and adds it to the ruleAgents Map
      */
     public void createAgents() {
         for (Map.Entry<RuleAgentKey, StringBuilder> entry : droolsFiles.entrySet()) {
@@ -309,7 +310,7 @@ public class DroolsManager {
     }
 
     /**
-     * gets the ServiceName from the context Path     *
+     * gets the ServiceName from the context Path
      *
      * @param path
      * @return service name
