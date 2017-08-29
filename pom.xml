@@ -5,6 +5,12 @@
          http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+        <groupId>com.tapestrysolutions</groupId>
+        <artifactId>tapestry-parent</artifactId>
+        <version>2.0.8</version>
+    </parent>
 
     <groupId>org.jaffa</groupId>
     <artifactId>jaffa-parent</artifactId>
