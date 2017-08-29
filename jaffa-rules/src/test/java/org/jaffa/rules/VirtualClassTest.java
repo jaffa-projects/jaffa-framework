@@ -47,82 +47,50 @@
  * ====================================================================
  */
 
-package org.jaffa.rules.jbossaop;
+package org.jaffa.rules;
 
-import javassist.CtConstructor;
-import javassist.CtField;
-import javassist.CtMethod;
-import org.apache.log4j.Logger;
-import org.jboss.aop.Advisor;
-import org.jboss.aop.metadata.ClassMetaDataBinding;
-import org.jboss.aop.metadata.ClassMetaDataLoader;
-import org.w3c.dom.Element;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
+import junit.framework.TestCase;
+import org.jaffa.config.JaffaRulesConfig;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
- * This class previous used JBoss AOP to load Rules for classes. It is no longer used as
- * this information is loaded via the {link #AopXmlLoader.class} class, which is responsible
- * for providing information to the respective repositories.
- *
- * @deprecated This class is only here for legacy purposes, and will be removed in the near future
+ * It is recommened that the variant rules be put after the non-variant rules.
+ * If the rules are spread across multiple JAR files, then ensure that the non-variant rules appear before the variant rules.
  */
-@Deprecated
-public class RuleLoader implements ClassMetaDataLoader {
-    private static final Logger log = Logger.getLogger(RuleLoader.class);
-    private static ClassMetaDataBinding c_classMetaDataBinding = null;
-    public static final Object lockOjbect = new Object();
+public class VirtualClassTest extends TestCase {
+
+    private ApplicationContext ctx;
 
     /**
-     * Previously imported metadata from the AOP XML files.
+     * Creates a new Test
      *
-     * @return an instance of DummyClassMetaDataBinding.
-     * @throws Exception if any error occurs.
-     * @deprecated This method is deprecated and support will be removed in the future
+     * @param name The name of the test case.
      */
-    @Deprecated
-    public ClassMetaDataBinding importMetaData(Element element, String fileName, String tagName, String className)
-            throws Exception {
+    public VirtualClassTest(String name) {
+        super(name);
+    }
 
-        if (log.isDebugEnabled()) {
-            log.debug("Deprecated AOP rule import called for " + fileName + " / " + tagName + " / " + className);
+    /**
+     * Runs the test suite.
+     *
+     * @param args The input args are not used.
+     */
+    public static void main(String[] args) {
+        junit.textui.TestRunner.run(VirtualClassTest.class);
+    }
+
+    protected void setUp() throws Exception {
+        ctx = new AnnotationConfigApplicationContext(JaffaRulesConfig.class);
+    }
+
+    public void testVirtualClass() {
+        try {
+            assertEquals(String.class, RulesEngineFactory.getRulesEngine().getPropertyRuleIntrospector("test.rules.Virtual1", "field1", null).getPropertyType());
+            assertEquals(Long.class, RulesEngineFactory.getRulesEngine().getPropertyRuleIntrospector("test.rules.Virtual1", "field2", null).getPropertyType());
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            fail();
         }
-
-        // Return a singleton instance of ClassMetaDataBinding
-        if (c_classMetaDataBinding == null) {
-            synchronized (lockOjbect) {
-                // Create an anonymous binding which merely extends ClassMetaDataBinding
-                if (c_classMetaDataBinding == null)
-                    c_classMetaDataBinding = new ClassMetaDataBinding(this, fileName, tagName, className) {
-                    };
-            }
-        }
-        return c_classMetaDataBinding;
     }
-
-    /**
-     * Dummy No-Op implementation that implements the required interface
-     *
-     * @deprecated This method is deprecated and support will be removed in the future
-     */
-    @Deprecated
-    public void bind(Advisor classAdvisor, ClassMetaDataBinding data,
-                     CtMethod[] ctMethod, CtField[] ctField, CtConstructor[] ctConstructor)
-            throws java.lang.Exception {
-    }
-
-    /**
-     * Dummy No-Op implementation that implements the required interface
-     *
-     * @deprecated This method is deprecated and support will be removed in the future
-     */
-    @Deprecated
-    public void bind(Advisor classAdvisor, ClassMetaDataBinding data,
-                     Method[] methods, Field[] fields, Constructor[] constructors)
-            throws Exception {
-    }
-
 }

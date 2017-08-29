@@ -49,220 +49,62 @@
 
 package org.jaffa.rules.commons;
 
-import java.io.File;
-import java.io.Reader;
-import java.net.URL;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Map;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import org.apache.log4j.Logger;
 import org.jaffa.rules.JaffaRulesFrameworkException;
 import org.jaffa.util.BeanHelper;
-import org.jaffa.util.DefaultEntityResolver;
-import org.jaffa.util.DefaultErrorHandler;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
-/** A helper class to load XML having the following structure
- *
- *       <?xml version="1.0" encoding="UTF-8"?>
- *       <...>
- *         <metadata tag="..." class="...">
- *           ...
- *           ...
- *           ...
- *         </metadata>
- *
- *         <metadata tag="..." class="...">
- *           ...
- *           ...
- *           ...
- *         </metadata>
- *       </...>
- *
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Map;
+
+/**
+ * Provides some common functionality shared between different repositories to commonly
+ * load xml elements.
+ * <p>
  * <p>
  * A concrete class will provide implementation for the abstract load() and clear() methods to
  * appropriately handle the contents of each metadata element.
  */
 public abstract class AbstractLoader {
-    
-    private static Logger log = Logger.getLogger(AbstractLoader.class);
-    
-    private static final String ELEMENT_METADATA = "metadata";
-    
-    /** Imports XML.
-     * @param f the source file.
-     * @throws JaffaRulesFrameworkException if any internal error occurs.
-     */
-    public void load(File f) throws JaffaRulesFrameworkException {
-        if (log.isDebugEnabled())
-            log.debug("Loading file " + f);
-        load(f.toURI().toString());
-    }
-    
-    /** Imports XML.
-     * @param url the URL of the source file.
-     * @throws JaffaRulesFrameworkException if any internal error occurs.
-     */
-    public void load(URL url) throws JaffaRulesFrameworkException {
-        try {
-            if (log.isDebugEnabled())
-                log.debug("Loading URL " + url);
-            load(url.toURI().toString());
-        } catch (Exception e) {
-            log.error("Invalid URL passed for loading XML: " + url, e);
-            throw new JaffaRulesFrameworkException(JaffaRulesFrameworkException.INVALID_URL, new Object[] {url}, e);
-        }
-    }
-    
-    /** Imports XML.
-     * @param uri the URI of the source file.
-     * @throws JaffaRulesFrameworkException if any internal error occurs.
-     */
-    public void load(String uri) throws JaffaRulesFrameworkException {
-        try {
-            if (log.isDebugEnabled())
-                log.debug("Loading URI " + uri);
-
-            // Create an XML Parser
-            DocumentBuilder parser = createParser();
-
-            // Parse the file and build a Document tree to represent its content
-            Document document = parser.parse(uri);
-
-            // Load the metadata elements within the Document
-            load(document, uri);
-        } catch (Exception e) {
-            log.error("Error in parsing the XML from " + uri, e);
-            throw new JaffaRulesFrameworkException(JaffaRulesFrameworkException.PARSE_ERROR, new Object[]{uri}, e);
-        }
-    }
 
     /**
-     * Imports XML by parsing the metadata elements in the input character stream.
-     * @param characterStream the character stream containing metadata elements.
-     * @param source a unique name for identifying the character stream.
-     * @throws JaffaRulesFrameworkException if any internal error occurs.
-     */
-    public void load(Reader characterStream, String source) throws JaffaRulesFrameworkException {
-        try {
-            if (log.isDebugEnabled())
-                log.debug("Loading from character stream identified by the source " + source);
-
-            // Create an XML Parser
-            DocumentBuilder parser = createParser();
-
-            // Parse the file and build a Document tree to represent its content
-            Document document = parser.parse(new InputSource(characterStream));
-
-            // Load the metadata elements within the Document
-            load(document, source);
-        } catch (Exception e) {
-            log.error("Error in parsing the XML from " + source, e);
-            throw new JaffaRulesFrameworkException(JaffaRulesFrameworkException.PARSE_ERROR, new Object[]{source}, e);
-        }
-    }
-
-    /** Imports XML by parsing the metadata elements in the input Document.
-     * @param document the Document containing metadata elements.
-     * @param source the name of the source file.
-     * @throws JaffaRulesFrameworkException if any internal error occurs.
-     */
-    public void load(Document document, String source) throws JaffaRulesFrameworkException {
-        if (log.isDebugEnabled())
-            log.debug("Loading XML Document from Source " + source);
-        Element[] metadataElements = getChildren(document.getDocumentElement());
-        for (Element metadataElement : metadataElements) {
-            if (ELEMENT_METADATA.equals(metadataElement.getNodeName()))
-                load(metadataElement, source);
-            else
-                log.warn("Unsupported element: " + metadataElement.getNodeName());
-        }
-    }
-    
-    /** Imports XML.
+     * Imports XML.
+     *
      * @param metadataElement the metadata element we are processing within a source.
-     * @param source the name of the source file.
+     * @param source          the name of the source file.
      * @throws JaffaRulesFrameworkException if any internal error occurs.
      */
     public abstract void load(Element metadataElement, String source) throws JaffaRulesFrameworkException;
-    
-    
-    
-    /** Unloads the XML that was imported from the input.
-     * @param f the source file.
-     * @throws JaffaRulesFrameworkException if any internal error occurs.
-     */
-    public void unload(File f) throws JaffaRulesFrameworkException {
-        if (log.isDebugEnabled())
-            log.debug("Unloading file " + f);
-        unload(f.toURI().toString());
-    }
-    
-    /** Unloads the XML that was imported from the input.
-     * @param url the URL of the source file.
-     * @throws JaffaRulesFrameworkException if any internal error occurs.
-     */
-    public void unload(URL url) throws JaffaRulesFrameworkException {
-        try {
-            if (log.isDebugEnabled())
-                log.debug("Unloading URL " + url);
-            unload(url.toURI().toString());
-        } catch (Exception e) {
-            log.error("Invalid URL passed for loading XML: " + url, e);
-            throw new JaffaRulesFrameworkException(JaffaRulesFrameworkException.INVALID_URL, new Object[] {url}, e);
-        }
-    }
-    
-    /** Unloads the XML that was imported from the input.
+
+    /**
+     * Unloads the XML that was imported from the input.
+     *
      * @param uri the URI of the source file.
      * @throws JaffaRulesFrameworkException if any internal error occurs.
      */
     public abstract void unload(String uri) throws JaffaRulesFrameworkException;
-    
-    /** Clears the Repository.
+
+    /**
+     * Clears the Repository.
+     *
      * @throws JaffaRulesFrameworkException if any internal error occurs.
      */
     public abstract void clear() throws JaffaRulesFrameworkException;
-    
-    
+
+
     //---------------------------------------------------------------------------------
     //
     //   CONVENIENCE METHODS
     //
     //----------------------------------------------------------------------------------
-    
-    /** Returns an XML Parser.
-     * @return an XML Parser.
-     * @throws ParserConfigurationException if any error occurs
-     */
-    protected DocumentBuilder createParser() throws ParserConfigurationException {
-        // Create a factory object for creating DOM parsers
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
-        // Specifies that the parser produced by this factory will validate documents as they are parsed.
-        factory.setValidating(false);
 
-        // Now use the factory to create a DOM parser
-        DocumentBuilder parser = factory.newDocumentBuilder();
-
-        // Specifies the EntityResolver to resolve DTD used in XML documents
-        parser.setEntityResolver(new DefaultEntityResolver());
-
-        // Specifies the ErrorHandler to handle warning/error/fatalError conditions
-        parser.setErrorHandler(new DefaultErrorHandler());
-
-        return parser;
-    }
-
-    /** Returns the line number for the input node.
+    /**
+     * Returns the line number for the input node.
+     *
      * @param node A Node.
      * @return the line number for the input node.
      */
@@ -273,28 +115,32 @@ public abstract class AbstractLoader {
         } catch (Exception e) {
             return null;
         }
-        
+
     }
-    
-    /** Returns the child elements within the input element.
+
+    /**
+     * Returns the child elements within the input element.
+     *
      * @param element An Element.
      * @return the child elements within the input element.
      */
     protected Element[] getChildren(Element element) {
-        Collection<Element> elements = new LinkedList<Element>();
+        Collection<Element> elements = new LinkedList<>();
         NodeList nodes = element.getChildNodes();
         if (nodes != null) {
             for (int i = 0; i < nodes.getLength(); i++) {
                 Node node = nodes.item(i);
                 if (node.getNodeType() == Node.ELEMENT_NODE)
                     elements.add((Element) node);
-                
+
             }
         }
         return elements.toArray(new Element[elements.size()]);
     }
-    
-    /** Returns the text within the input element.
+
+    /**
+     * Returns the text within the input element.
+     *
      * @param element An Element.
      * @return the text within the input element.
      */
@@ -313,10 +159,12 @@ public abstract class AbstractLoader {
         }
         return buf != null ? buf.toString().trim() : null;
     }
-    
-    /** Reads the attributes within the input element and adds them to the input Map.
+
+    /**
+     * Reads the attributes within the input element and adds them to the input Map.
+     *
      * @param element An Element.
-     * @param map A Map.
+     * @param map     A Map.
      */
     protected void attributesToMap(Element element, Map<String, String> map) {
         NamedNodeMap attributes = element.getAttributes();
@@ -328,5 +176,5 @@ public abstract class AbstractLoader {
             }
         }
     }
-    
+
 }
