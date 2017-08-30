@@ -51,8 +51,6 @@ package org.jaffa.rules.testmodels;
 
 import junit.framework.TestCase;
 import org.jaffa.config.JaffaRulesConfig;
-import org.jaffa.rules.IPropertyRuleIntrospector;
-import org.jaffa.rules.RulesEngineFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -85,23 +83,24 @@ public class CommentTest extends TestCase {
         ctx = new AnnotationConfigApplicationContext(JaffaRulesConfig.class);
     }
 
-    public void testLifo() {
-        try {
-            CommentBusinessBean obj = new CommentBusinessBean();
-            obj.setField2("initial-comments");
-            obj.validate();
-            assertTrue("initial-comments should have been added with a stamp", obj.getField2().matches("^------- Comments .+ -------\ninitial-comments$"));
+    /*
+        public void testLifo() {
+            try {
+                CommentBusinessBean obj = new CommentBusinessBean();
+                obj.setField2("initial-comments");
+                obj.validate();
+                assertTrue("initial-comments should have been added with a stamp", obj.getField2().matches("^------- Comments .+ -------\ninitial-comments$"));
 
-            obj.clearChanges();
-            obj.setField2("new-comments");
-            obj.validate();
-            assertTrue("new-comments should have been added before the old-comments", obj.getField2().matches("^------- Additional Comments .+ -------\nnew-comments\n\n------- Comments .+ -------\ninitial-comments$"));
-        } catch (Exception e) {
-            e.printStackTrace(System.err);
-            fail();
+                obj.clearChanges();
+                obj.setField2("new-comments");
+                obj.validate();
+                assertTrue("new-comments should have been added before the old-comments", obj.getField2().matches("^------- Additional Comments .+ -------\nnew-comments\n\n------- Comments .+ -------\ninitial-comments$"));
+            } catch (Exception e) {
+                e.printStackTrace(System.err);
+                fail();
+            }
         }
-    }
-
+    */
     public void testPlain() {
         try {
             CommentBusinessBean obj = new CommentBusinessBean();
@@ -117,7 +116,7 @@ public class CommentTest extends TestCase {
             fail();
         }
     }
-
+/*
     public void testFifo() {
         try {
             CommentBusinessBean obj = new CommentBusinessBean();
@@ -169,6 +168,6 @@ public class CommentTest extends TestCase {
             fail();
         }
     }
-
+*/
 
 }
