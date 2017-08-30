@@ -54,7 +54,7 @@ import org.jaffa.rules.JaffaRulesFrameworkException;
 import org.jaffa.rules.dto.ClassMetaDataDto;
 import org.jaffa.rules.dto.PropertyMetaDataDto;
 import org.jaffa.rules.dto.RuleMetaDataDto;
-import org.jaffa.rules.jbossaop.AopXmlLoader;
+import org.jaffa.rules.AopXmlLoader;
 import org.jaffa.rules.meta.MetaDataRepository;
 import org.jaffa.rules.rulemeta.Rule;
 import org.jaffa.rules.rulemeta.RuleRepository;
