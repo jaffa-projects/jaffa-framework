@@ -47,9 +47,9 @@ public class DroolsManagerTest {
         droolsManager.registerDrool(customerResource, "Customer");
 
         //verify
-        assertEquals(" ..\\data\\rules\\testservice\\DEF\\testservice.drl", droolsManager.getDroolsFiles().get(new RuleAgentKey(SERVICE_NAME, VariationContext.DEFAULT_VARIATION)).toString());
+        assertEquals(" ..\\data\\rules\\default\\testservice\\DEF\\testservice.drl", droolsManager.getDroolsFiles().get(new RuleAgentKey(SERVICE_NAME, VariationContext.DEFAULT_VARIATION)).toString());
         //verify
-        assertEquals(" ..\\data\\rules\\testservice\\Customer\\testservice.drl", droolsManager.getDroolsFiles().get(new RuleAgentKey(SERVICE_NAME, "Customer")).toString());
+        assertEquals(" ..\\data\\rules\\default\\testservice\\Customer\\testservice.drl", droolsManager.getDroolsFiles().get(new RuleAgentKey(SERVICE_NAME, "Customer")).toString());
     }
 
     /**
@@ -108,7 +108,7 @@ public class DroolsManagerTest {
 
         //verify
         assertNotNull(droolsManager.getRuleAgents().get(new RuleAgentKey(SERVICE_NAME, VariationContext.DEFAULT_VARIATION)));
-        assertEquals(" ..\\data\\rules\\testservice\\Customer\\testservice.drl ..\\data\\rules\\testservice\\DEF\\testservice.drl", droolsManager.getDroolsFiles().get(new RuleAgentKey(SERVICE_NAME, "Customer")).toString());
+        assertEquals(" ..\\data\\rules\\default\\testservice\\Customer\\testservice.drl ..\\data\\rules\\default\\testservice\\DEF\\testservice.drl", droolsManager.getDroolsFiles().get(new RuleAgentKey(SERVICE_NAME, "Customer")).toString());
     }
 
     /**
@@ -120,5 +120,15 @@ public class DroolsManagerTest {
         assertEquals("Service Name Method Fail", SERVICE_NAME, droolsManager.getServiceName(CORE_DRL_PATH));
         assertEquals("Service Name Method Fail", "workorderservice" , droolsManager.getServiceName("C:\\Documents and Settings\\workorderservice\\Desktop.test.drl"));
         assertNull(droolsManager.getServiceName(null));
+    }
+
+    /**
+     * tests the Module Name retrieval
+     */
+    @Test
+    public void getModuleNameTest(){
+        //verify
+        assertEquals("Service Name Method Fail", "goldesp-mils-17.2.0-SNAPSHOT" , droolsManager.getModuleName("file:\\C:\\apache-tomcat-8.5.16\\webapps\\goldesp-platform-1.0.0-SNAPSHOT\\WEB-INF\\lib\\goldesp-mils-17.2.0-SNAPSHOT.jar!\\META-INF\\rules\\jaffa\\soa\\soaeventservice\\InboundTransactionService.drl"));
+        assertEquals("default",droolsManager.getModuleName(null));
     }
 }

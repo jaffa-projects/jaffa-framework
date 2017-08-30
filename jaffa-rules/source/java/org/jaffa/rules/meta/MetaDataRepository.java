@@ -54,7 +54,6 @@ import org.jaffa.rules.JaffaRulesFrameworkException;
 import org.jaffa.rules.commons.AbstractLoader;
 import org.jaffa.rules.realm.RealmRepository;
 import org.jaffa.util.StringHelper;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.Serializable;
@@ -100,29 +99,6 @@ public class MetaDataRepository extends AbstractLoader {
     public static MetaDataRepository instance() {
         return c_instance;
     }
-
-    /**
-     * Imports XML by parsing the metadata elements in the input Document.
-     * <p/>
-     * NOTE: This override to the method of the parent class ensures that metadata identified
-     * by the source if not reloaded. If a reload() feature is needed, then invoke unload()
-     * before invoking this method.
-     *
-     * @param document the Document containing metadata elements.
-     * @param source   the name of the source file.
-     * @throws JaffaRulesFrameworkException if any internal error occurs.
-     */
-    //@Override
-    @Deprecated
-    /*public void load(Document document, String source) throws JaffaRulesFrameworkException {
-        //Ensure that metadata identified by the source is not reloaded
-        if (!m_classMetaDataListBySource.containsKey(source)) {
-            synchronized (this) {
-                if (!m_classMetaDataListBySource.containsKey(source))
-                    super.load(document, source);
-            }
-        }
-    }*/
 
     /**
      * Imports meta data.

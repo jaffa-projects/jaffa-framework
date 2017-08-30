@@ -37,12 +37,14 @@
     <dependency>
       <groupId>org.springframework.data</groupId>
       <artifactId>spring-data-jpa</artifactId>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.codehaus.janino</groupId>
       <artifactId>janino</artifactId>
       <version>${version.org.codehaus.janino}</version>
+      <scope>provided</scope>
     </dependency>
     <!-- ******************************************************************* -->
     <!-- Provided Libraries                                                  -->
