@@ -46,52 +46,13 @@
  * SUCH DAMAGE.
  * ====================================================================
  */
-
-package org.jaffa.rules;
-
-import junit.framework.TestCase;
-import org.jaffa.config.JaffaRulesConfig;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+package org.jaffa.soa.graph;
 
 /**
- * It is recommened that the variant rules be put after the non-variant rules.
- * If the rules are spread across multiple JAR files, then ensure that the non-variant rules appear before the variant rules.
+ * This is a mock GraphCriteria, since the original class now resides in the JaffaSOA module,
+ * and a dependency cannot be added on that module to avoid cyclic dependencies.
+ * It is to be used for unit-tests only.
+ * NOTE: Do not use this class for production-level code.
  */
-public class VirtualClassTest extends TestCase {
-
-    private ApplicationContext ctx;
-
-    /**
-     * Creates a new Test
-     *
-     * @param name The name of the test case.
-     */
-    public VirtualClassTest(String name) {
-        super(name);
-    }
-
-    /**
-     * Runs the test suite.
-     *
-     * @param args The input args are not used.
-     */
-    public static void main(String[] args) {
-        junit.textui.TestRunner.run(VirtualClassTest.class);
-    }
-
-    protected void setUp() throws Exception {
-        ctx = new AnnotationConfigApplicationContext(JaffaRulesConfig.class);
-    }
-
-
-    public void testVirtualClass() {
-        try {
-            assertEquals(String.class, RulesEngineFactory.getRulesEngine().getPropertyRuleIntrospector("org.jaffa.rules.testmodels.Virtual1", "field1", null).getPropertyType());
-            assertEquals(Long.class, RulesEngineFactory.getRulesEngine().getPropertyRuleIntrospector("org.jaffa.rules.testmodels.Virtual1", "field2", null).getPropertyType());
-        } catch (Exception e) {
-            e.printStackTrace(System.err);
-            fail();
-        }
-    }
+public class GraphCriteria {
 }

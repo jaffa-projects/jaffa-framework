@@ -54,7 +54,7 @@ import org.apache.log4j.Logger;
 import org.jaffa.exceptions.FrameworkException;
 import org.jaffa.presentation.portlet.FormBase;
 import org.jaffa.rules.JaffaRulesFrameworkException;
-import org.jaffa.rules.jbossaop.AopXmlLoader;
+import org.jaffa.rules.AopXmlLoader;
 import org.jaffa.rules.jbossaop.interceptors.IRuleInterceptor;
 import org.jaffa.rules.jbossaop.mixins.Mixin;
 import org.jaffa.rules.meta.ClassMetaData;
