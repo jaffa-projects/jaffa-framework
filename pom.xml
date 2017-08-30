@@ -193,6 +193,7 @@
         <!-- ******************************************************************* -->
         <!-- 3rd Party Libraries Versions                                        -->
         <!-- ******************************************************************* -->
+        <version.com.joilbox>0.8.0.RELEASE</version.com.joilbox>
         <version.bsf>2.4.0</version.bsf>
         <version.com.fasterxml.jackson-annotations>2.3.0</version.com.fasterxml.jackson-annotations>
         <version.com.fasterxml.jackson-core>2.3.0</version.com.fasterxml.jackson-core>
@@ -1449,6 +1450,11 @@
 
     <dependencyManagement>
         <dependencies>
+          <dependency>
+            <groupId>com.jolbox</groupId>
+            <artifactId>bonecp-spring</artifactId>
+            <version>${version.com.joilbox}</version>
+          </dependency>
             <dependency>
                 <groupId>ant-contrib</groupId>
                 <artifactId>ant-contrib</artifactId>
@@ -1761,11 +1767,6 @@
                 <groupId>org.hibernate.javax.persistence</groupId>
                 <artifactId>hibernate-jpa-2.1-api</artifactId>
                 <version>1.0.0.Final</version>
-            </dependency>
-            <dependency>
-                <groupId>org.hibernate.javax.persistence</groupId>
-                <artifactId>hibernate-jpa-2.0-api</artifactId>
-                <version>1.0.1.Final</version>
             </dependency>
             <dependency>
                 <groupId>org.jdom</groupId>
