@@ -193,6 +193,7 @@
         <!-- ******************************************************************* -->
         <!-- 3rd Party Libraries Versions                                        -->
         <!-- ******************************************************************* -->
+        <version.com.google.guava>19.0</version.com.google.guava>
         <version.com.joilbox>0.8.0.RELEASE</version.com.joilbox>
         <version.bsf>2.4.0</version.bsf>
         <version.com.fasterxml.jackson-annotations>2.3.0</version.com.fasterxml.jackson-annotations>
@@ -1500,6 +1501,11 @@
                 <groupId>com.lowagie</groupId>
                 <artifactId>itext</artifactId>
                 <version>${version.com.lowagie.itext}</version>
+            </dependency>
+            <dependency>
+              <groupId>com.google.guava</groupId>
+              <artifactId>guava</artifactId>
+              <version>${version.com.google.guava}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.protobuf</groupId>
