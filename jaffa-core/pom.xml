@@ -96,7 +96,6 @@
         <dependency>
             <groupId>struts</groupId>
             <artifactId>struts</artifactId>
-            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>commons-beanutils</groupId>
