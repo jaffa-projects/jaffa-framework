@@ -52,6 +52,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.jaffa.util.OrderedPathMatchingResourcePatternResolver;
@@ -61,140 +62,144 @@ import org.springframework.core.io.Resource;
  * This class loads the
  * ApplicationRules_global.properties,ApplicationRules_(variation).properties
  * into memory on container startup.
- * 
+ * <p>
  * <p>
  * The cache looks like below given e.g.
- * 
- * {key} | {value} 
- * ------------------- 
- * {global} | {properties of ApplicationRules_global} 
+ * <p>
+ * {key} | {value}
+ * -------------------
+ * {global} | {properties of ApplicationRules_global}
  * {WOL}    | {properties of ApplicationRules_WOL}
- * 
- * 
  */
 public class ApplicationRulesLoader {
 
-	private static final Logger log = Logger.getLogger(ApplicationRulesLoader.class);
+    private static final Logger log = Logger.getLogger(ApplicationRulesLoader.class);
 
-	private static final String APP_RULE_GLOBAL = "global";
+    private static final String APP_RULE_GLOBAL = "global";
 
-	private static final String APP_RULE_NOT_FOUND = "ApplicationRules_*.properties not found in jar!META-INF";
-	private static final String ERROR_READING_APP_RULES = "Error reading jar!META-INF/ApplicationRules_*.properties";
+    private static final String APP_RULE_NOT_FOUND = "ApplicationRules_*.properties not found in jar!META-INF";
+    private static final String ERROR_READING_APP_RULES = "Error reading jar!META-INF/ApplicationRules_*.properties";
 
-	/**
-	 * singleton instance of the ApplicationResourceLoader
-	 */
-	private static ApplicationRulesLoader instance;
+    /**
+     * singleton instance of the ApplicationResourceLoader
+     */
+    private static ApplicationRulesLoader instance;
 
-	/**
-	 * The cache per application rules. 
-	 */
-	private Map<String, Properties> applicationRules = new HashMap<String, Properties>();
+    /**
+     * The cache per application rules.
+     */
+    private Map<String, Properties> applicationRules = new HashMap<String, Properties>();
 
-	/**
-	 * private constructor and it can be only instantiated via getInstance()
-	 * method
-	 */
-	private ApplicationRulesLoader() {
-		/**
-		 * load resources from class jar!/META-INF
-		 * 
-		 * @TODO - Needs to think about adding the load function to load the
-		 *       rules from Data Directory for Rules Editor
-		 */
-		loadApplicationRules();
-	}
+    /**
+     * private constructor and it can be only instantiated via getInstance()
+     * method
+     */
+    private ApplicationRulesLoader() {
+        /**
+         * load resources from class jar!/META-INF
+         *
+         * @TODO - Needs to think about adding the load function to load the
+         *       rules from Data Directory for Rules Editor
+         */
+        loadApplicationRules();
+    }
 
-	/**
-	 * This method will return the instance of the ApplicationRulesLoader.
-	 * 
-	 * @return ApplicationRulesLoader
-	 */
-	public static ApplicationRulesLoader getInstance() {
-		if (instance == null) {
-			instance = new ApplicationRulesLoader();
-			if (log.isDebugEnabled()) {
-				log.debug("Singleton ApplicationRulesLoader Created");
-			}
-		}
-		return instance;
-	}
+    /**
+     * This method will return the instance of the ApplicationRulesLoader.
+     *
+     * @return ApplicationRulesLoader
+     */
+    public static ApplicationRulesLoader getInstance() {
+        if (instance == null) {
+            instance = new ApplicationRulesLoader();
+            if (log.isDebugEnabled()) {
+                log.debug("Singleton ApplicationRulesLoader Created");
+            }
+        }
+        return instance;
+    }
 
-	/**
-	 * @return ApplicationRules_global properties
-	 */
-	public Properties getApplicationRulesGlobal() {
-		return applicationRules.get(APP_RULE_GLOBAL);
-	}
+    /**
+     * @return ApplicationRules_global properties
+     */
+    public Properties getApplicationRulesGlobal() {
+        return applicationRules.get(APP_RULE_GLOBAL);
+    }
 
-	/**
-	 * 
-	 * @param variation
-	 * @return ApplicationRules_{variation} properties
-	 */
-	public Properties getApplicationRulesVariation(String variation) {
-		return applicationRules.get(variation);
-	}
+    /**
+     * @param variation
+     * @return ApplicationRules_{variation} properties
+     */
+    public Properties getApplicationRulesVariation(String variation) {
+        return applicationRules.get(variation);
+    }
 
-	/**
-	 * This will load the ApplicationRules files for global and user variation
-	 * 
-	 */
-	private void loadApplicationRules() {
+    /**
+     * This will load the ApplicationRules files for global and user variation
+     */
+    private void loadApplicationRules() {
 
-		if (log.isDebugEnabled()) {
-			log.debug("ApplicationRulesLoader::loadApplicationRules");
-		}
+        if (log.isDebugEnabled()) {
+            log.debug("ApplicationRulesLoader::loadApplicationRules");
+        }
 
-		OrderedPathMatchingResourcePatternResolver resolver = OrderedPathMatchingResourcePatternResolver.getInstance();
-		try {
+        OrderedPathMatchingResourcePatternResolver resolver = OrderedPathMatchingResourcePatternResolver.getInstance();
+        try {
 
-			Resource[] resources = resolver.getResources("classpath*:META-INF/ApplicationRules_*.properties");
-			if (resources != null) {
-				for (Resource resource : resources) {
+            Resource[] resources = resolver.getResources("classpath*:META-INF/ApplicationRules_*.properties");
+            if (resources != null) {
+                for (Resource resource : resources) {
 
-					if (resource == null) {
-						continue;
-					}
+                    if (resource == null) {
+                        continue;
+                    }
 
-					Properties properties = new Properties();
+                    Properties properties = new Properties();
 
-					// derives variation from resource file name(e.g. global,WOL,BIM)
-					String ruleVariation = resource.getFilename();
+                    // derives variation from resource file name(e.g. global,WOL,BIM)
+                    String ruleVariation = resource.getFilename();
 
-					if (ruleVariation != null && ruleVariation.indexOf("_") > 0) {
-						ruleVariation = ruleVariation.substring(ruleVariation.indexOf("_") + 1);
-					}
-					if (ruleVariation != null && ruleVariation.indexOf(".") > 0) {
-						ruleVariation = ruleVariation.substring(0, ruleVariation.indexOf("."));
-					}
+                    if (ruleVariation != null && ruleVariation.indexOf("_") > 0) {
+                        ruleVariation = ruleVariation.substring(ruleVariation.indexOf("_") + 1);
+                    }
+                    if (ruleVariation != null && ruleVariation.indexOf(".") > 0) {
+                        ruleVariation = ruleVariation.substring(0, ruleVariation.indexOf("."));
+                    }
 
-					loadProperties(resource, properties);
+                    loadProperties(resource, properties);
 
-					if (properties != null && properties.size() > 0) {
-						applicationRules.put(ruleVariation, properties);
-					}
-				}
-			} else {
-				log.error(APP_RULE_NOT_FOUND);
-				throw new RuntimeException(APP_RULE_NOT_FOUND);
-			}
+                    if (properties != null && properties.size() > 0) {
+                        applicationRules.put(ruleVariation, properties);
+                    }
+                }
+            } else {
+                log.error(APP_RULE_NOT_FOUND);
+                throw new RuntimeException(APP_RULE_NOT_FOUND);
+            }
 
-		} catch (IOException e) {
-			log.error(ERROR_READING_APP_RULES, e);
-			throw new RuntimeException(ERROR_READING_APP_RULES, e);
-		}
-	}
+        } catch (IOException e) {
+            log.error(ERROR_READING_APP_RULES, e);
+            throw new RuntimeException(ERROR_READING_APP_RULES, e);
+        }
+    }
 
-	private void loadProperties(Resource resource, Properties properties) throws IOException {
-		if (resource != null) {
-			if (log.isDebugEnabled()) {
-				log.debug("Properties Resource Location: " + resource.getURL());
-			}
-			if (resource != null && resource.getInputStream() != null) {
-				properties.load(resource.getInputStream());
-			}
-		}
-	}
+    private void loadProperties(Resource resource, Properties properties) throws IOException {
+        if (resource != null) {
+            if (log.isDebugEnabled()) {
+                log.debug("Properties Resource Location: " + resource.getURL());
+            }
+            if (resource != null && resource.getInputStream() != null) {
+                properties.load(resource.getInputStream());
+            }
+
+            for (Object property : properties.keySet()) {
+                String envPropertyValue = System.getenv((String) property);
+                if (envPropertyValue != null && !"".equals(envPropertyValue)) {
+                    properties.setProperty((String) property, envPropertyValue);
+                }
+            }
+
+        }
+    }
 
 }
