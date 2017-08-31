@@ -106,7 +106,7 @@ public class TransactionManager implements IManager {
      * {@inheritDoc}
      */
     @Override
-    public void registerXML(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
+    public void registerResource(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
 
         Config config = JAXBHelper.unmarshalConfigFile(Config.class, resource, CONFIGURATION_SCHEMA_FILE);
 
@@ -129,7 +129,7 @@ public class TransactionManager implements IManager {
      * {@inheritDoc}
      */
     @Override
-    public String getXmlFileName() {
+    public String getResourceFileName() {
         return DEFAULT_CONFIGURATION_FILE;
     }
 

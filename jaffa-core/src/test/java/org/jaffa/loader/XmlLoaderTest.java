@@ -24,11 +24,11 @@ public class XmlLoaderTest {
 
     /**
      * initialize defaultContexts and xmlLoader
-     * use mockito to return "components.xml" when getXmlFileName() is invoked
+     * use mockito to return "components.xml" when getResourceFileName() is invoked
      */
     @Before
     public void setup() {
-        when(iManager.getXmlFileName()).thenReturn("components.xml");
+        when(iManager.getResourceFileName()).thenReturn("components.xml");
         xmlLoader.setManager(iManager);
     }
 
@@ -38,7 +38,7 @@ public class XmlLoaderTest {
     @Test
     public void testLoadXmls() throws Exception {
         xmlLoader.loadXmls();
-        verify(iManager).registerXML((Resource) anyObject(), anyString(), anyString());
+        verify(iManager).registerResource((Resource) anyObject(), anyString(), anyString());
     }
 
     /**

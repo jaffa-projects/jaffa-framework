@@ -121,6 +121,25 @@ public class MapRepository<T> implements IRepository<T> {
      * {@inheritDoc}
      */
     @Override
+    public synchronized T queryByVariation(String id, String variation) {
+        if(id!=null) {
+            TreeSet<ContextKey> contextKeysForId = contextKeyCache.get(id);
+            if (contextKeysForId!=null && contextKeysForId.size() > 0) {
+                for (ContextKey contextKey : contextKeysForId) {
+                    if ((contextKey.getVariation() != null && contextKey.getVariation().equals(variation))) {
+                        return repositoryMap.get(contextKey);
+                    }
+
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public synchronized ContextKey findKey(String id){
         if(id!=null) {
             TreeSet<ContextKey> contextKeysForId = contextKeyCache.get(id);
@@ -198,5 +217,19 @@ public class MapRepository<T> implements IRepository<T> {
             myRepository.put(repoKey, query(repoKey));
         }
         return myRepository;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public synchronized Map<String, T> getRepositoryByVariation(String variation){
+        Map<String, T> variationRepository = new HashMap<>();
+        Set<String> repoKeys = contextKeyCache.keySet();
+        for(String repoKey : repoKeys){
+            variationRepository.put(repoKey, queryByVariation(repoKey, variation));
+        }
+        return variationRepository;
     }
 }
