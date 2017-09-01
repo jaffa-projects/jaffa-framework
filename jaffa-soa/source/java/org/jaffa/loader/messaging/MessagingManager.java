@@ -120,7 +120,7 @@ public class MessagingManager implements IManager {
      * @throws IOException
      */
     @Override
-    public void registerXML(Resource resource, String context, String variation)
+    public void registerResource(Resource resource, String context, String variation)
             throws JAXBException, SAXException, IOException {
 
         Config config = JAXBHelper.unmarshalConfigFile(Config.class, resource,
@@ -149,7 +149,7 @@ public class MessagingManager implements IManager {
                     ContextKey contextKey = new ContextKey(filter.getFilterName(), resource.getURI().toString(), variation, context);
                     registerMessageFilter(contextKey, filter);
                 } else {
-                    log.warn("MessagingObject.registerXML, unexpected object: " + o);
+                    log.warn("MessagingObject.registerResource, unexpected object: " + o);
                 }
             }   // for
             checkForQueueAndTopicNamingConflicts();
@@ -354,7 +354,7 @@ public class MessagingManager implements IManager {
     ////////////////////////////////////////////////////////////////////////
 
     @Override
-    public String getXmlFileName() {
+    public String getResourceFileName() {
         return DEFAULT_CONFIGURATION_FILE;
     }
 

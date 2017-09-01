@@ -56,7 +56,7 @@ import javax.xml.bind.JAXBException;
 import java.io.IOException;
 
 /**
- * Interface for xml managers to registerXml and getXmlFileName.
+ * Interface for xml managers to registerXml and getResourceFileName.
  */
 public interface IManager {
 
@@ -69,11 +69,11 @@ public interface IManager {
      * @throws SAXException if xml file is not valid.
      * @throws IOException if resource does not found.
      */
-    void registerXML(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException;
+    void registerResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException;
 
     /**
      * gets the name of xml config file.
      * @return xml config file name
      */
-    String getXmlFileName();
+    String getResourceFileName();
 }

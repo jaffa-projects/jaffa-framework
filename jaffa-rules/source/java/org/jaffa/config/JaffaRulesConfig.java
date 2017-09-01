@@ -52,7 +52,7 @@ import org.jaffa.beans.factory.InitializerFactory;
 import org.jaffa.rules.JaffaRulesFrameworkException;
 import org.jaffa.rules.commons.AopConstants;
 import org.jaffa.rules.initializers.RuleInitializerFactory;
-import org.jaffa.rules.jbossaop.AopXmlLoader;
+import org.jaffa.rules.AopXmlLoader;
 import org.jaffa.rules.rulemeta.DefaultRuleHelper;
 import org.jaffa.rules.rulemeta.IRuleEvaluator;
 import org.jaffa.rules.validators.*;

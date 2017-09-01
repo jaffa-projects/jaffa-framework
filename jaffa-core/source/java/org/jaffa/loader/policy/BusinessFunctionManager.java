@@ -83,7 +83,7 @@ public class BusinessFunctionManager implements IManager {
     private IRepository<BusinessFunction> businessFunctionRepository = new MapRepository<>();
 
     /**
-     * registerXML - Registers the roles into the business function repository from the business-functions.xml files found in META-INF/roles.xml
+     * registerResource - Registers the roles into the business function repository from the business-functions.xml files found in META-INF/roles.xml
      * @param resource the object that contains the xml config file.
      * @param context  key with which config file to be registered.
      * @throws JAXBException
@@ -91,7 +91,7 @@ public class BusinessFunctionManager implements IManager {
      * @throws IOException
      */
     @Override
-    public void registerXML(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
+    public void registerResource(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
         BusinessFunctions businessFunctions = JAXBHelper.unmarshalConfigFile(BusinessFunctions.class, resource, CONFIGURATION_SCHEMA_FILE);
         if (businessFunctions.getBusinessFunction() != null) {
             for (final BusinessFunction businessFunction : businessFunctions.getBusinessFunction()) {
@@ -102,11 +102,11 @@ public class BusinessFunctionManager implements IManager {
     }
 
     /**
-     * getXmlFileName - Returns the default XML file name of the business functions XSD.
+     * getResourceFileName - Returns the default XML file name of the business functions XSD.
      * @return the xml file name
      */
     @Override
-    public String getXmlFileName() {
+    public String getResourceFileName() {
         return DEFAULT_CONFIGURATION_FILE;
     }
 

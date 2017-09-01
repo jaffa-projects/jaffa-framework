@@ -100,8 +100,9 @@ public class DroolsManager {
     public synchronized void registerDrool(Resource resource, String variation) throws IOException {
 
         String serviceName = getServiceName(resource.getURL().getPath());
+        String moduleName = getModuleName(resource.getURL().getPath());
 
-        Path newPath = Paths.get(createDroolDirectoryPath(serviceName,variation) + File.separator + resource.getFilename());
+        Path newPath = Paths.get(createDroolDirectoryPath(moduleName, serviceName,variation) + File.separator + resource.getFilename());
 
         try {
             Files.delete(newPath);
@@ -152,8 +153,10 @@ public class DroolsManager {
     public synchronized void unRegisterDrool(Resource resource, String variation) throws IOException {
 
         String serviceName = getServiceName(resource.getURL().getPath());
+        String moduleName = getModuleName(resource.getURL().getPath());
+
         RuleAgentKey ruleAgentKey = new RuleAgentKey(serviceName, variation);
-        Path newPath = Paths.get(createDroolDirectoryPath(serviceName,variation) + File.separator + resource.getFilename());
+        Path newPath = Paths.get(createDroolDirectoryPath(moduleName, serviceName,variation) + File.separator + resource.getFilename());
 
         try {
             Files.delete(newPath);
@@ -325,14 +328,34 @@ public class DroolsManager {
     }
 
     /**
+     * gets the Module name from the context Path
+     *
+     * @param path
+     * @return module name
+     */
+    public String getModuleName(String path) {
+        try {
+            if (path != null && !"".equals(path)) {
+                String temp = new File(path).getParent();
+                temp = temp.substring(0, temp.indexOf("!" + File.separator + "META-INF" + File.separator + "rules"));
+                return temp.substring(temp.lastIndexOf(File.separator) + 1, temp.length() - 4);
+            }
+        }catch(Exception e){
+            log.error("Error in getting module name from path " + path);
+        }
+
+        return "default";
+    }
+
+    /**
      * creates the drool directory path where drool files to be placed
      * @param serviceName
      * @param variation
      * @return drool Directory path
      * @throws IOException
      */
-    private String createDroolDirectoryPath(String serviceName, String variation) throws IOException {
-        return Files.createDirectories(Paths.get(DROOLS_FILE_DIRECTORY + serviceName + File.separator + variation)).toString();
+    private String createDroolDirectoryPath(String moduleName, String serviceName, String variation) throws IOException {
+        return Files.createDirectories(Paths.get(DROOLS_FILE_DIRECTORY + moduleName + File.separator + serviceName + File.separator + variation)).toString();
     }
 
     /**

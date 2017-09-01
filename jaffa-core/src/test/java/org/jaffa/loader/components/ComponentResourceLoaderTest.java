@@ -62,10 +62,10 @@ import java.util.Set;
 import static org.junit.Assert.*;
 
 /**
- * ComponentXmlLoaderTest - Verifies the Component beans can be loaded from the
+ * ComponentResourceLoaderTest - Verifies the Component beans can be loaded from the
  * ComponentManager implementation.
  */
-public class ComponentXmlLoaderTest {
+public class ComponentResourceLoaderTest {
 
 
     private static AnnotationConfigApplicationContext xmlLoaderConfig =

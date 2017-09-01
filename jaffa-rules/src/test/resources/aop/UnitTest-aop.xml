@@ -91,7 +91,7 @@
         <label condition='bean.field1 == null'>object label to use when field1 is null</label>
         <label condition='bean.field1 != null'>object label to use when field1 is not null</label>
         <label condition='1 == 2'>invalid object label since condition can never be true</label>
-        <foreign-key domainObject='test.rules.SomeForeignClassWithCompositeKey' value='field10,field5'/>
+        <foreign-key domainObject='org.jaffa.rules.testmodels.SomeForeignClassWithCompositeKey' value='field10,field5'/>
         <property name="field1">
             <initialize>value1</initialize>
             <label condition='bean.field1 == null'>label to use when field1 is null</label>
@@ -140,7 +140,7 @@
             <max-length>5,2</max-length>
         </property>
         <property name="field10">
-            <foreign-key domainObject='test.rules.SomeForeignClass' condition='bean.field1 != null'/>
+            <foreign-key domainObject='org.jaffa.rules.testmodels.SomeForeignClass' condition='bean.field1 != null'/>
             <generic-foreign-key tableName='TABLEA' fieldName='FIELD1' condition='bean.field1 == null'/>
         </property>
         <property name="field11">
@@ -328,7 +328,7 @@
         </property>
     </metadata>
 
-    <metadata tag="jaffa.rules" class="org.jaffa.rules.testmodels.Child2" extends-class='test.rules.Parent'
+    <metadata tag="jaffa.rules" class="org.jaffa.rules.testmodels.Child2" extends-class='org.jaffa.rules.testmodels.Parent'
               execution-realm="business">
         <!-- Inherit object-level rules -->
         <super/>
@@ -341,14 +341,14 @@
         </property>
 
         <!-- Extend a property on the same class -->
-        <property name="field3" extends-class='test.rules.Child2' extends-property='field2'>
+        <property name="field3" extends-class='org.jaffa.rules.testmodels.Child2' extends-property='field2'>
             <super/>
         </property>
 
         <!-- The foreign-key rule can only be executed when the class is in the 'business' realm -->
         <property name="field4">
             <label value='Child2Field4'/>
-            <foreign-key domainObject='test.rules.SomeForeignClass'/>
+            <foreign-key domainObject='org.jaffa.rules.testmodels.SomeForeignClass'/>
         </property>
 
         <!-- Undefined properties will be inherited from the base class -->
@@ -360,7 +360,7 @@
         </property>
     </metadata>
 
-    <metadata tag="jaffa.rules" class="org.jaffa.rules.testmodels.Child3" extends-class='test.rules.Child2'>
+    <metadata tag="jaffa.rules" class="org.jaffa.rules.testmodels.Child3" extends-class='org.jaffa.rules.testmodels.Child2'>
         <!-- Inherit all the properties from the base class -->
         <!-- The object-level rules will not be inherited, since we are not specifying <super/> -->
         <!-- Only the non-realm rules of Child2 will be inherited, since we have not specified any execution-realm for Child3 -->
@@ -425,7 +425,7 @@
     <!-- Setup the properties of CommentBean as comments -->
     <!-- However, since the execution-realm is not business, the values for the properties will not be converted -->
     <metadata tag="jaffa.rules" class="org.jaffa.rules.testmodels.CommentBean"
-              extends-class='test.rules.CommentBusinessBean'>
+              extends-class='org.jaffa.rules.testmodels.CommentBusinessBean'>
     </metadata>
 
     <!-- Define a Virtual Class -->
@@ -441,7 +441,7 @@
     </metadata>
 
     <metadata tag="jaffa.rules" class="org.jaffa.rules.testmodels.SomeGraphCriteria"
-              extends-class='test.rules.Strings1'>
+              extends-class='org.jaffa.rules.testmodels.Strings1'>
         <!-- This should inherit only those rules which are allowed by the realm -->
         <super/>
 

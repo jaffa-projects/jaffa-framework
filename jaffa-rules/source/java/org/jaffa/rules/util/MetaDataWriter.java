@@ -51,193 +51,195 @@ package org.jaffa.rules.util;
 import org.apache.log4j.Logger;
 import org.jaffa.exceptions.FrameworkException;
 import org.jaffa.rules.JaffaRulesFrameworkException;
-import org.jaffa.rules.dto.*;
+import org.jaffa.rules.dto.ClassMetaDataDto;
+import org.jaffa.rules.dto.PropertyMetaDataDto;
+import org.jaffa.rules.dto.RuleMetaDataDto;
+import org.jaffa.rules.AopXmlLoader;
 import org.jaffa.rules.meta.MetaDataRepository;
 import org.jaffa.rules.rulemeta.Rule;
 import org.jaffa.rules.rulemeta.RuleRepository;
 import org.jaffa.util.LabelHelper;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.OutputKeys;
-import java.io.*;
+import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A helper class to interact with meta data.
  */
+@Deprecated
 public class MetaDataWriter {
 
-	private static Logger log = Logger.getLogger(MetaDataWriter.class);
+    private static Logger log = Logger.getLogger(MetaDataWriter.class);
 
-	/**
-	 * Writes the supplied meta data into the supplied source file
-	 */
-	public static void write(ClassMetaDataDto cmd) throws MetaDataWriterException {
-		if (cmd.getSourceFileName()==null){
-			log.error("No source folder was supplied for meta data export.");
-			throw new MetaDataWriterException(MetaDataWriterException.SOURCE_NOT_FOUND);
-		}
+    /**
+     * Writes the supplied meta data into the supplied source file
+     */
+    public static void write(ClassMetaDataDto cmd) throws MetaDataWriterException {
+        if (cmd.getSourceFileName() == null) {
+            log.error("No source folder was supplied for meta data export.");
+            throw new MetaDataWriterException(MetaDataWriterException.SOURCE_NOT_FOUND);
+        }
 
-		Document document = null;
-		try{
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
+        Document document = null;
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
 
-			document = builder.newDocument();
-	
-		} catch ( javax.xml.parsers.ParserConfigurationException dbe){
-			log.error("No source folder was supplied for meta data export.");
-			throw new MetaDataWriterException(MetaDataWriterException.PARSE_ERROR, null, dbe);
-		}
-			
-		Element aop = document.createElement("aop");
-		Element metadata = document.createElement("metadata");
-		metadata.setAttribute("tag", "jaffa.rules");
-		metadata.setAttribute("class", cmd.getName());
-		if (cmd.getExecutionRealm()!=null && !cmd.getExecutionRealm().equals(""))
-			metadata.setAttribute("execution-realm", cmd.getExecutionRealm());
-		if (cmd.getExtendsClass()!=null && !cmd.getExtendsClass().equals(""))
-			metadata.setAttribute("extends-class", cmd.getExtendsClass());
-		if (cmd.getLanguage()!=null && !cmd.getLanguage().equals(""))
-			metadata.setAttribute("language", cmd.getLanguage());
-		if (cmd.getCondition() != null && !cmd.getCondition().equals(""))
-			metadata.setAttribute("condition", cmd.getCondition());
+            document = builder.newDocument();
 
-		List<RuleMetaDataDto> classRules = cmd.getRules();
-		if (classRules != null) {
-			for (RuleMetaDataDto classRule : classRules) {
-				Rule ruleInfo = RuleRepository.instance().getRuleByName(classRule.getRuleName());
-				Element propertyRule = document.createElement(classRule.getRuleName());
-				Map<String, String> params = classRule.getParameters();
-				Boolean customProcess = false;
-				//If label rule contains a token and a tokenValue then update applicationResources with the new token value
-				if (classRule.getRuleName().equals("label")){
-					String token = null, value = null;
-					if (params != null) {
-						for (Map.Entry<String, String> param : params.entrySet()) {
-							if (param.getKey().equals("token")){
-								token = param.getValue();
-							}
-							if (param.getKey().equals("tokenValue")){
-								value = param.getValue();
-							}
-						}
-					}
-					if (token!=null && value!=null){
-						try {
-							LabelHelper.setLabel(token, value);
-						} catch (FrameworkException e) {
-							log.debug(e.getLocalizedMessage());
-						}
-						customProcess=true;
-					}
-				} 
-				if (!customProcess){
-					if (params != null) {
-						for (Map.Entry<String, String> param : params.entrySet()) {
-							if (ruleInfo.getTextParameter()!=null && ruleInfo.getTextParameter().equals(param.getKey())){
-								propertyRule.setTextContent(param.getValue());
-							}else{
-								propertyRule.setAttribute(param.getKey(), param.getValue());
-							}
-						}
-					}
-					metadata.appendChild(propertyRule);
-				}
-			}
-		}
+        } catch (javax.xml.parsers.ParserConfigurationException dbe) {
+            log.error("No source folder was supplied for meta data export.");
+            throw new MetaDataWriterException(MetaDataWriterException.PARSE_ERROR, null, dbe);
+        }
 
-		List<PropertyMetaDataDto> fields = cmd.getProperties();
-		List<String> processedProperties = new LinkedList<String>();
-		if (fields != null) {
-			for (PropertyMetaDataDto field : fields) {
-				if (processedProperties.indexOf(field.getPropertyName().toLowerCase())>=0){
-					log.error("Property has been defined multiple times: " + field.getPropertyName());
-					throw new MetaDataWriterException(MetaDataWriterException.DUPLICATE_PROPERTY);
-				}
-				processedProperties.add(field.getPropertyName().toLowerCase());
-				
-				Element property = document.createElement("property");
-				property.setAttribute("name", field.getPropertyName());
-				if (field.getExtendsProperty()!=null && !field.getExtendsProperty().equals(""))
-					metadata.setAttribute("extends-property", field.getExtendsProperty());
-				if (field.getExtendsClass()!=null && !field.getExtendsClass().equals(""))
-					metadata.setAttribute("extends-class", field.getExtendsClass());
-				if (field.getLanguage()!=null && !field.getLanguage().equals(""))
-					metadata.setAttribute("language", field.getLanguage());
-				if (field.getCondition() != null && !field.getCondition().equals(""))
-					property.setAttribute("condition", field.getCondition());
+        Element aop = document.createElement("aop");
+        Element metadata = document.createElement("metadata");
+        metadata.setAttribute("tag", "jaffa.rules");
+        metadata.setAttribute("class", cmd.getName());
+        if (cmd.getExecutionRealm() != null && !cmd.getExecutionRealm().equals(""))
+            metadata.setAttribute("execution-realm", cmd.getExecutionRealm());
+        if (cmd.getExtendsClass() != null && !cmd.getExtendsClass().equals(""))
+            metadata.setAttribute("extends-class", cmd.getExtendsClass());
+        if (cmd.getLanguage() != null && !cmd.getLanguage().equals(""))
+            metadata.setAttribute("language", cmd.getLanguage());
+        if (cmd.getCondition() != null && !cmd.getCondition().equals(""))
+            metadata.setAttribute("condition", cmd.getCondition());
 
-				List<RuleMetaDataDto> rules = field.getRules();
-				if (rules != null) {
-					for (RuleMetaDataDto rule : rules) {
-						Rule ruleInfo = RuleRepository.instance().getRuleByName(rule.getRuleName());
-						Element propertyRule = document.createElement(rule.getRuleName());
-						Map<String, String> params = rule.getParameters();
-						if (params != null) {
-							for (Map.Entry<String, String> param : params.entrySet()) {
-								if (ruleInfo.getTextParameter()!=null && ruleInfo.getTextParameter().equals(param.getKey())){
-									propertyRule.setTextContent(param.getValue());
-								}else{
-									propertyRule.setAttribute(param.getKey(), param.getValue());
-								}
-							}
-						}
-						property.appendChild(propertyRule);
-					}
-				}
-				metadata.appendChild(property);
-			}
-		}
+        List<RuleMetaDataDto> classRules = cmd.getRules();
+        if (classRules != null) {
+            for (RuleMetaDataDto classRule : classRules) {
+                Rule ruleInfo = RuleRepository.instance().getRuleByName(classRule.getRuleName());
+                Element propertyRule = document.createElement(classRule.getRuleName());
+                Map<String, String> params = classRule.getParameters();
+                Boolean customProcess = false;
+                //If label rule contains a token and a tokenValue then update applicationResources with the new token value
+                if (classRule.getRuleName().equals("label")) {
+                    String token = null, value = null;
+                    if (params != null) {
+                        for (Map.Entry<String, String> param : params.entrySet()) {
+                            if (param.getKey().equals("token")) {
+                                token = param.getValue();
+                            }
+                            if (param.getKey().equals("tokenValue")) {
+                                value = param.getValue();
+                            }
+                        }
+                    }
+                    if (token != null && value != null) {
+                        try {
+                            LabelHelper.setLabel(token, value);
+                        } catch (FrameworkException e) {
+                            log.debug(e.getLocalizedMessage());
+                        }
+                        customProcess = true;
+                    }
+                }
+                if (!customProcess) {
+                    if (params != null) {
+                        for (Map.Entry<String, String> param : params.entrySet()) {
+                            if (ruleInfo.getTextParameter() != null && ruleInfo.getTextParameter().equals(param.getKey())) {
+                                propertyRule.setTextContent(param.getValue());
+                            } else {
+                                propertyRule.setAttribute(param.getKey(), param.getValue());
+                            }
+                        }
+                    }
+                    metadata.appendChild(propertyRule);
+                }
+            }
+        }
 
-		aop.appendChild(metadata);
-		document.appendChild(aop);
+        List<PropertyMetaDataDto> fields = cmd.getProperties();
+        List<String> processedProperties = new LinkedList<String>();
+        if (fields != null) {
+            for (PropertyMetaDataDto field : fields) {
+                if (processedProperties.indexOf(field.getPropertyName().toLowerCase()) >= 0) {
+                    log.error("Property has been defined multiple times: " + field.getPropertyName());
+                    throw new MetaDataWriterException(MetaDataWriterException.DUPLICATE_PROPERTY);
+                }
+                processedProperties.add(field.getPropertyName().toLowerCase());
 
-		File file = null;
-		try {
-			TransformerFactory transformerFactory = TransformerFactory.newInstance();
-			Transformer transformer = transformerFactory.newTransformer();
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-			DOMSource source = new DOMSource(document);
-			file = new File(new URI(cmd.getSourceFileName()));
-			log.debug("Writing aop file to: " + file.getAbsolutePath());
-			File parentDir = file.getParentFile();
-		    if(! parentDir.exists()) 
-		        parentDir.mkdirs();
-			StreamResult result = new StreamResult(file);
-			transformer.transform(source, result);
-		} catch (javax.xml.transform.TransformerException te){
-			log.error("Error writing xml document into file.");
-			throw new MetaDataWriterException(MetaDataWriterException.XML_PARSE_ERROR, null, te);
-		} catch (URISyntaxException se) {
-			log.error("Source path could not be converted to URI");
-			throw new MetaDataWriterException(MetaDataWriterException.SOURCE_NOT_FOUND, null, se);
-		}
-		
-		try {
-			MetaDataRepository.instance().unload(file);
-			MetaDataRepository.instance().load(file);
-		} catch (JaffaRulesFrameworkException jrfe){
-			log.error("Error loading/unloading class meta data from file.");
-			throw new MetaDataWriterException(MetaDataWriterException.FILE_ERROR, null, jrfe);
-		}
+                Element property = document.createElement("property");
+                property.setAttribute("name", field.getPropertyName());
+                if (field.getExtendsProperty() != null && !field.getExtendsProperty().equals(""))
+                    metadata.setAttribute("extends-property", field.getExtendsProperty());
+                if (field.getExtendsClass() != null && !field.getExtendsClass().equals(""))
+                    metadata.setAttribute("extends-class", field.getExtendsClass());
+                if (field.getLanguage() != null && !field.getLanguage().equals(""))
+                    metadata.setAttribute("language", field.getLanguage());
+                if (field.getCondition() != null && !field.getCondition().equals(""))
+                    property.setAttribute("condition", field.getCondition());
 
-	}
+                List<RuleMetaDataDto> rules = field.getRules();
+                if (rules != null) {
+                    for (RuleMetaDataDto rule : rules) {
+                        Rule ruleInfo = RuleRepository.instance().getRuleByName(rule.getRuleName());
+                        Element propertyRule = document.createElement(rule.getRuleName());
+                        Map<String, String> params = rule.getParameters();
+                        if (params != null) {
+                            for (Map.Entry<String, String> param : params.entrySet()) {
+                                if (ruleInfo.getTextParameter() != null && ruleInfo.getTextParameter().equals(param.getKey())) {
+                                    propertyRule.setTextContent(param.getValue());
+                                } else {
+                                    propertyRule.setAttribute(param.getKey(), param.getValue());
+                                }
+                            }
+                        }
+                        property.appendChild(propertyRule);
+                    }
+                }
+                metadata.appendChild(property);
+            }
+        }
+
+        aop.appendChild(metadata);
+        document.appendChild(aop);
+
+        File file = null;
+        try {
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+            DOMSource source = new DOMSource(document);
+            file = new File(new URI(cmd.getSourceFileName()));
+            log.debug("Writing aop file to: " + file.getAbsolutePath());
+            File parentDir = file.getParentFile();
+            if (!parentDir.exists())
+                parentDir.mkdirs();
+            StreamResult result = new StreamResult(file);
+            transformer.transform(source, result);
+        } catch (javax.xml.transform.TransformerException te) {
+            log.error("Error writing xml document into file.");
+            throw new MetaDataWriterException(MetaDataWriterException.XML_PARSE_ERROR, null, te);
+        } catch (URISyntaxException se) {
+            log.error("Source path could not be converted to URI");
+            throw new MetaDataWriterException(MetaDataWriterException.SOURCE_NOT_FOUND, null, se);
+        }
+
+        try {
+            MetaDataRepository.instance().unload(file.toURI().toString());
+            new AopXmlLoader(Collections.singletonList(file.toString().toString()));
+        } catch (JaffaRulesFrameworkException jrfe) {
+            log.error("Error loading/unloading class meta data from file.");
+            throw new MetaDataWriterException(MetaDataWriterException.FILE_ERROR, null, jrfe);
+        }
+
+    }
 
 }

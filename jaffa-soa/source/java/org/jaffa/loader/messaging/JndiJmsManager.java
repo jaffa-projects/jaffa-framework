@@ -107,7 +107,7 @@ public class JndiJmsManager implements IManager {
      * @throws IOException
      */
     @Override
-    public void registerXML(Resource resource, String context, String variation)
+    public void registerResource(Resource resource, String context, String variation)
             throws JAXBException, SAXException, IOException {
         JndiConfig config = JAXBHelper.unmarshalConfigFile(JndiConfig.class, resource,
                 JMS_JNDI_CONFIGURATION_SCHEMA_FILE);
@@ -117,7 +117,7 @@ public class JndiJmsManager implements IManager {
     }
 
     @Override
-    public String getXmlFileName() {
+    public String getResourceFileName() {
         return jmsJndiConfigurationFile;
     }
 

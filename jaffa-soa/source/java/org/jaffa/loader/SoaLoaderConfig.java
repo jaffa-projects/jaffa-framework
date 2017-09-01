@@ -74,10 +74,10 @@ public class SoaLoaderConfig {
 	/*************  Transaction Manager    **************/
 	/****************************************************/
     @Bean
-    public XmlLoader<TransactionManager> transactionManagerXmlLoader() {
-        XmlLoader<TransactionManager> transactionManagerXmlLoader = new XmlLoader<TransactionManager>() ;
-        transactionManagerXmlLoader.setManager(transactionManager());
-        return  transactionManagerXmlLoader;
+    public ResourceLoader<TransactionManager> transactionManagerXmlLoader() {
+        ResourceLoader<TransactionManager> transactionManagerResourceLoader = new ResourceLoader<TransactionManager>() ;
+        transactionManagerResourceLoader.setManager(transactionManager());
+        return transactionManagerResourceLoader;
     }
 
     @Bean
@@ -103,10 +103,10 @@ public class SoaLoaderConfig {
 	/*************   Soa Event Manager     **************/
 	/****************************************************/
     @Bean
-    public XmlLoader<SoaEventManager> soaEventManagerXmlLoader() {
-        XmlLoader<SoaEventManager> soaEventManagerXmlLoader = new XmlLoader<SoaEventManager>() ;
-        soaEventManagerXmlLoader.setManager(soaEventManager());
-        return  soaEventManagerXmlLoader;
+    public ResourceLoader<SoaEventManager> soaEventManagerXmlLoader() {
+        ResourceLoader<SoaEventManager> soaEventManagerResourceLoader = new ResourceLoader<SoaEventManager>() ;
+        soaEventManagerResourceLoader.setManager(soaEventManager());
+        return soaEventManagerResourceLoader;
     }
 
     @Bean
@@ -121,11 +121,11 @@ public class SoaLoaderConfig {
      * @return the messaging manager's XML loader
      */
     @Bean
-    public XmlLoader<MessagingManager> messagingManagerXmlLoader() {
-        XmlLoader<MessagingManager> messagingManagerXmlLoader =
-                new XmlLoader<>() ;
-        messagingManagerXmlLoader.setManager(messagingManager());
-        return messagingManagerXmlLoader;
+    public ResourceLoader<MessagingManager> messagingManagerXmlLoader() {
+        ResourceLoader<MessagingManager> messagingManagerResourceLoader =
+                new ResourceLoader<>() ;
+        messagingManagerResourceLoader.setManager(messagingManager());
+        return messagingManagerResourceLoader;
     }
 
     /**
@@ -150,10 +150,10 @@ public class SoaLoaderConfig {
      * @return
      */
     @Bean
-    public XmlLoader<SchedulerManager> schedulerManagerXmlLoader() {
-        XmlLoader<SchedulerManager> schedulerManagerXmlLoader = new XmlLoader<>();
-        schedulerManagerXmlLoader.setManager(schedulerManager());
-        return schedulerManagerXmlLoader;
+    public ResourceLoader<SchedulerManager> schedulerManagerXmlLoader() {
+        ResourceLoader<SchedulerManager> schedulerManagerResourceLoader = new ResourceLoader<>();
+        schedulerManagerResourceLoader.setManager(schedulerManager());
+        return schedulerManagerResourceLoader;
     }
 
     /**

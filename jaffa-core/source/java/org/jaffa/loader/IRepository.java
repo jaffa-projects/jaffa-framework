@@ -117,4 +117,20 @@ public interface IRepository<T> {
      * @return Map
      */
     Map<String, T> getMyRepository();
+
+    /**
+     * Returns the repository associated with the variation
+     * @param variation
+     * @return
+     */
+    public Map<String, T> getRepositoryByVariation(String variation);
+
+
+    /**
+     * Returns Repository value for the passed Id in the context of variation
+     * @param id
+     * @param variation
+     * @return
+     */
+    public T queryByVariation(String id, String variation);
 }

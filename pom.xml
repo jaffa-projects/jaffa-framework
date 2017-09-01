@@ -28,42 +28,11 @@
         with advanced scheduling and queue sub-systems.
     </description>
     <url>http://jaffa.sourceforge.net/</url>
-    <inceptionYear>2015</inceptionYear>
+    <inceptionYear>2003</inceptionYear>
 
     <properties>
-        <!--<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>-->
-        <!--<spring.version>4.3.2.RELEASE</spring.version>-->
-        <!--<spring.jpa.version>1.9.4.RELEASE</spring.jpa.version>-->
-        <!--<spring.data.commons.version>1.11.4.RELEASE</spring.data.commons.version>-->
-        <!--<spring.data.commons.core.version>1.4.1.RELEASE</spring.data.commons.core.version>-->
-        <!--<spring.security.version>3.2.5.RELEASE</spring.security.version>-->
-        <!--<spring.jaxws.version>1.9</spring.jaxws.version>-->
-        <!--<xbean-spring>3.16</xbean-spring>-->
-        <!--<commons-logging>1.0.4</commons-logging>-->
-        <!--<log4j>1.2.17</log4j>-->
-        <!--<slf4j>1.7.18</slf4j>-->
-        <!--<slf4j-api>1.7.18</slf4j-api>-->
-        <!--<junit>4.7</junit>-->
-        <!--<mockito>1.9.5</mockito>-->
-        <!--<ehCache>2.8.4</ehCache>-->
         <hibernate.version>3.6.10.Final</hibernate.version>
         <ignite.version>1.4.0</ignite.version>
-        <!--<hibernateCommons>3.2.0.Final</hibernateCommons>-->
-        <!--<commons-logging-version>1.0.4</commons-logging-version>-->
-        <!--<journalVersion>1.0.0</journalVersion>-->
-        <!--<chronicleVersion>2.1.4</chronicleVersion>-->
-        <!--<quartzVersion>1.6.2</quartzVersion>-->
-        <!--<activemqVersion>5.13.4</activemqVersion>-->
-        <!--<strutsVersion>1.2.7</strutsVersion>-->
-        <!--<javaxMailVersion>1.4.7</javaxMailVersion>-->
-        <!--<javaxServletVersion>3.1.0</javaxServletVersion>-->
-        <!--<awakeSqlVersion>1.0.5</awakeSqlVersion>-->
-        <!--<oracleVersion>11.2.0.3.0</oracleVersion>-->
-        <!--<jaffaJdbcplusVersion>6.0.0.Final</jaffaJdbcplusVersion>-->
-        <!--<xercesVersion>2.2.1</xercesVersion>-->
-        <!--<beanshellVersion>2.0b5</beanshellVersion>-->
-        <!--<geronimoJmsVersion>1.1.1</geronimoJmsVersion>-->
-        <!--<saxParserVersion>2.9.0</saxParserVersion>-->
 
         <!-- ******************************************************************* -->
         <!-- Jaffa Version                                                       -->
@@ -74,7 +43,7 @@
         <!-- ******************************************************************* -->
         <!-- UI Source Directory                                                 -->
         <!-- ******************************************************************* -->
-	    <ui.sourcedir>source/html</ui.sourcedir>
+	      <ui.sourcedir>source/html</ui.sourcedir>
 	
         <!-- ******************************************************************* -->
         <!-- JAVA Compiler Options                                               -->
@@ -104,11 +73,6 @@
         <application.data.directory>${user.home}/${appname}/data</application.data.directory>
         <product.name>JAFFA</product.name>
         <product.instance>JAFFA</product.instance>
-        <SYVE_REQUIRED_VERSION>6.0.0</SYVE_REQUIRED_VERSION>
-        <APP.HOST>localhost</APP.HOST>
-        <APP.PORT>8080</APP.PORT>
-        <LOCAL.ID></LOCAL.ID>
-        <ADMIN.USERID></ADMIN.USERID>
         <product.server.id></product.server.id>
 
         <!-- ******************************************************************* -->
@@ -187,12 +151,14 @@
         <!-- ******************************************************************* -->
         <!-- maven-enforcer-plugin                                               -->
         <!-- ******************************************************************* -->
-        <maven.min.version>3.0.4</maven.min.version>
+        <maven.min.version>3.3.9</maven.min.version>
         <jdk.min.version>1.7</jdk.min.version>
 
         <!-- ******************************************************************* -->
         <!-- 3rd Party Libraries Versions                                        -->
         <!-- ******************************************************************* -->
+        <version.com.google.guava>19.0</version.com.google.guava>
+        <version.com.joilbox>0.8.0.RELEASE</version.com.joilbox>
         <version.bsf>2.4.0</version.bsf>
         <version.com.fasterxml.jackson-annotations>2.3.0</version.com.fasterxml.jackson-annotations>
         <version.com.fasterxml.jackson-core>2.3.0</version.com.fasterxml.jackson-core>
@@ -350,12 +316,6 @@
         <url>http://jaffa.sourceforge.net</url>
     </organization>
 
-    <!--
-    <issueManagement>
-      <system>Tracker Sourceforge.net</system>
-      <url>http://sourceforge.net/tracker/?group_id=39497</url>
-    </issueManagement>
-    -->
 
     <scm>
         <connection>scm:svn:https://svn/repos/jaffa/trunk/</connection>
@@ -1449,6 +1409,11 @@
 
     <dependencyManagement>
         <dependencies>
+          <dependency>
+            <groupId>com.jolbox</groupId>
+            <artifactId>bonecp-spring</artifactId>
+            <version>${version.com.joilbox}</version>
+          </dependency>
             <dependency>
                 <groupId>ant-contrib</groupId>
                 <artifactId>ant-contrib</artifactId>
@@ -1494,6 +1459,11 @@
                 <groupId>com.lowagie</groupId>
                 <artifactId>itext</artifactId>
                 <version>${version.com.lowagie.itext}</version>
+            </dependency>
+            <dependency>
+              <groupId>com.google.guava</groupId>
+              <artifactId>guava</artifactId>
+              <version>${version.com.google.guava}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.protobuf</groupId>
@@ -1761,11 +1731,6 @@
                 <groupId>org.hibernate.javax.persistence</groupId>
                 <artifactId>hibernate-jpa-2.1-api</artifactId>
                 <version>1.0.0.Final</version>
-            </dependency>
-            <dependency>
-                <groupId>org.hibernate.javax.persistence</groupId>
-                <artifactId>hibernate-jpa-2.0-api</artifactId>
-                <version>1.0.1.Final</version>
             </dependency>
             <dependency>
                 <groupId>org.jdom</groupId>

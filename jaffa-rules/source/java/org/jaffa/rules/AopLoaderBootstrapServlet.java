@@ -1,8 +1,7 @@
-package org.jaffa.rules.jbossaop;
+package org.jaffa.rules;
 
 import com.google.common.base.Strings;
 import org.apache.log4j.Logger;
-import org.jaffa.rules.JaffaRulesFrameworkException;
 
 import javax.servlet.http.HttpServlet;
 import java.util.Arrays;

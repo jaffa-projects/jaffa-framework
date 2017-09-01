@@ -161,25 +161,26 @@ public class VariationTest extends TestCase {
         }
     }
 
-    public void testUriMatchingVariation() {
-        try {
-            VariationBean obj = new VariationBean();
+    /*
+        public void testUriMatchingVariation() {
+            try {
+                VariationBean obj = new VariationBean();
 
-            // This will pickup the rules defined in a MetaData file having a mapping for it's URI with a comma-separated list of variations
-            VariationContext.setVariation("VAR1");
-            assertTrue("Field1 should have been hidden for variation VAR1", RulesEngineFactory.getRulesEngine().getPropertyRuleIntrospector(obj.getClass().getName(), "field1", obj).isHidden());
+                // This will pickup the rules defined in a MetaData file having a mapping for it's URI with a comma-separated list of variations
+                VariationContext.setVariation("VAR1");
+                assertTrue("Field1 should have been hidden for variation VAR1", RulesEngineFactory.getRulesEngine().getPropertyRuleIntrospector(obj.getClass().getName(), "field1", obj).isHidden());
 
-            VariationContext.setVariation("VAR2");
-            assertTrue("Field1 should have been hidden for variation VAR2", RulesEngineFactory.getRulesEngine().getPropertyRuleIntrospector(obj.getClass().getName(), "field1", obj).isHidden());
+                VariationContext.setVariation("VAR2");
+                assertTrue("Field1 should have been hidden for variation VAR2", RulesEngineFactory.getRulesEngine().getPropertyRuleIntrospector(obj.getClass().getName(), "field1", obj).isHidden());
 
-            VariationContext.setVariation("VAR3");
-            assertTrue("Field1 should not have been hidden for variation VAR3", !RulesEngineFactory.getRulesEngine().getPropertyRuleIntrospector(obj.getClass().getName(), "field1", obj).isHidden());
-        } catch (Exception e) {
-            e.printStackTrace(System.err);
-            fail();
+                VariationContext.setVariation("VAR3");
+                assertTrue("Field1 should not have been hidden for variation VAR3", !RulesEngineFactory.getRulesEngine().getPropertyRuleIntrospector(obj.getClass().getName(), "field1", obj).isHidden());
+            } catch (Exception e) {
+                e.printStackTrace(System.err);
+                fail();
+            }
         }
-    }
-
+    */
     public void testOverridingUriMatchingVariation() {
         try {
             VariationBean obj = new VariationBean();

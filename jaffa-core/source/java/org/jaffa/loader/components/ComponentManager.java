@@ -101,7 +101,7 @@ public class ComponentManager implements IManager {
      * ComponentDefinitionException
      */
     @Override
-    public void registerXML(Resource resource, String context, String variation)
+    public void registerResource(Resource resource, String context, String variation)
             throws JAXBException, SAXException, IOException {
 
         Components components = JAXBHelper.unmarshalConfigFile(Components.class,
@@ -160,7 +160,7 @@ public class ComponentManager implements IManager {
     ////////////////////////////////////////////////////////////////////////
 
     @Override
-    public String getXmlFileName() {
+    public String getResourceFileName() {
         return configurationFile;
     }
 

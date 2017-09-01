@@ -1,7 +1,6 @@
-package org.jaffa.rules.jbossaop;
+package org.jaffa.rules;
 
 import org.apache.log4j.Logger;
-import org.jaffa.rules.JaffaRulesFrameworkException;
 import org.jaffa.rules.commons.AbstractLoader;
 import org.jaffa.rules.commons.AopConstants;
 import org.jaffa.util.FileHelper;

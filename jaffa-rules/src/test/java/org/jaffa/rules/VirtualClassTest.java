@@ -84,10 +84,11 @@ public class VirtualClassTest extends TestCase {
         ctx = new AnnotationConfigApplicationContext(JaffaRulesConfig.class);
     }
 
+
     public void testVirtualClass() {
         try {
-            assertEquals(String.class, RulesEngineFactory.getRulesEngine().getPropertyRuleIntrospector("test.rules.Virtual1", "field1", null).getPropertyType());
-            assertEquals(Long.class, RulesEngineFactory.getRulesEngine().getPropertyRuleIntrospector("test.rules.Virtual1", "field2", null).getPropertyType());
+            assertEquals(String.class, RulesEngineFactory.getRulesEngine().getPropertyRuleIntrospector("org.jaffa.rules.testmodels.Virtual1", "field1", null).getPropertyType());
+            assertEquals(Long.class, RulesEngineFactory.getRulesEngine().getPropertyRuleIntrospector("org.jaffa.rules.testmodels.Virtual1", "field2", null).getPropertyType());
         } catch (Exception e) {
             e.printStackTrace(System.err);
             fail();

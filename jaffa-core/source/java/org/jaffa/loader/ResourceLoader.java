@@ -55,20 +55,18 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Loads the Xml Config files and registers them to the Repository.
  */
-public class XmlLoader<T extends IManager> {
+public class ResourceLoader<T extends IManager> {
 
     private static Logger logger = Logger.getLogger(ContextHelper.class);
 
     private T manager ;
 
     /**
-     * gets the Manager from the XmlLoader
+     * gets the Manager from the ResourceLoader
      * @return Manager Object identified ny T
      */
     public T getManager() {
@@ -76,7 +74,7 @@ public class XmlLoader<T extends IManager> {
     }
 
     /**
-     * sets the manager on the XmlLoader
+     * sets the manager on the ResourceLoader
      * @param manager Object identified by T
      */
     public void setManager(T manager) {
@@ -91,14 +89,14 @@ public class XmlLoader<T extends IManager> {
     public void loadXmls() {
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         try {
-            Resource[] resources = resolver.getResources("classpath*:META-INF/" + manager.getXmlFileName());
+            Resource[] resources = resolver.getResources("classpath*:META-INF/" + manager.getResourceFileName());
             if (resources != null) {
                 for (Resource resource : resources) {
                     if (resource == null) {
                         continue;
                     }
                     try {
-                        manager.registerXML(resource, ContextHelper.getContextSalience(resource.getURI().toString()),
+                        manager.registerResource(resource, ContextHelper.getContextSalience(resource.getURI().toString()),
                                 ContextHelper.getVariationSalience(resource.getURI().toString()));
                     }catch(Exception e){
                         logger.error("Exception occurred while registering XML " + resource.getURI().toString() + " exception " + e);
