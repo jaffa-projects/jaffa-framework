@@ -65,6 +65,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.apache.commons.beanutils.DynaProperty;
 import org.apache.log4j.Logger;
 import org.jaffa.datatypes.DataTypeMapper;
@@ -76,7 +77,6 @@ import org.jaffa.exceptions.DomainObjectNotFoundException;
 import org.jaffa.exceptions.FrameworkException;
 import org.jaffa.exceptions.MultipleDomainObjectsFoundException;
 import org.jaffa.flexfields.FlexBean;
-import org.jaffa.flexfields.FlexProperty;
 import org.jaffa.flexfields.IFlexFields;
 import org.jaffa.persistence.Criteria;
 import org.jaffa.persistence.IPersistent;
@@ -88,9 +88,10 @@ import org.jaffa.util.BeanHelper;
 import org.jaffa.util.ExceptionHelper;
 import org.jaffa.util.StringHelper;
 
-/** Utility Methods used by the Data Transformer
+/**
+ * Utility Methods used by the Data Transformer
  *
- * @author  PaulE
+ * @author PaulE
  * @version 1.0
  */
 public class TransformerUtils {
@@ -100,6 +101,7 @@ public class TransformerUtils {
     /**
      * Display the properties of this JavaBean. If this bean has properties that implement
      * either GraphDataObject or GraphDataObject[], then also print this objects too.
+     *
      * @param source Javabean who's contents should be printed
      * @return multi-line string of this beans properties and their values
      */
@@ -112,7 +114,7 @@ public class TransformerUtils {
      * objects its printed, and if this is one of them, it stops. This allows detection
      * of possible infinite recusion.
      *
-     * @param source Javabean who's contents should be printed
+     * @param source      Javabean who's contents should be printed
      * @param objectStack List of objects already traversed
      * @return multi-line string of this beans properties and their values
      */
@@ -190,33 +192,34 @@ public class TransformerUtils {
         } catch (IllegalAccessException e) {
             TransformException me = new TransformException(TransformException.ACCESS_ERROR, "???", e.getMessage());
             log.error(me.getLocalizedMessage(), e);
-        //throw me;
+            //throw me;
         } catch (InvocationTargetException e) {
             TransformException me = new TransformException(TransformException.INVOCATION_ERROR, "???", e);
             log.error(me.getLocalizedMessage(), me.getCause());
-        //throw me;
+            //throw me;
         } catch (IntrospectionException e) {
             TransformException me = new TransformException(TransformException.INTROSPECT_ERROR, "???", e.getMessage());
             log.error(me.getLocalizedMessage(), e);
-        //throw me;
+            //throw me;
         }
         return out.toString();
     }
 
     /**
-     * Display the properties of this JavaBean in XML format. 
+     * Display the properties of this JavaBean in XML format.
+     *
      * @param source Javabean who's contents should be printed
      * @return XML formatted string of this beans properties and their values
-     */    
-    public static String printXMLGraph(Object source){
+     */
+    public static String printXMLGraph(Object source) {
 
         StringBuffer out = new StringBuffer();
-        out.append("<"+source.getClass().getSimpleName()+">");
+        out.append("<" + source.getClass().getSimpleName() + ">");
 
         try {
             BeanInfo sInfo = Introspector.getBeanInfo(source.getClass());
             PropertyDescriptor[] sDescriptors = sInfo.getPropertyDescriptors();
-            if (sDescriptors != null && sDescriptors.length != 0){
+            if (sDescriptors != null && sDescriptors.length != 0) {
                 for (int i = 0; i < sDescriptors.length; i++) {
                     PropertyDescriptor sDesc = sDescriptors[i];
                     Method sm = sDesc.getReadMethod();
@@ -225,34 +228,35 @@ public class TransformerUtils {
                             sm.setAccessible(true);
                         Object sValue = sm.invoke(source, (Object[]) null);
 
-                        out.append("<"+sDesc.getName()+">");
+                        out.append("<" + sDesc.getName() + ">");
 
                         if (sValue != null && !sm.getReturnType().isArray()
-                            && !GraphDataObject.class.isAssignableFrom(sValue.getClass())){
+                                && !GraphDataObject.class.isAssignableFrom(sValue.getClass())) {
                             out.append(sValue.toString().trim());
                         }
-                        out.append("</"+sDesc.getName()+">");
+                        out.append("</" + sDesc.getName() + ">");
                     }
                 }
             }
         } catch (IllegalAccessException e) {
             TransformException me = new TransformException(TransformException.ACCESS_ERROR, "???", e.getMessage());
             log.error(me.getLocalizedMessage(), e);
-        //throw me;
+            //throw me;
         } catch (InvocationTargetException e) {
             TransformException me = new TransformException(TransformException.INVOCATION_ERROR, "???", e);
             log.error(me.getLocalizedMessage(), me.getCause());
-        //throw me;
+            //throw me;
         } catch (IntrospectionException e) {
             TransformException me = new TransformException(TransformException.INTROSPECT_ERROR, "???", e.getMessage());
             log.error(me.getLocalizedMessage(), e);
-        //throw me;
+            //throw me;
         }
-        out.append("</"+source.getClass().getSimpleName()+">");
+        out.append("</" + source.getClass().getSimpleName() + ">");
         return out.toString();
     }
 
-    /** Pass in an empty map and it fills it with Key = Value for the source
+    /**
+     * Pass in an empty map and it fills it with Key = Value for the source
      * object. It returns false if one or more key values are null, or if this
      * object has no keys defined
      */
@@ -267,7 +271,7 @@ public class TransformerUtils {
                 return false;
             }
             // Loop through all the keys get het the values
-            for (Iterator k = keys.iterator(); k.hasNext();) {
+            for (Iterator k = keys.iterator(); k.hasNext(); ) {
                 String keyField = (String) k.next();
                 PropertyDescriptor pd = mapping.getDataFieldDescriptor(keyField);
                 if (pd != null && pd.getReadMethod() != null) {
@@ -300,7 +304,7 @@ public class TransformerUtils {
     }
 
     static void updateBeanData(String path, GraphDataObject source, UOW uow, ITransformationHandler handler,
-            GraphMapping mapping, IPersistent domainObject, DataTransformer.Mode mode, GraphDataObject newGraph)
+                               GraphMapping mapping, IPersistent domainObject, DataTransformer.Mode mode, GraphDataObject newGraph)
             throws InstantiationException, IllegalAccessException, InvocationTargetException,
             ApplicationExceptions, FrameworkException {
 
@@ -311,6 +315,11 @@ public class TransformerUtils {
             if (mode != DataTransformer.Mode.VALIDATE_ONLY && mode != DataTransformer.Mode.CLONE && mode != DataTransformer.Mode.MASS_UPDATE)
                 source.validate();
 
+            List<ITransformationHandler> handlers = null;
+            if (handler != null) {
+                handlers = handler.getTransformationHandlers();
+            }
+
             // Ensure the domain object has not been modified
             domainObjectChangedTest(path, source, mapping, domainObject);
 
@@ -319,16 +328,19 @@ public class TransformerUtils {
                 domainObject.setUOW(uow);
 
             // Reflect ProcessEventGraphs from newGraph to source - This will handle Pending/Warning Events during a clone/mass update
-            if(newGraph!=null && newGraph.getProcessEventGraphs()!=null)
-            	source.setProcessEventGraphs(newGraph.getProcessEventGraphs());
+            if (newGraph != null && newGraph.getProcessEventGraphs() != null)
+                source.setProcessEventGraphs(newGraph.getProcessEventGraphs());
             //----------------------------------------------------------------
             // Fire 'startBean' handler
-            if (mode != DataTransformer.Mode.VALIDATE_ONLY && handler != null)
-                handler.startBean(path, source, domainObject);
+            if (mode != DataTransformer.Mode.VALIDATE_ONLY && handlers != null) {
+                for (ITransformationHandler transformationHandler : handlers) {
+                    transformationHandler.startBean(path, source, domainObject);
+                }
+            }
 
             //----------------------------------------------------------------
             // Reflect all normal fields
-            for (Iterator it = mapping.getFields().iterator(); it.hasNext();) {
+            for (Iterator it = mapping.getFields().iterator(); it.hasNext(); ) {
                 String field = (String) it.next();
                 // ignore read-only fields
                 if (mapping.isReadOnly(field))
@@ -352,7 +364,6 @@ public class TransformerUtils {
                         updateProperty(mapping.getDomainFieldDescriptor(field), value, domainObject);
                 }
             }
-
 
             //----------------------------------------------------------------
             // Update flex fields
@@ -391,10 +402,9 @@ public class TransformerUtils {
                 }
             }
 
-
             //----------------------------------------------------------------
             // Reflect any foreign keys
-            for (Iterator it = mapping.getForeignFields().iterator(); it.hasNext();) {
+            for (Iterator it = mapping.getForeignFields().iterator(); it.hasNext(); ) {
                 String field = (String) it.next();
                 // ignore read-only fields
                 if (mapping.isReadOnly(field))
@@ -461,67 +471,99 @@ public class TransformerUtils {
                 }
             }
 
-
             //----------------------------------------------------------------
             // Store Record
             if (mode == DataTransformer.Mode.VALIDATE_ONLY) {
                 if (log.isDebugEnabled())
                     log.debug("Domain object will not be persisted during prevalidation. Invoking the prevalidateBean handler");
-                if (handler != null)
-                    handler.prevalidateBean(path, source, domainObject);
+                if (handlers != null) {
+                    for (ITransformationHandler transformationHandler : handlers) {
+                        transformationHandler.prevalidateBean(path, source, domainObject);
+                    }
+                }
             } else if (domainObject.isDatabaseOccurence()) {
                 if (log.isDebugEnabled())
                     log.debug("UOW.Update Domain Object");
                 //----------------------------------------------------------------
                 // Fire 'startBeanUpdate' handler
-                if (handler != null)
-                    handler.startBeanUpdate(path, source, domainObject);
+                if (handlers != null) {
+                    for (ITransformationHandler transformationHandler : handlers) {
+                        transformationHandler.startBeanUpdate(path, source, domainObject);
+                    }
+                }
                 if (domainObject.isModified()) {
                     uow.update(domainObject);
-                    if (handler != null)
-                        handler.setChangeDone(true);
+                    if (handlers != null) {
+                        for (ITransformationHandler transformationHandler : handlers) {
+                            transformationHandler.setChangeDone(true);
+                        }
+                    }
                 }
                 //----------------------------------------------------------------
                 // Fire 'endBeanUpdate' handler
-                if (handler != null)
-                    handler.endBeanUpdate(path, source, domainObject);
+                if (handlers != null) {
+                    for (ITransformationHandler transformationHandler : handlers) {
+                        transformationHandler.endBeanUpdate(path, source, domainObject);
+                    }
+                }
             } else {
-                if (handler != null && mode == DataTransformer.Mode.CLONE) {
-                    if (log.isDebugEnabled())
+                if (handlers != null && mode == DataTransformer.Mode.CLONE) {
+                    if (log.isDebugEnabled()) {
                         log.debug("Invoke startBeanClone");
-                    handler.startBeanClone(path, source, domainObject, newGraph);
-                } else if (handler != null && mode == DataTransformer.Mode.MASS_UPDATE) {
-                    if (log.isDebugEnabled())
+                    }
+                    for (ITransformationHandler transformationHandler : handlers) {
+                        transformationHandler.startBeanClone(path, source, domainObject, newGraph);
+                    }
+                } else if (handlers != null && mode == DataTransformer.Mode.MASS_UPDATE) {
+                    if (log.isDebugEnabled()) {
                         log.debug("Invoke startBeanMassUpdate");
-                    handler.startBeanMassUpdate(path, source, domainObject, newGraph);
+                    }
+                    for (ITransformationHandler transformationHandler : handlers) {
+                        transformationHandler.startBeanMassUpdate(path, source, domainObject, newGraph);
+                    }
                 }
                 if (log.isDebugEnabled())
                     log.debug("UOW.Add Domain Object");
                 //----------------------------------------------------------------
                 // Fire 'startBeanAdd' handler
-                if (handler != null)
-                    handler.startBeanAdd(path, source, domainObject);
+                if (handlers != null) {
+                    for (ITransformationHandler transformationHandler : handlers) {
+                        transformationHandler.startBeanAdd(path, source, domainObject);
+                    }
+                }
                 uow.add(domainObject);
-                if (handler != null)
-                    handler.setChangeDone(true);
+                if (handlers != null) {
+                    for (ITransformationHandler transformationHandler : handlers) {
+                        transformationHandler.setChangeDone(true);
+                    }
+                }
                 //----------------------------------------------------------------
                 // Fire 'endBeanAdd' handler
-                if (handler != null)
-                    handler.endBeanAdd(path, source, domainObject);
-                if (handler != null && mode == DataTransformer.Mode.CLONE) {
-                    if (log.isDebugEnabled())
+                if (handlers != null) {
+                    for (ITransformationHandler transformationHandler : handlers) {
+                        transformationHandler.endBeanAdd(path, source, domainObject);
+                    }
+                }
+                if (handlers != null && mode == DataTransformer.Mode.CLONE) {
+                    if (log.isDebugEnabled()) {
                         log.debug("Invoke endBeanClone");
-                    handler.endBeanClone(path, source, domainObject, newGraph);
-                } else if (handler != null && mode == DataTransformer.Mode.MASS_UPDATE) {
-                    if (log.isDebugEnabled())
+                    }
+                    for (ITransformationHandler transformationHandler : handlers) {
+                        transformationHandler.endBeanClone(path, source, domainObject, newGraph);
+                    }
+                } else if (handlers != null && mode == DataTransformer.Mode.MASS_UPDATE) {
+                    if (log.isDebugEnabled()) {
                         log.debug("Invoke endBeanMassUpdate");
-                    handler.endBeanMassUpdate(path, source, domainObject, newGraph);
+                    }
+                    for (ITransformationHandler transformationHandler : handlers) {
+                        transformationHandler.endBeanMassUpdate(path, source, domainObject, newGraph);
+                    }
                 }
             }
 
             //----------------------------------------------------------------
             // Reflect any related objects
-            for (Iterator it = mapping.getRelatedFields().iterator(); it.hasNext();) {
+            for (Iterator it = mapping.getRelatedFields().iterator(); it.hasNext(); ) {
                 String field = (String) it.next();
                 if (mapping.isReadOnly(field))
                     continue;
@@ -581,24 +623,29 @@ public class TransformerUtils {
 
             //----------------------------------------------------------------
             // Fire 'endBean' handler
-            if (mode != DataTransformer.Mode.VALIDATE_ONLY && handler != null)
-                handler.endBean(path, source, domainObject);
+            if (mode != DataTransformer.Mode.VALIDATE_ONLY && handlers != null) {
+                for (ITransformationHandler transformationHandler : handlers) {
+                    transformationHandler.endBean(path, source, domainObject);
+                }
+            }
 
         } catch (SkipTransformException e) {
-            if (log.isDebugEnabled())
+            if (log.isDebugEnabled()) {
                 log.debug("Processing of " + path + " will be skipped", e);
+            }
         } catch (ApplicationException e) {
             throw new ApplicationExceptions(e);
         }
     }
 
-    /**  Take a source object and try and mold it back it its domain object.
-     *  This is the same as updateParent, except from the way it retrieved the
-     *  record, and the way it creates a new record.
+    /**
+     * Take a source object and try and mold it back it its domain object.
+     * This is the same as updateParent, except from the way it retrieved the
+     * record, and the way it creates a new record.
      */
     static void updateChildBean(String path, GraphDataObject source, UOW uow, ITransformationHandler handler,
-            IPersistent parentDomain, GraphMapping parentMapping, String parentField, DataTransformer.Mode mode,
-            GraphDataObject newGraph) throws ApplicationExceptions, FrameworkException {
+                                IPersistent parentDomain, GraphMapping parentMapping, String parentField, DataTransformer.Mode mode,
+                                GraphDataObject newGraph) throws ApplicationExceptions, FrameworkException {
         if (log.isDebugEnabled())
             log.debug("Update Child Bean " + path);
         String relationshipName = parentMapping.getDomainFieldName(parentField);
@@ -655,7 +702,7 @@ public class TransformerUtils {
                     // Find Criteria For Related Object
                     Criteria criteria = (Criteria) findCriteria.invoke(parentDomain, new Object[]{});
                     // Add extra key info...
-                    for (Iterator it = keys.keySet().iterator(); it.hasNext();) {
+                    for (Iterator it = keys.keySet().iterator(); it.hasNext(); ) {
                         String keyField = (String) it.next();
                         Object value = keys.get(keyField);
                         keyField = StringHelper.getUpper1(mapping.getDomainFieldName(keyField));
@@ -677,7 +724,6 @@ public class TransformerUtils {
                         log.debug("Object " + path + " has either missing or null key values - Assume Create is needed");
                 }
             }
-
 
             // Create object if not found
             if (domainObject == null) {
@@ -703,7 +749,7 @@ public class TransformerUtils {
                 domainObject = (IPersistent) newObject.invoke(parentDomain, new Object[]{});
 
                 // Set the key fields
-                for (Iterator it = keys.keySet().iterator(); it.hasNext();) {
+                for (Iterator it = keys.keySet().iterator(); it.hasNext(); ) {
                     String keyField = (String) it.next();
                     if (mapping.isReadOnly(keyField))
                         continue;
@@ -739,12 +785,13 @@ public class TransformerUtils {
         }
     }
 
-    /**  Take a source object and try and mold it back it its domain object.
-     *  This is the same as updateParent, except from the way it retrieved the
-     *  record, and the way it creates a new record.
+    /**
+     * Take a source object and try and mold it back it its domain object.
+     * This is the same as updateParent, except from the way it retrieved the
+     * record, and the way it creates a new record.
      */
     static void deleteChildBean(String path, GraphDataObject source, UOW uow, ITransformationHandler handler,
-            IPersistent parentDomain, GraphMapping parentMapping, String parentField)
+                                IPersistent parentDomain, GraphMapping parentMapping, String parentField)
             throws ApplicationExceptions, FrameworkException {
         if (log.isDebugEnabled())
             log.debug("Delete Child Bean " + path);
@@ -797,7 +844,7 @@ public class TransformerUtils {
                     // Find Criteria For Related Object
                     Criteria criteria = (Criteria) findCriteria.invoke(parentDomain, new Object[]{});
                     // Add extra key info...
-                    for (Iterator it = keys.keySet().iterator(); it.hasNext();) {
+                    for (Iterator it = keys.keySet().iterator(); it.hasNext(); ) {
                         String keyField = (String) it.next();
                         Object value = keys.get(keyField);
                         keyField = StringHelper.getUpper1(mapping.getDomainFieldName(keyField));
@@ -845,24 +892,32 @@ public class TransformerUtils {
     }
 
     static void deleteBeanData(String path, GraphDataObject source, UOW uow, ITransformationHandler handler,
-            GraphMapping mapping, IPersistent domainObject)
+                               GraphMapping mapping, IPersistent domainObject)
             throws InstantiationException, IllegalAccessException, InvocationTargetException,
             ApplicationExceptions, FrameworkException {
         try {
             // Ensure the domain object has not been modified
             domainObjectChangedTest(path, source, mapping, domainObject);
 
+            List<ITransformationHandler> handlers = null;
+            if (handler != null) {
+                handlers = handler.getTransformationHandlers();
+            }
+
             //----------------------------------------------------------------
             // Fire 'startBean' handler
-            if (handler != null)
-                handler.startBean(path, source, domainObject);
+            if (handlers != null) {
+                for (ITransformationHandler transformationHandler : handlers) {
+                    transformationHandler.startBean(path, source, domainObject);
+                }
+            }
 
             //----------------------------------------------------------------
             // Now loop through children, if there is one, delete it, and leave parent alone
             boolean deleteChild = false;
 
             // Reflect any related objects
-            for (Iterator it = mapping.getRelatedFields().iterator(); it.hasNext();) {
+            for (Iterator it = mapping.getRelatedFields().iterator(); it.hasNext(); ) {
                 String field = (String) it.next();
                 Object value = getProperty(mapping.getDataFieldDescriptor(field), source);
                 if (value != null) {
@@ -891,24 +946,34 @@ public class TransformerUtils {
                 if (log.isDebugEnabled())
                     log.debug("UOW.Delete Domain Object");
                 // Fire 'startBeanDelete' handler
-                if (handler != null)
-                    handler.startBeanDelete(path, source, domainObject);
+                if (handlers != null) {
+                    for (ITransformationHandler transformationHandler : handlers) {
+                        transformationHandler.startBeanDelete(path, source, domainObject);
+                    }
+                }
 
                 uow.delete(domainObject);
-                if (handler != null)
-                    handler.setChangeDone(true);
+                if (handlers != null) {
+                    for (ITransformationHandler transformationHandler : handlers) {
+                        transformationHandler.setChangeDone(true);
+                    }
+                }
 
                 // Fire 'endBeanDelete' handler
-                if (handler != null)
-                    handler.endBeanDelete(path, source, domainObject);
+                if (handlers != null) {
+                    for (ITransformationHandler transformationHandler : handlers) {
+                        transformationHandler.endBeanDelete(path, source, domainObject);
+                    }
+                }
             }
-
-
 
             //----------------------------------------------------------------
             // Fire 'endBean' handler
-            if (handler != null)
-                handler.endBean(path, source, domainObject);
+            if (handlers != null) {
+                for (ITransformationHandler transformationHandler : handlers) {
+                    transformationHandler.endBean(path, source, domainObject);
+                }
+            }
 
         } catch (SkipTransformException e) {
             if (log.isDebugEnabled())
@@ -965,7 +1030,8 @@ public class TransformerUtils {
         }
     }
 
-    /** Set a value on a Bean, if its a persistent bean, try to use an update method first
+    /**
+     * Set a value on a Bean, if its a persistent bean, try to use an update method first
      * (for v1.0 domain objects), otherwise use the setter (for v1.1 and above).
      */
     static void updateProperty(PropertyDescriptor pd, Object value, Object source)
@@ -981,7 +1047,7 @@ public class TransformerUtils {
                         m.invoke(source, new Object[]{value});
                         if (log.isDebugEnabled())
                             log.debug("Update property '" + pd.getName() + '=' + value + "' on object '" + source.getClass().getName() + '\'');
-                    // See if there is a datatype mapper for these classes
+                        // See if there is a datatype mapper for these classes
                     } else if (DataTypeMapper.instance().isMappable(value.getClass(), tClass)) {
                         value = DataTypeMapper.instance().map(value, tClass);
                         m.invoke(source, new Object[]{value});
@@ -1007,12 +1073,16 @@ public class TransformerUtils {
             setProperty(pd, value, source);
     }
 
-    /** Tries to use meta data to get domain objects label. */
+    /**
+     * Tries to use meta data to get domain objects label.
+     */
     static String findDomainLabel(Class doClass) {
         return findDomainLabel(doClass.getName());
     }
 
-    /** Tries to use meta data to get domain objects label. */
+    /**
+     * Tries to use meta data to get domain objects label.
+     */
     static String findDomainLabel(String doClassName) {
         String label = doClassName;
         try {
@@ -1023,7 +1093,8 @@ public class TransformerUtils {
         return label;
     }
 
-    /** Performs the dirty-read check to ensure that the underlying record in the database hasn't
+    /**
+     * Performs the dirty-read check to ensure that the underlying record in the database hasn't
      * been changed by another user, while the current user has been trying to modify it.
      */
     private static void domainObjectChangedTest(String path, GraphDataObject source, GraphMapping mapping, IPersistent domainObject)
@@ -1034,23 +1105,23 @@ public class TransformerUtils {
             Object lastKnownValue = getProperty(mapping.getDataFieldDescriptor(mapping.getDirtyReadDataFieldName()), source);
             Object currentValue = getProperty(mapping.getDomainFieldDescriptor(mapping.getDirtyReadDataFieldName()), domainObject);
             if (lastKnownValue == null ? currentValue != null : !lastKnownValue.equals(currentValue)) {
-            	
+
                 if (log.isDebugEnabled())
                     log.debug("Dirty-read check failed: lastKnownValue='" + lastKnownValue + "', currentValue='" + currentValue + '\'');
-                if(!domainObject.isDatabaseOccurence()) {
-                	if (log.isDebugEnabled())
-                        log.debug("Dirty-read check failed: "+domainObject+" may have been removed.");
-                	throw new ApplicationExceptions(new ApplicationExceptionWithContext(path,new ApplicationException(DomainObjectChangedException.OBJECT_REMOVED,null,null)));
+                if (!domainObject.isDatabaseOccurence()) {
+                    if (log.isDebugEnabled())
+                        log.debug("Dirty-read check failed: " + domainObject + " may have been removed.");
+                    throw new ApplicationExceptions(new ApplicationExceptionWithContext(path, new ApplicationException(DomainObjectChangedException.OBJECT_REMOVED, null, null)));
                 } else {
-                	String[] errorParamNames = mapping.getDirtyReadErrorParams();
-	                Object[] errorParamValues = new Object[errorParamNames.length];
-	                try {
-	                    for (int i = 0; i < errorParamNames.length; i++)
-	                        errorParamValues[i] = BeanHelper.getField(domainObject, errorParamNames[i]);
-	                } catch (Exception e) {
-	                    log.warn("Error in creation of the argument array to pass to the DomainObjectChangedException from the list: " + Arrays.toString(mapping.getDirtyReadErrorParams()), e);
-	                }
-	                throw new ApplicationExceptions(new ApplicationExceptionWithContext(path, new DomainObjectChangedException(mapping.getDirtyReadErrorLabelToken(), errorParamValues, null)));
+                    String[] errorParamNames = mapping.getDirtyReadErrorParams();
+                    Object[] errorParamValues = new Object[errorParamNames.length];
+                    try {
+                        for (int i = 0; i < errorParamNames.length; i++)
+                            errorParamValues[i] = BeanHelper.getField(domainObject, errorParamNames[i]);
+                    } catch (Exception e) {
+                        log.warn("Error in creation of the argument array to pass to the DomainObjectChangedException from the list: " + Arrays.toString(mapping.getDirtyReadErrorParams()), e);
+                    }
+                    throw new ApplicationExceptions(new ApplicationExceptionWithContext(path, new DomainObjectChangedException(mapping.getDirtyReadErrorLabelToken(), errorParamValues, null)));
                 }
             } else {
                 if (log.isDebugEnabled())
@@ -1059,24 +1130,25 @@ public class TransformerUtils {
         }
     }
 
-    /** This will generate a unique string for the input persistent object, based on the persistent class name and its key values.
+    /**
+     * This will generate a unique string for the input persistent object, based on the persistent class name and its key values.
      * The format of the generated key will be: package.classname;key1value;key2value;key3value
      * For eg:
-     *     For a Person persistent object having a primary key PersonId, the serialized key could be "org.example.Person;P0021"
-     *     For an EventEntry persistent object having a composite primary key of EventId and PersonId primary, the serialized key could be "org.example.EventEntry;E01;P0021"
+     * For a Person persistent object having a primary key PersonId, the serialized key could be "org.example.Person;P0021"
+     * For an EventEntry persistent object having a composite primary key of EventId and PersonId primary, the serialized key could be "org.example.EventEntry;E01;P0021"
      * The back-slash '\' will be the escape character.
      * Hence, if the key-value contains a '\', then it'll be replaced by '\\'
      * If the key value contains a semi-colon, then it'll be replaced by '\;'
-     *
+     * <p/>
      * Note: This method will determine the key fields by looking up the getKeyFields method in the corresponding meta class for the input persistent object.
      *
-     * @param object The persistent object.
-     * @throws ClassNotFoundException if the Meta class for the input persistent class is not found.
-     * @throws NoSuchMethodException if the Meta class does not have the 'public static FieldMetaData[] getKeyFields()' method.
-     * @throws IllegalAccessException if the 'public static FieldMetaData[] getKeyFields()' method of the Meta class enforces Java language access control and the underlying method is inaccessible.
-     * @throws InvocationTargetException if the 'public static FieldMetaData[] getKeyFields()' method of the Meta class throws an exception.
-     * @throws IllegalArgumentException if the input persistent class does not have any key-fields or if any of the key-fields is null.
+     * @param source The persistent object.
      * @return a unique String for identifying the persistent object.
+     * @throws ClassNotFoundException    if the Meta class for the input persistent class is not found.
+     * @throws NoSuchMethodException     if the Meta class does not have the 'public static FieldMetaData[] getKeyFields()' method.
+     * @throws IllegalAccessException    if the 'public static FieldMetaData[] getKeyFields()' method of the Meta class enforces Java language access control and the underlying method is inaccessible.
+     * @throws InvocationTargetException if the 'public static FieldMetaData[] getKeyFields()' method of the Meta class throws an exception.
+     * @throws IllegalArgumentException  if the input persistent class does not have any key-fields or if any of the key-fields is null.
      */
     public static String generateSerializedKey(GraphDataObject source)
             throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, IllegalArgumentException {
@@ -1085,11 +1157,10 @@ public class TransformerUtils {
         Set<String> keyFields = mapping.getKeyFields();
         Class doClass = mapping.getDomainClass();
 
-
         StringBuffer buf = new StringBuffer(doClass.getName());
 
         if (keyFields != null && keyFields.size() > 0) {
-            for(String keyFieldName : keyFields){
+            for (String keyFieldName : keyFields) {
                 Object keyFieldValue = BeanHelper.getField(source, keyFieldName);
                 if (keyFieldValue != null) {
                     buf.append(';').append(quoteSerializedKeyValue(keyFieldValue.toString()));
@@ -1109,7 +1180,8 @@ public class TransformerUtils {
         return buf.toString();
     }
 
-    /** This will quote the semi-colon characters in the input string.
+    /**
+     * This will quote the semi-colon characters in the input string.
      * The back-slash '\' will be the escape character.
      * Hence, if the key-value contains a '\', then it'll be replaced by '\\'
      * If the key value contains a semi-colon, then it'll be replaced by '\;'
@@ -1119,7 +1191,8 @@ public class TransformerUtils {
         return StringHelper.replace(StringHelper.replace(input, "\\", "\\\\"), ";", "\\;");
     }
 
-    /** This will unquote the semi-colon characters in the input string.
+    /**
+     * This will unquote the semi-colon characters in the input string.
      * The back-slash '\' will be the escape character.
      * Hence, if the key-value contains a '\;', then it'll be replaced by ';'
      * If the key value contains a '\\', then it'll be replaced by '\'

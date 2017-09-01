@@ -106,13 +106,13 @@ public class DataTransformer {
     /**
      * Mould data from domain object and its related objects into a new JavaBean based
      * domain object graph, based on the defined mapping rules.
-     * <p>
+     * <p/>
      * Same as {@link #buildGraphFromDomain(Object source, Object target, GraphMapping graph, MappingFilter filter, String objectPath, boolean includeKeys)}
      * except the graph is derived from the target object, a default MappingFilter (that
      * just returns fields from the root object) and includeKeys is false.
      * The objectPath is also null, assuming this is the first object in the domain
      * object graph.
-     * <p>
+     * <p/>
      *
      * @param source Source object to mould data from, typically extends Persistent
      * @param target Target object to mould data to, typically extends GraphDataObject
@@ -127,10 +127,10 @@ public class DataTransformer {
     /**
      * Mould data from domain object and its related objects into a new JavaBean based
      * domain object graph, based on the defined mapping rules.
-     * <p>
+     * <p/>
      * Same as {@link #buildGraphFromDomain(Object source, Object target, GraphMapping graph, MappingFilter filter, String objectPath, boolean includeKeys)}
      * except the graph is derived from the target object, and includeKeys is false.
-     * <p>
+     * <p/>
      *
      * @param source     Source object to mould data from, typically extends Persistent
      * @param target     Target object to mould data to, typically extends GraphDataObject
@@ -423,9 +423,12 @@ public class DataTransformer {
 
             // Invoke the handler
             if (handler != null) {
-                if (log.isDebugEnabled())
+                if (log.isDebugEnabled()) {
                     log.debug("Invoking the endBeanLoad on the handler");
-                handler.endBeanLoad(objectPath, source, target, filter, originalCriteria);
+                }
+                for (ITransformationHandler transformationHandler : handler.getTransformationHandlers()) {
+                    transformationHandler.endBeanLoad(objectPath, source, target, filter, originalCriteria);
+                }
             }
 
         } catch (ApplicationException e) {
@@ -610,14 +613,13 @@ public class DataTransformer {
                     // Find Object based on key
                     domainObject = (IPersistent) findByPK.invoke(null, inputs);
 
-                    if(domainObject != null && mode == Mode.CLONE)
+                    if (domainObject != null && mode == Mode.CLONE)
                         throw new ApplicationExceptions(new DuplicateKeyException(TransformerUtils.findDomainLabel(doClass)));
 
                 } else {
                     if (log.isDebugEnabled())
                         log.debug("Object " + path + " has either missing or null key values - Assume Create is needed");
                 }
-
 
                 // Create object if not found
                 boolean createMode = false;
@@ -648,8 +650,11 @@ public class DataTransformer {
                 TransformerUtils.updateBeanData(path, source, uow, handler, mapping, domainObject, mode, newGraph);
 
                 // Invoke the changeDone trigger
-                if (handler != null && handler.isChangeDone())
-                    handler.changeDone(path, source, domainObject, uow);
+                if (handler != null && handler.isChangeDone()) {
+                    for (ITransformationHandler transformationHandler : handler.getTransformationHandlers()) {
+                        transformationHandler.changeDone(path, source, domainObject, uow);
+                    }
+                }
 
                 // Return an appropriate output
                 if (mode == Mode.VALIDATE_ONLY) {
@@ -769,8 +774,11 @@ public class DataTransformer {
             TransformerUtils.deleteBeanData(path, source, uow, handler, mapping, domainObject);
 
             // Invoke the changeDone trigger
-            if (handler != null && handler.isChangeDone())
-                handler.changeDone(path, source, domainObject, uow);
+            if (handler != null && handler.isChangeDone()) {
+                for (ITransformationHandler transformationHandler : handler.getTransformationHandlers()) {
+                    transformationHandler.changeDone(path, source, domainObject, uow);
+                }
+            }
         } catch (IllegalAccessException e) {
             TransformException me = new TransformException(TransformException.ACCESS_ERROR, path, e.getMessage());
             log.error(me.getLocalizedMessage(), e);
@@ -823,9 +831,15 @@ public class DataTransformer {
 
                     // Invoke the handler
                     if (handler != null) {
-                        if (log.isDebugEnabled())
+                        if (log.isDebugEnabled()) {
                             log.debug("Invoking the preQuery on the handler");
-                        criteria = handler.preQuery(path, criteria, originalCriteria, relatedObjectClass);
+                        }
+                        for (ITransformationHandler transformationHandler : handler.getTransformationHandlers()) {
+                            Criteria handlerCriteria = transformationHandler.preQuery(path, criteria, originalCriteria, relatedObjectClass);
+                            if (handlerCriteria != null) {
+                                criteria = handlerCriteria;
+                            }
+                        }
                     }
 
                     if (criteria == null) {
