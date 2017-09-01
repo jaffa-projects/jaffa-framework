@@ -193,7 +193,7 @@ public class ApplicationRulesLoader {
             }
 
             for (Object property : properties.keySet()) {
-                String envPropertyValue = System.getenv((String) property);
+                String envPropertyValue = System.getProperty((String) property);
                 if (envPropertyValue != null && !"".equals(envPropertyValue)) {
                     properties.setProperty((String) property, envPropertyValue);
                 }
