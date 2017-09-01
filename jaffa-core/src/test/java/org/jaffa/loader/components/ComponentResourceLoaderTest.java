@@ -47,65 +47,62 @@
  * ====================================================================
  */
 
-package org.jaffa.loader;
+package org.jaffa.loader.components;
 
-import org.apache.log4j.Logger;
-import org.jaffa.util.ContextHelper;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.jaffa.loader.ContextKey;
+import org.jaffa.loader.IRepository;
+import org.jaffa.presentation.portlet.component.ComponentDefinition;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import javax.annotation.PostConstruct;
+import java.util.List;
+import java.util.Set;
+
+import static org.junit.Assert.*;
 
 /**
- * Loads the Xml Config files and registers them to the Repository.
+ * ComponentResourceLoaderTest - Verifies the Component beans can be loaded from the
+ * ComponentManager implementation.
  */
-public class XmlLoader<T extends IManager> {
+public class ComponentResourceLoaderTest {
 
-    private static Logger logger = Logger.getLogger(ContextHelper.class);
 
-    private T manager ;
+    private static AnnotationConfigApplicationContext xmlLoaderConfig =
+            new AnnotationConfigApplicationContext(ComponentXmlLoaderTestConfig.class);
 
     /**
-     * gets the Manager from the XmlLoader
-     * @return Manager Object identified ny T
+     * Test loading the XML config via the ComponentManager.
+     * (Assumes a certain components file with particular values in
+     * jaffa-framework/jaffa-core/target/test-classes/META-INF/components.xml)
      */
-    public T getManager() {
-        return manager;
+    @Test
+    public void testXmlLoad() {
+        ComponentManager componentManager =
+                xmlLoaderConfig.getBean(ComponentManager.class);
+        assertNull(componentManager.getComponentDefinition(null));
+        assertNull(componentManager.getComponentDefinition(""));
+
+        IRepository<ComponentDefinition> repository =
+                componentManager.getComponentRepository();
+        List<ComponentDefinition> values = repository.getAllValues();
+        assertEquals(4, values.size());
+
+        Set<ContextKey> keys = repository.getAllKeys();
+        String rolesEditorKey = "Jaffa.Admin.RolesEditor";
+        ContextKey rolesEditorContextKey = new ContextKey(rolesEditorKey, "different-file.xml", "DEF", "100-Highest");
+        assertTrue(keys.contains(rolesEditorContextKey));
+        String testFunctionViewerKey = "Jaffa.UnitTest.TestFunctionViewer";
+        ContextKey testFunctionViewerContextKey = new ContextKey(testFunctionViewerKey, "different-file.xml", "DEF", "100-Highest");
+        assertTrue(keys.contains(testFunctionViewerContextKey));
+
+        ComponentDefinition reComponentDefinition =
+                componentManager.getComponentDefinition(rolesEditorKey);
+        String reType = reComponentDefinition.getComponentType();
+        assertEquals("Custom", reType);
+        String[] optionals = reComponentDefinition.getOptionalFunctions();
+        assertEquals(0, optionals.length);
+        assertNull(reComponentDefinition.getParameters());
     }
 
-    /**
-     * sets the manager on the XmlLoader
-     * @param manager Object identified by T
-     */
-    public void setManager(T manager) {
-        this.manager = manager;
-    }
-
-    /**
-     * loads all the Xml files with xml file name in the manager from all the jars
-     * where package contains META-INF/*
-      */
-    @PostConstruct
-    public void loadXmls() {
-        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        try {
-            Resource[] resources = resolver.getResources("classpath*:META-INF/" + manager.getResourceFileName());
-            if (resources != null) {
-                for (Resource resource : resources) {
-                    if (resource == null) {
-                        continue;
-                    }
-                    try {
-                        manager.registerResource(resource, ContextHelper.getContextSalience(resource.getURI().toString()),
-                                ContextHelper.getVariationSalience(resource.getURI().toString()));
-                    }catch(Exception e){
-                        logger.error("Exception occurred while registering XML " + resource.getURI().toString() + " exception " + e);
-                    }
-                }
-            }
-        }catch(Exception w){
-            throw new RuntimeException(w.getCause());
-        }
-    }
-
-}
+ }

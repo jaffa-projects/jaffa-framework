@@ -49,7 +49,7 @@
 
 package org.jaffa.loader.components;
 
-import org.jaffa.loader.XmlLoader;
+import org.jaffa.loader.ResourceLoader;
 import org.jaffa.presentation.portlet.component.componentdomain.Loader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -64,11 +64,11 @@ public class ComponentXmlLoaderConfig {
      * @return the messaging manager's XML loader
      */
     @Bean
-    public XmlLoader<ComponentManager> componentManagerXmlLoader() {
-        XmlLoader<ComponentManager> componentManagerXmlLoader =
-                new XmlLoader<>() ;
-        componentManagerXmlLoader.setManager(componentManager());
-        return componentManagerXmlLoader;
+    public ResourceLoader<ComponentManager> componentManagerXmlLoader() {
+        ResourceLoader<ComponentManager> componentManagerResourceLoader =
+                new ResourceLoader<>() ;
+        componentManagerResourceLoader.setManager(componentManager());
+        return componentManagerResourceLoader;
     }
 
     /**

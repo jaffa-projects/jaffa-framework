@@ -72,10 +72,10 @@ public class CoreLoaderConfig {
      * @return Returns an XMLLoader for RoleManager
      */
     @Bean
-    public XmlLoader<RoleManager> roleManagerXmlLoader() {
-        XmlLoader<RoleManager> roleManagerXmlLoader = new XmlLoader<RoleManager>();
-        roleManagerXmlLoader.setManager(roleManager());
-        return roleManagerXmlLoader;
+    public ResourceLoader<RoleManager> roleManagerXmlLoader() {
+        ResourceLoader<RoleManager> roleManagerResourceLoader = new ResourceLoader<RoleManager>();
+        roleManagerResourceLoader.setManager(roleManager());
+        return roleManagerResourceLoader;
     }
 
     /**
@@ -93,10 +93,10 @@ public class CoreLoaderConfig {
      * @return Returns an XMLLoader BusinessFunctionManager
      */
     @Bean
-    public XmlLoader<BusinessFunctionManager> businessFunctionManagerXmlLoader() {
-        XmlLoader<BusinessFunctionManager> businessFunctionManagerXmlLoader = new XmlLoader<BusinessFunctionManager>();
-        businessFunctionManagerXmlLoader.setManager(businessFunctionManager());
-        return businessFunctionManagerXmlLoader;
+    public ResourceLoader<BusinessFunctionManager> businessFunctionManagerXmlLoader() {
+        ResourceLoader<BusinessFunctionManager> businessFunctionManagerResourceLoader = new ResourceLoader<BusinessFunctionManager>();
+        businessFunctionManagerResourceLoader.setManager(businessFunctionManager());
+        return businessFunctionManagerResourceLoader;
     }
 
     /**
