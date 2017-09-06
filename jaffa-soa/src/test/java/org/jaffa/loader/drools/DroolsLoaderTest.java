@@ -1,5 +1,6 @@
 package org.jaffa.loader.drools;
 
+import org.jaffa.loader.CoreLoaderConfig;
 import org.jaffa.loader.SoaLoaderConfig;
 import org.jaffa.security.VariationContext;
 import org.junit.Test;
@@ -12,7 +13,8 @@ import static org.junit.Assert.assertNotNull;
  */
 public class DroolsLoaderTest {
 
-    private static AnnotationConfigApplicationContext droolLoaderConfig = new AnnotationConfigApplicationContext(SoaLoaderConfig.class);
+    private static AnnotationConfigApplicationContext droolLoaderConfig = new AnnotationConfigApplicationContext(CoreLoaderConfig.class,
+            SoaLoaderConfig.class);
 
     /**
      * tests the drools files are loaded correctly
