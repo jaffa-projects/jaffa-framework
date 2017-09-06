@@ -91,7 +91,6 @@
             <groupId>net.sf.json-lib</groupId>
             <artifactId>json-lib</artifactId>
             <classifier>jdk15</classifier>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>struts</groupId>
