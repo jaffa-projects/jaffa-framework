@@ -1,0 +1,322 @@
+<?xml version="1.0"?>
+
+<global-menu>
+
+  <menu-option>
+    <label>HTTP Unit Test</label>
+    <sub-menu>
+
+          <menu-option>
+            <label>Security Test 1</label>
+            <component-action>
+              <component-name>Test.Security.Test1</component-name>
+            </component-action>
+          </menu-option>
+
+          <menu-option>
+            <label>Item Finder to Test Data Security</label>
+            <component-action>
+              <component-name>Material.ItemFinder</component-name>
+            </component-action>
+          </menu-option>
+ 
+         <menu-option>
+            <label>Edit Logger Settings</label>
+            
+            <url-action>
+              <url>/jaffa/jsp/log4j.jsp</url>
+            </url-action>
+          </menu-option>          
+        </sub-menu>
+      </menu-option>
+      
+      
+  <menu-option>
+        <label>Test Portlet Widgets</label>
+        <sub-menu>	  
+          <menu-option>
+          <label>User Widgets</label>
+          <sub-menu>	  
+          <menu-option>
+            <label>Test Editbox</label>
+            <component-action>
+              <component-name>Portlet.Widget.Test.EditBox</component-name>
+            </component-action>
+          </menu-option>
+
+          <menu-option>
+            <label>Test Grid</label>
+            <component-action>
+              <component-name>Portlet.Widget.Test.Grid</component-name>
+            </component-action>
+          </menu-option>
+
+
+          <menu-option>
+            <label>Test UserGrid</label>
+            <component-action>
+              <component-name>Portlet.Widget.Test.UserGrid</component-name>
+            </component-action>
+          </menu-option>
+
+
+          <menu-option>
+            <label>Test Text</label>
+            <component-action>
+              <component-name>Portlet.Widget.Test.Text</component-name>
+            </component-action>
+          </menu-option>
+
+
+          <menu-option>
+            <label>Test Button</label>
+            <component-action>
+              <component-name>Portlet.Widget.Test.Button</component-name>
+            </component-action>
+          </menu-option>
+
+
+          <menu-option>
+            <label>Test DateTime</label>
+            <component-action>
+              <component-name>Portlet.Widget.Test.DateTime</component-name>
+            </component-action>
+          </menu-option>
+
+
+          <menu-option>
+            <label>Test CheckBox</label>
+            <component-action>
+              <component-name>Portlet.Widget.Test.CheckBox</component-name>
+            </component-action>
+          </menu-option>
+
+
+          <menu-option>
+            <label>Test Image</label>
+            <component-action>
+              <component-name>Portlet.Widget.Test.Image</component-name>
+            </component-action>
+          </menu-option>
+
+
+          <menu-option>
+            <label>Test RadioButton</label>
+            <component-action>
+              <component-name>Portlet.Widget.Test.RadioButton</component-name>
+            </component-action>
+          </menu-option>
+
+
+          <menu-option>
+            <label>Test DropDown</label>
+            <component-action>
+              <component-name>Portlet.Widget.Test.DropDown</component-name>
+            </component-action>
+          </menu-option>
+
+
+          <menu-option>
+            <label>Test Table</label>
+            <component-action>
+              <component-name>Portlet.Widget.Test.Table</component-name>
+            </component-action>
+          </menu-option>
+
+
+          <menu-option>
+            <label>Test Lookup</label>
+            <component-action>
+              <component-name>Portlet.Widget.Test.Lookup</component-name>
+            </component-action>
+          </menu-option>
+
+
+          <menu-option>
+            <label>Test Label</label>
+            <component-action>
+              <component-name>Portlet.Widget.Test.Label</component-name>
+            </component-action>
+          </menu-option>
+
+
+          <menu-option>
+            <label>Test FoldingSection</label>
+            <component-action>
+              <component-name>Portlet.Widget.Test.FoldingSection</component-name>
+            </component-action>
+          </menu-option>
+
+
+        </sub-menu>
+      </menu-option>  
+       </sub-menu>
+      </menu-option> 
+      
+<menu-option>
+    <label>HTTP Unit Test Desktop</label>
+    <desktop-menu>
+    <label>HTTP Unit Test Desktop</label>
+    <struts-tile-template>httpunittest.desktop</struts-tile-template>
+      <menu-option>
+        <label>Components to Run</label>
+        <sub-menu>
+          <menu-option>
+            <label>Security Test</label>
+            <component-action>
+              <component-name>Test.Security.Test</component-name>
+            </component-action>
+          </menu-option>
+
+          <menu-option>
+            <label>Item Finder to Test Data Security</label>
+            <component-action>
+              <component-name>Material.ItemFinder</component-name>
+            </component-action>
+          </menu-option>
+   
+         <menu-option>
+            <label>Edit Logger Settings</label>
+            
+            <url-action>
+              <url>/jaffa/jsp/log4j.jsp</url>
+            </url-action>
+          </menu-option>          
+        </sub-menu>
+      </menu-option>      
+    </desktop-menu>
+  </menu-option>
+
+<menu-option>
+    <label>HTML Widgets</label>
+    <desktop-menu>
+    <label>HTML Widgets</label>
+    <struts-tile-template>httpunittest.desktop</struts-tile-template>
+            <menu-option>
+             <label>User Widgets</label>
+             <sub-menu>	  
+             <menu-option>
+               <label>Test Editbox</label>
+               <component-action>
+                 <component-name>Portlet.Widget.Test.EditBox</component-name>
+               </component-action>
+             </menu-option>
+   
+             <menu-option>
+               <label>Test Grid</label>
+               <component-action>
+                 <component-name>Portlet.Widget.Test.Grid</component-name>
+               </component-action>
+             </menu-option>
+   
+   
+             <menu-option>
+               <label>Test UserGrid</label>
+               <component-action>
+                 <component-name>Portlet.Widget.Test.UserGrid</component-name>
+               </component-action>
+             </menu-option>
+   
+   
+             <menu-option>
+               <label>Test Text</label>
+               <component-action>
+                 <component-name>Portlet.Widget.Test.Text</component-name>
+               </component-action>
+             </menu-option>
+   
+   
+             <menu-option>
+               <label>Test Button</label>
+               <component-action>
+                 <component-name>Portlet.Widget.Test.Button</component-name>
+               </component-action>
+             </menu-option>
+   
+   
+             <menu-option>
+               <label>Test DateTime</label>
+               <component-action>
+                 <component-name>Portlet.Widget.Test.DateTime</component-name>
+               </component-action>
+             </menu-option>
+   
+   
+             <menu-option>
+               <label>Test CheckBox</label>
+               <component-action>
+                 <component-name>Portlet.Widget.Test.CheckBox</component-name>
+               </component-action>
+             </menu-option>
+   
+   
+             <menu-option>
+               <label>Test Image</label>
+               <component-action>
+                 <component-name>Portlet.Widget.Test.Image</component-name>
+               </component-action>
+             </menu-option>
+   
+   
+             <menu-option>
+               <label>Test RadioButton</label>
+               <component-action>
+                 <component-name>Portlet.Widget.Test.RadioButton</component-name>
+               </component-action>
+             </menu-option>
+   
+   
+             <menu-option>
+               <label>Test DropDown</label>
+               <component-action>
+                 <component-name>Portlet.Widget.Test.DropDown</component-name>
+               </component-action>
+             </menu-option>
+   
+   
+             <menu-option>
+               <label>Test Table</label>
+               <component-action>
+                 <component-name>Portlet.Widget.Test.Table</component-name>
+               </component-action>
+             </menu-option>
+   
+   
+             <menu-option>
+               <label>Test Lookup</label>
+               <component-action>
+                 <component-name>Portlet.Widget.Test.Lookup</component-name>
+               </component-action>
+             </menu-option>
+   
+   
+             <menu-option>
+               <label>Test Label</label>
+               <component-action>
+                 <component-name>Portlet.Widget.Test.Label</component-name>
+               </component-action>
+             </menu-option>
+   
+   
+             <menu-option>
+               <label>Test FoldingSection</label>
+               <component-action>
+                 <component-name>Portlet.Widget.Test.FoldingSection</component-name>
+               </component-action>
+             </menu-option>
+   
+   
+           </sub-menu>
+      </menu-option>  
+    </desktop-menu>
+  </menu-option>
+
+
+  
+</global-menu>  
+
+
+
+    
+       
+  
