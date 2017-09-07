@@ -131,7 +131,6 @@ public class NavCache {
      */
     private NavCache() {
         if (m_menu == null) {
-            NavigationManager navigationManager = getNavigationManager();
             if (null != navigationManager) {
                 m_menu = navigationManager.getGlobalMenu();
             }
