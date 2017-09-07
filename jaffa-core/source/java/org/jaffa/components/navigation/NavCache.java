@@ -54,23 +54,16 @@
  */
 package org.jaffa.components.navigation;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
 import org.apache.log4j.Logger;
 import org.jaffa.components.navigation.domain.GlobalMenu;
 import org.jaffa.config.Config;
+import org.jaffa.loader.navigation.NavigationManager;
 import org.jaffa.security.VariationContext;
-import org.jaffa.util.JAXBHelper;
-import org.jaffa.util.OrderedPathMatchingResourcePatternResolver;
 import org.jaffa.util.URLHelper;
-import org.jaffa.util.XmlHelper;
-import org.springframework.core.io.Resource;
+
+import java.net.MalformedURLException;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /** This singleton class loads in the global navigation xml and caches it
  * to in can be used for constructing instances of NavAccessor's
@@ -81,12 +74,16 @@ import org.springframework.core.io.Resource;
 public class NavCache {
 
     private static final Logger log = Logger.getLogger(NavCache.class);
-    private static final String DEFAULT_NAVIGATION_LOCATION = "classpath:///resources/navigation.xml";
-    private static final String MODULE_NAVIGATION_LOCATION = "classpath*:META-INF/navigation.xml";
-    private static final String SCHEMA = "org/jaffa/components/navigation/navigation_1_0.xsd";
+    private static final String DEFAULT_NAVIGATION_LOCATION = "classpath:///META-INF/navigation.xml";
     private static final ConcurrentMap<String, NavCache> c_navCacheByVariation = new ConcurrentHashMap<String, NavCache>();
     private static final String DEFAULT_KEY = ""; //this key will used to put the NavCache instance for the default navigation.xml file
     private GlobalMenu m_menu = null;
+
+    /**
+     * RoleManager - Returns the Navigation domain objects.  These are the objects created from the Navigation xsd.
+     */
+    private static NavigationManager navigationManager;
+
 
     /** Creates an instance of NavCache, if not already instantiated.
      * @return An instance of the NavCache.
@@ -103,16 +100,25 @@ public class NavCache {
         return navCache;
     }
 
+    /**
+     *
+     * @return NavCache
+     */
     private static NavCache createNavCacheInstance() {
         String fileLocation = getFileLocation();
-        return fileLocation.equals(getDefaultFileLocation()) ? getDefaultInstance() : new NavCache(fileLocation);
+        String defaultFileLocation = getDefaultFileLocation();
+        return fileLocation.equals(defaultFileLocation) ? getDefaultInstance() : new NavCache();
     }
 
+    /**
+     *
+     * @return NavCache
+     */
     private static NavCache getDefaultInstance() {
         String variation = DEFAULT_KEY;
         NavCache navCache = c_navCacheByVariation.get(variation);
         if (navCache == null) {
-            NavCache generatedNavCache = new NavCache(getDefaultFileLocation());
+            NavCache generatedNavCache = new NavCache();
             navCache = c_navCacheByVariation.putIfAbsent(variation, generatedNavCache);
             if (navCache == null)
                 navCache = generatedNavCache;
@@ -120,73 +126,13 @@ public class NavCache {
         return navCache;
     }
 
-    private NavCache(String initFile) {
-        if (log.isDebugEnabled())
-            log.debug("Creating an instance of NavCache using '" + initFile + '\'');
-        InputStream stream = null;
-        URL navUrl = null;
-
-        try {
-            try {
-                // Create a URL for the resource file...
-                navUrl = URLHelper.newExtendedURL(initFile);
-            } catch (MalformedURLException e) {
-                if(log.isDebugEnabled())
-                    log.debug("Can't Find Navigation File from " + initFile + " Trying to find in classpath.");
-            }
-            if(navUrl!=null) {
-                stream = navUrl.openStream();
-
-                // create a JAXBContext capable of handling classes generated into the package
-                JAXBContext jc = JAXBContext.newInstance("org.jaffa.components.navigation.domain");
-
-                // create an Unmarshaller
-                Unmarshaller u = jc.createUnmarshaller();
-
-                // enable validation
-                u.setSchema(JAXBHelper.createSchema(SCHEMA));
-
-                // unmarshal a document into a tree of Java content objects composed of classes from the package.
-                m_menu = (GlobalMenu) u.unmarshal(XmlHelper.stripDoctypeDeclaration(stream));
-            }else{
-                //try finding navigation from modules
-                OrderedPathMatchingResourcePatternResolver resolver = OrderedPathMatchingResourcePatternResolver.getInstance();
-                try {
-
-                    Resource[] resources = resolver.getResources(MODULE_NAVIGATION_LOCATION);
-                    if (resources != null && resources.length == 1) {
-                        Resource resource = resources[0];
-                        // create a JAXBContext capable of handling classes generated into the package
-                        JAXBContext jc = JAXBContext.newInstance("org.jaffa.components.navigation.domain");
-
-                        // create an Unmarshaller
-                        Unmarshaller u = jc.createUnmarshaller();
-
-                        // enable validation
-                        u.setSchema(JAXBHelper.createSchema(SCHEMA));
-
-                        // unmarshal a document into a tree of Java content objects composed of classes from the package.
-                        m_menu = (GlobalMenu) u.unmarshal(XmlHelper.stripDoctypeDeclaration(resource.getInputStream()));
-                    }else{
-                        throw new SecurityException("More than one navigation.xml found");
-                    }
-                } catch (IOException e) {
-                    log.error("Error in Reading Policy", e);
-                    throw new SecurityException("Error in Reading Policy", e);
-                }
-            }
-
-        } catch (Exception e) {
-            String str = "Error while parsing the Navigation file " + initFile;
-            log.fatal(str, e);
-            throw new SecurityException(str);
-        } finally {
-            try {
-                if (stream != null) {
-                    stream.close();
-                }
-            } catch (IOException e) {
-                // do nothing
+    /**
+     *  NavCache - Constructor for NavCache and also the creator of the m_menu map.
+     */
+    private NavCache() {
+        if (m_menu == null) {
+            if (null != navigationManager) {
+                m_menu = navigationManager.getGlobalMenu();
             }
         }
     }
@@ -200,6 +146,7 @@ public class NavCache {
     }
 
     /** Returns the location of the default navigation.xml file. */
+    @Deprecated
     public static String getDefaultFileLocation() {
         return (String) Config.getProperty(Config.PROP_MENULIST_URL, DEFAULT_NAVIGATION_LOCATION);
     }
@@ -208,6 +155,7 @@ public class NavCache {
      * Returns the location of navigation_{VAR}.xml file.
      * NOTE: This file may not exist in the file-system.
      */
+    @Deprecated
     public static String getVariationFileLocation() {
         String defaultFileLocation = getDefaultFileLocation();
 
@@ -226,6 +174,7 @@ public class NavCache {
      * Returns the variation file-location, if it exists in the file-system.
      * Else the default file-location will be returned.
      */
+    @Deprecated
     public static String getFileLocation() {
         String variationFileLocation = getVariationFileLocation();
         try {
@@ -239,5 +188,13 @@ public class NavCache {
                 log.debug("FileLocation is the default '" + defaultFileLocation + "', since variation file '" + variationFileLocation + "' does not exist");
             return defaultFileLocation;
         }
+    }
+
+    public static NavigationManager getNavigationManager() {
+        return navigationManager;
+    }
+
+    public static void setNavigationManager(NavigationManager navigationManager) {
+        NavCache.navigationManager = navigationManager;
     }
 }

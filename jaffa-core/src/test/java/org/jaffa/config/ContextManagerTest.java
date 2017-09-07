@@ -49,58 +49,73 @@
 
 package org.jaffa.config;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
+import org.jaffa.loader.CoreLoaderConfig;
+import org.jaffa.loader.config.ApplicationRulesManager;
 import org.jaffa.presentation.portlet.session.UserSession;
 import org.jaffa.session.ContextManagerFactory;
+import org.jaffa.session.IContextManager;
 import org.junit.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 /**
- * 
  * Test for ContextManager to check ApplicationRulesLoader loaded the rules as
  * expected
- *
  */
 public class ContextManagerTest {
 
-	public static final String USER_ATTRIBUTE = "org.jaffa.presentation.portlet.session.UserInfo";
-	public static final String USER = "GOLDADMIN";
-	public static final String VARIATION = "TEST";
+    public static final String USER_ATTRIBUTE = "org.jaffa.presentation.portlet.session.UserInfo";
+    public static final String USER = "GOLDADMIN";
+    public static final String VARIATION = "NULL";
 
-	@Test
-	public void testContextManager() throws Exception {
+    private static AnnotationConfigApplicationContext xmlLoaderConfig =
+            new AnnotationConfigApplicationContext(CoreLoaderConfig.class);
 
-		MockHttpServletRequest request = new MockHttpServletRequest();
+    /**
+     * testContextManager - Verifies that the application rules have been loaded correctly for both global and variation
+     * specific rules files.
+     * @throws Exception
+     */
+    @Test
+    public void testContextManager() throws Exception {
 
-		// creating user session
-		UserSession us = UserSession.getUserSession(request);
-		us.setUserId(USER);
-		us.setVariation(VARIATION);
+        ApplicationRulesManager applicationRulesManager =
+                xmlLoaderConfig.getBean(ApplicationRulesManager.class);
+        assertNotNull(applicationRulesManager.getApplicationRulesRepository());
 
-		// creating mock http session for the same use session
-		MockHttpSession session = new MockHttpSession();
-		session.setAttribute(USER_ATTRIBUTE, us);
+        MockHttpServletRequest request = new MockHttpServletRequest();
 
-		// setting the mock session into request
-		request.setSession(session);
+        // creating user session
+        UserSession us = UserSession.getUserSession(request);
+        us.setUserId(USER);
+        us.setVariation(VARIATION);
 
-		ContextManagerFactory.instance().setThreadContext(request);
+        // creating mock http session for the same use session
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute(USER_ATTRIBUTE, us);
 
-		// Property from global
-		assertNotNull(ContextManagerFactory.instance().getProperty("org.jaffa.config.global"));
+        // setting the mock session into request
+        request.setSession(session);
 
-		// Property from variation
-		assertNotNull(ContextManagerFactory.instance().getProperty("org.jaffa.config.variation"));
+        ContextManagerFactory.instance().setThreadContext(request);
 
-		// Property from variation
-		assertEquals("true", ContextManagerFactory.instance().getProperty("org.jaffa.config.hidepanel"));
+        // Property from global
+        IContextManager iContextManager = ContextManagerFactory.instance();
+        assertNotNull(iContextManager.getProperty("org.jaffa.config.global"));
 
-		// Property from variation
-		assertEquals("true", ContextManagerFactory.instance().getProperty("org.jaffa.config.hidemaintenancepanel"));
+        // Property from variation
+        assertNotNull(ContextManagerFactory.instance().getProperty("org.jaffa.config.variation"));
 
-	}
+        // Property from variation
+        assertEquals("true", ContextManagerFactory.instance().getProperty("org.jaffa.config.hidepanel"));
+
+        // Property from variation
+        assertEquals("true", ContextManagerFactory.instance().getProperty("org.jaffa.config.hidemaintenancepanel"));
+
+    }
 
 }
