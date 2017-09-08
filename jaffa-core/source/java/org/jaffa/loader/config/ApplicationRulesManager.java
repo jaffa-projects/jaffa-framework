@@ -53,11 +53,13 @@ import org.jaffa.loader.ContextKey;
 import org.jaffa.loader.IManager;
 import org.jaffa.loader.IRepository;
 import org.jaffa.loader.MapRepository;
+import org.jaffa.security.VariationContext;
 import org.springframework.core.io.Resource;
 import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -136,7 +138,8 @@ public class ApplicationRulesManager implements IManager {
         IRepository<Properties> propertyRepository = getApplicationRulesRepository();
         Properties properties = new Properties();
         if (null != propertyRepository) {
-            properties = propertyRepository.query(variation);
+            Map<String, Properties> variationRepo = propertyRepository.getRepositoryByVariation(variation);
+            properties = variationRepo.get(variation);
         }
         return properties;
     }
@@ -158,7 +161,7 @@ public class ApplicationRulesManager implements IManager {
         if (resource != null && resource.getInputStream() != null) {
             properties.load(resource.getInputStream());
             if (!properties.isEmpty()) {
-                String nullHandledVariation = (null != variation) ? variation : APP_RULE_GLOBAL;
+                String nullHandledVariation = !VariationContext.NULL_VARIATION.equals(variation) ? variation : APP_RULE_GLOBAL;
                 ContextKey key = new ContextKey(nullHandledVariation, resource.getURI().toString(), nullHandledVariation, precedence);
                 registerProperties(key, properties);
             }
