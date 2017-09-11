@@ -160,6 +160,12 @@ public class ApplicationRulesManager implements IManager {
         Properties properties = new Properties();
         if (resource != null && resource.getInputStream() != null) {
             properties.load(resource.getInputStream());
+            for (Object property : properties.keySet()) {
+                String systemPropertyValue = System.getProperty((String) property);
+                if (systemPropertyValue != null && !"".equals(systemPropertyValue)) {
+                    properties.setProperty((String) property, systemPropertyValue);
+                }
+            }
             if (!properties.isEmpty()) {
                 String nullHandledVariation = !VariationContext.NULL_VARIATION.equals(variation) ? variation : APP_RULE_GLOBAL;
                 ContextKey key = new ContextKey(nullHandledVariation, resource.getURI().toString(), nullHandledVariation, precedence);
