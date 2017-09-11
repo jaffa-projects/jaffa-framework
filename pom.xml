@@ -423,6 +423,14 @@
                             <phase>compile</phase>
                         </execution>
                     </executions>
+                    <configuration>
+                      <customResourceDefinitions>
+                        <customResourceDefinition>
+                          <directory>true</directory>
+                          <customResource>aop</customResource>
+                        </customResourceDefinition>
+                      </customResourceDefinitions>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

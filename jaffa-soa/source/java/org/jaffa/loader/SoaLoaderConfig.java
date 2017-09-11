@@ -76,12 +76,12 @@ public class SoaLoaderConfig {
     @Bean
     public ResourceLoader<TransactionManager> transactionManagerXmlLoader() {
         ResourceLoader<TransactionManager> transactionManagerResourceLoader = new ResourceLoader<TransactionManager>() ;
-        transactionManagerResourceLoader.setManager(transactionManagerXml());
+        transactionManagerResourceLoader.setManager(jaffaTransactionManager());
         return transactionManagerResourceLoader;
     }
 
     @Bean
-    public TransactionManager transactionManagerXml() {
+    public TransactionManager jaffaTransactionManager() {
         TransactionManager transactionManager = new TransactionManager();
         org.jaffa.transaction.services.ConfigurationService.setTransactionManager(transactionManager);
         transactionManager.setTransactionRepository(transactionInfoRepository());

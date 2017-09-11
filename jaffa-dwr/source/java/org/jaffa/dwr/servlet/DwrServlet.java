@@ -83,7 +83,7 @@ import org.xml.sax.SAXException;
 		urlPatterns = "/dwr/*", 
 		loadOnStartup=2,
 		initParams = {
-				//@WebInitParam(name = "debug", value = "true"),				
+				@WebInitParam(name = "debug", value = "true"),
 				@WebInitParam(name = "skipDefaultConfig", value = "true"),
 				@WebInitParam(name = "meta-config", value = "classpath*:META-INF/dwr.xml") 
 		}
@@ -130,7 +130,7 @@ public class DwrServlet extends org.directwebremoting.servlet.DwrServlet {
 			 * found in classpath and default config got skipped.
 			 */
 			if ((resources == null || resources.length == 0) && skipDefaultConfig) {
-				throw new IOException(Messages.getString("DwrXmlConfigurator.MissingConfigFile",new String[] { "jar!META-INT/dwr.xml" }));
+				throw new IOException(Messages.getString("DwrXmlConfigurator.MissingConfigFile",new String[] { "jar!META-INF/dwr.xml" }));
 			}
 
 			/*
