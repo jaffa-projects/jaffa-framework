@@ -35,9 +35,8 @@
         <ignite.version>1.4.0</ignite.version>
 
         <!-- ******************************************************************* -->
-        <!-- Jaffa Version                                                       -->
+        <!-- Jaffa Maven Tools Version                                                       -->
         <!-- ******************************************************************* -->
-        <jaffa.version>6.0.0-SNAPSHOT</jaffa.version>
         <jaffa.maven.tools.version>1.0.0-SNAPSHOT</jaffa.maven.tools.version>
 
         <!-- ******************************************************************* -->
@@ -130,10 +129,10 @@
         <manifest.specification.version>6.0.0</manifest.specification.version>
         <manifest.specification.vendor>JAFFA</manifest.specification.vendor>
 
-        <manifest.implementation.title>${project.artifactId}-${jaffa.version}</manifest.implementation.title>
+        <manifest.implementation.title>${project.artifactId}-${project.version}</manifest.implementation.title>
         <manifest.implementation.vendor>JAFFA</manifest.implementation.vendor>
         <manifest.implementation.vendor.id>org.jaffa</manifest.implementation.vendor.id>
-        <manifest.implementation.version>${jaffa.version}</manifest.implementation.version>
+        <manifest.implementation.version>${project.version}</manifest.implementation.version>
 
         <manifest.bundle.symbolic.name>org.jaffa</manifest.bundle.symbolic.name>
         <manifest.bundle.vendor>JAFFA</manifest.bundle.vendor>
@@ -141,7 +140,7 @@
         <manifest.bundle.copyright>2015</manifest.bundle.copyright>
         <manifest.bundle.license>http://jaffa.sourceforge.net</manifest.bundle.license>
         <manifest.bundle.docurl>http://jaffa.sourceforge.net</manifest.bundle.docurl>
-        <manifest.bundle.version>${jaffa.version}</manifest.bundle.version>
+        <manifest.bundle.version>${project.version}</manifest.bundle.version>
         <manifest.bundle.manifest.version>2</manifest.bundle.manifest.version>
         <manifest.bundle.classpath>.</manifest.bundle.classpath>
         <manifest.export.package>.</manifest.export.package>
@@ -814,7 +813,7 @@
                         <dependency>
                             <groupId>org.jaffa.assemblies</groupId>
                             <artifactId>jaffa-ui-assembly-descriptor</artifactId>
-                            <version>${jaffa.version}</version>
+                            <version>${project.version}</version>
                         </dependency>
                     </dependencies>
                     <executions>
@@ -838,8 +837,8 @@
                     <configuration>
                         <minmemory>256m</minmemory>
                         <maxmemory>2g</maxmemory>
-                        <header><![CDATA[<b>${project.name} ${jaffa.version}</b>]]></header>
-                        <footer><![CDATA[<b>${project.name} ${jaffa.version}</b>]]></footer>
+                        <header><![CDATA[<b>${project.name} ${project.version}</b>]]></header>
+                        <footer><![CDATA[<b>${project.name} ${project.version}</b>]]></footer>
                         <archive>
                             <index>true</index>
                             <manifest>
@@ -1994,62 +1993,62 @@
             <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-components-admin</artifactId>
-                <version>${jaffa.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-components</artifactId>
-                <version>${jaffa.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-components-messaging</artifactId>
-                <version>${jaffa.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-components-printing</artifactId>
-                <version>${jaffa.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-components-scheduler</artifactId>
-                <version>${jaffa.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-components-user</artifactId>
-                <version>${jaffa.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-console</artifactId>
-                <version>${jaffa.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-core</artifactId>
-                <version>${jaffa.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-dwr</artifactId>
-                <version>${jaffa.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-soa</artifactId>
-                <version>${jaffa.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-ria</artifactId>
-                <version>${jaffa.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-rules</artifactId>
-                <version>${jaffa.version}</version>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -2080,4 +2079,10 @@
             </modules>
         </profile>
     </profiles>
+
+    <scm>
+        <connection>scm:git:https://tapljs482.tapestry.local/jaffa/jaffa-framework</connection>
+        <developerConnection>scm:git:https://tapljs482.tapestry.local/jaffa/jaffa-framework</developerConnection>
+    </scm>
+
 </project>
