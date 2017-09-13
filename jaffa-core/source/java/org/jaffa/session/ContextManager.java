@@ -55,31 +55,15 @@
 
 package org.jaffa.session;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.WeakHashMap;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
-import org.jaffa.config.ApplicationRulesLoader;
+import org.jaffa.loader.config.ApplicationRulesManager;
 import org.jaffa.presentation.portlet.session.UserSession;
 import org.jaffa.util.NestedMap;
-import org.jaffa.util.URLHelper;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.*;
+import java.net.URLEncoder;
+import java.util.*;
 
 /**
  * Base implementation of the IContextManager. It reads Global Context,
@@ -99,13 +83,15 @@ import org.jaffa.util.URLHelper;
 public class ContextManager implements IContextManager {
 
     private static final Logger log = Logger.getLogger(ContextManager.class);
-    private static final String LOCATION = "resources/ApplicationRules.";
+
 
     private static ThreadLocal threadContext = new ThreadLocal();
     private static ThreadLocal userPreferencesInThread = new ThreadLocal();
 
     private Map m_global = null; // Contains global properties
     private Map m_variation = new WeakHashMap(); // Contains variation/properties pairs
+
+    private static ApplicationRulesManager applicationRulesManager;
 
     /**
      * Used to set the context on the thread. This uses all the other methods in the class to build
@@ -338,52 +324,9 @@ public class ContextManager implements IContextManager {
         if (m_global == null) {
             synchronized (this) {
                 if (m_global == null) {
-                    // Read global settings
-                    String location = LOCATION + "global";
-                    InputStream input = null;
                     Properties props = null;
-                    try {
-                        input = URLHelper.getInputStream(location);
-                        if (input != null) {
-                        	props = new Properties();
-                            props.load(input);
-                            if (log.isDebugEnabled()) {
-                                if (props.size() < 1) {
-                                    log.debug("No Global Rules Defined in file " + location);
-                                } else {
-                                    log.debug("Loaded " + props.size() + " rule(s) from " + location);
-                                }
-                            }
-                        } else {
-                            if (log.isInfoEnabled()) {
-                                log.info("No Global Rules found. Can't find file " + location);
-                            }
-                        }
-                    } catch (Exception e) {
-                        // No global rules available;
-                        if (log.isInfoEnabled()) {
-                            log.info("No Global Rules Found. Error in loading file " + location, e);
-                        }
-                    } finally {
-                        try {
-                            if (input != null) {
-                                input.close();
-                            }
-                        } catch (IOException e) {
-                            if (log.isInfoEnabled()) {
-                                log.info("Exception thrown while closing the properties file", e);
-                            }
-                        }
-                    }
+                    props = applicationRulesManager.getApplicationRulesGlobal();
 
-					/**
-					 * If nothing loaded from I/O file. Load it from
-					 * ApplicationRulesLoader
-					 */
-					if (props == null || props.size() == 0) {
-						props = ApplicationRulesLoader.getInstance().getApplicationRulesGlobal();
-					}
-                    
                     // Cache an unmodifiable view
 					if (props != null) {
 						m_global = Collections.unmodifiableMap(props);
@@ -404,50 +347,9 @@ public class ContextManager implements IContextManager {
         if (!m_variation.containsKey(variation)) {
             synchronized (m_variation) {
                 if (!m_variation.containsKey(variation)) {
-                    // Read variation settings
-                    String location = LOCATION + variation;
-                    InputStream input = null;
                     Properties props = null;
-                    try {
-                        input = URLHelper.getInputStream(location);
-                        if (input != null) {
-                        	props = new Properties();
-                            props.load(input);
-                            if (log.isDebugEnabled()) {
-                                if (props.size() < 1) {
-                                    log.debug("No Variation '" + variation + "' Rules Defined in file " + location);
-                                } else {
-                                    log.debug("Loaded " + props.size() + " rule(s) from " + location);
-                                }
-                            }
-                        } else {
-                            if (log.isInfoEnabled()) {
-                                log.info("No Variation '" + variation + "' Rules Found. Can't find file " + location);
-                            }
-                        }
-                    } catch (Exception e) {
-                        // No rules available;
-                        if (log.isInfoEnabled()) {
-                            log.info("No Variation '" + variation + "' Rules Found. Error in loading file " + location, e);
-                        }
-                    } finally {
-                        try {
-                            if (input != null) {
-                                input.close();
-                            }
-                        } catch (IOException e) {
-                            if (log.isInfoEnabled()) {
-                                log.info("Exception thrown while closing the properties file", e);
-                            }
-                        }
-                    }
-                    
-					/**
-					 * If nothing loaded from I/O file. Load it from
-					 * ApplicationRulesLoader
-					 */
 					if (props == null || props.size() == 0) {
-						props = ApplicationRulesLoader.getInstance().getApplicationRulesVariation(variation);
+						props = applicationRulesManager.getApplicationRulesVariation(variation);
 					}
                     
                     // Cache an unmodifiable view
@@ -608,5 +510,14 @@ public class ContextManager implements IContextManager {
                 os.close();
             }
         }
+    }
+
+
+    public static ApplicationRulesManager getApplicationRulesManager() {
+        return applicationRulesManager;
+    }
+
+    public static void setApplicationRulesManager(ApplicationRulesManager applicationRulesManager) {
+        ContextManager.applicationRulesManager = applicationRulesManager;
     }
 }

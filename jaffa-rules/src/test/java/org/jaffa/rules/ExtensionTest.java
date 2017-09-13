@@ -60,6 +60,7 @@ import org.apache.log4j.Logger;
 import org.jaffa.config.JaffaRulesConfig;
 import org.jaffa.datatypes.DateOnly;
 import org.jaffa.datatypes.exceptions.InvalidForeignKeyException;
+import org.jaffa.loader.CoreLoaderConfig;
 import org.jaffa.rules.testmodels.Extension1;
 import org.jaffa.util.ExceptionHelper;
 import org.springframework.context.ApplicationContext;
@@ -95,7 +96,7 @@ public class ExtensionTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        ctx = new AnnotationConfigApplicationContext(JaffaRulesConfig.class);
+        ctx = new AnnotationConfigApplicationContext(JaffaRulesConfig.class, CoreLoaderConfig.class);
     }
 
     public void testAOPInjection() {

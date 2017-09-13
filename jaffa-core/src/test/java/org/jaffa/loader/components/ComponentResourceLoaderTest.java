@@ -50,9 +50,9 @@
 package org.jaffa.loader.components;
 
 import org.jaffa.loader.ContextKey;
+import org.jaffa.loader.CoreLoaderConfig;
 import org.jaffa.loader.IRepository;
 import org.jaffa.presentation.portlet.component.ComponentDefinition;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -69,7 +69,7 @@ public class ComponentResourceLoaderTest {
 
 
     private static AnnotationConfigApplicationContext xmlLoaderConfig =
-            new AnnotationConfigApplicationContext(ComponentXmlLoaderTestConfig.class);
+            new AnnotationConfigApplicationContext(ComponentXmlLoaderTestConfig.class, CoreLoaderConfig.class);
 
     /**
      * Test loading the XML config via the ComponentManager.
@@ -90,10 +90,10 @@ public class ComponentResourceLoaderTest {
 
         Set<ContextKey> keys = repository.getAllKeys();
         String rolesEditorKey = "Jaffa.Admin.RolesEditor";
-        ContextKey rolesEditorContextKey = new ContextKey(rolesEditorKey, "different-file.xml", "DEF", "100-Highest");
+        ContextKey rolesEditorContextKey = new ContextKey(rolesEditorKey, "different-file.xml", "NULL", "100-Highest");
         assertTrue(keys.contains(rolesEditorContextKey));
         String testFunctionViewerKey = "Jaffa.UnitTest.TestFunctionViewer";
-        ContextKey testFunctionViewerContextKey = new ContextKey(testFunctionViewerKey, "different-file.xml", "DEF", "100-Highest");
+        ContextKey testFunctionViewerContextKey = new ContextKey(testFunctionViewerKey, "different-file.xml", "NULL", "100-Highest");
         assertTrue(keys.contains(testFunctionViewerContextKey));
 
         ComponentDefinition reComponentDefinition =

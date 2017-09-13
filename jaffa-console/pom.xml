@@ -137,15 +137,15 @@
         <artifactId>maven-assembly-plugin</artifactId>
       </plugin>
        <!--Uncomment this piece as we need to skip jawr fragment merging for jaffa-web-app build-->
-      <plugin>
-        <groupId>org.jaffa.maven</groupId>
-        <artifactId>fragmentmerge-maven-plugin</artifactId>
-        <configuration>
-          <skipConfigFiles>
-            <skipConfigFile>jawr</skipConfigFile>
-          </skipConfigFiles>
-        </configuration>
-      </plugin>
+      <!--<plugin>-->
+        <!--<groupId>org.jaffa.maven</groupId>-->
+        <!--<artifactId>fragmentmerge-maven-plugin</artifactId>-->
+        <!--<configuration>-->
+          <!--<skipConfigFiles>-->
+            <!--<skipConfigFile>jawr</skipConfigFile>-->
+          <!--</skipConfigFiles>-->
+        <!--</configuration>-->
+      <!--</plugin>-->
     </plugins>
 
   </build>

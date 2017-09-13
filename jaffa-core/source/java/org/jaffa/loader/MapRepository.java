@@ -107,7 +107,7 @@ public class MapRepository<T> implements IRepository<T> {
             if (contextKeysForId!=null && contextKeysForId.size() > 0) {
                 for (ContextKey contextKey : contextKeysForId) {
                     if ((contextKey.getVariation() != null && contextKey.getVariation().equals(VariationContext.getVariation()))
-                            || contextKey.getVariation().equals(VariationContext.DEFAULT_VARIATION)) {
+                            || contextKey.getVariation().equals(VariationContext.NULL_VARIATION)) {
                         return repositoryMap.get(contextKey);
                     }
 
