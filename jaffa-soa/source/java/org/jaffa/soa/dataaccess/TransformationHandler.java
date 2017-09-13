@@ -75,11 +75,12 @@ import java.util.List;
  */
 public class TransformationHandler implements ITransformationHandler {
 
-    private static Logger log = Logger.getLogger(TransformationHandler.class);
+    protected static Logger log = Logger.getLogger(TransformationHandler.class);
+
     private boolean changeDone;
     private boolean cloning = false;
     private boolean loggingActive = true;
-
+    private ITransformationHandler targetBean;
     private List<ITransformationHandler> transformationHandlers = new ArrayList<>();
 
     /**
@@ -112,6 +113,11 @@ public class TransformationHandler implements ITransformationHandler {
      * Adds a new handler to the beginning of the list of all handlers.
      */
     public void prependTransformationHandlers(List<ITransformationHandler> handlers) {
+        for (ITransformationHandler handler : handlers) {
+            handler.setTargetBean(this);
+        }
+
+        // maintain order of the input list
         transformationHandlers.addAll(0, handlers);
     }
 
@@ -119,7 +125,10 @@ public class TransformationHandler implements ITransformationHandler {
      * Adds a new handler to the end of the list of all handlers.
      */
     public void appendTransformationHandlers(List<ITransformationHandler> handlers) {
-        transformationHandlers.addAll(handlers);
+        for (ITransformationHandler handler : handlers) {
+            handler.setTargetBean(this);
+            transformationHandlers.add(handler);
+        }
     }
 
     /**
@@ -127,6 +136,22 @@ public class TransformationHandler implements ITransformationHandler {
      */
     public List<ITransformationHandler> getTransformationHandlers() {
         return transformationHandlers;
+    }
+
+    /**
+     * Sets this handler's target handler instance - that would be the instance of the handler that this instance
+     * is operating on.
+     */
+    public void setTargetBean(ITransformationHandler targetBean) {
+        this.targetBean = targetBean;
+    }
+
+    /**
+     * Gets this handler's target handler instance - that would be the instance of the handler that this instance
+     * is operating on.
+     */
+    public ITransformationHandler getTargetBean() {
+        return targetBean;
     }
 
     /**
@@ -344,7 +369,7 @@ public class TransformationHandler implements ITransformationHandler {
             log.debug("Handle Event : prevalidateBean for " + path + " (Target=" + shortClassName(target) + ")");
     }
 
-    private String shortClassName(Object o) {
+    protected String shortClassName(Object o) {
         return o != null ? o.getClass().getSimpleName() : null;
     }
 }

@@ -48,8 +48,10 @@
  */
 package org.jaffa.persistence;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -91,19 +93,47 @@ public abstract class Persistent implements IPersistent {
     private transient Map<String, Object> m_modifiedFields = null;
     private transient Validator<Persistent> validator;//do not create a getter for validators, will cause serialization problems
 
-    // Customer-specific injected events to be fired
-    // TODO-SWAT add preAddBegins() event
-    // TODO-SWAT add preAddEnds() event
-    // TODO-SWAT add preDeleteBegins() event
-    // TODO-SWAT add preUpdateBegins() event
-    // TODO-SWAT add preUpdateEnds() event
-    // TODO-SWAT add postAddBegins() event
-    // TODO-SWAT add postAddEnds() event
-    // TODO-SWAT add postDeleteEnds() event
-    // TODO-SWAT add postUpdateBegins() event
-    // TODO-SWAT add postUpdateEnds() event
-    // TODO-SWAT add validateBegins() event
-    // TODO-SWAT add validateEnds() event
+    // handlers to inject custom code around lifecycle events
+    private List<ILifecycleHandler> lifecycleHandlers = new ArrayList<>();
+
+    /**
+     * Adds a new handler to the beginning of the list of all handlers.
+     */
+    public void prependLifecycleHandlers(List<ILifecycleHandler> handlers) {
+        for (ILifecycleHandler handler : handlers) {
+            handler.setTargetBean(this);
+        }
+
+        // maintain order of the input list
+        lifecycleHandlers.addAll(0, handlers);
+    }
+
+    /**
+     * Adds a new handler to the end of the list of all handlers.
+     */
+    public void appendLifecycleHandlers(List<ILifecycleHandler> handlers) {
+        for (ILifecycleHandler handler : handlers) {
+            handler.setTargetBean(this);
+            lifecycleHandlers.add(handler);
+        }
+    }
+
+    /**
+     * Gets the ordered list of transformation handlers to fire when invoking lifecycle events on this handler.
+     */
+    public List<ILifecycleHandler> getLifecycleHandlers() {
+        return lifecycleHandlers;
+    }
+
+    /**
+     * Sets the target instance of a LifecycleHandler on this instance of the handler.  When we add multiple
+     * handlers into a list on the target bean, this will give each handler in the list access to the target
+     * instance of the handler itself.
+     *
+     * @param targetBean the target instance of the lifecycle handler this instance is operating on.
+     */
+    public void setTargetBean(ILifecycleHandler targetBean) {
+    }
 
     /** This returns the state of the object for diagnostic purposes.
      * @return a String representation of the object.
@@ -283,9 +313,7 @@ public abstract class Persistent implements IPersistent {
      * @throws PreAddFailedException if any error occurs during the process.
      */
     public void preAdd() throws PreAddFailedException {
-        // TODO-SWAT fire preAddBegins() event
         doPreAdd();
-        // TODO-SWAT fire preAddEnds() event
     }
 
     /**
@@ -360,8 +388,6 @@ public abstract class Persistent implements IPersistent {
      * @throws PostAddFailedException if any error occurs during the process.
      */
     public void postAdd() throws PostAddFailedException {
-        // TODO-SWAT fire postAddBegins() event
-        // TODO-SWAT fire postAddEnds() event
     }
 
     /** This method is triggered by the UOW, before adding this object to the Update-Store.
@@ -372,7 +398,6 @@ public abstract class Persistent implements IPersistent {
      * @throws PreUpdateFailedException if any error occurs during the process.
      */
     public void preUpdate() throws PreUpdateFailedException {
-        // TODO-SWAT fire preUpdateBegins() event
         if (log.isDebugEnabled())
             log.debug("Invoking validate() to validate the domain object");
         try {
@@ -389,7 +414,6 @@ public abstract class Persistent implements IPersistent {
                 throw new PreUpdateFailedException(null, e);
             }
         }
-        // TODO-SWAT fire preUpdateEnds() event
     }
 
     /** This method is triggered by the UOW, after adding this object to the Update-Store.
@@ -397,8 +421,6 @@ public abstract class Persistent implements IPersistent {
      * @throws PostUpdateFailedException if any error occurs during the process.
      */
     public void postUpdate() throws PostUpdateFailedException {
-        // TODO-SWAT fire postUpdateBegins() event
-        // TODO-SWAT fire postUpdateEnds() event
     }
 
     /** This method is triggered by the UOW, before adding this object to the Delete-Store.
@@ -408,7 +430,6 @@ public abstract class Persistent implements IPersistent {
      */
     public void preDelete() throws PreDeleteFailedException {
         performPreDeleteReferentialIntegrity();
-        // TODO-SWAT fire preDeleteEnds() event
     }
 
     /** This method is triggered by the UOW, after adding this object to the Delete-Store.
@@ -416,7 +437,6 @@ public abstract class Persistent implements IPersistent {
      * @throws PostDeleteFailedException if any error occurs during the process.
      */
     public void postDelete() throws PostDeleteFailedException {
-        // TODO-SWAT fire postDeleteEnds() event
     }
 
     /** This method is triggered by the UOW after a query loads this object.
@@ -434,10 +454,8 @@ public abstract class Persistent implements IPersistent {
      * @throws ApplicationExceptions if any application error occurs.
      * @throws FrameworkException Indicates some system error
      */
-    protected void validate() throws ApplicationExceptions, FrameworkException {
-        // TODO-SWAT fire validateBegins() event
+    public void validate() throws ApplicationExceptions, FrameworkException {
         doValidate();
-        // TODO-SWAT fire validateEnds() event
     }
 
     /**

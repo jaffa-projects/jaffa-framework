@@ -60,7 +60,7 @@ import java.util.List;
 
 /**
  * Interface of an Transformation Handler that can be used to link in
- * additional functionality to the transformation process when a
+ * additional functionallity to the transformation process when a
  * object graph is being transformed to either create, update or delete
  * domain objects.
  *
@@ -68,6 +68,27 @@ import java.util.List;
  * @version 1.0
  */
 public interface ITransformationHandler {
+
+    String LIFECYCLE_CHANGE_DONE = "changeDone(..)";
+    String LIFECYCLE_END_BEAN = "endBean(..)";
+    String LIFECYCLE_END_BEAN_ADD = "endBeanAdd(..)";
+    String LIFECYCLE_END_BEAN_CLONE = "endBeanClone(..)";
+    String LIFECYCLE_END_BEAN_DELETE = "endBeanDelete(..)";
+    String LIFECYCLE_END_BEAN_LOAD = "endBeanLoad(..)";
+    String LIFECYCLE_END_BEAN_MASS_UPDATE = "endBeanMassUpdate(..)";
+    String LIFECYCLE_END_BEAN_UPDATE = "endBeanUpdate(..)";
+    String LIFECYCLE_IS_CHANGE_DONE = "isChangeDone()";
+    String LIFECYCLE_IS_CLONING = "isCloning()";
+    String LIFECYCLE_PRE_QUERY = "preQuery(..)";
+    String LIFECYCLE_PREVALIDATE_BEAN = "prevalidateBean(..)";
+    String LIFECYCLE_SET_CHANGE_DONE = "setChangeDone(..)";
+    String LIFECYCLE_SET_CLONING = "setCloning(..)";
+    String LIFECYCLE_START_BEAN = "startBean(..)";
+    String LIFECYCLE_START_BEAN_ADD = "startBeanAdd(..)";
+    String LIFECYCLE_START_BEAN_CLONE = "startBeanClone(..)";
+    String LIFECYCLE_START_BEAN_DELETE = "startBeanDelete(..)";
+    String LIFECYCLE_START_BEAN_MASS_UPDATE = "startBeanMassUpdate(..)";
+    String LIFECYCLE_START_BEAN_UPDATE = "startBeanUpdate(..)";
 
     /**
      * Getter for the property cloning.
@@ -311,4 +332,13 @@ public interface ITransformationHandler {
      * injected before or after lifecycle methods.
      */
     List<ITransformationHandler> getTransformationHandlers();
+
+    /**
+     * Sets the target instance of a TransformationHandler on this instance of the handler.  When we add multiple
+     * handlers into a list on the target bean, this will give each handler in the list access to the target
+     * instance of the handler itself.
+     *
+     * @param targetBean the target instance of the transformation handler this instance is operating on.
+     */
+    void setTargetBean(ITransformationHandler targetBean);
 }

@@ -47,50 +47,52 @@
  *  ====================================================================
  */
 
-package org.jaffa.soa.dataaccess;
+package org.jaffa.beans.factory;
+
+import org.jaffa.persistence.ILifecycleHandler;
 
 import java.util.List;
 
 /**
- * Factory used to register {@link TransformationHandler}s for a specific Transformation Handler type.
+ * Factory used to register {@link ILifecycleHandler}s for a specific Lifecycle Handler type.
  * The handlers will be added in a specific order to allow for custom code to be executed before or after
  * all lifecycle events.  This factory bean can be retrieved from the application context or injected into a component
  * or configuration so new handlers can be added - allowing customer builds to add to the base set of handlers.
  * <p/>
- * Created by ndzwill on 8/18/2017.
+ * Created by ndzwill on 9/8/2017.
  */
-public interface ITransformationHandlerFactory {
+public interface ILifecycleHandlerFactory {
 
     /**
-     * Used to get instances of TransformationHandlers.  This allows the creation of
+     * Used to get instances of LifecycleHandlers.  This allows the creation of
      * custom handlers on the fly so each handler can have the context of the instance of the class they are on.
      * <p/>
-     * Created by ndzwill on 9/10/2017.
+     * Created by ndzwill on 9/12/2017.
      */
-    interface ITransformationHandlerProvider {
+    interface ILifecycleHandlerProvider {
 
         /**
-         * Used to get instances of TransformationHandlers.  This allows the creation of
+         * Used to get instances of LifecycleHandlers.  This allows the creation of
          * custom handlers on the fly so each handler can have the context of the instance of the class they are on.
          */
-        ITransformationHandler getHandler();
+        ILifecycleHandler getHandler();
     }
 
     /**
      * Adds a handler to be fired before the handler with the specified type.
      *
-     * @param clazz   the type of handler to prepend this handler to.
-     * @param handler the handler to be prepended to all handlers on the input type.
+     * @param clazz    the type of handler to prepend this handler to.
+     * @param provider provides unique instances of handlers when needed.
      */
-    void addPrependedHandler(Class<?> clazz, ITransformationHandlerProvider handler);
+    void addPrependedHandlerProvider(Class<?> clazz, ILifecycleHandlerProvider provider);
 
     /**
      * Adds a handler to be fired after the handler with the specified type.
      *
-     * @param clazz   the type of handler to append this handler to.
-     * @param handler the handler to be appended to all handlers on the input type.
+     * @param clazz    the type of handler to append this handler to.
+     * @param provider provides unique instances of handlers when needed.
      */
-    void addAppendedHandler(Class<?> clazz, ITransformationHandlerProvider handler);
+    void addAppendedHandlerProvider(Class<?> clazz, ILifecycleHandlerProvider provider);
 
     /**
      * Gets all handlers with custom logic to fire before the input handler.
@@ -98,7 +100,7 @@ public interface ITransformationHandlerFactory {
      * @param handler the handler to get customer handlers for.
      * @return all handlers to be fired before the input handler or null if there are none.
      */
-    List<ITransformationHandler> getPrependedHandlers(TransformationHandler handler);
+    List<ILifecycleHandler> getPrependedHandlers(ILifecycleHandler handler);
 
     /**
      * Gets all handlers with custom logic to fire after the input handler.
@@ -106,5 +108,5 @@ public interface ITransformationHandlerFactory {
      * @param handler the handler to get customer handlers for.
      * @return all handlers to be fired after the input handler or null if there are none.
      */
-    List<ITransformationHandler> getAppendedHandlers(TransformationHandler handler);
+    List<ILifecycleHandler> getAppendedHandlers(ILifecycleHandler handler);
 }

@@ -48,30 +48,25 @@
  */
 package org.jaffa.persistence.engines.jdbcengine.datasource;
 
+import org.apache.log4j.Logger;
+import org.jaffa.exceptions.ApplicationExceptions;
+import org.jaffa.exceptions.FrameworkException;
+import org.jaffa.persistence.Criteria;
+import org.jaffa.persistence.ILifecycleHandler;
+import org.jaffa.persistence.IPersistent;
+import org.jaffa.persistence.UOW;
+import org.jaffa.persistence.engines.jdbcengine.configservice.initdomain.Database;
+import org.jaffa.persistence.engines.jdbcengine.datasource.exceptions.DataSourceCreationException;
+import org.jaffa.persistence.exceptions.*;
+import org.jaffa.persistence.logging.IPersistenceLoggingPlugin;
+import org.jaffa.session.ContextManagerFactory;
+import org.jaffa.util.ExceptionHelper;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-
-import org.apache.log4j.Logger;
-
-import java.sql.SQLException;
-
-import org.jaffa.exceptions.ApplicationExceptions;
-import org.jaffa.exceptions.FrameworkException;
-import org.jaffa.persistence.Criteria;
-import org.jaffa.persistence.IPersistent;
-import org.jaffa.persistence.UOW;
-import org.jaffa.persistence.engines.jdbcengine.datasource.exceptions.DataSourceCreationException;
-import org.jaffa.persistence.exceptions.IllegalPersistentStateRuntimeException;
-import org.jaffa.persistence.exceptions.AddFailedException;
-import org.jaffa.persistence.exceptions.UpdateFailedException;
-import org.jaffa.persistence.exceptions.DeleteFailedException;
-import org.jaffa.persistence.engines.jdbcengine.configservice.initdomain.Database;
-import org.jaffa.persistence.exceptions.CommitFailedException;
-import org.jaffa.persistence.logging.IPersistenceLoggingPlugin;
-import org.jaffa.session.ContextManagerFactory;
-import org.jaffa.util.ExceptionHelper;
 
 /**
  * This class is used to hold a connection to the database. It holds collections of objects to be added, updated, deleted or queried.
@@ -116,7 +111,7 @@ public class PersistentTransaction {
      *
      * @param uow      The UOW being processed.
      * @param dataSource A Datasource with an existing connection.
-     * @throws DataSourceCreationException 
+     * @throws DataSourceCreationException
      */
     public PersistentTransaction(UOW uow, DataSource dataSource) throws DataSourceCreationException {
         dataSourceContainer = new DataSourceContainer(dataSource);
@@ -140,10 +135,17 @@ public class PersistentTransaction {
             throw new IllegalPersistentStateRuntimeException(str);
         }
 
+        List<ILifecycleHandler> handlers = null;
+        if (object != null) {
+            handlers = object.getLifecycleHandlers();
+        }
+
         if (invokeLifecycleEvents) {
             if (log.isDebugEnabled())
                 log.debug("Invoking the PreAdd trigger on the Persistent object");
-            object.preAdd();
+            for (ILifecycleHandler lifeCycleHandler : handlers) {
+                lifeCycleHandler.preAdd();
+            }
         }
 
         if (adds == null) {
@@ -179,7 +181,9 @@ public class PersistentTransaction {
             }
 
             // Invoke the post add behaviors
-            object.postAdd();
+            for (ILifecycleHandler lifecycleHandler : handlers) {
+                lifecycleHandler.postAdd();
+            }
         }
     }
 
@@ -206,10 +210,17 @@ public class PersistentTransaction {
             return;
         }
 
+        List<ILifecycleHandler> handlers = null;
+        if (object != null) {
+            handlers = object.getLifecycleHandlers();
+        }
+
         if (invokeLifecycleEvents) {
             if (log.isDebugEnabled())
                 log.debug("Invoking the PreUpdate trigger on the Persistent object");
-            object.preUpdate();
+            for (ILifecycleHandler lifecycleHandler : handlers) {
+                lifecycleHandler.preUpdate();
+            }
         }
 
         if (updates == null) {
@@ -245,7 +256,9 @@ public class PersistentTransaction {
             }
 
             // Invoke the post update behaviors
-            object.postUpdate();
+            for (ILifecycleHandler lifecycleHandler : handlers) {
+                lifecycleHandler.postUpdate();
+            }
         }
     }
 
@@ -266,10 +279,17 @@ public class PersistentTransaction {
             throw new IllegalPersistentStateRuntimeException(str);
         }
 
+        List<ILifecycleHandler> handlers = null;
+        if (object != null) {
+            handlers = object.getLifecycleHandlers();
+        }
+
         if (invokeLifecycleEvents) {
             if (log.isDebugEnabled())
                 log.debug("Invoking the PreDelete trigger on the Persistent object");
-            object.preDelete();
+            for (ILifecycleHandler lifecycleHandler : handlers) {
+                lifecycleHandler.preDelete();
+            }
         }
 
         if (deletes == null) {
@@ -305,7 +325,9 @@ public class PersistentTransaction {
             }
 
             // Invoke the post delete behaviors
-            object.postDelete();
+            for (ILifecycleHandler lifecycleHandler : handlers) {
+                lifecycleHandler.postDelete();
+            }
         }
     }
 
@@ -613,7 +635,7 @@ public class PersistentTransaction {
         /**
          * Creates a Database container for an e
          *
-         * @param database Database to create the DataSource from
+         * @param dataSource Database to create the DataSource from
          */
         public DataSourceContainer(DataSource dataSource) {
             m_dataSource = dataSource;

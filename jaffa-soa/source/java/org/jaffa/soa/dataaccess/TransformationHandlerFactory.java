@@ -64,32 +64,46 @@ import java.util.Map;
  */
 public class TransformationHandlerFactory implements ITransformationHandlerFactory {
 
-    private Map<Class<?>, List<ITransformationHandler>> prependedHandlers = new HashMap<>();
-    private Map<Class<?>, List<ITransformationHandler>> appendedHandlers = new HashMap<>();
+    private Map<Class<?>, List<ITransformationHandlerProvider>> prependedHandlers = new HashMap<>();
+    private Map<Class<?>, List<ITransformationHandlerProvider>> appendedHandlers = new HashMap<>();
 
     @Override
-    public void addPrependedHandler(Class<?> clazz, ITransformationHandler handler) {
+    public void addPrependedHandler(Class<?> clazz, ITransformationHandlerProvider handler) {
         if (!prependedHandlers.containsKey(clazz)) {
-            prependedHandlers.put(clazz, new ArrayList<ITransformationHandler>());
+            prependedHandlers.put(clazz, new ArrayList<ITransformationHandlerProvider>());
         }
         prependedHandlers.get(clazz).add(0, handler);
     }
 
     @Override
-    public void addAppendedHandler(Class<?> clazz, ITransformationHandler handler) {
+    public void addAppendedHandler(Class<?> clazz, ITransformationHandlerProvider handler) {
         if (!appendedHandlers.containsKey(clazz)) {
-            appendedHandlers.put(clazz, new ArrayList<ITransformationHandler>());
+            appendedHandlers.put(clazz, new ArrayList<ITransformationHandlerProvider>());
         }
         appendedHandlers.get(clazz).add(handler);
     }
 
     @Override
     public List<ITransformationHandler> getPrependedHandlers(TransformationHandler handler) {
-        return prependedHandlers.get(handler.getClass());
+        List<ITransformationHandler> handlers = null;
+        if (prependedHandlers.containsKey(handler.getClass())) {
+            handlers = new ArrayList<>();
+            for (ITransformationHandlerProvider provider : prependedHandlers.get(handler.getClass())) {
+                handlers.add(provider.getHandler());
+            }
+        }
+        return handlers;
     }
 
     @Override
     public List<ITransformationHandler> getAppendedHandlers(TransformationHandler handler) {
-        return appendedHandlers.get(handler.getClass());
+        List<ITransformationHandler> handlers = null;
+        if (appendedHandlers.containsKey(handler.getClass())) {
+            handlers = new ArrayList<>();
+            for (ITransformationHandlerProvider provider : appendedHandlers.get(handler.getClass())) {
+                handlers.add(provider.getHandler());
+            }
+        }
+        return handlers;
     }
 }

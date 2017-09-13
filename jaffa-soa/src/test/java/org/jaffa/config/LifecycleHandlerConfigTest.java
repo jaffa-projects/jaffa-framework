@@ -59,6 +59,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.jaffa.soa.dataaccess.ITransformationHandlerFactory.*;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -66,9 +67,9 @@ import static org.junit.Assert.assertEquals;
  * <p/>
  * Created by ndzwill on 8/18/2017.
  */
-public class TransformationHandlerConfigTest {
+public class LifecycleHandlerConfigTest {
 
-    private TransformationHandlerConfig target;
+    private LifecycleHandlerConfig target;
     private ITransformationHandlerFactory factory;
 
     /**
@@ -76,7 +77,7 @@ public class TransformationHandlerConfigTest {
      */
     @Before
     public void setup() {
-        target = new TransformationHandlerConfig();
+        target = new LifecycleHandlerConfig();
         factory = target.transformationHandlerFactory();
     }
 
@@ -108,14 +109,14 @@ public class TransformationHandlerConfigTest {
     @Test
     public void testTransformationHandlerOnlyPrependedHandlers() {
         TransformationHandler handler = new TransformationHandler();
-        List<ITransformationHandler> prependedHandlers = setupMockPrependedHandlers(handler);
+        List<ITransformationHandlerProvider> prependedHandlers = setupMockPrependedHandlers(handler);
         handler = target.transformationHandler(handler);
 
         // all the prepend handlers should be in order with the target handler last
         assertEquals("Unexpected number of handlers", prependedHandlers.size() + 1, handler.getTransformationHandlers().size());
-        for (ITransformationHandler actualHandler : prependedHandlers) {
+        for (ITransformationHandlerProvider actualHandler : prependedHandlers) {
             int index = prependedHandlers.indexOf(actualHandler);
-            assertEquals("Unexpected handler", actualHandler, handler.getTransformationHandlers().get(index));
+            assertEquals("Unexpected handler", index + 1, ((TestTransformationHandler) handler.getTransformationHandlers().get(index)).getIndex());
         }
 
         // the target handler is last in the list
@@ -128,7 +129,7 @@ public class TransformationHandlerConfigTest {
     @Test
     public void testTransformationHandlerOnlyAppendedHandlers() {
         TransformationHandler handler = new TransformationHandler();
-        List<ITransformationHandler> appendedHandlers = setupMockAppendedHandlers(handler);
+        List<ITransformationHandlerProvider> appendedHandlers = setupMockAppendedHandlers(handler);
         handler = target.transformationHandler(handler);
 
         // the target handler is first in the list
@@ -136,9 +137,11 @@ public class TransformationHandlerConfigTest {
         assertEquals("Unexpected handler", handler, handler.getTransformationHandlers().get(0));
 
         // all the append handlers should be in order at the end of the list
-        for (ITransformationHandler actualHandler : appendedHandlers) {
+        int counter = 0;
+        for (ITransformationHandlerProvider actualHandler : appendedHandlers) {
+            counter++;
             int index = appendedHandlers.indexOf(actualHandler) + 1;
-            assertEquals("Unexpected handler", actualHandler, handler.getTransformationHandlers().get(index));
+            assertEquals("Unexpected handler", counter, ((TestTransformationHandler) handler.getTransformationHandlers().get(index)).getIndex());
         }
     }
 
@@ -148,8 +151,8 @@ public class TransformationHandlerConfigTest {
     @Test
     public void testTransformationHandlerAllHandlers() {
         TransformationHandler handler = new TransformationHandler();
-        List<ITransformationHandler> prependedHandlers = setupMockPrependedHandlers(handler);
-        List<ITransformationHandler> appendedHandlers = setupMockAppendedHandlers(handler);
+        List<ITransformationHandlerProvider> prependedHandlers = setupMockPrependedHandlers(handler);
+        List<ITransformationHandlerProvider> appendedHandlers = setupMockAppendedHandlers(handler);
         handler = target.transformationHandler(handler);
 
         // expected size
@@ -157,30 +160,32 @@ public class TransformationHandlerConfigTest {
 
         // all the prepend handlers should be in order first in the list
         assertEquals("Unexpected number of handlers", totalSize, handler.getTransformationHandlers().size());
-        for (ITransformationHandler actualHandler : prependedHandlers) {
+        for (ITransformationHandlerProvider actualHandler : prependedHandlers) {
             int index = prependedHandlers.indexOf(actualHandler);
-            assertEquals("Unexpected handler", actualHandler, handler.getTransformationHandlers().get(index));
+            assertEquals("Unexpected handler", index + 1, ((TestTransformationHandler) handler.getTransformationHandlers().get(index)).getIndex());
         }
 
         // the target handler is in the middle of the list
         assertEquals("Unexpected handler", handler, handler.getTransformationHandlers().get(prependedHandlers.size()));
 
         // all the append handlers should be in order at the end of the list
+        int counter = 0;
         int offset = prependedHandlers.size() + 1;
-        for (ITransformationHandler actualHandler : appendedHandlers) {
+        for (ITransformationHandlerProvider actualHandler : appendedHandlers) {
+            counter++;
             int index = appendedHandlers.indexOf(actualHandler);
-            assertEquals("Unexpected handler", actualHandler, handler.getTransformationHandlers().get(index + offset));
+            assertEquals("Unexpected handler", counter, ((TestTransformationHandler) handler.getTransformationHandlers().get(index + offset)).getIndex());
         }
     }
 
     /**
      * Sets up a list of mock prepended handlers
      */
-    private List<ITransformationHandler> setupMockPrependedHandlers(TransformationHandler targetHandler) {
-        List<ITransformationHandler> handlers = new ArrayList<>();
-        handlers.add(new TransformationHandler());
-        handlers.add(new TransformationHandler());
-        handlers.add(new TransformationHandler());
+    private List<ITransformationHandlerProvider> setupMockPrependedHandlers(TransformationHandler targetHandler) {
+        List<ITransformationHandlerProvider> handlers = new ArrayList<>();
+        handlers.add(new TestProvider(1));
+        handlers.add(new TestProvider(2));
+        handlers.add(new TestProvider(3));
         factory.addPrependedHandler(targetHandler.getClass(), handlers.get(2));
         factory.addPrependedHandler(targetHandler.getClass(), handlers.get(1));
         factory.addPrependedHandler(targetHandler.getClass(), handlers.get(0));
@@ -190,14 +195,48 @@ public class TransformationHandlerConfigTest {
     /**
      * Sets up a list of mock prepended handlers
      */
-    private List<ITransformationHandler> setupMockAppendedHandlers(TransformationHandler targetHandler) {
-        List<ITransformationHandler> handlers = new ArrayList<>();
-        handlers.add(new TransformationHandler());
-        handlers.add(new TransformationHandler());
-        handlers.add(new TransformationHandler());
+    private List<ITransformationHandlerProvider> setupMockAppendedHandlers(TransformationHandler targetHandler) {
+        List<ITransformationHandlerProvider> handlers = new ArrayList<>();
+        handlers.add(new TestProvider(1));
+        handlers.add(new TestProvider(2));
+        handlers.add(new TestProvider(3));
         factory.addAppendedHandler(targetHandler.getClass(), handlers.get(0));
         factory.addAppendedHandler(targetHandler.getClass(), handlers.get(1));
         factory.addAppendedHandler(targetHandler.getClass(), handlers.get(2));
         return handlers;
     }
+
+    // TODO add fake rules to repo and test that they are added as expected to the handler factories
+
+    private class TestProvider implements ITransformationHandlerProvider {
+
+        private int index;
+
+        public TestProvider(int index) {
+            this.index = index;
+        }
+
+        @Override
+        public ITransformationHandler getHandler() {
+            return new TestTransformationHandler(index);
+        }
+    }
+
+    /**
+     * The index field gives us a way of uniquely identifying the handler so we can assert they are in the
+     * correct order.
+     */
+    private class TestTransformationHandler extends TransformationHandler {
+
+        private int index;
+
+        public TestTransformationHandler(int index) {
+            this.index = index;
+        }
+
+        public int getIndex() {
+            return index;
+        }
+    }
+
 }

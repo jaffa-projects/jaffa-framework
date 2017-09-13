@@ -49,147 +49,136 @@
 package org.jaffa.persistence;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
-import org.jaffa.persistence.exceptions.PostAddFailedException;
-import org.jaffa.persistence.exceptions.PostDeleteFailedException;
-import org.jaffa.persistence.exceptions.PostLoadFailedException;
-import org.jaffa.persistence.exceptions.PostUpdateFailedException;
-import org.jaffa.persistence.exceptions.PreAddFailedException;
-import org.jaffa.persistence.exceptions.PreDeleteFailedException;
-import org.jaffa.persistence.exceptions.PreUpdateFailedException;
 
-/** Interface for all persistent objects.
+/**
+ * Interface for all persistent objects.
  */
-public interface IPersistent extends Cloneable, Serializable {
+public interface IPersistent extends ILifecycleHandler, Cloneable, Serializable {
 
-    /** Returns the UOW to which this object is associated.
+    /**
+     * Returns the UOW to which this object is associated.
+     *
      * @return The UOW
      */
-    public UOW getUOW();
+    UOW getUOW();
 
-    /** Associates this object to a UOW.
+    /**
+     * Associates this object to a UOW.
      * Note: This method is for internal use by the Persistence Engine only.
+     *
      * @param uow The UOW.
      */
-    public void setUOW(UOW uow);
+    void setUOW(UOW uow);
 
-    /** Returns a true value if the object had any of its fields updated.
+    /**
+     * Returns a true value if the object had any of its fields updated.
+     *
      * @return a true value if the object had any of its fields updated.
      */
-    public boolean isModified();
+    boolean isModified();
 
-    /** Set the modified status of this object.
+    /**
+     * Set the modified status of this object.
      * Note: This method is for internal use by the Persistence Engine only.
+     *
      * @param modified the modified status.
      */
-    public void setModified(boolean modified);
+    void setModified(boolean modified);
 
-    /** Returns a true value if the object was loaded from the database.
+    /**
+     * Returns a true value if the object was loaded from the database.
+     *
      * @return a true value if the object was loaded from the database.
      */
-    public boolean isDatabaseOccurence();
+    boolean isDatabaseOccurence();
 
-    /** Set the database status of this object.
+    /**
+     * Set the database status of this object.
      * Note: This method is for internal use by the Persistence Engine only.
+     *
      * @param databaseOccurence the database status.
      */
-    public void setDatabaseOccurence(boolean databaseOccurence);
+    void setDatabaseOccurence(boolean databaseOccurence);
 
-    /** Returns the locking strategy for this persistent object.
+    /**
+     * Returns the locking strategy for this persistent object.
+     *
      * @return the locking strategy for this persistent object.
      */
-    public int getLocking();
+    int getLocking();
 
-    /** Set the locking strategy for this persistent object.
+    /**
+     * Set the locking strategy for this persistent object.
      * Note: This method is for internal use by the Persistence Engine only.
+     *
      * @param locking the locking strategy.
      */
-    public void setLocking(int locking);
+    void setLocking(int locking);
 
-    /** Returns a true value if the underlying database row is locked.
+    /**
+     * Returns a true value if the underlying database row is locked.
+     *
      * @return a true value if the underlying database row is locked.
      */
-    public boolean isLocked();
+    boolean isLocked();
 
-    /** Set the locked status of this object.
+    /**
+     * Set the locked status of this object.
      * Note: This method is for internal use by the Persistence Engine only.
+     *
      * @param locked the locked status.
      */
-    public void setLocked(boolean locked);
+    void setLocked(boolean locked);
 
-    /** Returns a true value if this object has been added/updated/deleted and not yet been committed.
+    /**
+     * Returns a true value if this object has been added/updated/deleted and not yet been committed.
+     *
      * @return a true value if this object has been added/updated/deleted and not yet been committed.
      */
-    public boolean isQueued();
+    boolean isQueued();
 
-    /** Set the queued status of this object.
+    /**
+     * Set the queued status of this object.
      * The Persistence Engine will set the queued status to true on an Add/Update/Delete. Thereafter, any updates on this object will throw a RuntimeException.
-     * This flag will be reset after the object actaully gets added/updated/deleted to the database.
+     * This flag will be reset after the object actually gets added/updated/deleted to the database.
      * Note: This method is for internal use by the Persistence Engine only.
+     *
      * @param queued the queued status.
      */
-    public void setQueued(boolean queued);
+    void setQueued(boolean queued);
 
-    /** Returns a true value if the field has been updated.
+    /**
+     * Returns a true value if the field has been updated.
+     *
      * @param fieldName the field to check.
      * @return a true value if the field has been updated.
      */
-    public boolean isModified(String fieldName);
+    boolean isModified(String fieldName);
 
-    /** Returns the initial value for a field; i.e. before it was modified.
+    /**
+     * Returns the initial value for a field; i.e. before it was modified.
      * A null will be returned if the field was never modified. Use the isModified() method to determine if the field was modified.
      * A null can also be returned if the field had a null value to begin with.
+     *
      * @param fieldName the field.
      * @return the initial value for a field; i.e. before it was modified.
      */
-    public Object returnInitialValue(String fieldName);
+    Object returnInitialValue(String fieldName);
 
-    /** Returns a map of modified fields.
+    /**
+     * Returns a map of modified fields.
      * The map contains the name of the modified field and it's initial value.
      * NOTE: The returned map is a read-only view, and attempts to modify the returned map will result in an UnsupportedOperationException.
+     *
      * @return a map of modified fields.
      */
-    public Map<String, Object> getModifiedFields();
+    Map<String, Object> getModifiedFields();
 
-    /** This method is triggered by the UOW, before adding this object to the Add-Store, but after a UOW has been associated to the object.
-     * A concrete persistent object should provide the implementation, if its necessary.
-     * @throws PreAddFailedException if any error occurs during the process.
+    /**
+     * Gets all life cycle handlers set on a concrete persistent handler.  This allows custom code to be
+     * injected before or after lifecycle methods.
      */
-    public void preAdd() throws PreAddFailedException;
-
-    /** This method is triggered by the UOW, after adding this object to the Add-Store.
-     * A concrete persistent object should provide the implementation, if its necessary.
-     * @throws PostAddFailedException if any error occurs during the process.
-     */
-    public void postAdd() throws PostAddFailedException;
-
-    /** This method is triggered by the UOW, before adding this object to the Update-Store.
-     * A concrete persistent object should provide the implementation, if its necessary.
-     * @throws PreUpdateFailedException if any error occurs during the process.
-     */
-    public void preUpdate() throws PreUpdateFailedException;
-
-    /** This method is triggered by the UOW, after adding this object to the Update-Store.
-     * A concrete persistent object should provide the implementation, if its necessary.
-     * @throws PostUpdateFailedException if any error occurs during the process.
-     */
-    public void postUpdate() throws PostUpdateFailedException;
-
-    /** This method is triggered by the UOW, before adding this object to the Delete-Store.
-     * A concrete persistent object should provide the implementation, if its necessary.
-     * @throws PreDeleteFailedException if any error occurs during the process.
-     */
-    public void preDelete() throws PreDeleteFailedException;
-
-    /** This method is triggered by the UOW, after adding this object to the Delete-Store.
-     * A concrete persistent object should provide the implementation, if its necessary.
-     * @throws PostDeleteFailedException if any error occurs during the process.
-     */
-    public void postDelete() throws PostDeleteFailedException;
-
-    /** This method is triggered by the UOW after a query loads this object.
-     * A concrete persistent object should provide the implementation, if its necessary.
-     * @throws PostLoadFailedException if any error occurs during the process.
-     */
-    public void postLoad() throws PostLoadFailedException;
+    List<ILifecycleHandler> getLifecycleHandlers();
 }

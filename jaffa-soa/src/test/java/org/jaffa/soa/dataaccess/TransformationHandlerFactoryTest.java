@@ -53,6 +53,7 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static org.jaffa.soa.dataaccess.ITransformationHandlerFactory.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -72,29 +73,29 @@ public class TransformationHandlerFactoryTest {
      */
     @Test
     public void testAddPrependedHandler() {
-        TestTransformationHandler handler = new TestTransformationHandler();
+        TestTransformationHandler handler = new TestTransformationHandler(0);
 
         // we expect no handlers to be returned yet
         List<ITransformationHandler> handlers = target.getPrependedHandlers(handler);
         assertNull("No handler expected", handlers);
 
         // add 1 handler and then see it get returned
-        TransformationHandler handler1 = new TransformationHandler();
+        ITransformationHandlerProvider handler1 = new TestProvider(1);
         target.addPrependedHandler(handler.getClass(), handler1);
         handlers = target.getPrependedHandlers(handler);
         assertEquals("No handler expected", 1, handlers.size());
-        assertEquals("Handler not expected", handler1, handlers.get(0));
+        assertEquals("Handler not expected", 1, ((TestTransformationHandler) handlers.get(0)).getId());
 
         // add 2 more and see that you get all 3
-        TransformationHandler handler2 = new TransformationHandler();
-        TransformationHandler handler3 = new TransformationHandler();
+        ITransformationHandlerProvider handler2 = new TestProvider(2);
+        ITransformationHandlerProvider handler3 = new TestProvider(3);
         target.addPrependedHandler(handler.getClass(), handler2);
         target.addPrependedHandler(handler.getClass(), handler3);
         handlers = target.getPrependedHandlers(handler);
         assertEquals("No handler expected", 3, handlers.size());
-        assertEquals("Handler not expected", handler3, handlers.get(0));
-        assertEquals("Handler not expected", handler2, handlers.get(1));
-        assertEquals("Handler not expected", handler1, handlers.get(2));
+        assertEquals("Handler not expected", 3, ((TestTransformationHandler) handlers.get(0)).getId());
+        assertEquals("Handler not expected", 2, ((TestTransformationHandler) handlers.get(1)).getId());
+        assertEquals("Handler not expected", 1, ((TestTransformationHandler) handlers.get(2)).getId());
     }
 
     /**
@@ -104,29 +105,29 @@ public class TransformationHandlerFactoryTest {
      */
     @Test
     public void testAddAppendedHandler() {
-        TestTransformationHandler handler = new TestTransformationHandler();
+        TestTransformationHandler handler = new TestTransformationHandler(0);
 
         // we expect no handlers to be returned yet
         List<ITransformationHandler> handlers = target.getAppendedHandlers(handler);
         assertNull("No handler expected", handlers);
 
         // add 1 handler and then see it get returned
-        TransformationHandler handler1 = new TransformationHandler();
+        ITransformationHandlerProvider handler1 = new TestProvider(1);
         target.addAppendedHandler(handler.getClass(), handler1);
         handlers = target.getAppendedHandlers(handler);
         assertEquals("No handler expected", 1, handlers.size());
-        assertEquals("Handler not expected", handler1, handlers.get(0));
+        assertEquals("Handler not expected", 1, ((TestTransformationHandler) handlers.get(0)).getId());
 
         // add 2 more and see that you get all 3
-        TransformationHandler handler2 = new TransformationHandler();
-        TransformationHandler handler3 = new TransformationHandler();
+        ITransformationHandlerProvider handler2 = new TestProvider(2);
+        ITransformationHandlerProvider handler3 = new TestProvider(3);
         target.addAppendedHandler(handler.getClass(), handler2);
         target.addAppendedHandler(handler.getClass(), handler3);
         handlers = target.getAppendedHandlers(handler);
         assertEquals("No handler expected", 3, handlers.size());
-        assertEquals("Handler not expected", handler1, handlers.get(0));
-        assertEquals("Handler not expected", handler2, handlers.get(1));
-        assertEquals("Handler not expected", handler3, handlers.get(2));
+        assertEquals("Handler not expected", 1, ((TestTransformationHandler) handlers.get(0)).getId());
+        assertEquals("Handler not expected", 2, ((TestTransformationHandler) handlers.get(1)).getId());
+        assertEquals("Handler not expected", 3, ((TestTransformationHandler) handlers.get(2)).getId());
     }
 
     /**
@@ -135,5 +136,29 @@ public class TransformationHandlerFactoryTest {
      */
     private class TestTransformationHandler extends TransformationHandler {
 
+        private int id;
+
+        public TestTransformationHandler(int id) {
+            this.id = id;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+    }
+
+    private class TestProvider implements ITransformationHandlerProvider {
+
+        private int id;
+
+        public TestProvider(int id) {
+            this.id = id;
+        }
+
+        @Override
+        public ITransformationHandler getHandler() {
+            return new TestTransformationHandler(id);
+        }
     }
 }

@@ -55,13 +55,11 @@ import org.jaffa.soa.graph.GraphDataObject;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 /**
  * Base class for all persistent configuration objects.
  */
 @Configuration
-@Import(TransformationHandlerConfig.class)
 public abstract class GraphDataObjectConfig implements ApplicationContextAware {
 
     private ApplicationContext appContext;

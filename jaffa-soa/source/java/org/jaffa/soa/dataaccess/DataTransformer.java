@@ -190,7 +190,7 @@ public class DataTransformer {
         if (graph == null)
             graph = MappingFactory.getInstance(target);
 
-        boolean useQueryDomain = graph.getQueryDomainClass() != null && source.getClass().isAssignableFrom(graph.getQueryDomainClass()) ? true : false;
+        boolean useQueryDomain = graph.getQueryDomainClass() != null && source.getClass().isAssignableFrom(graph.getQueryDomainClass());
 
         //throw new InstantiationException("A GraphMapping must be supplied");
         if (filter == null)

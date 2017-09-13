@@ -47,64 +47,65 @@
  *  ====================================================================
  */
 
-package org.jaffa.soa.dataaccess;
+package org.jaffa.beans.factory;
 
+import org.jaffa.persistence.ILifecycleHandler;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
- * Factory used to register {@link TransformationHandler}s for a specific Transformation Handler type.
+ * Factory used to register {@link ILifecycleHandler}s for a specific Lifecycle Handler type.
  * The handlers will be added in a specific order to allow for custom code to be executed before or after
  * all lifecycle events.  This factory bean can be retrieved from the application context or injected into a component
  * or configuration so new handlers can be added - allowing customer builds to add to the base set of handlers.
  * <p/>
- * Created by ndzwill on 8/18/2017.
+ * Created by ndzwill on 9/8/2017.
  */
-public interface ITransformationHandlerFactory {
+public class LifecycleHandlerFactory implements ILifecycleHandlerFactory {
 
-    /**
-     * Used to get instances of TransformationHandlers.  This allows the creation of
-     * custom handlers on the fly so each handler can have the context of the instance of the class they are on.
-     * <p/>
-     * Created by ndzwill on 9/10/2017.
-     */
-    interface ITransformationHandlerProvider {
+    private Map<Class<?>, List<ILifecycleHandlerProvider>> prependedHandlerProviders = new HashMap<>();
+    private Map<Class<?>, List<ILifecycleHandlerProvider>> appendedHandlerProviders = new HashMap<>();
 
-        /**
-         * Used to get instances of TransformationHandlers.  This allows the creation of
-         * custom handlers on the fly so each handler can have the context of the instance of the class they are on.
-         */
-        ITransformationHandler getHandler();
+    @Override
+    public void addPrependedHandlerProvider(Class<?> clazz, ILifecycleHandlerProvider provider) {
+        if (!prependedHandlerProviders.containsKey(clazz)) {
+            prependedHandlerProviders.put(clazz, new ArrayList<ILifecycleHandlerProvider>());
+        }
+        prependedHandlerProviders.get(clazz).add(0, provider);
     }
 
-    /**
-     * Adds a handler to be fired before the handler with the specified type.
-     *
-     * @param clazz   the type of handler to prepend this handler to.
-     * @param handler the handler to be prepended to all handlers on the input type.
-     */
-    void addPrependedHandler(Class<?> clazz, ITransformationHandlerProvider handler);
+    @Override
+    public void addAppendedHandlerProvider(Class<?> clazz, ILifecycleHandlerProvider provider) {
+        if (!appendedHandlerProviders.containsKey(clazz)) {
+            appendedHandlerProviders.put(clazz, new ArrayList<ILifecycleHandlerProvider>());
+        }
+        appendedHandlerProviders.get(clazz).add(provider);
+    }
 
-    /**
-     * Adds a handler to be fired after the handler with the specified type.
-     *
-     * @param clazz   the type of handler to append this handler to.
-     * @param handler the handler to be appended to all handlers on the input type.
-     */
-    void addAppendedHandler(Class<?> clazz, ITransformationHandlerProvider handler);
+    @Override
+    public List<ILifecycleHandler> getPrependedHandlers(ILifecycleHandler handler) {
+        List<ILifecycleHandler> handlers = null;
+        if (prependedHandlerProviders.containsKey(handler.getClass())) {
+            handlers = new ArrayList<>();
+            for (ILifecycleHandlerProvider provider : prependedHandlerProviders.get(handler.getClass())) {
+                handlers.add(provider.getHandler());
+            }
+        }
+        return handlers;
+    }
 
-    /**
-     * Gets all handlers with custom logic to fire before the input handler.
-     *
-     * @param handler the handler to get customer handlers for.
-     * @return all handlers to be fired before the input handler or null if there are none.
-     */
-    List<ITransformationHandler> getPrependedHandlers(TransformationHandler handler);
-
-    /**
-     * Gets all handlers with custom logic to fire after the input handler.
-     *
-     * @param handler the handler to get customer handlers for.
-     * @return all handlers to be fired after the input handler or null if there are none.
-     */
-    List<ITransformationHandler> getAppendedHandlers(TransformationHandler handler);
+    @Override
+    public List<ILifecycleHandler> getAppendedHandlers(ILifecycleHandler handler) {
+        List<ILifecycleHandler> handlers = null;
+        if (appendedHandlerProviders.containsKey(handler.getClass())) {
+            handlers = new ArrayList<>();
+            for (ILifecycleHandlerProvider provider : appendedHandlerProviders.get(handler.getClass())) {
+                handlers.add(provider.getHandler());
+            }
+        }
+        return handlers;
+    }
 }
