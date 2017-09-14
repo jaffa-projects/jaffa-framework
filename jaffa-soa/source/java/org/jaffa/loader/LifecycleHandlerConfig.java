@@ -47,12 +47,14 @@
  *  ====================================================================
  */
 
-package org.jaffa.config;
+package org.jaffa.loader;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.jaffa.beans.factory.ILifecycleHandlerFactory;
 import org.jaffa.beans.factory.config.StaticContext;
+import org.jaffa.config.JaffaRulesConfig;
+import org.jaffa.config.PersistentConfig;
 import org.jaffa.datatypes.Parser;
 import org.jaffa.persistence.ILifecycleHandler;
 import org.jaffa.rules.meta.MetaDataRepository;
@@ -86,7 +88,7 @@ import java.util.Map;
  * Created by ndzwill on 8/18/2017.
  */
 @Configuration
-@Import(JaffaRulesConfig.class)
+@Import({JaffaRulesConfig.class, PersistentConfig.class})
 public class LifecycleHandlerConfig {
 
     protected static Logger log = Logger.getLogger(LifecycleHandlerConfig.class);

@@ -50,6 +50,7 @@
 package org.jaffa.config;
 
 import org.jaffa.beans.factory.config.StaticContext;
+import org.jaffa.loader.LifecycleHandlerConfig;
 import org.jaffa.soa.dataaccess.ITransformationHandler;
 import org.jaffa.soa.dataaccess.ITransformationHandlerFactory;
 import org.jaffa.soa.dataaccess.TransformationHandler;
