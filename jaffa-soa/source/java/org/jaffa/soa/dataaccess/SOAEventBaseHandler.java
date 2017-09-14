@@ -105,6 +105,9 @@ public abstract class SOAEventBaseHandler {
         raiseSOAEvent(invocationMethod, target, null);
     }
 
+    protected void raiseSOAEvent(String invocationMethod, Object target, UOW uow) throws ApplicationExceptions, FrameworkException {
+        raiseSOAEvent(invocationMethod, target, uow, null);
+    }
     /**
      * Check if the method being invoked on the handler is the trigger method defined in the rule meta data then raise the event
      *
@@ -114,7 +117,7 @@ public abstract class SOAEventBaseHandler {
      * @throws ApplicationExceptions
      * @throws FrameworkException
      */
-    protected void raiseSOAEvent(String invocationMethod, Object target, UOW uow) throws ApplicationExceptions, FrameworkException {
+    protected void raiseSOAEvent(String invocationMethod, Object target, UOW uow, Object[] args) throws ApplicationExceptions, FrameworkException {
         if (log.isDebugEnabled()) {
             log.debug("Handle Event : " + invocationMethod + "  for " + " (Target=" + shortClassName(target) + ")");
         }
@@ -133,7 +136,7 @@ public abstract class SOAEventBaseHandler {
             // raise event for each applicableRule
             if (applicableRules != null) {
                 for (RuleMetaData rule : applicableRules) {
-                    raiseSOAEvent(uow, target, rule);
+                    raiseSOAEvent(uow, target, rule, args);
                 }
             }
         }
@@ -148,7 +151,7 @@ public abstract class SOAEventBaseHandler {
      * @throws ApplicationExceptions
      * @throws FrameworkException
      */
-    private void raiseSOAEvent(UOW uow, Object targetObject, RuleMetaData rule) throws ApplicationExceptions, FrameworkException {
+    private void raiseSOAEvent(UOW uow, Object targetObject, RuleMetaData rule, Object[] args) throws ApplicationExceptions, FrameworkException {
         UOW localUow = uow;
         if (uow == null || !uow.isActive()) {
             localUow = getUOW(targetObject);
@@ -160,8 +163,8 @@ public abstract class SOAEventBaseHandler {
 
         // Add Parameters for the SOAEvent
         List<HeaderParam> headerParamsList = new ArrayList<>();
-        headerParamsList.addAll(createSOAEventParameters(rule.getParameter("staticParameters"), null, null));
-        headerParamsList.addAll(createSOAEventParameters(rule.getParameter("dynamicParameters"), targetObject, rule));
+        headerParamsList.addAll(createSOAEventParameters(rule.getParameter("staticParameters"), null, null, null));
+        headerParamsList.addAll(createSOAEventParameters(rule.getParameter("dynamicParameters"), targetObject, args, rule));
 
         RaiseEventService raiseEventService = new RaiseEventService();
         raiseEventService.raiseSoaEvent(localUow, rule.getParameter("eventName"), rule.getParameter("description"),
@@ -175,7 +178,7 @@ public abstract class SOAEventBaseHandler {
      * @param targetObject The target Object. Parameters will be considered static if this argument is null.
      * @throws FrameworkException exception if bean script fails
      */
-    private List<HeaderParam> createSOAEventParameters(String parameters, Object targetObject, RuleMetaData rule) throws ApplicationExceptions {
+    private List<HeaderParam> createSOAEventParameters(String parameters, Object targetObject, Object args, RuleMetaData rule) throws ApplicationExceptions {
         List<HeaderParam> headerParamsList = new ArrayList<>();
         if (parameters != null) {
             for (String parameter : parameters.split(";")) {
@@ -197,6 +200,9 @@ public abstract class SOAEventBaseHandler {
                         // Assume the dynamic parameter to be a script
                         Map beans = new HashMap();
                         beans.put(ScriptHelper.CONTEXT_BEAN, targetObject);
+                        if (args!=null){
+                            beans.put(ScriptHelper.CONTEXT_ARGUMENTS, args);
+                        }
                         try {
                             Object fieldValue = ScriptHelper.instance(rule.getParameter(RuleMetaData.PARAMETER_LANGUAGE)).evaluate(null, value, beans,
                                     rule.getSource(), rule.getLine() != null ? rule.getLine() : 0, 0);

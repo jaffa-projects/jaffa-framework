@@ -125,32 +125,38 @@ public class SOAEventTransformationHandler extends SOAEventBaseHandler implement
 
     @Override
     public void changeDone(String path, Object source, Object target, UOW uow) throws ApplicationExceptions, FrameworkException {
-        raiseSOAEvent(TransformationHandler.LIFECYCLE_CHANGE_DONE, targetBean, uow);
+        Object[] args = {path,source,target, uow};
+        raiseSOAEvent(TransformationHandler.LIFECYCLE_CHANGE_DONE, targetBean, uow, args);
     }
 
     @Override
     public void startBean(String path, Object source, Object target) throws ApplicationException, ApplicationExceptions, FrameworkException {
-        raiseSOAEvent(SOAEventTransformationHandler.LIFECYCLE_START_BEAN, targetBean);
+        Object[] args = {path,source,target};
+        raiseSOAEvent(SOAEventTransformationHandler.LIFECYCLE_START_BEAN, targetBean, null, args);
     }
 
     @Override
     public void endBean(String path, Object source, Object target) throws ApplicationException, ApplicationExceptions, FrameworkException {
-        raiseSOAEvent(TransformationHandler.LIFECYCLE_END_BEAN, targetBean);
+        Object[] args = {path,source,target};
+        raiseSOAEvent(TransformationHandler.LIFECYCLE_END_BEAN, targetBean, null, args);
     }
 
     @Override
     public void startBeanDelete(String path, Object source, Object target) throws ApplicationException, ApplicationExceptions, FrameworkException {
-        raiseSOAEvent(SOAEventTransformationHandler.LIFECYCLE_START_BEAN_DELETE, targetBean);
+        Object[] args = {path,source,target};
+        raiseSOAEvent(SOAEventTransformationHandler.LIFECYCLE_START_BEAN_DELETE, targetBean, null, args);
     }
 
     @Override
     public void endBeanDelete(String path, Object source, Object target) throws ApplicationException, ApplicationExceptions, FrameworkException {
-        raiseSOAEvent(SOAEventTransformationHandler.LIFECYCLE_END_BEAN_DELETE, targetBean);
+        Object[] args = {path,source,target};
+        raiseSOAEvent(SOAEventTransformationHandler.LIFECYCLE_END_BEAN_DELETE, targetBean, null, args);
     }
 
     @Override
     public void startBeanAdd(String path, Object source, Object target) throws ApplicationException, ApplicationExceptions, FrameworkException {
-        raiseSOAEvent(SOAEventTransformationHandler.LIFECYCLE_START_BEAN_ADD, targetBean);
+        Object[] args = {path,source,target};
+        raiseSOAEvent(SOAEventTransformationHandler.LIFECYCLE_START_BEAN_ADD, targetBean, null, args);
     }
 
     @Override
@@ -165,43 +171,51 @@ public class SOAEventTransformationHandler extends SOAEventBaseHandler implement
 
     @Override
     public void endBeanUpdate(String path, Object source, Object target) throws ApplicationException, ApplicationExceptions, FrameworkException {
-        raiseSOAEvent(SOAEventTransformationHandler.LIFECYCLE_END_BEAN_UPDATE, targetBean);
+        Object[] args = {path,source,target};
+        raiseSOAEvent(SOAEventTransformationHandler.LIFECYCLE_END_BEAN_UPDATE, targetBean, null, args);
     }
 
     @Override
     public void startBeanClone(String path, Object source, Object target, Object newGraph) throws ApplicationException, ApplicationExceptions, FrameworkException {
-        raiseSOAEvent(TransformationHandler.LIFECYCLE_START_BEAN_CLONE, targetBean);
+        Object[] args = {path,source,target,newGraph};
+        raiseSOAEvent(TransformationHandler.LIFECYCLE_START_BEAN_CLONE, targetBean, null, args);
     }
 
     @Override
     public void endBeanClone(String path, Object source, Object target, Object newGraph) throws ApplicationException, ApplicationExceptions, FrameworkException {
-        raiseSOAEvent(TransformationHandler.LIFECYCLE_END_BEAN_CLONE, targetBean);
+        Object[] args = {path,source,target,newGraph};
+        raiseSOAEvent(TransformationHandler.LIFECYCLE_END_BEAN_CLONE, targetBean, null, args);
     }
 
     @Override
     public void startBeanMassUpdate(String path, Object source, Object target, Object newGraph) throws ApplicationException, ApplicationExceptions, FrameworkException {
-        raiseSOAEvent(TransformationHandler.LIFECYCLE_START_BEAN_MASS_UPDATE, targetBean);
+        Object[] args = {path,source,target,newGraph};
+        raiseSOAEvent(TransformationHandler.LIFECYCLE_START_BEAN_MASS_UPDATE, targetBean, null, args);
     }
 
     @Override
     public void endBeanMassUpdate(String path, Object source, Object target, Object newGraph) throws ApplicationException, ApplicationExceptions, FrameworkException {
-        raiseSOAEvent(TransformationHandler.LIFECYCLE_END_BEAN_MASS_UPDATE, targetBean);
+        Object[] args = {path,source,target, newGraph};
+        raiseSOAEvent(TransformationHandler.LIFECYCLE_END_BEAN_MASS_UPDATE, targetBean, null, args);
     }
 
     @Override
     public Criteria preQuery(String path, Criteria criteria, GraphCriteria originalCriteria, Class domain) throws ApplicationException, ApplicationExceptions, FrameworkException {
-        raiseSOAEvent(TransformationHandler.LIFECYCLE_PRE_QUERY, targetBean);
+        Object[] args = {path,criteria, originalCriteria, domain};
+        raiseSOAEvent(TransformationHandler.LIFECYCLE_PRE_QUERY, targetBean, null, args);
         return null;
     }
 
     @Override
     public void endBeanLoad(String path, Object source, Object target, MappingFilter filter, GraphCriteria originalCriteria) throws ApplicationException, ApplicationExceptions, FrameworkException {
-        raiseSOAEvent(TransformationHandler.LIFECYCLE_END_BEAN_LOAD, targetBean);
+        Object[] args = {path,source,target,filter,originalCriteria};
+        raiseSOAEvent(TransformationHandler.LIFECYCLE_END_BEAN_LOAD, targetBean, null, args);
     }
 
     @Override
     public void prevalidateBean(String path, Object source, Object target) throws ApplicationException, ApplicationExceptions, FrameworkException {
-        raiseSOAEvent(TransformationHandler.LIFECYCLE_PREVALIDATE_BEAN, targetBean);
+        Object[] args = {path,source,target};
+        raiseSOAEvent(TransformationHandler.LIFECYCLE_PREVALIDATE_BEAN, targetBean, null, args);
     }
 
     @Override
