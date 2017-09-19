@@ -325,7 +325,7 @@ public class ContextManager implements IContextManager {
             synchronized (this) {
                 if (m_global == null) {
                     Properties props = null;
-                    props = applicationRulesManager.getApplicationRulesGlobal();
+                    props = (applicationRulesManager != null) ? applicationRulesManager.getApplicationRulesGlobal() : null;
 
                     // Cache an unmodifiable view
 					if (props != null) {

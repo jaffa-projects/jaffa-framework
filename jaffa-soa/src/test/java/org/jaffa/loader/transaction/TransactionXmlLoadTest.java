@@ -1,5 +1,6 @@
 package org.jaffa.loader.transaction;
 
+import org.jaffa.loader.CoreLoaderConfig;
 import org.jaffa.loader.SoaLoaderConfig;
 import org.jaffa.loader.soa.SoaEventManager;
 import org.junit.Test;
@@ -15,7 +16,7 @@ import static org.junit.Assert.assertNotNull;
 public class TransactionXmlLoadTest {
 
     private static AnnotationConfigApplicationContext xmlLoaderConfig =
-            new AnnotationConfigApplicationContext(SoaLoaderConfig.class);
+            new AnnotationConfigApplicationContext(CoreLoaderConfig.class, SoaLoaderConfig.class);
 
     @Test
     public void testTransactionXmlLoad(){
