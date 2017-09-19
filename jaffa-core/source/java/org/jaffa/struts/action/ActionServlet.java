@@ -84,9 +84,8 @@ public class ActionServlet extends org.apache.struts.action.ActionServlet {
 		try {
 			digester.parse(resource.getInputStream());
 		} catch (SAXException | IOException e) {
-			String msg = getInternal().getMessage("configParse", resource.getFilename());
+			String msg = getInternal()!=null ? getInternal().getMessage("configParse", resource.getFilename()) : "Exception while parsing struts-config.xml";
 			log.error(msg, e);
-			e.printStackTrace(System.out);
 			throw new UnavailableException(msg);
 		}
 	}
