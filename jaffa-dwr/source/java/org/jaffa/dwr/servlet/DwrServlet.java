@@ -77,7 +77,7 @@ import org.xml.sax.SAXException;
  * 
  */
 @WebServlet(
-		name = "dwr", 
+		name = "dwr-invoker",
 		description = "DWR Servlet", 
 		displayName = "DWR Servlet", 
 		urlPatterns = "/dwr/*", 
