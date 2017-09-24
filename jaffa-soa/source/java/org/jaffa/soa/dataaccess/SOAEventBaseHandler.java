@@ -131,7 +131,7 @@ public abstract class SOAEventBaseHandler {
             IRuleHelper ruleHelper = RuleHelperFactory.instance(ruleMetaData.getName());
 
             // Check if the rule is applicable for the target object (evaluates rule condition)
-            List<RuleMetaData> applicableRules = ruleHelper.getApplicableRules(target.getClass().getName(), target, rules, false);
+            List<RuleMetaData> applicableRules = ruleHelper.getApplicableRules(target.getClass().getName(), target, rules, true);
 
             // raise event for each applicableRule
             if (applicableRules != null) {

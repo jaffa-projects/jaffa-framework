@@ -177,7 +177,7 @@ public class ScriptLifecycleHandler implements ILifecycleHandler {
             IRuleHelper ruleHelper = RuleHelperFactory.instance(ruleMetaData.getName());
 
             // Check if the rule is applicable for the target object (evaluates rule condition)
-            List<RuleMetaData> applicableRules = ruleHelper.getApplicableRules(targetBean.getClass().getName(), targetBean, rules, false);
+            List<RuleMetaData> applicableRules = ruleHelper.getApplicableRules(targetBean.getClass().getName(), targetBean, rules, true);
 
             // invoke script for each applicableRule
             if (applicableRules != null) {
