@@ -16,6 +16,7 @@
 
     <!-- Begin Apache Commons dependencies -->
     <dependency org="commons-beanutils" name="commons-beanutils" rev="${commons-beanutils-version}" transitive="false"/>
+    <dependency org="commons-collections" name="commons-collections" rev="${commons-collections-version}" transitive="false"/>
     <dependency org="commons-dbcp" name="commons-dbcp" rev="${commons-dbcp-version}" transitive="false"/>
     <dependency org="commons-logging" name="commons-logging" rev="${commons-logging-version}" transitive="false"/>
     <dependency org="org.apache.commons" name="commons-pool" rev="${commons-pool-version}" transitive="false"/>
