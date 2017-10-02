@@ -54,6 +54,7 @@ import java.util.Enumeration;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.*;
 
+import org.jaffa.beans.factory.config.StaticContext;
 import org.jaffa.datatypes.DateTime;
 import org.jaffa.exceptions.ApplicationExceptions;
 import org.jaffa.exceptions.FrameworkException;
@@ -77,6 +78,13 @@ public abstract class Component implements IComponent {
     private DateTime m_lastActivityDate = new DateTime();
     private Collection m_childComponents = null;
     private String m_token = null;
+
+    /**
+     * Pass this to the static context to be initialized.
+     */
+    protected void initializeThis() {
+        StaticContext.initialize(this);
+    }
     
     // *****************************************
     //  METHODS INVOKED BY THE ComponentManager
