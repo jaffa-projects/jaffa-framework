@@ -180,7 +180,7 @@ public class TransactionManagerTest {
         transactionManager.getAllTransactionInfo();
 
         //verify
-        verify(transactionRepoMock).getAllValues();
+        verify(transactionRepoMock).getValues();
     }
 
     /**
@@ -192,6 +192,6 @@ public class TransactionManagerTest {
         transactionManager.getTypeNames();
 
         //verify
-        verify(typeInfoRepoMock).getAllKeyIds();
+        verify(typeInfoRepoMock).getKeyIds();
     }
 }

@@ -131,7 +131,7 @@ public class SchedulerManager implements IManager {
      * @return
      */
     public Task getSchedulerTaskByTypeName(String typeName) {
-        List<Task> tasks = schedulerTaskRepository.getAllValues();
+        List<Task> tasks = schedulerTaskRepository.getValues();
         for (Task task : tasks) {
             if (typeName.equalsIgnoreCase(task.getType())) return task;
         }
@@ -146,7 +146,7 @@ public class SchedulerManager implements IManager {
      * @return List of all values
      */
     public Task[] getAllSchedulerTasks() {
-        return schedulerTaskRepository.getAllValues().toArray(new Task[0]);
+        return schedulerTaskRepository.getValues().toArray(new Task[0]);
     }
 
 

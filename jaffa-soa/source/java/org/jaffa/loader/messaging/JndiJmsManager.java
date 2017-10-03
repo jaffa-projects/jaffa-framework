@@ -135,6 +135,6 @@ public class JndiJmsManager implements IManager {
      */
     public JmsConfig getJmsConfig() {
         //There should be only one entry of jmsJndiConfig
-        return jmsRepository.getAllValues()!=null && jmsRepository.getAllValues().size() > 0 ? jmsRepository.getAllValues().get(0) : null;
+        return jmsRepository.getValues()!=null && jmsRepository.getValues().size() > 0 ? jmsRepository.getValues().get(0) : null;
     }
 }

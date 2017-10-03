@@ -115,7 +115,7 @@ public class BusinessFunctionManager implements IManager {
      * @return a list of all BusinessFunctions
      */
     public List<BusinessFunction> getAllBusinessFunctions() {
-        return getBusinessFunctionRepository().getAllValues();
+        return getBusinessFunctionRepository().getValues();
     }
 
     /**

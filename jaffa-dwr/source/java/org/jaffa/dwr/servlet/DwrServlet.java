@@ -83,7 +83,7 @@ import org.xml.sax.SAXException;
 		urlPatterns = "/dwr/*", 
 		loadOnStartup=2,
 		initParams = {
-				@WebInitParam(name = "debug", value = "true"),
+				@WebInitParam(name = "debug", value = "false"),
 				@WebInitParam(name = "skipDefaultConfig", value = "true"),
 				@WebInitParam(name = "meta-config", value = "classpath*:META-INF/dwr.xml") 
 		}

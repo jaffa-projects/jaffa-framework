@@ -146,7 +146,7 @@ public class RoleManager implements IManager {
      * @return returns a list of all Roles
      */
     public List<Role> getAllRoles() {
-        return roleRepository.getAllValues();
+        return roleRepository.getValues();
     }
 
     /**

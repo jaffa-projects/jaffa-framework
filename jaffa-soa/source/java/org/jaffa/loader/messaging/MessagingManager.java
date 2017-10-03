@@ -258,7 +258,7 @@ public class MessagingManager implements IManager {
      * @return all Queue Names
      */
     public String[] getQueueNames() {
-        return queueInfoRepository.getAllKeyIds().toArray(new String[0]);
+        return queueInfoRepository.getKeyIds().toArray(new String[0]);
     }
 
     /**
@@ -266,7 +266,7 @@ public class MessagingManager implements IManager {
      * @return all Topic Names
      */
     public String[] getTopicNames() {
-        return topicInfoRepository.getAllKeyIds().toArray(new String[0]);
+        return topicInfoRepository.getKeyIds().toArray(new String[0]);
     }
 
     /**
@@ -274,7 +274,7 @@ public class MessagingManager implements IManager {
      * @return list of all message filters
      */
     public List<MessageFilter> getMessageFilters() {
-        return messageFilterRepository.getAllValues();
+        return messageFilterRepository.getValues();
     }
 
     ////////////////////////////////////////////////////////////////////////

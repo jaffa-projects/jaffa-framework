@@ -78,7 +78,6 @@ public class ApplicationRulesManager implements IManager {
      */
     private static final String DEFAULT_PROPERTY_FILE_NAME = "ApplicationRules.properties";
 
-    private static final String APP_RULE_GLOBAL = "global";
 
     /**
      * registerProperties - Registers an individual Properties object into the IRepository
@@ -124,7 +123,7 @@ public class ApplicationRulesManager implements IManager {
      * @return ApplicationRules_global properties
      */
     public Properties getApplicationRulesGlobal() {
-        return getApplicationRulesVariation(APP_RULE_GLOBAL);
+        return getApplicationRulesVariation(VariationContext.NULL_VARIATION);
     }
 
     /**
@@ -167,8 +166,7 @@ public class ApplicationRulesManager implements IManager {
                 }
             }
             if (!properties.isEmpty()) {
-                String nullHandledVariation = !VariationContext.NULL_VARIATION.equals(variation) ? variation : APP_RULE_GLOBAL;
-                ContextKey key = new ContextKey(nullHandledVariation, resource.getURI().toString(), nullHandledVariation, precedence);
+                ContextKey key = new ContextKey(variation, resource.getURI().toString(), variation, precedence);
                 registerProperties(key, properties);
             }
         }

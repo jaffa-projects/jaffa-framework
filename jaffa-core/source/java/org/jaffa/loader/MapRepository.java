@@ -185,6 +185,34 @@ public class MapRepository<T> implements IRepository<T> {
     @Override
     public synchronized List<T> getAllValues() { return new ArrayList(repositoryMap.values());}
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<ContextKey> getKeys() {
+        Set<ContextKey> contextKeys = new HashSet<>();
+        for (String id : getKeyIds()) {
+            contextKeys.add(findKey(id));
+        }
+        return contextKeys;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<String> getKeyIds() {
+        return getMyRepository().keySet();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<T> getValues() {
+        return new ArrayList<>(getMyRepository().values());
+    }
+
 
     /**
      * Adds repositoryKey to contextKeyCache
@@ -215,7 +243,10 @@ public class MapRepository<T> implements IRepository<T> {
         Map<String, T> myRepository = new HashMap<>();
         Set<String> repoKeys = contextKeyCache.keySet();
         for(String repoKey : repoKeys){
-            myRepository.put(repoKey, query(repoKey));
+            T value = query(repoKey);
+            if(value!=null) {
+                myRepository.put(repoKey, value);
+            }
         }
         return myRepository;
     }
@@ -229,7 +260,10 @@ public class MapRepository<T> implements IRepository<T> {
         Map<String, T> variationRepository = new HashMap<>();
         Set<String> repoKeys = contextKeyCache.keySet();
         for(String repoKey : repoKeys){
-            variationRepository.put(repoKey, queryByVariation(repoKey, variation));
+            T value = queryByVariation(repoKey, variation);
+            if(value!=null) {
+                variationRepository.put(repoKey, value);
+            }
         }
         return variationRepository;
     }

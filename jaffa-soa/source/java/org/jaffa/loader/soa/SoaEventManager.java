@@ -87,7 +87,7 @@ public class SoaEventManager implements IManager {
      * @return List of all values
      */
 	public SoaEventInfo[] getAllSoaEventInfo(List<String> contextOrderParam) {
-		return soaEventRepository.getAllValues().toArray(new SoaEventInfo[0]);
+		return soaEventRepository.getValues().toArray(new SoaEventInfo[0]);
 	}
 	
     /**

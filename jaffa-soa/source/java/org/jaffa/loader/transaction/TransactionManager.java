@@ -196,7 +196,7 @@ public class TransactionManager implements IManager {
      * @return List of all values
      */
     public TransactionInfo[] getAllTransactionInfo() {
-        return transactionRepository.getAllValues().toArray(new TransactionInfo[0]);
+        return transactionRepository.getValues().toArray(new TransactionInfo[0]);
     }
 
     /**
@@ -204,7 +204,7 @@ public class TransactionManager implements IManager {
      * @return Set of all Type Names
      */
     public String[] getTypeNames() {
-        return typeInfoRepository.getAllKeyIds().toArray(new String[0]);
+        return typeInfoRepository.getKeyIds().toArray(new String[0]);
     }
 
 
