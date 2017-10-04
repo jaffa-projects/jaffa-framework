@@ -18,8 +18,8 @@ public class DroolsManagerTest {
     DroolsManager droolsManager = new DroolsManager();
     PathMatchingResourcePatternResolver pathMatchingResourcePatternResolver = new PathMatchingResourcePatternResolver();
     private static final String SERVICE_NAME = "testservice";
-    private static final String CORE_DRL_PATH = "classpath:META-INF/rules/testservice/testservice.drl";
-    private static final String CUSTOMER_DRL_PATH = "classpath:META-INF/rules/testservice/testservice.drl";
+    private static final String CORE_DRL_PATH = "classpath:META-INF/rules/testservice/TestService.drl";
+    private static final String CUSTOMER_DRL_PATH = "classpath:META-INF/rules/testservice/TestService.drl";
 
     /**
      * tests the registering of drool method
@@ -47,9 +47,9 @@ public class DroolsManagerTest {
         droolsManager.registerDrool(customerResource, "Customer");
 
         //verify
-        assertEquals(" ..\\data\\rules\\default\\testservice\\DEF\\testservice.drl", droolsManager.getDroolsFiles().get(new RuleAgentKey(SERVICE_NAME, VariationContext.DEFAULT_VARIATION)).toString());
+        assertEquals(" ..\\data\\rules\\default\\testservice\\DEF\\TestService.drl", droolsManager.getDroolsFiles().get(new RuleAgentKey(SERVICE_NAME, VariationContext.DEFAULT_VARIATION)).toString());
         //verify
-        assertEquals(" ..\\data\\rules\\default\\testservice\\Customer\\testservice.drl", droolsManager.getDroolsFiles().get(new RuleAgentKey(SERVICE_NAME, "Customer")).toString());
+        assertEquals(" ..\\data\\rules\\default\\testservice\\Customer\\TestService.drl", droolsManager.getDroolsFiles().get(new RuleAgentKey(SERVICE_NAME, "Customer")).toString());
     }
 
     /**
@@ -108,7 +108,7 @@ public class DroolsManagerTest {
 
         //verify
         assertNotNull(droolsManager.getRuleAgents().get(new RuleAgentKey(SERVICE_NAME, VariationContext.DEFAULT_VARIATION)));
-        assertEquals(" ..\\data\\rules\\default\\testservice\\Customer\\testservice.drl ..\\data\\rules\\default\\testservice\\DEF\\testservice.drl", droolsManager.getDroolsFiles().get(new RuleAgentKey(SERVICE_NAME, "Customer")).toString());
+        assertEquals(" ..\\data\\rules\\default\\testservice\\Customer\\TestService.drl ..\\data\\rules\\default\\testservice\\DEF\\TestService.drl", droolsManager.getDroolsFiles().get(new RuleAgentKey(SERVICE_NAME, "Customer")).toString());
     }
 
     /**
@@ -118,7 +118,7 @@ public class DroolsManagerTest {
     public void getServiceNameTest(){
         //verify
         assertEquals("Service Name Method Fail", SERVICE_NAME, droolsManager.getServiceName(CORE_DRL_PATH));
-        assertEquals("Service Name Method Fail", "workorderservice" , droolsManager.getServiceName("C:\\Documents and Settings\\workorderservice\\Desktop.test.drl"));
+        assertEquals("Service Name Method Fail", "workorderservice" , droolsManager.getServiceName("..\\Documents\\workorderservice\\Desktop.test.drl"));
         assertNull(droolsManager.getServiceName(null));
     }
 
