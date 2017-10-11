@@ -61,6 +61,7 @@ import org.springframework.mock.web.MockHttpSession;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * Test for ContextManager to check ApplicationRulesLoader loaded the rules as
@@ -78,6 +79,7 @@ public class ContextManagerTest {
     /**
      * testContextManager - Verifies that the application rules have been loaded correctly for both global and variation
      * specific rules files.
+     *
      * @throws Exception
      */
     @Test
@@ -107,6 +109,8 @@ public class ContextManagerTest {
         IContextManager iContextManager = ContextManagerFactory.instance();
         assertNotNull(iContextManager.getProperty("org.jaffa.config.global"));
 
+        assertNull(iContextManager.getProperty("nonExistentKey"));
+
         // Property from variation
         assertNotNull(ContextManagerFactory.instance().getProperty("org.jaffa.config.variation"));
 
@@ -115,6 +119,18 @@ public class ContextManagerTest {
 
         // Property from variation
         assertEquals("true", ContextManagerFactory.instance().getProperty("org.jaffa.config.hidemaintenancepanel"));
+
+        assertEquals("datadist_root/outbound", ContextManagerFactory.instance().getProperty("datadist.outboundFolder"));
+
+        assertEquals("datadist_root/outbound/fragments", ContextManagerFactory.instance().getProperty("datadist.outboundFolder.fragments"));
+
+        assertEquals("c:/test/interfaces_root/outbound/test", ContextManagerFactory.instance().getProperty("interfaces.outboundTestFolder"));
+
+        assertEquals("http://pentaho_host.mypentaho.com:80967/pentaho", ContextManagerFactory.instance().getProperty("pentaho.url"));
+
+        assertEquals("C:\\apache-tomcat-8.5.16/server/Goldesp/conf/report-security.txt", ContextManagerFactory.instance().getProperty("usersecurity.reportsecurity.securityFilterKeyFile"));
+
+
 
     }
 
