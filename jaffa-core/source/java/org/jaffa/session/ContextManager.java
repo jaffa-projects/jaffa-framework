@@ -59,6 +59,7 @@ import org.apache.log4j.Logger;
 import org.jaffa.loader.config.ApplicationRulesManager;
 import org.jaffa.presentation.portlet.session.UserSession;
 import org.jaffa.util.NestedMap;
+import org.jaffa.util.StringHelper;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
@@ -196,7 +197,19 @@ public class ContextManager implements IContextManager {
      */
     public Object getProperty(Object key) {
         Map m = getThreadContext();
-        return m != null ? m.get(key) : null;
+        String appRuleValue = m != null ? (String) m.get(key) : null;
+        if(appRuleValue != null && appRuleValue.contains("${")){
+            String tokenName = appRuleValue.substring(appRuleValue.indexOf("${") + 2, appRuleValue.lastIndexOf("}"));
+            String tokenValue = (String) getProperty(tokenName);
+            if(log.isDebugEnabled()) {
+                log.debug("Token Name Used " + tokenName + " and its value " + tokenValue);
+            }
+            if(tokenValue != null){
+                appRuleValue = StringHelper.replace(appRuleValue, "${" + tokenName + "}", tokenValue);
+            }
+
+        }
+        return appRuleValue;
     }
 
     /** Sets the property in the thread context.
