@@ -48,6 +48,8 @@
  */
 package org.jaffa.components.finder;
 
+import org.jaffa.beans.factory.config.StaticContext;
+
 import java.util.*;
 
 /**
@@ -65,9 +67,11 @@ public class FinderInDto {
     private Boolean findTotalRecords;
 
     /** Creates an instance of this class.
+     * Pass derived instances to the static context to be initialized.
      */
     public FinderInDto() {
         orderByFields = new ArrayList();
+        StaticContext.initialize(this);
     }
 
     /** Add orderByFields.

@@ -103,6 +103,13 @@ public abstract class LookupComponent2 extends FinderComponent2 {
     private Boolean m_autoSelect;
     private Boolean m_errorIfNoRows;
     private String m_returnStyle;
+
+    /**
+     * Pass all derived classes to the static context to be initialized.
+     */
+    public LookupComponent2() {
+        initializeThis();
+    }
     
     // **************************************************************
     // Component Properties
