@@ -53,6 +53,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.Globals;
 import javax.servlet.http.HttpServletRequest;
+
+import org.jaffa.beans.factory.config.StaticContext;
 import org.jaffa.presentation.portlet.component.Component;
 import org.jaffa.presentation.portlet.session.WidgetCache;
 import org.jaffa.presentation.portlet.session.UserSession;
@@ -80,11 +82,14 @@ public class FormBase extends ActionForm {
         return m_component;
     }
     /** Sets the Component for the Form
+     * Pass all derived classes to the static context to be initialized
+     *
      * @param component The Component object
      */
     public void setComponent(Component component) {
         m_component = component;
         setWidgetCache(null);
+        StaticContext.initialize(this);
     }
 
     /** Returns the WidgetCache of all the models for the Component

@@ -450,6 +450,8 @@ Jaffa.form.FinderViewport = Ext.extend(Ext.Viewport, {
       if(viewport.validateResponse(response) !== false){
         Ext.Msg.alert(viewport.deleteTitle, viewport.deleteSuccessMsg);
         viewport.finderContainer.store.loadMore(true);
+      } else {
+        if (viewport.maintenancePanelRef) viewport.maintenancePanelRef.enable();
       }
     });
     if (this.maintenancePanelRef) this.maintenancePanelRef.disable();
