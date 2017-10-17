@@ -202,11 +202,11 @@ public class ContextManager implements IContextManager {
      */
     public Object getProperty(Object key) {
         Map m = getThreadContext();
-        String appRuleValue = m != null ? (String) m.get(key) : null;
-        if (appRuleValue != null && appRuleValue.contains("${")) {
-            appRuleValue = replaceTokens(appRuleValue);
+        Object contextValue = m != null ? m.get(key) : null;
+        if (contextValue != null && contextValue instanceof String) {
+            contextValue = replaceTokens((String)contextValue);
         }
-        return appRuleValue;
+        return contextValue;
     }
 
     private String replaceTokens(String appRuleValue) {
