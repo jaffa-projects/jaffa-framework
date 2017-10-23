@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soa-events>
+    <soa-event name="Jaffa.Transaction.Transaction.Error" label="Transaction Error Alert"
+               description="This event is raised to send an email on the occurrence of Error Transaction">
+        <param name="id" data-type="STRING" description="Id"/>
+        <param name="transactionType" data-type="STRING" description="Transaction Type"/>
+    </soa-event>
+</soa-events>

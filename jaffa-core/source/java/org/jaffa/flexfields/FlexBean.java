@@ -48,18 +48,10 @@
  */
 package org.jaffa.flexfields;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
-import java.util.TreeMap;
-import javax.xml.bind.annotation.XmlTransient;
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.beanutils.DynaClass;
 import org.apache.log4j.Logger;
+import org.jaffa.beans.factory.config.StaticContext;
 import org.jaffa.datatypes.DataTypeMapper;
 import org.jaffa.exceptions.ApplicationException;
 import org.jaffa.exceptions.ApplicationExceptions;
@@ -70,22 +62,33 @@ import org.jaffa.metadata.FieldMetaData;
 import org.jaffa.persistence.Criteria;
 import org.jaffa.persistence.IPersistent;
 import org.jaffa.persistence.util.PersistentHelper;
+import org.jaffa.rules.fieldvalidators.Validator;
+import org.jaffa.rules.fieldvalidators.ValidatorFactory;
 import org.jaffa.util.BeanHelper;
+
+import javax.xml.bind.annotation.XmlTransient;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.TreeMap;
 
 /**
  * FlexBean implements the DynaBean interface.
  * <p>
  * It holds the following information when linked to a persistent object:
- *   flexClass: the associated DynaClass
- *   persistentObject: the persistent object for which this bean will hold FlexField instances.
- *   flexFields: the associated FlexField instances.
+ * flexClass: the associated DynaClass
+ * persistentObject: the persistent object for which this bean will hold FlexField instances.
+ * flexFields: the associated FlexField instances.
  * NOTE: For a persistent object, the setter will either set a flex field directly on the
  * associated persistent object, if a domain-mapping is provided, or the flex field will be
  * added to the flexFields property.
  * <p>
  * It holds the following information when linked to a non-persistent object:
- *   flexClass: the associated DynaClass
- *   flexParams: the associated FlexParam instances.
+ * flexClass: the associated DynaClass
+ * flexParams: the associated FlexParam instances.
  * NOTE: For a non-persistent object, the setter will always add the flex field to the
  * flexParams property.
  * <p>
@@ -93,14 +96,15 @@ import org.jaffa.util.BeanHelper;
  */
 public class FlexBean implements DynaBean {
 
-    private static Logger log = Logger.getLogger(FlexBean.class);
+    private static final Logger log = Logger.getLogger(FlexBean.class);
+    private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+    private final Map<String, FlexField> flexFields = new TreeMap<>();
+    private final Map<String, FlexParam> flexParams = new TreeMap<>();
+    private final Map<String, Object> changes = new HashMap<>();
+    private transient Validator<FlexBean> flexBeanValidator;
     private FlexClass flexClass;
     private IPersistent persistentObject;
     private boolean loaded; //controls the lazy-loading of data
-    private Map<String, FlexField> flexFields = new TreeMap<String, FlexField>();
-    private Map<String, FlexParam> flexParams = new TreeMap<String, FlexParam>();
-    private Map changes = new HashMap();
-    protected PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
     /**
      * Creates a new instance.
@@ -111,29 +115,120 @@ public class FlexBean implements DynaBean {
 
     /**
      * Creates a new instance.
+     *
      * @param flexClass the associated FlexClass.
      */
     public FlexBean(FlexClass flexClass) {
-        addPropertyChangeListener();
+        this();
         this.flexClass = flexClass;
+
+        // Aop Replacement Support:
+        // Validation was previous applied via the execution(* org.jaffa.flexfields.FlexBean->validate())
+        // pointcut. Removal of AOP support requires that the validators be identified dynamically and
+        // (if found) invoked manually in the validated method.
+        ValidatorFactory validatorFactory = (ValidatorFactory) StaticContext.getBean("ruleValidatorFactory");
+        if (validatorFactory != null) {
+            flexBeanValidator = validatorFactory.getValidator(this);
+        }
     }
 
     /**
      * Creates a new instance.
-     * @param flexClass the associated FlexClass.
+     *
+     * @param flexClass        the associated FlexClass.
      * @param persistentObject the persistent object.
      * @throws ApplicationExceptions if any application error occurs.
-     * @throws FrameworkException if any framework error occurs.
+     * @throws FrameworkException    if any framework error occurs.
      */
     public FlexBean(FlexClass flexClass, IPersistent persistentObject) throws ApplicationExceptions, FrameworkException {
-        addPropertyChangeListener();
-        this.flexClass = flexClass;
+        this(flexClass);
         this.persistentObject = persistentObject;
     }
 
-    // *************************
-    // **** IMPLEMENTATION *****
-    // *************************
+    /**
+     * This is the recommended way to instantiate a FlexBean.
+     * It obtains the appropriate FlexClass.
+     *
+     * @param object the associated object.
+     * @return a FlexBean instance.
+     * @throws ApplicationExceptions if any application error occurs.
+     * @throws FrameworkException    if any framework error occurs.
+     */
+    public static FlexBean instance(Object object) throws ApplicationExceptions, FrameworkException {
+        if (object instanceof FlexClass)
+            return instance((FlexClass) object);
+        else {
+            FlexClass flexClass = FlexClass.instance(object);
+            return instance(flexClass, object);
+        }
+    }
+
+    /**
+     * Creates an instance based on the input FlexClass and clears all the initial values.
+     *
+     * @param flexClass the associated FlexClass.
+     * @return a FlexBean instance.
+     * @throws ApplicationExceptions if any application error occurs.
+     * @throws FrameworkException    if any framework error occurs.
+     */
+    public static FlexBean instance(FlexClass flexClass) throws ApplicationExceptions, FrameworkException {
+        return instance(flexClass, null);
+    }
+
+    /**
+     * This is the recommended way to instantiate a FlexBean.
+     * It obtains the appropriate FlexClass.
+     *
+     * @param flexClass the associated FlexClass.
+     * @param object    the associated object.
+     * @return a FlexBean instance. A null will be returned if the FlexClass has no dyna-properties.
+     * @throws ApplicationExceptions if any application error occurs.
+     * @throws FrameworkException    if any framework error occurs.
+     */
+    private static FlexBean instance(FlexClass flexClass, Object object) throws ApplicationExceptions, FrameworkException {
+        FlexBean flexBean = null;
+        if (flexClass.getDynaProperties() != null && flexClass.getDynaProperties().length > 0) {
+            if (object != null && object instanceof IPersistent) {
+                flexBean = new FlexBean(flexClass, (IPersistent) object);
+            } else {
+                flexBean = new FlexBean(flexClass);
+                // Clear all the changes. This can happen if initialze rules are delcared for any of the flex fields.
+                // What this means is that initialize rules for a non-persistent object will be ignored.
+                // This is necessary, else the initial values will be reapplied even after a flex field was modified to a different value.
+                flexBean.flexParams.clear();
+                flexBean.clearChanges();
+            }
+        } else {
+            if (log.isDebugEnabled())
+                log.debug("FlexBean will not be instantiated for the FlexClass '" + flexClass.getName() + "', since it has no dyna-properties");
+        }
+        return flexBean;
+    }
+
+    /**
+     * Attempts to configure an object that implements the IFlexFields interface with optional flex field properties
+     * based upon the configuration loaded from the MetaClass Rule repositories. If the instance does not have any
+     * flex fields defined it will not be modified.
+     *
+     * @param flexInstance the instance to configure with the custom flex fields from the repositories
+     */
+    public static void configureFlexBean(IFlexFields flexInstance) {
+        try {
+            FlexBean flexBean = instance(flexInstance);
+
+            if (flexBean != null) {
+                // simulate the pointcut for construction(org.jaffa.flexfields.FlexBean->new(..)) which referenced
+                // the initialize interceptor. That logic has been ported to be set up by the static context instead.
+                StaticContext.initialize(flexBean);
+
+                // assign the flexbean to the graphData object
+                flexInstance.setFlexBean(flexBean);
+            }
+        } catch (ApplicationExceptions | FrameworkException ex) {
+            log.error("An exception occurred while attempting to initialize flex fields on object of type " + flexInstance.getClass().getName(), ex);
+        }
+    }
+
     /**
      * NOTE: This is an unsupported operation for a FlexBean instance.
      */
@@ -146,6 +241,7 @@ public class FlexBean implements DynaBean {
      * If the property has a domain-mapping (as determined from the associated FlexProperty, value will
      * be obtained from the persistentObject. Else the value will be obtained from
      * the appropriate FlexField instance.
+     *
      * @param name the property name.
      * @return value for the property.
      */
@@ -169,11 +265,24 @@ public class FlexBean implements DynaBean {
 
     /**
      * Return the FlexClass instance that describes the set of properties available for this FlexBean.
+     *
      * @return the FlexClass instance that describes the set of properties available for this FlexBean.
      */
     @XmlTransient
     public DynaClass getDynaClass() {
         return flexClass;
+    }
+
+    /**
+     * Sets the FlexClass instance that describes the set of properties available for this FlexBean.
+     * <p>
+     * NOTE: This method will throw a ClassCastException if a non-FlexClass argument is passed.
+     * DynaClass is used in the signature so that this property turns up as a valid read+write property via the JavaBeans Introspector.
+     *
+     * @param flexClass new value for the property flexClass.
+     */
+    public void setDynaClass(DynaClass flexClass) {
+        this.flexClass = (FlexClass) flexClass;
     }
 
     /**
@@ -188,7 +297,8 @@ public class FlexBean implements DynaBean {
      * If the property has a domain-mapping (as determined from the associated FlexProperty, value will
      * be stamped on the persistentObject. Else the value will be stamped on
      * the appropriate FlexField instance.
-     * @param name the property name.
+     *
+     * @param name  the property name.
      * @param value the new value.
      */
     public void set(String name, Object value) {
@@ -209,22 +319,9 @@ public class FlexBean implements DynaBean {
         throw new UnsupportedOperationException();
     }
 
-    // ***********************************
-    // **** METHODS TO SUPPORT TOOLS *****
-    // ***********************************
-    /**
-     * Sets the FlexClass instance that describes the set of properties available for this FlexBean.
-     *
-     * NOTE: This method will throw a ClassCastException if a non-FlexClass argument is passed.
-     * DynaClass is used in the signature so that this property turns up as a valid read+write property via the JavaBeans Introspector.
-     * @param flexClass new value for the property flexClass.
-     */
-    public void setDynaClass(DynaClass flexClass) {
-        this.flexClass = (FlexClass) flexClass;
-    }
-
     /**
      * Getter for the property flexParams.
+     *
      * @return the value of the property flexParams.
      */
     public FlexParam[] getFlexParams() {
@@ -233,6 +330,7 @@ public class FlexBean implements DynaBean {
 
     /**
      * Setter for the property flexParams.
+     *
      * @param flexParams new value for the property flexParams.
      */
     public void setFlexParams(FlexParam[] flexParams) {
@@ -244,17 +342,16 @@ public class FlexBean implements DynaBean {
 
     /**
      * Getter for the property persistentObject.
+     *
      * @return the value of the property persistentObject.
      */
     public IPersistent getPersistentObject() {
         return persistentObject;
     }
 
-    // *****************************
-    // **** ADDITIONAL METHODS *****
-    // *****************************
     /**
      * Returns debug info.
+     *
      * @return debug info.
      */
     @Override
@@ -289,8 +386,9 @@ public class FlexBean implements DynaBean {
 
     /**
      * Loads the FlexField instances related to the persistent object.
+     *
      * @throws ApplicationExceptions if any application error occurs.
-     * @throws FrameworkException if any framework error occurs.
+     * @throws FrameworkException    if any framework error occurs.
      */
     private void load() throws ApplicationExceptions, FrameworkException {
         if (persistentObject == null || loaded)
@@ -313,8 +411,8 @@ public class FlexBean implements DynaBean {
                 criteria.addCriteria(FlexFieldMeta.KEY3, keyValues[2]);
 
             // load the FlexFields
-            for (Iterator i = persistentObject.getUOW().query(criteria).iterator(); i.hasNext();) {
-                FlexField flexField = (FlexField) i.next();
+            for (Object o : persistentObject.getUOW().query(criteria)) {
+                FlexField flexField = (FlexField) o;
                 String propertyName = flexClass.getNameByLogicalName(flexField.getFieldName());
                 if (propertyName == null)
                     log.warn("LogicalName '" + flexField.getFieldName() + "' has not been defined in the flex-fields definition of '" + flexClass.getName());
@@ -329,72 +427,18 @@ public class FlexBean implements DynaBean {
     }
 
     /**
-     * This is the recommended way to instantiate a FlexBean.
-     * It obtains the appropriate FlexClass.
-     * @param object the associated object.
-     * @return a FlexBean instance.
-     * @throws ApplicationExceptions if any application error occurs.
-     * @throws FrameworkException if any framework error occurs.
-     */
-    public static FlexBean instance(Object object) throws ApplicationExceptions, FrameworkException {
-        if (object instanceof FlexClass)
-            return instance((FlexClass) object);
-        else {
-            FlexClass flexClass = FlexClass.instance(object);
-            return instance(flexClass, object);
-        }
-    }
-
-    /**
-     * Creates an instance based on the input FlexClass and clears all the initial values.
-     * @param flexClass the associated FlexClass.
-     * @return a FlexBean instance.
-     * @throws ApplicationExceptions if any application error occurs.
-     * @throws FrameworkException if any framework error occurs.
-     */
-    public static FlexBean instance(FlexClass flexClass) throws ApplicationExceptions, FrameworkException {
-        return instance(flexClass, null);
-    }
-
-    /**
-     * This is the recommended way to instantiate a FlexBean.
-     * It obtains the appropriate FlexClass.
-     * @param flexClass the associated FlexClass.
-     * @param object the associated object.
-     * @return a FlexBean instance. A null will be returned if the FlexClass has no dyna-properties.
-     * @throws ApplicationExceptions if any application error occurs.
-     * @throws FrameworkException if any framework error occurs.
-     */
-    private static FlexBean instance(FlexClass flexClass, Object object) throws ApplicationExceptions, FrameworkException {
-        FlexBean flexBean = null;
-        if (flexClass.getDynaProperties() != null && flexClass.getDynaProperties().length > 0) {
-            if (object != null && object instanceof IPersistent) {
-                flexBean = new FlexBean(flexClass, (IPersistent) object);
-            } else {
-                flexBean = new FlexBean(flexClass);
-                // Clear all the changes. This can happen if initialze rules are delcared for any of the flex fields.
-                // What this means is that initialize rules for a non-persistent object will be ignored.
-                // This is necessary, else the initial values will be reapplied even after a flex field was modified to a different value.
-                flexBean.flexParams.clear();
-                flexBean.clearChanges();
-            }
-        } else {
-            if (log.isDebugEnabled())
-                log.debug("FlexBean will not be instantiated for the FlexClass '" + flexClass.getName() + "', since it has no dyna-properties");
-        }
-        return flexBean;
-    }
-
-    /** Adds a PropertyChangeListener to the listener list.
+     * Adds a PropertyChangeListener to the listener list.
+     *
      * @param l The listener to add.
      */
     public final void addPropertyChangeListener(PropertyChangeListener l) {
         propertyChangeSupport.addPropertyChangeListener(l);
     }
 
-    /** Removes a PropertyChangeListener from the listener list.
-     * @param l The listener to remove.
+    /**
+     * Removes a PropertyChangeListener from the listener list.
      *
+     * @param l The listener to remove.
      */
     public final void removePropertyChangeListener(PropertyChangeListener l) {
         propertyChangeSupport.removePropertyChangeListener(l);
@@ -410,6 +454,7 @@ public class FlexBean implements DynaBean {
 
     /**
      * Has the bean changed since it was created or last cleared.
+     *
      * @return true if the bean has been modified
      */
     public boolean hasChanged() {
@@ -419,6 +464,7 @@ public class FlexBean implements DynaBean {
     /**
      * Has the specified bean property been changed since the bean was
      * created or last cleared
+     *
      * @param name Name of bean property to check
      * @return true if the property has been modified
      */
@@ -430,10 +476,11 @@ public class FlexBean implements DynaBean {
      * Get the original value for this field, throw an error if this field has no
      * changed, so you should consider first checking with the  {@link #hasChanged(String)}
      * method
+     *
      * @param name Name of bean property to check
-     * @throws NoSuchFieldException Throw if the property has not been changed, or does not exist.
      * @return The object representing the original values. Primitives are return as their
      * Object counterparts.
+     * @throws NoSuchFieldException Throw if the property has not been changed, or does not exist.
      */
     public Object getOriginalValue(String name) throws NoSuchFieldException {
         if (changes.containsKey(name))
@@ -442,7 +489,9 @@ public class FlexBean implements DynaBean {
             throw new NoSuchFieldException(name);
     }
 
-    /** Adds a default PropertyChangeListener to the listener list. */
+    /**
+     * Adds a default PropertyChangeListener to the listener list.
+     */
     private void addPropertyChangeListener() {
         addPropertyChangeListener(new PropertyChangeListener() {
 
@@ -454,13 +503,17 @@ public class FlexBean implements DynaBean {
         });
     }
 
-    /** Adds the oldValue to the changes Map. */
+    /**
+     * Adds the oldValue to the changes Map.
+     */
     private void valueChanged(String name, Object oldValue) {
         if (!changes.containsKey(name))
             changes.put(name, oldValue);
     }
 
-    /** Gets or Sets a property. */
+    /**
+     * Gets or Sets a property.
+     */
     private Object getset(boolean get, String name, Object value, FlexParam flexParam) {
         if (flexParam != null) {
             name = flexParam.getName();
@@ -522,7 +575,7 @@ public class FlexBean implements DynaBean {
                         oldValue = null;
                         FlexField flexField = new FlexField();
                         flexField.setObjectName(flexClass.getLogicalName());
-                        flexField.setFieldName(flexProperty.getLogicalName());
+                        flexField.setFieldName(flexProperty != null ? flexProperty.getLogicalName() : null);
                         flexField.setValue(convertToString(value, layout));
                         flexFields.put(name, flexField);
                     }
@@ -539,7 +592,9 @@ public class FlexBean implements DynaBean {
         }
     }
 
-    /** Returns an array containing key values for the persistent object. */
+    /**
+     * Returns an array containing key values for the persistent object.
+     */
     private String[] findKeyValues() {
         try {
             Class persistentClass = persistentObject.getClass();
@@ -567,7 +622,9 @@ public class FlexBean implements DynaBean {
         }
     }
 
-    /** Stamps the key values of the persistent object on the input FlexField instance. */
+    /**
+     * Stamps the key values of the persistent object on the input FlexField instance.
+     */
     private void stampKeyValues(FlexField flexField) throws ApplicationExceptions, FrameworkException {
         try {
             String[] keyValues = findKeyValues();
@@ -591,16 +648,29 @@ public class FlexBean implements DynaBean {
         return (String) convertTo(value, String.class, layout);
     }
 
-    // ****************************
-    // **** LIFECYCLE METHODS *****
-    // ****************************
     /**
      * Validates this bean.
      * This is also useful for binding AOP-based validations.
+     *
      * @throws ApplicationExceptions if any application error occurs.
-     * @throws FrameworkException if any framework error occurs.
+     * @throws FrameworkException    if any framework error occurs.
      */
     public void validate() throws ApplicationExceptions, FrameworkException {
+
+        // Aop Replacement Support:
+        // Validation was previous applied via an aop pointcut that would be applied to this method.
+        // this is now performed via dynamic discovery of validators (via spring config), and if
+        // found, executed here
+
+        if (flexBeanValidator != null) {
+            try {
+                flexBeanValidator.validate(this);
+            } catch (ApplicationException exception) {
+                //re-wrap Application Exception into an Application Exceptions
+                throw new ApplicationExceptions(exception);
+            }
+        }
+
         // stamps the key-values on new FlexField instances
         for (FlexField flexField : flexFields.values()) {
             if (!flexField.isDatabaseOccurence() && flexField.getValue() != null && flexField.getValue().length() > 0)
@@ -611,8 +681,9 @@ public class FlexBean implements DynaBean {
     /**
      * Adds/Updates FlexField instances to the database.
      * This should ideally be called after the associated persistentObject has been added/updated.
+     *
      * @throws ApplicationExceptions if any application error occurs.
-     * @throws FrameworkException if any framework error occurs.
+     * @throws FrameworkException    if any framework error occurs.
      */
     public void update() throws ApplicationExceptions, FrameworkException {
         if (log.isDebugEnabled())
@@ -647,8 +718,9 @@ public class FlexBean implements DynaBean {
     /**
      * Delete the FlexField instances to the database.
      * This should ideally be called before the associated persistentObject has been deleted.
+     *
      * @throws ApplicationExceptions if any application error occurs.
-     * @throws FrameworkException if any framework error occurs.
+     * @throws FrameworkException    if any framework error occurs.
      */
     public void delete() throws ApplicationExceptions, FrameworkException {
         load(); //retrieve data from the database, in case it hasn't be loaded yet
