@@ -222,8 +222,4 @@ public class StaticContext implements ApplicationContextAware {
     public void setApplicationContext(ApplicationContext applicationContext) {
         StaticContext.appContext = applicationContext;
     }
-
-    public static void setAppContext(ApplicationContext appContext) {
-        StaticContext.appContext = appContext;
-    }
 }
