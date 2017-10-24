@@ -112,23 +112,23 @@ public class ContextManagerTest {
         assertNull(iContextManager.getProperty("nonExistentKey"));
 
         // Property from variation
-        assertNotNull(ContextManagerFactory.instance().getProperty("org.jaffa.config.variation"));
+        assertNotNull(iContextManager.getProperty("org.jaffa.config.variation"));
 
         // Property from variation
-        assertEquals("true", ContextManagerFactory.instance().getProperty("org.jaffa.config.hidepanel"));
+        assertEquals("true", iContextManager.getProperty("org.jaffa.config.hidepanel"));
 
         // Property from variation
-        assertEquals("true", ContextManagerFactory.instance().getProperty("org.jaffa.config.hidemaintenancepanel"));
+        assertEquals("true", iContextManager.getProperty("org.jaffa.config.hidemaintenancepanel"));
 
-        assertEquals("datadist_root/outbound", ContextManagerFactory.instance().getProperty("datadist.outboundFolder"));
+        assertEquals("datadist_root/outbound", iContextManager.getProperty("datadist.outboundFolder"));
 
-        assertEquals("datadist_root/outbound/fragments", ContextManagerFactory.instance().getProperty("datadist.outboundFolder.fragments"));
+        assertEquals("datadist_root/outbound/fragments", iContextManager.getProperty("datadist.outboundFolder.fragments"));
 
-        assertEquals("c:/test/interfaces_root/outbound/test", ContextManagerFactory.instance().getProperty("interfaces.outboundTestFolder"));
+        assertEquals("c:/test/interfaces_root/outbound/test", iContextManager.getProperty("interfaces.outboundTestFolder"));
 
-        assertEquals("http://pentaho_host.mypentaho.com:80967/pentaho", ContextManagerFactory.instance().getProperty("pentaho.url"));
+        assertEquals("http://pentaho_host.mypentaho.com:80967/pentaho", iContextManager.getProperty("pentaho.url"));
 
-        assertEquals("C:\\apache-tomcat-8.5.16/server/Goldesp/conf/report-security.txt", ContextManagerFactory.instance().getProperty("usersecurity.reportsecurity.securityFilterKeyFile"));
+        assertEquals("C:\\apache-tomcat-8.5.16/server/Goldesp/conf/report-security.txt", iContextManager.getProperty("usersecurity.reportsecurity.securityFilterKeyFile"));
 
 
 
