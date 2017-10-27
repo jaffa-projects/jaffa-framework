@@ -86,6 +86,7 @@ public abstract class GraphCriteria implements IFlexCriteriaFields {
     private String[] resultGraphRules;
     private FlexCriteriaBean flexCriteriaBean;
     private Boolean shouldLookupFlexbean = true;
+    private String tableName;
 
     /**
      * Getter for property orderByFields.
@@ -260,6 +261,7 @@ public abstract class GraphCriteria implements IFlexCriteriaFields {
      */
     public Criteria returnQueryClause(Criteria nestedClause) {
         Criteria c = new Criteria();
+        c.setTable(tableName);
         // append an orderBy clause to the criteria
         if (getOrderByFields() != null) {
             for (OrderByField orderByField : getOrderByFields()) {
@@ -349,5 +351,22 @@ public abstract class GraphCriteria implements IFlexCriteriaFields {
             currentInstance.setFlexCriteriaParams(flexCriteriaBean.getFlexCriteriaParams());
         else
             this.flexCriteriaBean = flexCriteriaBean;
+    }
+
+    /**
+     * Internal method of specifying the table name that will be set on the query criteria when its created. This
+     * allows the flexCriteriaBean to properly generate a criteria clause for non-domain flex field.
+     * <p>
+     * Note: This is required because the invocation order for the flex field returnQueryClause method changed from
+     * being post-invocation via the interceptor to now being called during super.returnQueryClause. All concrete
+     * instances call the super.returnQueryClause method first, then set the tablename as this method will ignore
+     * any passed criteria (see comments on the method above reqarding subqueries). We work around this by having the
+     * concrete implementation make the base class aware of the table name instead of setting the value on the
+     * criteria directly.
+     *
+     * @param tableName
+     */
+    protected void setTableName(String tableName) {
+        this.tableName = tableName;
     }
 }
