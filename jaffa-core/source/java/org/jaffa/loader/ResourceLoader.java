@@ -55,10 +55,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.annotation.PostConstruct;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Loads the Xml Config files and registers them to the Repository.
@@ -67,14 +63,15 @@ public class ResourceLoader<T extends IManager> {
 
     private static Logger logger = Logger.getLogger(ContextHelper.class);
 
-    private List<PropertyChangeListener> listeners = new ArrayList<>();
+    private ManagerRepositoryService managerRepositoryService = ManagerRepositoryService.getInstance();
 
     private static String REPOSITORY_EVENT = "ADD_UPDATE_REPOSITORY";
 
-    private T manager ;
+    private T manager;
 
     /**
      * gets the Manager from the ResourceLoader
+     *
      * @return Manager Object identified ny T
      */
     public T getManager() {
@@ -83,6 +80,7 @@ public class ResourceLoader<T extends IManager> {
 
     /**
      * sets the manager on the ResourceLoader
+     *
      * @param manager Object identified by T
      */
     public void setManager(T manager) {
@@ -92,7 +90,7 @@ public class ResourceLoader<T extends IManager> {
     /**
      * loads all the Xml files with xml file name in the manager from all the jars
      * where package contains META-INF/*
-      */
+     */
     @PostConstruct
     public void loadXmls() {
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
@@ -107,33 +105,15 @@ public class ResourceLoader<T extends IManager> {
                     try {
                         manager.registerResource(resource, ContextHelper.getContextSalience(resource.getURI().toString()),
                                 ContextHelper.getVariationSalience(resource.getURI().toString()));
-//                        notifyPropertyChangeListeners(manager.getResourceFileName()); //TODO: Change this to repos.name
-                    }catch(Exception e){
+                        managerRepositoryService.add(manager.getClass().getSimpleName(), manager);
+                    } catch (Exception e) {
                         logger.error("Exception occurred while registering XML " + resource.getURI().toString() + " exception " + e);
                     }
                 }
             }
-        }catch(Exception w){
+        } catch (Exception w) {
             throw new RuntimeException(w.getCause());
         }
-    }
-
-    /**
-     *
-     * @param repositoryName
-     */
-    private void notifyPropertyChangeListeners(String repositoryName) {
-        for (PropertyChangeListener propertyChangeListener: listeners){
-            propertyChangeListener.propertyChange(new PropertyChangeEvent(this, repositoryName, null, REPOSITORY_EVENT));
-        }
-    }
-
-    /**
-     * Adds change listeners to the resourceLoader
-     * @param newListener
-     */
-    public void addPropertyChangeListener(PropertyChangeListener newListener) {
-        listeners.add(newListener);
     }
 
 }

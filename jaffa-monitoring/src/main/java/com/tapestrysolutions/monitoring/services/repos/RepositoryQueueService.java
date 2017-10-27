@@ -1,26 +1,53 @@
 package com.tapestrysolutions.monitoring.services.repos;
 
+import org.jaffa.loader.IManager;
+import org.jaffa.loader.IRepository;
+import org.jaffa.loader.ManagerRepositoryService;
+import org.jaffa.loader.MapRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 /**
- * Created by rcastellow on 9/15/2017.
+ * RepositoryQueueService - Provides a service mapping of the managerService with the contents of the repositories in each
+ * service.
  */
 public class RepositoryQueueService {
 
-    private static volatile RepositoryQueueService repositoryQueueServiceInstance = null;
+    private ManagerRepositoryService managerRepositoryService = ManagerRepositoryService.getInstance();
 
-    private RepositoryQueueService() {
-    }
+    /**
+     * getRepositoryNames() - Returns a list of the repository names
+     * @return
+     */
+    public List<String> getRepositoryNames() {
 
-    public static RepositoryQueueService getInstance() {
-        if (repositoryQueueServiceInstance == null) {
-            synchronized (RepositoryQueueService.class) {
-                if (repositoryQueueServiceInstance == null) {
-                    repositoryQueueServiceInstance = new RepositoryQueueService();
-                }
-            }
+        Map<String, IManager> managerMap = managerRepositoryService.getManagerMap();
+        List<String> repositoryNames = new ArrayList<>();
+        for (Map.Entry managerEntry : managerMap.entrySet()) {
+            IManager manager = (IManager) managerEntry.getValue();
+//            repositoryNames.add(manager.getRepositoryNames);
         }
-        return repositoryQueueServiceInstance;
+
+        return repositoryNames;
     }
 
+    /**
+     * getRepository() - Returns a repository from the manager service by repository name.
+     * @param name
+     * @return
+     */
+    public IRepository<?> getRepository(String name) {
 
+        Map<String, IManager> managerMap = managerRepositoryService.getManagerMap();
+        for (Map.Entry managerEntry : managerMap.entrySet()) {
+            IManager manager = (IManager) managerEntry.getValue();
+//            if (manager.getRepositoryNames().contains(name)) {
+//                return manager.getRepositoryByName(name);
+//            }
+        }
+        return new MapRepository();
+    }
 
 }
