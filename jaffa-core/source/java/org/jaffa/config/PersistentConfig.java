@@ -51,6 +51,8 @@ package org.jaffa.config;
 import org.jaffa.beans.factory.ILifecycleHandlerFactory;
 import org.jaffa.beans.factory.LifecycleHandlerFactory;
 import org.jaffa.beans.factory.config.StaticContext;
+import org.jaffa.exceptions.ApplicationExceptions;
+import org.jaffa.exceptions.FrameworkException;
 import org.jaffa.persistence.ILifecycleHandler;
 import org.jaffa.persistence.Persistent;
 import org.jaffa.rules.fieldvalidators.ValidatorFactory;
@@ -67,7 +69,6 @@ import java.util.List;
  */
 @Configuration
 public abstract class PersistentConfig implements ApplicationContextAware {
-
     private ApplicationContext appContext;
     private ILifecycleHandlerFactory lifecycleHandlerFactory = new LifecycleHandlerFactory();
 
@@ -89,10 +90,9 @@ public abstract class PersistentConfig implements ApplicationContextAware {
      * @param persistent the object to initialize
      * @return the initialized object
      */
-    protected <T extends Persistent> T persistent(T persistent) {
+    protected <T extends Persistent> T persistent(T persistent) throws FrameworkException, ApplicationExceptions {
         if (appContext != null && persistent != null) {
-
-            // register validators
+            // Add validations for the persistent object
             ValidatorFactory validatorFactory = (ValidatorFactory) appContext.getBean("ruleValidatorFactory");
             if (validatorFactory != null) {
                 persistent.setValidator(validatorFactory.getValidator(persistent));

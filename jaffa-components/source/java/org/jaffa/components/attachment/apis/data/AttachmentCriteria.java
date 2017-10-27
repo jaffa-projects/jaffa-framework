@@ -272,8 +272,8 @@ public class AttachmentCriteria extends GraphCriteria {
      */
     @Override
     public Criteria returnQueryClause(Criteria nestedClause) {
+        setTableName(AttachmentMeta.getName());
         Criteria c = super.returnQueryClause(nestedClause);
-        c.setTable(AttachmentMeta.getName());
         FinderTx.addCriteria(getAttachmentId(), AttachmentMeta.ATTACHMENT_ID, c);
         FinderTx.addCriteria(getSerializedKey(), AttachmentMeta.SERIALIZED_KEY, c);
         FinderTx.addCriteria(getOriginalFileName(), AttachmentMeta.ORIGINAL_FILE_NAME, c);

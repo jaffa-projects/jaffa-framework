@@ -28,8 +28,8 @@ public class ValidFieldValueCriteria extends GraphCriteria {
      */
     @Override
     public Criteria returnQueryClause(Criteria c) {
+        setTableName(ValidFieldValueMeta.getName());
         c = super.returnQueryClause(c);
-        c.setTable(ValidFieldValueMeta.getName());
         FinderTx.addCriteria(getTableName(), ValidFieldValueMeta.TABLE_NAME, c);
         FinderTx.addCriteria(getFieldName(), ValidFieldValueMeta.FIELD_NAME, c);
         FinderTx.addCriteria(getLegalValue(), ValidFieldValueMeta.LEGAL_VALUE, c);

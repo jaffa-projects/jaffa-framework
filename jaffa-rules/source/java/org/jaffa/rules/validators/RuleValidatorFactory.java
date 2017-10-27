@@ -51,6 +51,7 @@ package org.jaffa.rules.validators;
 import org.apache.log4j.Logger;
 import org.jaffa.exceptions.ApplicationExceptions;
 import org.jaffa.exceptions.FrameworkException;
+import org.jaffa.flexfields.FlexBean;
 import org.jaffa.rules.RuleActorFactory;
 import org.jaffa.rules.fieldvalidators.Validator;
 import org.jaffa.rules.fieldvalidators.ValidatorFactory;
@@ -58,7 +59,6 @@ import org.jaffa.rules.meta.ClassMetaData;
 import org.jaffa.rules.meta.MetaDataRepository;
 import org.jaffa.rules.meta.PropertyMetaData;
 import org.jaffa.rules.meta.RuleMetaData;
-import org.jaffa.rules.realm.RealmRepository;
 import org.jaffa.rules.rulemeta.IRuleHelper;
 import org.jaffa.rules.rulemeta.RuleHelperFactory;
 import org.springframework.beans.BeansException;
@@ -141,10 +141,8 @@ public class RuleValidatorFactory extends RuleActorFactory<Validator> implements
      * @param targetClassName The target Class.
      * @param ruleName        the rule to search for.
      * @return a Map containing a List of RuleMetaData instances per propertyName for the className+ruleName combination.
-     * @throws org.jaffa.exceptions.ApplicationExceptions
-     *          if any application exception occurs.
-     * @throws org.jaffa.exceptions.FrameworkException
-     *          if any internal error occurs.
+     * @throws org.jaffa.exceptions.ApplicationExceptions if any application exception occurs.
+     * @throws org.jaffa.exceptions.FrameworkException    if any internal error occurs.
      */
     protected Map<String, List<RuleMetaData>> getPropertyRuleMap(String targetClassName, String ruleName) throws ApplicationExceptions, FrameworkException {
         if (targetClassName != null) {
@@ -179,7 +177,16 @@ public class RuleValidatorFactory extends RuleActorFactory<Validator> implements
         // Return null if no validator found that corresponds to the combination
         // of classname, realm, and variation.
         if (object != null) {
-            String className = object.getClass().getName();
+            // FlexBean rules are stored as the classname$Flex. If requesting the rules for a flexfield,
+            // this requires us to lookup to rules differently than we would with a concrete class.
+            String className;
+
+            if (object instanceof FlexBean) {
+                className = ((FlexBean) object).getDynaClass().getName();
+            } else {
+                className = object.getClass().getName();
+            }
+
             List<ClassMetaData> metaDataList = MetaDataRepository.instance().getClassMetaDataListByClassName(className);
             if (metaDataList != null) {
                 synchronized (syncObject) {
@@ -205,8 +212,8 @@ public class RuleValidatorFactory extends RuleActorFactory<Validator> implements
         for (ClassMetaData classMetaData : metaDataList) {
             // Retrieve class-level rules
             List<RuleMetaData> allRulesForClass = classMetaData.getClassRules();
-            if(allRulesForClass != null){
-                for(RuleMetaData ruleMetaData : allRulesForClass){
+            if (allRulesForClass != null) {
+                for (RuleMetaData ruleMetaData : allRulesForClass) {
                     String ruleName = ruleMetaData.getName();
                     try {
                         //get the map of rules that apply to the class in new condition

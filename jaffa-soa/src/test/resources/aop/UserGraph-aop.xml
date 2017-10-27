@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+    <!-- ================================================= -->
+    <!-- Rules for User Graph                         -->
+    <!-- ================================================= -->
+
+
+    <metadata tag="jaffa.rules"
+              class="org.jaffa.rules.testmodels.UserGraph"
+              extends-class="org.jaffa.rules.testmodels.User">
+        <super/>
+
+        <property name="userId">
+            <label>[label.UserSecurity.User.User.UserId]</label>
+            <mandatory/>
+            <max-length>20</max-length>
+            <case-type>Upper</case-type>
+        </property>
+
+        <property name="openTechOneJob">
+            <label>[label.UserSecurity.User.User.OpenTechOneJob.Short]</label>
+        </property>
+
+        <property name="wpForOneAsset">
+            <label>[label.UserSecurity.User.User.WpForOneAsset.Short]</label>
+        </property>
+
+        <property name="lockedDatetime">
+            <super/>
+            <hidden condition='!org.jaffa.security.SecurityManager.checkFunctionAccess("UserSecurity.User.User.Maintenance")'/>
+        </property>
+
+        <property name="lockMachine">
+            <super/>
+            <hidden condition='!org.jaffa.security.SecurityManager.checkFunctionAccess("UserSecurity.User.User.Maintenance")'/>
+        </property>
+
+        <property name="pin">
+            <super/>
+            <hidden condition='"false".equalsIgnoreCase( (java.lang.String) org.jaffa.session.ContextManagerFactory.instance().getProperty("usersecurity.security.usePinForEcert"))'/>
+        </property>
+
+        <property name="usersSiteOffline">
+            <super/>
+            <hidden condition='"false".equalsIgnoreCase( (java.lang.String) org.jaffa.session.ContextManagerFactory.instance().getProperty("contractwarehouse.setup.enableSiteOfflineRecovery"))'/>
+        </property>
+
+        <property name="aircrew">
+            <super/>
+        </property>
+
+    </metadata>
+
+
+</aop>

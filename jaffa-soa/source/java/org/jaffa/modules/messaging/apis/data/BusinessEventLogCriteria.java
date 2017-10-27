@@ -38,8 +38,8 @@ public class BusinessEventLogCriteria extends GraphCriteria {
      */
     @Override
     public Criteria returnQueryClause(Criteria c) {
+        setTableName(BusinessEventLogMeta.getName());
         c = super.returnQueryClause(c);
-        c.setTable(BusinessEventLogMeta.getName());
         FinderTx.addCriteria(getLogId(), BusinessEventLogMeta.LOG_ID, c);
         FinderTx.addCriteria(getCorrelationType(), BusinessEventLogMeta.CORRELATION_TYPE, c);
         FinderTx.addCriteria(getCorrelationKey1(), BusinessEventLogMeta.CORRELATION_KEY1, c);
@@ -147,7 +147,7 @@ public class BusinessEventLogCriteria extends GraphCriteria {
     }
 
     /**
-     * @param SubProcessName the subProcessName to set
+     * @param subProcessName the subProcessName to set
      */
     public void setSubProcessName(StringCriteriaField subProcessName) {
         this.subProcessName = subProcessName;

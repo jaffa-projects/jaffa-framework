@@ -49,6 +49,8 @@
 
 package org.jaffa.config;
 
+import org.jaffa.exceptions.ApplicationExceptions;
+import org.jaffa.exceptions.FrameworkException;
 import org.jaffa.persistence.Persistent;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
@@ -70,7 +72,7 @@ public class PersistentBeanConfig extends PersistentConfig {
     @Bean
     @Scope(BeanDefinition.SCOPE_PROTOTYPE)
     @Override
-    public Persistent persistent(Persistent persistent) {
+    public Persistent persistent(Persistent persistent) throws FrameworkException, ApplicationExceptions {
         return super.persistent(persistent);
     }
 }

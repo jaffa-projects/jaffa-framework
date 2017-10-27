@@ -52,7 +52,6 @@ import org.jaffa.components.finder.CriteriaField;
 import org.jaffa.components.finder.DateTimeCriteriaField;
 import org.jaffa.components.finder.FinderTx;
 import org.jaffa.components.finder.StringCriteriaField;
-import org.jaffa.persistence.AtomicCriteria;
 import org.jaffa.persistence.Criteria;
 import org.jaffa.soa.graph.GraphCriteria;
 import org.jaffa.transaction.domain.TransactionFieldMeta;
@@ -258,8 +257,8 @@ public class TransactionCriteria extends GraphCriteria {
      */
     @Override
     public Criteria returnQueryClause(Criteria nestedClause) {
+        setTableName(TransactionMeta.getName());
         Criteria c = super.returnQueryClause(nestedClause);
-        c.setTable(TransactionMeta.getName());
         FinderTx.addCriteria(getId(), TransactionMeta.ID, c);
         FinderTx.addCriteria(getDirection(), TransactionMeta.DIRECTION, c);
         

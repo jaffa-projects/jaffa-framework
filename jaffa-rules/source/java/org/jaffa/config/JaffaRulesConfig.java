@@ -49,16 +49,17 @@
 package org.jaffa.config;
 
 import org.jaffa.beans.factory.InitializerFactory;
+import org.jaffa.rules.AopXmlLoader;
 import org.jaffa.rules.JaffaRulesFrameworkException;
 import org.jaffa.rules.commons.AopConstants;
 import org.jaffa.rules.initializers.RuleInitializerFactory;
-import org.jaffa.rules.AopXmlLoader;
 import org.jaffa.rules.rulemeta.DefaultRuleHelper;
 import org.jaffa.rules.rulemeta.IRuleEvaluator;
 import org.jaffa.rules.validators.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.Environment;
@@ -70,6 +71,7 @@ import java.util.List;
  * Java Configuration class for the Jaffa Rules
  */
 @Configuration
+@ComponentScan("org.jaffa.beans.factory.config")
 public class JaffaRulesConfig {
 
     /**
