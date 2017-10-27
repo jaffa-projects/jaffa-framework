@@ -96,7 +96,7 @@ public class SchedulerManager implements IManager {
      * {@inheritDoc}
      */
     @Override
-    public void registerXML(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
+    public void registerResource(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
 
         Config config = JAXBHelper.unmarshalConfigFile(Config.class, resource, CONFIGURATION_SCHEMA_FILE);
         if (config.getTask() != null) {
@@ -111,7 +111,7 @@ public class SchedulerManager implements IManager {
      * {@inheritDoc}
      */
     @Override
-    public String getXmlFileName() {
+    public String getResourceFileName() {
         return DEFAULT_CONFIGURATION_FILE;
     }
 
@@ -131,7 +131,7 @@ public class SchedulerManager implements IManager {
      * @return
      */
     public Task getSchedulerTaskByTypeName(String typeName) {
-        List<Task> tasks = schedulerTaskRepository.getAllValues();
+        List<Task> tasks = schedulerTaskRepository.getValues();
         for (Task task : tasks) {
             if (typeName.equalsIgnoreCase(task.getType())) return task;
         }
@@ -146,7 +146,7 @@ public class SchedulerManager implements IManager {
      * @return List of all values
      */
     public Task[] getAllSchedulerTasks() {
-        return schedulerTaskRepository.getAllValues().toArray(new Task[0]);
+        return schedulerTaskRepository.getValues().toArray(new Task[0]);
     }
 
 

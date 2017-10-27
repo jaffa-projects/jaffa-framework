@@ -55,57 +55,46 @@
 
 package org.jaffa.session;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.WeakHashMap;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
-import org.jaffa.config.ApplicationRulesLoader;
+import org.jaffa.loader.config.ApplicationRulesManager;
 import org.jaffa.presentation.portlet.session.UserSession;
 import org.jaffa.util.NestedMap;
-import org.jaffa.util.URLHelper;
+import org.jaffa.util.StringHelper;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.*;
+import java.net.URLEncoder;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Base implementation of the IContextManager. It reads Global Context,
  * Variation context and UserPreferences from properties files, and gets session information
  * from the UserSession object if available.
- *
+ * <p>
  * It assumes that a UserSession has been created and initialized prior to
  * invoking setThreadContext().
- *
+ * <p>
  * Contexts are built based on the org.jaffa.util.NestedMap, such that Thread
  * settings override Session settings which override User Preferences which override Variation settings which
  * override Global settings.
  *
- * @author  PaulE
- * @version  1.0
+ * @author PaulE
+ * @version 1.0
  */
 public class ContextManager implements IContextManager {
 
     private static final Logger log = Logger.getLogger(ContextManager.class);
-    private static final String LOCATION = "resources/ApplicationRules.";
+
 
     private static ThreadLocal threadContext = new ThreadLocal();
     private static ThreadLocal userPreferencesInThread = new ThreadLocal();
 
     private Map m_global = null; // Contains global properties
     private Map m_variation = new WeakHashMap(); // Contains variation/properties pairs
+
+    private static ApplicationRulesManager applicationRulesManager;
 
     /**
      * Used to set the context on the thread. This uses all the other methods in the class to build
@@ -120,17 +109,18 @@ public class ContextManager implements IContextManager {
      * <code><pre>
      * try {
      *    ContextManagerFactory.instance().setThreadContext(request);
-     *
+     * <p>
      *    // rest of code
      * } finally {
      *    ContextManagerFactory.instance().unsetThreadContext();
      * }
      * </pre></code>
+     *
      * @param request the request being processed.
      */
     public void setThreadContext(HttpServletRequest request) {
         Map m = (Map) threadContext.get();
-        if (m==null || m.size()==0 || m.get("hasSession")==null) {
+        if (m == null || m.size() == 0 || m.get("hasSession") == null) {
             if (log.isDebugEnabled()) log.debug("Setting Thread Context.");
             m = getGlobalContext();
             Map sessionContext = getSessionContext(request);
@@ -157,7 +147,7 @@ public class ContextManager implements IContextManager {
             m = new NestedMap(m);
             // Put the request in the thread, as this may be useful later
             m.put("request", request);
-            if (sessionContext!=null) m.put("hasSession", true);
+            if (sessionContext != null) m.put("hasSession", true);
 
             // Add the userPreferencesFileName to the thread context
             if (userPreferencesFileName != null) {
@@ -171,6 +161,7 @@ public class ContextManager implements IContextManager {
 
     /**
      * Used to unset the context on the thread.
+     *
      * @see #setThreadContext(HttpServletRequest)
      */
     public void unsetThreadContext() {
@@ -184,7 +175,7 @@ public class ContextManager implements IContextManager {
      * UserPreferences, Variation and Global contexts. Any methods that manipulate the Map will only have an effect on
      * the Thread values, although any value inserted in the Thread context with the same name will
      * override the value in all the other contexts.
-     *
+     * <p>
      * The GlobalContext is returned, in case a thread context has not been created yet.
      * This may be useful, if a global setting is used during the setting up of the thread context.
      *
@@ -205,17 +196,42 @@ public class ContextManager implements IContextManager {
      * <code>
      * String rule = (String) ContextManagerFactory.instance().getThreadContext().get('my.rule');
      * </code>
+     *
      * @param key the property.
      * @return the value for the given property.
      */
     public Object getProperty(Object key) {
         Map m = getThreadContext();
-        return m != null ? m.get(key) : null;
+        Object contextValue = m != null ? m.get(key) : null;
+        if (contextValue != null && contextValue instanceof String) {
+            contextValue = replaceTokens((String)contextValue);
+        }
+        return contextValue;
     }
 
-    /** Sets the property in the thread context.
+    private String replaceTokens(String appRuleValue) {
+        //Regular expression to find ${word} tokens in the application rule value
+        Pattern pt = Pattern.compile("\\$\\{([^}]*)\\}");
+        Matcher matcher = pt.matcher(appRuleValue);
+
+        while (matcher.find()) {
+            String tokenName = matcher.group(1);
+            String tokenValue = (String) getProperty(tokenName);
+            if (log.isDebugEnabled()) {
+                log.debug("Token Name Used " + tokenName + " and its value " + tokenValue);
+            }
+            if (tokenValue != null) {
+                appRuleValue = StringHelper.replace(appRuleValue, matcher.group(0), tokenValue);
+            }
+        }
+        return appRuleValue;
+    }
+
+    /**
+     * Sets the property in the thread context.
      * This property will be available only for the duration of the thread and will not be persisted.
-     * @param key the key for a property.
+     *
+     * @param key   the key for a property.
      * @param value the value for a property.
      * @return the previous value of the specified key in this property list, or null if it did not have one.
      */
@@ -224,7 +240,9 @@ public class ContextManager implements IContextManager {
         return m != null ? m.put(key, value) : null;
     }
 
-    /** Returns a set containing all the keys in the different contexts.
+    /**
+     * Returns a set containing all the keys in the different contexts.
+     *
      * @return a set containing all the keys in the different contexts.
      */
     public Set getPropertyNames() {
@@ -232,7 +250,9 @@ public class ContextManager implements IContextManager {
         return m != null ? m.keySet() : null;
     }
 
-    /** Returns a set containing all the keys in the different contexts and which match the input regex filter.
+    /**
+     * Returns a set containing all the keys in the different contexts and which match the input regex filter.
+     *
      * @param filter the regular expression to filter the keys.
      * @return a set containing all the keys in the different contexts and which match the input regex filter.
      */
@@ -240,7 +260,7 @@ public class ContextManager implements IContextManager {
         Set s = getPropertyNames();
         if (s != null && filter != null) {
             Set filteredSet = new HashSet();
-            for (Iterator i = s.iterator(); i.hasNext();) {
+            for (Iterator i = s.iterator(); i.hasNext(); ) {
                 String key = i.next().toString();
                 if (key.matches(filter)) {
                     filteredSet.add(key);
@@ -252,8 +272,10 @@ public class ContextManager implements IContextManager {
         }
     }
 
-    /** Set a user preference, which will persisted beyond a session.
-     * @param name Name of the preference.
+    /**
+     * Set a user preference, which will persisted beyond a session.
+     *
+     * @param name  Name of the preference.
      * @param value Value of the preference.
      * @throws IOException if any I/O error occurs.
      */
@@ -269,7 +291,9 @@ public class ContextManager implements IContextManager {
     }
 
 
-    /** Unset a user preference already persisted, which will be removed beyond a session.
+    /**
+     * Unset a user preference already persisted, which will be removed beyond a session.
+     *
      * @param name Name of the preference.
      * @throws IOException if any I/O error occurs.
      */
@@ -285,7 +309,9 @@ public class ContextManager implements IContextManager {
     }
 
 
-    /** Set user preferences, which will persisted beyond a session.
+    /**
+     * Set user preferences, which will persisted beyond a session.
+     *
      * @param userPreferences Property Object containing preferences.
      * @throws IOException if any I/O error occurs.
      */
@@ -307,7 +333,9 @@ public class ContextManager implements IContextManager {
         }
     }
 
-    /** Unset user preferences already persisted, which will be removed beyond a session.
+    /**
+     * Unset user preferences already persisted, which will be removed beyond a session.
+     *
      * @param userPreferences Set containing preference names to be removed.
      * @throws IOException if any I/O error occurs.
      */
@@ -332,62 +360,20 @@ public class ContextManager implements IContextManager {
     /**
      * Get the global context, this is read once and cached. It looks for
      * a properties file called 'resources/ApplicationRules.global'
+     *
      * @return the global context.
      */
     private Map getGlobalContext() {
         if (m_global == null) {
             synchronized (this) {
                 if (m_global == null) {
-                    // Read global settings
-                    String location = LOCATION + "global";
-                    InputStream input = null;
                     Properties props = null;
-                    try {
-                        input = URLHelper.getInputStream(location);
-                        if (input != null) {
-                        	props = new Properties();
-                            props.load(input);
-                            if (log.isDebugEnabled()) {
-                                if (props.size() < 1) {
-                                    log.debug("No Global Rules Defined in file " + location);
-                                } else {
-                                    log.debug("Loaded " + props.size() + " rule(s) from " + location);
-                                }
-                            }
-                        } else {
-                            if (log.isInfoEnabled()) {
-                                log.info("No Global Rules found. Can't find file " + location);
-                            }
-                        }
-                    } catch (Exception e) {
-                        // No global rules available;
-                        if (log.isInfoEnabled()) {
-                            log.info("No Global Rules Found. Error in loading file " + location, e);
-                        }
-                    } finally {
-                        try {
-                            if (input != null) {
-                                input.close();
-                            }
-                        } catch (IOException e) {
-                            if (log.isInfoEnabled()) {
-                                log.info("Exception thrown while closing the properties file", e);
-                            }
-                        }
-                    }
+                    props = (applicationRulesManager != null) ? applicationRulesManager.getApplicationRulesGlobal() : null;
 
-					/**
-					 * If nothing loaded from I/O file. Load it from
-					 * ApplicationRulesLoader
-					 */
-					if (props == null || props.size() == 0) {
-						props = ApplicationRulesLoader.getInstance().getApplicationRulesGlobal();
-					}
-                    
                     // Cache an unmodifiable view
-					if (props != null) {
-						m_global = Collections.unmodifiableMap(props);
-					}
+                    if (props != null) {
+                        m_global = Collections.unmodifiableMap(props);
+                    }
                 }
             }
         }
@@ -397,6 +383,7 @@ public class ContextManager implements IContextManager {
     /**
      * Get a variation context, this is read once and cached per variation. It looks for
      * a properties file called 'resources/ApplicationRules.{variation}'
+     *
      * @param variation the variation.
      * @return the variation context.
      */
@@ -404,66 +391,27 @@ public class ContextManager implements IContextManager {
         if (!m_variation.containsKey(variation)) {
             synchronized (m_variation) {
                 if (!m_variation.containsKey(variation)) {
-                    // Read variation settings
-                    String location = LOCATION + variation;
-                    InputStream input = null;
                     Properties props = null;
-                    try {
-                        input = URLHelper.getInputStream(location);
-                        if (input != null) {
-                        	props = new Properties();
-                            props.load(input);
-                            if (log.isDebugEnabled()) {
-                                if (props.size() < 1) {
-                                    log.debug("No Variation '" + variation + "' Rules Defined in file " + location);
-                                } else {
-                                    log.debug("Loaded " + props.size() + " rule(s) from " + location);
-                                }
-                            }
-                        } else {
-                            if (log.isInfoEnabled()) {
-                                log.info("No Variation '" + variation + "' Rules Found. Can't find file " + location);
-                            }
-                        }
-                    } catch (Exception e) {
-                        // No rules available;
-                        if (log.isInfoEnabled()) {
-                            log.info("No Variation '" + variation + "' Rules Found. Error in loading file " + location, e);
-                        }
-                    } finally {
-                        try {
-                            if (input != null) {
-                                input.close();
-                            }
-                        } catch (IOException e) {
-                            if (log.isInfoEnabled()) {
-                                log.info("Exception thrown while closing the properties file", e);
-                            }
-                        }
+                    if (props == null || props.size() == 0) {
+                        props = applicationRulesManager.getApplicationRulesVariation(variation);
                     }
-                    
-					/**
-					 * If nothing loaded from I/O file. Load it from
-					 * ApplicationRulesLoader
-					 */
-					if (props == null || props.size() == 0) {
-						props = ApplicationRulesLoader.getInstance().getApplicationRulesVariation(variation);
-					}
-                    
+
                     // Cache an unmodifiable view
-					if (props != null) {
-						m_variation.put(variation, Collections.unmodifiableMap(props));
-					}
+                    if (props != null) {
+                        m_variation.put(variation, Collections.unmodifiableMap(props));
+                    }
                 }
             }
         }
         return (Map) m_variation.get(variation);
     }
 
-    /** Returns the preferences for the input userId.
+    /**
+     * Returns the preferences for the input userId.
      * If the 'user.preferences.folder' property is specified, then it looks for a properties file 'getProperty("user.preferences.folder")/{userId}/user.properties'.
      * Else, it looks for a properties file '{System.getProperty("user.home")}/.jaffa/user-preferences/{userId}/user.properties'.
      * This is read once and then cached in the thread.
+     *
      * @param location the file containing the user preferences.
      * @return the preferences for the input userId.
      */
@@ -522,6 +470,7 @@ public class ContextManager implements IContextManager {
      * <li>user.locale (java.lang.String) Locale of the user, default to local of server if not available
      * <li>user.variation (java.lang.String) Varition applicable to this user. Defined at logon
      * </ul>
+     *
      * @param request the request being processed.
      * @return the session context.
      */
@@ -542,7 +491,8 @@ public class ContextManager implements IContextManager {
         }
     }
 
-    /** If folder is passed, then it returns '{folder}/{userId}/user.properties'.
+    /**
+     * If folder is passed, then it returns '{folder}/{userId}/user.properties'.
      * Else, it returns '{System.getProperty("user.home")}/.jaffa/user-preferences/{userId}/user.properties'.
      */
     private static String getUserPreferencesFileName(String userId, String folder) {
@@ -575,10 +525,12 @@ public class ContextManager implements IContextManager {
         return buf.toString();
     }
 
-    /** Stores the input properties into the given file.
+    /**
+     * Stores the input properties into the given file.
      * The order in which the properties are written to the file is not guaranteed. Comments in an existing file will be lost.
+     *
      * @param properties The properties to be stored.
-     * @param fileName The file into which the properties will be stored.
+     * @param fileName   The file into which the properties will be stored.
      * @throws IOException if any error occurs.
      */
     private static void storePropertiesToFile(Properties properties, String fileName) throws IOException {
@@ -608,5 +560,14 @@ public class ContextManager implements IContextManager {
                 os.close();
             }
         }
+    }
+
+
+    public static ApplicationRulesManager getApplicationRulesManager() {
+        return applicationRulesManager;
+    }
+
+    public static void setApplicationRulesManager(ApplicationRulesManager applicationRulesManager) {
+        ContextManager.applicationRulesManager = applicationRulesManager;
     }
 }

@@ -28,6 +28,12 @@
     <!-- ******************************************************************* -->
     <!-- Provided Libraries                                                  -->
     <!-- ******************************************************************* -->
+
+    <dependency>
+      <groupId>struts</groupId>
+      <artifactId>struts</artifactId>
+      <scope>provided</scope>
+    </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>

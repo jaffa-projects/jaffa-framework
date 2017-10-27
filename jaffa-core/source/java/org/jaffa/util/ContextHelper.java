@@ -53,15 +53,11 @@ package org.jaffa.util;
 import org.apache.log4j.Logger;
 import org.jaffa.security.VariationContext;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.jar.Attributes;
-import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 
@@ -119,7 +115,7 @@ public class ContextHelper {
      * @return string containing context salience
      */
     public static String getVariationSalience(String contextPath)  {
-        String variationSalience = VariationContext.DEFAULT_VARIATION;
+        String variationSalience = VariationContext.NULL_VARIATION;
 
         if (!contextPath.startsWith("jar")) {
             // Class not from JAR

@@ -80,6 +80,7 @@ import java.util.Map;
 /**
  * A helper class to interact with meta data.
  */
+@Deprecated
 public class MetaDataWriter {
 
     private static Logger log = Logger.getLogger(MetaDataWriter.class);

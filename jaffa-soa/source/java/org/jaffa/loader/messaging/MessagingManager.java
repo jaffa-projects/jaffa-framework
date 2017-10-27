@@ -120,7 +120,7 @@ public class MessagingManager implements IManager {
      * @throws IOException
      */
     @Override
-    public void registerXML(Resource resource, String context, String variation)
+    public void registerResource(Resource resource, String context, String variation)
             throws JAXBException, SAXException, IOException {
 
         Config config = JAXBHelper.unmarshalConfigFile(Config.class, resource,
@@ -149,7 +149,7 @@ public class MessagingManager implements IManager {
                     ContextKey contextKey = new ContextKey(filter.getFilterName(), resource.getURI().toString(), variation, context);
                     registerMessageFilter(contextKey, filter);
                 } else {
-                    log.warn("MessagingObject.registerXML, unexpected object: " + o);
+                    log.warn("MessagingObject.registerResource, unexpected object: " + o);
                 }
             }   // for
             checkForQueueAndTopicNamingConflicts();
@@ -258,7 +258,7 @@ public class MessagingManager implements IManager {
      * @return all Queue Names
      */
     public String[] getQueueNames() {
-        return queueInfoRepository.getAllKeyIds().toArray(new String[0]);
+        return queueInfoRepository.getKeyIds().toArray(new String[0]);
     }
 
     /**
@@ -266,7 +266,7 @@ public class MessagingManager implements IManager {
      * @return all Topic Names
      */
     public String[] getTopicNames() {
-        return topicInfoRepository.getAllKeyIds().toArray(new String[0]);
+        return topicInfoRepository.getKeyIds().toArray(new String[0]);
     }
 
     /**
@@ -274,7 +274,7 @@ public class MessagingManager implements IManager {
      * @return list of all message filters
      */
     public List<MessageFilter> getMessageFilters() {
-        return messageFilterRepository.getAllValues();
+        return messageFilterRepository.getValues();
     }
 
     ////////////////////////////////////////////////////////////////////////
@@ -354,7 +354,7 @@ public class MessagingManager implements IManager {
     ////////////////////////////////////////////////////////////////////////
 
     @Override
-    public String getXmlFileName() {
+    public String getResourceFileName() {
         return DEFAULT_CONFIGURATION_FILE;
     }
 

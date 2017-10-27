@@ -106,7 +106,7 @@ public class TransactionManager implements IManager {
      * {@inheritDoc}
      */
     @Override
-    public void registerXML(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
+    public void registerResource(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
 
         Config config = JAXBHelper.unmarshalConfigFile(Config.class, resource, CONFIGURATION_SCHEMA_FILE);
 
@@ -129,7 +129,7 @@ public class TransactionManager implements IManager {
      * {@inheritDoc}
      */
     @Override
-    public String getXmlFileName() {
+    public String getResourceFileName() {
         return DEFAULT_CONFIGURATION_FILE;
     }
 
@@ -196,7 +196,7 @@ public class TransactionManager implements IManager {
      * @return List of all values
      */
     public TransactionInfo[] getAllTransactionInfo() {
-        return transactionRepository.getAllValues().toArray(new TransactionInfo[0]);
+        return transactionRepository.getValues().toArray(new TransactionInfo[0]);
     }
 
     /**
@@ -204,7 +204,7 @@ public class TransactionManager implements IManager {
      * @return Set of all Type Names
      */
     public String[] getTypeNames() {
-        return typeInfoRepository.getAllKeyIds().toArray(new String[0]);
+        return typeInfoRepository.getKeyIds().toArray(new String[0]);
     }
 
 

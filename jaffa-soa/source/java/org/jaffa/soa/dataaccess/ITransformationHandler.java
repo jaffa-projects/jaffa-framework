@@ -56,229 +56,289 @@ import org.jaffa.persistence.Criteria;
 import org.jaffa.persistence.UOW;
 import org.jaffa.soa.graph.GraphCriteria;
 
-/** Interface of an Transformation Handler that can be used to link in
+import java.util.List;
+
+/**
+ * Interface of an Transformation Handler that can be used to link in
  * additional functionallity to the transformation process when a
  * object graph is being transformed to either create, update or delete
  * domain objects.
  *
- * @author  PaulE
+ * @author PaulE
  * @version 1.0
  */
 public interface ITransformationHandler {
 
+    String LIFECYCLE_CHANGE_DONE = "changeDone(..)";
+    String LIFECYCLE_END_BEAN = "endBean(..)";
+    String LIFECYCLE_END_BEAN_ADD = "endBeanAdd(..)";
+    String LIFECYCLE_END_BEAN_CLONE = "endBeanClone(..)";
+    String LIFECYCLE_END_BEAN_DELETE = "endBeanDelete(..)";
+    String LIFECYCLE_END_BEAN_LOAD = "endBeanLoad(..)";
+    String LIFECYCLE_END_BEAN_MASS_UPDATE = "endBeanMassUpdate(..)";
+    String LIFECYCLE_END_BEAN_UPDATE = "endBeanUpdate(..)";
+    String LIFECYCLE_IS_CHANGE_DONE = "isChangeDone()";
+    String LIFECYCLE_IS_CLONING = "isCloning()";
+    String LIFECYCLE_PRE_QUERY = "preQuery(..)";
+    String LIFECYCLE_PREVALIDATE_BEAN = "prevalidateBean(..)";
+    String LIFECYCLE_SET_CHANGE_DONE = "setChangeDone(..)";
+    String LIFECYCLE_SET_CLONING = "setCloning(..)";
+    String LIFECYCLE_START_BEAN = "startBean(..)";
+    String LIFECYCLE_START_BEAN_ADD = "startBeanAdd(..)";
+    String LIFECYCLE_START_BEAN_CLONE = "startBeanClone(..)";
+    String LIFECYCLE_START_BEAN_DELETE = "startBeanDelete(..)";
+    String LIFECYCLE_START_BEAN_MASS_UPDATE = "startBeanMassUpdate(..)";
+    String LIFECYCLE_START_BEAN_UPDATE = "startBeanUpdate(..)";
 
-	/**
+    /**
      * Getter for the property cloning.
-     * This property is set whenever we are in a clone process. This allows the UpdateHandlers to know if they are in clone mode 
-     * or just a regular update 
+     * This property is set whenever we are in a clone process. This allows the UpdateHandlers to know if they are in clone mode
+     * or just a regular update
+     *
      * @return value of the property cloning.
      */
-    public boolean isCloning();
-	    
+    boolean isCloning();
 
     /**
      * Setter for the property cloning.
-     * This property is set whenever we are in a clone process. This allows the UpdateHandlers to know if they are in clone mode 
-     * or just a regular update 
+     * This property is set whenever we are in a clone process. This allows the UpdateHandlers to know if they are in clone mode
+     * or just a regular update
+     *
      * @param cloning value of the property cloning
      */
-    public void setCloning(boolean cloning);
-    
+    void setCloning(boolean cloning);
+
     /**
      * Getter for the property changeDone.
      * This property is set whenever a domain object is added, updated or deleted during the processing of a graph hierarchy.
+     *
      * @return value of the property changeDone.
      */
-    public boolean isChangeDone();
+    boolean isChangeDone();
 
     /**
      * Setter for the property changeDone.
      * This property is set whenever a domain object is added, updated or deleted during the processing of a graph hierarchy.
+     *
      * @param changeDone value of the property changeDone
      */
-    public void setChangeDone(boolean changeDone);
+    void setChangeDone(boolean changeDone);
 
     /**
      * Called after all processing has been completed on the root graph.
      * This method will be invoked only if any domain object was actually added, updated or deleted.
-     * @param path This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
+     *
+     * @param path   This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
      * @param source the graph object being processed.
      * @param target the corresponding domain object.
      * @throws ApplicationExceptions if multiple Application errors occur.
-     * @throws FrameworkException if an internal error occurs.
+     * @throws FrameworkException    if an internal error occurs.
      */
-    public void changeDone(String path, Object source, Object target, UOW uow) throws ApplicationExceptions, FrameworkException;
+    void changeDone(String path, Object source, Object target, UOW uow) throws ApplicationExceptions, FrameworkException;
 
     /**
      * Called prior to any processing of the target bean.
-     * @param path This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
+     *
+     * @param path   This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
      * @param source the graph object being processed.
      * @param target the corresponding domain object.
-     * @throws ApplicationException if any Application error occurs. SkipTransformException may be thrown to stop the processing of this graph.
+     * @throws ApplicationException  if any Application error occurs. SkipTransformException may be thrown to stop the processing of this graph.
      * @throws ApplicationExceptions if multiple Application errors occur.
-     * @throws FrameworkException if an internal error occurs.
+     * @throws FrameworkException    if an internal error occurs.
      */
-    public void startBean(String path, Object source, Object target) throws ApplicationException, ApplicationExceptions, FrameworkException;
+    void startBean(String path, Object source, Object target) throws ApplicationException, ApplicationExceptions, FrameworkException;
 
     /**
      * Called after all processing has been completed on the target bean, this included its related beans.
-     * @param path This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
+     *
+     * @param path   This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
      * @param source the graph object being processed.
      * @param target the corresponding domain object.
-     * @throws ApplicationException if any Application error occurs.
+     * @throws ApplicationException  if any Application error occurs.
      * @throws ApplicationExceptions if multiple Application errors occur.
-     * @throws FrameworkException if an internal error occurs.
+     * @throws FrameworkException    if an internal error occurs.
      */
-    public void endBean(String path, Object source, Object target) throws ApplicationException, ApplicationExceptions, FrameworkException;
+    void endBean(String path, Object source, Object target) throws ApplicationException, ApplicationExceptions, FrameworkException;
 
     /**
      * Called prior to deleting the target bean from the persistent store.
-     * @param path This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
+     *
+     * @param path   This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
      * @param source the graph object being processed.
      * @param target the corresponding domain object.
-     * @throws ApplicationException if any Application error occurs. SkipTransformException may be thrown to stop the processing of this graph.
+     * @throws ApplicationException  if any Application error occurs. SkipTransformException may be thrown to stop the processing of this graph.
      * @throws ApplicationExceptions if multiple Application errors occur.
-     * @throws FrameworkException if an internal error occurs.
+     * @throws FrameworkException    if an internal error occurs.
      */
-    public void startBeanDelete(String path, Object source, Object target) throws ApplicationException, ApplicationExceptions, FrameworkException;
+    void startBeanDelete(String path, Object source, Object target) throws ApplicationException, ApplicationExceptions, FrameworkException;
 
     /**
      * Called after deleting the target bean from the persistent store.
-     * @param path This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
+     *
+     * @param path   This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
      * @param source the graph object being processed.
      * @param target the corresponding domain object.
-     * @throws ApplicationException if any Application error occurs.
+     * @throws ApplicationException  if any Application error occurs.
      * @throws ApplicationExceptions if multiple Application errors occur.
-     * @throws FrameworkException if an internal error occurs.
+     * @throws FrameworkException    if an internal error occurs.
      */
-    public void endBeanDelete(String path, Object source, Object target) throws ApplicationException, ApplicationExceptions, FrameworkException;
+    void endBeanDelete(String path, Object source, Object target) throws ApplicationException, ApplicationExceptions, FrameworkException;
 
     /**
      * Called prior to adding the target bean to the persistent store.
-     * @param path This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
+     *
+     * @param path   This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
      * @param source the graph object being processed.
      * @param target the corresponding domain object.
-     * @throws ApplicationException if any Application error occurs. SkipTransformException may be thrown to stop the processing of this graph.
+     * @throws ApplicationException  if any Application error occurs. SkipTransformException may be thrown to stop the processing of this graph.
      * @throws ApplicationExceptions if multiple Application errors occur.
-     * @throws FrameworkException if an internal error occurs.
+     * @throws FrameworkException    if an internal error occurs.
      */
-    public void startBeanAdd(String path, Object source, Object target) throws ApplicationException, ApplicationExceptions, FrameworkException;
+    void startBeanAdd(String path, Object source, Object target) throws ApplicationException, ApplicationExceptions, FrameworkException;
 
     /**
      * Called after adding the target bean to the persistent store.
-     * @param path This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
+     *
+     * @param path   This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
      * @param source the graph object being processed.
      * @param target the corresponding domain object.
-     * @throws ApplicationException if any Application error occurs.
+     * @throws ApplicationException  if any Application error occurs.
      * @throws ApplicationExceptions if multiple Application errors occur.
-     * @throws FrameworkException if an internal error occurs.
+     * @throws FrameworkException    if an internal error occurs.
      */
-    public void endBeanAdd(String path, Object source, Object target) throws ApplicationException, ApplicationExceptions, FrameworkException;
+    void endBeanAdd(String path, Object source, Object target) throws ApplicationException, ApplicationExceptions, FrameworkException;
 
     /**
      * Called prior to updating the target bean in the persistent store.
-     * @param path This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
+     *
+     * @param path   This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
      * @param source the graph object being processed.
      * @param target the corresponding domain object.
-     * @throws ApplicationException if any Application error occurs. SkipTransformException may be thrown to stop the processing of this graph.
+     * @throws ApplicationException  if any Application error occurs. SkipTransformException may be thrown to stop the processing of this graph.
      * @throws ApplicationExceptions if multiple Application errors occur.
-     * @throws FrameworkException if an internal error occurs.
+     * @throws FrameworkException    if an internal error occurs.
      */
-    public void startBeanUpdate(String path, Object source, Object target) throws ApplicationException, ApplicationExceptions, FrameworkException;
+    void startBeanUpdate(String path, Object source, Object target) throws ApplicationException, ApplicationExceptions, FrameworkException;
 
     /**
      * Called after updating the target bean in the persistent store.
-     * @param path This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
+     *
+     * @param path   This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
      * @param source the graph object being processed.
      * @param target the corresponding domain object.
-     * @throws ApplicationException if any Application error occurs.
+     * @throws ApplicationException  if any Application error occurs.
      * @throws ApplicationExceptions if multiple Application errors occur.
-     * @throws FrameworkException if an internal error occurs.
+     * @throws FrameworkException    if an internal error occurs.
      */
-    public void endBeanUpdate(String path, Object source, Object target) throws ApplicationException, ApplicationExceptions, FrameworkException;
+    void endBeanUpdate(String path, Object source, Object target) throws ApplicationException, ApplicationExceptions, FrameworkException;
 
     /**
      * Called prior to adding the target bean to the persistent store during a clone process.
-     * @param path This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
-     * @param source the graph object being processed.
-     * @param target the corresponding domain object.
+     *
+     * @param path     This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
+     * @param source   the graph object being processed.
+     * @param target   the corresponding domain object.
      * @param newGraph an additional graph object that contains override values for the properties in the source object.
-     * @throws ApplicationException if any Application error occurs. SkipTransformException may be thrown to stop the processing of this graph.
+     * @throws ApplicationException  if any Application error occurs. SkipTransformException may be thrown to stop the processing of this graph.
      * @throws ApplicationExceptions if multiple Application errors occur.
-     * @throws FrameworkException if an internal error occurs.
+     * @throws FrameworkException    if an internal error occurs.
      */
-    public void startBeanClone(String path, Object source, Object target, Object newGraph) throws ApplicationException, ApplicationExceptions, FrameworkException;
+    void startBeanClone(String path, Object source, Object target, Object newGraph) throws ApplicationException, ApplicationExceptions, FrameworkException;
 
     /**
      * Called after adding the target bean to the persistent store during a clone process.
-     * @param path This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
-     * @param source the graph object being processed.
-     * @param target the corresponding domain object.
+     *
+     * @param path     This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
+     * @param source   the graph object being processed.
+     * @param target   the corresponding domain object.
      * @param newGraph an additional graph object that contains override values for the properties in the source object.
-     * @throws ApplicationException if any Application error occurs.
+     * @throws ApplicationException  if any Application error occurs.
      * @throws ApplicationExceptions if multiple Application errors occur.
-     * @throws FrameworkException if an internal error occurs.
+     * @throws FrameworkException    if an internal error occurs.
      */
-    public void endBeanClone(String path, Object source, Object target, Object newGraph) throws ApplicationException, ApplicationExceptions, FrameworkException;
+    void endBeanClone(String path, Object source, Object target, Object newGraph) throws ApplicationException, ApplicationExceptions, FrameworkException;
 
     /**
      * Called prior to updating the target bean in the persistent store during a MassUpdate process.
-     * @param path This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
-     * @param source the graph object being processed.
-     * @param target the corresponding domain object.
+     *
+     * @param path     This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
+     * @param source   the graph object being processed.
+     * @param target   the corresponding domain object.
      * @param newGraph an additional graph object that contains override values for the properties in the source object.
-     * @throws ApplicationException if any Application error occurs. SkipTransformException may be thrown to stop the processing of this graph.
+     * @throws ApplicationException  if any Application error occurs. SkipTransformException may be thrown to stop the processing of this graph.
      * @throws ApplicationExceptions if multiple Application errors occur.
-     * @throws FrameworkException if an internal error occurs.
+     * @throws FrameworkException    if an internal error occurs.
      */
-    public void startBeanMassUpdate(String path, Object source, Object target, Object newGraph) throws ApplicationException, ApplicationExceptions, FrameworkException;
+    void startBeanMassUpdate(String path, Object source, Object target, Object newGraph) throws ApplicationException, ApplicationExceptions, FrameworkException;
 
     /**
      * Called after updating the target bean in the persistent store during a MassUpdate process.
-     * @param path This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
-     * @param source the graph object being processed.
-     * @param target the corresponding domain object.
+     *
+     * @param path     This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
+     * @param source   the graph object being processed.
+     * @param target   the corresponding domain object.
      * @param newGraph an additional graph object that contains override values for the properties in the source object.
-     * @throws ApplicationException if any Application error occurs.
+     * @throws ApplicationException  if any Application error occurs.
      * @throws ApplicationExceptions if multiple Application errors occur.
-     * @throws FrameworkException if an internal error occurs.
+     * @throws FrameworkException    if an internal error occurs.
      */
-    public void endBeanMassUpdate(String path, Object source, Object target, Object newGraph) throws ApplicationException, ApplicationExceptions, FrameworkException;
+    void endBeanMassUpdate(String path, Object source, Object target, Object newGraph) throws ApplicationException, ApplicationExceptions, FrameworkException;
 
-    /** Called prior to invoking a Query.
+    /**
+     * Called prior to invoking a Query.
      * A handler may modify the input Criteria.
      * It may return a null to stop the query.
-     * @param path This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
-     * @param criteria the Criteria to be modified.
+     *
+     * @param path             This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
+     * @param criteria         the Criteria to be modified.
      * @param originalCriteria the original graph criteria.
-     * @param domain the domain class being queried.
+     * @param domain           the domain class being queried.
      * @return a modified Criteria instance.
-     * @throws ApplicationException if any Application error occurs.
+     * @throws ApplicationException  if any Application error occurs.
      * @throws ApplicationExceptions if multiple Application errors occur.
-     * @throws FrameworkException if an internal error occurs.
+     * @throws FrameworkException    if an internal error occurs.
      */
-    public Criteria preQuery(String path, Criteria criteria, GraphCriteria originalCriteria, Class domain) throws ApplicationException, ApplicationExceptions, FrameworkException;
+    Criteria preQuery(String path, Criteria criteria, GraphCriteria originalCriteria, Class domain) throws ApplicationException, ApplicationExceptions, FrameworkException;
 
-    /** Called after a bean has been loaded.
-     * @param path This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
-     * @param source the domain object that was just queried.
-     * @param target the graph object being molded.
-     * @param filter Filter object that it is used to control what fields are populated or the target objects.
+    /**
+     * Called after a bean has been loaded.
+     *
+     * @param path             This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
+     * @param source           the domain object that was just queried.
+     * @param target           the graph object being molded.
+     * @param filter           Filter object that it is used to control what fields are populated or the target objects.
      * @param originalCriteria the original graph criteria.
-     * @throws ApplicationException if any Application error occurs.
+     * @throws ApplicationException  if any Application error occurs.
      * @throws ApplicationExceptions if multiple Application errors occur.
-     * @throws FrameworkException if an internal error occurs.
+     * @throws FrameworkException    if an internal error occurs.
      */
-    public void endBeanLoad(String path, Object source, Object target, MappingFilter filter, GraphCriteria originalCriteria) throws ApplicationException, ApplicationExceptions, FrameworkException;
+    void endBeanLoad(String path, Object source, Object target, MappingFilter filter, GraphCriteria originalCriteria) throws ApplicationException, ApplicationExceptions, FrameworkException;
 
-    /** Called after the source graph has been validated and molded into the target domain object.
+    /**
+     * Called after the source graph has been validated and molded into the target domain object.
      * This handler may then be used to perform additional validations and/or set default data on the source graph.
-     * @param path This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
+     *
+     * @param path   This is the source path of this graph, used when processing a more complex tree, where this is the path to get to this root object being processed.
      * @param source the graph object being validated.
      * @param target the domain object molded from the graph.
-     * @throws ApplicationException if any Application error occurs.
+     * @throws ApplicationException  if any Application error occurs.
      * @throws ApplicationExceptions if multiple Application errors occur.
-     * @throws FrameworkException if an internal error occurs.
+     * @throws FrameworkException    if an internal error occurs.
      */
-    public void prevalidateBean(String path, Object source, Object target) throws ApplicationException, ApplicationExceptions, FrameworkException;
+    void prevalidateBean(String path, Object source, Object target) throws ApplicationException, ApplicationExceptions, FrameworkException;
+
+    /**
+     * Gets all transformation handlers set on a concrete transformation handler.  This allows custom code to be
+     * injected before or after lifecycle methods.
+     */
+    List<ITransformationHandler> getTransformationHandlers();
+
+    /**
+     * Sets the target instance of a TransformationHandler on this instance of the handler.  When we add multiple
+     * handlers into a list on the target bean, this will give each handler in the list access to the target
+     * instance of the handler itself.
+     *
+     * @param targetBean the target instance of the transformation handler this instance is operating on.
+     */
+    void setTargetBean(ITransformationHandler targetBean);
 }

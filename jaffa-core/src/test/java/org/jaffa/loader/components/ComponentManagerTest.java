@@ -123,12 +123,12 @@ public class ComponentManagerTest {
     }
 
     /**
-     * Tests that getXmlFileName returns an XML file by default.
+     * Tests that getResourceFileName returns an XML file by default.
      * @throws Exception
      */
     @Test
     public void getXmlFileName() throws Exception {
-        String xmlFileName = manager.getXmlFileName();
+        String xmlFileName = manager.getResourceFileName();
         assertNotNull(xmlFileName);
         assertTrue(xmlFileName.contains(".xml"));
     }

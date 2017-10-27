@@ -87,7 +87,7 @@ public class SoaEventManager implements IManager {
      * @return List of all values
      */
 	public SoaEventInfo[] getAllSoaEventInfo(List<String> contextOrderParam) {
-		return soaEventRepository.getAllValues().toArray(new SoaEventInfo[0]);
+		return soaEventRepository.getValues().toArray(new SoaEventInfo[0]);
 	}
 	
     /**
@@ -102,7 +102,7 @@ public class SoaEventManager implements IManager {
      * {@inheritDoc}
      */
 	@Override
-	public void registerXML(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
+	public void registerResource(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
 		SoaEvents soaEvents = JAXBHelper.unmarshalConfigFile(SoaEvents.class, resource, CONFIGURATION_SCHEMA_FILE);
 
 		if (soaEvents != null) {
@@ -117,7 +117,7 @@ public class SoaEventManager implements IManager {
      * {@inheritDoc}
      */
 	@Override
-	public String getXmlFileName() {
+	public String getResourceFileName() {
 		return DEFAULT_CONFIGURATION_FILE;
 	}
 

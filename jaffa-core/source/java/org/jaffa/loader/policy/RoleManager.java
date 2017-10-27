@@ -93,7 +93,7 @@ public class RoleManager implements IManager {
     private static Logger log = Logger.getLogger(PolicyCache.class);
 
     /**
-     * registerXML - Registers the roles into the role repository from the roles.xml files found in META-INF/roles.xml
+     * registerResource - Registers the roles into the role repository from the roles.xml files found in META-INF/roles.xml
      * that exist in the classpath.
      * @param resource the object that contains the xml config file.
      * @param context  key with which config file to be registered.
@@ -102,7 +102,7 @@ public class RoleManager implements IManager {
      * @throws IOException
      */
     @Override
-    public void registerXML(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
+    public void registerResource(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
 
         Roles roles = JAXBHelper.unmarshalConfigFile(Roles.class, resource, CONFIGURATION_SCHEMA_FILE);
         if (roles.getRole() != null) {
@@ -114,11 +114,11 @@ public class RoleManager implements IManager {
     }
 
     /**
-     * getXmlFileName - Returns the default XML file name of the security roles XSD.
+     * getResourceFileName - Returns the default XML file name of the security roles XSD.
      * @return return the name of the roles XSD file
      */
     @Override
-    public String getXmlFileName() {
+    public String getResourceFileName() {
         return DEFAULT_CONFIGURATION_FILE;
     }
 
@@ -146,7 +146,7 @@ public class RoleManager implements IManager {
      * @return returns a list of all Roles
      */
     public List<Role> getAllRoles() {
-        return roleRepository.getAllValues();
+        return roleRepository.getValues();
     }
 
     /**

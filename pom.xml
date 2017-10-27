@@ -28,53 +28,21 @@
         with advanced scheduling and queue sub-systems.
     </description>
     <url>http://jaffa.sourceforge.net/</url>
-    <inceptionYear>2015</inceptionYear>
+    <inceptionYear>2003</inceptionYear>
 
     <properties>
-        <!--<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>-->
-        <!--<spring.version>4.3.2.RELEASE</spring.version>-->
-        <!--<spring.jpa.version>1.9.4.RELEASE</spring.jpa.version>-->
-        <!--<spring.data.commons.version>1.11.4.RELEASE</spring.data.commons.version>-->
-        <!--<spring.data.commons.core.version>1.4.1.RELEASE</spring.data.commons.core.version>-->
-        <!--<spring.security.version>3.2.5.RELEASE</spring.security.version>-->
-        <!--<spring.jaxws.version>1.9</spring.jaxws.version>-->
-        <!--<xbean-spring>3.16</xbean-spring>-->
-        <!--<commons-logging>1.0.4</commons-logging>-->
-        <!--<log4j>1.2.17</log4j>-->
-        <!--<slf4j>1.7.18</slf4j>-->
-        <!--<slf4j-api>1.7.18</slf4j-api>-->
-        <!--<junit>4.7</junit>-->
-        <!--<mockito>1.9.5</mockito>-->
-        <!--<ehCache>2.8.4</ehCache>-->
         <hibernate.version>3.6.10.Final</hibernate.version>
         <ignite.version>1.4.0</ignite.version>
-        <!--<hibernateCommons>3.2.0.Final</hibernateCommons>-->
-        <!--<commons-logging-version>1.0.4</commons-logging-version>-->
-        <!--<journalVersion>1.0.0</journalVersion>-->
-        <!--<chronicleVersion>2.1.4</chronicleVersion>-->
-        <!--<quartzVersion>1.6.2</quartzVersion>-->
-        <!--<activemqVersion>5.13.4</activemqVersion>-->
-        <!--<strutsVersion>1.2.7</strutsVersion>-->
-        <!--<javaxMailVersion>1.4.7</javaxMailVersion>-->
-        <!--<javaxServletVersion>3.1.0</javaxServletVersion>-->
-        <!--<awakeSqlVersion>1.0.5</awakeSqlVersion>-->
-        <!--<oracleVersion>11.2.0.3.0</oracleVersion>-->
-        <!--<jaffaJdbcplusVersion>6.0.0.Final</jaffaJdbcplusVersion>-->
-        <!--<xercesVersion>2.2.1</xercesVersion>-->
-        <!--<beanshellVersion>2.0b5</beanshellVersion>-->
-        <!--<geronimoJmsVersion>1.1.1</geronimoJmsVersion>-->
-        <!--<saxParserVersion>2.9.0</saxParserVersion>-->
 
         <!-- ******************************************************************* -->
-        <!-- Jaffa Version                                                       -->
+        <!-- Jaffa Maven Tools Version                                                       -->
         <!-- ******************************************************************* -->
-        <jaffa.version>6.0.0-SNAPSHOT</jaffa.version>
         <jaffa.maven.tools.version>1.0.0-SNAPSHOT</jaffa.maven.tools.version>
 
         <!-- ******************************************************************* -->
         <!-- UI Source Directory                                                 -->
         <!-- ******************************************************************* -->
-	    <ui.sourcedir>source/html</ui.sourcedir>
+	      <ui.sourcedir>source/html</ui.sourcedir>
 	
         <!-- ******************************************************************* -->
         <!-- JAVA Compiler Options                                               -->
@@ -104,11 +72,6 @@
         <application.data.directory>${user.home}/${appname}/data</application.data.directory>
         <product.name>JAFFA</product.name>
         <product.instance>JAFFA</product.instance>
-        <SYVE_REQUIRED_VERSION>6.0.0</SYVE_REQUIRED_VERSION>
-        <APP.HOST>localhost</APP.HOST>
-        <APP.PORT>8080</APP.PORT>
-        <LOCAL.ID></LOCAL.ID>
-        <ADMIN.USERID></ADMIN.USERID>
         <product.server.id></product.server.id>
 
         <!-- ******************************************************************* -->
@@ -166,10 +129,10 @@
         <manifest.specification.version>6.0.0</manifest.specification.version>
         <manifest.specification.vendor>JAFFA</manifest.specification.vendor>
 
-        <manifest.implementation.title>${project.artifactId}-${jaffa.version}</manifest.implementation.title>
+        <manifest.implementation.title>${project.artifactId}-${project.version}</manifest.implementation.title>
         <manifest.implementation.vendor>JAFFA</manifest.implementation.vendor>
         <manifest.implementation.vendor.id>org.jaffa</manifest.implementation.vendor.id>
-        <manifest.implementation.version>${jaffa.version}</manifest.implementation.version>
+        <manifest.implementation.version>${project.version}</manifest.implementation.version>
 
         <manifest.bundle.symbolic.name>org.jaffa</manifest.bundle.symbolic.name>
         <manifest.bundle.vendor>JAFFA</manifest.bundle.vendor>
@@ -177,7 +140,7 @@
         <manifest.bundle.copyright>2015</manifest.bundle.copyright>
         <manifest.bundle.license>http://jaffa.sourceforge.net</manifest.bundle.license>
         <manifest.bundle.docurl>http://jaffa.sourceforge.net</manifest.bundle.docurl>
-        <manifest.bundle.version>${jaffa.version}</manifest.bundle.version>
+        <manifest.bundle.version>${project.version}</manifest.bundle.version>
         <manifest.bundle.manifest.version>2</manifest.bundle.manifest.version>
         <manifest.bundle.classpath>.</manifest.bundle.classpath>
         <manifest.export.package>.</manifest.export.package>
@@ -187,12 +150,14 @@
         <!-- ******************************************************************* -->
         <!-- maven-enforcer-plugin                                               -->
         <!-- ******************************************************************* -->
-        <maven.min.version>3.0.4</maven.min.version>
+        <maven.min.version>3.3.9</maven.min.version>
         <jdk.min.version>1.7</jdk.min.version>
 
         <!-- ******************************************************************* -->
         <!-- 3rd Party Libraries Versions                                        -->
         <!-- ******************************************************************* -->
+        <version.com.google.guava>19.0</version.com.google.guava>
+        <version.com.joilbox>0.8.0.RELEASE</version.com.joilbox>
         <version.bsf>2.4.0</version.bsf>
         <version.com.fasterxml.jackson-annotations>2.3.0</version.com.fasterxml.jackson-annotations>
         <version.com.fasterxml.jackson-core>2.3.0</version.com.fasterxml.jackson-core>
@@ -350,18 +315,6 @@
         <url>http://jaffa.sourceforge.net</url>
     </organization>
 
-    <!--
-    <issueManagement>
-      <system>Tracker Sourceforge.net</system>
-      <url>http://sourceforge.net/tracker/?group_id=39497</url>
-    </issueManagement>
-    -->
-
-    <scm>
-        <connection>scm:svn:https://svn/repos/jaffa/trunk/</connection>
-        <developerConnection>scm:svn:https://svn/repos/jaffa/trunk/</developerConnection>
-    </scm>
-
     <developers>
         <developer>
             <id>jaffa.sourceforge.net/</id>
@@ -463,6 +416,14 @@
                             <phase>compile</phase>
                         </execution>
                     </executions>
+                    <configuration>
+                      <customResourceDefinitions>
+                        <customResourceDefinition>
+                          <directory>true</directory>
+                          <customResource>aop</customResource>
+                        </customResourceDefinition>
+                      </customResourceDefinitions>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -846,7 +807,7 @@
                         <dependency>
                             <groupId>org.jaffa.assemblies</groupId>
                             <artifactId>jaffa-ui-assembly-descriptor</artifactId>
-                            <version>${jaffa.version}</version>
+                            <version>${project.version}</version>
                         </dependency>
                     </dependencies>
                     <executions>
@@ -870,8 +831,8 @@
                     <configuration>
                         <minmemory>256m</minmemory>
                         <maxmemory>2g</maxmemory>
-                        <header><![CDATA[<b>${project.name} ${jaffa.version}</b>]]></header>
-                        <footer><![CDATA[<b>${project.name} ${jaffa.version}</b>]]></footer>
+                        <header><![CDATA[<b>${project.name} ${project.version}</b>]]></header>
+                        <footer><![CDATA[<b>${project.name} ${project.version}</b>]]></footer>
                         <archive>
                             <index>true</index>
                             <manifest>
@@ -1449,6 +1410,11 @@
 
     <dependencyManagement>
         <dependencies>
+          <dependency>
+            <groupId>com.jolbox</groupId>
+            <artifactId>bonecp-spring</artifactId>
+            <version>${version.com.joilbox}</version>
+          </dependency>
             <dependency>
                 <groupId>ant-contrib</groupId>
                 <artifactId>ant-contrib</artifactId>
@@ -1494,6 +1460,11 @@
                 <groupId>com.lowagie</groupId>
                 <artifactId>itext</artifactId>
                 <version>${version.com.lowagie.itext}</version>
+            </dependency>
+            <dependency>
+              <groupId>com.google.guava</groupId>
+              <artifactId>guava</artifactId>
+              <version>${version.com.google.guava}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.protobuf</groupId>
@@ -1763,11 +1734,6 @@
                 <version>1.0.0.Final</version>
             </dependency>
             <dependency>
-                <groupId>org.hibernate.javax.persistence</groupId>
-                <artifactId>hibernate-jpa-2.0-api</artifactId>
-                <version>1.0.1.Final</version>
-            </dependency>
-            <dependency>
                 <groupId>org.jdom</groupId>
                 <artifactId>jdom</artifactId>
                 <version>1.1.2</version>
@@ -2021,62 +1987,62 @@
             <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-components-admin</artifactId>
-                <version>${jaffa.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-components</artifactId>
-                <version>${jaffa.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-components-messaging</artifactId>
-                <version>${jaffa.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-components-printing</artifactId>
-                <version>${jaffa.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-components-scheduler</artifactId>
-                <version>${jaffa.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-components-user</artifactId>
-                <version>${jaffa.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-console</artifactId>
-                <version>${jaffa.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-core</artifactId>
-                <version>${jaffa.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-dwr</artifactId>
-                <version>${jaffa.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-soa</artifactId>
-                <version>${jaffa.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-ria</artifactId>
-                <version>${jaffa.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-rules</artifactId>
-                <version>${jaffa.version}</version>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -2107,4 +2073,10 @@
             </modules>
         </profile>
     </profiles>
+
+    <scm>
+        <connection>scm:git:https://tapljs482.tapestry.local/jaffa/jaffa-framework</connection>
+        <developerConnection>scm:git:https://tapljs482.tapestry.local/jaffa/jaffa-framework</developerConnection>
+    </scm>
+
 </project>

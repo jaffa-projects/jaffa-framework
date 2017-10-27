@@ -77,13 +77,13 @@ public class MetaDataRepository extends AbstractLoader {
     // Singleton instance
     private static MetaDataRepository c_instance = new MetaDataRepository();
     // Cache containing 'Map containing a List of RuleMetaData instances per propertyName' per className+ruleName combination.
-    private final Map<ClassRuleKey, Map<String, List<RuleMetaData>>> m_cacheOfPropertyRuleMetaDataMapByClassRuleKey = new WeakHashMap<ClassRuleKey, Map<String, List<RuleMetaData>>>();
+    private final Map<ClassRuleKey, Map<String, List<RuleMetaData>>> m_cacheOfPropertyRuleMetaDataMapByClassRuleKey = new WeakHashMap<>();
     // Cache containing array of classNames per ruleName
-    private final Map<String, String[]> m_cacheOfClassNamesPerRule = new WeakHashMap<String, String[]>();
+    private final Map<String, List<String>> m_cacheOfClassNamesPerRule = new WeakHashMap<>();
     // Repository containing List of ClassMetaData instances per className
-    private Map<String, List<ClassMetaData>> m_classMetaDataListByClassName = new LinkedHashMap<String, List<ClassMetaData>>();
+    private Map<String, List<ClassMetaData>> m_classMetaDataListByClassName = new LinkedHashMap<>();
     // Repository containing List of ClassMetaData instances per source
-    private Map<String, List<ClassMetaData>> m_classMetaDataListBySource = new LinkedHashMap<String, List<ClassMetaData>>();
+    private Map<String, List<ClassMetaData>> m_classMetaDataListBySource = new LinkedHashMap<>();
 
     /**
      * Creates an instance.
@@ -108,8 +108,9 @@ public class MetaDataRepository extends AbstractLoader {
      * @throws JaffaRulesFrameworkException if any internal error occurs.
      */
     public void load(Element metadataElement, String source) throws JaffaRulesFrameworkException {
-        if (log.isDebugEnabled())
+        if (log.isDebugEnabled()) {
             log.debug("Loading metadata: " + source + ", " + metadataElement.getAttribute(ATTR_CLASS));
+        }
 
         // Create a ClassMetaData instance
         ClassMetaData cmd = new ClassMetaData();
@@ -142,8 +143,9 @@ public class MetaDataRepository extends AbstractLoader {
 
                 // Add rules to the property
                 Element[] ruleElements = getChildren(propertyElement);
-                for (Element ruleElement : ruleElements)
+                for (Element ruleElement : ruleElements) {
                     pmd.addRule(createRuleMetaData(ruleElement, cmd, pmd));
+                }
 
                 // Add the property to ClassMetaData
                 cmd.addProperty(pmd);
@@ -380,25 +382,37 @@ public class MetaDataRepository extends AbstractLoader {
      * @return an array of classNames that have the input rule.
      */
     public String[] getClassNamesByRuleName(String ruleName) {
-        if (!m_cacheOfClassNamesPerRule.containsKey(ruleName)) {
+        if (m_cacheOfClassNamesPerRule.isEmpty()) {
             synchronized (m_cacheOfClassNamesPerRule) {
-                if (!m_cacheOfClassNamesPerRule.containsKey(ruleName)) {
-                    List<String> classNameList = null;
-                    for (String className : m_classMetaDataListByClassName.keySet()) {
-                        List<RuleMetaData> rules = getRuleList(className, null, ruleName);
-                        if (rules != null && rules.size() > 0) {
-                            if (classNameList == null)
-                                classNameList = new LinkedList<String>();
-                            classNameList.add(className);
+                if (m_cacheOfClassNamesPerRule.isEmpty()) {
+                    for (List<ClassMetaData> cmdList : m_classMetaDataListByClassName.values()) {
+                        for (ClassMetaData cmd : cmdList) {
+                            String className = cmd.getName();
+                            List<RuleMetaData> classRules = cmd.getRules();
+                            if (classRules != null) {
+                                for (RuleMetaData ruleMetaData : classRules) {
+                                    String name = ruleMetaData.getName();
+                                    if (!m_cacheOfClassNamesPerRule.containsKey(name)) {
+                                        List<String> classNames = new ArrayList<>();
+                                        classNames.add(className);
+                                        m_cacheOfClassNamesPerRule.put(name, classNames);
+                                    } else if (!m_cacheOfClassNamesPerRule.get(name).contains(className)) {
+                                        m_cacheOfClassNamesPerRule.get(name).add(className);
+                                    }
+                                }
+                            }
                         }
                     }
-                    String[] classNames = classNameList != null ? classNameList.toArray(new String[classNameList.size()]) : null;
-                    m_cacheOfClassNamesPerRule.put(ruleName, classNames);
-                    return classNames;
                 }
             }
         }
-        return m_cacheOfClassNamesPerRule.get(ruleName);
+
+        // return an array for backwards compatibility
+        List<String> classNames = m_cacheOfClassNamesPerRule.get(ruleName);
+        if (classNames == null) {
+            return null;
+        }
+        return classNames.toArray(new String[classNames.size()]);
     }
 
     /**
@@ -465,6 +479,7 @@ public class MetaDataRepository extends AbstractLoader {
      * This class is used to cache class-level rules by className+ruleName combination.
      */
     private static class ClassRuleKey implements Cloneable, Comparable<ClassRuleKey>, Serializable {
+
         private String m_className;
         private String m_ruleName;
 

@@ -49,14 +49,21 @@
 
 package org.jaffa.loader;
 
+import org.jaffa.components.navigation.NavCache;
+import org.jaffa.components.navigation.domain.GlobalMenu;
+import org.jaffa.loader.config.ApplicationRulesManager;
+import org.jaffa.loader.navigation.NavigationManager;
 import org.jaffa.loader.policy.BusinessFunctionManager;
 import org.jaffa.loader.policy.RoleManager;
 import org.jaffa.security.CheckPolicy;
 import org.jaffa.security.PolicyCache;
 import org.jaffa.security.businessfunctionsdomain.BusinessFunction;
 import org.jaffa.security.securityrolesdomain.Role;
+import org.jaffa.session.ContextManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Properties;
 
 /**
  * Contains all the Beans related to the BusinessFunctionManager and RoleManager Loader Architecture for the Jaffa-SOA
@@ -72,10 +79,10 @@ public class CoreLoaderConfig {
      * @return Returns an XMLLoader for RoleManager
      */
     @Bean
-    public XmlLoader<RoleManager> roleManagerXmlLoader() {
-        XmlLoader<RoleManager> roleManagerXmlLoader = new XmlLoader<RoleManager>();
-        roleManagerXmlLoader.setManager(roleManager());
-        return roleManagerXmlLoader;
+    public ResourceLoader<RoleManager> roleManagerXmlLoader() {
+        ResourceLoader<RoleManager> roleManagerResourceLoader = new ResourceLoader<RoleManager>();
+        roleManagerResourceLoader.setManager(roleManager());
+        return roleManagerResourceLoader;
     }
 
     /**
@@ -93,14 +100,14 @@ public class CoreLoaderConfig {
      * @return Returns an XMLLoader BusinessFunctionManager
      */
     @Bean
-    public XmlLoader<BusinessFunctionManager> businessFunctionManagerXmlLoader() {
-        XmlLoader<BusinessFunctionManager> businessFunctionManagerXmlLoader = new XmlLoader<BusinessFunctionManager>();
-        businessFunctionManagerXmlLoader.setManager(businessFunctionManager());
-        return businessFunctionManagerXmlLoader;
+    public ResourceLoader<BusinessFunctionManager> businessFunctionManagerXmlLoader() {
+        ResourceLoader<BusinessFunctionManager> businessFunctionManagerResourceLoader = new ResourceLoader<BusinessFunctionManager>();
+        businessFunctionManagerResourceLoader.setManager(businessFunctionManager());
+        return businessFunctionManagerResourceLoader;
     }
 
     /**
-     * @return Returns a BusinessFunctionMana
+     * @return Returns a BusinessFunctionManager
      */
     @Bean
     public BusinessFunctionManager businessFunctionManager() {
@@ -111,7 +118,50 @@ public class CoreLoaderConfig {
     }
 
     /**
-     * @return Returns a repository of Roles
+     * @return Returns an XMLLoader NavigationManager
+     */
+    @Bean
+    public ResourceLoader<NavigationManager> navigationManagerXmlLoader() {
+        ResourceLoader<NavigationManager> navigationManagerXmlLoader = new ResourceLoader<>();
+        navigationManagerXmlLoader.setManager(navigationManager());
+        return navigationManagerXmlLoader;
+    }
+
+    /**
+     * @return Returns a NavigationManager
+     */
+    @Bean
+    public NavigationManager navigationManager() {
+        NavigationManager navigationManager = new NavigationManager();
+        NavCache.setNavigationManager(navigationManager);
+        navigationManager.setNavigationRepository(navigationRepository());
+        return navigationManager;
+    }
+
+    /**
+     * @return Returns an XMLLoader for the ApplicationRulesManager
+     */
+    @Bean
+    public ResourceLoader<ApplicationRulesManager> applicationRulesManagerPropertiesLoader() {
+        ResourceLoader<ApplicationRulesManager> rulesManagerResourceLoader = new ResourceLoader<>();
+        rulesManagerResourceLoader.setManager(applicationRulesManager());
+        return rulesManagerResourceLoader;
+    }
+
+    /**
+     * @return Returns a ApplicationRulesManager
+     */
+    @Bean
+    public ApplicationRulesManager applicationRulesManager() {
+        ApplicationRulesManager applicationRulesManager = new ApplicationRulesManager();
+        ContextManager.setApplicationRulesManager(applicationRulesManager);
+        applicationRulesManager.setApplicationRulesRepository(applicationRulesRepository());
+        return applicationRulesManager;
+    }
+
+    /**
+     * roleRepository() - Returns a repository of Roles
+     * @return MapRepository<Role>
      */
     private MapRepository<Role> roleRepository() {
         MapRepository<Role> roleMapRepository = new MapRepository<>();
@@ -119,13 +169,31 @@ public class CoreLoaderConfig {
     }
 
     /**
-     * @return Returns a repository of BusinessFunctions
+     * businessFunctionRepository - Returns a repository of BusinessFunctions
+     * @return - MapRepository<BusinessFunction>
      */
     private MapRepository<BusinessFunction> businessFunctionRepository() {
         MapRepository<BusinessFunction> businessFunctionMapRepository = new MapRepository<>();
         return businessFunctionMapRepository;
     }
 
+    /**
+     * navigationRepository - Returns a repository of GlobalMenu
+     * @return MapRepository<GlobalMenu>
+     */
+    private MapRepository<GlobalMenu> navigationRepository() {
+        MapRepository<GlobalMenu> navCacheMapRepository = new MapRepository<>();
+        return navCacheMapRepository;
+    }
+
+    /**
+     * applicationRulesRepository - Returns a repository of application rules
+     * @return MapRepository<Properties>
+     */
+    private MapRepository<Properties> applicationRulesRepository() {
+        MapRepository<Properties> applicationRulesRepository = new MapRepository<>();
+        return applicationRulesRepository;
+    }
 
 }
 

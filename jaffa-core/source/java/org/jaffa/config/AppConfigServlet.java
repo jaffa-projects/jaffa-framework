@@ -97,7 +97,6 @@ public class AppConfigServlet extends HttpServlet {
 		//checkUserGridSettingsUrls();
 
 		initApplicationResourcesParameters();
-		initApplicationRulesParameters();
 		initComponents();
 	}
 
@@ -108,14 +107,7 @@ public class AppConfigServlet extends HttpServlet {
 	private void initApplicationResourcesParameters() {
 		ApplicationResourceLoader.getInstance();
 	}
-	
-	/**
-	 * Initialize applicationrules
-	 */
-	private void initApplicationRulesParameters() {
-		ApplicationRulesLoader.getInstance();
-	}	
-	
+
 	/**
 	 * Initialize ComponentDefinition
 	 */

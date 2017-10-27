@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<!DOCTYPE aop PUBLIC "-//JBoss//DTD JBOSS AOP 1.0//EN" "http://www.jboss.org/aop/dtd/jboss-aop_1_0.dtd">-->
+
+<!-- Declare the PER_VM Interceptor instances -->
+<aop>
+  <interceptor name="candidate-key" class="org.jaffa.rules.jbossaop.interceptors.CandidateKeyInterceptor" scope="PER_VM"/>
+  <interceptor name="case-type" class="org.jaffa.rules.jbossaop.interceptors.CaseTypeInterceptor" scope="PER_VM"/>
+  <interceptor name="comment" class="org.jaffa.rules.jbossaop.interceptors.CommentInterceptor" scope="PER_VM"/>
+  <interceptor name="component-guard" class="org.jaffa.rules.jbossaop.interceptors.ComponentGuardInterceptor" scope="PER_VM"/>
+  <interceptor name="foreign-key" class="org.jaffa.rules.jbossaop.interceptors.ForeignKeyInterceptor" scope="PER_VM"/>
+  <interceptor name="function-guard" class="org.jaffa.rules.jbossaop.interceptors.FunctionGuardInterceptor" scope="PER_VM"/>
+  <interceptor name="generic-foreign-key" class="org.jaffa.rules.jbossaop.interceptors.GenericForeignKeyInterceptor" scope="PER_VM"/>
+  <interceptor name="initialize" class="org.jaffa.rules.jbossaop.interceptors.InitializeInterceptor" scope="PER_VM"/>
+  <interceptor name="in-list" class="org.jaffa.rules.jbossaop.interceptors.InListInterceptor" scope="PER_VM"/>
+  <interceptor name="mandatory" class="org.jaffa.rules.jbossaop.interceptors.MandatoryInterceptor" scope="PER_VM"/>
+  <interceptor name="max-length" class="org.jaffa.rules.jbossaop.interceptors.MaxLengthInterceptor" scope="PER_VM"/>
+  <interceptor name="max-value" class="org.jaffa.rules.jbossaop.interceptors.MaxValueInterceptor" scope="PER_VM"/>
+  <interceptor name="min-length" class="org.jaffa.rules.jbossaop.interceptors.MinLengthInterceptor" scope="PER_VM"/>
+  <interceptor name="min-value" class="org.jaffa.rules.jbossaop.interceptors.MinValueInterceptor" scope="PER_VM"/>
+  <interceptor name="not-in-list" class="org.jaffa.rules.jbossaop.interceptors.NotInListInterceptor" scope="PER_VM"/>
+  <interceptor name="partial-foreign-key" class="org.jaffa.rules.jbossaop.interceptors.PartialForeignKeyInterceptor" scope="PER_VM"/>
+  <interceptor name="pattern" class="org.jaffa.rules.jbossaop.interceptors.PatternInterceptor" scope="PER_VM"/>
+  <interceptor name="primary-key" class="org.jaffa.rules.jbossaop.interceptors.PrimaryKeyInterceptor" scope="PER_VM"/>
+  <interceptor name="script" class="org.jaffa.rules.jbossaop.interceptors.ScriptInterceptor" scope="PER_VM"/>
+  <interceptor name="struts-FormBeanConfig" class="org.jaffa.rules.jbossaop.interceptors.StrutsFormBeanConfigInterceptor" scope="PER_VM"/>
+    
+  <interceptor name="metrics" class="org.jaffa.rules.jbossaop.interceptors.MetricsInterceptor" scope="PER_VM"/>
+</aop>

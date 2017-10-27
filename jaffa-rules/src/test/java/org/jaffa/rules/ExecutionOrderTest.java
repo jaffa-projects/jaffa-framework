@@ -50,10 +50,8 @@
 package org.jaffa.rules;
 
 import junit.framework.TestCase;
-import org.jaffa.config.JaffaRulesConfig;
 import org.jaffa.rules.testmodels.ExecutionOrder1;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.ArrayList;
 
@@ -84,7 +82,7 @@ public class ExecutionOrderTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        ctx = new AnnotationConfigApplicationContext(JaffaRulesConfig.class);
+        TestHelper.setupRepos();
     }
 
     public void test2DifferentClasses() {

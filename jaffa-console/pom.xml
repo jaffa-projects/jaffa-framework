@@ -49,34 +49,43 @@
     <!-- 3rd Party Libraries                                                 -->
     <!-- ******************************************************************* -->
     <dependency>
+      <groupId>struts</groupId>
+      <artifactId>struts</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>net.sf.json-lib</groupId>
       <artifactId>json-lib</artifactId>
       <classifier>jdk15</classifier>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.quartz-scheduler</groupId>
       <artifactId>quartz</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.quartz-scheduler</groupId>
       <artifactId>quartz-oracle</artifactId>
+      <scope>provided</scope>
     </dependency>
 	
-    <!-- ******************************************************************* -->
-    <!-- Provided Libraries                                                  -->
-    <!-- ******************************************************************* -->
+
     <dependency>
       <groupId>javax.ejb</groupId>
       <artifactId>javax.ejb-api</artifactId>
@@ -128,15 +137,15 @@
         <artifactId>maven-assembly-plugin</artifactId>
       </plugin>
        <!--Uncomment this piece as we need to skip jawr fragment merging for jaffa-web-app build-->
-      <plugin>
-        <groupId>org.jaffa.maven</groupId>
-        <artifactId>fragmentmerge-maven-plugin</artifactId>
-        <configuration>
-          <skipConfigFiles>
-            <skipConfigFile>jawr</skipConfigFile>
-          </skipConfigFiles>
-        </configuration>
-      </plugin>
+      <!--<plugin>-->
+        <!--<groupId>org.jaffa.maven</groupId>-->
+        <!--<artifactId>fragmentmerge-maven-plugin</artifactId>-->
+        <!--<configuration>-->
+          <!--<skipConfigFiles>-->
+            <!--<skipConfigFile>jawr</skipConfigFile>-->
+          <!--</skipConfigFiles>-->
+        <!--</configuration>-->
+      <!--</plugin>-->
     </plugins>
 
   </build>

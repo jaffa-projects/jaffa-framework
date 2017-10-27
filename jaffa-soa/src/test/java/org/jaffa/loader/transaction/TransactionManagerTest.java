@@ -2,7 +2,6 @@ package org.jaffa.loader.transaction;
 
 import org.jaffa.loader.ContextKey;
 import org.jaffa.loader.IRepository;
-import org.jaffa.loader.transaction.TransactionManager;
 import org.jaffa.transaction.services.configdomain.TransactionInfo;
 import org.jaffa.transaction.services.configdomain.TypeInfo;
 import org.junit.Before;
@@ -11,12 +10,8 @@ import org.mockito.Matchers;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -49,7 +44,7 @@ public class TransactionManagerTest {
 
         Resource resource = pathMatchingResourcePatternResolver.getResource("classpath:META-INF/jaffa-transaction-config.xml");
         //test
-        transactionManager.registerXML(resource, "cust-code", "DEF");
+        transactionManager.registerResource(resource, "cust-code", "DEF");
 
         //verify
         verify(transactionRepoMock).register(eq(new ContextKey("org.jaffa.soa.services.SOAEventPoller", null, "DEF", "cust-code")), Matchers.anyObject());
@@ -145,11 +140,11 @@ public class TransactionManagerTest {
     }
 
     /**
-     * tests the getXmlFileName
+     * tests the getResourceFileName
      */
     @Test
     public void testGetxmlFileName() {
-        assertEquals("jaffa-transaction-config.xml", transactionManager.getXmlFileName());
+        assertEquals("jaffa-transaction-config.xml", transactionManager.getResourceFileName());
     }
 
     /**
@@ -185,7 +180,7 @@ public class TransactionManagerTest {
         transactionManager.getAllTransactionInfo();
 
         //verify
-        verify(transactionRepoMock).getAllValues();
+        verify(transactionRepoMock).getValues();
     }
 
     /**
@@ -197,6 +192,6 @@ public class TransactionManagerTest {
         transactionManager.getTypeNames();
 
         //verify
-        verify(typeInfoRepoMock).getAllKeyIds();
+        verify(typeInfoRepoMock).getKeyIds();
     }
 }

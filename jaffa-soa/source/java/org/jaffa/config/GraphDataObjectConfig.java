@@ -66,7 +66,6 @@ public abstract class GraphDataObjectConfig implements ApplicationContextAware {
 
     static {
         StaticContext.addToFactoryMethodMap(GraphDataObject.class, "graphDataObject");
-
     }
 
     /**

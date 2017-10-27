@@ -107,7 +107,26 @@ public class MapRepository<T> implements IRepository<T> {
             if (contextKeysForId!=null && contextKeysForId.size() > 0) {
                 for (ContextKey contextKey : contextKeysForId) {
                     if ((contextKey.getVariation() != null && contextKey.getVariation().equals(VariationContext.getVariation()))
-                            || contextKey.getVariation().equals(VariationContext.DEFAULT_VARIATION)) {
+                            || contextKey.getVariation().equals(VariationContext.NULL_VARIATION)) {
+                        return repositoryMap.get(contextKey);
+                    }
+
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public synchronized T queryByVariation(String id, String variation) {
+        if(id!=null) {
+            TreeSet<ContextKey> contextKeysForId = contextKeyCache.get(id);
+            if (contextKeysForId!=null && contextKeysForId.size() > 0) {
+                for (ContextKey contextKey : contextKeysForId) {
+                    if ((contextKey.getVariation() != null && contextKey.getVariation().equals(variation))) {
                         return repositoryMap.get(contextKey);
                     }
 
@@ -127,7 +146,8 @@ public class MapRepository<T> implements IRepository<T> {
             if (contextKeysForId!=null) {
                 for (ContextKey contextKey : contextKeysForId) {
                     if ((contextKey.getVariation() != null && contextKey.getVariation().equals(VariationContext.getVariation()))
-                            || contextKey.getVariation().equals(VariationContext.DEFAULT_VARIATION)) {
+                            || contextKey.getVariation().equals(VariationContext.DEFAULT_VARIATION)
+                            || contextKey.getVariation().equals(VariationContext.NULL_VARIATION)) {
                         return contextKey;
                     }
 
@@ -165,6 +185,34 @@ public class MapRepository<T> implements IRepository<T> {
     @Override
     public synchronized List<T> getAllValues() { return new ArrayList(repositoryMap.values());}
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<ContextKey> getKeys() {
+        Set<ContextKey> contextKeys = new HashSet<>();
+        for (String id : getKeyIds()) {
+            contextKeys.add(findKey(id));
+        }
+        return contextKeys;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<String> getKeyIds() {
+        return getMyRepository().keySet();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<T> getValues() {
+        return new ArrayList<>(getMyRepository().values());
+    }
+
 
     /**
      * Adds repositoryKey to contextKeyCache
@@ -195,8 +243,28 @@ public class MapRepository<T> implements IRepository<T> {
         Map<String, T> myRepository = new HashMap<>();
         Set<String> repoKeys = contextKeyCache.keySet();
         for(String repoKey : repoKeys){
-            myRepository.put(repoKey, query(repoKey));
+            T value = query(repoKey);
+            if(value!=null) {
+                myRepository.put(repoKey, value);
+            }
         }
         return myRepository;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public synchronized Map<String, T> getRepositoryByVariation(String variation){
+        Map<String, T> variationRepository = new HashMap<>();
+        Set<String> repoKeys = contextKeyCache.keySet();
+        for(String repoKey : repoKeys){
+            T value = queryByVariation(repoKey, variation);
+            if(value!=null) {
+                variationRepository.put(repoKey, value);
+            }
+        }
+        return variationRepository;
     }
 }

@@ -50,9 +50,7 @@
 package org.jaffa.rules;
 
 import junit.framework.TestCase;
-import org.jaffa.config.JaffaRulesConfig;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 //import org.jaffa.rules.aop.metadata.ClassAdvisorHelper;
 
@@ -84,7 +82,7 @@ public class RulesInheritanceTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        ctx = new AnnotationConfigApplicationContext(JaffaRulesConfig.class);
+        TestHelper.setupRepos();
     }
 
     public void testPassForNow() {
