@@ -1,36 +1,37 @@
 package com.tapestrysolutions.monitoring.services.repos;
 
 import com.google.gson.Gson;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.json.Json;
-
 /**
- * RepositoryJsonService
+ * RepositoryJsonService - This class will call the Queue service and serializes the response.
  */
 @Service("repositoryJsonService")
 public class RepositoryJsonService implements IRepositoryJsonService {
-    @Autowired
-    RepositoryQueueService repositoryQueueService = RepositoryQueueService.getInstance();
 
+    RepositoryQueueService repositoryQueueService = new RepositoryQueueService();
+
+    /**
+     * getRepositoryNames() - Returns a JSON list of all currently registered repositories that have been loaded
+     * from the ResourceLoader.
+     * @return String
+     */
     @Override
     public String getRepositoryNames() {
         Gson gson = new Gson();
         String json = gson.toJson(repositoryQueueService.getRepositoryNames());
         return json;
-
     }
 
+    /**
+     * getRespository() - Returns the serialized repository in JSON objects representing the named repository.
+     * @param name
+     * @return String
+     */
     @Override
     public String getRepository(String name) {
-
-//        repositoryQueueService.getRepository(name);
-
-        return Json.createObjectBuilder()
-                .add("name", "X")
-                .add("name2", "Y")
-                .add("name3", "Z")
-                .build().toString();
+        Gson gson = new Gson();
+        String json = gson.toJson(repositoryQueueService.getRepository(name));
+        return json;
     }
 }
