@@ -57,7 +57,6 @@ import java.util.*;
  * Java Map Implementation of IRepository
  */
 public class MapRepository<T> implements IRepository<T> {
-
     /**
      * Repository Map holds ContextKey and associated Repository Element
      */
@@ -134,6 +133,18 @@ public class MapRepository<T> implements IRepository<T> {
             }
         }
         return null;
+    }
+
+    @Override
+    public String getName() {
+        String name;
+        if (!repositoryMap.keySet().isEmpty()) {
+            Object key = repositoryMap.keySet().toArray()[0];
+            name = repositoryMap.get(key).getClass().getSimpleName();
+        } else {
+            name = "Empty Repository";
+        }
+        return name;
     }
 
     /**

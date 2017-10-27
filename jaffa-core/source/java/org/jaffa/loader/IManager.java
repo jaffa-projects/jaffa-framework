@@ -54,6 +54,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Interface for xml managers to registerXml and getResourceFileName.
@@ -76,4 +77,8 @@ public interface IManager {
      * @return xml config file name
      */
     String getResourceFileName();
+
+    List<String> getRepositoryNames();
+
+    IRepository getRepositoryByName(String name);
 }

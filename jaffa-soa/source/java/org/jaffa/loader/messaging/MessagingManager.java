@@ -55,16 +55,13 @@ import org.jaffa.loader.IManager;
 import org.jaffa.loader.IRepository;
 import org.jaffa.loader.MapRepository;
 import org.jaffa.modules.messaging.services.configdomain.*;
-import org.jaffa.util.ContextHelper;
 import org.jaffa.util.JAXBHelper;
 import org.springframework.core.io.Resource;
 import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A class that manages various kinds of messaging object specifications, as
@@ -108,6 +105,11 @@ public class MessagingManager implements IManager {
      *  the value in the MessageFilter object. */
     private IRepository<MessageFilter> messageFilterRepository =
             new MapRepository<>();
+
+
+    /** The list of repositories managed by this class */
+    private IRepository<?>[] managedRepositories = new IRepository<?>[] {
+            messageInfoRepository, queueInfoRepository, topicInfoRepository, messageFilterRepository};
 
     /**
      * Unmarshall the contents of the configuration to create and register
@@ -356,6 +358,38 @@ public class MessagingManager implements IManager {
     @Override
     public String getResourceFileName() {
         return DEFAULT_CONFIGURATION_FILE;
+    }
+
+    /**
+     * getRepositoryNames - Retrieve a String list of all the IRepositories managed by this IManager
+     * @return A list of repository names managed by this manager
+     */
+    @Override
+    public List<String> getRepositoryNames() {
+        List<String> repositoryNames = new ArrayList<>();
+        for (IRepository<?> repository : managedRepositories) {
+            repositoryNames.add(repository.getName());
+        }
+        return repositoryNames;
+    }
+
+    /**
+     * Retrieve an IRepository managed by this IManager via its String name
+     * @param name The name of the repository to be retrieved
+     * @return The retrieved repository, or null if no matching repository was found.
+     */
+    @Override
+    public IRepository<?> getRepositoryByName(String name) {
+        IRepository<?> matchingRepository = null;
+        for (IRepository<?> repository : managedRepositories) {
+            if (name.equals(repository.getName())) {
+                matchingRepository = repository;
+            }
+        }
+        if (matchingRepository == null) {
+            matchingRepository = new MapRepository<>();
+        }
+        return matchingRepository;
     }
 
     public IRepository<MessageInfo> getMessageInfoRepository() {

@@ -55,7 +55,6 @@ import org.jaffa.loader.IRepository;
 import org.jaffa.loader.MapRepository;
 import org.jaffa.security.businessfunctionsdomain.BusinessFunction;
 import org.jaffa.security.businessfunctionsdomain.BusinessFunctions;
-import org.jaffa.util.ContextHelper;
 import org.jaffa.util.JAXBHelper;
 import org.springframework.core.io.Resource;
 import org.xml.sax.SAXException;
@@ -83,6 +82,11 @@ public class BusinessFunctionManager implements IManager {
     private IRepository<BusinessFunction> businessFunctionRepository = new MapRepository<>();
 
     /**
+     * The list of repositories managed by this class
+     */
+    private IRepository<?>[] managedRepositories = new IRepository<?>[] {businessFunctionRepository};
+
+    /**
      * registerResource - Registers the roles into the business function repository from the business-functions.xml files found in META-INF/roles.xml
      * @param resource the object that contains the xml config file.
      * @param context  key with which config file to be registered.
@@ -108,6 +112,38 @@ public class BusinessFunctionManager implements IManager {
     @Override
     public String getResourceFileName() {
         return DEFAULT_CONFIGURATION_FILE;
+    }
+
+    /**
+     * getRepositoryNames - Retrieve a String list of all the IRepositories managed by this IManager
+     * @return A list of repository names managed by this manager
+     */
+    @Override
+    public List<String> getRepositoryNames() {
+        List<String> repositoryNames = new ArrayList<>();
+        for (IRepository<?> repository : managedRepositories) {
+            repositoryNames.add(repository.getName());
+        }
+        return repositoryNames;
+    }
+
+    /**
+     * Retrieve an IRepository managed by this IManager via its String name
+     * @param name The name of the repository to be retrieved
+     * @return The retrieved repository, or null if no matching repository was found.
+     */
+    @Override
+    public IRepository<?> getRepositoryByName(String name) {
+        IRepository<?> matchingRepository = null;
+        for (IRepository<?> repository : managedRepositories) {
+            if (name.equals(repository.getName())) {
+                matchingRepository = repository;
+            }
+        }
+        if (matchingRepository == null) {
+            matchingRepository = new MapRepository<>();
+        }
+        return matchingRepository;
     }
 
     /**

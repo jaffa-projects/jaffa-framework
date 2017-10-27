@@ -133,4 +133,51 @@ public class ComponentManagerTest {
         assertTrue(xmlFileName.contains(".xml"));
     }
 
+    /**
+     * Test the repository name retrieval function
+     */
+    @Test
+    public void testGetName() throws Exception {
+        //A componentDefinition must be registered first
+        Component component = new Component();
+        String name = "q1";
+        component.setId(name);
+        ComponentDefinition definition = new ComponentDefinition(component);
+        ContextKey key = new ContextKey(name, "components.xml", "DEF", "0-PLATFORM");
+        manager.registerComponentDefinition(key, definition);
+
+        assertEquals("ComponentDefinition", manager.getComponentRepository().getName());
+    }
+
+    /**
+     * Tests the ability of this IManager to retrieve a repository when given its String name
+    */
+     @Test
+     public void testGetRepositoryByName() throws Exception {
+         //A componentDefinition must be registered first
+         Component component = new Component();
+         String name = "q1";
+         component.setId(name);
+         ComponentDefinition definition = new ComponentDefinition(component);
+         ContextKey key = new ContextKey(name, "components.xml", "DEF", "0-PLATFORM");
+         manager.registerComponentDefinition(key, definition);
+
+         //Negative test
+         String repo = "ThieWillBeAnEmptyRepository";
+         assertEquals("Empty Repository", manager.getRepositoryByName(repo).getName());
+
+         //Positive test
+         repo = "ComponentDefinition";
+         assertEquals(repo, manager.getRepositoryByName(repo).getName());
+     }
+
+    /**
+     * Test the retrieval of the list of repositories managed by this class
+    */
+    @Test
+     public void testGetRepositoryNames() {
+        for (String repositoryName : manager.getRepositoryNames()) {
+            assertNotNull(manager.getRepositoryByName(repositoryName).getName());
+        }
+    }
 }

@@ -1,5 +1,7 @@
 package com.tapestrysolutions.monitoring.services.repos;
 
+import com.google.gson.Gson;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.json.Json;
@@ -9,15 +11,14 @@ import javax.json.Json;
  */
 @Service("repositoryJsonService")
 public class RepositoryJsonService implements IRepositoryJsonService {
-
+    @Autowired
     RepositoryQueueService repositoryQueueService = RepositoryQueueService.getInstance();
 
     @Override
     public String getRepositoryNames() {
-
-//        Gson gson = new Gson();
-//        String json = gson.toJson(repositoryQueueService.getRepositoryNames());
-        return "";
+        Gson gson = new Gson();
+        String json = gson.toJson(repositoryQueueService.getRepositoryNames());
+        return json;
 
     }
 

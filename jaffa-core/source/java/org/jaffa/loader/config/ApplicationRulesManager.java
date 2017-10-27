@@ -59,6 +59,8 @@ import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -72,6 +74,12 @@ public class ApplicationRulesManager implements IManager {
      * Instantiates a new Properties repository
      */
     private IRepository<Properties> applicationRulesRepository = new MapRepository<>();
+
+
+    /**
+     * The list of repositories managed by this class
+     */
+    private IRepository<?>[] managedRepositories = new IRepository<?>[] {applicationRulesRepository};
 
     /**
      * Provides the pattern to search for ApplicationRules
@@ -105,6 +113,38 @@ public class ApplicationRulesManager implements IManager {
      */
     public IRepository<Properties> getApplicationRulesRepository() {
         return applicationRulesRepository;
+    }
+
+    /**
+     * getRepositoryNames - Retrieve a String list of all the IRepositories managed by this IManager
+     * @return A list of repository names managed by this manager
+     */
+    @Override
+    public List<String> getRepositoryNames() {
+        List<String> repositoryNames = new ArrayList<>();
+        for (IRepository<?> repository : managedRepositories) {
+            repositoryNames.add(repository.getName());
+        }
+        return repositoryNames;
+    }
+
+    /**
+     * Retrieve an IRepository managed by this IManager via its String name
+     * @param name The name of the repository to be retrieved
+     * @return The retrieved repository, or null if no matching repository was found.
+     */
+    @Override
+    public IRepository<?> getRepositoryByName(String name) {
+        IRepository<?> matchingRepository = null;
+        for (IRepository<?> repository : managedRepositories) {
+            if (name.equals(repository.getName())) {
+                matchingRepository = repository;
+            }
+        }
+        if (matchingRepository == null) {
+            matchingRepository = new MapRepository<>();
+        }
+        return matchingRepository;
     }
 
     /**
@@ -142,6 +182,8 @@ public class ApplicationRulesManager implements IManager {
         }
         return properties;
     }
+
+
 
     /**
      * registerResource - Provides a method which submits the contents of the resource file to the application rules

@@ -9,6 +9,7 @@ import javax.xml.bind.JAXBException;
 import org.jaffa.loader.ContextKey;
 import org.jaffa.loader.IManager;
 import org.jaffa.loader.IRepository;
+import org.jaffa.loader.MapRepository;
 import org.jaffa.soa.services.configdomain.SoaEventInfo;
 import org.jaffa.soa.services.configdomain.SoaEvents;
 import org.jaffa.util.JAXBHelper;
@@ -32,6 +33,9 @@ public class SoaEventManager implements IManager {
 	 * This holds the SoaEventInfo with key of SoaEventName
 	 */
     private IRepository<SoaEventInfo> soaEventRepository;
+
+	/** The list of repositories managed by this class */
+	private IRepository<?>[] managedRepositories = new IRepository<?>[] {soaEventRepository};
 
 	/**
 	 * The location of the schema for the configuration file.
@@ -121,4 +125,35 @@ public class SoaEventManager implements IManager {
 		return DEFAULT_CONFIGURATION_FILE;
 	}
 
+	/**
+	 * getRepositoryNames - Retrieve a String list of all the IRepositories managed by this IManager
+	 * @return A list of repository names managed by this manager
+	 */
+	@Override
+	public List<String> getRepositoryNames() {
+		List<String> repositoryNames = new ArrayList<>();
+		for (IRepository<?> repository : managedRepositories) {
+			repositoryNames.add(repository.getName());
+		}
+		return repositoryNames;
+	}
+
+	/**
+	 * Retrieve an IRepository managed by this IManager via its String name
+	 * @param name The name of the repository to be retrieved
+	 * @return The retrieved repository, or null if no matching repository was found.
+	 */
+	@Override
+	public IRepository<?> getRepositoryByName(String name) {
+		IRepository<?> matchingRepository = null;
+		for (IRepository<?> repository : managedRepositories) {
+			if (name.equals(repository.getName())) {
+				matchingRepository = repository;
+			}
+		}
+		if (matchingRepository == null) {
+			matchingRepository = new MapRepository<>();
+		}
+		return matchingRepository;
+	}
 }

@@ -64,10 +64,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  *   RoleManager - The RoleManager is used to handle security role creates, removes, updates, and deletes from the
@@ -89,6 +86,11 @@ public class RoleManager implements IManager {
      * The repository of the role names as keys and Roles as values.
      */
     private IRepository<Role> roleRepository = new MapRepository<>();
+
+    /**
+     * The list of repositories managed by this class
+     */
+    private IRepository<?>[] managedRepositories = new IRepository<?>[] {roleRepository};
 
     private static Logger log = Logger.getLogger(PolicyCache.class);
 
@@ -120,6 +122,38 @@ public class RoleManager implements IManager {
     @Override
     public String getResourceFileName() {
         return DEFAULT_CONFIGURATION_FILE;
+    }
+
+    /**
+     * getRepositoryNames - Retrieve a String list of all the IRepositories managed by this IManager
+     * @return A list of repository names managed by this manager
+     */
+    @Override
+    public List<String> getRepositoryNames() {
+        List<String> repositoryNames = new ArrayList<>();
+        for (IRepository<?> repository : managedRepositories) {
+            repositoryNames.add(repository.getName());
+        }
+        return repositoryNames;
+    }
+
+    /**
+     * Retrieve an IRepository managed by this IManager via its String name
+     * @param name The name of the repository to be retrieved
+     * @return The retrieved repository, or null if no matching repository was found.
+     */
+    @Override
+    public IRepository<?> getRepositoryByName(String name) {
+        IRepository<?> matchingRepository = null;
+        for (IRepository<?> repository : managedRepositories) {
+            if (name.equals(repository.getName())) {
+                matchingRepository = repository;
+            }
+        }
+        if (matchingRepository == null) {
+            matchingRepository = new MapRepository<>();
+        }
+        return matchingRepository;
     }
 
     /**

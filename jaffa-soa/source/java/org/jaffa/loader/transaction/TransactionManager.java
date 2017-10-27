@@ -52,6 +52,7 @@ package org.jaffa.loader.transaction;
 import org.jaffa.loader.ContextKey;
 import org.jaffa.loader.IManager;
 import org.jaffa.loader.IRepository;
+import org.jaffa.loader.MapRepository;
 import org.jaffa.transaction.services.configdomain.Config;
 import org.jaffa.transaction.services.configdomain.TransactionInfo;
 import org.jaffa.transaction.services.configdomain.TypeInfo;
@@ -62,6 +63,7 @@ import org.springframework.core.io.Resource;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -82,6 +84,9 @@ public class TransactionManager implements IManager {
 
     private IRepository<TransactionInfo> transactionRepository;
     private IRepository<TypeInfo> typeInfoRepository;
+
+    /** The list of repositories managed by this class */
+    private IRepository<?>[] managedRepositories = new IRepository<?>[] {transactionRepository, typeInfoRepository};
 
     /**
      * register TransactionInfo to the repository
@@ -131,6 +136,38 @@ public class TransactionManager implements IManager {
     @Override
     public String getResourceFileName() {
         return DEFAULT_CONFIGURATION_FILE;
+    }
+
+    /**
+     * getRepositoryNames - Retrieve a String list of all the IRepositories managed by this IManager
+     * @return A list of repository names managed by this manager
+     */
+    @Override
+    public List<String> getRepositoryNames() {
+        List<String> repositoryNames = new ArrayList<>();
+        for (IRepository<?> repository : managedRepositories) {
+            repositoryNames.add(repository.getName());
+        }
+        return repositoryNames;
+    }
+
+    /**
+     * Retrieve an IRepository managed by this IManager via its String name
+     * @param name The name of the repository to be retrieved
+     * @return The retrieved repository, or null if no matching repository was found.
+     */
+    @Override
+    public IRepository<?> getRepositoryByName(String name) {
+        IRepository<?> matchingRepository = null;
+        for (IRepository<?> repository : managedRepositories) {
+            if (name.equals(repository.getName())) {
+                matchingRepository = repository;
+            }
+        }
+        if (matchingRepository == null) {
+            matchingRepository = new MapRepository<>();
+        }
+        return matchingRepository;
     }
 
     /**
