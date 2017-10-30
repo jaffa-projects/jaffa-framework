@@ -56,6 +56,7 @@ import org.jaffa.rules.initializers.Initializer;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -68,6 +69,7 @@ import java.util.Map;
  * <p/>
  * The implementation requires a reference to a spring context which is injected automatically during initialization.
  */
+@Component
 public class StaticContext implements ApplicationContextAware {
     private static final Logger logger = Logger.getLogger(StaticContext.class.getName());
 
@@ -201,6 +203,16 @@ public class StaticContext implements ApplicationContextAware {
      */
     public static <T> T getBean(Class<T> beanClass) {
         return appContext.getBean(beanClass);
+    }
+
+    /**
+     * This method allows jsp and GOLDesp code to pull a Spring configured bean by identifier
+     *
+     * @param beanName
+     * @return The bean configured by Spring or null if not found.
+     */
+    public static Object getBean(String beanName) {
+        return appContext.getBean(beanName);
     }
 
     /**

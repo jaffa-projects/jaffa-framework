@@ -1,6 +1,7 @@
 package org.jaffa.rules;
 
 import org.apache.log4j.Logger;
+import org.jaffa.flexfields.FlexBean;
 import org.jaffa.rules.realm.RealmRepository;
 import org.jaffa.security.VariationContext;
 
@@ -29,7 +30,17 @@ public abstract class RuleActorFactory<ActorT> {
         if (object == null) {
             throw new NullPointerException("RuleActorFactory: Cannot create an actor for a null object");
         }
-        String clazz = object.getClass().getName() != null ? object.getClass().getName() : "";
+        String clazz;
+
+        // Flex Field Support:
+        // For instances of FlexBeans, the rules apply to the dyanmic class name
+        // which generally consists of the classname + "$Flex".  If this is a flexbean, use that instead.
+        if (object instanceof FlexBean && ((FlexBean) object).getDynaClass() != null) {
+            clazz = ((FlexBean) object).getDynaClass().getName();
+        } else {
+            clazz = object.getClass().getName() != null ? object.getClass().getName() : "";
+        }
+
         String realm = RealmRepository.instance().find(clazz) != null ? RealmRepository.instance().find(clazz) : "";
         String variation = VariationContext.getVariation() != null ? VariationContext.getVariation() : "";
         KeySet key = new KeySet(clazz, realm, variation);

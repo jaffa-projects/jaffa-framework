@@ -50,9 +50,7 @@
 package org.jaffa.rules;
 
 import junit.framework.TestCase;
-import org.jaffa.config.JaffaRulesConfig;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
  * It is recommened that the variant rules be put after the non-variant rules.
@@ -80,8 +78,10 @@ public class VirtualClassTest extends TestCase {
         junit.textui.TestRunner.run(VirtualClassTest.class);
     }
 
+    @Override
     protected void setUp() throws Exception {
-        ctx = new AnnotationConfigApplicationContext(JaffaRulesConfig.class);
+        super.setUp();
+        TestHelper.setupRepos();
     }
 
 

@@ -50,11 +50,9 @@
 package org.jaffa.rules;
 
 import junit.framework.TestCase;
-import org.jaffa.config.JaffaRulesConfig;
 import org.jaffa.rules.testmodels.Child1;
 import org.jaffa.rules.testmodels.Parent;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
  * Results of Java Inheritance tests
@@ -91,7 +89,7 @@ public class JavaInheritanceTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        ctx = new AnnotationConfigApplicationContext(JaffaRulesConfig.class);
+        TestHelper.setupRepos();
     }
 
     /*
