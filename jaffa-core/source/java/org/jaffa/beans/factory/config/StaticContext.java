@@ -222,4 +222,13 @@ public class StaticContext implements ApplicationContextAware {
     public void setApplicationContext(ApplicationContext applicationContext) {
         StaticContext.appContext = applicationContext;
     }
+
+    /**
+     * Removes the application context instance from the singleton. This is used as a workaround as tests may make
+     * repeated applicationContexts and/or expect them to not exist. Since this is a static context as opposed to a
+     * managed bean, it does not lend itself well to testing.
+     */
+    public static void clearApplicationContext() {
+        appContext = null;
+    }
 }

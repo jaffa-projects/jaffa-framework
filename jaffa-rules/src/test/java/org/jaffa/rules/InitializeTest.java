@@ -154,4 +154,10 @@ public class InitializeTest extends TestCase {
         }
     }
 */
+
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        TestHelper.shutdownRepos();
+    }
 }

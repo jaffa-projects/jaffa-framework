@@ -147,5 +147,11 @@ public class FlexFieldsTest extends TestCase {
         // the flextfield for the date should have attempted to "add" in the uow
         verify(mockUow).delete(Matchers.any(FlexField.class));
     }
+
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        TestHelper.shutdownRepos();
+    }
 }
 

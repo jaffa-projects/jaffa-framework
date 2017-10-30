@@ -218,4 +218,10 @@ public class ExecutionOrderTest extends TestCase {
             fail(e.getLocalizedMessage());
         }
     }
+
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        TestHelper.shutdownRepos();
+    }
 }
