@@ -101,7 +101,7 @@ public class AopXmlLoader {
                     logger.debug("Attempting to load " + match.toString());
                 }
 
-                loadStream(match.getInputStream(), match.getURI().toString());
+                loadStream(match.getInputStream(), match.getFilename());
             }
 
             logger.info("Finished loading resources with path: " + path);
