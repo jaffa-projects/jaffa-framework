@@ -27,7 +27,7 @@ public class RepositoryQueueService {
         List<String> repositoryNames = new ArrayList<>();
         for (Map.Entry managerEntry : managerMap.entrySet()) {
             IManager manager = (IManager) managerEntry.getValue();
-//            repositoryNames.add(manager.getRepositoryNames);
+            repositoryNames.addAll(manager.getRepositoryNames());
         }
 
         return repositoryNames;
@@ -43,9 +43,9 @@ public class RepositoryQueueService {
         Map<String, IManager> managerMap = managerRepositoryService.getManagerMap();
         for (Map.Entry managerEntry : managerMap.entrySet()) {
             IManager manager = (IManager) managerEntry.getValue();
-//            if (manager.getRepositoryNames().contains(name)) {
-//                return manager.getRepositoryByName(name);
-//            }
+            if (manager.getRepositoryNames().contains(name)) {
+                return manager.getRepositoryByName(name);
+            }
         }
         return new MapRepository();
     }

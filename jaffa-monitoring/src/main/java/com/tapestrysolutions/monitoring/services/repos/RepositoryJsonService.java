@@ -1,12 +1,10 @@
 package com.tapestrysolutions.monitoring.services.repos;
 
 import com.google.gson.Gson;
-import org.springframework.stereotype.Service;
 
 /**
  * RepositoryJsonService - This class will call the Queue service and serializes the response.
  */
-@Service("repositoryJsonService")
 public class RepositoryJsonService implements IRepositoryJsonService {
 
     RepositoryQueueService repositoryQueueService = new RepositoryQueueService();

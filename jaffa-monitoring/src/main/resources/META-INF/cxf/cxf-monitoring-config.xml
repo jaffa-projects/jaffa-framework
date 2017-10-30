@@ -52,7 +52,7 @@
     <bean id="RepositoryJsonServiceBean"
           class="com.tapestrysolutions.monitoring.services.repos.RepositoryJsonService"/>
 
-    <jaxrs:server address="/services">
+    <jaxrs:server address="/">
         <jaxrs:providers>
             <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
         </jaxrs:providers>
