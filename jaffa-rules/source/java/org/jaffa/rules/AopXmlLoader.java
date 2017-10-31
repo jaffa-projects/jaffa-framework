@@ -83,7 +83,7 @@ public class AopXmlLoader {
         File resourcePath = new File(path);
 
         if (resourcePath.exists() && resourcePath.isFile()) {
-            loadStream(new FileInputStream(resourcePath), path);
+            loadStream(new FileInputStream(resourcePath), resourcePath.toURI().toString());
         } else if (resourcePath.exists() && resourcePath.isDirectory()) {
             loadDirectory(resourcePath);
         } else {
@@ -101,7 +101,7 @@ public class AopXmlLoader {
                     logger.debug("Attempting to load " + match.toString());
                 }
 
-                loadStream(match.getInputStream(), match.getDescription());
+                loadStream(match.getInputStream(), match.getURI().toString());
             }
 
             logger.info("Finished loading resources with path: " + path);
@@ -128,7 +128,7 @@ public class AopXmlLoader {
             if (child.isDirectory()) {
                 loadDirectory(child);
             } else if (child.getName().endsWith("-aop.xml")) {
-                loadStream(new FileInputStream(child), child.getAbsolutePath());
+                loadStream(new FileInputStream(child), child.toURI().toString());
             }
         }
     }

@@ -50,81 +50,97 @@
 package org.jaffa.rules;
 
 
-/** This is the interface to the Rules Engine.
+/**
+ * This is the interface to the Rules Engine.
  *
- * @author  GautamJ
+ * @author GautamJ
  */
 public interface IRulesEngine {
-    
-    /** Creates an instance of IObjectRuleIntrospector.
+
+    /**
+     * Creates an instance of IObjectRuleIntrospector.
      * This method should be used if the source object is available.
      * The source object can then be used for setting up the context for the 'condition' checks, if any.
      * The className is obtained from the source object.
+     *
      * @param obj The Object being introspected.
      * @return an instance of IObjectRuleIntrospector.
      */
-    public IObjectRuleIntrospector getObjectRuleIntrospector(Object obj);
-    
-    /** Creates an instance of IObjectRuleIntrospector.
+    IObjectRuleIntrospector getObjectRuleIntrospector(Object obj);
+
+    /**
+     * Creates an instance of IObjectRuleIntrospector.
      * This method should be used if an instance of the source class is not available.
      * Consequently, the context for the 'condition' checks, if any, will not have the instance information.
+     *
      * @param clazz The Class being introspected.
      * @return an instance of IObjectRuleIntrospector.
      */
-    public IObjectRuleIntrospector getObjectRuleIntrospector(Class clazz);
-    
-    /** Creates an instance of IObjectRuleIntrospector.
+    IObjectRuleIntrospector getObjectRuleIntrospector(Class clazz);
+
+    /**
+     * Creates an instance of IObjectRuleIntrospector.
+     *
      * @param className the class, virtual or real, being introspected.
-     * @param obj The Object being introspected.
+     * @param obj       The Object being introspected.
      * @return an instance of IObjectRuleIntrospector.
      */
-    public IObjectRuleIntrospector getObjectRuleIntrospector(String className, Object obj);
-    
-    /** Creates an instance of IObjectRuleIntrospector.
+    IObjectRuleIntrospector getObjectRuleIntrospector(String className, Object obj);
+
+    /**
+     * Creates an instance of IObjectRuleIntrospector.
+     *
      * @param className the class, virtual or real, being introspected.
-     * @param obj The Object being introspected.
      * @return an instance of IObjectRuleIntrospector.
      */
-    public IObjectRuleIntrospector getAuditRuleIntrospector(String className);
-    
-    
-    /** Creates an instance of IPropertyRuleIntrospector.
+    IObjectRuleIntrospector getAuditRuleIntrospector(String className);
+
+
+    /**
+     * Creates an instance of IPropertyRuleIntrospector.
      * This method should be used if the source object is available.
      * The source object can then be used for setting up the context for the 'condition' checks, if any.
      * The className is obtained from the source object.
-     * @param obj The Object being introspected.
+     *
+     * @param obj          The Object being introspected.
      * @param propertyName The property name.
      * @return an instance of IPropertyRuleIntrospector.
      */
-    public IPropertyRuleIntrospector getPropertyRuleIntrospector(Object obj, String propertyName);
-    
-    /** Creates an instance of IPropertyRuleIntrospector.
+    IPropertyRuleIntrospector getPropertyRuleIntrospector(Object obj, String propertyName);
+
+    /**
+     * Creates an instance of IPropertyRuleIntrospector.
      * This method should be used if an instance of the source class is not available.
      * Consequently, the context for the 'condition' checks, if any, will not have the instance information.
-     * @param clazz The Class being introspected.
+     *
+     * @param clazz        The Class being introspected.
      * @param propertyName The property name.
      * @return an instance of IPropertyRuleIntrospector.
      */
-    public IPropertyRuleIntrospector getPropertyRuleIntrospector(Class clazz, String propertyName);
-    
-    /** Creates an instance of IObjectRuleIntrospector.
-     * @param className the class, virtual or real, being introspected.
+    IPropertyRuleIntrospector getPropertyRuleIntrospector(Class clazz, String propertyName);
+
+    /**
+     * Creates an instance of IObjectRuleIntrospector.
+     *
+     * @param className    the class, virtual or real, being introspected.
      * @param propertyName The property name.
-     * @param obj The Object being introspected.
+     * @param obj          The Object being introspected.
      * @return an instance of IObjectRuleIntrospector.
      */
-    public IPropertyRuleIntrospector getPropertyRuleIntrospector(String className, String propertyName, Object obj);
-    
-    /** Returns an array of classNames that have the input rule.
+    IPropertyRuleIntrospector getPropertyRuleIntrospector(String className, String propertyName, Object obj);
+
+    /**
+     * Returns an array of classNames that have the input rule.
+     *
      * @param ruleName the rule name.
      * @return an array of classNames that have the input rule.
      */
-    public String[] getClassNamesByRuleName(String ruleName);
+    String[] getClassNamesByRuleName(String ruleName);
 
     /**
      * Clears the "Condition Evaluation Cache".
      * This method should be invoked at the start of each thread execution.
      * An implementation may choose to ignore this call, as it may not need caching.
      */
-    public void clearConditionEvaluationCache();
+    void clearConditionEvaluationCache();
 }

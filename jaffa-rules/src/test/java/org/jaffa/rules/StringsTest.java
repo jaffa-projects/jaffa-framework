@@ -56,10 +56,8 @@
 package org.jaffa.rules;
 
 import junit.framework.TestCase;
-import org.jaffa.config.JaffaRulesConfig;
 import org.jaffa.rules.testmodels.Strings1;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import static org.jaffa.rules.testmodels.StringsConstants.DATA4;
 
@@ -91,7 +89,7 @@ public class StringsTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        ctx = new AnnotationConfigApplicationContext(JaffaRulesConfig.class);
+        TestHelper.setupRepos();
     }
 
     public void testAOPInjection() {
@@ -401,4 +399,10 @@ public class StringsTest extends TestCase {
         }
     }
     */
+
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        TestHelper.shutdownRepos();
+    }
 }

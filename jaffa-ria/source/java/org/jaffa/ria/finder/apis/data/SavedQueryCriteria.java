@@ -4,13 +4,13 @@
  */
 
 package org.jaffa.ria.finder.apis.data;
+
 import org.jaffa.components.finder.BooleanCriteriaField;
 import org.jaffa.components.finder.FinderTx;
 import org.jaffa.components.finder.StringCriteriaField;
 import org.jaffa.persistence.Criteria;
-import org.jaffa.soa.graph.GraphCriteria;
-
 import org.jaffa.ria.finder.domain.SavedQueryMeta;
+import org.jaffa.soa.graph.GraphCriteria;
 
 /**
  *
@@ -147,7 +147,7 @@ public class SavedQueryCriteria extends GraphCriteria {
   @Override
   public Criteria returnQueryClause(Criteria c) {
     c = super.returnQueryClause(c);
-    c.setTable(SavedQueryMeta.getName());
+      c.setTable(SavedQueryMeta.getName());
     FinderTx.addCriteria(getQueryId(), SavedQueryMeta.QUERY_ID, c);
     FinderTx.addCriteria(getUserId(), SavedQueryMeta.USER_ID, c);
     FinderTx.addCriteria(getComponentRef(), SavedQueryMeta.COMPONENT_REF, c);

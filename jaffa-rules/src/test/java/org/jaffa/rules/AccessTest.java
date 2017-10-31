@@ -56,12 +56,10 @@
 package org.jaffa.rules;
 
 import junit.framework.TestCase;
-import org.jaffa.config.JaffaRulesConfig;
 import org.jaffa.rules.testmodels.Access1;
 import org.jaffa.rules.testmodels.Access3;
 import org.jaffa.rules.testmodels.Access4;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import static org.jaffa.rules.testmodels.AccessConstants.*;
 
@@ -171,9 +169,10 @@ public class AccessTest extends TestCase {
     }
 */
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
-        ctx = new AnnotationConfigApplicationContext(JaffaRulesConfig.class);
+        TestHelper.setupRepos();
     }
 
     public void testInitializeReadOnlyField() {
@@ -260,5 +259,11 @@ public class AccessTest extends TestCase {
             e.printStackTrace(System.err);
             fail();
         }
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        TestHelper.shutdownRepos();
     }
 }

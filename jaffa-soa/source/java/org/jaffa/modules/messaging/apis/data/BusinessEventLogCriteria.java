@@ -147,7 +147,7 @@ public class BusinessEventLogCriteria extends GraphCriteria {
     }
 
     /**
-     * @param SubProcessName the subProcessName to set
+     * @param subProcessName the subProcessName to set
      */
     public void setSubProcessName(StringCriteriaField subProcessName) {
         this.subProcessName = subProcessName;

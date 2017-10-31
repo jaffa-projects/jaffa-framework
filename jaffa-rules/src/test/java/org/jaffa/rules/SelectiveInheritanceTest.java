@@ -49,12 +49,10 @@
 package org.jaffa.rules;
 
 import junit.framework.TestCase;
-import org.jaffa.config.JaffaRulesConfig;
 import org.jaffa.metadata.FieldMetaData;
 import org.jaffa.rules.testmodels.SomeGraphCriteria;
 import org.jaffa.rules.testmodels.Strings1;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
  * This tests the selective inheritance of rules across a realm, based on the defined filters
@@ -126,6 +124,12 @@ public class SelectiveInheritanceTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        ctx = new AnnotationConfigApplicationContext(JaffaRulesConfig.class);
+        TestHelper.setupRepos();
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        TestHelper.shutdownRepos();
     }
 }

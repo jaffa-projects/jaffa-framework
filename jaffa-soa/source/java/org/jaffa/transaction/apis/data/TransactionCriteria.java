@@ -52,7 +52,6 @@ import org.jaffa.components.finder.CriteriaField;
 import org.jaffa.components.finder.DateTimeCriteriaField;
 import org.jaffa.components.finder.FinderTx;
 import org.jaffa.components.finder.StringCriteriaField;
-import org.jaffa.persistence.AtomicCriteria;
 import org.jaffa.persistence.Criteria;
 import org.jaffa.soa.graph.GraphCriteria;
 import org.jaffa.transaction.domain.TransactionFieldMeta;
