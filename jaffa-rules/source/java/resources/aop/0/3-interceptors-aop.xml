@@ -10,7 +10,6 @@
   <interceptor name="foreign-key" class="org.jaffa.rules.jbossaop.interceptors.ForeignKeyInterceptor" scope="PER_VM"/>
   <interceptor name="function-guard" class="org.jaffa.rules.jbossaop.interceptors.FunctionGuardInterceptor" scope="PER_VM"/>
   <interceptor name="generic-foreign-key" class="org.jaffa.rules.jbossaop.interceptors.GenericForeignKeyInterceptor" scope="PER_VM"/>
-  <interceptor name="initialize" class="org.jaffa.rules.jbossaop.interceptors.InitializeInterceptor" scope="PER_VM"/>
   <interceptor name="in-list" class="org.jaffa.rules.jbossaop.interceptors.InListInterceptor" scope="PER_VM"/>
   <interceptor name="mandatory" class="org.jaffa.rules.jbossaop.interceptors.MandatoryInterceptor" scope="PER_VM"/>
   <interceptor name="max-length" class="org.jaffa.rules.jbossaop.interceptors.MaxLengthInterceptor" scope="PER_VM"/>
