@@ -57,14 +57,15 @@ import org.jaffa.presentation.portlet.component.ComponentDefinition;
 import org.jaffa.presentation.portlet.component.ComponentDefinitionException;
 import org.jaffa.presentation.portlet.component.componentdomain.Component;
 import org.jaffa.presentation.portlet.component.componentdomain.Components;
-import org.jaffa.security.VariationContext;
 import org.jaffa.util.JAXBHelper;
 import org.springframework.core.io.Resource;
 import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A class that manages various kinds of component object specifications, as
@@ -86,7 +87,18 @@ public class ComponentManager implements IManager {
 
     /** The ComponentDefinition repository.  The key is the component name of
      * the value in the ComponentDefinition object. */
-    private IRepository<ComponentDefinition> componentRepository = new MapRepository<>();
+    private IRepository<ComponentDefinition> componentRepository = new MapRepository<>("ComponentDefinition");
+
+    /**
+     * The list of repositories managed by this class
+     */
+    private HashMap managedRepositories = new HashMap<String, IRepository>() {
+        {
+            put(componentRepository.getName(), componentRepository);
+        }
+
+    };
+
 
     /**
      * Unmarshall the contents of the configuration to create and register
@@ -162,6 +174,25 @@ public class ComponentManager implements IManager {
     @Override
     public String getResourceFileName() {
         return configurationFile;
+    }
+
+    /**
+     * getRepositoryNames - Retrieve a String list of all the IRepositories managed by this IManager
+     * @return A list of repository names managed by this manager
+     */
+    @Override
+    public Set getRepositoryNames() {
+        return managedRepositories.keySet();
+    }
+
+    /**
+     * Retrieve an IRepository managed by this IManager via its String name
+     * @param name The name of the repository to be retrieved
+     * @return The retrieved repository, or empty if no matching repository was found.
+     */
+    @Override
+    public IRepository<?> getRepositoryByName(String name) {
+        return (IRepository<?>) managedRepositories.get(name);
     }
 
     public IRepository<ComponentDefinition> getComponentRepository() {

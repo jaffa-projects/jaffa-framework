@@ -50,20 +50,15 @@
 package org.jaffa.loader;
 
 import org.jaffa.components.navigation.NavCache;
-import org.jaffa.components.navigation.domain.GlobalMenu;
 import org.jaffa.loader.config.ApplicationRulesManager;
 import org.jaffa.loader.navigation.NavigationManager;
 import org.jaffa.loader.policy.BusinessFunctionManager;
 import org.jaffa.loader.policy.RoleManager;
 import org.jaffa.security.CheckPolicy;
 import org.jaffa.security.PolicyCache;
-import org.jaffa.security.businessfunctionsdomain.BusinessFunction;
-import org.jaffa.security.securityrolesdomain.Role;
 import org.jaffa.session.ContextManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.Properties;
 
 /**
  * Contains all the Beans related to the BusinessFunctionManager and RoleManager Loader Architecture for the Jaffa-SOA
@@ -92,7 +87,6 @@ public class CoreLoaderConfig {
     public RoleManager roleManager() {
         RoleManager roleManager = new RoleManager();
         PolicyCache.setRoleManager(roleManager);
-        roleManager.setRoleRepository(roleRepository());
         return roleManager;
     }
 
@@ -113,7 +107,6 @@ public class CoreLoaderConfig {
     public BusinessFunctionManager businessFunctionManager() {
         BusinessFunctionManager businessFunctionManager = new BusinessFunctionManager();
         CheckPolicy.setBusinessFunctionManager(businessFunctionManager);
-        businessFunctionManager.setBusinessFunctionRepository(businessFunctionRepository());
         return businessFunctionManager;
     }
 
@@ -134,7 +127,6 @@ public class CoreLoaderConfig {
     public NavigationManager navigationManager() {
         NavigationManager navigationManager = new NavigationManager();
         NavCache.setNavigationManager(navigationManager);
-        navigationManager.setNavigationRepository(navigationRepository());
         return navigationManager;
     }
 
@@ -155,44 +147,7 @@ public class CoreLoaderConfig {
     public ApplicationRulesManager applicationRulesManager() {
         ApplicationRulesManager applicationRulesManager = new ApplicationRulesManager();
         ContextManager.setApplicationRulesManager(applicationRulesManager);
-        applicationRulesManager.setApplicationRulesRepository(applicationRulesRepository());
         return applicationRulesManager;
-    }
-
-    /**
-     * roleRepository() - Returns a repository of Roles
-     * @return MapRepository<Role>
-     */
-    private MapRepository<Role> roleRepository() {
-        MapRepository<Role> roleMapRepository = new MapRepository<>();
-        return roleMapRepository;
-    }
-
-    /**
-     * businessFunctionRepository - Returns a repository of BusinessFunctions
-     * @return - MapRepository<BusinessFunction>
-     */
-    private MapRepository<BusinessFunction> businessFunctionRepository() {
-        MapRepository<BusinessFunction> businessFunctionMapRepository = new MapRepository<>();
-        return businessFunctionMapRepository;
-    }
-
-    /**
-     * navigationRepository - Returns a repository of GlobalMenu
-     * @return MapRepository<GlobalMenu>
-     */
-    private MapRepository<GlobalMenu> navigationRepository() {
-        MapRepository<GlobalMenu> navCacheMapRepository = new MapRepository<>();
-        return navCacheMapRepository;
-    }
-
-    /**
-     * applicationRulesRepository - Returns a repository of application rules
-     * @return MapRepository<Properties>
-     */
-    private MapRepository<Properties> applicationRulesRepository() {
-        MapRepository<Properties> applicationRulesRepository = new MapRepository<>();
-        return applicationRulesRepository;
     }
 
 }

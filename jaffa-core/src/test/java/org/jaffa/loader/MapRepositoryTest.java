@@ -3,9 +3,6 @@ package org.jaffa.loader;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.Assert.*;
 
 /**
@@ -13,7 +10,7 @@ import static org.junit.Assert.*;
  */
 public class MapRepositoryTest {
 
-    MapRepository<String> mapRepository = new MapRepository();
+    private IRepository<String> mapRepository = new MapRepository<>("String");
 
     //initialize map repository
     ContextKey contextKey1 = new ContextKey("key1", "file1.xml", "cust-code1", "1-PRODUCT");
@@ -109,7 +106,7 @@ public class MapRepositoryTest {
         ContextKey addOncustomerLevelRule = new ContextKey("apprule", "file4.xml", "cust-code", "2-CUSTOMER");
 
 
-        MapRepository<String> ruleRepository = new MapRepository();
+        MapRepository<String> ruleRepository = new MapRepository<>("String");
         ruleRepository.register(platformLevelRule, "platform");
         ruleRepository.register(productLevelRule, "product");
         ruleRepository.register(customerLevelRule, "customer");
@@ -117,5 +114,13 @@ public class MapRepositoryTest {
 
         assertEquals("customer", ruleRepository.query("apprule"));
         assertEquals(customerLevelRule, ruleRepository.findKey("apprule"));
+    }
+
+    /**
+     * Tests the ability to retireve the repository name
+     */
+    @Test
+    public void testGetName() {
+        assertEquals("String", mapRepository.getName());
     }
 }

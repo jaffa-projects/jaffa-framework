@@ -104,5 +104,25 @@ public class ComponentResourceLoaderTest {
         assertEquals(0, optionals.length);
         assertNull(reComponentDefinition.getParameters());
     }
+    /**
+     * Tests the ability of this IManager to retrieve a repository when given its String name
+     */
+    @Test
+    public void testGetRepositoryByName() throws Exception {
+        ComponentManager componentManager = xmlLoaderConfig.getBean(ComponentManager.class);
 
+        String repo = "ComponentDefinition";
+        assertEquals(repo, componentManager.getRepositoryByName(repo).getName());
+    }
+
+    /**
+     * Test the retrieval of the list of repositories managed by this class
+     */
+    @Test
+    public void testGetRepositoryNames() {
+        ComponentManager componentManager = xmlLoaderConfig.getBean(ComponentManager.class);
+        for (Object repositoryName : componentManager.getRepositoryNames()) {
+            assertEquals("ComponentDefinition", componentManager.getRepositoryByName((String) repositoryName).getName());
+        }
+    }
  }

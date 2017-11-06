@@ -68,6 +68,18 @@ public class MapRepository<T> implements IRepository<T> {
      */
     private Map<String, TreeSet<ContextKey>> contextKeyCache = new HashMap<>();
 
+    /**
+     * The name of the repository
+     */
+    private String repositoryName;
+
+    /**
+     * Create a MapRepository object and set its name value
+     * @param name
+     */
+    public MapRepository(String name) {
+        repositoryName = name;
+    }
 
     /**
      * {@inheritDoc}
@@ -134,6 +146,23 @@ public class MapRepository<T> implements IRepository<T> {
             }
         }
         return null;
+    }
+
+    /**
+     * Retrieve the name of the repository
+     * @return  The name of the repository
+     */
+    @Override
+    public String getName() {
+        return repositoryName;
+    }
+
+    /**
+     * Retrieve the full Repository Map
+     * @return the Repository Map
+     */
+    public Map getRepositoryMap() {
+        return repositoryMap;
     }
 
     /**
