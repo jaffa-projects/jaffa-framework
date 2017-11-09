@@ -61,6 +61,7 @@ import org.xml.sax.SAXException;
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -139,7 +140,33 @@ public class ApplicationRulesManager implements IManager {
      */
     @Override
     public IRepository<?> getRepositoryByName(String name) {
-        return (IRepository<?>) managedRepositories.get(name);
+        MapRepository<String> propertyRepository = new MapRepository<>("Properties");
+        IRepository requestedRepository = (IRepository) managedRepositories.get(name);
+        Iterator<ContextKey> contextKeyIterator = requestedRepository.getKeys().iterator();
+        while (contextKeyIterator.hasNext()) {
+            ContextKey contextKey = contextKeyIterator.next();
+            Properties contextKeyProperties = (Properties) requestedRepository.getValues().get(0);
+            registerProperties(propertyRepository, contextKey, contextKeyProperties);
+
+        }
+        return propertyRepository;
+    }
+
+    /**
+     * registerProperties() - Registers each property from a provided ContextKey for repository access
+     * @param mapRepository The repository to register the properties to
+     * @param key   The ContextKey corresponding to the property values
+     * @param properties    The Properties object containing property key/value pairs
+     */
+
+    private void registerProperties(MapRepository<String> mapRepository, ContextKey key, Properties properties) {
+        Iterator<String> contextKeyPropertiesIterator = properties.stringPropertyNames().iterator();
+        while (contextKeyPropertiesIterator.hasNext()) {
+            String propertyKey = contextKeyPropertiesIterator.next();
+            String propertyValue = properties.getProperty(propertyKey);
+            mapRepository.register(
+                    new ContextKey(propertyKey, key.getFileName(), key.getVariation(), key.getPrecedence()), propertyValue);
+        }
     }
 
     /**

@@ -3,6 +3,7 @@ package com.tapestrysolutions.monitoring.services.repos;
 import com.google.gson.Gson;
 import org.jaffa.loader.*;
 
+import javax.ws.rs.NotFoundException;
 import java.util.*;
 
 /**
@@ -46,14 +47,28 @@ public class RepositoryJsonService implements IRepositoryJsonService {
         for (Map.Entry managerEntry : managerMap.entrySet()) {
             IManager manager = (IManager) managerEntry.getValue();
             if (manager.getRepositoryNames().contains(name)) {
-                for (Object repositoryKey : manager.getRepositoryByName(name).getAllKeys()) {
-                    ContextKey contextKey = (ContextKey) repositoryKey;
-                    repository.put(contextKey.getId(), manager.getRepositoryByName(name).query(contextKey.getId()));
-                }
+               repository = createRepositoryMap(name, repository, manager);
             }
+        }
+        if (repository.isEmpty()) {
+            throw new NotFoundException();
         }
         String json = gson.toJson(repository);
         return json;
+    }
+
+    /**
+     * createRepositoryMap() - Add values to local repository map for access by web services
+     * @param name  The repository name
+     * @param repository    The local repository to be populated
+     * @param manager   The manager hosting the requested repository
+     */
+    private Map createRepositoryMap(String name, Map repository, IManager manager) {
+        for (Object repositoryKey : manager.getRepositoryByName(name).getAllKeys()) {
+            ContextKey contextKey = (ContextKey) repositoryKey;
+            repository.put(contextKey.getId(), manager.getRepositoryByName(name).query(contextKey.getId()));
+        }
+        return repository;
     }
 
     /**
@@ -75,6 +90,9 @@ public class RepositoryJsonService implements IRepositoryJsonService {
                 }
                 break;
             }
+        }
+        if (queryResponse == null) {
+            throw new NotFoundException();
         }
         String json = gson.toJson(queryResponse);
         return json;
