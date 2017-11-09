@@ -158,14 +158,6 @@ public class MapRepository<T> implements IRepository<T> {
     }
 
     /**
-     * Retrieve the full Repository Map
-     * @return the Repository Map
-     */
-    public Map getRepositoryMap() {
-        return repositoryMap;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
