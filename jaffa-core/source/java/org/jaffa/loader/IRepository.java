@@ -150,4 +150,14 @@ public interface IRepository<T> {
      * @return
      */
     public T queryByVariation(String id, String variation);
+
+    /**
+     * Returns the Name of the repository
+     */
+    public String getName();
+
+    /**
+     * Returns the repository map
+     */
+    public Map getRepositoryMap();
 }

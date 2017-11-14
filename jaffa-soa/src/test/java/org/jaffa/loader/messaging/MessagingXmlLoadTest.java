@@ -72,4 +72,26 @@ public class MessagingXmlLoadTest {
         assertTrue(schedulerTasks.contains(topicNames[0]));
         assertTrue(schedulerTasks.contains(topicNames[1]));
     }
+
+    /**
+     * Tests the ability of this IManager to retrieve a repository when given its String name
+     */
+    @Test
+    public void testGetRepositoryByName() throws Exception {
+        MessagingManager messagingManager = xmlLoaderConfig.getBean(MessagingManager.class);
+
+        String repo = "MessageInfo";
+        assertEquals(repo, messagingManager.getRepositoryByName(repo).getName());
+    }
+
+    /**
+     * Test the retrieval of the list of repositories managed by this class
+     */
+    @Test
+    public void testGetRepositoryNames() {
+        MessagingManager messagingManager = xmlLoaderConfig.getBean(MessagingManager.class);
+        for (Object repositoryName : messagingManager.getRepositoryNames()) {
+            assertEquals(repositoryName, messagingManager.getRepositoryByName((String) repositoryName).getName());
+        }
+    }
 }

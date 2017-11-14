@@ -69,11 +69,13 @@ public class ComponentManagerTest {
     /** The manager being tested. */
     private ComponentManager manager;
 
+    /** Create a new ComponentManager before every test */
     @Before
     public void setUp() throws Exception {
         manager = new ComponentManager();
     }
 
+    /** Remove the ComponentManager after every test */
     @After
     public void tearDown() throws Exception {
         manager = null;
@@ -114,7 +116,7 @@ public class ComponentManagerTest {
                 manager.getComponentRepository();
         assertNotNull(origRepository);
         IRepository<ComponentDefinition> componentRepository1 =
-                new MapRepository<>();
+                new MapRepository<>("ComponentDefinition");
         manager.setComponentRepository(componentRepository1);
         IRepository<ComponentDefinition> retrievedRepository =
                 manager.getComponentRepository();
@@ -133,4 +135,46 @@ public class ComponentManagerTest {
         assertTrue(xmlFileName.contains(".xml"));
     }
 
+    /**
+     * Test the repository name retrieval function
+     */
+    @Test
+    public void testGetName() throws Exception {
+        //A componentDefinition must be registered first
+        Component component = new Component();
+        String name = "q1";
+        component.setId(name);
+        ComponentDefinition definition = new ComponentDefinition(component);
+        ContextKey key = new ContextKey(name, "components.xml", "DEF", "0-PLATFORM");
+        manager.registerComponentDefinition(key, definition);
+
+        assertEquals("ComponentDefinition", manager.getComponentRepository().getName());
+    }
+
+    /**
+     * Tests the ability of this IManager to retrieve a repository when given its String name
+    */
+     @Test
+     public void testGetRepositoryByName() throws Exception {
+         //A componentDefinition must be registered first
+         Component component = new Component();
+         String name = "q1";
+         component.setId(name);
+         ComponentDefinition definition = new ComponentDefinition(component);
+         ContextKey key = new ContextKey(name, "components.xml", "DEF", "0-PLATFORM");
+         manager.registerComponentDefinition(key, definition);
+
+         String repo = "ComponentDefinition";
+         assertEquals(repo, manager.getRepositoryByName(repo).getName());
+     }
+
+    /**
+     * Test the retrieval of the list of repositories managed by this class
+    */
+    @Test
+     public void testGetRepositoryNames() {
+        for (Object repositoryName : manager.getRepositoryNames()) {
+            assertEquals("ComponentDefinition", manager.getRepositoryByName((String)repositoryName).getName());
+        }
+    }
 }

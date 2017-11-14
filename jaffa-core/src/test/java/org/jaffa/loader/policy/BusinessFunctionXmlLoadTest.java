@@ -6,7 +6,6 @@ import org.jaffa.security.businessfunctionsdomain.BusinessFunction;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -55,4 +54,25 @@ public class BusinessFunctionXmlLoadTest {
         assertNull(businessFunctionManager.getBusinessFunction("Jaffa.WebServices.Test"));
     }
 
+    /**
+     * Tests the ability of this IManager to retrieve a repository when given its String name
+     */
+    @Test
+    public void testGetRepositoryByName() throws Exception {
+        BusinessFunctionManager businessFunctionManager = xmlLoaderConfig.getBean(BusinessFunctionManager.class);
+
+        String repo = "BusinessFunction";
+        assertEquals(repo, businessFunctionManager.getRepositoryByName(repo).getName());
+    }
+
+    /**
+     * Test the retrieval of the list of repositories managed by this class
+     */
+    @Test
+    public void testGetRepositoryNames() {
+        BusinessFunctionManager businessFunctionManager = xmlLoaderConfig.getBean(BusinessFunctionManager.class);
+        for (Object repositoryName : businessFunctionManager.getRepositoryNames()) {
+            assertEquals("BusinessFunction", businessFunctionManager.getRepositoryByName((String) repositoryName).getName());
+        }
+    }
 }

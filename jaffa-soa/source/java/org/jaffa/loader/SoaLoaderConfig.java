@@ -58,9 +58,6 @@ import org.jaffa.loader.transaction.TransactionManager;
 import org.jaffa.modules.messaging.services.ConfigurationService;
 import org.jaffa.modules.scheduler.services.SchedulerConfiguration;
 import org.jaffa.soa.rules.ServiceRulesInterceptor;
-import org.jaffa.soa.services.configdomain.SoaEventInfo;
-import org.jaffa.transaction.services.configdomain.TransactionInfo;
-import org.jaffa.transaction.services.configdomain.TypeInfo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -84,19 +81,7 @@ public class SoaLoaderConfig {
     public TransactionManager jaffaTransactionManager() {
         TransactionManager transactionManager = new TransactionManager();
         org.jaffa.transaction.services.ConfigurationService.setTransactionManager(transactionManager);
-        transactionManager.setTransactionRepository(transactionInfoRepository());
-        transactionManager.setTypeInfoRepository(typeInfoRepository());
         return transactionManager;
-    }
-
-    private MapRepository<TransactionInfo> transactionInfoRepository(){
-        MapRepository<TransactionInfo> mapRepository= new MapRepository<>();
-        return mapRepository;
-    }
-
-    private MapRepository<TypeInfo> typeInfoRepository(){
-        MapRepository<TypeInfo> mapRepository= new MapRepository<>();
-        return mapRepository;
     }
     
 	/****************************************************/
@@ -113,7 +98,6 @@ public class SoaLoaderConfig {
     public SoaEventManager soaEventManager() {
     	SoaEventManager soaEventManager = new SoaEventManager();
     	org.jaffa.soa.services.ConfigurationService.setSoaEventManager(soaEventManager);
-        soaEventManager.setSoaEventRepository(soaEventInfoRepository());
         return soaEventManager;
     }
 
@@ -137,11 +121,6 @@ public class SoaLoaderConfig {
         MessagingManager messagingManager = new MessagingManager();
         ConfigurationService.getInstance().setMessagingManager(messagingManager);
         return messagingManager;
-    }
-
-    private MapRepository<SoaEventInfo> soaEventInfoRepository(){
-        MapRepository<SoaEventInfo> mapRepository= new MapRepository<>();
-        return mapRepository;
     }
 
     /**
