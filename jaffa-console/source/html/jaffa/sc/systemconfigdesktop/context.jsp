@@ -1,56 +1,58 @@
 <%@ page import='java.io.IOException,
 java.io.File,
 java.io.InputStream,
-java.io.OutputStream,
-java.net.URL,
-java.net.URLConnection,
 java.util.ArrayList,
 java.util.Enumeration,
 java.util.HashMap,
 java.util.Iterator,
-java.util.LinkedHashSet,
 java.util.List,
 java.util.Map,
 java.util.Properties,
-java.util.Set,
 javax.servlet.jsp.JspWriter,
-javax.servlet.http.HttpServletRequest,
 net.sf.json.JSONObject,
 net.sf.json.JSONArray,
 org.apache.log4j.Logger,
-org.jaffa.datatypes.Currency,
-org.jaffa.datatypes.DateOnly,
-org.jaffa.datatypes.DateTime,
-org.jaffa.datatypes.Parser,
 org.jaffa.presentation.portlet.session.UserSession,
+org.jaffa.security.VariationContext,
+org.jaffa.session.ContextManager,
 org.jaffa.session.ContextManagerFactory,
-org.jaffa.util.ListProperties,
-org.jaffa.util.MessageHelper,
 org.jaffa.util.StringHelper,
 org.jaffa.util.URLHelper' %>
+<%@ page import="org.jaffa.loader.config.ApplicationRulesManager" %>
 
 <%!
 private static final Logger log = Logger.getLogger("jaffa.sc.systemconfigdesktop");
 
-/** Find the rules */
-private void showRules(String userId, String variation, JspWriter out, String eventId) throws Exception {
-  String prefsFolder;
-  //get global rules
-  Properties globalProps = new Properties();
-  globalProps = getRules("resources/ApplicationRules.global");
+  /** Find the rules */
+  private void showRules(String userId, String variation, JspWriter out, String eventId) throws Exception {
+    String prefsFolder;
+    Properties globalProps = new Properties();
+    Properties varProps = new Properties();
+    Properties userProps = new Properties();
 
-  //get variation rules
-  Properties varProps = new Properties();
-  varProps = getRules("resources/ApplicationRules." + variation);
+    try {
+      //Retrieving global rules from the ApplicationRulesManager
+      ContextManager contextManager = (ContextManager) ContextManagerFactory.instance();
+      ApplicationRulesManager applicationRulesManager = contextManager.getApplicationRulesManager();
+      if (applicationRulesManager.getApplicationRulesGlobal() != null) {
+        globalProps = applicationRulesManager.getApplicationRulesGlobal();
+      }
 
-  prefsFolder = (String)varProps.get("user.preferences.folder");
-  if (prefsFolder==null || prefsFolder.equals("")){
-    prefsFolder = (String)globalProps.get("user.preferences.folder");
-  }
+      //Retrieving variation-specific rules from the ApplicationRulesManager
+      if (applicationRulesManager.getApplicationRulesVariation(VariationContext.getVariation()) != null) {
+        varProps = applicationRulesManager.getApplicationRulesVariation(VariationContext.getVariation());
+      }
 
-  //get user rules
-  Properties userProps = new Properties();
-  userProps = getRules(prefsFolder + File.separator + userId + File.separator + "user.properties");
+      //Retrieving user-specific rules from the ApplicationRulesManager
+      prefsFolder = (String) varProps.get("user.preferences.folder");
+      if (prefsFolder == null || prefsFolder.equals("")) {
+        prefsFolder = (String) globalProps.get("user.preferences.folder");
+      }
+      userProps = getRules(prefsFolder + File.separator + userId + File.separator + "user.properties");
+    }
+    catch (NullPointerException e) {
+      log.debug("An exception occurred when trying to retrieve properties. " + e);
+    }
 
   out.write("businessRules={");
 
@@ -123,167 +125,20 @@ private Properties getRules(String location) throws Exception {
   return props;
 }
 
-private ListProperties getListRules(String location) throws Exception {
-  InputStream input = null;
-  ListProperties props = new ListProperties();
-  try {
-    input = URLHelper.getInputStream(location);
-    if (input != null) {
-      props.load(input);
-      if (log.isDebugEnabled()) {
-        if (props.size() < 1) {
-          log.debug("No Rules Defined in file " + location);
-        } else {
-          log.debug("Loaded " + props.size() + " rule(s) from " + location);
-        }
-      }
+  /*** getMap provides a Map representation of the JSON Object
+   * @param jsonResponse The JSON object string
+   * @return Map of JSONObject.
+   **/
+  protected Map<String, Object> getMap(String jsonResponse ) throws Exception {
+    Map<String, Object> mapResponse = new HashMap<String, Object>();
+    if (jsonResponse.startsWith("{")) {
+      JSONObject jsonObj = JSONObject.fromObject(jsonResponse);
+      toJavaMap(jsonObj, mapResponse);
     } else {
-      if (log.isInfoEnabled()) {
-        log.info("No Rules found. Can't find file " + location);
-      }
+      throw new Exception("MalFormed JSON Array Response.");
     }
-  } catch (Exception e) {
-    // No global rules avilable;
-    if (log.isInfoEnabled()) {
-      log.info("No Rules Found. Error in loading file " + location, e);
-    }
-  } finally {
-    try {
-      if (input != null) {
-        input.close();
-      }
-    } catch (IOException e) {
-      if (log.isInfoEnabled()) {
-        log.info("Exception thrown while closing the properties file", e);
-      }
-    }
+    return mapResponse;
   }
-  return props;
-}
-
-private void setListRules(String location, ListProperties props) throws Exception {
-  OutputStream output = null;
-  try {
-
-    URL url = URLHelper.getUrl(location);
-
-    URLConnection connection = url.openConnection();
-    connection.setDoOutput(true);
-
-    output = connection.getOutputStream();
-
-    if (output != null) {
-      props.store(output, null);
-    } else {
-      if (log.isInfoEnabled()) {
-        log.info("No Rules found. Can't find file " + location);
-      }
-    }
-  } catch (Exception e) {
-    // No global rules avilable;
-    if (log.isInfoEnabled()) {
-      log.info("No Rules Found. Error in loading file " + location, e);
-    }
-  } finally {
-    try {
-      if (output != null) {
-        output.close();
-      }
-    } catch (IOException e) {
-      if (log.isInfoEnabled()) {
-        log.info("Exception thrown while closing the properties file", e);
-      }
-    }
-  }
-}
-
-
-private void saveRules(String userId, String variation, String globalRules, String varRules, String userRules, HttpServletRequest request) throws Exception {
-  Map<String, Object> globalMap = new HashMap<String, Object>();
-  if (!globalRules.equals("null")){
-    JSONObject gjsonObj = JSONObject.fromObject(globalRules);
-    toJavaMap(gjsonObj, globalMap);
-    updateRules ("resources/ApplicationRules.global", globalMap);
-  }
-
-  Map<String, Object> varMap = new HashMap<String, Object>();
-  if (!varRules.equals("null")){
-    JSONObject vjsonObj = JSONObject.fromObject(varRules);
-    toJavaMap(vjsonObj, varMap);
-    updateRules ("resources/ApplicationRules." + variation, varMap);
-  }
-
-  Map<String, Object> userMap = new HashMap<String, Object>();
-  if (!userRules.equals("null")){
-    JSONObject ujsonObj = JSONObject.fromObject(userRules);
-    toJavaMap(ujsonObj, userMap);
-
-    String prefsFolder;
-    //get global rules
-    Properties globalProps = new Properties();
-    globalProps = getRules("resources/ApplicationRules.global");
-
-    //get variation rules
-    Properties varProps = new Properties();
-    varProps = getRules("resources/ApplicationRules." + variation);
-
-    prefsFolder = (String)varProps.get("user.preferences.folder");
-    if (prefsFolder==null || prefsFolder.equals("")){
-      prefsFolder = (String)globalProps.get("user.preferences.folder");
-    }
-
-    String userLocation = prefsFolder + File.separator + userId + File.separator + "user.properties";
-
-    updateRules (userLocation, userMap);
-  }
-
-  ContextManagerFactory.newInstance();
-}
-
-private void updateRules(String location, Map<String, Object> rulesMap) throws Exception {
-  //get user rules
-  ListProperties props = new ListProperties();
-  props = getListRules(location);
-
-  Set s=rulesMap.entrySet();
-  Iterator it=s.iterator();
-
-  while(it.hasNext())
-  {
-    // key=value separator this by Map.Entry to get key and value
-    Map.Entry m =(Map.Entry)it.next();
-
-    // getKey is used to get key of Map
-    String key=(String)m.getKey();
-
-    // getValue is used to get value of key in Map
-    String value=(String)m.getValue();
-    if (value.equals("")){
-      props.remove(key);
-    }else{
-      if (value.equals("\"\"")){
-        value = "";
-      }
-      props.setProperty(key,value);
-    }
-  }
-  setListRules(location, props);
-}
-
-/*** getMap provides a Map representation of the JSON Object
-* @param jsonResponse The JSON object string
-* @return Map of JSONObject.
-**/
-protected Map<String, Object> getMap(String jsonResponse ) throws Exception {
-  Map<String, Object> mapResponse = new HashMap<String, Object>();
-  if (jsonResponse.startsWith("{")) {
-    JSONObject jsonObj = JSONObject.fromObject(jsonResponse);
-    toJavaMap(jsonObj, mapResponse);
-  } else {
-    throw new Exception("MalFormed JSON Array Response.");
-  }
-  return mapResponse;
-}
 
 /*** toJavaMap converts the JSONObject into a Java Map
 * @param o
@@ -366,14 +221,7 @@ if (log.isDebugEnabled())
 
     String currentUserId = request.getUserPrincipal().getName();
     String currentVariation = us.getVariation();
-
     String eventId = request.getParameter("eventId");
-    String globalRules = request.getParameter("globalRules");
-    String varRules = request.getParameter("varRules");
-    String userRules = request.getParameter("userRules");
-    if ("save".equals(eventId)){
-      saveRules(currentUserId, currentVariation, globalRules, varRules, userRules, request);
-    }else{
-      showRules(currentUserId, currentVariation, out, eventId);
-    }
+
+    showRules(currentUserId, currentVariation, out, eventId);
 %>
