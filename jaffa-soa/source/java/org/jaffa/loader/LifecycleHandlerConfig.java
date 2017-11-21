@@ -126,6 +126,7 @@ public class LifecycleHandlerConfig {
      */
     @Bean
     public ITransformationHandlerFactory transformationHandlerFactory() {
+        init();
         return transformationHandlerFactory;
     }
 
