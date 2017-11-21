@@ -36,6 +36,32 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         '<p><b>' + Labels.get('label.Jaffa.SC.SystemConfigDesktop.description') + ':</b> {description}</p>'
       )
     });
+
+    var tbar;
+    if (this.enableSearch)
+      tbar = [
+          '-',
+          {xtype:'textfield', emptyText:Labels.get('label.Jaffa.SC.SystemConfigDesktop.searchValue'),ref:'searchField',
+            listeners : {
+            "specialkey": function(field, ev){
+                if(ev.getKey() == ev.ENTER){
+                    ev.preventDefault();
+                    this.ownerCt.ownerCt.search(this.getValue());
+                  }
+              },
+            keydown: {
+                fn: function(){
+                    this.ownerCt.ownerCt.search(this.getValue());
+                  },
+                buffer: 350
+              }
+          }
+      },{
+          itemId:'searchCount',
+              text: Labels.get('label.Jaffa.Widgets.Button.Search') + ': 0 '+Labels.get('label.Common.of')+' 0'
+        }
+    ];
+
     Ext.apply(this, {
       title: this.path?this.path:Labels.get('label.Jaffa.SC.SystemConfigDesktop.mainTabTitle'),
       id: this.path?this.path:'apprules',
@@ -43,6 +69,7 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
       plugins: expander,
       disableSelection: true,
       contentType: 'BUSINESSRULES',
+      tbar: tbar,
       columns: [expander,{
         header: Labels.get('label.Jaffa.SC.SystemConfigDesktop.rule'),
         dataIndex: 'rule',
