@@ -34,13 +34,15 @@ private static final Logger log = Logger.getLogger("jaffa.sc.systemconfigdesktop
       //Retrieving global rules from the ApplicationRulesManager
       ContextManager contextManager = (ContextManager) ContextManagerFactory.instance();
       ApplicationRulesManager applicationRulesManager = contextManager.getApplicationRulesManager();
-      if (applicationRulesManager.getApplicationRulesGlobal() != null) {
-        globalProps = applicationRulesManager.getApplicationRulesGlobal();
+      Properties applicationRules = applicationRulesManager.getApplicationRulesGlobal();
+      if (applicationRules != null) {
+        globalProps = applicationRules;
       }
 
       //Retrieving variation-specific rules from the ApplicationRulesManager
-      if (applicationRulesManager.getApplicationRulesVariation(VariationContext.getVariation()) != null) {
-        varProps = applicationRulesManager.getApplicationRulesVariation(VariationContext.getVariation());
+      applicationRules = applicationRulesManager.getApplicationRulesVariation(VariationContext.getVariation());
+      if (applicationRules != null) {
+        varProps = applicationRules;
       }
 
       //Retrieving user-specific rules from the ApplicationRulesManager
