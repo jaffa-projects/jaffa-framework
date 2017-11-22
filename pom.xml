@@ -1959,11 +1959,6 @@
                 <artifactId>spring-test</artifactId>
                 <version>${version.springframework}</version>
             </dependency>
-            <dependency>
-                <groupId>org.codehaus.groovy</groupId>
-                <artifactId>groovy-all</artifactId>
-                <version>${version.groovy-all}</version>
-            </dependency>
             <!-- ******************************************************************* -->
             <!-- Jaffa Libraries                                                     -->
             <!-- ******************************************************************* -->
