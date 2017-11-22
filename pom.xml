@@ -9,7 +9,7 @@
 	<parent>
         <groupId>com.tapestrysolutions</groupId>
         <artifactId>tapestry-parent</artifactId>
-        <version>2.0.8</version>
+        <version>2.0.9</version>
     </parent>
 
     <groupId>org.jaffa</groupId>
@@ -1959,11 +1959,6 @@
                 <artifactId>spring-test</artifactId>
                 <version>${version.springframework}</version>
             </dependency>
-            <dependency>
-                <groupId>org.codehaus.groovy</groupId>
-                <artifactId>groovy-all</artifactId>
-                <version>${version.groovy-all}</version>
-            </dependency>
             <!-- ******************************************************************* -->
             <!-- Jaffa Libraries                                                     -->
             <!-- ******************************************************************* -->
@@ -2058,8 +2053,8 @@
     </profiles>
 
     <scm>
-        <connection>scm:git:https://tapljs482.tapestry.local/jaffa/jaffa-framework</connection>
-        <developerConnection>scm:git:https://tapljs482.tapestry.local/jaffa/jaffa-framework</developerConnection>
+        <connection>scm:git:https://tapljs482.tapestry.local/jaffa/jaffa-framework.git</connection>
+        <developerConnection>scm:git:https://tapljs482.tapestry.local/jaffa/jaffa-framework.git</developerConnection>
     </scm>
 
 </project>

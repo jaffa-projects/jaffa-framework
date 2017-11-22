@@ -59,8 +59,10 @@ import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * ApplicationRulesManager - ApplicationManager is the managing class for all application rules as defined by the
@@ -71,7 +73,18 @@ public class ApplicationRulesManager implements IManager {
     /**
      * Instantiates a new Properties repository
      */
-    private IRepository<Properties> applicationRulesRepository = new MapRepository<>();
+    private IRepository<Properties> applicationRulesRepository = new MapRepository<>("Properties");
+
+
+    /**
+     * The list of repositories managed by this class
+     */
+    private HashMap managedRepositories = new HashMap<String, IRepository>() {
+        {
+            put(applicationRulesRepository.getName(), applicationRulesRepository);
+        }
+
+    };
 
     /**
      * Provides the pattern to search for ApplicationRules
@@ -105,6 +118,25 @@ public class ApplicationRulesManager implements IManager {
      */
     public IRepository<Properties> getApplicationRulesRepository() {
         return applicationRulesRepository;
+    }
+
+    /**
+     * getRepositoryNames - Retrieve a String list of all the IRepositories managed by this IManager
+     * @return A list of repository names managed by this manager
+     */
+    @Override
+    public Set getRepositoryNames() {
+        return managedRepositories.keySet();
+    }
+
+    /**
+     * Retrieve an IRepository managed by this IManager via its String name
+     * @param name The name of the repository to be retrieved
+     * @return The retrieved repository, or empty if no matching repository was found.
+     */
+    @Override
+    public IRepository<?> getRepositoryByName(String name) {
+        return (IRepository<?>) managedRepositories.get(name);
     }
 
     /**

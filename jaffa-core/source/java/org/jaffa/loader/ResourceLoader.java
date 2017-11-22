@@ -61,9 +61,20 @@ import javax.annotation.PostConstruct;
  */
 public class ResourceLoader<T extends IManager> {
 
+    /**
+     * Create a ContextHelper logger
+     */
     private static Logger logger = Logger.getLogger(ContextHelper.class);
 
-    private T manager ;
+    /**
+     * Create a ManagerRepositoryService singleton to store managers
+     */
+    private ManagerRepositoryService managerRepositoryService = ManagerRepositoryService.getInstance();
+
+    /**
+     * Create a generic manager
+     */
+    private T manager;
 
     /**
      * gets the Manager from the ResourceLoader
@@ -98,7 +109,8 @@ public class ResourceLoader<T extends IManager> {
                     try {
                         manager.registerResource(resource, ContextHelper.getContextSalience(resource.getURI().toString()),
                                 ContextHelper.getVariationSalience(resource.getURI().toString()));
-                    }catch(Exception e){
+                        managerRepositoryService.add(manager.getClass().getSimpleName(), manager);
+                    } catch (Exception e) {
                         logger.error("Exception occurred while registering XML " + resource.getURI().toString() + " exception " + e);
                     }
                 }

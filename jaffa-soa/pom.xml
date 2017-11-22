@@ -149,14 +149,6 @@
             <artifactId>knowledge-internal-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.quartz-scheduler</groupId>
-            <artifactId>quartz</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.quartz-scheduler</groupId>
-            <artifactId>quartz-oracle</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr-runtime</artifactId>
             <scope>runtime</scope>
@@ -188,11 +180,6 @@
         <dependency>
             <groupId>org.jgroups</groupId>
             <artifactId>jgroups</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.1-api</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>

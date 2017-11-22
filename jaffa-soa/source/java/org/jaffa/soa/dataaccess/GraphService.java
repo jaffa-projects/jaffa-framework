@@ -48,16 +48,6 @@
  */
 package org.jaffa.soa.dataaccess;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Map;
 import org.apache.log4j.Logger;
 import org.apache.log4j.MDC;
 import org.jaffa.datatypes.Formatter;
@@ -67,12 +57,14 @@ import org.jaffa.modules.messaging.domain.BusinessEventLogMeta;
 import org.jaffa.persistence.Criteria;
 import org.jaffa.persistence.UOW;
 import org.jaffa.persistence.util.PersistentHelper;
-import org.jaffa.soa.graph.GraphCriteria;
-import org.jaffa.soa.graph.GraphDataObject;
-import org.jaffa.soa.graph.GraphQueryResponse;
-import org.jaffa.soa.graph.GraphUpdateResponse;
-import org.jaffa.soa.graph.ServiceError;
+import org.jaffa.soa.graph.*;
 import org.jaffa.util.ExceptionHelper;
+
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.*;
 
 /**
  * Provides functions for Creating, Retrieving, Updating and
@@ -614,7 +606,7 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
             if (graphCriteria == null)
                 graphCriteria = graphCriteriaClass.newInstance();
 
-            return graphCriteria.returnQueryClause(null);
+            return graphCriteria.buildQueryCriteria();
         } catch (Exception e) {
             String s = "Error in creating instance of GraphCriteria";
             log.error(s, e);

@@ -68,6 +68,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *   RoleManager - The RoleManager is used to handle security role creates, removes, updates, and deletes from the
@@ -85,10 +86,18 @@ public class RoleManager implements IManager {
      */
     private static final String CONFIGURATION_SCHEMA_FILE = "org/jaffa/security/securityrolesdomain/security-roles_1_0.xsd";
 
+    /** Create a Role Repository */
+    private IRepository<Role> roleRepository = new MapRepository<>("Role");
+
     /**
-     * The repository of the role names as keys and Roles as values.
+     * The list of repositories managed by this class
      */
-    private IRepository<Role> roleRepository = new MapRepository<>();
+    private HashMap managedRepositories = new HashMap<String, IRepository>() {
+        {
+            put(roleRepository.getName(), roleRepository);
+        }
+
+    };
 
     private static Logger log = Logger.getLogger(PolicyCache.class);
 
@@ -120,6 +129,25 @@ public class RoleManager implements IManager {
     @Override
     public String getResourceFileName() {
         return DEFAULT_CONFIGURATION_FILE;
+    }
+
+    /**
+     * getRepositoryNames - Retrieve a String list of all the IRepositories managed by this IManager
+     * @return A list of repository names managed by this manager
+     */
+    @Override
+    public Set getRepositoryNames() {
+        return managedRepositories.keySet();
+    }
+
+    /**
+     * Retrieve an IRepository managed by this IManager via its String name
+     * @param name The name of the repository to be retrieved
+     * @return The retrieved repository, or empty if no matching repository was found.
+     */
+    @Override
+    public IRepository<?> getRepositoryByName(String name) {
+        return (IRepository<?>) managedRepositories.get(name);
     }
 
     /**

@@ -1,5 +1,6 @@
 package org.jaffa.rules;
 
+import org.jaffa.beans.factory.config.StaticContext;
 import org.jaffa.config.JaffaRulesConfig;
 import org.jaffa.rules.meta.MetaDataRepository;
 import org.jaffa.rules.realm.RealmRepository;
@@ -13,9 +14,7 @@ public class TestHelper {
     public static ApplicationContext context;
 
     public static void setupRepos() throws JaffaRulesFrameworkException {
-        if (context != null) {
-            ((ConfigurableApplicationContext) context).close();
-        }
+        shutdownRepos();
 
         RuleRepository.instance().clear();
         MetaDataRepository.instance().clear();
@@ -23,5 +22,12 @@ public class TestHelper {
         VariationRepository.instance().clear();
 
         context = new AnnotationConfigApplicationContext(JaffaRulesConfig.class);
+    }
+
+    public static void shutdownRepos() {
+        if (context != null) {
+            ((ConfigurableApplicationContext) context).close();
+        }
+        StaticContext.clearApplicationContext();
     }
 }

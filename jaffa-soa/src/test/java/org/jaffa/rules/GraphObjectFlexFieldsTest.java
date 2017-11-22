@@ -92,5 +92,10 @@ public class GraphObjectFlexFieldsTest extends TestCase {
         userGraph.validate();
     }
 
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        TestHelper.shutdownRepos();
+    }
 }
 

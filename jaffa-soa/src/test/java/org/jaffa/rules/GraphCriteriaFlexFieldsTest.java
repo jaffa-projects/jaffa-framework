@@ -51,20 +51,25 @@ public class GraphCriteriaFlexFieldsTest extends TestCase {
         StaticContext.initialize(userCriteria);
         assertNotNull(userCriteria.getFlexCriteriaBean());
 
-        Criteria c = new Criteria();
-        c = userCriteria.returnQueryClause(c);
+        Criteria c = userCriteria.buildQueryCriteria();
 
         assertNull(c.getCriteriaEntries());
 
         userCriteria.getFlexCriteriaBean().set("remarks", new StringCriteriaField("Equals", "nice guy"));
 
-        c = userCriteria.returnQueryClause(c);
+        c = userCriteria.buildQueryCriteria();
         assertNotNull(c.getCriteriaEntries());
         assertEquals(1, c.getCriteriaEntries().size());
 
         List<Criteria.CriteriaEntry> criteriaEntries = new ArrayList<>(c.getCriteriaEntries());
         assertEquals("nice guy", criteriaEntries.get(0).getValue());
         assertEquals("UserRef15", criteriaEntries.get(0).getName());
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        TestHelper.shutdownRepos();
     }
 }
 

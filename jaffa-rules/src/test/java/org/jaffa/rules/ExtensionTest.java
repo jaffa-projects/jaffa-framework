@@ -772,4 +772,10 @@ Commenting out until AOP interceptors are finished
         obj.setField7(1); //set to at least 1 because of the min-value rule against this property
         return obj;
     }
+
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        TestHelper.shutdownRepos();
+    }
 }
