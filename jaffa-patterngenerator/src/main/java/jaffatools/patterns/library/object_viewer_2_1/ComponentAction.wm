@@ -1,0 +1,401 @@
+// .//GEN-BEGIN:_1_be
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ * 
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/
+package $(BasePackage.Lower).components.$(Component.Lower).ui;
+
+import java.util.*;
+import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionMessages;
+import org.jaffa.presentation.portlet.ActionBase;
+import org.jaffa.presentation.portlet.FormKey;
+import org.jaffa.presentation.portlet.HistoryNav;
+import org.jaffa.exceptions.FrameworkException;
+import org.jaffa.exceptions.ApplicationExceptions;
+import org.jaffa.exceptions.ApplicationException;
+
+#if ($RelatedObjects != null) #begin
+import org.jaffa.presentation.portlet.widgets.model.GridModel;
+import org.jaffa.presentation.portlet.widgets.model.GridModelRow;
+#end
+import $(BasePackage.Lower).components.$(Component.Lower).dto.$(Component.Upper1)OutDto;
+// .//GEN-END:_1_be
+// Add additional imports//GEN-FIRST:_imports
+
+
+
+
+// .//GEN-LAST:_imports
+// .//GEN-BEGIN:_2_be
+/** The Action class for handling events related to the View screen.
+ */
+public class $(Component.Upper1)Action extends ActionBase {
+
+    private static final Logger log = Logger.getLogger($(Component.Upper1)Action.class);
+
+    // .//GEN-END:_2_be
+
+#foreach $field in $ResultsFields.values() #begin
+#if ($(field.Viewer) != null) #begin
+    // .//GEN-BEGIN:do_$(field.Name.Upper1)Viewer_Clicked_1_be
+    /** Invokes the view$(field.Viewer.ClassName.Upper1)() method on the component.
+     * @return The FormKey for the View screen.
+     */    
+    public FormKey do_$(field.Name.Upper1)Viewer_Clicked() {
+        FormKey fk = null;
+        // .//GEN-END:do_$(field.Name.Upper1)Viewer_Clicked_1_be
+        // Add custom code before processing the action //GEN-FIRST:do_$(field.Name.Upper1)Viewer_Clicked_1
+
+
+        // .//GEN-LAST:do_$(field.Name.Upper1)Viewer_Clicked_1
+        // .//GEN-BEGIN:do_$(field.Name.Upper1)Viewer_Clicked_2_be
+        $(Component.Upper1)Form myForm = ($(Component.Upper1)Form) form;
+        $(Component.Upper1)Component myComp = ($(Component.Upper1)Component) myForm.getComponent();
+        $(Component.Upper1)OutDto outputDto = myComp.get$(Component.Upper1)OutDto();
+        if (outputDto != null && outputDto.get$(field.Name.Upper1)() != null) {
+            try {
+                // .//GEN-END:do_$(field.Name.Upper1)Viewer_Clicked_2_be
+                // Add custom code before invoking the component //GEN-FIRST:do_$(field.Name.Upper1)Viewer_Clicked_2
+
+
+                // .//GEN-LAST:do_$(field.Name.Upper1)Viewer_Clicked_2
+                // .//GEN-BEGIN:do_$(field.Name.Upper1)Viewer_Clicked_3_be
+                fk = myComp.view$(field.Viewer.ClassName.Upper1)(outputDto.get$(field.Name.Upper1)());
+            } catch (ApplicationExceptions e){
+                if (log.isDebugEnabled())
+                    log.debug("Viewer Failed");
+                myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, e);
+            } catch (FrameworkException e) {
+                System.err.println(null, e);
+                myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, "error.framework.general" );
+            }
+        }
+        // .//GEN-END:do_$(field.Name.Upper1)Viewer_Clicked_3_be
+        // Add custom code before returning //GEN-FIRST:do_$(field.Name.Upper1)Viewer_Clicked_3
+
+
+        // .//GEN-LAST:do_$(field.Name.Upper1)Viewer_Clicked_3
+        // .//GEN-BEGIN:do_$(field.Name.Upper1)Viewer_Clicked_4_be
+        // Direct User back to current form
+        if (fk == null)
+            fk = new FormKey(myForm.NAME, myComp.getComponentId());
+        return fk;
+    }
+    // .//GEN-END:do_$(field.Name.Upper1)Viewer_Clicked_4_be
+#end
+#end
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelatedObjectViewer != null) #begin
+    // .//GEN-BEGIN:do_Related$(object.Name.Upper1)_View_Clicked_1_be
+    /** Invokes the do_Related$(object.Name.Upper1)_View_Clicked() method.
+     * @param rowNum The selected row on the Grid.
+     * @return The FormKey for the View screen of the $(object.Name.Upper1) object.
+     */ 
+    public FormKey do_Related$(object.Name.Upper1)_Clicked(String rowNum) {
+        return do_Related$(object.Name.Upper1)_View_Clicked(rowNum);
+    }
+
+
+#set $wm_parameters = ""
+#set $firstPass = "true"
+#foreach $field in $object.KeyFields.values() #begin
+#if ($firstPass == "true") #begin
+#set $firstPass = "false"
+#else
+#set $wm_parameters = "$(wm_parameters), "
+#end
+#set $wm_parameters = "$(wm_parameters)($(field.DataType.JavaDataType)) selectedRow.get(\"$(field.RelatedObjectFieldName.JavaBeanStyle)\")"
+#end
+    /** Invokes the view$(object.Name.Upper1)() method on the component.
+     * @param rowNum The selected row on the Grid.
+     * @return The FormKey for the View screen of the $(object.Name.Upper1) object.
+     */    
+    public FormKey do_Related$(object.Name.Upper1)_View_Clicked(String rowNum) {
+        FormKey fk = null;
+        // .//GEN-END:do_Related$(object.Name.Upper1)_View_Clicked_1_be
+        // Add custom code before processing the action //GEN-FIRST:do_Related$(object.Name.Upper1)_View_Clicked_1
+
+
+        // .//GEN-LAST:do_Related$(object.Name.Upper1)_View_Clicked_1
+        // .//GEN-BEGIN:do_Related$(object.Name.Upper1)_View_Clicked_2_be
+        $(Component.Upper1)Form myForm = ($(Component.Upper1)Form) form;
+        $(Component.Upper1)Component myComp = ($(Component.Upper1)Component) myForm.getComponent();
+
+        GridModel model = (GridModel) myForm.getRelated$(object.Name.Upper1)WM();
+        GridModelRow selectedRow = model.getRow(Integer.parseInt(rowNum));
+        if (selectedRow != null) {
+            try {
+                // .//GEN-END:do_Related$(object.Name.Upper1)_View_Clicked_2_be
+                // Add custom code before invoking the component //GEN-FIRST:do_Related$(object.Name.Upper1)_View_Clicked_2
+
+
+                // .//GEN-LAST:do_Related$(object.Name.Upper1)_View_Clicked_2
+                // .//GEN-BEGIN:do_Related$(object.Name.Upper1)_View_Clicked_3_be
+                fk = myComp.view$(object.Name.Upper1)($wm_parameters);
+            } catch (ApplicationExceptions e){
+                if (log.isDebugEnabled())
+                    log.debug("Viewer Failed");
+                myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, e);
+            } catch (FrameworkException e) {
+                System.err.println(null, e);
+                myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, "error.framework.general" );
+            }
+        }
+        // .//GEN-END:do_Related$(object.Name.Upper1)_View_Clicked_3_be
+        // Add custom code before returning //GEN-FIRST:do_Related$(object.Name.Upper1)_View_Clicked_3
+
+
+        // .//GEN-LAST:do_Related$(object.Name.Upper1)_View_Clicked_3
+        // .//GEN-BEGIN:do_Related$(object.Name.Upper1)_View_Clicked_4_be
+        // The Viewer will be rendered in a new window
+        // We don't want to see the existing HistoryNav in that window
+        // Hence, initialize the HistoryNav
+        HistoryNav.initializeHistoryNav(request);
+
+        // Direct User back to current form
+        if (fk == null)
+            fk = new FormKey(myForm.NAME, myComp.getComponentId());
+        return fk;
+    }
+    // .//GEN-END:do_Related$(object.Name.Upper1)_View_Clicked_4_be
+#end
+
+#if ($object.RelatedObjectUpdator != null) #begin
+#set $wm_parameters = ""
+#set $firstPass = "true"
+#foreach $field in $object.KeyFields.values() #begin
+#if ($firstPass == "true") #begin
+#set $firstPass = "false"
+#else
+#set $wm_parameters = "$(wm_parameters), "
+#end
+#set $wm_parameters = "$(wm_parameters)($(field.DataType.JavaDataType)) selectedRow.get(\"$(field.RelatedObjectFieldName.JavaBeanStyle)\")"
+#end
+    // .//GEN-BEGIN:do_Related$(object.Name.Upper1)_Update_Clicked_1_be
+    /** Invokes the update$(object.Name.Upper1)() method on the component.
+     * @param rowNum The selected row on the Grid.
+     * @return The FormKey for the Update screen of the $(object.Name.Upper1) object.
+     */    
+    public FormKey do_Related$(object.Name.Upper1)_Update_Clicked(String rowNum) {
+        FormKey fk = null;
+        // .//GEN-END:do_Related$(object.Name.Upper1)_Update_Clicked_1_be
+        // Add custom code before processing the action //GEN-FIRST:do_Related$(object.Name.Upper1)_Update_Clicked_1
+
+
+        // .//GEN-LAST:do_Related$(object.Name.Upper1)_Update_Clicked_1
+        // .//GEN-BEGIN:do_Related$(object.Name.Upper1)_Update_Clicked_2_be
+        $(Component.Upper1)Form myForm = ($(Component.Upper1)Form) form;
+        $(Component.Upper1)Component myComp = ($(Component.Upper1)Component) myForm.getComponent();
+
+        GridModel model = (GridModel) myForm.getRelated$(object.Name.Upper1)WM();
+        GridModelRow selectedRow = model.getRow(Integer.parseInt(rowNum));
+        if (selectedRow != null) {
+            try {
+                // .//GEN-END:do_Related$(object.Name.Upper1)_Update_Clicked_2_be
+                // Add custom code before invoking the component //GEN-FIRST:do_Related$(object.Name.Upper1)_Update_Clicked_2
+
+
+                // .//GEN-LAST:do_Related$(object.Name.Upper1)_Update_Clicked_2
+                // .//GEN-BEGIN:do_Related$(object.Name.Upper1)_Update_Clicked_3_be
+                fk = myComp.update$(object.Name.Upper1)($wm_parameters);
+            } catch (ApplicationExceptions e){
+                if (log.isDebugEnabled())
+                    log.debug("Updator Failed");
+                myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, e);
+            } catch (FrameworkException e) {
+                System.err.println(null, e);
+                myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, "error.framework.general" );
+            }
+        }
+        // .//GEN-END:do_Related$(object.Name.Upper1)_Update_Clicked_3_be
+        // Add custom code before returning //GEN-FIRST:do_Related$(object.Name.Upper1)_Update_Clicked_3
+
+
+        // .//GEN-LAST:do_Related$(object.Name.Upper1)_Update_Clicked_3
+        // .//GEN-BEGIN:do_Related$(object.Name.Upper1)_Update_Clicked_4_be
+        if (fk == null)
+            fk = new FormKey(myForm.NAME, myComp.getComponentId());
+        return fk;
+    }
+    // .//GEN-END:do_Related$(object.Name.Upper1)_Update_Clicked_4_be
+#end
+
+#if ($object.RelatedObjectDeletor != null) #begin
+#set $wm_parameters = ""
+#set $firstPass = "true"
+#foreach $field in $object.KeyFields.values() #begin
+#if ($firstPass == "true") #begin
+#set $firstPass = "false"
+#else
+#set $wm_parameters = "$(wm_parameters), "
+#end
+#set $wm_parameters = "$(wm_parameters)($(field.DataType.JavaDataType)) selectedRow.get(\"$(field.RelatedObjectFieldName.JavaBeanStyle)\")"
+#end
+    // .//GEN-BEGIN:do_Related$(object.Name.Upper1)_Delete_Clicked_1_be
+    /** Invokes the delete$(object.Name.Upper1)() method on the component.
+     * @param rowNum The selected row on the Grid.
+     * @return The FormKey for the Delete screen of the $(object.Name.Upper1) object.
+     */    
+    public FormKey do_Related$(object.Name.Upper1)_Delete_Clicked(String rowNum) {
+        FormKey fk = null;
+        // .//GEN-END:do_Related$(object.Name.Upper1)_Delete_Clicked_1_be
+        // Add custom code before processing the action //GEN-FIRST:do_Related$(object.Name.Upper1)_Delete_Clicked_1
+
+
+        // .//GEN-LAST:do_Related$(object.Name.Upper1)_Delete_Clicked_1
+        // .//GEN-BEGIN:do_Related$(object.Name.Upper1)_Delete_Clicked_2_be
+        $(Component.Upper1)Form myForm = ($(Component.Upper1)Form) form;
+        $(Component.Upper1)Component myComp = ($(Component.Upper1)Component) myForm.getComponent();
+
+        GridModel model = (GridModel) myForm.getRelated$(object.Name.Upper1)WM();
+        GridModelRow selectedRow = model.getRow(Integer.parseInt(rowNum));
+        if (selectedRow != null) {
+            try {
+                // .//GEN-END:do_Related$(object.Name.Upper1)_Delete_Clicked_2_be
+                // Add custom code before invoking the component //GEN-FIRST:do_Related$(object.Name.Upper1)_Delete_Clicked_2
+
+
+                // .//GEN-LAST:do_Related$(object.Name.Upper1)_Delete_Clicked_2
+                // .//GEN-BEGIN:do_Related$(object.Name.Upper1)_Delete_Clicked_3_be
+                fk = myComp.delete$(object.Name.Upper1)($wm_parameters);
+            } catch (ApplicationExceptions e){
+                if (log.isDebugEnabled())
+                    log.debug("Deletor Failed");
+                myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, e);
+            } catch (FrameworkException e) {
+                System.err.println(null, e);
+                myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, "error.framework.general" );
+            }
+        }
+        // .//GEN-END:do_Related$(object.Name.Upper1)_Delete_Clicked_3_be
+        // Add custom code before returning //GEN-FIRST:do_Related$(object.Name.Upper1)_Delete_Clicked_3
+
+
+        // .//GEN-LAST:do_Related$(object.Name.Upper1)_Delete_Clicked_3
+        // .//GEN-BEGIN:do_Related$(object.Name.Upper1)_Delete_Clicked_4_be
+        if (fk == null)
+            fk = new FormKey(myForm.NAME, myComp.getComponentId());
+        return fk;
+    }
+    // .//GEN-END:do_Related$(object.Name.Upper1)_Delete_Clicked_4_be
+#end
+#end
+#end
+    // .//GEN-BEGIN:_do_Close_Clicked_1_be
+    /** Quits the component and returns the FormKey for the calling screen.
+     * @return The FormKey for the caling screen. A null will be returned, if no calling screen was specified.
+     */    
+    public FormKey do_Close_Clicked() {
+        // .//GEN-END:_do_Close_Clicked_1_be
+        // Add custom code before processing the action //GEN-FIRST:_do_Close_Clicked_1
+
+
+        // .//GEN-LAST:_do_Close_Clicked_1
+        // .//GEN-BEGIN:_do_Close_Clicked_2_be
+        return (($(Component.Upper1)Form) form).getComponent().quitAndReturnToCallingScreen();
+    }
+    // .//GEN-END:_do_Close_Clicked_2_be
+
+#if ($Updator != null) #begin
+    // .//GEN-BEGIN:_do_Update_Clicked_1_be
+    /** Invokes the updateObject() method on the component.
+     * @return The FormKey for the Update screen.
+     */    
+    public FormKey do_Update_Clicked() {
+        FormKey fk = null;
+        // .//GEN-END:_do_Update_Clicked_1_be
+        // Add custom code before processing the action //GEN-FIRST:_do_Update_Clicked_1
+
+
+        // .//GEN-LAST:_do_Update_Clicked_1
+        // .//GEN-BEGIN:_do_Update_Clicked_2_be
+        $(Component.Upper1)Form myForm = ($(Component.Upper1)Form) form;
+        $(Component.Upper1)Component myComp = ($(Component.Upper1)Component) myForm.getComponent();
+        try {
+            // .//GEN-END:_do_Update_Clicked_2_be
+            // Add custom code before invoking the component //GEN-FIRST:_do_Update_Clicked_2
+
+
+            // .//GEN-LAST:_do_Update_Clicked_2
+            // .//GEN-BEGIN:_do_Update_Clicked_3_be
+            fk = myComp.updateObject();
+        } catch (ApplicationExceptions e){
+            if (log.isDebugEnabled())
+                log.debug("Update Failed");
+            myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, e);
+        } catch (FrameworkException e) {
+            System.err.println(null, e);
+            myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, "error.framework.general" );
+        }
+        // .//GEN-END:_do_Update_Clicked_3_be
+        // Add custom code after returning from the component //GEN-FIRST:_do_Update_Clicked_3
+
+
+        // .//GEN-LAST:_do_Update_Clicked_3
+        // .//GEN-BEGIN:_do_Update_Clicked_4_be
+        // Direct User back to current form
+        if (fk == null)
+            fk = myComp.getViewerFormKey();
+        return fk;
+    }
+    // .//GEN-END:_do_Update_Clicked_4_be
+#end
+
+#if ($Deletor != null) #begin
+    // .//GEN-BEGIN:_do_Delete_Clicked_1_be
+    /** Invokes the deleteObject() method on the component.
+     * @return The FormKey for the Delete screen.
+     */    
+    public FormKey do_Delete_Clicked() {
+        FormKey fk = null;
+        // .//GEN-END:_do_Delete_Clicked_1_be
+        // Add custom code before processing the action //GEN-FIRST:_do_Delete_Clicked_1
+
+
+        // .//GEN-LAST:_do_Delete_Clicked_1
+        // .//GEN-BEGIN:_do_Delete_Clicked_2_be
+        $(Component.Upper1)Form myForm = ($(Component.Upper1)Form) form;
+        $(Component.Upper1)Component myComp = ($(Component.Upper1)Component) myForm.getComponent();
+        try {
+            // .//GEN-END:_do_Delete_Clicked_2_be
+            // Add custom code before invoking the component //GEN-FIRST:_do_Delete_Clicked_2
+
+
+            // .//GEN-LAST:_do_Delete_Clicked_2
+            // .//GEN-BEGIN:_do_Delete_Clicked_3_be
+            fk = myComp.deleteObject();
+        } catch (ApplicationExceptions e){
+            if (log.isDebugEnabled())
+                log.debug("Delete Failed");
+            myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, e);
+        } catch (FrameworkException e) {
+            System.err.println(null, e);
+            myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, "error.framework.general" );
+        }
+        // .//GEN-END:_do_Delete_Clicked_3_be
+        // Add custom code after returning from the component //GEN-FIRST:_do_Delete_Clicked_3
+
+
+        // .//GEN-LAST:_do_Delete_Clicked_3
+        // .//GEN-BEGIN:_do_Delete_Clicked_4_be
+        // Direct User back to current form
+        if (fk == null)
+            fk = myComp.getViewerFormKey();
+        return fk;
+    }
+    // .//GEN-END:_do_Delete_Clicked_4_be
+#end
+    // All the custom code goes here //GEN-FIRST:_custom
+
+
+
+
+
+
+    // .//GEN-LAST:_custom
+}

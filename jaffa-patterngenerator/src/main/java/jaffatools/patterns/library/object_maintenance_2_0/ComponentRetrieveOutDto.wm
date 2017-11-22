@@ -1,0 +1,249 @@
+// .//GEN-BEGIN:_1_be
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ * 
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/ 
+package $(BasePackage.Lower).components.$(Component.Lower).dto;
+
+import java.util.*;
+// .//GEN-END:_1_be
+// Add additional imports//GEN-FIRST:_imports
+
+
+
+
+// .//GEN-LAST:_imports
+// .//GEN-BEGIN:_2_be
+/** The output for the $(Component.Upper1).
+ */
+public class $(Component.Upper1)RetrieveOutDto {
+
+
+#foreach $field in $Fields.values() #begin
+#if ($field.RelatedObjectName == null || $field.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+    /** Holds value of property $(field.Name.Lower1). */
+    private $(field.DataType.JavaDataType) $(field.Name.Lower1);
+
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+    /** Holds value of property $(field.Name.Lower1). */
+    private $(field.DataType.JavaDataType) $(field.Name.Lower1);
+
+#end
+#end
+#end
+#end
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelationshipToDomainObject.RelationshipTypeMany && $object.RelatedObjectFields != null) #begin
+    /** Holds an array of $(object.Name.Upper1) objects to be returned. */
+    private List $(object.Name.Lower1)List;
+
+#end
+#end
+#end
+
+    /** Default Constructor.*/    
+    public $(Component.Upper1)RetrieveOutDto() {
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelationshipToDomainObject.RelationshipTypeMany && $object.RelatedObjectFields != null) #begin
+        $(object.Name.Lower1)List = new ArrayList();
+#end
+#end
+#end
+    }
+
+
+#foreach $field in $Fields.values() #begin
+#if ($field.RelatedObjectName == null || $field.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+    /** Getter for property $(field.Name.Lower1).
+     * @return Value of property $(field.Name.Lower1).
+     */
+    public $(field.DataType.JavaDataType) get$(field.Name.Upper1)() {
+        return $(field.Name.Lower1);
+    }
+    
+    /** Setter for property $(field.Name.Lower1).
+     * @param $(field.Name.Lower1) New value of property $(field.Name.Lower1).
+     */
+    public void set$(field.Name.Upper1)($(field.DataType.JavaDataType) $(field.Name.Lower1)) {
+
+#if ($(field.DataType.DataTypeString)) #begin
+        if ($(field.Name.Lower1) == null || $(field.Name.Lower1).length() == 0)
+            this.$(field.Name.Lower1) = null;
+        else
+            this.$(field.Name.Lower1) = $(field.Name.Lower1);
+#else
+        this.$(field.Name.Lower1) = $(field.Name.Lower1);
+#end
+    }
+
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+    /** Getter for property $(field.Name.Lower1).
+     * @return Value of property $(field.Name.Lower1).
+     */
+    public $(field.DataType.JavaDataType) get$(field.Name.Upper1)() {
+        return $(field.Name.Lower1);
+    }
+    
+    /** Setter for property $(field.Name.Lower1).
+     * @param $(field.Name.Lower1) New value of property $(field.Name.Lower1).
+     */
+    public void set$(field.Name.Upper1)($(field.DataType.JavaDataType) $(field.Name.Lower1)) {
+
+#if ($(field.DataType.DataTypeString)) #begin
+        if ($(field.Name.Lower1) == null || $(field.Name.Lower1).length() == 0)
+            this.$(field.Name.Lower1) = null;
+        else
+            this.$(field.Name.Lower1) = $(field.Name.Lower1);
+#else
+        this.$(field.Name.Lower1) = $(field.Name.Lower1);
+#end
+    }
+
+#end
+#end
+#end
+#end
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelationshipToDomainObject.RelationshipTypeMany && $object.RelatedObjectFields != null) #begin
+    /** Add $(object.Name.Upper1) objects.
+     * @param $(object.Name.Lower1) $(object.Name.Upper1).
+     */    
+    public void add$(object.Name.Upper1)($(object.Name.Upper1)Dto $(object.Name.Lower1)) {
+        $(object.Name.Lower1)List.add($(object.Name.Lower1));
+    }
+    
+    /** Add $(object.Name.Upper1) at the specified position.
+     * @param $(object.Name.Lower1) $(object.Name.Upper1).
+     * @param index The position at which the $(object.Name.Upper1) is to be added.
+     */    
+    public void set$(object.Name.Upper1)($(object.Name.Upper1)Dto $(object.Name.Lower1), int index) {
+        //-- check bounds for index
+        if ((index < 0) || (index > $(object.Name.Lower1)List.size()))
+            throw new IndexOutOfBoundsException();
+        
+        $(object.Name.Lower1)List.set(index, $(object.Name.Lower1));
+    }
+    
+    /** Add an array of $(object.Name.Upper1) objects. This will overwrite existing $(object.Name.Upper1) objects.
+     * @param objects An array of $(object.Name.Upper1) objects.
+     */    
+    public void set$(object.Name.Upper1)($(object.Name.Upper1)Dto[] objects) {
+        $(object.Name.Lower1)List = Arrays.asList(objects);
+    }
+    
+    /** Clear existing $(object.Name.Upper1) objects.
+     */    
+    public void clear$(object.Name.Upper1)() {
+        $(object.Name.Lower1)List.clear();
+    }
+    
+    /** Remove $(object.Name.Upper1) object.
+     * @param $(object.Name.Lower1) $(object.Name.Upper1).
+     * @return A true indicates a $(object.Name.Upper1) object was removed. A false indicates, the $(object.Name.Upper1) object was not found.
+     */    
+    public boolean remove$(object.Name.Upper1)($(object.Name.Upper1)Dto $(object.Name.Lower1)) {
+        return $(object.Name.Lower1)List.remove($(object.Name.Lower1));
+    }
+    
+    /** Returns a $(object.Name.Upper1) object from the specified position.
+     * @param index The position index.
+     * @return $(object.Name.Upper1).
+     */    
+    public $(object.Name.Upper1)Dto get$(object.Name.Upper1)(int index) {
+        //-- check bounds for index
+        if ((index < 0) || (index > $(object.Name.Lower1)List.size()))
+            throw new IndexOutOfBoundsException();
+        
+        return ($(object.Name.Upper1)Dto) $(object.Name.Lower1)List.get(index);
+    }
+    
+    /** Returns an array of $(object.Name.Upper1) objects.
+     * @return An array of $(object.Name.Upper1) objects.
+     */    
+    public $(object.Name.Upper1)Dto[] get$(object.Name.Upper1)() {
+        return ($(object.Name.Upper1)Dto[]) $(object.Name.Lower1)List.toArray(new $(object.Name.Upper1)Dto[0]);
+    }
+    
+    /** Returns a count of $(object.Name.Upper1) objects.
+     * @return The count of $(object.Name.Upper1) objects.
+     */    
+    public int get$(object.Name.Upper1)Count() {
+        return $(object.Name.Lower1)List.size();
+    }
+
+#end
+#end
+#end
+
+
+    /** Returns the debug information
+     * @return The debug information
+     */
+    public String toString() {
+        StringBuffer buf = new StringBuffer();
+        buf.append("<$(Component.Upper1)RetrieveOutDto>");
+
+#foreach $field in $Fields.values() #begin
+#if ($field.RelatedObjectName == null || $field.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+        buf.append("<$(field.Name.Lower1)>"); if ($(field.Name.Lower1) != null) buf.append($(field.Name.Lower1)); buf.append("</$(field.Name.Lower1)>");
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+        buf.append("<$(field.Name.Lower1)>"); if ($(field.Name.Lower1) != null) buf.append($(field.Name.Lower1)); buf.append("</$(field.Name.Lower1)>");
+#end
+#end
+#end
+#end
+
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelationshipToDomainObject.RelationshipTypeMany && $object.RelatedObjectFields != null) #begin
+        buf.append("<$(object.Name.Lower1)s>");
+        $(object.Name.Upper1)Dto[] $(object.Name.Lower1)s = get$(object.Name.Upper1)();
+        for (int i = 0; i < $(object.Name.Lower1)s.length; i++) {
+            buf.append($(object.Name.Lower1)s[i].toString());
+        }
+        buf.append("</$(object.Name.Lower1)s>");
+
+#end
+#end
+#end
+        buf.append("</$(Component.Upper1)RetrieveOutDto>");
+        return buf.toString();
+    }
+    
+    // .//GEN-END:_2_be
+    // All the custom code goes here //GEN-FIRST:_custom
+
+
+
+
+
+
+    // .//GEN-LAST:_custom
+}

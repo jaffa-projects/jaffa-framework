@@ -1,0 +1,4 @@
+    <!-- $(Component.Upper1)Criteria -->
+    <forward   name="$(Module.Lower)_$(Component.Lower1)Criteria"    path="/$(Application.Lower)/$(Module.Lower)/$(Component.Lower)/jsp/criteria.jsp"/>
+    <!-- $(Component.Upper1)Results -->
+    <forward   name="$(Module.Lower)_$(Component.Lower1)Results"    path="/$(Application.Lower)/$(Module.Lower)/$(Component.Lower)/jsp/results.jsp"/>

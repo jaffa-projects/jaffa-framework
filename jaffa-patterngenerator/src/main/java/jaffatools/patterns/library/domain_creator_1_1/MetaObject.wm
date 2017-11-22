@@ -1,0 +1,326 @@
+// .//GEN-BEGIN:1_be
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ * 
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/ 
+package $(DomainPackage.Lower);
+
+import org.jaffa.metadata.*;
+import java.util.*;
+
+// .//GEN-END:1_be
+// Add additional imports//GEN-FIRST:imports
+
+
+
+
+// .//GEN-LAST:imports
+// .//GEN-BEGIN:2_be
+/** This class has the meta information for the $(DomainObject.Upper1) persistent class.
+ */
+public class $(DomainObject.Upper1)Meta {
+    
+    // domain-object class name
+    private static String m_name = "$(DomainPackage.Lower).$(DomainObject.Upper1)";
+
+    // token to be used for getting the label for the domain-object
+
+#set $wm_labelToken = ""
+#if ($LabelToken != null) #begin
+#set $wm_labelToken = $LabelToken
+#end
+    private static String m_labelToken = "$(wm_labelToken)";
+
+
+
+    // Field constants
+
+#foreach $field in $Fields.values() #begin
+#if ($(field.Ignore) == null || !$(field.Ignore.BooleanValue)) #begin
+    /** A constant to identity the $(field.Name.Upper1) field.*/
+    public static final String $(field.Name.Static) = "$(field.Name.Upper1)";
+#end
+#end
+
+
+    // Meta Data Definitions
+
+#foreach $field in $Fields.values() #begin
+#if ($(field.Ignore) == null || !$(field.Ignore.BooleanValue)) #begin
+#set $wm_object = "$(field.Name.Static)"
+#if ($(field.LabelToken) != null && $(field.LabelToken.toString()) != "") #begin
+#set $wm_object = "$(wm_object), \"$(field.LabelToken)\""
+#else
+#set $wm_object = "$(wm_object), \"$(field.Name.Static)\""
+#end
+#if ($(field.Mandatory) != null && $(field.Mandatory.BooleanValue)) #begin
+#set $wm_object = "$(wm_object), Boolean.TRUE"
+#else
+#set $wm_object = "$(wm_object), Boolean.FALSE"
+#end
+#if ($(field.DatabaseDataType.Upper) == "STRING" || $(field.DatabaseDataType.Upper) == "VARCHAR") #begin
+#set $wm_object = "new StringFieldMetaData($(wm_object)"
+#if ($(field.Pattern) != null && $(field.Pattern.toString()) != "") #begin
+#set $wm_object = "$(wm_object), \"$(field.Pattern)\""
+#else
+#set $wm_object = "$(wm_object), null"
+#end
+#if ($(field.IntSize) != null && $(field.IntSize.toString()) != "") #begin
+#set $wm_object = "$(wm_object), new Integer($(field.IntSize))"
+#else
+#set $wm_object = "$(wm_object), null"
+#end
+#if ($(field.CaseType) != null && $(field.CaseType.Upper) == "UPPERCASE") #begin
+#set $wm_object = "$(wm_object), FieldMetaData.UPPER_CASE"
+#elseif ($(field.CaseType) != null && $(field.CaseType.Upper) == "LOWERCASE") #begin
+#set $wm_object = "$(wm_object), FieldMetaData.LOWER_CASE"
+#elseif ($(field.CaseType) != null && $(field.CaseType.Upper) == "MIXEDCASE") #begin
+#set $wm_object = "$(wm_object), FieldMetaData.MIXED_CASE"
+#else
+#set $wm_object = "$(wm_object), null"
+#end
+
+#elseif ($(field.DatabaseDataType.Upper) == "INTEGER" || $(field.DatabaseDataType.Upper) == "BIGINT") #begin
+#set $wm_object = "new IntegerFieldMetaData($(wm_object)"
+#if ($(field.Layout) != null && $(field.Layout.toString()) != "") #begin
+#set $wm_object = "$(wm_object), \"$(field.Layout)\""
+#else
+#set $wm_object = "$(wm_object), null"
+#end
+#if ($(field.MinValue) != null && $(field.MinValue.toString()) != "") #begin
+#set $wm_object = "$(wm_object), new Long($(field.MinValue))"
+#else
+#set $wm_object = "$(wm_object), null"
+#end
+#if ($(field.MaxValue) != null && $(field.MaxValue.toString()) != "") #begin
+#set $wm_object = "$(wm_object), new Long($(field.MaxValue))"
+#else
+#set $wm_object = "$(wm_object), null"
+#end
+#if ($(field.IntSize) != null && $(field.IntSize.toString()) != "") #begin
+#set $wm_object = "$(wm_object), new Integer($(field.IntSize))"
+#else
+#set $wm_object = "$(wm_object), null"
+#end
+
+#elseif ($(field.DatabaseDataType.Upper) == "DECIMAL" || $(field.DatabaseDataType.Upper) == "DOUBLE") #begin
+#set $wm_object = "new DecimalFieldMetaData($(wm_object)"
+#if ($(field.Layout) != null && $(field.Layout.toString()) != "") #begin
+#set $wm_object = "$(wm_object), \"$(field.Layout)\""
+#else
+#set $wm_object = "$(wm_object), null"
+#end
+#if ($(field.MinValue) != null && $(field.MinValue.toString()) != "") #begin
+#set $wm_object = "$(wm_object), new Double($(field.MinValue))"
+#else
+#set $wm_object = "$(wm_object), null"
+#end
+#if ($(field.MaxValue) != null && $(field.MaxValue.toString()) != "") #begin
+#set $wm_object = "$(wm_object), new Double($(field.MaxValue))"
+#else
+#set $wm_object = "$(wm_object), null"
+#end
+#if ($(field.IntSize) != null && $(field.IntSize.toString()) != "") #begin
+#set $wm_object = "$(wm_object), new Integer($(field.IntSize))"
+#else
+#set $wm_object = "$(wm_object), null"
+#end
+#if ($(field.FracSize) != null && $(field.FracSize.toString()) != "") #begin
+#set $wm_object = "$(wm_object), new Integer($(field.FracSize))"
+#else
+#set $wm_object = "$(wm_object), null"
+#end
+
+#elseif ($(field.DatabaseDataType.Upper) == "BOOLEAN" || $(field.DatabaseDataType.Upper) == "BOOLEAN_BIT" || $(field.DatabaseDataType.Upper) == "BOOLEAN_TF" || $(field.DatabaseDataType.Upper) == "BOOLEAN_YN" || $(field.DatabaseDataType.Upper) == "BOOLEAN_10") #begin
+#set $wm_object = "new BooleanFieldMetaData($(wm_object)"
+#if ($(field.Layout) != null && $(field.Layout.toString()) != "") #begin
+#set $wm_object = "$(wm_object), \"$(field.Layout)\""
+#else
+#set $wm_object = "$(wm_object), null"
+#end
+#if ($(field.Pattern) != null && $(field.Pattern.toString()) != "") #begin
+#set $wm_object = "$(wm_object), \"$(field.Pattern)\""
+#else
+#set $wm_object = "$(wm_object), null"
+#end
+
+#elseif ($(field.DatabaseDataType.Upper) == "DATE_ONLY") #begin
+#set $wm_object = "new DateOnlyFieldMetaData($(wm_object)"
+#if ($(field.Layout) != null && $(field.Layout.toString()) != "") #begin
+#set $wm_object = "$(wm_object), \"$(field.Layout)\""
+#else
+#set $wm_object = "$(wm_object), null"
+#end
+#set $wm_object = "$(wm_object), null"
+#set $wm_object = "$(wm_object), null"
+
+#elseif ($(field.DatabaseDataType.Upper) == "DATE_TIME") #begin
+#set $wm_object = "new DateTimeFieldMetaData($(wm_object)"
+#if ($(field.Layout) != null && $(field.Layout.toString()) != "") #begin
+#set $wm_object = "$(wm_object), \"$(field.Layout)\""
+#else
+#set $wm_object = "$(wm_object), null"
+#end
+#set $wm_object = "$(wm_object), null"
+#set $wm_object = "$(wm_object), null"
+
+#elseif ($(field.DatabaseDataType.Upper) == "CURRENCY") #begin
+#set $wm_object = "new CurrencyFieldMetaData($(wm_object)"
+#if ($(field.Layout) != null && $(field.Layout.toString()) != "") #begin
+#set $wm_object = "$(wm_object), \"$(field.Layout)\""
+#else
+#set $wm_object = "$(wm_object), null"
+#end
+#if ($(field.MinValue) != null && $(field.MinValue.toString()) != "") #begin
+#set $wm_object = "$(wm_object), new Currency($(field.MinValue))"
+#else
+#set $wm_object = "$(wm_object), null"
+#end
+#if ($(field.MaxValue) != null && $(field.MaxValue.toString()) != "") #begin
+#set $wm_object = "$(wm_object), new Currency($(field.MaxValue))"
+#else
+#set $wm_object = "$(wm_object), null"
+#end
+#if ($(field.IntSize) != null && $(field.IntSize.toString()) != "") #begin
+#set $wm_object = "$(wm_object), new Integer($(field.IntSize))"
+#else
+#set $wm_object = "$(wm_object), null"
+#end
+#if ($(field.FracSize) != null && $(field.FracSize.toString()) != "") #begin
+#set $wm_object = "$(wm_object), new Integer($(field.FracSize))"
+#else
+#set $wm_object = "$(wm_object), null"
+#end
+
+#elseif ($(field.DatabaseDataType.Upper) == "RAW") #begin
+#set $wm_object = "new RawFieldMetaData($(wm_object)"
+
+#elseif ($(field.DatabaseDataType.Upper) == "LONGSTRING" || $(field.DatabaseDataType.Upper) == "LONGVARCHAR" || $(field.DatabaseDataType.Upper) == "CLOB") #begin
+#set $wm_object = "new StringFieldMetaData($(wm_object)"
+#if ($(field.Pattern) != null && $(field.Pattern.toString()) != "") #begin
+#set $wm_object = "$(wm_object), \"$(field.Pattern)\""
+#else
+#set $wm_object = "$(wm_object), null"
+#end
+#set $wm_object = "$(wm_object), null"
+#if ($(field.CaseType) != null && $(field.CaseType.Upper) == "UPPERCASE") #begin
+#set $wm_object = "$(wm_object), FieldMetaData.UPPER_CASE"
+#elseif ($(field.CaseType) != null && $(field.CaseType.Upper) == "LOWERCASE") #begin
+#set $wm_object = "$(wm_object), FieldMetaData.LOWER_CASE"
+#elseif ($(field.CaseType) != null && $(field.CaseType.Upper) == "MIXEDCASE") #begin
+#set $wm_object = "$(wm_object), FieldMetaData.MIXED_CASE"
+#else
+#set $wm_object = "$(wm_object), null"
+#end
+
+#elseif ($(field.DatabaseDataType.Upper) == "LONGRAW" || $(field.DatabaseDataType.Upper) == "BLOB") #begin
+#set $wm_object = "new RawFieldMetaData($(wm_object)"
+
+#end
+    /** A constant which holds the meta information for the $(field.Name.Upper1) field.*/
+    public static final FieldMetaData META_$(field.Name.Static) = $(wm_object));
+#end
+#end
+
+
+
+    // Map of FieldConstants + MetaDataDefinitions
+    private static Map m_fieldMap = new HashMap();
+    static {
+
+#foreach $field in $Fields.values() #begin
+#if ($(field.Ignore) == null || !$(field.Ignore.BooleanValue)) #begin
+        m_fieldMap.put($(field.Name.Static), META_$(field.Name.Static));
+#end
+#end
+    }
+    
+    // List of MetaDataDefinitions for key fields
+    private static List m_keyFields = new LinkedList();
+    static {
+
+#foreach $field in $Fields.values() #begin
+#if (($(field.Ignore) == null || !$(field.Ignore.BooleanValue)) && $(field.PrimaryKey) != null && $(field.PrimaryKey.BooleanValue)) #begin
+        m_keyFields.add(META_$(field.Name.Static));
+#end
+#end
+    }
+    
+    // List of MetaDataDefinitions for mandatory fields
+    private static List m_mandatoryFields = new LinkedList();
+    static {
+
+#foreach $field in $Fields.values() #begin
+#if (($(field.Ignore) == null || !$(field.Ignore.BooleanValue)) && $(field.Mandatory) != null && $(field.Mandatory.BooleanValue)) #begin
+        m_mandatoryFields.add(META_$(field.Name.Static));
+#end
+#end
+    }
+    
+    
+    
+    
+    
+    /** Returns the name of the persistent class.
+     * @return the name of the persistent class.
+     */
+    public static String getName() {
+        return m_name;
+    }
+    
+    /** Getter for property labelToken.
+     * @return Value of property labelToken.
+     */
+    public static String getLabelToken() {
+        return m_labelToken;
+    }
+    
+    /** This returns an array of all the fields of the persistent class.
+     * @return an array of all the fields of the persistent class.
+     */
+    public static String[] getAttributes() {
+        return DomainMetaDataHelper.getAttributes(m_fieldMap);
+    }
+    
+    /** This returns an array of meta information for all the fields of the persistent class.
+     * @return an array of meta information for all the fields of the persistent class.
+     */
+    public static FieldMetaData[] getFieldMetaData() {
+        return DomainMetaDataHelper.getFieldMetaData(m_fieldMap);
+    }
+    
+    /** This returns meta information for the input field.
+     * @param fieldName the field name.
+     * @return meta information for the input field.
+     */
+    public static FieldMetaData getFieldMetaData(String fieldName) {
+        return DomainMetaDataHelper.getFieldMetaData(m_fieldMap, fieldName);
+    }
+
+    /** This returns an array of meta information for all the key fields of the persistent class.
+     * @return an array of meta information for all the key fields of the persistent class.
+     */
+    public static FieldMetaData[] getKeyFields() {
+        return (FieldMetaData[]) m_keyFields.toArray(new FieldMetaData[0]);
+    }
+    
+    /** This returns an array of meta information for all the mandatory fields of the persistent class.
+     * @return an array of meta information for all the mandatory fields of the persistent class.
+     */
+    public static FieldMetaData[] getMandatoryFields() {
+        return (FieldMetaData[]) m_mandatoryFields.toArray(new FieldMetaData[0]);
+    }
+    
+// .//GEN-END:2_be
+// All the custom code goes here//GEN-FIRST:custom
+
+
+
+
+
+
+// .//GEN-LAST:custom
+}
+

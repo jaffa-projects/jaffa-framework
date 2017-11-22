@@ -1,0 +1,31 @@
+#if ($(MainLayout) != null && $(MainLayout.Lower) != "") #begin
+#set $wm_mainLayout = "$(MainLayout)"
+#else
+#set $wm_mainLayout = "jaffa.MainLayout"
+#end
+#if ($(ViewerLayout) != null && $(ViewerLayout.Lower) != "") #begin
+#set $wm_viewerLayout = "$(ViewerLayout)"
+#else
+#set $wm_viewerLayout = "jaffa.ViewerLayout"
+#end
+    <!-- $(Component.Upper1) -->
+    <definition name="$(Application.Lower).$(Module.Lower).$(Component.Lower).ViewerLayout"  extends="$(wm_viewerLayout)">
+        <put name="body" value="/$(Application.Lower)/$(Module.Lower)/$(Component.Lower)/view.jsp"/>
+        <put name="action" value="/$(Application.Lower)_$(Module.Lower)_$(Component.JavaBeanStyle)"/>
+
+#if ($Updator != null) #begin
+        <put name="updateComponent" value="$(Updator.ComponentName)"/>
+#end
+
+#if ($Deletor != null) #begin
+        <put name="deleteComponent" value="$(Deletor.ComponentName)"/>
+#end
+    </definition>
+    <definition name="$(Application.Lower).$(Module.Lower).$(Component.Lower)"  extends="$(wm_mainLayout)">
+
+#if ($(Title) != null && $(Title.Lower) != "") #begin
+        <put name="title" value="$(Title)"/>
+#end
+        <put name="body" value="$(Application.Lower).$(Module.Lower).$(Component.Lower).ViewerLayout"/>
+    </definition>
+

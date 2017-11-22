@@ -1,0 +1,97 @@
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ * 
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/ 
+#set $wm_relatedObjectNo = "WM_RELATED_OBJECT_NO"
+
+#if ($ScratchPad.get($(wm_relatedObjectNo)) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($(wm_relatedObjectNo), "0") != null) #begin #end
+#end
+
+#set $index = -1
+#set $found = "false"
+#foreach $object in $RelatedObjects.values() #begin
+#set $index = $index + 1
+#if ( $ScratchPad.get($wm_relatedObjectNo).equals("$index") && $found = "false" ) #begin
+#set $found = "true"
+#set $index = $index + 1
+## the following 'if' statement is used to invoke the 'add' method
+#if ($ScratchPad.put($wm_relatedObjectNo, "$index") != null) #begin #end
+
+// .//GEN-BEGIN:_1_be
+package $(BasePackage.Lower).components.$(Component.Lower).dto;
+// .//GEN-END:_1_be
+// Add additional imports//GEN-FIRST:_imports
+
+
+
+
+// .//GEN-LAST:_imports
+// .//GEN-BEGIN:_2_be
+/** The related object returned by the $(Component.Upper1).
+ */
+public class $(object.Name.Upper1)Dto {
+
+
+#foreach $field in $object.RelatedObjectFields.values() #begin
+    /** Holds value of property $(field.Name.JavaBeanStyle). */
+    private $(field.DataType.JavaDataType) $(field.Name.JavaBeanStyle);
+
+#end
+
+#foreach $field in $object.RelatedObjectFields.values() #begin
+    /** Getter for property $(field.Name.JavaBeanStyle).
+     * @return Value of property $(field.Name.JavaBeanStyle).
+     */
+    public $(field.DataType.JavaDataType) get$(field.Name.Upper1)() {
+        return $(field.Name.JavaBeanStyle);
+    }
+    
+    /** Setter for property $(field.Name.JavaBeanStyle).
+     * @param $(field.Name.JavaBeanStyle) New value of property $(field.Name.JavaBeanStyle).
+     */
+    public void set$(field.Name.Upper1)($(field.DataType.JavaDataType) $(field.Name.JavaBeanStyle)) {
+
+#if ($(field.DataType.DataTypeString)) #begin
+        if ($(field.Name.JavaBeanStyle) == null || $(field.Name.JavaBeanStyle).length() == 0)
+            this.$(field.Name.JavaBeanStyle) = null;
+        else
+            this.$(field.Name.JavaBeanStyle) = $(field.Name.JavaBeanStyle);
+#else
+        this.$(field.Name.JavaBeanStyle) = $(field.Name.JavaBeanStyle);
+#end
+    }
+
+#end
+
+
+    /** Returns the debug information
+     * @return The debug information
+     */
+    public String toString() {
+        StringBuffer buf = new StringBuffer();
+        buf.append("<$(object.Name.Upper1)Dto>");
+
+#foreach $field in $object.RelatedObjectFields.values() #begin
+        buf.append("<$(field.Name.JavaBeanStyle)>"); if ($(field.Name.JavaBeanStyle) != null) buf.append($(field.Name.JavaBeanStyle)); buf.append("</$(field.Name.JavaBeanStyle)>");
+#end
+        buf.append("</$(object.Name.Upper1)Dto>");
+        return buf.toString();
+    }
+    
+    // .//GEN-END:_2_be
+    // All the custom code goes here //GEN-FIRST:_custom
+
+
+
+
+
+
+    // .//GEN-LAST:_custom
+}
+
+#end
+#end

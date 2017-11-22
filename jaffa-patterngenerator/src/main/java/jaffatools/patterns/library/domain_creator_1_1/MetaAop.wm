@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+  <!-- ================================================= -->
+  <!-- Rules for Domain Object $(DomainObject.Upper1) -->
+  <!-- ================================================= -->
+
+  <metadata tag="jaffa.rules" class="$(DomainPackage.Lower).$(DomainObject.Upper1)">
+
+
+#if ($DeleteDomainObject != null && $DeleteDomainPackage != null) #begin
+    <delete-domain-info name="$(DeleteDomainPackage).$(DeleteDomainObject)"/>
+#end
+
+
+## Object level Rules
+#if ($LabelToken != null) #begin
+    <label>$(LabelToken)</label>
+#end
+
+## domain info or flex fields
+#if ($FlexDomainInfo != null && $FlexDomainInfo.BooleanValue) #begin
+
+    <domain-info name="$(DomainObject.Upper1)"/>
+#end
+
+#foreach $field in $Fields.values() #begin
+#if ($(field.Ignore) == null || !$(field.Ignore.BooleanValue)) #begin
+
+    <property name="$(field.Name.JavaBeanStyle)">
+
+## Common data type properties
+#if ($(field.LabelToken) != null && $(field.LabelToken.toString()) != "") #begin
+      <label>$(field.LabelToken)</label>
+#end
+#if ($(field.Mandatory) != null && $(field.Mandatory.BooleanValue)) #begin
+      <mandatory/>
+#end    
+#if ($(field.Layout) != null && $(field.Layout.toString()) != "") #begin
+      <layout>$(field.Layout)</layout>
+#end    
+#if ($(field.Pattern) != null && $(field.Pattern.toString()) != "") #begin
+      <pattern>$(field.Pattern)</pattern>
+#end    
+## All Strings    
+#if ($(field.DatabaseDataType.Upper) == "STRING" || $(field.DatabaseDataType.Upper) == "VARCHAR" || $(field.DatabaseDataType.Upper) == "LONGSTRING" || $(field.DatabaseDataType.Upper) == "LONGVARCHAR" || $(field.DatabaseDataType.Upper) == "CLOB") #begin
+#if ($(field.IntSize) != null && $(field.IntSize.toString()) != "") #begin
+      <max-length>$(field.IntSize)</max-length>
+#end    
+#if ($(field.CaseType) != null && $(field.CaseType.Upper) == "UPPERCASE") #begin
+      <case-type>Upper</case-type>
+#elseif ($(field.CaseType) != null && $(field.CaseType.Upper) == "LOWERCASE") #begin
+      <case-type>Lower</case-type>
+#end
+#end
+## All Numerics
+#if ($(field.DatabaseDataType.Upper) == "INTEGER" || $(field.DatabaseDataType.Upper) == "BIGINT") #begin
+#if ($(field.MinValue) != null && $(field.MinValue.toString()) != "") #begin
+      <min-value>$(field.MinValue)</min-value>
+#end
+#if ($(field.MaxValue) != null && $(field.MaxValue.toString()) != "") #begin
+      <max-value>$(field.MaxValue)</max-value>
+#end
+#if ($(field.IntSize) != null && $(field.IntSize.toString()) != "") #begin
+      <max-length>$(field.IntSize)</max-length>
+#end
+#end
+## Decimal Only
+#if ($(field.DatabaseDataType.Upper) == "DECIMAL" || $(field.DatabaseDataType.Upper) == "DOUBLE" || $(field.DatabaseDataType.Upper) == "CURRENCY") #begin
+#if ($(field.MinValue) != null && $(field.MinValue.toString()) != "") #begin
+      <min-value>$(field.MinValue)</min-value>
+#end
+#if ($(field.MaxValue) != null && $(field.MaxValue.toString()) != "") #begin
+      <max-value>$(field.MaxValue)</max-value>
+#end
+#if ($(field.FracSize) != null && $(field.FracSize.toString()) != "") #begin
+      <max-length>$(field.IntSize),$(field.FracSize)</max-length>
+#elseif ($(field.IntSize) != null && $(field.IntSize.toString()) != "") #begin
+      <max-length>$(field.IntSize)</max-length>
+#end
+#end
+    </property>
+#end
+#end
+
+  </metadata>
+</aop>

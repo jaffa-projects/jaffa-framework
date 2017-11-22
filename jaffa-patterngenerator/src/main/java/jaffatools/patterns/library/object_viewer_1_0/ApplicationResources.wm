@@ -1,0 +1,10 @@
+
+#if ($(Title) != null && $(Title) != "") #begin
+$(Title)=Enter Text Here
+#end
+
+#foreach $field in $ResultsFields.values() #begin
+#if ($(field.Label) != null && $(field.Label) != "") #begin
+$(field.Label)=Enter Text Here
+#end
+#end

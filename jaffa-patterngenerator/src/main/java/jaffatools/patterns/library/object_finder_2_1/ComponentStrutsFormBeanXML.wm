@@ -1,0 +1,1 @@
+    <form-bean name="$(Application.Lower)_$(Module.Lower)_$(Component.JavaBeanStyle)Form" type="$(BasePackage.Lower).components.$(Component.Lower).ui.$(Component.Upper1)Form"/>

@@ -1,0 +1,96 @@
+##
+## Check all relationships to create foreign key constraints.
+##
+#if ($Relationships != null) {
+#set $counter = 0
+#foreach $relationship in $Relationships.values() {
+#set $counter = $counter + 1
+##
+## If this is a non-validating relationship, do not create a foreign key constraint for it
+##
+#if ($(relationship.Type.Upper1) != "NONVALIDATINGASSOCIATION") {
+##
+## Check if the ToCardinality is 1, this denotes a foreign key is necessary.
+##
+#if ($(relationship.ToCardinality.Upper) == "1") {
+##
+## We will need to know the following
+## fromColumnName - This is the foreign key column in our table
+## toTableName - This is the table that our foreign key column references
+## toColumnName - This is a comma separated list of columns in the toTable that our foreign key references
+##
+#set $fromColumnName = ""
+#set $toModelName = $(relationship.ToDomainObject.Upper)
+#set $toTableName = $(PatternGenerator.getTableName($toModelName))
+#set $toColumnName = ""
+##
+## We want to check each FromField in the relationship to build up the foreign key column names
+##
+#foreach $fromField in $relationship.FromFields.values() {
+#set $fromFieldName = $(fromField.Name.Upper)
+##
+## Set the column name of the from field.  If there are multiple from fields, they are comma separated.
+##
+#if ($fromColumnName == "") {
+#set $fromColumnName = $(PatternGenerator.getColumnName($DomainObject.Upper, $fromFieldName))
+} #else {
+#set $fromColumnName = "$(fromColumnName), $(PatternGenerator.getColumnName($DomainObject.Upper, $fromFieldName))"
+}
+}
+##
+## We want to check each ToField in the relationship to build up the toTable column names
+##
+#foreach $toField in $relationship.ToFields.values() {
+#set $toFieldName = $(toField.Name.Upper)
+##
+## Set the column name of the to field.  If there are multiple to fields, they are comma separated.
+##
+#if ($toColumnName == "") {
+#set $toColumnName = $(PatternGenerator.getColumnName($toModelName, $toFieldName))
+} #else {
+#set $toColumnName = "$(toColumnName), $(PatternGenerator.getColumnName($toModelName, $toFieldName))"
+}
+}
+
+##
+## Create the foreign key constraint if it does not already exist
+## Also add an index on the foreign key column (the fromColumn) if it does not already exist
+##
+-- Foreign Key constraint from the [$fromColumnName] column to the [$toColumnName] column in the $toTableName table.
+-- Add an index on the [$fromColumnName] column if it does not already exist.
+BEGIN
+
+    -- If the foreign key already exists, log a message.
+    DECLARE
+        foreign_key_exists EXCEPTION;
+        PRAGMA EXCEPTION_INIT(foreign_key_exists, -2275);
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE $(DatabaseTable.Upper) ADD FOREIGN KEY ($fromColumnName) REFERENCES $toTableName ($toColumnName)';
+        Dbms_Output.put_line('Foreign key constraint added on the $(DatabaseTable.Upper)[$fromColumnName] column to the $toTableName[$toColumnName] column.');
+    EXCEPTION
+        WHEN foreign_key_exists
+        THEN Dbms_Output.put_line('A foreign key constraint from the [$fromColumnName] column to the $toTableName[$toColumnName] column already exists.');
+    END;
+
+    -- If the index already exists, log a message.
+    DECLARE
+        index_exists EXCEPTION;
+        list_exists EXCEPTION;
+        PRAGMA EXCEPTION_INIT(index_exists, -955);
+        PRAGMA EXCEPTION_INIT(list_exists, -1408);
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE INDEX $(DatabaseTable.Upper)FI$counter ON $(DatabaseTable.Upper) ($fromColumnName)';
+        Dbms_Output.put_line('Index created on the $(DatabaseTable.Upper)[$fromColumnName] column.');
+    EXCEPTION
+        WHEN index_exists
+        THEN Dbms_Output.put_line('An index already exists on the [$fromColumnName] column.');
+        WHEN list_exists
+        THEN Dbms_Output.put_line('An index already exists on the [$fromColumnName] column.');
+    END;
+
+END;
+/
+}
+}
+}
+}

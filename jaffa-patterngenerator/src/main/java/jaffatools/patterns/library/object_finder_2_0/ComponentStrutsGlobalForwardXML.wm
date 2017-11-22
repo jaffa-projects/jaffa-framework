@@ -1,0 +1,5 @@
+    <forward name="$(Module.Lower)_$(Component.Lower1)Criteria" path="$(Application.Lower).$(Module.Lower).$(Component.Lower).criteria"/>
+    <forward name="$(Module.Lower)_$(Component.Lower1)Results" path="$(Application.Lower).$(Module.Lower).$(Component.Lower).results"/>
+    <forward name="$(Module.Lower)_$(Component.Lower1)ConsolidatedCriteriaAndResults" path="$(Application.Lower).$(Module.Lower).$(Component.Lower).consolidatedCriteriaAndResults"/>
+    <forward name="$(Module.Lower)_$(Component.Lower1)ExcelResults" path="$(Application.Lower).$(Module.Lower).$(Component.Lower).FinderExcelLayout"/>
+    <forward name="$(Module.Lower)_$(Component.Lower1)XmlResults" path="$(Application.Lower).$(Module.Lower).$(Component.Lower).FinderXmlLayout"/>

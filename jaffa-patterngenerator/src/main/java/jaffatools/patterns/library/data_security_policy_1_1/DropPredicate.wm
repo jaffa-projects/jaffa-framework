@@ -1,0 +1,28 @@
+
+declare
+   v_count number;
+   v_object_name varchar2(30);
+begin
+
+#foreach $field in $Tables.values() #begin
+   select count (*) into v_count from all_policies where object_owner = '<<DATABASE.SCHEMA.PREFIX>>__MASTER'
+      and policy_name = '$(field.PolicyName.Upper)';
+   if (v_count > 0) then
+      select object_name into v_object_name from all_policies where object_owner = '<<DATABASE.SCHEMA.PREFIX>>__MASTER'
+          and policy_name = '$(field.PolicyName.Upper)';
+      DBMS_RLS.DROP_POLICY ('<<DATABASE.SCHEMA.PREFIX>>__MASTER',v_object_name,'$(field.PolicyName)'); 
+   end if;
+
+#end
+end;
+/
+
+create or replace procedure $(BasePackage)_drop_policies as
+begin
+
+#foreach $field in $Tables.values() #begin
+   DBMS_RLS.DROP_POLICY ('<<DATABASE.SCHEMA.PREFIX>>__MASTER','$(field.SourceTable)','$(field.PolicyName)'); 
+#end
+end;
+/
+

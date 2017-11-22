@@ -1,0 +1,438 @@
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ * 
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/
+#set $wm_formNameKey = "WM_FORM_NAME"
+
+#if ($ScratchPad.get($(wm_formNameKey)) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($(wm_formNameKey), "0") != null) #begin #end
+#end
+
+#set $wm_formIndex = -1
+#set $wm_formFound = "false"
+#foreach $screen in $Screens.values() #begin
+#set $wm_formIndex = $wm_formIndex + 1
+#if ( $ScratchPad.get($wm_formNameKey).equals("$wm_formIndex") && $wm_formFound = "false" ) #begin
+#set $wm_formFound = "true"
+#set $wm_formIndex = $wm_formIndex + 1
+#if ($screen.ScreenName != null) #begin
+#set $wm_form = "$(Component.Upper1)$(screen.ScreenName.Upper1)Form"
+#set $wm_formMapping = "$(Module.Lower)_$(Component.Lower1)$(screen.ScreenName.Upper1)"
+#else
+#set $wm_form = "$(Component.Upper1)Form"
+#set $wm_formMapping = "$(Module.Lower)_$(Component.Lower1)"
+#end
+package $(BasePackage.Lower).components.$(Component.Lower).ui;
+
+import javax.servlet.http.HttpServletRequest;
+import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionError;
+import org.jaffa.presentation.portlet.FormBase;
+import org.jaffa.metadata.*;
+import org.jaffa.datatypes.*;
+import org.jaffa.presentation.portlet.widgets.model.*;
+import org.jaffa.presentation.portlet.widgets.controller.*;
+import org.jaffa.datatypes.exceptions.*;
+
+$ScratchPad.clear()
+#if ($DomainObject != null && $DomainPackage != null) #begin
+#set $wm_import = "$(DomainPackage.Lower).$(DomainObject.Upper1)Meta"
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_import,$wm_import) != null) #begin #end
+import $(wm_import);
+#end
+#if ($Screens != null) #begin
+#foreach $aScreen in $Screens.values() #begin
+#if ($(aScreen.ScreenFields) != null) #begin
+#foreach $field in $aScreen.ScreenFields.values() #begin
+#if ($field.DomainObject != null && $field.DomainPackage != null) #begin
+#set $wm_import = "$(field.DomainPackage.Lower).$(field.DomainObject.Upper1)Meta"
+#if ($ScratchPad.get($wm_import) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_import,$wm_import) != null) #begin #end
+import $(wm_import);
+#end
+#end
+#end
+#end
+#end
+#end
+$ScratchPad.clear()
+
+
+/** The FormBean class.
+ */
+public class $wm_form extends FormBase {
+    /** The name constant used for determining the corresponding jsp through the struts-config file.
+     */    
+    public static final String NAME = "$(wm_formMapping)";
+
+    private static Logger log = Logger.getLogger($(wm_form).class);
+
+
+#if ($(screen.ScreenFields) != null) #begin
+#foreach $field in $screen.ScreenFields.values() #begin
+#set $wm_wt = $field.WidgetType.Lower
+#if ($(field.LinkedToComponent.Lower) == "false" && $wm_wt != "button" && $wm_wt != "grid" && $wm_wt != "usergrid" && $wm_wt != "table") #begin
+#set $wm_dataType = ""
+#if ($(field.DataType.Upper) == "STRING" || $(field.DataType.Upper) == "VARCHAR" || $(field.DataType.Upper) == "LONGSTRING" || $(field.DataType.Upper) == "LONGVARCHAR" || $(field.DataType.Upper) == "CLOB") #begin
+#set $wm_dataType = "String"
+#elseif ($(field.DataType.Upper) == "INTEGER" || $(field.DataType.Upper) == "BIGINT") #begin
+#set $wm_dataType = "Long"
+#elseif ($(field.DataType.Upper) == "DECIMAL" || $(field.DataType.Upper) == "DOUBLE") #begin
+#set $wm_dataType = "Double"
+#elseif ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") #begin
+#set $wm_dataType = "Boolean"
+#elseif ($(field.DataType.Upper) == "DATE_ONLY" || $(field.DataType.Upper) == "DATEONLY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateOnly"
+#elseif ($(field.DataType.Upper) == "DATE_TIME" || $(field.DataType.Upper) == "DATETIME") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateTime"
+#elseif ($(field.DataType.Upper) == "CURRENCY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.Currency"
+#elseif ($(field.DataType.Upper) == "RAW" || $(field.DataType.Upper) == "LONGRAW" || $(field.DataType.Upper) == "BLOB") #begin
+#set $wm_dataType = "byte[]"
+#end
+    private $wm_dataType m_$(field.Name.Lower1);
+#end
+#set $wm_widgetModel = ""
+#if ($wm_wt == "editbox") #begin
+#set $wm_widgetModel = "EditBoxModel"
+#elseif ($wm_wt == "checkbox") #begin
+#set $wm_widgetModel = "CheckBoxModel"
+#elseif ($wm_wt == "datetime") #begin
+#set $wm_widgetModel = "DateTimeModel"
+#elseif ($wm_wt == "dropdown") #begin
+#set $wm_widgetModel = "DropDownModel"
+#elseif ($wm_wt == "radiobutton") #begin
+#set $wm_widgetModel = "RadioButtonModel"
+#elseif ($wm_wt == "grid" || $wm_wt == "usergrid") #begin
+#set $wm_widgetModel = "GridModel"
+#elseif ($wm_wt == "table") #begin
+#set $wm_widgetModel = "TableModel"
+#end
+#if ($wm_widgetModel != "") #begin
+    private $wm_widgetModel w_$(field.Name.Lower1);
+#end
+#end
+
+
+
+#foreach $field in $screen.ScreenFields.values() #begin
+#set $wm_wt = $field.WidgetType.Lower
+#set $wm_dataType = ""
+#if ($(field.DataType.Upper) == "STRING" || $(field.DataType.Upper) == "VARCHAR" || $(field.DataType.Upper) == "LONGSTRING" || $(field.DataType.Upper) == "LONGVARCHAR" || $(field.DataType.Upper) == "CLOB") #begin
+#set $wm_dataType = "String"
+#elseif ($(field.DataType.Upper) == "INTEGER" || $(field.DataType.Upper) == "BIGINT") #begin
+#set $wm_dataType = "Long"
+#elseif ($(field.DataType.Upper) == "DECIMAL" || $(field.DataType.Upper) == "DOUBLE") #begin
+#set $wm_dataType = "Double"
+#elseif ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") #begin
+#set $wm_dataType = "Boolean"
+#elseif ($(field.DataType.Upper) == "DATE_ONLY" || $(field.DataType.Upper) == "DATEONLY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateOnly"
+#elseif ($(field.DataType.Upper) == "DATE_TIME" || $(field.DataType.Upper) == "DATETIME") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateTime"
+#elseif ($(field.DataType.Upper) == "CURRENCY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.Currency"
+#elseif ($(field.DataType.Upper) == "RAW" || $(field.DataType.Upper) == "LONGRAW" || $(field.DataType.Upper) == "BLOB") #begin
+#set $wm_dataType = "byte[]"
+#end
+#set $wm_widgetModel = ""
+#set $wm_widgetController = ""
+#if ($wm_wt == "editbox") #begin
+#set $wm_widgetModel = "EditBoxModel"
+#set $wm_widgetController = "EditBoxController"
+#elseif ($wm_wt == "checkbox") #begin
+#set $wm_widgetModel = "CheckBoxModel"
+#set $wm_widgetController = "CheckBoxController"
+#elseif ($wm_wt == "datetime") #begin
+#set $wm_widgetModel = "DateTimeModel"
+#set $wm_widgetController = "DateTimeController"
+#elseif ($wm_wt == "dropdown") #begin
+#set $wm_widgetModel = "DropDownModel"
+#set $wm_widgetController = "DropDownController"
+#elseif ($wm_wt == "radiobutton") #begin
+#set $wm_widgetModel = "RadioButtonModel"
+#set $wm_widgetController = "RadioButtonController"
+#elseif ($wm_wt == "grid") #begin
+#set $wm_widgetModel = "GridModel"
+#set $wm_widgetController = "GridController"
+#elseif ($wm_wt == "usergrid") #begin
+#set $wm_widgetModel = "GridModel"
+#set $wm_widgetController = "UserGridController"
+#elseif ($wm_wt == "table") #begin
+#set $wm_widgetModel = "TableModel"
+#set $wm_widgetController = "TableController"
+#end
+#set $wm_meta = ""
+#if ($wm_widgetModel == "EditBoxModel" || $wm_widgetModel == "DateTimeModel") #begin
+#if ($field.DomainField != null && $field.DomainObject != null) #begin
+#set $wm_meta = "$(field.DomainObject.Upper1)Meta.META_$(field.DomainField.Static)"
+#elseif ($field.DomainField != null && $DomainObject != null) #begin
+#set $wm_meta = "$(DomainObject.Upper1)Meta.META_$(field.DomainField.Static)"
+#end
+#if ($wm_meta != "" && $wm_dataType == "org.jaffa.datatypes.DateOnly") #begin
+#set $wm_meta = "(DateOnlyFieldMetaData) $(wm_meta)"
+#elseif ($wm_meta != "" && $wm_dataType == "org.jaffa.datatypes.DateTime") #begin
+#set $wm_meta = "(DateTimeFieldMetaData) $(wm_meta)"
+#end
+#end
+#if ($wm_wt != "table" && $wm_wt != "grid" && $wm_wt != "usergrid" && $wm_wt != "button") #begin
+    /** Getter for property $(field.Name.Lower1).
+     * @return Value of property $(field.Name.Lower1).
+     */
+    public $wm_dataType get$(field.Name.Upper1)() {
+
+#if ($field.LinkedToComponent.Lower == "true") #begin
+        return ( ($(Component.Upper1)Component) getComponent() ).get$(field.Name.Upper1)();
+#else
+        return m_$(field.Name.Lower1);
+#end
+    }
+
+#end
+#if ($wm_wt != "text" && $wm_wt != "table" && $wm_wt != "grid" && $wm_wt != "usergrid" && $wm_wt != "button") #begin
+    /** Setter for property $(field.Name.Lower1).
+     * @param $(field.Name.Lower1) New value of property $(field.Name.Lower1).
+     */
+    public void set$(field.Name.Upper1)($wm_dataType $(field.Name.Lower1)) {
+
+#if ($field.LinkedToComponent.Lower == "true") #begin
+        ( ($(Component.Upper1)Component) getComponent() ).set$(field.Name.Upper1)($(field.Name.Lower1));
+#else
+        m_$(field.Name.Lower1) = $(field.Name.Lower1);
+#end
+    }
+
+#end
+#if ($wm_wt != "text" && $wm_wt != "button") #begin
+    /** Getter for property $(field.Name.Lower1). This is invoked by the custom tag, when the jsp is rendered, to get the current value.
+     * @return Value of property $(field.Name.Lower1).
+     */
+    public $(wm_widgetModel) get$(field.Name.Upper1)WM() {
+
+#if ($field.WidgetCached.Lower = "false") #begin
+        if (w_$(field.Name.Lower1) == null) {
+
+#if ($wm_wt == "table" || $wm_wt == "grid" || $wm_wt == "usergrid") #begin
+            w_$(field.Name.Lower1) = new $(wm_widgetModel)();
+#elseif ($wm_meta != "") #begin
+            w_$(field.Name.Lower1) = new $(wm_widgetModel)(get$(field.Name.Upper1)(), $(wm_meta));
+#else
+            if (get$(field.Name.Upper1)() != null)
+                w_$(field.Name.Lower1) = new $(wm_widgetModel)(get$(field.Name.Upper1)());
+            else
+
+#if ($wm_wt == "checkbox") #begin
+                w_$(field.Name.Lower1) = new $(wm_widgetModel)(Boolean.FALSE);
+#elseif ($wm_wt == "dropdown" || $wm_wt == "radiobutton") #begin
+                w_$(field.Name.Lower1) = new $(wm_widgetModel)(null);
+#else
+                w_$(field.Name.Lower1) = new $(wm_widgetModel)();
+#end
+#end
+        }
+#else
+        if (w_$(field.Name.Lower1) == null) {
+            w_$(field.Name.Lower1) = ($(wm_widgetModel)) getWidgetCache().getModel("$(field.Name.Lower1)");
+            if (w_$(field.Name.Lower1) == null) {
+
+#if ($wm_wt == "table") #begin
+                w_$(field.Name.Lower1) = new $(wm_widgetModel)();
+
+#if ($field.SubFields != null) #begin
+#foreach $subField in $field.SubFields.values() #begin
+                w_$(field.Name.Lower1).addColumn("$(subField.Name.Upper1)", Defaults.$(subField.DataType.Upper));
+#end
+#end
+#end
+#if ($wm_wt == "grid") #begin
+                w_$(field.Name.Lower1) = new $(wm_widgetModel)();
+#end
+#if ($wm_wt == "usergrid") #begin
+                w_$(field.Name.Lower1) = new $(wm_widgetModel)();
+#end
+#if ($wm_wt != "table" && $wm_wt != "grid" && $wm_wt != "usergrid" && $wm_meta != "") #begin
+                w_$(field.Name.Lower1) = new $(wm_widgetModel)(get$(field.Name.Upper1)(), $(wm_meta));
+#elseif ($wm_wt != "table" && $wm_wt != "grid" && $wm_wt != "usergrid") #begin
+                if (get$(field.Name.Upper1)() != null)
+                    w_$(field.Name.Lower1) = new $(wm_widgetModel)(get$(field.Name.Upper1)());
+                else
+
+#if ($wm_wt == "checkbox") #begin
+                    w_$(field.Name.Lower1) = new $(wm_widgetModel)(Boolean.FALSE);
+#elseif ($wm_wt == "dropdown" || $wm_wt == "radiobutton") #begin
+                    w_$(field.Name.Lower1) = new $(wm_widgetModel)(null);
+#else
+                    w_$(field.Name.Lower1) = new $(wm_widgetModel)();
+#end
+#end
+                getWidgetCache().addModel("$(field.Name.Lower1)", w_$(field.Name.Lower1));
+            }
+        }
+#end
+        return w_$(field.Name.Lower1);
+    }
+
+    /** Setter for property $(field.Name.Lower1). This is invoked by the servlet, when a post is done on the corresponding JSP.
+     * @param value New value of property $(field.Name.Lower1).
+     */
+    public void set$(field.Name.Upper1)WV(String value) {
+
+#if ($wm_wt == "usergrid") #begin
+        $(wm_widgetController).updateModel(value, get$(field.Name.Upper1)WM(), this);
+#else
+        $(wm_widgetController).updateModel(value, get$(field.Name.Upper1)WM());
+#end
+    }
+
+#end
+#end
+
+
+    /** This method should be invoked to ensure a valid state of the FormBean. It will validate the data in the models and set the corresponding properties.
+     * Errors will be raised in the FormBean, if any validation fails.
+     * @param request The request stream
+     * @return A true indicates validations went through successfully. */    
+    public boolean doValidate(HttpServletRequest request) {
+        boolean valid = true;
+        String htmlString = null;
+
+#foreach $field in $screen.ScreenFields.values() #begin
+#set $wm_wt = $field.WidgetType.Lower
+#set $wm_dataType = ""
+#set $wm_parse = ""
+#if ($(field.DataType.Upper) == "STRING" || $(field.DataType.Upper) == "VARCHAR" || $(field.DataType.Upper) == "LONGSTRING" || $(field.DataType.Upper) == "LONGVARCHAR" || $(field.DataType.Upper) == "CLOB") #begin
+#set $wm_dataType = "String"
+#set $wm_parse = "parseString"
+#elseif ($(field.DataType.Upper) == "INTEGER" || $(field.DataType.Upper) == "BIGINT") #begin
+#set $wm_dataType = "Long"
+#set $wm_parse = "parseInteger"
+#elseif ($(field.DataType.Upper) == "DECIMAL" || $(field.DataType.Upper) == "DOUBLE") #begin
+#set $wm_dataType = "Double"
+#set $wm_parse = "parseDecimal"
+#elseif ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") #begin
+#set $wm_dataType = "Boolean"
+#set $wm_parse = "parseBoolean"
+#elseif ($(field.DataType.Upper) == "DATE_ONLY" || $(field.DataType.Upper) == "DATEONLY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateOnly"
+#set $wm_parse = "parseDateOnly"
+#elseif ($(field.DataType.Upper) == "DATE_TIME" || $(field.DataType.Upper) == "DATETIME") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateTime"
+#set $wm_parse = "parseDateTime"
+#elseif ($(field.DataType.Upper) == "CURRENCY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.Currency"
+#set $wm_parse = "parseCurrency"
+#elseif ($(field.DataType.Upper) == "RAW" || $(field.DataType.Upper) == "LONGRAW" || $(field.DataType.Upper) == "BLOB") #begin
+#set $wm_dataType = "byte[]"
+#set $wm_parse = "parseRaw"
+#end
+#set $wm_widgetModel = ""
+#if ($wm_wt == "editbox") #begin
+#set $wm_widgetModel = "EditBoxModel"
+#elseif ($wm_wt == "checkbox") #begin
+#set $wm_widgetModel = "CheckBoxModel"
+#elseif ($wm_wt == "datetime") #begin
+#set $wm_widgetModel = "DateTimeModel"
+#elseif ($wm_wt == "dropdown") #begin
+#set $wm_widgetModel = "DropDownModel"
+#elseif ($wm_wt == "radiobutton") #begin
+#set $wm_widgetModel = "RadioButtonModel"
+#elseif ($wm_wt == "grid") #begin
+#set $wm_widgetModel = "GridModel"
+#elseif ($wm_wt == "usergrid") #begin
+#set $wm_widgetModel = "GridModel"
+#elseif ($wm_wt == "table") #begin
+#set $wm_widgetModel = "TableModel"
+#end
+#set $wm_meta = ""
+#if ($wm_widgetModel == "EditBoxModel" || $wm_widgetModel == "DateTimeModel" || $wm_widgetModel == "CheckBoxModel") #begin
+#if ($field.DomainField != null && $field.DomainObject != null) #begin
+#set $wm_meta = "$(field.DomainObject.Upper1)Meta.META_$(field.DomainField.Static)"
+#elseif ($field.DomainField != null && $DomainObject != null) #begin
+#set $wm_meta = "$(DomainObject.Upper1)Meta.META_$(field.DomainField.Static)"
+#end
+#if ($wm_meta != "" && $wm_dataType == "org.jaffa.datatypes.DateOnly") #begin
+#set $wm_meta = "(DateOnlyFieldMetaData) $(wm_meta)"
+#elseif ($wm_meta != "" && $wm_dataType == "org.jaffa.datatypes.DateTime") #begin
+#set $wm_meta = "(DateTimeFieldMetaData) $(wm_meta)"
+#elseif ($wm_meta != "" && $wm_dataType == "Boolean") #begin
+#set $wm_meta = "(BooleanFieldMetaData) $(wm_meta)"
+#end
+#end
+#if ($wm_wt != "text" && $wm_wt != "table" && $wm_wt != "grid" && $wm_wt != "usergrid" && $wm_wt != "button") #begin
+
+#if ($wm_meta == "") #begin
+#if ($wm_widgetModel == "EditBoxModel" && ($(field.DataType.Upper) == "CURRENCY" || $(field.DataType.Upper) == "DECIMAL" || $(field.DataType.Upper) == "DOUBLE" || $(field.DataType.Upper) == "INTEGER" || $(field.DataType.Upper) == "BIGINT" || $(field.DataType.Upper) == "DATE_ONLY" || $(field.DataType.Upper) == "DATEONLY" || $(field.DataType.Upper) == "DATE_TIME" || $(field.DataType.Upper) == "DATETIME")) #begin
+        try {
+            htmlString = get$(field.Name.Upper1)WM().getValue();
+            if (htmlString != null && htmlString.length() == 0)
+                htmlString = null;
+            $wm_dataType $(field.Name.Lower1)Value = Parser.$(wm_parse)(htmlString);
+            set$(field.Name.Upper1)($(field.Name.Lower1)Value);
+        } catch (ValidationException e) {
+            validationError(request, e, "$(field.Name.Upper1)", "$(field.Name.Upper1)");
+            valid = false;
+        }
+#elseif ($wm_widgetModel == "EditBoxModel") #begin
+        htmlString = get$(field.Name.Upper1)WM().getValue();
+        if (htmlString != null && htmlString.length() == 0)
+            htmlString = null;
+        $wm_dataType $(field.Name.Lower1)Value = Parser.$(wm_parse)(htmlString);
+        set$(field.Name.Upper1)($(field.Name.Lower1)Value);
+#elseif ($wm_widgetModel == "CheckBoxModel") #begin
+        $wm_dataType $(field.Name.Lower1)Value = new Boolean(get$(field.Name.Upper1)WM().getState());
+        set$(field.Name.Upper1)($(field.Name.Lower1)Value);
+#elseif ($wm_dataType == "org.jaffa.datatypes.DateOnly") #begin
+        $wm_dataType $(field.Name.Lower1)Value = get$(field.Name.Upper1)WM().getDateOnlyValue();
+        set$(field.Name.Upper1)($(field.Name.Lower1)Value);
+#else
+        $wm_dataType $(field.Name.Lower1)Value = get$(field.Name.Upper1)WM().getValue();
+        set$(field.Name.Upper1)($(field.Name.Lower1)Value);
+#end
+
+#else
+        try {
+
+#if ($wm_widgetModel == "EditBoxModel") #begin
+            htmlString = get$(field.Name.Upper1)WM().getValue();
+            if (htmlString != null && htmlString.length() == 0)
+                htmlString = null;
+            $wm_dataType $(field.Name.Lower1)Value = ($wm_dataType) FieldValidator.validateData(htmlString, $(wm_meta), false);
+#elseif ($wm_widgetModel == "CheckBoxModel") #begin
+            $wm_dataType $(field.Name.Lower1)Value = new Boolean(get$(field.Name.Upper1)WM().getState());
+            $(field.Name.Lower1)Value = FieldValidator.validate($(field.Name.Lower1)Value, $(wm_meta), false);
+#elseif ($wm_dataType == "org.jaffa.datatypes.DateOnly") #begin
+            $wm_dataType $(field.Name.Lower1)Value = get$(field.Name.Upper1)WM().getDateOnlyValue();
+            $(field.Name.Lower1)Value = FieldValidator.validate($(field.Name.Lower1)Value, $(wm_meta), false);
+#else
+            $wm_dataType $(field.Name.Lower1)Value = get$(field.Name.Upper1)WM().getValue();
+            $(field.Name.Lower1)Value = FieldValidator.validate($(field.Name.Lower1)Value, $(wm_meta), false);
+#end
+            set$(field.Name.Upper1)($(field.Name.Lower1)Value);
+        } catch (ValidationException e) {
+            validationError(request, e, ($(wm_meta)).getName(), ($(wm_meta)).getLabelToken());
+            valid = false;
+        }
+
+#end
+#end
+#end
+        return valid;
+    }
+
+    private void validationError(HttpServletRequest request, ValidationException e, String fieldName, String labelToken) {
+        e.setField(labelToken);
+        raiseError(request, fieldName, e);
+    }
+
+#end
+}
+
+## the following 'if' statement is used to invoke the 'add' method
+#if ($ScratchPad.put($wm_formNameKey, "$wm_formIndex") != null) #begin #end
+#end
+#end

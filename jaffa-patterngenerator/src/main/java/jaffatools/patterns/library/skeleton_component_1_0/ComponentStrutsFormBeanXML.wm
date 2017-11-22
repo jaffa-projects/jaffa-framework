@@ -1,0 +1,15 @@
+#if ($Screens != null) #begin
+#foreach $screen in $Screens.values() #begin
+#if ($(screen.ScreenName) != null) #begin
+#set $wm_formMapping = "$(Module.Lower)_$(Component.Lower1)$(screen.ScreenName.Upper1)Form"
+#set $wm_form = "$(Component.Upper1)$(screen.ScreenName.Upper1)Form"
+#else
+#set $wm_formMapping = "$(Module.Lower)_$(Component.Lower1)Form"
+#set $wm_form = "$(Component.Upper1)Form"
+#end
+    <!-- $(wm_formMapping) -->
+    <form-bean      name="$(wm_formMapping)"
+                    type="$(BasePackage.Lower).components.$(Component.Lower).ui.$(wm_form)"/>
+
+#end
+#end

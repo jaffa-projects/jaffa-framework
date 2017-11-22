@@ -1,0 +1,49 @@
+$ScratchPad.clear()
+#if ($Title != null && $Title != "") #begin
+#set $wm_entry = "$(Title)"
+#if ($ScratchPad.get($wm_entry) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_entry,$wm_entry) != null) #begin #end
+$(wm_entry)=Enter Text Here
+#end
+#end
+
+#if ($Screens != null) #begin
+#foreach $screen in $Screens.values() #begin
+#if ($screen.ScreenTitle != null && $screen.ScreenTitle != "") #begin
+#set $wm_entry = "$(screen.ScreenTitle)"
+#if ($ScratchPad.get($wm_entry) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_entry,$wm_entry) != null) #begin #end
+$(wm_entry)=Enter Text Here
+#end
+#end
+
+#if ($screen.ScreenFields != null) #begin
+#foreach $field in $screen.ScreenFields.values() #begin
+#if ($field.Label != null && $field.Label != "") #begin
+#set $wm_entry = "$(field.Label)"
+#if ($ScratchPad.get($wm_entry) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_entry,$wm_entry) != null) #begin #end
+$(wm_entry)=Enter Text Here
+#end
+#end
+
+#if ($field.SubFields != null) #begin
+#foreach $subField in $field.SubFields.values() #begin
+#if ($subField.Label != null && $subField.Label != "") #begin
+#set $wm_entry = "$(subField.Label)"
+#if ($ScratchPad.get($wm_entry) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_entry,$wm_entry) != null) #begin #end
+$(wm_entry)=Enter Text Here
+#end
+#end
+#end
+#end
+#end
+#end
+#end
+#end
+$ScratchPad.clear()

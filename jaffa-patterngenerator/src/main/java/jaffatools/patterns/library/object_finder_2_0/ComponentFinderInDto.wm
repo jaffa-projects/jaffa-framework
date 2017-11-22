@@ -1,0 +1,107 @@
+// .//GEN-BEGIN:_1_be
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ * 
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/
+package $(BasePackage.Lower).components.$(Component.Lower).dto;
+
+import java.util.*;
+import org.jaffa.components.finder.*;
+import org.jaffa.components.dto.HeaderDto;
+// .//GEN-END:_1_be
+// Add additional imports//GEN-FIRST:_imports
+
+
+
+
+// .//GEN-LAST:_imports
+// .//GEN-BEGIN:_2_be
+/** The input for the $(Component.Upper1).
+ */
+public class $(Component.Upper1)InDto extends FinderInDto {
+
+    /** Holds value of property headerDto. */
+    private HeaderDto headerDto;
+
+
+#foreach $field in $CriteriaFields.values() #begin
+    /** Holds value of property $(field.Name.Lower1). */
+    private $(field.DataType.CriteriaFieldType) $(field.Name.Lower1);
+
+#end
+
+
+    /** Getter for property headerDto.
+     * @return Value of property headerDto.
+     */
+    public HeaderDto getHeaderDto() {
+        return headerDto;
+    }
+    
+    /** Setter for property headerDto.
+     * @param headerDto New value of property headerDto.
+     */
+    public void setHeaderDto(HeaderDto headerDto) {
+        this.headerDto = headerDto;
+    }
+    
+
+
+#foreach $field in $CriteriaFields.values() #begin
+    /** Getter for property $(field.Name.Lower1).
+     * @return Value of property $(field.Name.Lower1).
+     */
+    public $(field.DataType.CriteriaFieldType) get$(field.Name.Upper1)() {
+        return $(field.Name.Lower1);
+    }
+    
+    /** Setter for property $(field.Name.Lower1).
+     * @param $(field.Name.Lower1) New value of property $(field.Name.Lower1).
+     */
+    public void set$(field.Name.Upper1)($(field.DataType.CriteriaFieldType) $(field.Name.Lower1)) {
+        this.$(field.Name.Lower1) = $(field.Name.Lower1);
+    }
+
+#end
+
+
+
+    /** Returns the debug information
+     * @return The debug information
+     */
+    public String toString() {
+        StringBuffer buf = new StringBuffer();
+        buf.append("<$(Component.Upper1)InDto>");
+        buf.append("<headerDto>"); if (headerDto != null) buf.append( headerDto.toString() ); buf.append("</headerDto>");
+
+
+#foreach $field in $CriteriaFields.values() #begin
+        buf.append("<$(field.Name.Lower1)>"); if ($(field.Name.Lower1) != null) buf.append($(field.Name.Lower1)); buf.append("</$(field.Name.Lower1)>");
+#end
+
+        buf.append("<orderByFields>");
+        OrderByField[] orderByFields = getOrderByFields();
+        if (orderByFields != null) {
+            for (int i = 0; i < orderByFields.length; i++)
+                buf.append(orderByFields[i].toString());
+        }
+        buf.append("</orderByFields>");
+        
+        buf.append("<maxRecords>"); if (getMaxRecords() != null) buf.append(getMaxRecords()); buf.append("</maxRecords>");
+        
+        buf.append("</$(Component.Upper1)InDto>");
+        return buf.toString();
+    }
+
+    // .//GEN-END:_2_be
+    // All the custom code goes here //GEN-FIRST:_custom
+
+
+
+
+
+
+    // .//GEN-LAST:_custom
+}

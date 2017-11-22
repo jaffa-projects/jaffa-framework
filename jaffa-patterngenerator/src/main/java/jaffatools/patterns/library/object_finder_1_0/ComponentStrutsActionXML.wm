@@ -1,0 +1,15 @@
+    <!-- $(Component.Upper1)Criteria -->
+    <action    path="/$(Module.Lower)_$(Component.Lower1)Criteria"
+               type="$(BasePackage.Lower).components.$(Component.Lower).ui.$(Component.Upper1)CriteriaAction"
+               name="$(Module.Lower)_$(Component.Lower1)CriteriaForm"
+               validate="false"
+               scope="request">
+    </action>
+
+    <!-- $(Component.Upper1)Results -->
+    <action    path="/$(Module.Lower)_$(Component.Lower1)Results"
+               type="$(BasePackage.Lower).components.$(Component.Lower).ui.$(Component.Upper1)ResultsAction"
+               name="$(Module.Lower)_$(Component.Lower1)ResultsForm"
+               validate="false"
+               scope="request">
+    </action>

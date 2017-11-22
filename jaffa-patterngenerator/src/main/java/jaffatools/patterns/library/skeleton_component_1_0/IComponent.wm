@@ -1,0 +1,21 @@
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ * 
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/ 
+package $(BasePackage.Lower).components.$(Component.Lower);
+
+import org.jaffa.exceptions.ApplicationExceptions;
+import org.jaffa.exceptions.FrameworkException;
+
+
+/** Interface for $(Component.Upper1) components.
+ */
+public interface I$(Component.Upper1) {
+
+    /**
+     * This should be invoked, when done with the component.
+     */
+    public void destroy();
+}

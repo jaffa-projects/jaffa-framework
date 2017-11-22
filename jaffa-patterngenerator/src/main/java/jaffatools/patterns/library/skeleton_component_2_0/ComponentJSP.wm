@@ -1,0 +1,187 @@
+<%-- ---------------------------------------------------------------- 
+  -- Code Generated From JAFFA Framework Default Pattern           --
+  --                                                               --
+  -- The JAFFA Project can be found at http://jaffa.sourceforge.net--
+  -- and is available under the Lesser GNU Public License          --
+  -- ------------------------------------------------------------- --%>
+#set $wm_screenNumberKey = "WM_SCREEN_NUMBER_KEY"
+
+#if ($ScratchPad.get($(wm_screenNumberKey)) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($(wm_screenNumberKey), "0") != null) #begin #end
+#end
+
+#set $wm_screenNumberIterator = -1
+#set $wm_screenFound = "false"
+#foreach $screen in $Screens.values() #begin
+#set $wm_screenNumberIterator = $wm_screenNumberIterator + 1
+#if ($wm_screenFound == "false" && $ScratchPad.get($wm_screenNumberKey).equals("$(wm_screenNumberIterator)")) #begin
+#set $wm_screenFound = "true"
+#set $wm_screenNumberIterator = $wm_screenNumberIterator + 1
+## the following 'if' statement is used to invoke the 'add' method
+#if ($ScratchPad.put($wm_screenNumberKey, "$wm_screenNumberIterator") != null) #begin #end
+
+<%@ page language="java" %>
+<%@ page import="org.jaffa.presentation.portlet.widgets.taglib.TagHelper" %>
+<%@ page import="org.jaffa.util.MessageHelper" %>
+<%@ page import="org.jaffa.util.StringHelper" %>
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
+<%@ taglib uri="/WEB-INF/jaffa-portlet.tld" prefix="Portlet" %>
+<%@ taglib uri='/WEB-INF/struts-tiles.tld' prefix='tiles' %>
+
+#if ($screen.ScreenFields != null) #begin
+<table>
+
+#foreach $field in $screen.ScreenFields.values() #begin
+
+#set $wm_label = ""
+#if ($field.Label != null) #begin
+#set $wm_label = "<Portlet:Label key='$(field.Label)'/>"
+#elseif ($field.DomainField != null && ($field.DomainPackage != null || $DomainPackage != null) && ($field.DomainObject != null || $DomainObject != null)) #begin
+#set $wm_label = "domain='"
+#if ($field.DomainPackage != null) #begin
+#set $wm_label = "$(wm_label)$(field.DomainPackage.Lower)"
+#else
+#set $wm_label = "$(wm_label)$(DomainPackage.Lower)"
+#end
+#if ($field.DomainObject != null) #begin
+#set $wm_label = "$(wm_label).$(field.DomainObject.Upper1)'"
+#else
+#set $wm_label = "$(wm_label).$(DomainObject.Upper1)'"
+#end
+#set $wm_label = "$(wm_label) field='$(field.DomainField)'"
+#set $wm_label = "<Portlet:Label $(wm_label)/>"
+#end
+#set $wm_widgetHtml = ""
+#set $wm_wt = $field.WidgetType.Lower
+#if ($(field.Display.BooleanValue) && $wm_wt != "button") #begin
+#if ($wm_wt == "editbox") #begin
+#set $wm_widgetHtml = "<Portlet:EditBox field='$(field.Name.Lower1)'"
+#if ($field.Width != null && $field.Width != "") #begin
+#set $wm_widgetHtml = "$(wm_widgetHtml) columns='$(field.Width)'"
+#end
+#if ($field.Event != null && $field.Event.Lower == "validate") #begin
+#set $wm_widgetHtml = "$(wm_widgetHtml) validate='true'/>"
+#else
+#set $wm_widgetHtml = "$(wm_widgetHtml)/>"
+#end
+<tr><td>$(wm_label):</td><td>$(wm_widgetHtml)</td></tr>
+#end
+#if ($wm_wt == "checkbox") #begin
+#set $wm_widgetHtml = "<Portlet:CheckBox field='$(field.Name.Lower1)'/>"
+<tr><td>$(wm_label):</td><td>$(wm_widgetHtml)</td></tr>
+#end
+#if ($wm_wt == "datetime") #begin
+#set $wm_widgetHtml = "<Portlet:DateTime field='$(field.Name.Lower1)'"
+#if ($field.Width != null && $field.Width != "") #begin
+#set $wm_widgetHtml = "$(wm_widgetHtml) columns='$(field.Width)'"
+#end
+#if ($(field.DataType.DataTypeDateOnly)) #begin
+#set $wm_widgetHtml = "$(wm_widgetHtml) dateOnly='true'/>"
+#else
+#set $wm_widgetHtml = "$(wm_widgetHtml)/>"
+#end
+<tr><td>$(wm_label):</td><td>$(wm_widgetHtml)</td></tr>
+#end
+#if ($wm_wt == "text") #begin
+#set $wm_widgetHtml = "<Portlet:Text field='$(field.Name.Lower1)'/>"
+<tr><td>$(wm_label):</td><td>$(wm_widgetHtml)</td></tr>
+#end
+#if ($wm_wt == "dropdown") #begin
+#set $wm_widgetHtml = "<Portlet:DropDown field='$(field.Name.Lower1)'/>"
+<tr><td>$(wm_label):</td><td>$(wm_widgetHtml)</td></tr>
+#end
+#if ($wm_wt == "radiobutton") #begin
+#set $wm_widgetHtml = "<Portlet:RadioButton field='$(field.Name.Lower1)' selectValue='ChangeThisValue'/>"
+<tr><td>$(wm_label):</td><td>$(wm_widgetHtml)</td></tr>
+#end
+#if ($wm_wt == "table") #begin
+#set $wm_widgetHtml = "<Portlet:Table field='$(field.Name.Lower1)'"
+#if ($field.SubFields == null) #begin
+#set $wm_widgetHtml = "$(wm_widgetHtml)/>"
+<tr><td>$(wm_label):</td><td>$(wm_widgetHtml)</td></tr>
+#else
+<tr><td>$(wm_label):</td><td>$(wm_widgetHtml)>
+
+#foreach $subField in $field.SubFields.values() #begin
+#if ($(subField.Display.BooleanValue)) #begin
+    <Portlet:TableColumn column="$(subField.Name.Upper1)" title="$(subField.Label)"/>
+#end
+#end
+</Portlet:Table></td></tr>
+#end
+#end
+#if ($wm_wt == "grid") #begin
+#set $wm_widgetHtml = "<Portlet:Grid field='$(field.Name.Lower1)'"
+#set $wm_columnTag = "GridColumn"
+#set $wm_endTag = "</Portlet:Grid>"
+#end
+#if ($wm_wt == "usergrid") #begin
+#set $wm_widgetHtml = "<Portlet:UserGrid field='$(field.Name.Lower1)' userGridId='$(field.Name.Lower1)'"
+#set $wm_columnTag = "UserGridColumn"
+#set $wm_endTag = "</Portlet:UserGrid>"
+#end
+#if ($wm_wt == "grid" || $wm_wt == "usergrid") #begin
+#if ($field.SubFields == null) #begin
+#set $wm_widgetHtml = "$(wm_widgetHtml)/>"
+<tr><td>$(wm_label):</td><td>$(wm_widgetHtml)</td></tr>
+#else
+<tr><td>$(wm_label):</td><td>$(wm_widgetHtml)>
+
+#foreach $subField in $field.SubFields.values() #begin
+#if ($(subField.Display.BooleanValue)) #begin
+    <Portlet:$(wm_columnTag) label="$(subField.Label)">
+
+#set $wm_subWt = $subField.WidgetType.Lower
+#if ($wm_subWt == "editbox") #begin
+#set $wm_widgetHtml = "<Portlet:EditBox field='$(subField.Name.Lower1)'"
+#if ($subField.Width != null && $subField.Width != "") #begin
+#set $wm_widgetHtml = "$(wm_widgetHtml) columns='$(subField.Width)'"
+#end
+#if ($subField.Event != null && $subField.Event.Lower == "validate") #begin
+#set $wm_widgetHtml = "$(wm_widgetHtml) validate='true'/>"
+#else
+#set $wm_widgetHtml = "$(wm_widgetHtml)/>"
+#end
+#end
+#if ($wm_subWt == "button") #begin
+#set $wm_widgetHtml = "<Portlet:Button field='$(subField.Name.Lower1)' label='$(subField.Label)'/>"
+#end
+#if ($wm_subWt == "checkbox") #begin
+#set $wm_widgetHtml = "<Portlet:CheckBox field='$(subField.Name.Lower1)'/>"
+#end
+#if ($wm_subWt == "datetime") #begin
+#set $wm_widgetHtml = "<Portlet:DateTime field='$(subField.Name.Lower1)'"
+#if ($subField.Width != null && $subField.Width != "") #begin
+#set $wm_widgetHtml = "$(wm_widgetHtml) columns='$(subField.Width)'"
+#end
+#if ($(field.DataType.DataTypeDateOnly)) #begin
+#set $wm_widgetHtml = "$(wm_widgetHtml) dateOnly='true'/>"
+#else
+#set $wm_widgetHtml = "$(wm_widgetHtml)/>"
+#end
+#end
+#if ($wm_subWt == "text") #begin
+#set $wm_widgetHtml = "<Portlet:Text field='$(subField.Name.Lower1)'/>"
+#end
+#if ($wm_subWt == "dropdown") #begin
+#set $wm_widgetHtml = "<Portlet:DropDown field='$(subField.Name.Lower1)'/>"
+#end
+#if ($wm_subWt == "radiobutton") #begin
+#set $wm_widgetHtml = "<Portlet:RadioButton field='$(subField.Name.Lower1)' selectValue='ChangeThisValue'/>"
+#end
+        $wm_widgetHtml
+    </Portlet:$(wm_columnTag)>
+#end
+#end
+$(wm_endTag)</td></tr>
+#end
+#end
+#end
+#end
+</table>
+#end
+#end
+#end

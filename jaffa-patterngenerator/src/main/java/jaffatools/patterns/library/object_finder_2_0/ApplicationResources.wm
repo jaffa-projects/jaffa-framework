@@ -1,0 +1,25 @@
+
+#if ($(CriteriaTitle) != null && $(CriteriaTitle.Lower) != "") #begin
+$(CriteriaTitle)=Enter Text Here
+#end
+
+#if ($(ResultsTitle) != null && $(ResultsTitle.Lower) != "") #begin
+$(ResultsTitle)=Enter Text Here
+#end
+
+
+#if ($(ConsolidatedCriteriaAndResultsTitle) != null && $(ConsolidatedCriteriaAndResultsTitle.Lower) != "") #begin
+$(ConsolidatedCriteriaAndResultsTitle)=Enter Text Here
+#end
+
+#foreach $field in $CriteriaFields.values() #begin
+#if ($(field.Label) != null && $(field.Label.Lower) != "") #begin
+$(field.Label)=Enter Text Here
+#end
+#end
+
+#foreach $field in $ResultsFields.values() #begin
+#if ($(field.Label) != null && $(field.Label.Lower) != "") #begin
+$(field.Label)=Enter Text Here
+#end
+#end

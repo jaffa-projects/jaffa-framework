@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<!DOCTYPE BuildPattern PUBLIC "-//JAFFA//DTD Pattern 1.0//EN" "http://jaffa.sourceforge.net/DTD/pattern_1_0.dtd">
+
+<BuildPattern>
+    <Name>DomainCreatorPattern</Name>
+
+    <PreRequesites>
+    </PreRequesites>
+
+    <Components>
+        <Build>
+            <Template>patterns/library/domain_creator_1_0/DomainObject.wm</Template>
+            <Package>java.$(DomainPackage.Lower)</Package>
+            <FileName>$(DomainObject.Upper1).java</FileName>
+            <Override>Merge</Override>
+        </Build>
+
+        <Build>
+            <Template>patterns/library/domain_creator_1_0/MetaObject.wm</Template>
+            <Package>java.$(DomainPackage.Lower)</Package>
+            <FileName>$(DomainObject.Upper1)Meta.java</FileName>
+            <Override>Merge</Override>
+        </Build>
+
+        <Build>
+            <Template>patterns/library/domain_creator_1_0/Resources.wm</Template>
+            <Package>java.$(DomainPackage.Lower)</Package>
+            <FileName>$(DomainObject.Upper1)Resources.properties</FileName>
+            <Override>Merge</Override>
+        </Build>
+        
+        <Build>
+            <Template>patterns/library/domain_creator_1_0/Mapping.wm</Template>
+            <Package>java.$(MappingPackage.Lower)</Package>
+            <FileName>$(DomainObject.Upper1).xml</FileName>
+            <Override>True</Override>
+        </Build>
+
+        <!-- uncomment to generate Configuration classes -->
+        <!--<Build>-->
+            <!--<Template>patterns/library/domain_creator_1_1/DomainConfig.wm</Template>-->
+            <!--<Package>java.$(DomainPackage.Lower)</Package>-->
+            <!--<FileName>$(DomainObject.Upper1)Config.java</FileName>-->
+            <!--<Override>False</Override>-->
+        <!--</Build>-->
+
+        <!-- uncomment to build for Oracle SQL Scripts -->
+        <Build>
+            <Template>patterns/library/domain_creator_1_0/CreateTable.wm</Template>
+            <Package>sql/create-table-scripts/oracle</Package>
+            <FileName>$(DatabaseTable.Upper).sql</FileName>
+            <Override>True</Override>
+        </Build>
+        <!-- end -->
+        
+        <!-- uncomment to build for MSSQL Scripts -->
+        <Build>
+            <Template>patterns/library/domain_creator_1_0/CreateTableMSSQL.wm</Template>
+            <Package>sql/create-table-scripts/mssqlserver</Package>
+            <FileName>$(DatabaseTable.Upper).sql</FileName>
+            <Override>True</Override>
+        </Build>
+        <!-- end -->
+        
+        <!-- uncomment to build for MySQL Scripts -->
+        <Build>
+            <Template>patterns/library/domain_creator_1_0/CreateTableMySQL.wm</Template>
+            <Package>sql/create-table-scripts/mysql</Package>
+            <FileName>$(DatabaseTable.Upper).sql</FileName>
+            <Override>True</Override>
+        </Build>
+        <!-- end -->
+        
+    </Components>
+</BuildPattern>
+

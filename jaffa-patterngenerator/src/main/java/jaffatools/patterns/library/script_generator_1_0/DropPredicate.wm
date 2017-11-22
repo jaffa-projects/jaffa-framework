@@ -1,0 +1,5 @@
+#foreach $field in $Tables.values() #begin
+
+EXECUTE DBMS_RLS.DROP_POLICY ('$(SchemaName)','$(field.SourceTable)','$(field.PolicyName)'); 
+
+#end

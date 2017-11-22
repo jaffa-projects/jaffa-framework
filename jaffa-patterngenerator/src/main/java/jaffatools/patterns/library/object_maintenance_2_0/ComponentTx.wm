@@ -1,0 +1,2252 @@
+#set $wm_useForDirtyReadCheckField = null
+#foreach $field in $Fields.values() #begin
+#if ($field.UseForDirtyReadCheck != null && $field.UseForDirtyReadCheck.BooleanValue) #begin
+#if ($field.RelatedObjectName == null) #begin
+#set $wm_useForDirtyReadCheckField = $field
+#end
+#end
+#end
+#set $wm_stampTypeLastUpdatedUserIdField = null
+#foreach $field in $Fields.values() #begin
+#if ($(field.StampType) != null && $(field.StampType.Upper1) == "LastUpdatedUserId") #begin
+#if ($field.RelatedObjectName == null) #begin
+#set $wm_stampTypeLastUpdatedUserIdField = $field
+#end
+#end
+#end
+#set $wm_stampTypeLastUpdatedDateTimeField = null
+#foreach $field in $Fields.values() #begin
+#if ($(field.StampType) != null && $(field.StampType.Upper1) == "LastUpdatedDateTime") #begin
+#if ($field.RelatedObjectName == null) #begin
+#set $wm_stampTypeLastUpdatedDateTimeField = $field
+#end
+#end
+#end
+#set $wm_foreignKeysInnerClassRequired = "false"
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.KeyType.Upper) == "TECHNICAL") #begin
+#set $wm_foreignKeysInnerClassRequired = "true"
+#end
+#end
+#end
+#end
+#end
+// .//GEN-BEGIN:_1_be
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ *
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/
+package $(BasePackage.Lower).components.$(Component.Lower).tx;
+
+import org.apache.log4j.Logger;
+import java.util.*;
+import org.jaffa.persistence.UOW;
+import org.jaffa.persistence.Criteria;
+import org.jaffa.exceptions.ApplicationExceptions;
+import org.jaffa.exceptions.ApplicationException;
+import org.jaffa.exceptions.FrameworkException;
+import org.jaffa.exceptions.DomainObjectNotFoundException;
+import org.jaffa.exceptions.DuplicateKeyException;
+import org.jaffa.exceptions.MultipleDomainObjectsFoundException;
+import org.jaffa.exceptions.IncompleteKeySpecifiedException;
+import org.jaffa.exceptions.RelatedDomainObjectFoundException;
+import org.jaffa.datatypes.ValidationException;
+import org.jaffa.exceptions.DomainObjectChangedException;
+import org.jaffa.datatypes.DateTime;
+import org.jaffa.datatypes.Formatter;
+import org.jaffa.util.BeanHelper;
+import org.jaffa.components.maint.MaintTx;
+import org.jaffa.components.voucher.IVoucherGenerator;
+import org.jaffa.components.voucher.VoucherGeneratorException;
+
+import $(BasePackage.Lower).components.$(Component.Lower).I$(Component.Upper1);
+import $(BasePackage.Lower).components.$(Component.Lower).dto.*;
+import $(DomainPackage.Lower).$(DomainObject.Upper1);
+import $(DomainPackage.Lower).$(DomainObject.Upper1)Meta;
+
+$ScratchPad.clear()
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#set $wm_package = "$(foreignObject.Package.Lower).$(foreignObject.Object.Upper1)"
+#if ($ScratchPad.get($wm_package) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_package,$wm_package) != null) #begin #end
+import $(wm_package);
+import $(wm_package)Meta;
+#end
+
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.SourceChain) != null) #begin
+#foreach $source in $field.SourceChain.values() #begin
+#set $wm_package = "$(source.Package.Lower).$(source.Object.Upper1)"
+#if ($ScratchPad.get($wm_package) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_package,$wm_package) != null) #begin #end
+import $(wm_package);
+import $(wm_package)Meta;
+#end
+#end
+#end
+#end
+#end
+#end
+
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#set $wm_package = "$(object.Package.Lower).$(object.ObjectName.Upper1)"
+#if ($ScratchPad.get($wm_package) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_package,$wm_package) != null) #begin #end
+import $(wm_package);
+import $(wm_package)Meta;
+#end
+
+#if ($object.RelatedObjectFields != null) #begin
+#foreach $field in $object.RelatedObjectFields.values() #begin
+#if ($(field.SourceChain) != null) #begin
+#foreach $source in $field.SourceChain.values() #begin
+#set $wm_package = "$(source.Package.Lower).$(source.Object.Upper1)"
+#if ($ScratchPad.get($wm_package) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_package,$wm_package) != null) #begin #end
+import $(wm_package);
+import $(wm_package)Meta;
+#end
+#end
+#end
+#end
+#end
+#end
+#end
+$ScratchPad.clear()
+// .//GEN-END:_1_be
+// Add additional imports//GEN-FIRST:_imports
+
+
+
+
+// .//GEN-LAST:_imports
+// .//GEN-BEGIN:_2_be
+/** Maintenance for $(DomainObject.Upper1) objects.
+*/
+public class $(Component.Upper1)Tx extends MaintTx implements I$(Component.Upper1) {
+
+    private static Logger log = Logger.getLogger($(Component.Upper1)Tx.class);
+
+    // .//GEN-END:_2_be
+    // .//GEN-BEGIN:_destroy_1_be
+    /**
+     * This should be invoked, when done with the component.
+     */
+    public void destroy() {
+        // .//GEN-END:_destroy_1_be
+        // Add custom code //GEN-FIRST:_destroy_1
+
+
+        // .//GEN-LAST:_destroy_1
+        // .//GEN-BEGIN:_destroy_2_be
+    }
+    // .//GEN-END:_destroy_2_be
+    // .//GEN-BEGIN:_prevalidateCreate_1_be
+    /** This method is used to perform prevalidations before creating a new instance of $(DomainObject.Upper1).
+     * @param input The new values for the domain object.
+     * @throws ApplicationExceptions This will be thrown if the input contains invalid data.
+     * @throws FrameworkException Indicates some system error.
+     * @return The object details.
+     */
+    public $(Component.Upper1)PrevalidateOutDto prevalidateCreate($(Component.Upper1)CreateInDto input) throws FrameworkException, ApplicationExceptions {
+        UOW uow = null;
+        try {
+            // Print Debug Information for the input
+            if (log.isDebugEnabled())
+                log.debug("Input: " + (input != null ? input.toString() : null));
+
+            // create the UOW
+            uow = new UOW();
+
+            // Preprocess the input
+            preprocess(uow, input);
+
+
+#if ($wm_foreignKeysInnerClassRequired == "true") #begin
+            // Determine the technical-keys
+            ForeignKeys foreignKeys = createForeignKeys(uow, input);
+
+            // Do not allow a Duplicate record
+            duplicateCheck(uow, input, foreignKeys);
+
+            // Validate the foreign objects
+            validateForeignObjects(uow, input);
+
+            // Create the domain object
+            $(DomainObject.Upper1) domain = createDomain(uow, input, foreignKeys, true);
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelationshipToDomainObject.RelationshipTypeOne) #begin
+            $(object.ObjectName.Upper1) $(object.Name.Lower1) = createOrLoad$(object.Name.Upper1)(uow, input, domain, foreignKeys, true);
+#end
+#end
+#end
+
+            // Perform post create processing
+            postCreate(uow, input, domain, foreignKeys, true);
+#else
+            // Do not allow a Duplicate record
+            duplicateCheck(uow, input);
+
+            // Validate the foreign objects
+            validateForeignObjects(uow, input);
+
+            // Create the domain object
+            $(DomainObject.Upper1) domain = createDomain(uow, input, true);
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelationshipToDomainObject.RelationshipTypeOne) #begin
+            $(object.ObjectName.Upper1) $(object.Name.Lower1) = createOrLoad$(object.Name.Upper1)(uow, input, domain, true);
+#end
+#end
+#end
+
+            // Perform post create processing
+            postCreate(uow, input, domain, true);
+#end
+
+            // Build the outbound dto
+            $(Component.Upper1)PrevalidateOutDto output = createPrevalidateOutDto(uow, domain, input);
+
+            // Print Debug Information for the output
+            if (log.isDebugEnabled())
+                log.debug("Output: " + (output != null ? output.toString() : null));
+            return output;
+        } catch (FrameworkException e) {
+            // It is possible the FrameworkException is wrapping an ApplicationException.
+            // If it is, then re-throw as ApplicationsExceptions, else throw the FrameworkException.
+            if (e.getCause() != null && e.getCause() instanceof ApplicationExceptions) {
+                throw (ApplicationExceptions) e.getCause();
+            } else if (e.getCause() != null && e.getCause() instanceof ApplicationException) {
+                ApplicationExceptions appExps = new ApplicationExceptions();
+                appExps.add((ApplicationException) e.getCause());
+                throw appExps;
+            } else
+                throw e;
+        } finally {
+            if (uow != null)
+                uow.rollback();
+        }
+    }
+    // .//GEN-END:_prevalidateCreate_1_be
+    // .//GEN-BEGIN:_create_1_be
+    /** Persists a new instance of $(DomainObject.Upper1).
+     * @param input The new values for the domain object.
+     * @throws ApplicationExceptions This will be thrown if the input contains invalid data.
+     * @throws FrameworkException Indicates some system error.
+     * @return The object details.
+     */
+    public $(Component.Upper1)RetrieveOutDto create($(Component.Upper1)CreateInDto input) throws FrameworkException, ApplicationExceptions {
+        UOW uow = null;
+        try {
+            // Print Debug Information for the input
+            if (log.isDebugEnabled())
+                log.debug("Input: " + (input != null ? input.toString() : null));
+
+            // create the UOW
+            uow = new UOW();
+
+            // Preprocess the input
+            preprocess(uow, input);
+
+
+#if ($wm_foreignKeysInnerClassRequired == "true") #begin
+            // Determine the technical-keys
+            ForeignKeys foreignKeys = createForeignKeys(uow, input);
+
+            // Do not allow a Duplicate record
+            duplicateCheck(uow, input, foreignKeys);
+
+            // Validate the foreign objects
+            validateForeignObjects(uow, input);
+
+            // Create the domain object
+            $(DomainObject.Upper1) domain = createDomain(uow, input, foreignKeys, false);
+            uow.add(domain);
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelationshipToDomainObject.RelationshipTypeOne) #begin
+            $(object.ObjectName.Upper1) $(object.Name.Lower1) = createOrLoad$(object.Name.Upper1)(uow, input, domain, foreignKeys, false);
+            if ($(object.Name.Lower1) != null && $(object.Name.Lower1).isModified()) {
+                if ($(object.Name.Lower1).isDatabaseOccurence())
+                    uow.update($(object.Name.Lower1));
+                else
+                    uow.add($(object.Name.Lower1));
+            }
+#end
+#end
+#end
+
+            // Perform post create processing
+            postCreate(uow, input, domain, foreignKeys, false);
+#else
+            // Do not allow a Duplicate record
+            duplicateCheck(uow, input);
+
+            // Validate the foreign objects
+            validateForeignObjects(uow, input);
+
+            // Create the domain object
+            $(DomainObject.Upper1) domain = createDomain(uow, input, false);
+            uow.add(domain);
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelationshipToDomainObject.RelationshipTypeOne) #begin
+            $(object.ObjectName.Upper1) $(object.Name.Lower1) = createOrLoad$(object.Name.Upper1)(uow, input, domain, false);
+            if ($(object.Name.Lower1) != null && $(object.Name.Lower1).isModified()) {
+                if ($(object.Name.Lower1).isDatabaseOccurence())
+                    uow.update($(object.Name.Lower1));
+                else
+                    uow.add($(object.Name.Lower1));
+            }
+#end
+#end
+#end
+
+            // Perform post create processing
+            postCreate(uow, input, domain, false);
+#end
+
+            // Commit the changes
+            uow.commit();
+
+            // Print Debug Information for the output
+            if (log.isDebugEnabled())
+                log.debug("Successfully created the domain object. Now retrieving the object details.");
+
+            // Build the outbound dto by performing a retrieve
+            $(Component.Upper1)RetrieveInDto retrieveInDto = new $(Component.Upper1)RetrieveInDto();
+            retrieveInDto.setHeaderDto(input.getHeaderDto());
+
+#foreach $keyField in $KeyFields.values() #begin
+#if ($wm_foreignKeysInnerClassRequired != "true") #begin
+            retrieveInDto.set$(keyField.Name.Upper1)(input.get$(keyField.Name.Upper1)());
+#else
+#set $wm_fieldIsTechnicalKey = "true"
+#foreach $field in $Fields.values() #begin
+#if ( $keyField.Name.Upper1 == $field.Name.Upper1 ) #begin
+#set $wm_fieldIsTechnicalKey = "false"
+#end
+#end
+#if ($wm_fieldIsTechnicalKey == "true") #begin
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($keyField.Name.Upper1 == $field.Name.Upper1 && $(field.KeyType.Upper) != "TECHNICAL") #begin
+#set $wm_fieldIsTechnicalKey = "false"
+#end
+#end
+#end
+#end
+#end
+#end
+#if ($wm_fieldIsTechnicalKey != "true") #begin
+            retrieveInDto.set$(keyField.Name.Upper1)(input.get$(keyField.Name.Upper1)());
+#else
+            retrieveInDto.set$(keyField.Name.Upper1)(foreignKeys.$(keyField.Name.Lower1));
+#end
+#end
+#end
+            $(Component.Upper1)RetrieveOutDto output = retrieve(retrieveInDto);
+            return output;
+        } catch (FrameworkException e) {
+            // It is possible the FrameworkException is wrapping an ApplicationException.
+            // If it is, then re-throw as ApplicationsExceptions, else throw the FrameworkException.
+            if (e.getCause() != null && e.getCause() instanceof ApplicationExceptions) {
+                throw (ApplicationExceptions) e.getCause();
+            } else if (e.getCause() != null && e.getCause() instanceof ApplicationException) {
+                ApplicationExceptions appExps = new ApplicationExceptions();
+                appExps.add((ApplicationException) e.getCause());
+                throw appExps;
+            } else
+                throw e;
+        } finally {
+            if (uow != null)
+                uow.rollback();
+        }
+    }
+    // .//GEN-END:_create_1_be
+    // .//GEN-BEGIN:_retrieve_1_be
+    /** Returns the details for $(DomainObject.Upper1).
+     * @param input The criteria based on which an object will be retrieved.
+     * @throws ApplicationExceptions This will be thrown if the criteria contains invalid data.
+     * @throws FrameworkException Indicates some system error.
+     * @return The object details. A null indicates, the object was not found.
+     */
+    public $(Component.Upper1)RetrieveOutDto retrieve($(Component.Upper1)RetrieveInDto input) throws FrameworkException, ApplicationExceptions {
+        UOW uow = null;
+        try {
+            // Print Debug Information for the input
+            if (log.isDebugEnabled())
+                log.debug("Input: " + (input != null ? input.toString() : null));
+
+            // create the UOW
+            uow = new UOW();
+
+            // Preprocess the input
+            preprocess(uow, input);
+
+            // Retrieve the object
+            $(DomainObject.Upper1) domain = load(uow, input);
+
+            // Convert the domain objects into the outbound dto
+            $(Component.Upper1)RetrieveOutDto output = buildRetrieveOutDto(uow, input, domain);
+
+            // Print Debug Information for the output
+            if (log.isDebugEnabled())
+                log.debug("Output: " + (output != null ? output.toString() : null));
+            return output;
+        } catch (FrameworkException e) {
+            // It is possible the FrameworkException is wrapping an ApplicationException.
+            // If it is, then re-throw as ApplicationsExceptions, else throw the FrameworkException.
+            if (e.getCause() != null && e.getCause() instanceof ApplicationExceptions) {
+                throw (ApplicationExceptions) e.getCause();
+            } else if (e.getCause() != null && e.getCause() instanceof ApplicationException) {
+                ApplicationExceptions appExps = new ApplicationExceptions();
+                appExps.add((ApplicationException) e.getCause());
+                throw appExps;
+            } else
+                throw e;
+        } finally {
+            if (uow != null)
+                uow.rollback();
+        }
+    }
+    // .//GEN-END:_retrieve_1_be
+    // .//GEN-BEGIN:_prevalidateUpdate_1_be
+    /** This method is used to perform prevalidations before updating an existing instance of $(DomainObject.Upper1).
+     * @param input The new values for the domain object.
+     * @throws ApplicationExceptions This will be thrown if the input contains invalid data.
+     * @throws FrameworkException Indicates some system error.
+     * @return The object details.
+     */
+    public $(Component.Upper1)PrevalidateOutDto prevalidateUpdate($(Component.Upper1)UpdateInDto input) throws FrameworkException, ApplicationExceptions {
+        UOW uow = null;
+        try {
+            // Print Debug Information for the input
+            if (log.isDebugEnabled())
+                log.debug("Input: " + (input != null ? input.toString() : null));
+
+            // create the UOW
+            uow = new UOW();
+
+            // Preprocess the input
+            preprocess(uow, input);
+
+
+#if ($wm_foreignKeysInnerClassRequired == "true") #begin
+            // Determine the technical-keys
+            ForeignKeys foreignKeys = createForeignKeys(uow, input);
+
+            // Retrieve the object
+            $(DomainObject.Upper1) domain = load(uow, input, foreignKeys);
+
+
+#if ($wm_useForDirtyReadCheckField != null) #begin
+#set $field = $wm_useForDirtyReadCheckField
+            // Ensure the domain object has not been modified
+            domainObjectChangedTest(input.getPerformDirtyReadCheck(), domain, input.get$(field.Name.Upper1)());
+
+#end
+            // Validate the foreign objects
+            validateForeignObjects(uow, input);
+
+            // Update the domain object
+            updateDomain(uow, input, foreignKeys, domain, true);
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelationshipToDomainObject.RelationshipTypeOne) #begin
+            $(object.ObjectName.Upper1) $(object.Name.Lower1) = createOrLoad$(object.Name.Upper1)(uow, input, domain, foreignKeys, true);
+#end
+#end
+#end
+
+#else
+            // Retrieve the object
+            $(DomainObject.Upper1) domain = load(uow, input);
+
+
+#if ($wm_useForDirtyReadCheckField != null) #begin
+#set $field = $wm_useForDirtyReadCheckField
+            // Ensure the domain object has not been modified
+            domainObjectChangedTest(input.getPerformDirtyReadCheck(), domain, input.get$(field.Name.Upper1)());
+
+#end
+            // Validate the foreign objects
+            validateForeignObjects(uow, input);
+
+            // Update the domain object
+            updateDomain(uow, input, domain, true);
+
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelationshipToDomainObject.RelationshipTypeOne) #begin
+            $(object.ObjectName.Upper1) $(object.Name.Lower1) = createOrLoad$(object.Name.Upper1)(uow, input, domain, true);
+#end
+#end
+#end
+#end
+
+            // Build the outbound dto
+            $(Component.Upper1)PrevalidateOutDto output = createPrevalidateOutDto(uow, domain, input);
+
+            // Print Debug Information for the output
+            if (log.isDebugEnabled())
+                log.debug("Output: " + (output != null ? output.toString() : null));
+            return output;
+        } catch (FrameworkException e) {
+            // It is possible the FrameworkException is wrapping an ApplicationException.
+            // If it is, then re-throw as ApplicationsExceptions, else throw the FrameworkException.
+            if (e.getCause() != null && e.getCause() instanceof ApplicationExceptions) {
+                throw (ApplicationExceptions) e.getCause();
+            } else if (e.getCause() != null && e.getCause() instanceof ApplicationException) {
+                ApplicationExceptions appExps = new ApplicationExceptions();
+                appExps.add((ApplicationException) e.getCause());
+                throw appExps;
+            } else
+                throw e;
+        } finally {
+            if (uow != null)
+                uow.rollback();
+        }
+    }
+    // .//GEN-END:_prevalidateUpdate_1_be
+    // .//GEN-BEGIN:_update_1_be
+    /** Updates an existing instance of $(DomainObject.Upper1).
+     * @param input The new values for the domain object.
+     * @throws ApplicationExceptions This will be thrown if the input contains invalid data.
+     * @throws FrameworkException Indicates some system error.
+     * @return The object details.
+     */
+    public $(Component.Upper1)RetrieveOutDto update($(Component.Upper1)UpdateInDto input) throws FrameworkException, ApplicationExceptions {
+        UOW uow = null;
+        try {
+            // Print Debug Information for the input
+            if (log.isDebugEnabled())
+                log.debug("Input: " + (input != null ? input.toString() : null));
+
+            // create the UOW
+            uow = new UOW();
+
+            // Preprocess the input
+            preprocess(uow, input);
+
+
+#if ($wm_foreignKeysInnerClassRequired == "true") #begin
+            // Determine the technical-keys
+            ForeignKeys foreignKeys = createForeignKeys(uow, input);
+
+            // Retrieve the object
+            $(DomainObject.Upper1) domain = load(uow, input, foreignKeys);
+
+
+#if ($wm_useForDirtyReadCheckField != null) #begin
+#set $field = $wm_useForDirtyReadCheckField
+            // Ensure the domain object has not been modified
+            domainObjectChangedTest(input.getPerformDirtyReadCheck(), domain, input.get$(field.Name.Upper1)());
+
+#end
+            // Validate the foreign objects
+            validateForeignObjects(uow, input);
+
+            // Update the domain object
+            updateDomain(uow, input, foreignKeys, domain, false);
+            uow.update(domain);
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelationshipToDomainObject.RelationshipTypeOne) #begin
+            $(object.ObjectName.Upper1) $(object.Name.Lower1) = createOrLoad$(object.Name.Upper1)(uow, input, domain, foreignKeys, false);
+            if ($(object.Name.Lower1) != null && $(object.Name.Lower1).isModified()) {
+                if ($(object.Name.Lower1).isDatabaseOccurence())
+                    uow.update($(object.Name.Lower1));
+                else
+                    uow.add($(object.Name.Lower1));
+            }
+#end
+#end
+#end
+
+#else
+            // Retrieve the object
+            $(DomainObject.Upper1) domain = load(uow, input);
+
+
+#if ($wm_useForDirtyReadCheckField != null) #begin
+#set $field = $wm_useForDirtyReadCheckField
+            // Ensure the domain object has not been modified
+            domainObjectChangedTest(input.getPerformDirtyReadCheck(), domain, input.get$(field.Name.Upper1)());
+
+#end
+            // Validate the foreign objects
+            validateForeignObjects(uow, input);
+
+            // Update the domain object
+            updateDomain(uow, input, domain, false);
+            uow.update(domain);
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelationshipToDomainObject.RelationshipTypeOne) #begin
+            $(object.ObjectName.Upper1) $(object.Name.Lower1) = createOrLoad$(object.Name.Upper1)(uow, input, domain, false);
+            if ($(object.Name.Lower1) != null && $(object.Name.Lower1).isModified()) {
+                if ($(object.Name.Lower1).isDatabaseOccurence())
+                    uow.update($(object.Name.Lower1));
+                else
+                    uow.add($(object.Name.Lower1));
+            }
+#end
+#end
+#end
+#end
+
+            // Commit the changes
+            uow.commit();
+
+            // Print Debug Information for the output
+            if (log.isDebugEnabled())
+                log.debug("Successfully updated the domain object. Now retrieving the object details.");
+
+            // Build the outbound dto by performing a retrieve
+            $(Component.Upper1)RetrieveInDto retrieveInDto = new $(Component.Upper1)RetrieveInDto();
+            retrieveInDto.setHeaderDto(input.getHeaderDto());
+
+#foreach $keyField in $KeyFields.values() #begin
+#if ($wm_foreignKeysInnerClassRequired != "true") #begin
+            retrieveInDto.set$(keyField.Name.Upper1)(input.get$(keyField.Name.Upper1)());
+#else
+#set $wm_fieldIsTechnicalKey = "true"
+#foreach $field in $Fields.values() #begin
+#if ( $keyField.Name.Upper1 == $field.Name.Upper1 ) #begin
+#set $wm_fieldIsTechnicalKey = "false"
+#end
+#end
+#if ($wm_fieldIsTechnicalKey == "true") #begin
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($keyField.Name.Upper1 == $field.Name.Upper1 && $(field.KeyType.Upper) != "TECHNICAL") #begin
+#set $wm_fieldIsTechnicalKey = "false"
+#end
+#end
+#end
+#end
+#end
+#end
+#if ($wm_fieldIsTechnicalKey != "true") #begin
+            retrieveInDto.set$(keyField.Name.Upper1)(input.get$(keyField.Name.Upper1)());
+#else
+            retrieveInDto.set$(keyField.Name.Upper1)(foreignKeys.$(keyField.Name.Lower1));
+#end
+#end
+#end
+            $(Component.Upper1)RetrieveOutDto output = retrieve(retrieveInDto);
+            return output;
+        } catch (FrameworkException e) {
+            // It is possible the FrameworkException is wrapping an ApplicationException.
+            // If it is, then re-throw as ApplicationsExceptions, else throw the FrameworkException.
+            if (e.getCause() != null && e.getCause() instanceof ApplicationExceptions) {
+                throw (ApplicationExceptions) e.getCause();
+            } else if (e.getCause() != null && e.getCause() instanceof ApplicationException) {
+                ApplicationExceptions appExps = new ApplicationExceptions();
+                appExps.add((ApplicationException) e.getCause());
+                throw appExps;
+            } else
+                throw e;
+        } finally {
+            if (uow != null)
+                uow.rollback();
+        }
+    }
+    // .//GEN-END:_update_1_be
+    // .//GEN-BEGIN:_delete_1_be
+    /** Deletes an existing instance of $(DomainObject.Upper1).
+     * @param input The key values for the domain object to be deleted.
+     * @throws ApplicationExceptions This will be thrown if the input contains invalid data.
+     * @throws FrameworkException Indicates some system error.
+     */
+    public void delete($(Component.Upper1)DeleteInDto input) throws FrameworkException, ApplicationExceptions {
+        UOW uow = null;
+        try {
+            // create the UOW
+            uow = new UOW();
+            
+            // invoke the delete passing the UOW
+            delete(input, uow);
+
+            // Commit the changes
+            uow.commit();
+
+            // Print Debug Information for the output
+            if (log.isDebugEnabled())
+                log.debug("Successfully deleted the domain object");
+
+        } catch (FrameworkException e) {
+            // It is possible the FrameworkException is wrapping an ApplicationException.
+            // If it is, then re-throw as ApplicationsExceptions, else throw the FrameworkException.
+            if (e.getCause() != null && e.getCause() instanceof ApplicationExceptions) {
+                throw (ApplicationExceptions) e.getCause();
+            } else if (e.getCause() != null && e.getCause() instanceof ApplicationException) {
+                ApplicationExceptions appExps = new ApplicationExceptions();
+                appExps.add((ApplicationException) e.getCause());
+                throw appExps;
+            } else
+                throw e;
+        } finally {
+            if (uow != null)
+                uow.rollback();
+        }
+    }
+
+    /** Deletes an existing instance of $(DomainObject.Upper1).
+     * @param input The key values for the domain object to be deleted.
+     * @param uow The delete will be performed using the input UOW.
+     * @throws ApplicationExceptions This will be thrown if the input contains invalid data.
+     * @throws FrameworkException Indicates some system error.
+     */
+    public void delete($(Component.Upper1)DeleteInDto input, UOW uow) throws FrameworkException, ApplicationExceptions {
+        // Print Debug Information for the input
+        if (log.isDebugEnabled())
+            log.debug("Input: " + (input != null ? input.toString() : null));
+
+        // Preprocess the input
+        preprocess(uow, input);
+
+        // Retrieve the object
+        $(DomainObject.Upper1) domain = load(uow, input);
+
+
+#if ($wm_useForDirtyReadCheckField != null) #begin
+#set $field = $wm_useForDirtyReadCheckField
+        // Ensure the domain object has not been modified
+        domainObjectChangedTest(input.getPerformDirtyReadCheck(), domain, input.get$(field.Name.Upper1)());
+
+#end
+        // Delete the domain object
+        deleteDomain(uow, input, domain);
+
+        // Print Debug Information for the output
+        if (log.isDebugEnabled())
+            log.debug("The domain object has been marked for deletion. It will be deleted when the UOW is committed");
+    }
+    // .//GEN-END:_delete_1_be
+    // .//GEN-BEGIN:_preprocessCreate_1_be
+    /** Preprocess the input for the create method. */
+    private void preprocess(UOW uow, $(Component.Upper1)CreateInDto input) throws FrameworkException, ApplicationExceptions {
+        // .//GEN-END:_preprocessCreate_1_be
+        // Add custom code //GEN-FIRST:_preprocessCreate_1
+
+
+        // .//GEN-LAST:_preprocessCreate_1
+        // .//GEN-BEGIN:_preprocessCreate_2_be
+    }
+    // .//GEN-END:_preprocessCreate_2_be
+    // .//GEN-BEGIN:_duplicateCheck_1_be
+    /** Ensure that a duplicate record is not created. */
+
+#if ($wm_foreignKeysInnerClassRequired == "true") #begin
+    private void duplicateCheck(UOW uow, $(Component.Upper1)CreateInDto input, ForeignKeys foreignKeys)
+    throws FrameworkException, ApplicationExceptions {
+#else
+    private void duplicateCheck(UOW uow, $(Component.Upper1)CreateInDto input)
+    throws FrameworkException, ApplicationExceptions {
+#end
+        // .//GEN-END:_duplicateCheck_1_be
+        // Add custom code //GEN-FIRST:_duplicateCheck_1
+
+
+        // .//GEN-LAST:_duplicateCheck_1
+        // .//GEN-BEGIN:_duplicateCheck_2_be
+
+#set $wm_ifCondition = ""
+#foreach $keyField in $KeyFields.values() #begin
+#if ($wm_ifCondition != "") #begin
+#set $wm_ifCondition = "$(wm_ifCondition) || "
+#end
+#if ($wm_foreignKeysInnerClassRequired != "true") #begin
+#set $wm_ifCondition = "$(wm_ifCondition)input.get$(keyField.Name.Upper1)() == null"
+#else
+#set $wm_fieldIsTechnicalKey = "true"
+#foreach $field in $Fields.values() #begin
+#if ( $keyField.Name.Upper1 == $field.Name.Upper1 ) #begin
+#set $wm_fieldIsTechnicalKey = "false"
+#end
+#end
+#if ($wm_fieldIsTechnicalKey == "true") #begin
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($keyField.Name.Upper1 == $field.Name.Upper1 && $(field.KeyType.Upper) != "TECHNICAL") #begin
+#set $wm_fieldIsTechnicalKey = "false"
+#end
+#end
+#end
+#end
+#end
+#end
+#if ($wm_fieldIsTechnicalKey != "true") #begin
+#set $wm_ifCondition = "$(wm_ifCondition)input.get$(keyField.Name.Upper1)() == null"
+#else
+#set $wm_ifCondition = "$(wm_ifCondition)foreignKeys.$(keyField.Name.Lower1) == null"
+#end
+#end
+#end
+        if ($(wm_ifCondition))
+            return;
+        Criteria criteria = new Criteria();
+        criteria.setTable( $(DomainObject.Upper1)Meta.getName() );
+        // .//GEN-END:_duplicateCheck_2_be
+        // Add custom criteria //GEN-FIRST:_duplicateCheck_2
+
+
+        // .//GEN-LAST:_duplicateCheck_2
+        // .//GEN-BEGIN:_duplicateCheck_3_be
+
+#foreach $keyField in $KeyFields.values() #begin
+#if ($wm_foreignKeysInnerClassRequired != "true") #begin
+        criteria.addCriteria($(DomainObject.Upper1)Meta.$(keyField.DomainField.Static), input.get$(keyField.Name.Upper1)());
+#else
+#set $wm_fieldIsTechnicalKey = "true"
+#foreach $field in $Fields.values() #begin
+#if ( $keyField.Name.Upper1 == $field.Name.Upper1 ) #begin
+#set $wm_fieldIsTechnicalKey = "false"
+#end
+#end
+#if ($wm_fieldIsTechnicalKey == "true") #begin
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($keyField.Name.Upper1 == $field.Name.Upper1 && $(field.KeyType.Upper) != "TECHNICAL") #begin
+#set $wm_fieldIsTechnicalKey = "false"
+#end
+#end
+#end
+#end
+#end
+#end
+#if ($wm_fieldIsTechnicalKey != "true") #begin
+        criteria.addCriteria($(DomainObject.Upper1)Meta.$(keyField.DomainField.Static), input.get$(keyField.Name.Upper1)());
+#else
+        criteria.addCriteria($(DomainObject.Upper1)Meta.$(keyField.DomainField.Static), foreignKeys.$(keyField.Name.Lower1));
+#end
+#end
+#end
+        Collection col = uow.query(criteria);
+        // .//GEN-END:_duplicateCheck_3_be
+        // Add custom code //GEN-FIRST:_duplicateCheck_3
+
+
+        // .//GEN-LAST:_duplicateCheck_3
+        // .//GEN-BEGIN:_duplicateCheck_4_be
+        if (col != null && !col.isEmpty()) {
+            ApplicationExceptions appExps = new ApplicationExceptions();
+            appExps.add(new DuplicateKeyException($(DomainObject.Upper1)Meta.getLabelToken()));
+            throw appExps;
+        }
+    }
+    // .//GEN-END:_duplicateCheck_4_be
+    // .//GEN-BEGIN:_createDomain_1_be
+    /** Create the domain object. */
+
+#if ($wm_foreignKeysInnerClassRequired == "true") #begin
+    private $(DomainObject.Upper1) createDomain(UOW uow, $(Component.Upper1)CreateInDto input, ForeignKeys foreignKeys, boolean fromPrevalidate)
+#else
+    private $(DomainObject.Upper1) createDomain(UOW uow, $(Component.Upper1)CreateInDto input, boolean fromPrevalidate)
+#end
+    throws FrameworkException, ApplicationExceptions {
+        $(DomainObject.Upper1) domain = new $(DomainObject.Upper1)();
+        ApplicationExceptions appExps = null;
+        // .//GEN-END:_createDomain_1_be
+        // Add custom code //GEN-FIRST:_createDomain_1
+
+
+        // .//GEN-LAST:_createDomain_1
+        // .//GEN-BEGIN:_createDomain_2_be
+
+#foreach $field in $Fields.values() #begin
+#if ($(field.DomainField.Upper) != "") #begin
+#if ($field.RelatedObjectName == null) #begin
+#if ($(field.StampType) == null || $(field.StampType.Upper1) == "CreatedUserId" || $(field.StampType.Upper1) == "CreatedDateTime") #begin
+        try {
+
+#if ($(field.Voucher) != null) #begin
+            if (input.get$(field.Name.Upper1)() != null) {
+                domain.update$(field.DomainField.Upper1)(input.get$(field.Name.Upper1)());
+            } else if (!fromPrevalidate) {
+                // Generate the Voucher
+                try {
+                    IVoucherGenerator generator = (IVoucherGenerator) $(field.Voucher.VoucherGeneratorImplementation).class.newInstance();
+                    generator.init();
+                    generator.setUow(uow);
+                    generator.setLabelToken($(DomainObject)Meta.META_$(field.DomainField.Static).getLabelToken());
+                    generator.setPrefix("$field.Voucher.Prefix");
+                    generator.setLength("$field.Voucher.Length");
+
+#if ($(field.Voucher.Params) != null) #begin
+#foreach $param in $field.Voucher.Params.values() #begin
+                    BeanHelper.setField(generator, "$(param.Name)", "$(param.Value)");
+#end
+#end
+                    input.set$(field.Name.Upper1)(generator.generate());
+                    generator.cleanup();
+                } catch (FrameworkException e) {
+                    throw e;
+                } catch (ApplicationExceptions e) {
+                    throw e;
+                } catch (Exception e) {
+                    throw new VoucherGeneratorException(null, e);
+                }
+                domain.update$(field.DomainField.Upper1)(input.get$(field.Name.Upper1)());
+            }
+#elseif ($(field.StampType) != null && $(field.StampType.Upper1) == "CreatedUserId") #begin
+            if (!fromPrevalidate && input.getHeaderDto() != null && input.getHeaderDto().getUserId() != null)
+                domain.update$(field.DomainField.Upper1)(input.getHeaderDto().getUserId());
+#elseif ($(field.StampType) != null && $(field.StampType.Upper1) == "CreatedDateTime") #begin
+            if (!fromPrevalidate)
+                domain.update$(field.DomainField.Upper1)(new DateTime());
+#elseif ($field.Comment != null) #begin
+            domain.update$(field.DomainField.Upper1)(input.get$(field.Name.Upper1)_AdditionalComment());
+#else
+            domain.update$(field.DomainField.Upper1)(input.get$(field.Name.Upper1)());
+#end
+        } catch (ValidationException e) {
+            if (appExps == null)
+                appExps = new ApplicationExceptions();
+            appExps.add(e);
+        }
+#end
+#end
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.KeyType.Upper) == "PRIMARY" || $(field.KeyType.Upper) == "TECHNICAL") #begin
+        try {
+
+#if ($(field.KeyType.Upper) == "PRIMARY") #begin
+            domain.update$(field.DomainField.Upper1)(input.get$(field.Name.Upper1)());
+#else
+            domain.update$(field.DomainField.Upper1)(foreignKeys.$(field.Name.Lower1));
+#end
+        } catch (ValidationException e) {
+            if (appExps == null)
+                appExps = new ApplicationExceptions();
+            appExps.add(e);
+        }
+#end
+#end
+#end
+#end
+#end
+        // .//GEN-END:_createDomain_2_be
+        // Add custom code //GEN-FIRST:_createDomain_2
+
+
+        // .//GEN-LAST:_createDomain_2
+        // .//GEN-BEGIN:_createDomain_3_be
+        if (appExps != null && appExps.size() > 0)
+            throw appExps;
+        return domain;
+    }
+    // .//GEN-END:_createDomain_3_be
+    // .//GEN-BEGIN:_postCreate_1_be
+    /** This method is invoked after the domain object has been created.*/
+
+#if ($wm_foreignKeysInnerClassRequired == "true") #begin
+    private void postCreate(UOW uow, $(Component.Upper1)CreateInDto input, $(DomainObject.Upper1) domain, ForeignKeys foreignKeys, boolean fromPrevalidate)
+#else
+    private void postCreate(UOW uow, $(Component.Upper1)CreateInDto input, $(DomainObject.Upper1) domain, boolean fromPrevalidate)
+#end
+    throws FrameworkException, ApplicationExceptions {
+        // .//GEN-END:_postCreate_1_be
+        // Add custom code //GEN-FIRST:_postCreate_1
+
+
+        // .//GEN-LAST:_postCreate_1
+        // .//GEN-BEGIN:_postCreate_2_be
+    }
+    // .//GEN-END:_postCreate_2_be
+    // .//GEN-BEGIN:_preprocessRetrieve_1_be
+    /** Preprocess the input for the retrieve method. */
+    private void preprocess(UOW uow, $(Component.Upper1)RetrieveInDto input) throws FrameworkException, ApplicationExceptions {
+        // .//GEN-END:_preprocessRetrieve_1_be
+        // Add custom code //GEN-FIRST:_preprocessRetrieve_1
+
+
+        // .//GEN-LAST:_preprocessRetrieve_1
+        // .//GEN-BEGIN:_preprocessRetrieve_2_be
+    }
+    // .//GEN-END:_preprocessRetrieve_2_be
+    // .//GEN-BEGIN:_loadRetrieve_1_be
+    /** Retrieve the domain object. */
+    private $(DomainObject.Upper1) load(UOW uow, $(Component.Upper1)RetrieveInDto input) throws FrameworkException, ApplicationExceptions {
+        $(DomainObject.Upper1) domain = null;
+        Criteria criteria = new Criteria();
+        criteria.setTable( $(DomainObject.Upper1)Meta.getName() );
+        // .//GEN-END:_loadRetrieve_1_be
+        // Add custom criteria //GEN-FIRST:_loadRetrieve_1
+
+
+        // .//GEN-LAST:_loadRetrieve_1
+        // .//GEN-BEGIN:_loadRetrieve_2_be
+
+#foreach $field in $KeyFields.values() #begin
+        criteria.addCriteria($(DomainObject.Upper1)Meta.$(field.DomainField.Static), input.get$(field.Name.Upper1)());
+#end
+        Iterator itr = uow.query(criteria).iterator();
+        if (itr.hasNext())
+            domain = ($(DomainObject.Upper1)) itr.next();
+        // .//GEN-END:_loadRetrieve_2_be
+        // Add custom code //GEN-FIRST:_loadRetrieve_2
+
+
+        // .//GEN-LAST:_loadRetrieve_2
+        // .//GEN-BEGIN:_loadRetrieve_3_be
+        if (domain == null) {
+            ApplicationExceptions appExps = new ApplicationExceptions();
+            appExps.add(new DomainObjectNotFoundException($(DomainObject.Upper1)Meta.getLabelToken()));
+            throw appExps;
+        }
+        return domain;
+    }
+    // .//GEN-END:_loadRetrieve_3_be
+    // .//GEN-BEGIN:_buildRetrieveOutDto_1_be
+    /** Create the RetrieveOutDto. */
+    private $(Component.Upper1)RetrieveOutDto buildRetrieveOutDto(UOW uow, $(Component.Upper1)RetrieveInDto input, $(DomainObject.Upper1) domain) throws FrameworkException, ApplicationExceptions {
+        $(Component.Upper1)RetrieveOutDto output = new $(Component.Upper1)RetrieveOutDto();
+        // .//GEN-END:_buildRetrieveOutDto_1_be
+        // Add custom code //GEN-FIRST:_buildRetrieveOutDto_1
+
+
+        // .//GEN-LAST:_buildRetrieveOutDto_1
+        // .//GEN-BEGIN:_buildRetrieveOutDto_2_be
+
+#foreach $field in $Fields.values() #begin
+#if ($(field.DomainField.Upper) != "") #begin
+#if ($field.RelatedObjectName == null) #begin
+        output.set$(field.Name.Upper1)(domain.get$(field.DomainField.Upper1)());
+#end
+#end
+#end
+        addForeignObjectsToRetrieveOut(uow, domain, output);
+        addRelatedDtosToRetrieveOut(uow, domain, output);
+        // .//GEN-END:_buildRetrieveOutDto_2_be
+        // Add custom code //GEN-FIRST:_buildRetrieveOutDto_2
+
+
+        // .//GEN-LAST:_buildRetrieveOutDto_2
+        // .//GEN-BEGIN:_buildRetrieveOutDto_3_be
+        return output;
+    }
+    // .//GEN-END:_buildRetrieveOutDto_3_be
+    // .//GEN-BEGIN:_preprocessUpdate_1_be
+    /** Preprocess the input for the update method. */
+    private void preprocess(UOW uow, $(Component.Upper1)UpdateInDto input) throws FrameworkException, ApplicationExceptions {
+        // .//GEN-END:_preprocessUpdate_1_be
+        // Add custom code //GEN-FIRST:_preprocessUpdate_1
+
+
+        // .//GEN-LAST:_preprocessUpdate_1
+        // .//GEN-BEGIN:_preprocessUpdate_2_be
+    }
+    // .//GEN-END:_preprocessUpdate_2_be
+    // .//GEN-BEGIN:_loadUpdate_1_be
+    /** Retrieve the domain object. */
+
+#if ($wm_foreignKeysInnerClassRequired == "true") #begin
+    private $(DomainObject.Upper1) load(UOW uow, $(Component.Upper1)UpdateInDto input, ForeignKeys foreignKeys)
+    throws FrameworkException, ApplicationExceptions {
+#else
+    private $(DomainObject.Upper1) load(UOW uow, $(Component.Upper1)UpdateInDto input)
+    throws FrameworkException, ApplicationExceptions {
+#end
+        $(DomainObject.Upper1) domain = null;
+        Criteria criteria = new Criteria();
+        criteria.setTable( $(DomainObject.Upper1)Meta.getName() );
+        // .//GEN-END:_loadUpdate_1_be
+        // Add custom criteria //GEN-FIRST:_loadUpdate_1
+
+
+        // .//GEN-LAST:_loadUpdate_1
+        // .//GEN-BEGIN:_loadUpdate_2_be
+
+#foreach $keyField in $KeyFields.values() #begin
+#if ($wm_foreignKeysInnerClassRequired != "true") #begin
+        criteria.addCriteria($(DomainObject.Upper1)Meta.$(keyField.DomainField.Static), input.get$(keyField.Name.Upper1)());
+#else
+#set $wm_fieldIsTechnicalKey = "true"
+#foreach $field in $Fields.values() #begin
+#if ( $keyField.Name.Upper1 == $field.Name.Upper1 ) #begin
+#set $wm_fieldIsTechnicalKey = "false"
+#end
+#end
+#if ($wm_fieldIsTechnicalKey == "true") #begin
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($keyField.Name.Upper1 == $field.Name.Upper1 && $(field.KeyType.Upper) != "TECHNICAL") #begin
+#set $wm_fieldIsTechnicalKey = "false"
+#end
+#end
+#end
+#end
+#end
+#end
+#if ($wm_fieldIsTechnicalKey != "true") #begin
+        criteria.addCriteria($(DomainObject.Upper1)Meta.$(keyField.DomainField.Static), input.get$(keyField.Name.Upper1)());
+#else
+        criteria.addCriteria($(DomainObject.Upper1)Meta.$(keyField.DomainField.Static), foreignKeys.$(keyField.Name.Lower1));
+#end
+#end
+#end
+        criteria.setLocking(Criteria.LOCKING_PARANOID);
+        Iterator itr = uow.query(criteria).iterator();
+        if (itr.hasNext())
+            domain = ($(DomainObject.Upper1)) itr.next();
+        // .//GEN-END:_loadUpdate_2_be
+        // Add custom code //GEN-FIRST:_loadUpdate_2
+
+
+        // .//GEN-LAST:_loadUpdate_2
+        // .//GEN-BEGIN:_loadUpdate_3_be
+        if (domain == null) {
+            ApplicationExceptions appExps = new ApplicationExceptions();
+            appExps.add(new DomainObjectNotFoundException($(DomainObject.Upper1)Meta.getLabelToken()));
+            throw appExps;
+        }
+        return domain;
+    }
+    // .//GEN-END:_loadUpdate_3_be
+    // .//GEN-BEGIN:_updateDomain_1_be
+    /** Update the domain object and add it to the UOW. */
+
+#if ($wm_foreignKeysInnerClassRequired == "true") #begin
+    private void updateDomain(UOW uow, $(Component.Upper1)UpdateInDto input, ForeignKeys foreignKeys, $(DomainObject.Upper1) domain, boolean fromPrevalidate)
+    throws FrameworkException, ApplicationExceptions {
+#else
+    private void updateDomain(UOW uow, $(Component.Upper1)UpdateInDto input, $(DomainObject.Upper1) domain, boolean fromPrevalidate)
+    throws FrameworkException, ApplicationExceptions {
+#end
+        ApplicationExceptions appExps = null;
+        // .//GEN-END:_updateDomain_1_be
+        // Add custom code //GEN-FIRST:_updateDomain_1
+
+
+        // .//GEN-LAST:_updateDomain_1
+        // .//GEN-BEGIN:_updateDomain_2_be
+
+#foreach $field in $Fields.values() #begin
+#set $wm_isKey = "false"
+#foreach $keyField in $KeyFields.values() #begin
+#if ( $keyField.Name.Upper1 == $field.Name.Upper1 ) #begin
+#set $wm_isKey = "true"
+#end
+#end
+#if ($wm_isKey == "false" && $(field.DomainField.Upper) != "") #begin
+#if ($field.RelatedObjectName == null) #begin
+#if ($(field.StampType) == null || $(field.StampType.Upper1) == "LastUpdatedUserId" || $(field.StampType.Upper1) == "LastUpdatedDateTime") #begin
+        try {
+
+#if ($(field.StampType) != null && $(field.StampType.Upper1) == "LastUpdatedUserId") #begin
+            if (!fromPrevalidate && input.getHeaderDto() != null && input.getHeaderDto().getUserId() != null)
+                domain.update$(field.DomainField.Upper1)(input.getHeaderDto().getUserId());
+#elseif ($(field.StampType) != null && $(field.StampType.Upper1) == "LastUpdatedDateTime") #begin
+            if (!fromPrevalidate)
+                domain.update$(field.DomainField.Upper1)(new DateTime());
+#elseif ($field.Comment != null) #begin
+            domain.update$(field.DomainField.Upper1)(input.get$(field.Name.Upper1)_AdditionalComment());
+#else
+            domain.update$(field.DomainField.Upper1)(input.get$(field.Name.Upper1)());
+#end
+        } catch (ValidationException e) {
+            if (appExps == null)
+                appExps = new ApplicationExceptions();
+            appExps.add(e);
+        }
+#end
+#end
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.KeyType.Upper) == "PRIMARY" || $(field.KeyType.Upper) == "TECHNICAL") #begin
+#set $wm_isKey = "false"
+#foreach $keyField in $KeyFields.values() #begin
+#if ( $keyField.Name.Upper1 == $field.Name.Upper1 ) #begin
+#set $wm_isKey = "true"
+#end
+#end
+#if ($wm_isKey == "false") #begin
+        try {
+
+#if ($(field.KeyType.Upper) == "PRIMARY") #begin
+            domain.update$(field.DomainField.Upper1)(input.get$(field.Name.Upper1)());
+#else
+            domain.update$(field.DomainField.Upper1)(foreignKeys.$(field.Name.Lower1));
+#end
+        } catch (ValidationException e) {
+            if (appExps == null)
+                appExps = new ApplicationExceptions();
+            appExps.add(e);
+        }
+#end
+#end
+#end
+#end
+#end
+#end
+        // .//GEN-END:_updateDomain_2_be
+        // Add custom code //GEN-FIRST:_updateDomain_2
+
+
+        // .//GEN-LAST:_updateDomain_2
+        // .//GEN-BEGIN:_updateDomain_3_be
+        if (appExps != null && appExps.size() > 0)
+            throw appExps;
+    }
+    // .//GEN-END:_updateDomain_3_be
+    // .//GEN-BEGIN:_preprocessDelete_1_be
+    /** Preprocess the input for the delete method. */
+    private void preprocess(UOW uow, $(Component.Upper1)DeleteInDto input) throws FrameworkException, ApplicationExceptions {
+        // .//GEN-END:_preprocessDelete_1_be
+        // Add custom code //GEN-FIRST:_preprocessDelete_1
+
+
+        // .//GEN-LAST:_preprocessDelete_1
+        // .//GEN-BEGIN:_preprocessDelete_2_be
+    }
+    // .//GEN-END:_preprocessDelete_2_be
+    // .//GEN-BEGIN:_loadDelete_1_be
+    /** Retrieve the domain object. */
+    private $(DomainObject.Upper1) load(UOW uow, $(Component.Upper1)DeleteInDto input) throws FrameworkException, ApplicationExceptions {
+        $(DomainObject.Upper1) domain = null;
+        Criteria criteria = new Criteria();
+        criteria.setTable( $(DomainObject.Upper1)Meta.getName() );
+        // .//GEN-END:_loadDelete_1_be
+        // Add custom criteria //GEN-FIRST:_loadDelete_1
+
+
+        // .//GEN-LAST:_loadDelete_1
+        // .//GEN-BEGIN:_loadDelete_2_be
+
+#foreach $field in $KeyFields.values() #begin
+        criteria.addCriteria($(DomainObject.Upper1)Meta.$(field.DomainField.Static), input.get$(field.Name.Upper1)());
+#end
+        criteria.setLocking(Criteria.LOCKING_PARANOID);
+        Iterator itr = uow.query(criteria).iterator();
+        if (itr.hasNext())
+            domain = ($(DomainObject.Upper1)) itr.next();
+        // .//GEN-END:_loadDelete_2_be
+        // Add custom code //GEN-FIRST:_loadDelete_2
+
+
+        // .//GEN-LAST:_loadDelete_2
+        // .//GEN-BEGIN:_loadDelete_3_be
+        if (domain == null) {
+            ApplicationExceptions appExps = new ApplicationExceptions();
+            appExps.add(new DomainObjectNotFoundException($(DomainObject.Upper1)Meta.getLabelToken()));
+            throw appExps;
+        }
+        return domain;
+    }
+    // .//GEN-END:_loadDelete_3_be
+    // .//GEN-BEGIN:_deleteDomain_1_be
+    /** Delete the domain object from the domain. */
+    private void deleteDomain(UOW uow, $(Component.Upper1)DeleteInDto input, $(DomainObject.Upper1) domain) throws FrameworkException, ApplicationExceptions {
+        // .//GEN-END:_deleteDomain_1_be
+        // Add custom code //GEN-FIRST:_deleteDomain_1
+
+
+        // .//GEN-LAST:_deleteDomain_1
+        // .//GEN-BEGIN:_deleteDomain_2_be
+        deleteRelatedObjects(uow, input, domain);
+        uow.delete(domain);
+        // .//GEN-END:_deleteDomain_2_be
+        // Add custom code //GEN-FIRST:_deleteDomain_2
+
+
+        // .//GEN-LAST:_deleteDomain_2
+        // .//GEN-BEGIN:_deleteDomain_3_be
+    }
+    // .//GEN-END:_deleteDomain_3_be
+    // .//GEN-BEGIN:_addForeignObjectsToRetrieveOut_1_be
+    /** Add foreign objects to $(Component.Upper1)RetrieveOutDto */
+    private void addForeignObjectsToRetrieveOut(UOW uow, $(DomainObject.Upper1) domain, $(Component.Upper1)RetrieveOutDto output)
+    throws FrameworkException, ApplicationExceptions {
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null) #begin
+$ScratchPad.clear()
+        {
+
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.DomainField.Upper) != "") #begin
+            output.set$(field.Name.Upper1)(domain.get$(field.DomainField.Upper1)());
+#elseif ($(field.SourceChain) == null) #begin
+#set $wm_foreignClass = "$(foreignObject.Object.Upper1)"
+#set $wm_foreignObject = "chain$(foreignObject.Object.Upper1)"
+#if ($ScratchPad.get($wm_foreignObject) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_foreignObject,$wm_foreignObject) != null) #begin #end
+#set $wm_ifCondition = ""
+#foreach $foreignField in $foreignObject.ForeignFields.values() #begin
+#if ($(foreignField.DomainField.Upper) != "" && ($(foreignField.KeyType.Upper) == "PRIMARY" || $(foreignField.KeyType.Upper) == "TECHNICAL")) #begin
+#if ($wm_ifCondition != "") #begin
+#set $wm_ifCondition = "$(wm_ifCondition) && "
+#end
+#set $wm_ifCondition = "$(wm_ifCondition)domain.get$(foreignField.DomainField.Upper1)() != null"
+#end
+#end
+            $(wm_foreignClass) $wm_foreignObject = null;
+            {
+                if ($(wm_ifCondition)) {
+                    Criteria criteria$(foreignObject.Object.Upper1) = new Criteria();
+                    criteria$(foreignObject.Object.Upper1).setTable($(foreignObject.Object.Upper1)Meta.getName());
+
+#foreach $foreignField in $foreignObject.ForeignFields.values() #begin
+#if ($(foreignField.DomainField.Upper) != "" && ($(foreignField.KeyType.Upper) == "PRIMARY" || $(foreignField.KeyType.Upper) == "TECHNICAL")) #begin
+                    criteria$(foreignObject.Object.Upper1).addCriteria($(foreignObject.Object.Upper1)Meta.$(foreignField.DomainFieldInForeignObject.Static), domain.get$(foreignField.DomainField.Upper1)());
+#end
+#end
+                    Iterator i = uow.query(criteria$(foreignObject.Object.Upper1)).iterator();
+                    if (i.hasNext() )
+                        $wm_foreignObject = ($(wm_foreignClass)) i.next();
+                }
+            }
+#end
+            try {
+                output.set$(field.Name.Upper1)($(wm_foreignObject).get$(field.DomainFieldInForeignObject.Upper1)());
+            } catch (NullPointerException e) {
+                // Do nothing
+            }
+#else
+#set $wm_relatedObject = "chain$(foreignObject.Object.Upper1)"
+#foreach $source in $field.SourceChain.values() #begin
+#set $wm_relatedObject = "$(wm_relatedObject)$(source.Object.Upper1)"
+#foreach $joinField in $source.JoinFields.values() #begin
+#set $wm_relatedObject = "$(wm_relatedObject)$(joinField.DomainObjectField.Upper1)$(joinField.SourceField.Upper1)"
+#end
+#end
+#set $wm_relatedClass = "$(source.Object.Upper1)"
+#if ($ScratchPad.get($wm_relatedObject) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_relatedObject,$wm_relatedObject) != null) #begin #end
+#set $wm_ifCondition = ""
+#foreach $foreignField in $foreignObject.ForeignFields.values() #begin
+#if ($(foreignField.DomainField.Upper) != "" && ($(foreignField.KeyType.Upper) == "PRIMARY" || $(foreignField.KeyType.Upper) == "TECHNICAL")) #begin
+#if ($wm_ifCondition != "") #begin
+#set $wm_ifCondition = "$(wm_ifCondition) && "
+#end
+#set $wm_ifCondition = "$(wm_ifCondition)domain.get$(foreignField.DomainField.Upper1)() != null"
+#end
+#end
+            $(wm_relatedClass) $wm_relatedObject = null;
+            {
+                if ($(wm_ifCondition)) {
+                    Criteria criteria$(foreignObject.Object.Upper1) = new Criteria();
+                    criteria$(foreignObject.Object.Upper1).setTable($(foreignObject.Object.Upper1)Meta.getName());
+
+#foreach $foreignField in $foreignObject.ForeignFields.values() #begin
+#if ($(foreignField.DomainField.Upper) != "" && ($(foreignField.KeyType.Upper) == "PRIMARY" || $(foreignField.KeyType.Upper) == "TECHNICAL")) #begin
+                    criteria$(foreignObject.Object.Upper1).addCriteria($(foreignObject.Object.Upper1)Meta.$(foreignField.DomainFieldInForeignObject.Static), domain.get$(foreignField.DomainField.Upper1)());
+#end
+#end
+#set $wm_previousSourceClass = "$(foreignObject.Object.Upper1)"
+#foreach $source in $field.SourceChain.values() #begin
+#foreach $joinField in $source.JoinFields.values() #begin
+                    criteria$(wm_previousSourceClass).addInnerCriteria($(wm_previousSourceClass)Meta.$(joinField.DomainObjectField.Static), $(source.Object.Upper1)Meta.$(joinField.SourceField.Static));
+#end
+
+                    Criteria criteria$(source.Object.Upper1) = new Criteria();
+                    criteria$(source.Object.Upper1).setTable($(source.Object.Upper1)Meta.getName());
+                    criteria$(source.Object.Upper1).addAggregate(criteria$(wm_previousSourceClass));
+
+#set $wm_previousSourceClass = "$(source.Object.Upper1)"
+#end
+                    Iterator i = uow.query(criteria$(wm_previousSourceClass)).iterator();
+                    if (i.hasNext() )
+                        $wm_relatedObject = ($(wm_relatedClass)) i.next();
+
+                }
+            }
+#end
+            try {
+                output.set$(field.Name.Upper1)($(wm_relatedObject).get$(field.DomainFieldInForeignObject.Upper1)());
+            } catch (NullPointerException e) {
+                // Do nothing
+            }
+#end
+#end
+        }
+#end
+#end
+#end
+    }
+    // .//GEN-END:_addForeignObjectsToRetrieveOut_1_be
+
+#if ($wm_foreignKeysInnerClassRequired == "true") #begin
+    // .//GEN-BEGIN:_createForeignKeys_1_be
+    /** This will determine the Technical-Keys from the Candidate-Keys. */
+    private ForeignKeys createForeignKeys(UOW uow, $(Component.Upper1)CreateInDto input)
+    throws FrameworkException, ApplicationExceptions {
+        ForeignKeys foreignKeys = new ForeignKeys();
+        ApplicationExceptions appExps = null;
+
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#set $wm_hasTechnicalKeys = "false"
+#set $wm_ifAndCondition = ""
+#set $wm_ifOrConditionRequired = "false"
+#set $wm_ifOrCondition = ""
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.KeyType.Upper) == "TECHNICAL") #begin
+#set $wm_hasTechnicalKeys = "true"
+#elseif ($(field.KeyType.Upper) == "PRIMARY" || $(field.KeyType.Upper) == "CANDIDATE") #begin
+#if ($wm_ifAndCondition != "") #begin
+#set $wm_ifAndCondition = "$(wm_ifAndCondition) && "
+#set $wm_ifOrCondition = "$(wm_ifOrCondition) || "
+#set $wm_ifOrConditionRequired = "true"
+#end
+#set $wm_ifAndCondition = "$(wm_ifAndCondition)input.get$(field.Name.Upper1)() != null"
+#set $wm_ifOrCondition = "$(wm_ifOrCondition)input.get$(field.Name.Upper1)() != null"
+#end
+#end
+#if ($wm_hasTechnicalKeys == "true") #begin
+        {
+            if ($(wm_ifAndCondition)) {
+                $(foreignObject.Object.Upper1) $(foreignObject.Object.Lower1) = null;
+                Criteria criteria$(foreignObject.Object.Upper1) = new Criteria();
+                criteria$(foreignObject.Object.Upper1).setTable($(foreignObject.Object.Upper1)Meta.getName());
+
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+$ScratchPad.clear()
+#if ($(field.KeyType.Upper) == "PRIMARY") #begin
+                criteria$(foreignObject.Object.Upper1).addCriteria($(foreignObject.Object.Upper1)Meta.$(field.DomainFieldInForeignObject.Static), input.get$(field.Name.Upper1)());
+#elseif ($(field.KeyType.Upper) == "CANDIDATE" && $(field.SourceChain) == null) #begin
+                criteria$(foreignObject.Object.Upper1).addCriteria($(foreignObject.Object.Upper1)Meta.$(field.DomainFieldInForeignObject.Static), input.get$(field.Name.Upper1)());
+#elseif ($(field.KeyType.Upper) == "CANDIDATE" && $(field.SourceChain) != null) #begin
+#set $wm_previousSourceClass = "$(foreignObject.Object.Upper1)"
+#set $wm_previousCriteria = "criteria$(wm_previousSourceClass)"
+#foreach $source in $field.SourceChain.values() #begin
+#set $wm_relatedCriteria = "$(wm_previousCriteria)$(source.Object.Upper1)"
+#foreach $joinField in $source.JoinFields.values() #begin
+#set $wm_relatedCriteria = "$(wm_relatedCriteria)$(joinField.DomainObjectField.Upper1)$(joinField.SourceField.Upper1)"
+#end
+#if ($ScratchPad.get($wm_relatedCriteria) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_relatedCriteria,$wm_relatedCriteria) != null) #begin #end
+                Criteria $(wm_relatedCriteria) = new Criteria();
+                $(wm_relatedCriteria).setTable($(source.Object.Upper1)Meta.getName());
+
+#foreach $joinField in $source.JoinFields.values() #begin
+                $(wm_relatedCriteria).addInnerCriteria($(source.Object.Upper1)Meta.$(joinField.SourceField.Static), $(wm_previousSourceClass)Meta.$(joinField.DomainObjectField.Static));
+#end
+                $(wm_previousCriteria).addAggregate($(wm_relatedCriteria));
+#end
+#set $wm_previousSourceClass = "$(source.Object.Upper1)"
+#set $wm_previousCriteria = "$(wm_relatedCriteria)"
+#end
+                $(wm_previousCriteria).addCriteria($(wm_previousSourceClass)Meta.$(field.DomainFieldInForeignObject.Static), input.get$(field.Name.Upper1)());
+#end
+#end
+                Collection col = uow.query(criteria$(foreignObject.Object.Upper1));
+                if (col.size() == 1) {
+                    $(foreignObject.Object.Lower1) = ($(foreignObject.Object.Upper1)) col.iterator().next();
+
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.KeyType.Upper) == "TECHNICAL") #begin
+                    foreignKeys.$(field.Name.Lower1) = $(foreignObject.Object.Lower1).get$(field.DomainFieldInForeignObject.Upper1)();
+#end
+#end
+                } else if (col.isEmpty()) {
+                    if (appExps == null)
+                        appExps = new ApplicationExceptions();
+                    appExps.add(new DomainObjectNotFoundException($(foreignObject.Object.Upper1)Meta.getLabelToken()));
+                } else {
+                    if (appExps == null)
+                        appExps = new ApplicationExceptions();
+                    appExps.add(new MultipleDomainObjectsFoundException($(foreignObject.Object.Upper1)Meta.getLabelToken()));
+                }
+
+#if ($wm_ifOrConditionRequired == "true") #begin
+            } else if ($(wm_ifOrCondition)) {
+                if (appExps == null)
+                    appExps = new ApplicationExceptions();
+                appExps.add(new IncompleteKeySpecifiedException($(foreignObject.Object.Upper1)Meta.getLabelToken()));
+#end
+            }
+        }
+#end
+#end
+#end
+        if (appExps != null)
+            throw appExps;
+        return foreignKeys;
+    }
+    // .//GEN-END:_createForeignKeys_1_be
+#end
+    // .//GEN-BEGIN:_validateForeignObjects_1_be
+    /** This will validate the Foreign Objects. */
+    private void validateForeignObjects(UOW uow, $(Component.Upper1)CreateInDto input)
+    throws FrameworkException, ApplicationExceptions {
+        ApplicationExceptions appExps = null;
+        // .//GEN-END:_validateForeignObjects_1_be
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#set $wm_hasTechnicalKeys = "false"
+#set $wm_ifAndCondition = ""
+#set $wm_ifOrConditionRequired = "false"
+#set $wm_ifOrCondition = ""
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.KeyType.Upper) == "TECHNICAL") #begin
+#set $wm_hasTechnicalKeys = "true"
+#elseif ($(field.KeyType.Upper) == "PRIMARY" || $(field.KeyType.Upper) == "CANDIDATE") #begin
+#if ($wm_ifAndCondition != "") #begin
+#set $wm_ifAndCondition = "$(wm_ifAndCondition) && "
+#set $wm_ifOrCondition = "$(wm_ifOrCondition) || "
+#set $wm_ifOrConditionRequired = "true"
+#end
+#set $wm_ifAndCondition = "$(wm_ifAndCondition)input.get$(field.Name.Upper1)() != null"
+#set $wm_ifOrCondition = "$(wm_ifOrCondition)input.get$(field.Name.Upper1)() != null"
+#end
+#end
+#if ($wm_hasTechnicalKeys == "false") #begin
+        // .//GEN-BEGIN:_validateForeignObjects_$(foreignObject.Name.Upper1)_1_be
+        {
+            if ($(wm_ifAndCondition)) {
+                Criteria criteria$(foreignObject.Object.Upper1) = new Criteria();
+                criteria$(foreignObject.Object.Upper1).setTable($(foreignObject.Object.Upper1)Meta.getName());
+
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.KeyType.Upper) == "PRIMARY") #begin
+                criteria$(foreignObject.Object.Upper1).addCriteria($(foreignObject.Object.Upper1)Meta.$(field.DomainFieldInForeignObject.Static), input.get$(field.Name.Upper1)());
+#end
+#end
+                // .//GEN-END:_validateForeignObjects_$(foreignObject.Name.Upper1)_1_be
+                // Add custom code //GEN-FIRST:_validateForeignObjects_$(foreignObject.Name.Upper1)_1
+
+
+                // .//GEN-LAST:_validateForeignObjects_$(foreignObject.Name.Upper1)_1
+                // .//GEN-BEGIN:_validateForeignObjects_$(foreignObject.Name.Upper1)_2_be
+                if (criteria$(foreignObject.Object.Upper1) != null) {
+                    Collection col = uow.query(criteria$(foreignObject.Object.Upper1));
+                    if (col.isEmpty()) {
+                        if (appExps == null)
+                            appExps = new ApplicationExceptions();
+                        appExps.add(new DomainObjectNotFoundException($(foreignObject.Object.Upper1)Meta.getLabelToken()));
+                    } else if (col.size() != 1) {
+                        if (appExps == null)
+                            appExps = new ApplicationExceptions();
+                        appExps.add(new MultipleDomainObjectsFoundException($(foreignObject.Object.Upper1)Meta.getLabelToken()));
+                    }
+                }
+
+#if ($wm_ifOrConditionRequired == "true") #begin
+            } else if ($(wm_ifOrCondition)) {
+                if (appExps == null)
+                    appExps = new ApplicationExceptions();
+                appExps.add(new IncompleteKeySpecifiedException($(foreignObject.Object.Upper1)Meta.getLabelToken()));
+#end
+            }
+        }
+        // .//GEN-END:_validateForeignObjects_$(foreignObject.Name.Upper1)_2_be
+#end
+#end
+#end
+#end
+        // .//GEN-BEGIN:_validateForeignObjects_2_be
+        if (appExps != null)
+            throw appExps;
+    }
+    // .//GEN-END:_validateForeignObjects_2_be
+    // .//GEN-BEGIN:_createPrevalidateOutDto_1_be
+    private $(Component.Upper1)PrevalidateOutDto createPrevalidateOutDto(UOW uow, $(DomainObject.Upper1) domain, $(Component.Upper1)CreateInDto input)
+    throws FrameworkException, ApplicationExceptions {
+        $(Component.Upper1)PrevalidateOutDto output = new $(Component.Upper1)PrevalidateOutDto();
+
+#foreach $field in $Fields.values() #begin
+#if ($field.RelatedObjectName == null) #begin
+#if ($(field.DomainField.Upper) != "") #begin
+        output.set$(field.Name.Upper1)(domain.get$(field.DomainField.Upper1)());
+#else
+        output.set$(field.Name.Upper1)(input.get$(field.Name.Upper1)());
+#end
+
+#if ($field.Comment != null) #begin
+        output.set$(field.Name.Upper1)_AdditionalComment(input.get$(field.Name.Upper1)_AdditionalComment());
+#end
+#end
+#end
+        addForeignObjectsToRetrieveOut(uow, domain, output);
+        addRelatedDtosToRetrieveOut(uow, domain, output);
+        // .//GEN-END:_createPrevalidateOutDto_1_be
+        // Add custom code //GEN-FIRST:_createPrevalidateOutDto_1
+
+
+        // .//GEN-LAST:_createPrevalidateOutDto_1
+        // .//GEN-BEGIN:_createPrevalidateOutDto_2_be
+        return output;
+    }
+    // .//GEN-END:_createPrevalidateOutDto_2_be
+    // .//GEN-BEGIN:_addRelatedDtosToRetrieveOut_1_be
+    /** Add related objects to $(Component.Upper1)RetrieveOutDto */
+    private void addRelatedDtosToRetrieveOut(UOW uow, $(DomainObject.Upper1) $(DomainObject.Lower1), $(Component.Upper1)RetrieveOutDto output)
+    throws FrameworkException, ApplicationExceptions {
+        // .//GEN-END:_addRelatedDtosToRetrieveOut_1_be
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelationshipToDomainObject.RelationshipTypeOne || ($object.RelationshipToDomainObject.RelationshipTypeMany && $object.RelatedObjectFields != null)) #begin
+#set $ifCondition = ""
+#set $firstPass = "true"
+#foreach $joinField in $object.RelatedObjectJoinFields.values() #begin
+#if ($firstPass = "true") #begin
+#set $firstPass = "false"
+#else
+#set $ifCondition = "$(ifCondition) && "
+#end
+#set $ifCondition = "$(ifCondition)$(DomainObject.Lower1).get$(joinField.DomainField.Upper1)() != null"
+#end
+        // .//GEN-BEGIN:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_1_be
+        if ($(ifCondition)) {
+            Criteria criteria = new Criteria();
+            criteria.setTable($(object.ObjectName.Upper1)Meta.getName());
+
+#foreach $joinField in $object.RelatedObjectJoinFields.values() #begin
+            criteria.addCriteria($(object.ObjectName.Upper1)Meta.$(joinField.RelatedObjectDomainField.Static), $(DomainObject.Lower1).get$(joinField.DomainField.Upper1)());
+#end
+
+#if ($object.OrderByFields != null) #begin
+#foreach $field in $object.OrderByFields.values() #begin
+#if ($field.sortAscending != null && !$(field.sortAscending.BooleanValue))
+            criteria.addOrderBy("$(field.DomainFieldName.Upper1)", Criteria.ORDER_BY_DESC);
+#else
+            criteria.addOrderBy("$(field.DomainFieldName.Upper1)", Criteria.ORDER_BY_ASC);
+#end
+#end
+#end
+            // .//GEN-END:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_1_be
+            // Add custom code to set the criteria before the query //GEN-FIRST:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_1
+
+
+            // .//GEN-LAST:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_1
+
+#if ($object.RelationshipToDomainObject.RelationshipTypeMany && $object.RelatedObjectFields != null) #begin
+            // .//GEN-BEGIN:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_2_be
+            Iterator itrMany = uow.query(criteria).iterator();
+            while (itrMany.hasNext()) {
+                $(object.ObjectName.Upper1) $(object.Name.Lower1) = ($(object.ObjectName.Upper1)) itrMany.next();
+                $(object.Name.Upper1)Dto dto = new $(object.Name.Upper1)Dto();
+                // .//GEN-END:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_2_be
+                // Add custom code before all the setters //GEN-FIRST:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_2
+
+
+                // .//GEN-LAST:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_2
+$ScratchPad.clear()
+#if ($object.RelatedObjectFields != null) #begin
+#foreach $field in $object.RelatedObjectFields.values() #begin
+#if ( $field.SourceChain == null ) #begin
+                // .//GEN-BEGIN:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_$(field.Name.Upper1)_1_be
+                dto.set$(field.Name.Upper1)($(object.Name.Lower1).get$(field.DomainField.Upper1)());
+                // .//GEN-END:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_$(field.Name.Upper1)_1_be
+#else
+#set $wm_relatedClass = ""
+#set $(wm_relatedObject) = "chain"
+#foreach $source in $field.SourceChain.values() #begin
+#set $(wm_relatedObject) = "$(wm_relatedObject)$(source.Object.Upper1)"
+#foreach $joinField in $source.JoinFields.values() #begin
+#set $(wm_relatedObject) = "$(wm_relatedObject)$(joinField.DomainObjectField.Upper1)$(joinField.SourceField.Upper1)"
+#end
+#end
+#set $wm_relatedClass = "$(source.Object.Upper1)"
+#if ($ScratchPad.get($wm_relatedObject) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_relatedObject,$wm_relatedObject) != null) #begin #end
+                // .//GEN-BEGIN:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_$(field.Name.Upper1)_1_be
+                $(wm_relatedClass) $wm_relatedObject = null;
+                {
+
+#set $wm_previousSourceClass = ""
+#set $wm_sourceFirstPass = "true"
+#foreach $source in $field.SourceChain.values() #begin
+#if ($wm_sourceFirstPass = "true") #begin
+#set $wm_sourceFirstPass = "false"
+#set $ifCondition = ""
+#set $firstPass = "true"
+#foreach $joinField in $source.JoinFields.values() #begin
+#if ($firstPass = "true") #begin
+#set $firstPass = "false"
+#else
+#set $ifCondition = "$(ifCondition) && "
+#end
+#set $ifCondition = "$(ifCondition)$(object.Name.Lower1).get$(joinField.DomainObjectField.Upper1)() != null"
+#end
+                    if ($(ifCondition)) {
+                        Criteria criteria$(source.Object.Upper1) = new Criteria();
+                        criteria$(source.Object.Upper1).setTable($(source.Object.Upper1)Meta.getName());
+
+#foreach $joinField in $source.JoinFields.values() #begin
+                        criteria$(source.Object.Upper1).addCriteria($(source.Object.Upper1)Meta.$(joinField.SourceField.Static), $(object.Name.Lower1).get$(joinField.DomainObjectField.Upper1)());
+#end
+#else
+#foreach $joinField in $source.JoinFields.values() #begin
+                        criteria$(wm_previousSourceClass).addInnerCriteria($(wm_previousSourceClass)Meta.$(joinField.DomainObjectField.Static), $(source.Object.Upper1)Meta.$(joinField.SourceField.Static));
+#end
+
+                        Criteria criteria$(source.Object.Upper1) = new Criteria();
+                        criteria$(source.Object.Upper1).setTable($(source.Object.Upper1)Meta.getName());
+                        criteria$(source.Object.Upper1).addAggregate(criteria$(wm_previousSourceClass));
+#end
+#set $wm_previousSourceClass = "$(source.Object.Upper1)"
+#end
+                        // .//GEN-END:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_$(field.Name.Upper1)_1_be
+                        // Add custom code to modify the criteria //GEN-FIRST:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_$(field.Name.Upper1)_1
+
+
+                        // .//GEN-LAST:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_$(field.Name.Upper1)_1
+                        // .//GEN-BEGIN:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_$(field.Name.Upper1)_2_be
+                        Iterator i = uow.query(criteria$(wm_previousSourceClass)).iterator();
+                        if (i.hasNext() )
+                            $wm_relatedObject = ($(wm_relatedClass)) i.next();
+                    }
+                }
+                // .//GEN-END:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_$(field.Name.Upper1)_2_be
+#end
+                // .//GEN-BEGIN:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_$(field.Name.Upper1)_3_be
+                try {
+                    dto.set$(field.Name.Upper1)($(wm_relatedObject).get$(field.DomainField.Upper1)());
+                } catch (NullPointerException e) {
+                    // Do nothing
+                }
+                // .//GEN-END:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_$(field.Name.Upper1)_3_be
+#end
+#end
+#end
+                // Add custom code to pass values to the dto //GEN-FIRST:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_3
+
+
+                // .//GEN-LAST:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_3
+                // .//GEN-BEGIN:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_3_be
+                output.add$(object.Name.Upper1)(dto);
+            }
+            // .//GEN-END:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_3_be
+#end
+
+#if ($object.RelationshipToDomainObject.RelationshipTypeOne && $object.RelationshipToDomainObject.RelationshipTypeMany) #begin
+            // Add custom code //GEN-FIRST:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_4
+
+
+            // .//GEN-LAST:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_4
+#end
+
+#if ($object.RelationshipToDomainObject.RelationshipTypeOne) #begin
+            // .//GEN-BEGIN:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_4_be
+            Iterator itrOne = uow.query(criteria).iterator();
+            if (itrOne.hasNext()) {
+                $(object.ObjectName.Upper1) $(object.Name.Lower1) = ($(object.ObjectName.Upper1)) itrOne.next();
+
+#foreach $field in $Fields.values() #begin
+#if ($(field.DomainField.Upper) != "") #begin
+#if ($field.RelatedObjectName != null && $(field.RelatedObjectName.Upper1) == $(object.Name.Upper1)) #begin
+                output.set$(field.Name.Upper1)($(object.Name.Lower1).get$(field.DomainField.Upper1)());
+#end
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName != null && $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+                {
+
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.DomainField.Upper) != "") #begin
+                    output.set$(field.Name.Upper1)($(object.Name.Lower1).get$(field.DomainField.Upper1)());
+#elseif ($(field.SourceChain) == null) #begin
+#set $wm_foreignClass = "$(foreignObject.Object.Upper1)"
+#set $wm_foreignObject = "chain$(foreignObject.Object.Upper1)"
+#if ($ScratchPad.get($wm_foreignObject) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_foreignObject,$wm_foreignObject) != null) #begin #end
+#set $wm_ifCondition = ""
+#foreach $foreignField in $foreignObject.ForeignFields.values() #begin
+#if ($(foreignField.DomainField.Upper) != "" && ($(foreignField.KeyType.Upper) == "PRIMARY" || $(foreignField.KeyType.Upper) == "TECHNICAL")) #begin
+#if ($wm_ifCondition != "") #begin
+#set $wm_ifCondition = "$(wm_ifCondition) && "
+#end
+#set $wm_ifCondition = "$(wm_ifCondition)$(object.Name.Lower1).get$(foreignField.DomainField.Upper1)() != null"
+#end
+#end
+                    $(wm_foreignClass) $wm_foreignObject = null;
+                    {
+                        if ($(wm_ifCondition)) {
+                            Criteria criteria$(foreignObject.Object.Upper1) = new Criteria();
+                            criteria$(foreignObject.Object.Upper1).setTable($(foreignObject.Object.Upper1)Meta.getName());
+
+#foreach $foreignField in $foreignObject.ForeignFields.values() #begin
+#if ($(foreignField.DomainField.Upper) != "" && ($(foreignField.KeyType.Upper) == "PRIMARY" || $(foreignField.KeyType.Upper) == "TECHNICAL")) #begin
+                            criteria$(foreignObject.Object.Upper1).addCriteria($(foreignObject.Object.Upper1)Meta.$(foreignField.DomainFieldInForeignObject.Static), $(object.Name.Lower1).get$(foreignField.DomainField.Upper1)());
+#end
+#end
+                            Iterator i = uow.query(criteria$(foreignObject.Object.Upper1)).iterator();
+                            if (i.hasNext() )
+                                $wm_foreignObject = ($(wm_foreignClass)) i.next();
+                        }
+                    }
+#end
+                    try {
+                        output.set$(field.Name.Upper1)($(wm_foreignObject).get$(field.DomainFieldInForeignObject.Upper1)());
+                    } catch (NullPointerException e) {
+                        // Do nothing
+                    }
+#else
+#set $wm_relatedObject = "chain$(foreignObject.Object.Upper1)"
+#foreach $source in $field.SourceChain.values() #begin
+#set $wm_relatedObject = "$(wm_relatedObject)$(source.Object.Upper1)"
+#foreach $joinField in $source.JoinFields.values() #begin
+#set $wm_relatedObject = "$(wm_relatedObject)$(joinField.DomainObjectField.Upper1)$(joinField.SourceField.Upper1)"
+#end
+#end
+#set $wm_relatedClass = "$(source.Object.Upper1)"
+#if ($ScratchPad.get($wm_relatedObject) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_relatedObject,$wm_relatedObject) != null) #begin #end
+#set $wm_ifCondition = ""
+#foreach $foreignField in $foreignObject.ForeignFields.values() #begin
+#if ($(foreignField.DomainField.Upper) != "" && ($(foreignField.KeyType.Upper) == "PRIMARY" || $(foreignField.KeyType.Upper) == "TECHNICAL")) #begin
+#if ($wm_ifCondition != "") #begin
+#set $wm_ifCondition = "$(wm_ifCondition) && "
+#end
+#set $wm_ifCondition = "$(wm_ifCondition)$(object.Name.Lower1).get$(foreignField.DomainField.Upper1)() != null"
+#end
+#end
+                    $(wm_relatedClass) $wm_relatedObject = null;
+                    {
+                        if ($(wm_ifCondition)) {
+                            Criteria criteria$(foreignObject.Object.Upper1) = new Criteria();
+                            criteria$(foreignObject.Object.Upper1).setTable($(foreignObject.Object.Upper1)Meta.getName());
+
+#foreach $foreignField in $foreignObject.ForeignFields.values() #begin
+#if ($(foreignField.DomainField.Upper) != "" && ($(foreignField.KeyType.Upper) == "PRIMARY" || $(foreignField.KeyType.Upper) == "TECHNICAL")) #begin
+                            criteria$(foreignObject.Object.Upper1).addCriteria($(foreignObject.Object.Upper1)Meta.$(foreignField.DomainFieldInForeignObject.Static), $(object.Name.Lower1).get$(foreignField.DomainField.Upper1)());
+#end
+#end
+#set $wm_previousSourceClass = "$(foreignObject.Object.Upper1)"
+#foreach $source in $field.SourceChain.values() #begin
+#foreach $joinField in $source.JoinFields.values() #begin
+                            criteria$(wm_previousSourceClass).addInnerCriteria($(wm_previousSourceClass)Meta.$(joinField.DomainObjectField.Static), $(source.Object.Upper1)Meta.$(joinField.SourceField.Static));
+#end
+
+                            Criteria criteria$(source.Object.Upper1) = new Criteria();
+                            criteria$(source.Object.Upper1).setTable($(source.Object.Upper1)Meta.getName());
+                            criteria$(source.Object.Upper1).addAggregate(criteria$(wm_previousSourceClass));
+
+#set $wm_previousSourceClass = "$(source.Object.Upper1)"
+#end
+                            Iterator i = uow.query(criteria$(wm_previousSourceClass)).iterator();
+                            if (i.hasNext() )
+                                $wm_relatedObject = ($(wm_relatedClass)) i.next();
+
+                        }
+                    }
+#end
+                    try {
+                        output.set$(field.Name.Upper1)($(wm_relatedObject).get$(field.DomainFieldInForeignObject.Upper1)());
+                    } catch (NullPointerException e) {
+                        // Do nothing
+                    }
+#end
+#end
+                }
+#end
+#end
+#end
+                // .//GEN-END:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_4_be
+                // Add custom code to pass values to the dto //GEN-FIRST:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_5
+
+
+                // .//GEN-LAST:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_5
+                // .//GEN-BEGIN:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_5_be
+            }
+            // .//GEN-END:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_5_be
+#end
+
+#if ($object.RelationshipToDomainObject.RelationshipTypeOne && $object.RelationshipToDomainObject.RelationshipTypeMany) #begin
+            // Add custom code //GEN-FIRST:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_6
+
+
+            // .//GEN-LAST:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_6
+#end
+            // .//GEN-BEGIN:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_6_be
+        }
+$ScratchPad.clear()
+        // .//GEN-END:_addRelatedDtosToRetrieveOut_$(object.Name.Upper1)_6_be
+#end
+#end
+#end
+        // .//GEN-BEGIN:_addRelatedDtosToRetrieveOut_2_be
+    }
+    // .//GEN-END:_addRelatedDtosToRetrieveOut_2_be
+    // .//GEN-BEGIN:_deleteRelatedObjects_1_be
+    /** Delete the related domain objects if the 'Cascading' constraint is specified. Throw an exception in case 'Restricted' constraint is specified. */
+    private void deleteRelatedObjects(UOW uow, $(Component.Upper1)DeleteInDto input, $(DomainObject.Upper1) $(DomainObject.Lower1)) throws FrameworkException, ApplicationExceptions {
+        ApplicationExceptions appExps = null;
+        // .//GEN-END:_deleteRelatedObjects_1_be
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#set $ifCondition = ""
+#set $firstPass = "true"
+#foreach $joinField in $object.RelatedObjectJoinFields.values() #begin
+#if ($firstPass = "true") #begin
+#set $firstPass = "false"
+#else
+#set $ifCondition = "$(ifCondition) && "
+#end
+#set $ifCondition = "$(ifCondition)$(DomainObject.Lower1).get$(joinField.DomainField.Upper1)() != null"
+#end
+        // .//GEN-BEGIN:_deleteRelatedObjects_$(object.Name.Upper1)_1_be
+        if ($(ifCondition)) {
+            Criteria criteria = new Criteria();
+            criteria.setTable($(object.ObjectName.Upper1)Meta.getName());
+
+#foreach $joinField in $object.RelatedObjectJoinFields.values() #begin
+            criteria.addCriteria($(object.ObjectName.Upper1)Meta.$(joinField.RelatedObjectDomainField.Static), $(DomainObject.Lower1).get$(joinField.DomainField.Upper1)());
+#end
+
+#if ($object.DeleteConstraint.Upper == "CASCADING") #begin
+            criteria.setLocking(Criteria.LOCKING_PARANOID);
+#end
+            // .//GEN-END:_deleteRelatedObjects_$(object.Name.Upper1)_1_be
+            // Add custom code to set the criteria before the query //GEN-FIRST:_deleteRelatedObjects_$(object.Name.Upper1)_1
+
+
+            // .//GEN-LAST:_deleteRelatedObjects_$(object.Name.Upper1)_1
+
+#if ($object.DeleteConstraint.Upper == "CASCADING" && $object.RelatedObjectDeletor != null) #begin
+            // .//GEN-BEGIN:_deleteRelatedObjects_$(object.Name.Upper1)_2_be
+            Iterator itr = uow.query(criteria).iterator();
+            while (itr.hasNext()) {
+                $(object.ObjectName.Upper1) $(object.Name.Lower1) = ($(object.ObjectName.Upper1)) itr.next();
+                if (log.isDebugEnabled())
+                    log.debug("Invoking the $(object.RelatedObjectDeletor.TxClass) class to cascade delete the related object " + $(object.Name.Lower1));
+                $(object.RelatedObjectDeletor.DeleteInDtoClass) deleteInDto = new $(object.RelatedObjectDeletor.DeleteInDtoClass)();
+                deleteInDto.setHeaderDto(input.getHeaderDto());
+
+#foreach $keyField in $object.RelatedObjectKeyFields.values() #begin
+## determine the DomainField corresponding to RelatedObjectFieldName
+#set $wm_relatedObjectDomainField = ""
+#if ($object.RelatedObjectFields != null) #begin
+#foreach $relatedObjectField in $object.RelatedObjectFields.values() #begin
+#if ($(keyField.RelatedObjectFieldName.Upper1) == $(relatedObjectField.Name.Upper1)) #begin
+#set $wm_relatedObjectDomainField = "$(relatedObjectField.DomainField.Upper1)"
+#end
+#end
+#end
+#if ($wm_relatedObjectDomainField == "") #begin
+#set $wm_relatedObjectDomainField = $keyField.RelatedObjectFieldName.Upper1
+#end
+                deleteInDto.set$(keyField.FieldNameInTargetComponent.Upper1)($(object.Name.Lower1).get$(wm_relatedObjectDomainField)());
+#end
+                $(object.RelatedObjectDeletor.TxClass) tx = new $(object.RelatedObjectDeletor.TxClass)();
+                // .//GEN-END:_deleteRelatedObjects_$(object.Name.Upper1)_2_be
+                // Add custom code to set any addtional criteria before the delete //GEN-FIRST:_deleteRelatedObjects_$(object.Name.Upper1)_2
+
+
+                // .//GEN-LAST:_deleteRelatedObjects_$(object.Name.Upper1)_2
+                // .//GEN-BEGIN:_deleteRelatedObjects_$(object.Name.Upper1)_3_be
+                tx.delete(deleteInDto, uow);
+                tx.destroy();
+            }
+            // .//GEN-END:_deleteRelatedObjects_$(object.Name.Upper1)_3_be
+#elseif ($object.DeleteConstraint.Upper == "CASCADING") #begin
+            // .//GEN-BEGIN:_deleteRelatedObjects_$(object.Name.Upper1)_4_be
+            Iterator itr = uow.query(criteria).iterator();
+            while (itr.hasNext()) {
+                $(object.ObjectName.Upper1) $(object.Name.Lower1) = ($(object.ObjectName.Upper1)) itr.next();
+                if (log.isDebugEnabled())
+                    log.debug("Deleting the related object " + $(object.Name.Lower1));
+                uow.delete($(object.Name.Lower1));
+            }
+            // .//GEN-END:_deleteRelatedObjects_$(object.Name.Upper1)_4_be
+#elseif ($object.DeleteConstraint.Upper == "RESTRICTED") #begin
+            // .//GEN-BEGIN:_deleteRelatedObjects_$(object.Name.Upper1)_5_be
+            Collection col = uow.query(criteria);
+            Iterator itr = col.iterator();
+            if (itr.hasNext()) {
+                col.clear();
+                if (log.isDebugEnabled())
+                    log.debug("The related $(object.Name.Lower1) object having 'Restricted Delete Constraint' was found. Delete cannot be performed");
+                if (appExps == null)
+                    appExps = new ApplicationExceptions();
+                appExps.add(new RelatedDomainObjectFoundException($(object.ObjectName.Upper1)Meta.getLabelToken()));
+            }
+            // .//GEN-END:_deleteRelatedObjects_$(object.Name.Upper1)_5_be
+#end
+        // .//GEN-BEGIN:_deleteRelatedObjects_$(object.Name.Upper1)_6_be
+        }
+        // .//GEN-END:_deleteRelatedObjects_$(object.Name.Upper1)_6_be
+#end
+#end
+        // Add custom code //GEN-FIRST:_deleteRelatedObjects_1
+
+
+        // .//GEN-LAST:_deleteRelatedObjects_1
+        // .//GEN-BEGIN:_deleteRelatedObjects_2_be
+        if (appExps != null)
+            throw appExps;
+    }
+    // .//GEN-END:_deleteRelatedObjects_2_be
+
+#if ($wm_useForDirtyReadCheckField != null) #begin
+#set $field = $wm_useForDirtyReadCheckField
+#if ($wm_stampTypeLastUpdatedUserIdField != null)
+#set $wm_stampTypeLastUpdatedUserId = "domain.get$(wm_stampTypeLastUpdatedUserIdField.DomainField.Upper1)()"
+#else
+#set $wm_stampTypeLastUpdatedUserId = "\"Another User\""
+#end
+#if ($wm_stampTypeLastUpdatedDateTimeField != null)
+#set $wm_stampTypeLastUpdatedDateTime = "Formatter.format(domain.get$(wm_stampTypeLastUpdatedDateTimeField.DomainField.Upper1)())"
+#else
+#set $wm_stampTypeLastUpdatedDateTime = "\"recently\""
+#end
+    // .//GEN-BEGIN:_domainObjectChangedTest_1_be
+    /** Ensure the domain object has not been modified. */
+    private void domainObjectChangedTest(Boolean performDirtyReadCheck, $(DomainObject.Upper1) domain, $(field.DataType.JavaDataType) $(field.DomainField.Lower1))
+    throws FrameworkException, ApplicationExceptions {
+        if (performDirtyReadCheck != null && performDirtyReadCheck.booleanValue()) {
+            if ($(field.DomainField.Lower1) == null ? domain.get$(field.DomainField.Upper1)() != null : !$(field.DomainField.Lower1).equals(domain.get$(field.DomainField.Upper1)()) ) {
+                DomainObjectChangedException e = new DomainObjectChangedException($(wm_stampTypeLastUpdatedUserId), $(wm_stampTypeLastUpdatedDateTime));
+                ApplicationExceptions aes = new ApplicationExceptions();
+                aes.add(e);
+                throw aes;
+            }
+        }
+    }
+    // .//GEN-END:_domainObjectChangedTest_1_be
+#end
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelationshipToDomainObject.RelationshipTypeOne) #begin
+    // .//GEN-BEGIN:_createOrLoad$(object.Name.Upper1)_1_be
+    /** Create Or Load an existing instance of $(object.Name.Upper1) which has a 1-to-1 relationship with the domain object.*/
+
+#if ($wm_foreignKeysInnerClassRequired == "true") #begin
+    private $(object.ObjectName.Upper1) createOrLoad$(object.Name.Upper1)(UOW uow, $(Component.Upper1)CreateInDto input, $(DomainObject.Upper1) domain, ForeignKeys foreignKeys, boolean fromPrevalidate)
+#else
+    private $(object.ObjectName.Upper1) createOrLoad$(object.Name.Upper1)(UOW uow, $(Component.Upper1)CreateInDto input, $(DomainObject.Upper1) domain, boolean fromPrevalidate)
+#end
+    throws FrameworkException, ApplicationExceptions {
+        $(object.ObjectName.Upper1) $(object.Name.Lower1) = null;
+        ApplicationExceptions appExps = null;
+        // .//GEN-END:_createOrLoad$(object.Name.Upper1)_1_be
+        // Add custom code //GEN-FIRST:_createOrLoad$(object.Name.Upper1)_1
+
+
+        // .//GEN-LAST:_createOrLoad$(object.Name.Upper1)_1
+        // .//GEN-BEGIN:_createOrLoad$(object.Name.Upper1)_2_be
+
+#set $ifCondition = ""
+#set $firstPass = "true"
+#foreach $joinField in $object.RelatedObjectJoinFields.values() #begin
+#if ($firstPass = "true") #begin
+#set $firstPass = "false"
+#else
+#set $ifCondition = "$(ifCondition) && "
+#end
+#set $ifCondition = "$(ifCondition)domain.get$(joinField.DomainField.Upper1)() != null"
+#end
+        if ($(ifCondition)) {
+            // load an existing instance
+            Criteria criteria = new Criteria();
+            criteria.setTable($(object.ObjectName.Upper1)Meta.getName());
+
+#foreach $joinField in $object.RelatedObjectJoinFields.values() #begin
+            criteria.addCriteria($(object.ObjectName.Upper1)Meta.$(joinField.RelatedObjectDomainField.Static), domain.get$(joinField.DomainField.Upper1)());
+#end
+            // .//GEN-END:_createOrLoad$(object.Name.Upper1)_2_be
+            // Add custom code //GEN-FIRST:_createOrLoad$(object.Name.Upper1)_2
+
+
+            // .//GEN-LAST:_createOrLoad$(object.Name.Upper1)_2
+            // .//GEN-BEGIN:_createOrLoad$(object.Name.Upper1)_3_be
+            Iterator itrOne = uow.query(criteria).iterator();
+            if (itrOne.hasNext())
+                $(object.Name.Lower1) = ($(object.ObjectName.Upper1)) itrOne.next();
+        }
+        
+        // create if it doesn't already exist
+        if ($(object.Name.Lower1) == null)
+            $(object.Name.Lower1) = new $(object.ObjectName.Upper1)();
+
+
+#foreach $field in $Fields.values() #begin
+#if ($(field.DomainField.Upper) != "") #begin
+#if ($field.RelatedObjectName != null && $(field.RelatedObjectName.Upper1) == $(object.Name.Upper1)) #begin
+        try {
+
+#if ($(field.Voucher) != null) #begin
+            if (input.get$(field.Name.Upper1)() != null) {
+                $(object.Name.Lower1).update$(field.DomainField.Upper1)(input.get$(field.Name.Upper1)());
+            } else if (!fromPrevalidate) {
+                // Generate the Voucher
+                try {
+                    IVoucherGenerator generator = (IVoucherGenerator) $(field.Voucher.VoucherGeneratorImplementation).class.newInstance();
+                    generator.init();
+                    generator.setUow(uow);
+                    generator.setLabelToken($(object.ObjectName.Upper1)Meta.META_$(field.DomainField.Static).getLabelToken());
+                    generator.setPrefix("$field.Voucher.Prefix");
+                    generator.setLength("$field.Voucher.Length");
+
+#if ($(field.Voucher.Params) != null) #begin
+#foreach $param in $field.Voucher.Params.values() #begin
+                    BeanHelper.setField(generator, "$(param.Name)", "$(param.Value)");
+#end
+#end
+                    input.set$(field.Name.Upper1)(generator.generate());
+                    generator.cleanup();
+                } catch (FrameworkException e) {
+                    throw e;
+                } catch (ApplicationExceptions e) {
+                    throw e;
+                } catch (Exception e) {
+                    throw new VoucherGeneratorException(null, e);
+                }
+                $(object.Name.Lower1).update$(field.DomainField.Upper1)(input.get$(field.Name.Upper1)());
+            }
+#elseif ($(field.StampType) != null && $(field.StampType.Upper1) == "CreatedUserId") #begin
+            if (!fromPrevalidate && !$(object.Name.Lower1).isDatabaseOccurence() && input.getHeaderDto() != null && input.getHeaderDto().getUserId() != null)
+                $(object.Name.Lower1).update$(field.DomainField.Upper1)(input.getHeaderDto().getUserId());
+#elseif ($(field.StampType) != null && $(field.StampType.Upper1) == "CreatedDateTime") #begin
+            if (!fromPrevalidate && !$(object.Name.Lower1).isDatabaseOccurence())
+                $(object.Name.Lower1).update$(field.DomainField.Upper1)(new DateTime());
+#elseif ($(field.StampType) != null && $(field.StampType.Upper1) == "LastUpdatedUserId") #begin
+            if (!fromPrevalidate && $(object.Name.Lower1).isDatabaseOccurence() && input.getHeaderDto() != null && input.getHeaderDto().getUserId() != null)
+                $(object.Name.Lower1).update$(field.DomainField.Upper1)(input.getHeaderDto().getUserId());
+#elseif ($(field.StampType) != null && $(field.StampType.Upper1) == "LastUpdatedDateTime") #begin
+            if (!fromPrevalidate && $(object.Name.Lower1).isDatabaseOccurence())
+                $(object.Name.Lower1).update$(field.DomainField.Upper1)(new DateTime());
+#elseif ($field.Comment != null) #begin
+            $(object.Name.Lower1).update$(field.DomainField.Upper1)(input.get$(field.Name.Upper1)_AdditionalComment());
+#else
+            $(object.Name.Lower1).update$(field.DomainField.Upper1)(input.get$(field.Name.Upper1)());
+#end
+        } catch (ValidationException e) {
+            if (appExps == null)
+                appExps = new ApplicationExceptions();
+            appExps.add(e);
+        }
+#end
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName != null && $(foreignObject.RelatedObjectName.Upper1) == $(object.Name.Upper1)) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.KeyType.Upper) == "PRIMARY" || $(field.KeyType.Upper) == "TECHNICAL") #begin
+        try {
+
+#if ($(field.KeyType.Upper) == "PRIMARY") #begin
+            $(object.Name.Lower1).update$(field.DomainField.Upper1)(input.get$(field.Name.Upper1)());
+#else
+            $(object.Name.Lower1).update$(field.DomainField.Upper1)(foreignKeys.$(field.Name.Lower1));
+#end
+        } catch (ValidationException e) {
+            if (appExps == null)
+                appExps = new ApplicationExceptions();
+            appExps.add(e);
+        }
+#end
+#end
+#end
+#end
+#end
+
+        if (!$(object.Name.Lower1).isDatabaseOccurence() && $(object.Name.Lower1).isModified()) {
+            // Finally set the join-fields
+
+#foreach $joinField in $object.RelatedObjectJoinFields.values() #begin
+            try {
+                $(object.Name.Lower1).update$(joinField.RelatedObjectDomainField.Upper1)(domain.get$(joinField.DomainField.Upper1)());
+            } catch (ValidationException e) {
+                if (appExps == null)
+                    appExps = new ApplicationExceptions();
+                appExps.add(e);
+            }
+#end
+        }
+        // .//GEN-END:_createOrLoad$(object.Name.Upper1)_3_be
+        // Add custom code //GEN-FIRST:_createOrLoad$(object.Name.Upper1)_3
+
+
+        // .//GEN-LAST:_createOrLoad$(object.Name.Upper1)_3
+        // .//GEN-BEGIN:_createOrLoad$(object.Name.Upper1)_4_be
+        if (appExps != null && appExps.size() > 0)
+            throw appExps;
+        return $(object.Name.Lower1);
+    }
+    // .//GEN-END:_createOrLoad$(object.Name.Upper1)_4_be
+#end
+#end
+#end
+
+#if ($wm_foreignKeysInnerClassRequired == "true") #begin
+    // .//GEN-BEGIN:_ForeignKeys_1_be
+    /** This is an inner-class for holding the Technical-Keys (determined from the Candidate keys)
+    An instance of this class will be created during the create/update process. */
+    private static class ForeignKeys {
+
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.KeyType.Upper) == "TECHNICAL") #begin
+        private $(field.DataType.JavaDataType) $(field.Name.Lower1);
+#end
+#end
+#end
+#end
+    }
+    // .//GEN-END:_ForeignKeys_1_be
+#end
+    // All the custom code goes here //GEN-FIRST:_custom
+
+
+
+
+
+
+    // .//GEN-LAST:_custom
+}
