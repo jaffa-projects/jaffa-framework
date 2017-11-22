@@ -95,8 +95,7 @@ public void validate()
 ***
 **org.jaffa.persistence.FakeModelMeta**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.UOW**
 
@@ -133,13 +132,11 @@ public void testUpdateReadOnlyField()
 ***
 **org.jaffa.rules.AopLoaderBootstrapServlet**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.AopXmlLoader**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.DataSecurityTest**
 
@@ -150,8 +147,7 @@ public void dataSecurityNotEnabled() throws FrameworkException, ApplicationExcep
 ***
 **org.jaffa.rules.Dummy**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.ExecutionOrderTest**
 
@@ -205,8 +201,7 @@ public void testAOPInjection()
 ***
 **org.jaffa.rules.JaffaRulesFrameworkException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.JavaInheritanceTest**
 
@@ -739,8 +734,7 @@ public void testRealmConfig()
 ***
 **org.jaffa.rules.meta.RuleCondition**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.meta.RuleMetaData**
 
@@ -826,8 +820,7 @@ public void validate(RuleMetaData rule) throws ApplicationExceptions, FrameworkE
 ***
 **org.jaffa.rules.rulemeta.AuditRuleHelper**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.rulemeta.AuditRuleMetaHelper**
 
@@ -852,8 +845,7 @@ public void setLayout(String layout)
 ***
 **org.jaffa.rules.rulemeta.IRuleEvaluator**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.rulemeta.IRuleHelper**
 
@@ -866,8 +858,7 @@ public void validate(RuleMetaData rule) throws ApplicationExceptions, FrameworkE
 ***
 **org.jaffa.rules.rulemeta.IRuleManager**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.rulemeta.InvalidRuleParameterException**
 
@@ -1030,23 +1021,19 @@ public String xgetField3()
 ***
 **org.jaffa.rules.testmodels.Access2**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.testmodels.Access3**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.testmodels.Access4**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.testmodels.AccessConstants**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.testmodels.Child1**
 
@@ -1345,8 +1332,7 @@ public String xgetField3()
 ***
 **org.jaffa.rules.testmodels.StringsConstants**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.testmodels.User**
 
@@ -1444,8 +1430,7 @@ public static void write(ClassMetaDataDto cmd) throws MetaDataWriterException
 ***
 **org.jaffa.rules.util.MetaDataWriterException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.util.PropertyTranslator**
 
@@ -1507,8 +1492,7 @@ public void testValidationException() throws FrameworkException, ApplicationExce
 ***
 **org.jaffa.rules.validators.CandidateKeyValidator**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.validators.CandidateKeyValidatorTest**
 
@@ -1521,8 +1505,7 @@ public void testValidator() throws ApplicationException, FrameworkException
 ***
 **org.jaffa.rules.validators.CaseTypeValidator**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.validators.CaseTypeValidatorTest**
 
@@ -1534,8 +1517,7 @@ public void testValidator() throws ApplicationException, FrameworkException
 ***
 **org.jaffa.rules.validators.CommentValidator**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.validators.CommentValidatorTest**
 
@@ -1547,8 +1529,7 @@ public void testValidator() throws ApplicationException, FrameworkException
 ***
 **org.jaffa.rules.validators.ForeignKeyValidator**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.validators.ForeignKeyValidatorTest**
 
@@ -1561,8 +1542,7 @@ public void testValidator() throws ApplicationException, FrameworkException
 ***
 **org.jaffa.rules.validators.GenericForeignKeyValidator**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.validators.GenericForeignKeyValidatorTest**
 
@@ -1575,8 +1555,7 @@ public void testValidator() throws ApplicationException, FrameworkException
 ***
 **org.jaffa.rules.validators.InListValidator**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.validators.InListValidatorTest**
 
@@ -1595,8 +1574,7 @@ public void validate(T targetObject) throws ApplicationException, FrameworkExcep
 ***
 **org.jaffa.rules.validators.MandatoryValidator**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.validators.MandatoryValidatorTest**
 
@@ -1609,8 +1587,7 @@ public void testValidator() throws ApplicationException, FrameworkException
 ***
 **org.jaffa.rules.validators.MaxLengthValidator**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.validators.MaxLengthValidatorTest**
 
@@ -1623,8 +1600,7 @@ public void testValidator() throws ApplicationException, FrameworkException
 ***
 **org.jaffa.rules.validators.MaxValueValidator**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.validators.MaxValueValidatorTest**
 
@@ -1637,8 +1613,7 @@ public void testValidator() throws ApplicationException, FrameworkException
 ***
 **org.jaffa.rules.validators.MinLengthValidator**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.validators.MinLengthValidatorTest**
 
@@ -1651,8 +1626,7 @@ public void testValidator() throws ApplicationException, FrameworkException
 ***
 **org.jaffa.rules.validators.MinValueValidator**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.validators.MinValueValidatorTest**
 
@@ -1665,8 +1639,7 @@ public void testValidator() throws ApplicationException, FrameworkException
 ***
 **org.jaffa.rules.validators.NotInListValidator**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.validators.NotInListValidatorTest**
 
@@ -1679,8 +1652,7 @@ public void testValidator() throws ApplicationException, FrameworkException
 ***
 **org.jaffa.rules.validators.PartialForeignKeyValidator**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.validators.PartialForeignKeyValidatorTest**
 
@@ -1693,8 +1665,7 @@ public void testValidator() throws ApplicationException, FrameworkException
 ***
 **org.jaffa.rules.validators.PatternValidator**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.validators.PatternValidatorTest**
 
@@ -1714,8 +1685,7 @@ public void testPersistentConfig() throws NoSuchFieldException, IllegalAccessExc
 ***
 **org.jaffa.rules.validators.PrimaryKeyValidator**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.validators.PrimaryKeyValidatorTest**
 
@@ -1762,8 +1732,7 @@ public void testSetRuleMap()
 ***
 **org.jaffa.rules.validators.TestModelPersistent**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.validators.TestModelPersistentConfig**
 
@@ -1779,8 +1748,7 @@ public Collection query(Criteria criteria)
 ***
 **org.jaffa.rules.validators.TestValidator**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.variation.UriMetaData**
 
@@ -1805,5 +1773,4 @@ public synchronized void unload(String uri) throws JaffaRulesFrameworkException
 ***
 **org.jaffa.soa.graph.GraphCriteria**
 
-```
-```
+No public methods.

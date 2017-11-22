@@ -477,13 +477,11 @@ public UserMaintenanceRetrieveOutDto update(UserMaintenanceUpdateInDto input) th
 ***
 **org.jaffa.applications.jaffa.modules.admin.components.usermaintenance.tx.exceptions.UserMaintenanceException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.applications.jaffa.modules.admin.components.usermaintenance.ui.UserMaintenanceAction**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.applications.jaffa.modules.admin.components.usermaintenance.ui.UserMaintenanceComponent**
 
@@ -1614,8 +1612,7 @@ public UserRequestMaintenanceRetrieveOutDto update(UserRequestMaintenanceUpdateI
 ***
 **org.jaffa.applications.jaffa.modules.user.components.userrequestmaintenance.ui.UserRequestMaintenanceAction**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.applications.jaffa.modules.user.components.userrequestmaintenance.ui.UserRequestMaintenanceComponent**
 
@@ -1725,8 +1722,7 @@ public void setUserNameWV(String value)
 ***
 **org.jaffa.applications.jaffa.modules.user.components.userrequestmaintenanceunsecured.ui.UserRequestMaintenanceComponent**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.applications.jaffa.modules.user.components.userrequestviewer.IUserRequestViewer**
 
@@ -1902,8 +1898,7 @@ public static String getName()
 ***
 **org.jaffa.applications.jaffa.modules.user.exceptions.RequestException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.modules.user.services.DummyPortletFilter**
 
@@ -2027,18 +2022,15 @@ public void testVariationContext() throws Exception
 ***
 **org.jaffa.modules.user.services.UserDataWrapper**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.unittest.AbstractDataWrapper**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.unittest.ContextWrapper**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.unittest.InitLog4J**
 

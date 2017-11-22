@@ -694,8 +694,7 @@ public UserTimeEntryMaintenanceRetrieveOutDto update(UserTimeEntryMaintenanceUpd
 ***
 **org.jaffa.applications.test.modules.time.components.usertimeentrymaintenance.ui.UserTimeEntryMaintenanceAction**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.applications.test.modules.time.components.usertimeentrymaintenance.ui.UserTimeEntryMaintenanceComponent**
 
@@ -990,18 +989,15 @@ public static String getName()
 ***
 **org.jaffa.beans.factory.ILifecycleHandlerFactory**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.beans.factory.ILifecycleHandlerProvider**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.beans.factory.InitializerFactory**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.beans.factory.LifecycleHandlerFactory**
 
@@ -1067,13 +1063,11 @@ public void setTestString(String testString)
 ***
 **org.jaffa.beans.factory.config.TestBeanDerived**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.beans.factory.config.TestPersistentBean**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.beans.moulding.data.Generic**
 
@@ -1191,8 +1185,7 @@ public void setRules(String[] rules)
 ***
 **org.jaffa.beans.moulding.mapping.MouldException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.beans.moulding.mapping.MouldHandler**
 
@@ -1269,8 +1262,7 @@ public int size()
 ***
 **org.jaffa.components.codehelper.ICodeHelper**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.components.codehelper.dto.CodeHelperInDto**
 
@@ -1643,8 +1635,7 @@ public void validate() throws InvalidCriteriaRuntimeException
 ***
 **org.jaffa.components.finder.InvalidCriteriaRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.components.finder.OrderByField**
 
@@ -1678,8 +1669,7 @@ public final void testtoArray()
 ***
 **org.jaffa.components.finder.QueryNotFoundException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.components.finder.QuerySaver**
 
@@ -1808,8 +1798,7 @@ public void setTargetFields(String targetFields)
 ***
 **org.jaffa.components.lookup.LookupForm**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.components.lookup.MultiSelectLookupEvent**
 
@@ -1958,8 +1947,7 @@ public void setCurrentScreenCounter(int currentScreenCounter)
 ***
 **org.jaffa.components.maint.MaintTx**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.components.maint.Screen**
 
@@ -2205,8 +2193,7 @@ public String generate() throws FrameworkException, ApplicationExceptions
 ***
 **org.jaffa.components.voucher.VoucherGeneratorException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.components.voucher.VoucherGeneratorFactory**
 
@@ -2293,8 +2280,7 @@ public void setApplicationContext(ApplicationContext applicationContext)
 ***
 **org.jaffa.config.SpringConfig**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.datatypes.ConvertDataTypesTest**
 
@@ -2551,8 +2537,7 @@ public void testFormatRaw() throws ValidationException
 ***
 **org.jaffa.datatypes.IDateBase**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.datatypes.Parser**
 
@@ -2648,93 +2633,75 @@ public Timestamp unmarshal(Date v)
 ***
 **org.jaffa.datatypes.exceptions.BelowMinimumException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.datatypes.exceptions.DateTimeRoundingPrecisionException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.datatypes.exceptions.ExceedsMaximumException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.datatypes.exceptions.FormatCurrencyException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.datatypes.exceptions.FormatDateOnlyException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.datatypes.exceptions.FormatDateTimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.datatypes.exceptions.FormatDecimalException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.datatypes.exceptions.FormatIntegerException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.datatypes.exceptions.InListException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.datatypes.exceptions.InvalidForeignKeyException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.datatypes.exceptions.InvalidGenericForeignKeyException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.datatypes.exceptions.InvalidPatternRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.datatypes.exceptions.MandatoryFieldException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.datatypes.exceptions.PatternExclusionException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.datatypes.exceptions.PatternMismatchException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.datatypes.exceptions.TooLittleDataException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.datatypes.exceptions.TooMuchDataException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.datatypes.exceptions.UnknownDataTypeRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.exceptions.ApplicationException**
 
@@ -2745,8 +2712,7 @@ public String getLocalizedMessage()
 ***
 **org.jaffa.exceptions.ApplicationExceptionWithContext**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.exceptions.ApplicationExceptions**
 
@@ -2766,8 +2732,7 @@ public int size()
 ***
 **org.jaffa.exceptions.ComponentExpiredException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.exceptions.CustomException**
 
@@ -2780,78 +2745,63 @@ public void setArguments(Object[] arguments)
 ***
 **org.jaffa.exceptions.CustomRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.exceptions.DomainObjectChangedException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.exceptions.DomainObjectNotFoundException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.exceptions.DuplicateCandidateKeyException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.exceptions.DuplicateKeyException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.exceptions.FrameworkException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.exceptions.GetQueryDataException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.exceptions.IncompleteKeySpecifiedException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.exceptions.LabelException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.exceptions.MiddlewareException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.exceptions.MultipleDomainObjectsFoundException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.exceptions.NoDefaultException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.exceptions.RelatedDomainObjectFoundException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.exceptions.SaveQueryException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.exceptions.ScriptingException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.exceptions.ServiceFault**
 
@@ -2863,18 +2813,15 @@ public String toString()
 ***
 **org.jaffa.exceptions.SetQueryDataException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.exceptions.TokenMismatchException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.exceptions.UOWSecurityException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.flexfields.FlexBean**
 
@@ -3139,8 +3086,7 @@ public ResourceLoader<RoleManager> roleManagerXmlLoader()
 ***
 **org.jaffa.loader.IManager**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.loader.IRepository**
 
@@ -3451,8 +3397,7 @@ public void performChecks() throws DomainMetaDataCheckException
 ***
 **org.jaffa.metadata.DomainMetaDataCheckException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.metadata.DomainMetaDataHelper**
 
@@ -3552,8 +3497,7 @@ public String toString()
 ***
 **org.jaffa.middleware.CreateServiceException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.middleware.Factory**
 
@@ -3649,13 +3593,11 @@ public String toString()
 ***
 **org.jaffa.persistence.ILifecycleHandler**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.IPersistent**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.InnerAtomicCriteria**
 
@@ -4015,8 +3957,7 @@ public void testUpdateUsingQuoteUsingProxy()
 ***
 **org.jaffa.persistence.blackboxtests.Wrapper**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.blackboxtests.logging.DemoLogger**
 
@@ -4711,8 +4652,7 @@ public void initialize(UOW uow, DataSource dataSource) throws FrameworkException
 ***
 **org.jaffa.persistence.engines.IMessagingEngine**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.engines.IPersistenceEngine**
 
@@ -4737,13 +4677,11 @@ public void update(IPersistent object, boolean invokeLifecycleEvents) throws Upd
 ***
 **org.jaffa.persistence.engines.IPersistenceEngineFactory**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.engines.ISender**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.engines.MessagingEngineFactory**
 
@@ -4786,8 +4724,7 @@ public void update(IPersistent object, boolean invokeLifecycleEvents) throws Upd
 ***
 **org.jaffa.persistence.engines.jdbcengine.IMessagingEngineFactory**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.engines.jdbcengine.IStoredProcedure**
 
@@ -4800,13 +4737,11 @@ public String prepareCall()
 ***
 **org.jaffa.persistence.engines.jdbcengine.LockedApplicationException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.engines.jdbcengine.SQLApplicationException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.engines.jdbcengine.configservice.ClassMetaData**
 
@@ -4856,23 +4791,19 @@ public void startElement(String uri, String sName, String qName, Attributes atts
 ***
 **org.jaffa.persistence.engines.jdbcengine.configservice.PropertyMetaData**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.engines.jdbcengine.configservice.exceptions.ClassMetaDataValidationRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.engines.jdbcengine.configservice.exceptions.ConfigurationServiceRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.engines.jdbcengine.configservice.exceptions.InitFileNotFoundRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.engines.jdbcengine.configservice.initdomain.ConfLocation**
 
@@ -5143,8 +5074,7 @@ public void freeConnection(Connection connection) throws SQLException, IOExcepti
 ***
 **org.jaffa.persistence.engines.jdbcengine.datasource.InternalConnectionManager**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.engines.jdbcengine.datasource.JndiDataSourceConnectionFactory**
 
@@ -5294,13 +5224,11 @@ public T unwrap(java.lang.Class<T> iface) throws java.sql.SQLException
 ***
 **org.jaffa.persistence.engines.jdbcengine.datasource.exceptions.DataSourceCreationException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.engines.jdbcengine.datasource.exceptions.DataSourceCursorRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.engines.jdbcengine.interceptor.AbstractInterceptor**
 
@@ -5416,8 +5344,7 @@ public Object invoke(Object proxy, Method method, Object[] args) throws Throwabl
 ***
 **org.jaffa.persistence.engines.jdbcengine.proxy.ProxyFieldValidatoRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.engines.jdbcengine.querygenerator.BlobTypeDefinition**
 
@@ -5481,8 +5408,7 @@ public void setAppObject(PreparedStatement pstmt, int parameterIndex, Object val
 ***
 **org.jaffa.persistence.engines.jdbcengine.querygenerator.Counter**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.engines.jdbcengine.querygenerator.CurrencyTypeDefinition**
 
@@ -5620,8 +5546,7 @@ public void setAppObject(PreparedStatement pstmt, int parameterIndex, Object val
 ***
 **org.jaffa.persistence.engines.jdbcengine.querygenerator.PreparedStatementArgument**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.engines.jdbcengine.querygenerator.PreparedStatementHelper**
 
@@ -5705,8 +5630,7 @@ public static TypeDefinition getTypeDefinitionBySqlTypeName(String typeName)
 ***
 **org.jaffa.persistence.engines.jdbcengine.security.IJdbcSecurityPlugin**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.engines.jdbcengine.util.Introspection**
 
@@ -5737,113 +5661,91 @@ public static String getProperty(String variant, String key) throws MissingResou
 ***
 **org.jaffa.persistence.exceptions.AddFailedException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.exceptions.AlreadyLockedObjectException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.exceptions.CommitFailedException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.exceptions.DeleteFailedException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.exceptions.DomainObjectValidationException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.exceptions.EngineInstantiationException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.exceptions.IllegalPersistentStateRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.exceptions.InactiveUowRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.exceptions.InvalidUowRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.exceptions.PostAddFailedException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.exceptions.PostDeleteFailedException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.exceptions.PostLoadFailedException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.exceptions.PostUpdateFailedException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.exceptions.PreAddFailedException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.exceptions.PreDeleteFailedException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.exceptions.PreUpdateFailedException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.exceptions.QueryFailedException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.exceptions.ReadOnlyObjectException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.exceptions.RollbackFailedException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.exceptions.UOWException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.exceptions.UpdateFailedException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.exceptions.UpdatePrimaryKeyException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.persistence.logging.IPersistenceLoggingPlugin**
 
@@ -5891,13 +5793,11 @@ public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServlet
 ***
 **org.jaffa.presentation.portlet.CustomRequestProcessor**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.EventHandlerMissingRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.FormBase**
 
@@ -6028,8 +5928,7 @@ public void updateLastActivityDate()
 ***
 **org.jaffa.presentation.portlet.component.ComponentCreationRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.component.ComponentDefinition**
 
@@ -6047,8 +5946,7 @@ public boolean isRia()
 ***
 **org.jaffa.presentation.portlet.component.ComponentDefinitionException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.component.ComponentManager**
 
@@ -6067,8 +5965,7 @@ public void testReadDefinitions()
 ***
 **org.jaffa.presentation.portlet.component.ComponentManagerWrapper**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.component.ComponentSecurity**
 
@@ -6260,8 +6157,7 @@ public void setName(String value)
 ***
 **org.jaffa.presentation.portlet.session.GetImageServlet**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.session.IdleComponentGarbageCollector**
 
@@ -6326,8 +6222,7 @@ public void valueUnbound(HttpSessionBindingEvent httpSessionBindingEvent)
 ***
 **org.jaffa.presentation.portlet.session.UserSessionSetupException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.session.WidgetCache**
 
@@ -6411,8 +6306,7 @@ public String getTableWidth(String userId, String userGridId)
 ***
 **org.jaffa.presentation.portlet.widgets.controller.exceptions.XmlStructureRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.widgets.controller.usergriddomain.ObjectFactory**
 
@@ -6503,8 +6397,7 @@ public boolean hasElement(String id)
 ***
 **org.jaffa.presentation.portlet.widgets.model.IWidgetModel**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.widgets.model.ImageModel**
 
@@ -6617,18 +6510,15 @@ public void setSelectedRows(List rowNums)
 ***
 **org.jaffa.presentation.portlet.widgets.model.exceptions.ColumnMismatchRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.widgets.model.exceptions.DataTypeMismatchRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.widgets.model.exceptions.IllegalExtensionRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.widgets.taglib.ButtonTag**
 
@@ -6747,8 +6637,7 @@ public boolean isRequired()
 ***
 **org.jaffa.presentation.portlet.widgets.taglib.CommentTag**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.widgets.taglib.CustomModelTag**
 
@@ -7079,8 +6968,7 @@ public void setNoCache(boolean value)
 ***
 **org.jaffa.presentation.portlet.widgets.taglib.IBodyTag**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.widgets.taglib.ICustomModelTag**
 
@@ -7103,13 +6991,11 @@ public void setParentCustomTag(ICustomTag tag)
 ***
 **org.jaffa.presentation.portlet.widgets.taglib.IFormTag**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.widgets.taglib.IWidgetTag**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.widgets.taglib.ImageTag**
 
@@ -7345,73 +7231,59 @@ public void setType(String value)
 ***
 **org.jaffa.presentation.portlet.widgets.taglib.UserGridTag**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.widgets.taglib.exceptions.ColumnAlreadyExistsRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.widgets.taglib.exceptions.InvalidParametersRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.widgets.taglib.exceptions.InvalidWidgetModelReturnedRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.widgets.taglib.exceptions.JspWriteRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.widgets.taglib.exceptions.MissingParametersRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.widgets.taglib.exceptions.OuterDropDownTagMissingRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.widgets.taglib.exceptions.OuterFormTagMissingRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.widgets.taglib.exceptions.OuterGridTagMissingRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.widgets.taglib.exceptions.OuterLayoutTagMissingRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.widgets.taglib.exceptions.OuterTableTagMissingRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.widgets.taglib.exceptions.TagCannotBeEnclosedRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.widgets.taglib.exceptions.WidgetModelAccessMethodInvocationRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.widgets.taglib.exceptions.WidgetModelAccessMethodNotFoundRuntimeException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.widgets.tests.ButtonAction**
 
@@ -7433,8 +7305,7 @@ public FormKey display()
 ***
 **org.jaffa.presentation.portlet.widgets.tests.ButtonForm**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.widgets.tests.CheckBoxAction**
 
@@ -7720,8 +7591,7 @@ public FormKey display()
 ***
 **org.jaffa.presentation.portlet.widgets.tests.LabelForm**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.presentation.portlet.widgets.tests.LabelMeta**
 
@@ -7962,8 +7832,7 @@ public boolean isReadOnly()
 ***
 **org.jaffa.rules.IRulesEngine**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.KeySet**
 
@@ -7986,8 +7855,7 @@ public static void doMandatoryValidationsForDomainObject(Object domainObject, UO
 ***
 **org.jaffa.rules.RulesEngineException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.RulesEngineFactory**
 
@@ -8162,13 +8030,11 @@ public void validate() throws ValidationException, FrameworkException
 ***
 **org.jaffa.rules.fieldvalidators.Validator**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.fieldvalidators.ValidatorFactory**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.fieldvalidators.ValidatorKeyTest**
 
@@ -8182,8 +8048,7 @@ public void testToString() throws Exception
 ***
 **org.jaffa.rules.initializers.Initializer**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.rules.metadata.ClassMetaData**
 
@@ -8748,8 +8613,7 @@ public void sessionDestroyed(HttpSessionEvent event)
 ***
 **org.jaffa.struts.action.ActionServlet**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.struts.action.ActionServletTest**
 
@@ -8847,8 +8711,7 @@ public boolean accept(File dir, String name)
 ***
 **org.jaffa.util.DirList**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.util.EmailHelper**
 
@@ -9350,8 +9213,7 @@ public static MessageResources getDefaultMessageResources()
 ***
 **org.jaffa.util.SettingsBase**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.util.SplitString**
 

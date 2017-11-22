@@ -65,23 +65,19 @@ public void setUsername(String value)
 ***
 **org.apache.log4j.jdbcplus.JDBCAppenderConfig**
 
-```
-```
+No public methods.
 ***
 **org.apache.log4j.jdbcplus.JDBCColumnHandler**
 
-```
-```
+No public methods.
 ***
 **org.apache.log4j.jdbcplus.JDBCColumnStorage**
 
-```
-```
+No public methods.
 ***
 **org.apache.log4j.jdbcplus.JDBCConnectionHandler**
 
-```
-```
+No public methods.
 ***
 **org.apache.log4j.jdbcplus.JDBCDefaultConnectionHandler**
 
@@ -100,13 +96,11 @@ public void setUsername(String string)
 ***
 **org.apache.log4j.jdbcplus.JDBCIDHandler**
 
-```
-```
+No public methods.
 ***
 **org.apache.log4j.jdbcplus.JDBCLogColumn**
 
-```
-```
+No public methods.
 ***
 **org.apache.log4j.jdbcplus.JDBCLogType**
 
@@ -154,8 +148,7 @@ public void tryToFreeConnection()
 ***
 **org.apache.log4j.jdbcplus.JDBCPoolConnectionHandler**
 
-```
-```
+No public methods.
 ***
 **org.apache.log4j.jdbcplus.JDBCSequencer**
 
@@ -165,8 +158,7 @@ public synchronized Object getID()
 ***
 **org.apache.log4j.jdbcplus.JDBCSqlHandler**
 
-```
-```
+No public methods.
 ***
 **org.apache.log4j.jdbcplus.MDCFilter**
 
@@ -974,8 +966,7 @@ public AttachmentMaintenanceRetrieveOutDto update(AttachmentMaintenanceUpdateInD
 ***
 **org.jaffa.components.attachment.components.attachmentmaintenance.ui.AttachmentMaintenanceAction**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.components.attachment.components.attachmentmaintenance.ui.AttachmentMaintenanceComponent**
 
@@ -1364,8 +1355,7 @@ public void testXmlEncoderAttachment() throws Exception
 ***
 **org.jaffa.components.attachment.services.JDBCAppenderWithAttachmentWrapper**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.components.attachment.services.JDBCLoggerWithAttachment**
 

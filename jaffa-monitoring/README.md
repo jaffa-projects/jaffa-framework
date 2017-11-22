@@ -3,8 +3,7 @@
 ***
 **com.tapestrysolutions.monitoring.services.repos.IRepositoryJsonService**
 
-```
-```
+No public methods.
 ***
 **com.tapestrysolutions.monitoring.services.repos.RepositoryJsonService**
 

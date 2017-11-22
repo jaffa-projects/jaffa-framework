@@ -508,8 +508,7 @@ public void setHeaderParams(HeaderParam[] headerParams)
 ***
 **org.jaffa.modules.messaging.services.IManageableMessageHandler**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.modules.messaging.services.IMessageFilter**
 
@@ -552,13 +551,11 @@ public static void processPayload(final MessageInfo messageInfo, final Object pa
 ***
 **org.jaffa.modules.messaging.services.JaffaMessagingApplicationException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.modules.messaging.services.JaffaMessagingFrameworkException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.modules.messaging.services.JmsBrowser**
 
@@ -816,8 +813,7 @@ public void run()
 ***
 **org.jaffa.modules.scheduler.polling.FilePoller**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.modules.scheduler.services.Custom**
 
@@ -847,13 +843,11 @@ public DateTime getSubmittedOn()
 ***
 **org.jaffa.modules.scheduler.services.JaffaSchedulerApplicationException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.modules.scheduler.services.JaffaSchedulerFrameworkException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.modules.scheduler.services.Monthly**
 
@@ -1209,8 +1203,7 @@ public void run()
 ***
 **org.jaffa.polling.FilePoller**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.qm.apis.IQueueAdmin**
 
@@ -1224,8 +1217,7 @@ public QueueAdminResponse[] toggleQueueStatus(QueueGraph[] graphs)
 ***
 **org.jaffa.qm.apis.QueueAdminException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.qm.apis.QueueManager**
 
@@ -1809,23 +1801,19 @@ public G[] localUpdate(String path, G[] graphs, UOW uow) throws FrameworkExcepti
 ***
 **org.jaffa.soa.dataaccess.ITransformationHandler**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.soa.dataaccess.ITransformationHandlerFactory**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.soa.dataaccess.ITransformationHandlerProvider**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.soa.dataaccess.KeyField**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.soa.dataaccess.MappingFactory**
 
@@ -1855,18 +1843,15 @@ public static void main(String[] args)
 ***
 **org.jaffa.soa.dataaccess.PlainField**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.soa.dataaccess.RelatedObject**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.soa.dataaccess.SOAEventBaseHandler**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.soa.dataaccess.SOAEventLifecycleHandler**
 
@@ -1912,8 +1897,7 @@ public void startBeanUpdate(String path, Object source, Object target) throws Ap
 ***
 **org.jaffa.soa.dataaccess.SkipTransformException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.soa.dataaccess.TestProvider**
 
@@ -1929,8 +1913,7 @@ public int getId()
 ***
 **org.jaffa.soa.dataaccess.TransformException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.soa.dataaccess.TransformationHandler**
 
@@ -2420,8 +2403,7 @@ public void invoke(UOW uow, SOAEventQueueMessage message) throws FrameworkExcept
 ***
 **org.jaffa.soa.services.SOAEventMessage**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.soa.services.SOAEventPoller**
 
@@ -2594,8 +2576,7 @@ public void write(int c)
 ***
 **org.jaffa.soa.transformation.controller.WebServiceController**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.soa.transformation.helper.DozerBeanMapperSingletonWrapper**
 
@@ -2817,8 +2798,7 @@ public void setSource(TransactionGraph source)
 ***
 **org.jaffa.transaction.apis.impl.TransactionHandler**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.transaction.daos.ITransactionMessageDAOFactory**
 
@@ -2828,13 +2808,11 @@ public T getDAO(Class<T> type)
 ***
 **org.jaffa.transaction.daos.TransactionDAOBase**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.transaction.daos.TransactionMessageDAO**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.transaction.daos.TransactionMessageDAOFactory**
 
@@ -2847,8 +2825,7 @@ public static void setDaoFactory(ITransactionMessageDAOFactory daoFactory)
 ***
 **org.jaffa.transaction.daos.TransactionMessageService**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.transaction.daos.impl.JaffaTransactionMessageService**
 
@@ -3231,18 +3208,15 @@ public Collection<Transaction> getFilteredResults(Object dataBean, TransactionMe
 ***
 **org.jaffa.transaction.services.ITransactionMessagingEngineFactory**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.transaction.services.InterruptedException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.transaction.services.JaffaTransactionFrameworkException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.transaction.services.LockingService**
 

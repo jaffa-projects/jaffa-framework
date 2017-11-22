@@ -830,8 +830,7 @@ public void setRelatedQueueHeaderWV(String value)
 ***
 **org.jaffa.modules.messaging.services.BaseMessage**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.modules.messaging.services.ConfigurationServiceTest**
 
@@ -848,10 +847,8 @@ public void testGetQueueNames()
 ***
 **org.jaffa.modules.messaging.services.Example1Message**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.modules.messaging.services.Example2Message**
 
-```
-```
+No public methods.

@@ -95,8 +95,7 @@ public void setSource(SavedQueryGraph source)
 ***
 **org.jaffa.ria.finder.apis.impl.SavedQueryUpdateHandler**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.ria.finder.domain.SavedQuery**
 
@@ -195,10 +194,8 @@ public String writeSecurityData()
 ***
 **org.jaffa.ria.util.MissingParameterException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.ria.util.PropsFilePropertiesSource**
 
-```
-```
+No public methods.

@@ -35,8 +35,7 @@ public void setFileContentsWV(String value)
 ***
 **org.jaffa.applications.jaffa.modules.admin.components.businessfunction.ui.exceptions.BusinessFunctionException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.applications.jaffa.modules.admin.components.checkpolicy.ui.CheckPolicyAction**
 
@@ -65,8 +64,7 @@ public HashMap getRoleMap()
 ***
 **org.jaffa.applications.jaffa.modules.admin.components.checkpolicy.ui.exceptions.CheckPolicyException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.applications.jaffa.modules.admin.components.defaultvalueeditor.ui.DefaultValueEditorAction**
 
@@ -126,8 +124,7 @@ public void setDefaultValuesWV(String value)
 ***
 **org.jaffa.applications.jaffa.modules.admin.components.defaultvalueeditor.ui.exceptions.DefaultValueEditorException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.applications.jaffa.modules.admin.components.fileexplorer.ui.FileBean**
 
@@ -184,8 +181,7 @@ public void setPathName(String pathName)
 ***
 **org.jaffa.applications.jaffa.modules.admin.components.fileexplorer.ui.FileExplorerDownload**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.applications.jaffa.modules.admin.components.fileexplorer.ui.FileExplorerForm**
 
@@ -225,8 +221,7 @@ public boolean accept(File dir, String name)
 ***
 **org.jaffa.applications.jaffa.modules.admin.components.fileexplorer.ui.exceptions.FileExplorerException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.applications.jaffa.modules.admin.components.labeleditor.ui.LabelEditorAction**
 
@@ -279,8 +274,7 @@ public void setSourceFragmentNameWV(String value)
 ***
 **org.jaffa.applications.jaffa.modules.admin.components.labeleditor.ui.exceptions.LabelEditorException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.applications.jaffa.modules.admin.components.log4jconfig.ui.Log4jConfigAction**
 
@@ -311,8 +305,7 @@ public void setFileContentsWV(String value)
 ***
 **org.jaffa.applications.jaffa.modules.admin.components.log4jconfig.ui.exceptions.Log4jConfigException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.applications.jaffa.modules.admin.components.menunavigation.ui.MenuNavigationAction**
 
@@ -343,8 +336,7 @@ public void setFileContentsWV(String value)
 ***
 **org.jaffa.applications.jaffa.modules.admin.components.menunavigation.ui.exceptions.MenuNavigationException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.applications.jaffa.modules.admin.components.roleseditor.ui.RolesEditorAction**
 
@@ -377,8 +369,7 @@ public void setFileContentsWV(String value)
 ***
 **org.jaffa.applications.jaffa.modules.admin.components.roleseditor.ui.exceptions.RolesEditorException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.applications.jaffa.modules.admin.components.validationruleseditor.ui.ValidationRulesEditorAction**
 
@@ -503,15 +494,12 @@ public void setKeyFieldPerViewerComponentContentsWV(String value)
 ***
 **org.jaffa.applications.jaffa.modules.admin.components.viewerhyperlinkconfig.ui.exceptions.ViewerHyperlinkConfigException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.applications.jaffa.modules.admin.exceptions.ConfigException**
 
-```
-```
+No public methods.
 ***
 **org.jaffa.applications.jaffa.modules.admin.exceptions.RequestException**
 
-```
-```
+No public methods.
