@@ -1,0 +1,14 @@
+#if ($Screens != null) #begin
+#foreach $screen in $Screens.values() #begin
+#if ($(screen.ScreenName) != null) #begin
+#set $wm_formMapping = "$(Module.Lower)_$(Component.Lower1)$(screen.ScreenName.Upper1)"
+#set $wm_jsp = "$(screen.ScreenName.Lower1).jsp"
+#else
+#set $wm_formMapping = "$(Module.Lower)_$(Component.Lower1)"
+#set $wm_jsp = "default.jsp"
+#end
+    <!-- $(wm_formMapping) -->
+    <forward name="$(wm_formMapping)" path="/$(Application.Lower)/$(Module.Lower)/$(Component.Lower)/jsp/$(wm_jsp)"/>
+
+#end
+#end

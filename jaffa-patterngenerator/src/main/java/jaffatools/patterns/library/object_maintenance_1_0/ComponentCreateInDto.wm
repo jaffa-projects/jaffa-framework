@@ -1,0 +1,231 @@
+// .//GEN-BEGIN:_1_be
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ * 
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/ 
+package $(BasePackage.Lower).components.$(Component.Lower).dto;
+
+import java.util.*;
+import org.jaffa.components.dto.HeaderDto;
+// .//GEN-END:_1_be
+// Add additional imports//GEN-FIRST:_imports
+
+
+
+
+// .//GEN-LAST:_imports
+// .//GEN-BEGIN:_2_be
+/** The output for the $(Component.Upper1).
+ */
+public class $(Component.Upper1)CreateInDto {
+
+    /** Holds value of property headerDto. */
+    private HeaderDto headerDto;
+
+
+#foreach $field in $Fields.values() #begin
+#set $wm_dataType = ""
+#if ($(field.DataType.Upper) == "STRING" || $(field.DataType.Upper) == "VARCHAR" || $(field.DataType.Upper) == "LONGSTRING" || $(field.DataType.Upper) == "LONGVARCHAR" || $(field.DataType.Upper) == "CLOB") #begin
+#set $wm_dataType = "String"
+#elseif ($(field.DataType.Upper) == "INTEGER" || $(field.DataType.Upper) == "BIGINT") #begin
+#set $wm_dataType = "Long"
+#elseif ($(field.DataType.Upper) == "DECIMAL" || $(field.DataType.Upper) == "DOUBLE") #begin
+#set $wm_dataType = "Double"
+#elseif ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") #begin
+#set $wm_dataType = "Boolean"
+#elseif ($(field.DataType.Upper) == "DATE_ONLY" || $(field.DataType.Upper) == "DATEONLY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateOnly"
+#elseif ($(field.DataType.Upper) == "DATE_TIME" || $(field.DataType.Upper) == "DATETIME") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateTime"
+#elseif ($(field.DataType.Upper) == "CURRENCY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.Currency"
+#elseif ($(field.DataType.Upper) == "RAW" || $(field.DataType.Upper) == "LONGRAW" || $(field.DataType.Upper) == "BLOB") #begin
+#set $wm_dataType = "byte[]"
+#end
+    /** Holds value of property $(field.Name.Lower1). */
+    private $wm_dataType $(field.Name.Lower1);
+
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.KeyType.Upper) == "PRIMARY" || $(field.KeyType.Upper) == "CANDIDATE") #begin
+#set $wm_dataType = ""
+#if ($(field.DataType.Upper) == "STRING" || $(field.DataType.Upper) == "VARCHAR" || $(field.DataType.Upper) == "LONGSTRING" || $(field.DataType.Upper) == "LONGVARCHAR" || $(field.DataType.Upper) == "CLOB") #begin
+#set $wm_dataType = "String"
+#elseif ($(field.DataType.Upper) == "INTEGER" || $(field.DataType.Upper) == "BIGINT") #begin
+#set $wm_dataType = "Long"
+#elseif ($(field.DataType.Upper) == "DECIMAL" || $(field.DataType.Upper) == "DOUBLE") #begin
+#set $wm_dataType = "Double"
+#elseif ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") #begin
+#set $wm_dataType = "Boolean"
+#elseif ($(field.DataType.Upper) == "DATE_ONLY" || $(field.DataType.Upper) == "DATEONLY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateOnly"
+#elseif ($(field.DataType.Upper) == "DATE_TIME" || $(field.DataType.Upper) == "DATETIME") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateTime"
+#elseif ($(field.DataType.Upper) == "CURRENCY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.Currency"
+#elseif ($(field.DataType.Upper) == "RAW" || $(field.DataType.Upper) == "LONGRAW" || $(field.DataType.Upper) == "BLOB") #begin
+#set $wm_dataType = "byte[]"
+#end
+    /** Holds value of property $(field.Name.Lower1). */
+    private $wm_dataType $(field.Name.Lower1);
+
+#end
+#end
+#end
+#end
+
+
+    /** Default Constructor.*/    
+    public $(Component.Upper1)CreateInDto() {
+    }
+
+    /** Getter for property headerDto.
+     * @return Value of property headerDto.
+     */
+    public HeaderDto getHeaderDto() {
+        return headerDto;
+    }
+    
+    /** Setter for property headerDto.
+     * @param headerDto New value of property headerDto.
+     */
+    public void setHeaderDto(HeaderDto headerDto) {
+        this.headerDto = headerDto;
+    }
+
+
+#foreach $field in $Fields.values() #begin
+#set $wm_dataType = ""
+#if ($(field.DataType.Upper) == "STRING" || $(field.DataType.Upper) == "VARCHAR" || $(field.DataType.Upper) == "LONGSTRING" || $(field.DataType.Upper) == "LONGVARCHAR" || $(field.DataType.Upper) == "CLOB") #begin
+#set $wm_dataType = "String"
+#elseif ($(field.DataType.Upper) == "INTEGER" || $(field.DataType.Upper) == "BIGINT") #begin
+#set $wm_dataType = "Long"
+#elseif ($(field.DataType.Upper) == "DECIMAL" || $(field.DataType.Upper) == "DOUBLE") #begin
+#set $wm_dataType = "Double"
+#elseif ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") #begin
+#set $wm_dataType = "Boolean"
+#elseif ($(field.DataType.Upper) == "DATE_ONLY" || $(field.DataType.Upper) == "DATEONLY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateOnly"
+#elseif ($(field.DataType.Upper) == "DATE_TIME" || $(field.DataType.Upper) == "DATETIME") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateTime"
+#elseif ($(field.DataType.Upper) == "CURRENCY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.Currency"
+#elseif ($(field.DataType.Upper) == "RAW" || $(field.DataType.Upper) == "LONGRAW" || $(field.DataType.Upper) == "BLOB") #begin
+#set $wm_dataType = "byte[]"
+#end
+    /** Getter for property $(field.Name.Lower1).
+     * @return Value of property $(field.Name.Lower1).
+     */
+    public $wm_dataType get$(field.Name.Upper1)() {
+        return $(field.Name.Lower1);
+    }
+    
+    /** Setter for property $(field.Name.Lower1).
+     * @param $(field.Name.Lower1) New value of property $(field.Name.Lower1).
+     */
+    public void set$(field.Name.Upper1)($wm_dataType $(field.Name.Lower1)) {
+
+#if ($(field.DataType.Upper) == "STRING" || $(field.DataType.Upper) == "VARCHAR" || $(field.DataType.Upper) == "LONGSTRING" || $(field.DataType.Upper) == "LONGVARCHAR" || $(field.DataType.Upper) == "CLOB") #begin
+        if ($(field.Name.Lower1) == null || $(field.Name.Lower1).length() == 0)
+            this.$(field.Name.Lower1) = null;
+        else
+            this.$(field.Name.Lower1) = $(field.Name.Lower1);
+#else
+        this.$(field.Name.Lower1) = $(field.Name.Lower1);
+#end
+    }
+
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.KeyType.Upper) == "PRIMARY" || $(field.KeyType.Upper) == "CANDIDATE") #begin
+#set $wm_dataType = ""
+#if ($(field.DataType.Upper) == "STRING" || $(field.DataType.Upper) == "VARCHAR" || $(field.DataType.Upper) == "LONGSTRING" || $(field.DataType.Upper) == "LONGVARCHAR" || $(field.DataType.Upper) == "CLOB") #begin
+#set $wm_dataType = "String"
+#elseif ($(field.DataType.Upper) == "INTEGER" || $(field.DataType.Upper) == "BIGINT") #begin
+#set $wm_dataType = "Long"
+#elseif ($(field.DataType.Upper) == "DECIMAL" || $(field.DataType.Upper) == "DOUBLE") #begin
+#set $wm_dataType = "Double"
+#elseif ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") #begin
+#set $wm_dataType = "Boolean"
+#elseif ($(field.DataType.Upper) == "DATE_ONLY" || $(field.DataType.Upper) == "DATEONLY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateOnly"
+#elseif ($(field.DataType.Upper) == "DATE_TIME" || $(field.DataType.Upper) == "DATETIME") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateTime"
+#elseif ($(field.DataType.Upper) == "CURRENCY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.Currency"
+#elseif ($(field.DataType.Upper) == "RAW" || $(field.DataType.Upper) == "LONGRAW" || $(field.DataType.Upper) == "BLOB") #begin
+#set $wm_dataType = "byte[]"
+#end
+    /** Getter for property $(field.Name.Lower1).
+     * @return Value of property $(field.Name.Lower1).
+     */
+    public $wm_dataType get$(field.Name.Upper1)() {
+        return $(field.Name.Lower1);
+    }
+    
+    /** Setter for property $(field.Name.Lower1).
+     * @param $(field.Name.Lower1) New value of property $(field.Name.Lower1).
+     */
+    public void set$(field.Name.Upper1)($wm_dataType $(field.Name.Lower1)) {
+
+#if ($(field.DataType.Upper) == "STRING" || $(field.DataType.Upper) == "VARCHAR" || $(field.DataType.Upper) == "LONGSTRING" || $(field.DataType.Upper) == "LONGVARCHAR" || $(field.DataType.Upper) == "CLOB") #begin
+        if ($(field.Name.Lower1) == null || $(field.Name.Lower1).length() == 0)
+            this.$(field.Name.Lower1) = null;
+        else
+            this.$(field.Name.Lower1) = $(field.Name.Lower1);
+#else
+        this.$(field.Name.Lower1) = $(field.Name.Lower1);
+#end
+    }
+
+#end
+#end
+#end
+#end
+
+
+    /** Returns the debug information
+     * @return The debug information
+     */
+    public String toString() {
+        StringBuffer buf = new StringBuffer();
+        buf.append("<$(Component.Upper1)CreateInDto>");
+        buf.append("<headerDto>"); if (headerDto != null) buf.append( headerDto.toString() ); buf.append("</headerDto>");
+
+
+#foreach $field in $Fields.values() #begin
+        buf.append("<$(field.Name.Lower1)>"); if ($(field.Name.Lower1) != null) buf.append($(field.Name.Lower1)); buf.append("</$(field.Name.Lower1)>");
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.KeyType.Upper) == "PRIMARY" || $(field.KeyType.Upper) == "CANDIDATE") #begin
+        buf.append("<$(field.Name.Lower1)>"); if ($(field.Name.Lower1) != null) buf.append($(field.Name.Lower1)); buf.append("</$(field.Name.Lower1)>");
+#end
+#end
+#end
+#end
+
+        buf.append("</$(Component.Upper1)CreateInDto>");
+        return buf.toString();
+    }
+    
+    // .//GEN-END:_2_be
+    // All the custom code goes here //GEN-FIRST:_custom
+
+
+
+
+
+
+    // .//GEN-LAST:_custom
+}

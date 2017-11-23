@@ -1,0 +1,133 @@
+// .//GEN-BEGIN:1_be
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ * 
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/ 
+package $(DomainPackage.Lower);
+
+import org.jaffa.datatypes.*;
+import org.jaffa.persistence.Persistent;
+
+
+#if ($(Relationships) != null) #begin
+$ScratchPad.clear()
+#foreach $relationship in $Relationships.values() #begin
+#if ($(relationship.ToDomainPackage.Lower) != "") #begin
+#set $wm_package = "$(relationship.ToDomainPackage.Lower).$(relationship.ToDomainObject.Upper1)"
+#if ($ScratchPad.get($wm_package) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_package,$wm_package) != null) #begin #end
+import $(wm_package);
+#end
+#end
+#end
+#end
+// .//GEN-END:1_be
+// Add additional imports//GEN-FIRST:imports
+
+
+
+
+// .//GEN-LAST:imports
+// .//GEN-BEGIN:2_be
+/**
+ * Auto Generated Persistent class for the $(DatabaseTable) table.
+ * @author  Auto-Generated
+ */
+public class $(DomainObject.Upper1) extends Persistent {
+
+
+#foreach $field in $Fields.values() #begin
+#if ($field.Ignore == null || $field.Ignore.Lower != "true") #begin
+    /** Holds value of property $(field.Name.Lower1). */
+    private $(field.DataType) m_$(field.Name.Lower1);
+
+#end
+#end
+
+    // .//GEN-END:2_be
+
+#foreach $field in $Fields.values() #begin
+#if ($field.Ignore == null || $field.Ignore.Lower != "true") #begin
+    // .//GEN-BEGIN:$(field.Name.Lower1)_be
+    /** Getter for property $(field.Name.Lower1).
+     * @return Value of property $(field.Name.Lower1).
+     */
+    public $(field.DataType) get$(field.Name.Upper1)() {
+        return m_$(field.Name.Lower1);
+    }
+    
+    /** Setter for property $(field.Name.Lower1).
+     * WARNING: This is strictly for use by the Persistence Engine. A developer should never use this method. Instead, use the update(field.Name.Upper1) method.
+     * @param $(field.Name.Lower1) New value of property $(field.Name.Lower1).
+     */
+    public void set$(field.Name.Upper1)($(field.DataType) $(field.Name.Lower1)) {
+        m_$(field.Name.Lower1) = $(field.Name.Lower1);
+    }
+    // .//GEN-END:$(field.Name.Lower1)_be
+#end
+#end
+    // .//GEN-BEGIN:3_be
+    /** This returns the diagnostic information.
+    * @return the diagnostic information.
+    */
+    public String toString() {
+        StringBuffer buf = new StringBuffer();
+        buf.append("<$(DomainObject.Upper1)>");
+
+#foreach $field in $Fields.values() #begin
+#if ($field.Ignore == null || $field.Ignore.Lower != "true") #begin
+        buf.append("<$(field.Name.Lower1)>"); if (m_$(field.Name.Lower1) != null) buf.append(m_$(field.Name.Lower1)); buf.append("</$(field.Name.Lower1)>");
+#end
+#end
+        buf.append(super.toString());
+        buf.append("</$(DomainObject.Upper1)>");
+        return buf.toString();
+    }
+
+
+#if ($(Relationships) != null) #begin
+#foreach $relationship in $Relationships.values() #begin
+#set $wm_fromFields = ""
+#set $wm_firstPass = "true"
+#foreach $field in $relationship.FromFields.values() #begin
+#if ($(wm_firstPass) == "true") #begin
+#set $wm_firstPass = "false"
+#else
+#set $wm_fromFields = "$(wm_fromFields),"
+#end
+#set $wm_fromFields = "$(wm_fromFields)$(field.Name.Lower1)"
+#end
+#set $wm_toFields = ""
+#set $wm_firstPass = "true"
+#foreach $field in $relationship.ToFields.values() #begin
+#if ($(wm_firstPass) == "true") #begin
+#set $wm_firstPass = "false"
+#else
+#set $wm_toFields = "$(wm_toFields),"
+#end
+#set $wm_toFields = "$(wm_toFields)$(field.Name.Lower1)"
+#end
+    /**
+     * @clientCardinality $(relationship.FromCardinality)
+     * @supplierCardinality $(relationship.ToCardinality)
+     * @clientQualifier $(wm_fromFields)
+     * @supplierQualifier $(wm_toFields)
+     * @link $(relationship.Type)
+     */
+    /*#$(relationship.ToDomainObject.Upper1) lnk$(relationship.ToDomainObject.Upper1);*/
+
+#end
+#end
+    // .//GEN-END:3_be
+    // All the custom code goes here//GEN-FIRST:custom
+
+
+
+
+
+
+    // .//GEN-LAST:custom
+}

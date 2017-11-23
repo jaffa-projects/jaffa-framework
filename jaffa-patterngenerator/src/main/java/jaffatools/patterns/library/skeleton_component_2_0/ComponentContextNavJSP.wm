@@ -1,0 +1,72 @@
+<%-- ---------------------------------------------------------------- 
+  -- Code Generated From JAFFA Framework Default Pattern           --
+  --                                                               --
+  -- The JAFFA Project can be found at http://jaffa.sourceforge.net--
+  -- and is available under the Lesser GNU Public License          --
+  -- ------------------------------------------------------------- --%>
+<%-- The contents of this JSP will appear in the 'contextNav' of Layout.jsp --%>
+<%@ page import='org.jaffa.util.MessageHelper' %>
+<%@ page import='org.jaffa.presentation.portlet.widgets.taglib.TagHelper' %>
+<%@ taglib uri='/WEB-INF/struts-tiles.tld' prefix='tiles' %>
+<%@ taglib uri='/WEB-INF/struts-logic.tld' prefix='logic' %>
+<%@ taglib uri='/WEB-INF/jaffa-portlet.tld' prefix='Portlet' %>
+
+<!-- Start of '/$(Application.Lower)/$(Module.Lower)/$(Component.Lower)/contextNav.jsp' -->
+<TABLE cellpadding='0' cellspacing='0' align='center' class='contextNav'>
+  <TR>
+    <TD valign='bottom' width='100%'>
+      <table class='contextNavHeader' width='100%'>
+        <tr>
+          <td class='contextNavTitle'><Portlet:Label key='title.Jaffa.ContextNav'/></td>
+        </tr>
+      </table>
+    </TD> 
+  </TR>
+  <TR align='middle'>
+    <TD>
+      <table class='contextNavBody' cellspacing='0' cellpadding='0' width='100%'>
+        <%-- ********* COMMONLY USED BUTTONS *********
+        <TR><TD><img src='jaffa/imgs/icons/save.gif'><Portlet:Button field='Save' type='link' label='[label.Jaffa.Widgets.Button.Save]' guarded='true'/></TD></TR>
+        <TR><TD><img src='jaffa/imgs/icons/finish.gif'><Portlet:Button field='Finish' type='link' label='[label.Jaffa.Widgets.Button.Finish]' guarded='true'/></TD></TR>
+        <TR><TD><img src='jaffa/imgs/icons/refresh.gif'><Portlet:Button field='Refresh' type='link' label='[label.Jaffa.Widgets.Button.Refresh]' guarded='true' preprocess='false'/></TD></TR>
+        <TR><TD><img src='jaffa/imgs/icons/delete.gif'><Portlet:Button field='Delete' type='link' label='[label.Jaffa.Widgets.Button.Delete]' preprocess='false' guarded='true' confirm='[label.Jaffa.Inquiry.delete.confirm]'/></TD></TR>
+        <TR><TD><img src='jaffa/imgs/icons/clear.gif'><a href='javascript:resetForm()'><%= MessageHelper.replaceTokens(pageContext, "[label.Jaffa.Widgets.Button.Clear]") %></a></TD></TR>
+        <TR><TD><img src='jaffa/imgs/icons/close.gif'><Portlet:Button field='Close' type='link' label='[label.Jaffa.Widgets.Button.Close]' preprocess='false'/></TD></TR>
+        --%>
+
+
+
+#if ($Screens != null) #begin
+#set $wm_screenCounter = -1
+#foreach $screen in $Screens.values() #begin
+#set $wm_screenCounter = $wm_screenCounter + 1
+#set $wm_foundButton = "false"
+#foreach $field in $screen.ScreenFields.values() #begin
+#if ($(field.Display.BooleanValue) && $field.WidgetType.Lower == "button") #begin
+#if ($wm_foundButton == "false") #begin
+#set $wm_foundButton = "true"
+        <logic:equal property='currentScreenCounter' name='<%= TagHelper.getFormName(pageContext) %>' value='$(wm_screenCounter)'>
+#end
+          <TR><TD><%-- <img src='Enter Source File Location'> --%><Portlet:Button field='$(field.Name.Lower1)' type='link' label='$(field.Label)' guarded='true'/></TD></TR>
+#end
+#end
+
+#if ($wm_foundButton == "true") #begin
+        </logic:equal>
+
+#end
+#end
+#end
+
+        <logic:equal property='previousActionAvailable' name='<%= TagHelper.getFormName(pageContext) %>' value='true'>
+          <TR><TD><img src='jaffa/imgs/icons/prev.gif'><Portlet:Button field='Previous' type='link' label='[label.Jaffa.Widgets.Button.Previous]' preprocess='false'/></TD></TR>
+        </logic:equal>
+        <logic:equal property='nextActionAvailable' name='<%= TagHelper.getFormName(pageContext) %>' value='true'>
+          <TR><TD><img src='jaffa/imgs/icons/next.gif'><Portlet:Button field='Next' type='link' label='[label.Jaffa.Widgets.Button.Next]' guarded='true'/></TD></TR>
+        </logic:equal>
+        <TR><TD><img src='jaffa/imgs/icons/cancel.gif'><Portlet:Button field='Cancel' type='link' label='[label.Jaffa.Widgets.Button.Cancel]' preprocess='false'/></TD></TR>
+      </table>
+    </TD>
+  </TR>
+</TABLE>
+<!-- End of '/$(Application.Lower)/$(Module.Lower)/$(Component.Lower)/contextNav.jsp' -->

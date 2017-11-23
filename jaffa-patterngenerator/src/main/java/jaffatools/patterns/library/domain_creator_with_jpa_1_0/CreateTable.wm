@@ -1,0 +1,76 @@
+CREATE TABLE "$(DatabaseTable.Upper)"(
+
+#set $wm_primaryKey = ""
+#set $counter = 0
+#foreach $field in $Fields.values() {
+#set $counter = $counter + 1
+#set $wm_dataType = ""
+#if ($(field.DatabaseDataType.Upper) == "STRING" || $(field.DatabaseDataType.Upper) == "VARCHAR") {
+#if ($(field.Rpad) != null) {
+#set $wm_dataType = "CHAR"
+} #else {
+#set $wm_dataType = "VARCHAR2"
+}
+#if ($(field.IntSize) != null && $(field.IntSize.toString()) != null) {
+#set $wm_dataType = "$(wm_dataType)($(field.IntSize))"
+} #else {
+#set $wm_dataType = "$(wm_dataType)(40)"
+}
+} #elseif ($(field.DatabaseDataType.Upper) == "LONGSTRING" || $(field.DatabaseDataType.Upper) == "LONGVARCHAR") {
+#set $wm_dataType = "LONG"
+} #elseif ($(field.DatabaseDataType.Upper) == "CLOB") {
+#set $wm_dataType = "CLOB"
+} #elseif ($(field.DatabaseDataType.Upper) == "INTEGER" || $(field.DatabaseDataType.Upper) == "BIGINT") {
+#set $wm_dataType = "NUMBER"
+#if ($(field.IntSize) != null && $(field.IntSize.toString()) != null) {
+#set $wm_dataType = "$(wm_dataType)($(field.IntSize))"
+}
+} #elseif ($(field.DatabaseDataType.Upper) == "DECIMAL" || $(field.DatabaseDataType.Upper) == "DOUBLE") {
+#set $wm_dataType = "NUMBER"
+#if ($(field.IntSize) != null && $(field.IntSize.toString()) != null && $(field.FracSize) != null && $(field.FracSize.toString())) {
+#set $wm_size = 0
+#set $wm_size = $wm_size + $(field.IntSize.IntValue)
+#set $wm_size = $wm_size + $(field.FracSize.IntValue)
+#set $wm_dataType = "$(wm_dataType)($(wm_size),$(field.FracSize))"
+}
+} #elseif ($(field.DatabaseDataType.Upper) == "BOOLEAN" || $(field.DatabaseDataType.Upper) == "BOOLEAN_BIT" || $(field.DatabaseDataType.Upper) == "BOOLEAN_TF" || $(field.DatabaseDataType.Upper) == "BOOLEAN_YN" || $(field.DatabaseDataType.Upper) == "BOOLEAN_10") {
+#set $wm_dataType = "CHAR(1)"
+} #elseif ($(field.DatabaseDataType.Upper) == "DATE_ONLY" || $(field.DatabaseDataType.Upper) == "DATEONLY") {
+#set $wm_dataType = "DATE"
+} #elseif ($(field.DatabaseDataType.Upper) == "DATE_TIME" || $(field.DatabaseDataType.Upper) == "DATETIME") {
+#set $wm_dataType = "TIMESTAMP"
+} #elseif ($(field.DatabaseDataType.Upper) == "CURRENCY") {
+#set $wm_dataType = "NUMBER"
+} #elseif ($(field.DatabaseDataType.Upper) == "RAW") {
+#set $wm_dataType = "RAW"
+#if ($(field.IntSize) != null && $(field.IntSize.toString()) != null) {
+#set $wm_dataType = "$(wm_dataType)($(field.IntSize))"
+} #else {
+#set $wm_dataType = "$(wm_dataType)(2000)"
+}
+} #elseif ($(field.DatabaseDataType.Upper) == "LONGRAW") {
+#set $wm_dataType = "LONG RAW"
+} #elseif ($(field.DatabaseDataType.Upper) == "BLOB") {
+#set $wm_dataType = "BLOB"
+}
+#if (($(field.Mandatory) != null && $(field.Mandatory.BooleanValue)) || ($(field.PrimaryKey) != null && $(field.PrimaryKey.BooleanValue))) {
+#set $wm_dataType = "$(wm_dataType) NOT NULL"
+}
+#if ($(field.PrimaryKey) != null && $(field.PrimaryKey.BooleanValue)) {
+#if ($wm_primaryKey == "") {
+#set $wm_primaryKey = '"$(field.DatabaseFieldName.Upper)"'
+} #else {
+#set $wm_primaryKey = '$(wm_primaryKey),"$(field.DatabaseFieldName.Upper)"'
+}
+}
+#if($counter == $Fields.size() && $wm_primaryKey == "") {
+        "$(field.DatabaseFieldName.Upper)"          $(wm_dataType)
+} #else {
+        "$(field.DatabaseFieldName.Upper)"          $(wm_dataType),
+}
+}
+#if ($wm_primaryKey != "") {
+    CONSTRAINT "$(DatabaseTable.Upper)P1" PRIMARY KEY($(wm_primaryKey))
+}
+)
+/

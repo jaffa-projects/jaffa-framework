@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+<!-- This dtd is used for validating the Meta files for generating the various object finder files -->
+
+<!ELEMENT Root (PatternTemplate,Application,Module,Component,BasePackage,DomainObject,DomainPackage,CriteriaTitle?,ResultsTitle?,ConsolidatedCriteriaAndResultsTitle?,MainLayout?,FinderLayout?,FinderExcelLayout?,FinderXmlLayout?,CriteriaFields,ResultsFields,OrderByFieldCombos?,Creator?,Viewer?,Updator?,Deletor?,KeyFields)>
+<!ELEMENT PatternTemplate (#PCDATA)>
+<!ELEMENT Application (#PCDATA)>
+<!ELEMENT Module (#PCDATA)>
+<!ELEMENT Component (#PCDATA)>
+<!ELEMENT BasePackage (#PCDATA)>
+<!ELEMENT DomainObject (#PCDATA)>
+<!ELEMENT DomainPackage (#PCDATA)>
+<!ELEMENT CriteriaTitle (#PCDATA)>
+<!ELEMENT ResultsTitle (#PCDATA)>
+<!ELEMENT ConsolidatedCriteriaAndResultsTitle (#PCDATA)>
+<!ELEMENT MainLayout (#PCDATA)>
+<!ELEMENT FinderLayout (#PCDATA)>
+<!ELEMENT FinderExcelLayout (#PCDATA)>
+<!ELEMENT FinderXmlLayout (#PCDATA)>
+
+
+<!ELEMENT CriteriaFields (CriteriaField+)>
+<!ELEMENT CriteriaField (Name,DataType,Display,Label?,DomainField,AltDomainObject?,Breakup?,FunctionGuardName?,Lookup?)>
+<!ELEMENT Name (#PCDATA)>
+<!ELEMENT DataType (#PCDATA)>
+<!ELEMENT Label (#PCDATA)>
+<!ELEMENT DomainField (#PCDATA)>
+<!ELEMENT AltDomainObject (Object,Package,CriteriaJoinFields)>
+<!ELEMENT Object (#PCDATA)>
+<!ELEMENT Package (#PCDATA)>
+<!ELEMENT CriteriaJoinFields (CriteriaJoinBetween+)>
+<!ELEMENT CriteriaJoinBetween (DomainObjectField,AltDomainObjectField)>
+<!ELEMENT DomainObjectField (#PCDATA)>
+<!ELEMENT AltDomainObjectField (#PCDATA)>
+<!ELEMENT Breakup (WidgetType,StaticValues?,DynamicValues?,InitialValue?)>
+<!ELEMENT WidgetType (#PCDATA)>
+<!ELEMENT StaticValues (StaticValue+)>
+<!ELEMENT StaticValue (Code,Description)>
+<!ELEMENT Code (#PCDATA)>
+<!ELEMENT Description (#PCDATA)>
+<!ELEMENT DynamicValues (DomainClassName,CodeFieldName,DescriptionFieldName,BreakupCriteriaFields?,CodeHelperInterface?,AppendCodeAndDescription?,AppendBeginMarker?,AppendEndMarker?)>
+<!ELEMENT DomainClassName (#PCDATA)>
+<!ELEMENT CodeFieldName (#PCDATA)>
+<!ELEMENT DescriptionFieldName (#PCDATA)>
+<!ELEMENT BreakupCriteriaFields (BreakupCriteriaField+)>
+<!ELEMENT BreakupCriteriaField (DataType,DomainField,Operator,Values)>
+<!ELEMENT Operator (#PCDATA)>
+<!ELEMENT Values (#PCDATA)>
+<!ELEMENT InitialValue (#PCDATA)>
+<!ELEMENT CodeHelperInterface (#PCDATA)>
+<!ELEMENT AppendCodeAndDescription (#PCDATA)>
+<!ELEMENT Lookup (Component,TargetFields,BypassCriteriaScreen?,StaticParameters?,DynamicParameters?)>
+<!ELEMENT BypassCriteriaScreen (#PCDATA)>
+<!ELEMENT StaticParameters (#PCDATA)>
+<!ELEMENT DynamicParameters (#PCDATA)>
+<!ELEMENT TargetFields (#PCDATA)>
+
+<!ELEMENT ResultsFields (ResultsField+)>
+<!ELEMENT ResultsField (Name,DataType,Display,DisplayAsKey?,Layout?,Label,DomainField,SourceChain?,AppendField?,FunctionGuardName?)>
+<!ELEMENT Display (#PCDATA)>
+<!ELEMENT DisplayAsKey (#PCDATA)>
+<!ELEMENT Layout (#PCDATA)>
+<!ELEMENT FunctionGuardName (#PCDATA)>
+<!ELEMENT SourceChain (Source+)>
+<!ELEMENT Source (Object,Package,JoinFields)>
+<!ELEMENT JoinFields (JoinBetween+)>
+<!ELEMENT JoinBetween (DomainObjectField,SourceField)>
+<!ELEMENT SourceField (#PCDATA)>
+<!ELEMENT AppendField (AppendBeginMarker?,Name,AppendEndMarker?)>
+<!ELEMENT AppendBeginMarker (#PCDATA)>
+<!ELEMENT AppendEndMarker (#PCDATA)>
+
+<!ELEMENT OrderByFieldCombos (OrderByFieldCombo+)>
+<!ELEMENT OrderByFieldCombo (OrderByField+,Default?)>
+<!ELEMENT OrderByField (DomainFieldName,Label?,SortAscending?)>
+<!ELEMENT DomainFieldName (#PCDATA)>
+<!ELEMENT SortAscending (#PCDATA)>
+<!ELEMENT Default (#PCDATA)>
+
+<!ELEMENT Creator (ComponentName,ClassName,Package)>
+<!ELEMENT Viewer (ComponentName,ClassName,Package)>
+<!ELEMENT Updator (ComponentName,ClassName,Package)>
+<!ELEMENT Deletor (ComponentName,ClassName,Package)>
+<!ELEMENT ComponentName (#PCDATA)>
+<!ELEMENT ClassName (#PCDATA)>
+
+<!ELEMENT KeyFields (KeyField+)>
+<!ELEMENT KeyField (ResultsFieldName,DataType,FieldNameInTargetComponent)>
+<!ELEMENT ResultsFieldName (#PCDATA)>
+<!ELEMENT FieldNameInTargetComponent (#PCDATA)>

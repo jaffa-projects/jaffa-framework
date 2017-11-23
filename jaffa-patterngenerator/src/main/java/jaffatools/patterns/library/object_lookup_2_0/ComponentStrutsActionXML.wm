@@ -1,0 +1,8 @@
+    <!-- $(Component.Upper1) -->
+    <action    path="/$(Module.Lower)_$(Component.Lower1)"
+               type="$(BasePackage.Lower).components.$(Component.Lower).ui.$(Component.Upper1)Action"
+               name="$(Module.Lower)_$(Component.Lower1)Form"
+               validate="false"
+               scope="request">
+    </action>
+

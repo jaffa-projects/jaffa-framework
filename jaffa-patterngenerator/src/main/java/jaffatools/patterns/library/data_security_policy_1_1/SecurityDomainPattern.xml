@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE BuildPattern PUBLIC "-//JAFFA//DTD Pattern 1.0//EN" "http://jaffa.sourceforge.net/DTD/pattern_1_0.dtd">
+
+<BuildPattern>
+    <Name>CreatPackagePattern</Name>
+
+    <PreRequesites>
+    </PreRequesites>
+
+    <Components>
+        <Build>
+            <Template>patterns/library/data_security_policy_1_1/CreatePredicate.wm</Template>
+            <Package>sql.admin.datasecurity.$(MappingPackage.Lower)</Package>
+            <FileName>$(BasePackage)_CreatePredicate.sql</FileName>
+            <Override>True</Override>
+        </Build>
+        <Build>
+            <Template>patterns/library/data_security_policy_1_1/DropPredicate.wm</Template>
+            <Package>sql.system.datasecurity.$(MappingPackage.Lower)</Package>
+            <FileName>$(BasePackage)_DropPredicate.sql</FileName>
+            <Override>True</Override>
+        </Build>
+        <Build>
+            <Template>patterns/library/data_security_policy_1_1/ApplyPredicate.wm</Template>
+            <Package>sql.system.datasecurity.$(MappingPackage.Lower)</Package>
+            <FileName>$(BasePackage)_ApplyPredicate.sql</FileName>
+            <Override>True</Override>
+        </Build>
+
+    </Components>
+</BuildPattern>

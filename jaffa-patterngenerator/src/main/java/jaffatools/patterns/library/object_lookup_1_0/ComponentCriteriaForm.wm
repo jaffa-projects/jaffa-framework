@@ -1,0 +1,376 @@
+// .//GEN-BEGIN:_1_be
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ *
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/
+package $(BasePackage.Lower).components.$(Component.Lower).ui;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
+import org.apache.log4j.Logger;
+import org.jaffa.metadata.*;
+import org.jaffa.datatypes.*;
+import org.jaffa.components.finder.*;
+import org.jaffa.presentation.portlet.widgets.model.*;
+import org.jaffa.presentation.portlet.widgets.controller.*;
+import org.jaffa.util.StringHelper;
+
+#set $wm_codeHelperAdded = "false"
+#foreach $field in $CriteriaFields.values() #begin
+#if ($wm_codeHelperAdded == "false" && $field.Breakup != null && $field.Breakup.DynamicValues != null) #begin
+#set $wm_codeHelperAdded = "true"
+import org.jaffa.components.codehelper.dto.*;
+#end
+#end
+import $(DomainPackage.Lower).$(DomainObject.Upper1)Meta;
+
+$ScratchPad.clear()
+#foreach $field in $CriteriaFields.values() #begin
+#if ($(field.AltDomainObject) != null) #begin
+#set $wm_package = "$(field.AltDomainObject.Package.Lower).$(field.AltDomainObject.Object.Upper1)"
+#if ($ScratchPad.get($wm_package) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_package,$wm_package) != null) #begin #end
+import $(wm_package)Meta;
+#end
+#end
+#end
+$ScratchPad.clear()
+// .//GEN-END:_1_be
+// Add additional imports//GEN-FIRST:_imports
+
+
+
+
+// .//GEN-LAST:_imports
+// .//GEN-BEGIN:_2_be
+/** The FormBean class to support the Criteria jsp of the $(Component.Upper1).
+ */
+public class $(Component.Upper1)CriteriaForm extends FinderCriteriaForm {
+
+    /** The name constant used for determining the corresponding jsp through the struts-config file.
+     */
+    public static final String NAME = "$(Module.Lower)_$(Component.Lower1)Criteria";
+
+    private static Logger log = Logger.getLogger($(Component.Upper1)CriteriaForm.class);
+
+#foreach $field in $CriteriaFields.values() #begin
+#set $wm_widgetType = ""
+#if ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "dropdown") #begin
+#set $wm_widgetType = "DropDown"
+#elseif ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "checkbox") #begin
+#set $wm_widgetType = "Grid"
+#elseif ($(field.DataType.Upper) == "STRING" || $(field.DataType.Upper) == "VARCHAR" || $(field.DataType.Upper) == "LONGSTRING" || $(field.DataType.Upper) == "LONGVARCHAR" || $(field.DataType.Upper) == "CLOB") #begin
+#set $wm_widgetType = "EditBox"
+#elseif ($(field.DataType.Upper) == "INTEGER" || $(field.DataType.Upper) == "BIGINT") #begin
+#set $wm_widgetType = "EditBox"
+#elseif ($(field.DataType.Upper) == "DECIMAL" || $(field.DataType.Upper) == "DOUBLE") #begin
+#set $wm_widgetType = "EditBox"
+#elseif ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") #begin
+#set $wm_widgetType = "DropDown"
+#elseif ($(field.DataType.Upper) == "DATE_ONLY" || $(field.DataType.Upper) == "DATEONLY") #begin
+#set $wm_widgetType = "EditBox"
+#elseif ($(field.DataType.Upper) == "DATE_TIME" || $(field.DataType.Upper) == "DATETIME") #begin
+#set $wm_widgetType = "EditBox"
+#elseif ($(field.DataType.Upper) == "CURRENCY") #begin
+#set $wm_widgetType = "EditBox"
+#elseif ($(field.DataType.Upper) == "RAW" || $(field.DataType.Upper) == "LONGRAW" || $(field.DataType.Upper) == "BLOB") #begin
+#set $wm_widgetType = "EditBox"
+#end
+    private $(wm_widgetType)Model w_$(field.Name.Lower1) = null;
+
+#if ($(field.DataType.Upper) != "BOOLEAN" && $(field.DataType.Upper) != "BIT" && ($field.Breakup == null || $field.Breakup.WidgetType.Lower == "dropdown")) #begin
+    private DropDownModel w_$(field.Name.Lower1)Dd = null;
+#end
+#end
+    // .//GEN-END:_2_be
+
+#foreach $field in $CriteriaFields.values() #begin
+#set $wm_widgetType = ""
+#set $wm_dataType = ""
+#if ($(field.DataType.Upper) == "STRING" || $(field.DataType.Upper) == "VARCHAR" || $(field.DataType.Upper) == "LONGSTRING" || $(field.DataType.Upper) == "LONGVARCHAR" || $(field.DataType.Upper) == "CLOB") #begin
+#set $wm_widgetType = "EditBox"
+#set $wm_dataType = "String"
+#elseif ($(field.DataType.Upper) == "INTEGER" || $(field.DataType.Upper) == "BIGINT") #begin
+#set $wm_widgetType = "EditBox"
+#set $wm_dataType = "Long"
+#elseif ($(field.DataType.Upper) == "DECIMAL" || $(field.DataType.Upper) == "DOUBLE") #begin
+#set $wm_widgetType = "EditBox"
+#set $wm_dataType = "Double"
+#elseif ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") #begin
+#set $wm_widgetType = "DropDown"
+#set $wm_dataType = "Boolean"
+#elseif ($(field.DataType.Upper) == "DATE_ONLY" || $(field.DataType.Upper) == "DATEONLY") #begin
+#set $wm_widgetType = "EditBox"
+#set $wm_dataType = "DateOnly"
+#elseif ($(field.DataType.Upper) == "DATE_TIME" || $(field.DataType.Upper) == "DATETIME") #begin
+#set $wm_widgetType = "EditBox"
+#set $wm_dataType = "DateTime"
+#elseif ($(field.DataType.Upper) == "CURRENCY") #begin
+#set $wm_widgetType = "EditBox"
+#set $wm_dataType = "Currency"
+#elseif ($(field.DataType.Upper) == "RAW" || $(field.DataType.Upper) == "LONGRAW" || $(field.DataType.Upper) == "BLOB") #begin
+#set $wm_widgetType = "EditBox"
+#set $wm_dataType = "Raw"
+#end
+#if ($field.AltDomainObject == null) #begin
+#set $wm_domainObject = "$(DomainObject.Upper1)"
+#else
+#set $wm_domainObject = "$(field.AltDomainObject.Object.Upper1)"
+#end
+#if ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "dropdown") #begin
+#set $wm_widgetType = "DropDown"
+#elseif ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "checkbox") #begin
+#set $wm_widgetType = "Grid"
+#end
+    // .//GEN-BEGIN:$(field.Name.Lower1)_1_be
+    /** Getter for property $(field.Name.Lower1).
+     * @return Value of property $(field.Name.Lower1).
+     */
+    public String get$(field.Name.Upper1)() {
+        return ( ($(Component.Upper1)Component) getComponent() ).get$(field.Name.Upper1)();
+    }
+
+    /** Setter for property $(field.Name.Lower1).
+     * @param $(field.Name.Lower1) New value of property $(field.Name.Lower1).
+     */
+    public void set$(field.Name.Upper1)(String $(field.Name.Lower1)) {
+        ( ($(Component.Upper1)Component) getComponent() ).set$(field.Name.Upper1)($(field.Name.Lower1));
+    }
+
+    /** Getter for property $(field.Name.Lower1). This is invoked by the custom tag, when the jsp is rendered, to get the current value.
+     * @return Value of property $(field.Name.Lower1).
+     */
+    public $(wm_widgetType)Model get$(field.Name.Upper1)WM() {
+        if (w_$(field.Name.Lower1) == null) {
+            w_$(field.Name.Lower1) = ($(wm_widgetType)Model) getWidgetCache().getModel("$(field.Name.Lower1)");
+            if (w_$(field.Name.Lower1) == null) {
+
+#if ($field.Breakup != null && $wm_widgetType == "DropDown") #begin
+                if (get$(field.Name.Upper1)() != null)
+                    w_$(field.Name.Lower1) = new $(wm_widgetType)Model( get$(field.Name.Upper1)() );
+                else
+                    w_$(field.Name.Lower1) = new $(wm_widgetType)Model("");
+
+#if ($field.Breakup.StaticValues != null) #begin
+#foreach $staticValue in $field.Breakup.StaticValues.values() #begin
+                w_$(field.Name.Lower1).addOption("$(staticValue.Description)", "$(staticValue.Code)");
+#end
+#end
+
+#if ($field.Breakup.DynamicValues != null) #begin
+                CodeHelperOutElementDto dto = ( ($(Component.Upper1)Component) getComponent() ).get$(field.Name.Upper1)Codes();
+                if (dto != null && dto.getCodeHelperOutCodeDtoCount() > 0) {
+                    CodeHelperOutCodeDto[] codes = dto.getCodeHelperOutCodeDtos();
+                    for (int i = 0; i < codes.length; i++) {
+                        CodeHelperOutCodeDto code = codes[i];
+                        w_$(field.Name.Lower1).addOption(Formatter.format(code.getDescription()), Formatter.format(code.getCode()));
+                    }
+                }
+#end
+
+#elseif ($field.Breakup != null && $wm_widgetType == "Grid") #begin
+                w_$(field.Name.Lower1) = new GridModel();
+                Collection existingValues = null;
+                Object code = null;
+                GridModelRow row = null;
+                if (get$(field.Name.Upper1)() != null)
+                    existingValues = StringHelper.convertToList(get$(field.Name.Upper1)());
+
+#if ($field.Breakup.StaticValues != null) #begin
+#foreach $staticValue in $field.Breakup.StaticValues.values() #begin
+                row = w_$(field.Name.Lower1).newRow();
+                code = "$(staticValue.Code)";
+                row.addElement("code", code);
+                row.addElement("description", "$(staticValue.Description)");
+                if (existingValues != null && existingValues.contains(code))
+                    row.addElement("checked", new CheckBoxModel(true));
+                else
+                    row.addElement("checked", new CheckBoxModel(false));
+#end
+#end
+
+#if ($field.Breakup.DynamicValues != null) #begin
+                CodeHelperOutElementDto dto = ( ($(Component.Upper1)Component) getComponent() ).get$(field.Name.Upper1)Codes();
+                if (dto != null && dto.getCodeHelperOutCodeDtoCount() > 0) {
+                    CodeHelperOutCodeDto[] codes = dto.getCodeHelperOutCodeDtos();
+                    for (int i = 0; i < codes.length; i++) {
+                        CodeHelperOutCodeDto codeDto = codes[i];
+                        row = w_$(field.Name.Lower1).newRow();
+                        code = codeDto.getCode();
+                        row.addElement("code", code);
+                        row.addElement("description", Formatter.format(codeDto.getDescription()));
+                        if (existingValues != null && existingValues.contains(code))
+                            row.addElement("checked", new CheckBoxModel(true));
+                        else
+                            row.addElement("checked", new CheckBoxModel(false));
+                    }
+                }
+#end
+
+#elseif ($wm_dataType == "String") #begin
+                if (get$(field.Name.Upper1)() != null)
+                    w_$(field.Name.Lower1) = new $(wm_widgetType)Model( get$(field.Name.Upper1)() );
+                else
+                    w_$(field.Name.Lower1) = new $(wm_widgetType)Model();
+
+#if ( $(field.DomainField) != null && $(field.DomainField.toString()) != "") #begin
+                w_$(field.Name.Lower1).setStringCase( ((StringFieldMetaData) $(wm_domainObject)Meta.META_$(field.DomainField.Static)).getCaseType() );
+#end
+
+#elseif ($wm_widgetType == "EditBox") #begin
+                if (get$(field.Name.Upper1)() != null)
+                    w_$(field.Name.Lower1) = new $(wm_widgetType)Model( get$(field.Name.Upper1)() );
+                else
+                    w_$(field.Name.Lower1) = new $(wm_widgetType)Model();
+#elseif ($wm_dataType == "Boolean" && $wm_widgetType == "DropDown") #begin
+                if (get$(field.Name.Upper1)() != null)
+                    w_$(field.Name.Lower1) = new $(wm_widgetType)Model( get$(field.Name.Upper1)() );
+                else
+                    w_$(field.Name.Lower1) = new $(wm_widgetType)Model("");
+                Map optionsMap = CriteriaDropDownOptions.getBooleanCriteriaDropDownOptions();
+                Set options = optionsMap.entrySet();
+                for (Iterator i = options.iterator(); i.hasNext();) {
+                    Map.Entry option = (Map.Entry) i.next();
+                    w_$(field.Name.Lower1).addOption((String) option.getValue(), (String) option.getKey());
+                }
+#end
+                // .//GEN-END:$(field.Name.Lower1)_1_be
+                // Add custom code //GEN-FIRST:$(field.Name.Lower1)_1
+
+
+                // .//GEN-LAST:$(field.Name.Lower1)_1
+                // .//GEN-BEGIN:$(field.Name.Lower1)_2_be
+                getWidgetCache().addModel("$(field.Name.Lower1)", w_$(field.Name.Lower1));
+            }
+        }
+        return w_$(field.Name.Lower1);
+    }
+
+    /** Setter for property $(field.Name.Lower1). This is invoked by the servlet, when a post is done on the Criteria screen.
+     * @param value New value of property $(field.Name.Lower1).
+     */
+    public void set$(field.Name.Upper1)WV(String value) {
+        $(wm_widgetType)Controller.updateModel(value, get$(field.Name.Upper1)WM());
+    }
+
+#if ($(field.DataType.Upper) != "BOOLEAN" && $(field.DataType.Upper) != "BIT" && ($field.Breakup == null || $field.Breakup.WidgetType.Lower == "dropdown")) #begin
+
+    /** Getter for DropDown property $(field.Name.Lower1).
+     * @return Value of property $(field.Name.Lower1)Dd.
+     */
+    public String get$(field.Name.Upper1)Dd() {
+        return ( ($(Component.Upper1)Component) getComponent() ).get$(field.Name.Upper1)Dd();
+    }
+
+    /** Setter for DropDown property $(field.Name.Lower1).
+     * @param $(field.Name.Lower1)Dd New value of property $(field.Name.Lower1)Dd.
+     */
+    public void set$(field.Name.Upper1)Dd(String $(field.Name.Lower1)Dd) {
+        ( ($(Component.Upper1)Component) getComponent() ).set$(field.Name.Upper1)Dd($(field.Name.Lower1)Dd);
+    }
+
+    /** Getter for DropDown property $(field.Name.Lower1). This is invoked by the custom tag, when the jsp is rendered, to get the current value.
+     * @return Value of property $(field.Name.Lower1)Dd.
+     */
+    public DropDownModel get$(field.Name.Upper1)DdWM() {
+        if (w_$(field.Name.Lower1)Dd == null) {
+            w_$(field.Name.Lower1)Dd = (DropDownModel) getWidgetCache().getModel("$(field.Name.Lower1)Dd");
+            if (w_$(field.Name.Lower1)Dd == null) {
+                if (get$(field.Name.Upper1)Dd() != null)
+                    w_$(field.Name.Lower1)Dd = new DropDownModel( get$(field.Name.Upper1)Dd() );
+                else
+                    w_$(field.Name.Lower1)Dd = new DropDownModel(CriteriaField.RELATIONAL_EQUALS);
+
+#if ($field.Breakup != null && $wm_widgetType = "DropDown") #begin
+                Map optionsMap = CriteriaDropDownOptions.getDropDownCriteriaDropDownOptions();
+#elseif ($(field.DataType.Upper) == "DATEONLY" || $(field.DataType.Upper) == "DATE_ONLY" || $(field.DataType.Upper) == "DATETIME" || $(field.DataType.Upper) == "DATE_TIME") #begin
+                Map optionsMap = CriteriaDropDownOptions.getDateCriteriaDropDownOptions();
+#elseif ($(field.DataType.Upper) == "INTEGER" || $(field.DataType.Upper) == "BIGINT" || $(field.DataType.Upper) == "DECIMAL" || $(field.DataType.Upper) == "DOUBLE") #begin
+                Map optionsMap = CriteriaDropDownOptions.getNumericalCriteriaDropDownOptions();
+#else
+                Map optionsMap = CriteriaDropDownOptions.getAllCriteriaDropDownOptions();
+#end
+                Set options = optionsMap.entrySet();
+                for (Iterator i = options.iterator(); i.hasNext();) {
+                    Map.Entry option = (Map.Entry) i.next();
+                    w_$(field.Name.Lower1)Dd.addOption((String) option.getValue(), (String) option.getKey());
+                }
+                getWidgetCache().addModel("$(field.Name.Lower1)Dd", w_$(field.Name.Lower1)Dd);
+            }
+        }
+        return w_$(field.Name.Lower1)Dd;
+    }
+
+    /** Setter for DropDown property $(field.Name.Lower1). This is invoked by the servlet, when a post is done on the Criteria screen.
+     * @param value New value of property $(field.Name.Lower1)Dd.
+     */
+    public void set$(field.Name.Upper1)DdWV(String value) {
+        DropDownController.updateModel(value, get$(field.Name.Upper1)DdWM());
+    }
+
+#end
+    // .//GEN-END:$(field.Name.Lower1)_2_be
+#end
+    // .//GEN-BEGIN:_doValidate_1_be
+    /** This method should be invoked to ensure a valid state of the FormBean. It will validate the data in the models and set the corresponding properties.
+     * Errors will be raised in the FormBean, if any validation fails.
+     * @param request The request stream
+     * @return A true indicates validations went through successfully. */
+    public boolean doValidate(HttpServletRequest request) {
+        boolean valid = super.doValidate(request);
+        String value = null;
+        StringBuffer buf = null;
+
+
+#foreach $field in $CriteriaFields.values() #begin
+#if ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "checkbox") #begin
+        buf = new StringBuffer();
+        if (get$(field.Name.Upper1)WM().getRows() != null) {
+            for (Iterator i = get$(field.Name.Upper1)WM().getRows().iterator(); i.hasNext(); ) {
+                GridModelRow row = (GridModelRow) i.next();
+                boolean checked = ((CheckBoxModel) row.getElement("checked")).getState();
+                if (checked) {
+                    if (buf.length() > 0)
+                        buf.append(',');
+                    buf.append(row.getElement("code"));
+                }
+            }
+        }
+        if (buf.length() > 0)
+            value = buf.toString();
+        else
+            value = null;
+#else
+        value = get$(field.Name.Upper1)WM().getValue();
+#end
+        if (value != null && value.trim().length() == 0)
+            value = null;
+        set$(field.Name.Upper1)(value);
+
+#if ($(field.DataType.Upper) != "BOOLEAN" && $(field.DataType.Upper) != "BIT" && ($field.Breakup == null || $field.Breakup.WidgetType.Lower == "dropdown")) #begin
+        set$(field.Name.Upper1)Dd(get$(field.Name.Upper1)DdWM().getValue());
+#end
+
+#end
+        // .//GEN-END:_doValidate_1_be
+        // Add custom code //GEN-FIRST:_doValidate_1
+
+
+
+        // .//GEN-LAST:_doValidate_1
+        // .//GEN-BEGIN:_doValidate_2_be
+        return valid;
+    }
+    // .//GEN-END:_doValidate_2_be
+    // All the custom code goes here //GEN-FIRST:_custom
+
+
+
+
+
+
+    // .//GEN-LAST:_custom
+}

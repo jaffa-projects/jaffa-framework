@@ -1,0 +1,63 @@
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ * 
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/
+#set $wm_actionNameKey = "WM_ACTION_NAME"
+
+#if ($ScratchPad.get($(wm_actionNameKey)) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($(wm_actionNameKey), "0") != null) #begin #end
+#end
+
+#set $wm_actionIndex = -1
+#set $wm_actionFound = "false"
+#foreach $screen in $Screens.values() #begin
+#set $wm_actionIndex = $wm_actionIndex + 1
+#if ( $ScratchPad.get($wm_actionNameKey).equals("$wm_actionIndex") && $wm_actionFound = "false" ) #begin
+#set $wm_actionFound = "true"
+#set $wm_actionIndex = $wm_actionIndex + 1
+#if ($screen.ScreenName != null) #begin
+#set $wm_action = "$(Component.Upper1)$(screen.ScreenName.Upper1)Action"
+#set $wm_form = "$(Component.Upper1)$(screen.ScreenName.Upper1)Form"
+#else
+#set $wm_action = "$(Component.Upper1)Action"
+#set $wm_form = "$(Component.Upper1)Form"
+#end
+package $(BasePackage.Lower).components.$(Component.Lower).ui;
+
+import org.apache.log4j.Logger;
+import org.jaffa.presentation.portlet.ActionBase;
+import org.jaffa.presentation.portlet.FormKey;
+
+/** The Action class for handling events.
+ */
+public class $wm_action extends ActionBase {
+
+    private static final Logger log = Logger.getLogger($(wm_action).class);
+
+
+#if ($(screen.ScreenFields) != null) #begin
+#foreach $field in $screen.ScreenFields.values() #begin
+#set $wm_wt = $field.WidgetType.Lower
+#if (($wm_wt == "editbox" || $wm_wt == "button" || $wm_wt == "table") && $(field.Event) != null) #begin
+    /** $(field.Event.Upper1) event handler for the field $(field.Name.Upper1).
+     * @return The FormKey.
+     */
+    public FormKey do_$(field.Name.Upper1)_$(field.Event.Upper1)() {
+        // Add Event Handling logic
+
+        // Returns to the same screen. Modify to return a different screen
+        return new FormKey($(wm_form).NAME, component != null ? component.getComponentId() : null);
+    }
+
+#end
+#end
+#end
+}
+
+## the following 'if' statement is used to invoke the 'add' method
+#if ($ScratchPad.put($wm_actionNameKey, "$wm_actionIndex") != null) #begin #end
+#end
+#end

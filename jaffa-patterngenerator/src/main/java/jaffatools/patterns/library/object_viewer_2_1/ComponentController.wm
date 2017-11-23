@@ -1,0 +1,662 @@
+// .//GEN-BEGIN:_1_be
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ * 
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/
+ package $(BasePackage.Lower).components.$(Component.Lower).ui;
+
+import org.apache.log4j.Logger;
+import java.util.EventObject;
+import org.jaffa.presentation.portlet.component.Component;
+import org.jaffa.presentation.portlet.FormKey;
+import org.jaffa.exceptions.ApplicationExceptions;
+import org.jaffa.exceptions.FrameworkException;
+import org.jaffa.exceptions.DomainObjectNotFoundException;
+import org.jaffa.datatypes.exceptions.MandatoryFieldException;
+import org.jaffa.middleware.Factory;
+import org.jaffa.components.finder.OrderByField;
+import org.jaffa.components.maint.*;
+import org.jaffa.components.dto.HeaderDto;
+
+import $(BasePackage.Lower).components.$(Component.Lower).I$(Component.Upper1);
+import $(BasePackage.Lower).components.$(Component.Lower).dto.$(Component.Upper1)InDto;
+import $(BasePackage.Lower).components.$(Component.Lower).dto.$(Component.Upper1)OutDto;
+import $(DomainPackage.Lower).$(DomainObject.Upper1);
+import $(DomainPackage.Lower).$(DomainObject.Upper1)Meta;
+
+$ScratchPad.clear()
+#foreach $field in $ResultsFields.values() #begin
+#if ($(field.Viewer) != null) #begin
+#set $wm_package = "$(field.Viewer.Package.Lower).$(field.Viewer.ClassName.Upper1)"
+#if ($ScratchPad.get($wm_package) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_package,$wm_package) != null) #begin #end
+#if ($(field.Viewer.Package.Lower) == "$(BasePackage.Lower).components.$(Component.Lower).ui" && $(field.Viewer.ClassName.Upper1) == "$(Component.Upper1)Component") #begin
+## do not import itself
+#else
+import $(wm_package);
+#end
+#end
+#end
+#end
+
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelatedObjectViewer != null) #begin
+#set $wm_package = "$(object.RelatedObjectViewer.Package.Lower).$(object.RelatedObjectViewer.ClassName.Upper1)"
+#if ($ScratchPad.get($wm_package) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_package,$wm_package) != null) #begin #end
+#if ($(object.RelatedObjectViewer.Package.Lower) == "$(BasePackage.Lower).components.$(Component.Lower).ui" && $(object.RelatedObjectViewer.ClassName.Upper1) == "$(Component.Upper1)Component") #begin
+## do not import itself
+#else
+import $(wm_package);
+#end
+#end
+#end
+
+#if ($object.RelatedObjectUpdator != null) #begin
+#set $wm_package = "$(object.RelatedObjectUpdator.Package.Lower).$(object.RelatedObjectUpdator.ClassName.Upper1)"
+#if ($ScratchPad.get($wm_package) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_package,$wm_package) != null) #begin #end
+#if ($(object.RelatedObjectUpdator.Package.Lower) == "$(BasePackage.Lower).components.$(Component.Lower).ui" && $(object.RelatedObjectUpdator.ClassName.Upper1) == "$(Component.Upper1)Component") #begin
+## do not import itself
+#else
+import $(wm_package);
+#end
+#end
+#end
+
+#if ($object.RelatedObjectDeletor != null) #begin
+#set $wm_package = "$(object.RelatedObjectDeletor.Package.Lower).$(object.RelatedObjectDeletor.ClassName.Upper1)"
+#if ($ScratchPad.get($wm_package) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_package,$wm_package) != null) #begin #end
+#if ($(object.RelatedObjectDeletor.Package.Lower) == "$(BasePackage.Lower).components.$(Component.Lower).ui" && $(object.RelatedObjectDeletor.ClassName.Upper1) == "$(Component.Upper1)Component") #begin
+## do not import itself
+#else
+import $(wm_package);
+#end
+#end
+#end
+#end
+#end
+
+
+#if ($Updator != null) #begin
+#set $wm_package = "$(Updator.Package.Lower).$(Updator.ClassName.Upper1)"
+#if ($ScratchPad.get($wm_package) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_package,$wm_package) != null) #begin #end
+#if ($(Updator.Package.Lower) == "$(BasePackage.Lower).components.$(Component.Lower).ui" && $(Updator.ClassName.Upper1) == "$(Component.Upper1)Component") #begin
+## do not import itself
+#else
+import $(wm_package);
+#end
+#end
+#end
+
+#if ($Deletor != null) #begin
+#set $wm_package = "$(Deletor.Package.Lower).$(Deletor.ClassName.Upper1)"
+#if ($ScratchPad.get($wm_package) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_package,$wm_package) != null) #begin #end
+#if ($(Deletor.Package.Lower) == "$(BasePackage.Lower).components.$(Component.Lower).ui" && $(Deletor.ClassName.Upper1) == "$(Component.Upper1)Component") #begin
+## do not import itself
+#else
+import $(wm_package);
+#end
+#end
+#end
+$ScratchPad.clear()// .//GEN-END:_1_be
+// Add additional imports//GEN-FIRST:_imports
+
+
+
+
+// .//GEN-LAST:_imports
+// .//GEN-BEGIN:_2_be
+/** The controller for the $(Component.Upper1).
+ */
+public class $(Component.Upper1)Component extends Component {
+    
+    private static Logger log = Logger.getLogger($(Component.Upper1)Component.class);
+    private HeaderDto m_headerDto = null;
+
+
+#foreach $field in $CriteriaFields.values() #begin
+    private $(field.DataType.JavaDataType) m_$(field.Name.JavaBeanStyle);
+#end
+    private $(Component.Upper1)OutDto m_outputDto = null;
+    private I$(Component.Upper1) m_tx = null;
+
+
+#if ($Updator != null) #begin
+    private $(Updator.ClassName.Upper1) m_updateComponent = null;
+    private IUpdateListener m_updateListener = null;
+#end
+
+#if ($Deletor != null) #begin
+    private $(Deletor.ClassName.Upper1) m_deleteComponent = null;
+    private IDeleteListener m_deleteListener = null;
+#end
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelatedObjectUpdator != null) #begin
+    private $(object.RelatedObjectUpdator.ClassName.Upper1) m_update$(object.Name.Upper1) = null;
+    private IUpdateListener m_updateListener$(object.Name.Upper1) = null;
+#end
+
+#if ($object.RelatedObjectDeletor != null) #begin
+    private $(object.RelatedObjectDeletor.ClassName.Upper1) m_delete$(object.Name.Upper1) = null;
+    private IDeleteListener m_deleteListener$(object.Name.Upper1) = null;
+#end
+#end
+#end
+    // .//GEN-END:_2_be
+    // .//GEN-BEGIN:_quit_1_be
+    /** This should be invoked when done with the component.
+     */    
+    public void quit() {
+        // .//GEN-END:_quit_1_be
+        // Add custom code before processing the method //GEN-FIRST:_quit_1
+
+
+        // .//GEN-LAST:_quit_1
+        // .//GEN-BEGIN:_quit_2_be
+        if (m_tx != null) {
+            m_tx.destroy();
+            m_tx = null;
+        }
+
+#if ($Updator != null) #begin
+        if (m_updateComponent != null) {
+            m_updateComponent.quit();
+            m_updateComponent = null;
+        }
+        m_updateListener = null;
+#end
+
+#if ($Deletor != null) #begin
+        if (m_deleteComponent != null) {
+            m_deleteComponent.quit();
+            m_deleteComponent = null;
+        }
+        m_deleteListener = null;
+#end
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelatedObjectUpdator != null) #begin
+        if (m_update$(object.Name.Upper1) != null) {
+            m_update$(object.Name.Upper1).quit();
+            m_update$(object.Name.Upper1) = null;
+        }
+        m_updateListener$(object.Name.Upper1) = null;
+#end
+
+#if ($object.RelatedObjectDeletor != null) #begin
+        if (m_delete$(object.Name.Upper1) != null) {
+            m_delete$(object.Name.Upper1).quit();
+            m_delete$(object.Name.Upper1) = null;
+        }
+        m_deleteListener$(object.Name.Upper1) = null;
+#end
+#end
+#end
+
+        m_outputDto = null;
+        super.quit();
+    }
+    // .//GEN-END:_quit_2_be
+
+#foreach $field in $CriteriaFields.values() #begin
+    // .//GEN-BEGIN:$(field.Name.JavaBeanStyle)_1_be
+    /** Getter for property $(field.Name.JavaBeanStyle).
+     * @return Value of property $(field.Name.JavaBeanStyle).
+     */
+    public $(field.DataType.JavaDataType) get$(field.Name.Upper1)() {
+        return m_$(field.Name.JavaBeanStyle);
+    }
+    
+    /** Setter for property $(field.Name.JavaBeanStyle).
+     * @param $(field.Name.JavaBeanStyle) New value of property $(field.Name.JavaBeanStyle).
+     */
+    public void set$(field.Name.Upper1)($(field.DataType.JavaDataType) $(field.Name.JavaBeanStyle)) {
+        m_$(field.Name.JavaBeanStyle) = $(field.Name.JavaBeanStyle);
+    }
+    // .//GEN-END:$(field.Name.JavaBeanStyle)_1_be
+#end
+    // .//GEN-BEGIN:_$(Component.Upper1)OutDto_1_be
+    /** Getter for property outputDto.
+     * @return Value of property outputDto.
+     */    
+    public $(Component.Upper1)OutDto get$(Component.Upper1)OutDto() {
+        return m_outputDto;
+    }
+    
+    /** Setter for property outputDto.
+     * @param outputDto New value of property outputDto.
+     */    
+    public void set$(Component.Upper1)OutDto($(Component.Upper1)OutDto outputDto) {
+        m_outputDto = outputDto;
+    }
+    // .//GEN-END:_$(Component.Upper1)OutDto_1_be
+    // .//GEN-BEGIN:_display_1_be
+    /** This retrieves the details for the $(DomainObject.Upper1).
+     * @throws ApplicationExceptions This will be thrown in case any invalid data has been set, or if no data has been set.
+     * @throws FrameworkException Indicates some system error.
+     * @return The FormKey for the View screen.
+     */    
+    public FormKey display() throws ApplicationExceptions, FrameworkException {
+        ApplicationExceptions appExps = null;
+        // .//GEN-END:_display_1_be
+        // Add custom code before processing the method //GEN-FIRST:_display_1
+
+
+        // .//GEN-LAST:_display_1
+        // .//GEN-BEGIN:_display_2_be
+
+#foreach $field in $CriteriaFields.values() #begin
+        if (get$(field.Name.Upper1)() == null) {
+            if (appExps == null)
+                appExps = new ApplicationExceptions();
+            appExps.add(new MandatoryFieldException($(DomainObject.Upper1)Meta.META_$(field.DomainField.Static).getLabelToken()) );
+        }
+#end
+        if (appExps != null && appExps.size() > 0)
+            throw appExps;
+
+        doInquiry();
+        return getViewerFormKey();
+    }
+    // .//GEN-END:_display_2_be
+    // .//GEN-BEGIN:_inquiry_1_be
+    private void doInquiry() throws ApplicationExceptions, FrameworkException {
+        $(Component.Upper1)InDto inputDto = new $(Component.Upper1)InDto();
+        // .//GEN-END:_inquiry_1_be
+        // Add custom code before building the input dto //GEN-FIRST:_inquiry_1
+
+
+        // .//GEN-LAST:_inquiry_1
+        // .//GEN-BEGIN:_inquiry_2_be
+
+#foreach $field in $CriteriaFields.values() #begin
+        inputDto.set$(field.Name.Upper1)(m_$(field.Name.JavaBeanStyle));
+#end
+
+        inputDto.setHeaderDto(createHeaderDto());
+
+        // create the Tx
+        if (m_tx == null)
+            m_tx = (I$(Component.Upper1)) Factory.createObject(I$(Component.Upper1).class);
+
+        // .//GEN-END:_inquiry_2_be
+        // Add custom code before invoking the Tx //GEN-FIRST:_inquiry_2
+
+
+        // .//GEN-LAST:_inquiry_2
+        // .//GEN-BEGIN:_inquiry_3_be
+        // now get the details
+        m_outputDto = m_tx.read(inputDto);
+
+        // uncache the widgets
+        getUserSession().getWidgetCache(getComponentId()).clear();
+        // .//GEN-END:_inquiry_3_be
+        // Add custom code after invoking the Tx //GEN-FIRST:_inquiry_3
+
+
+        // .//GEN-LAST:_inquiry_3
+        // .//GEN-BEGIN:_inquiry_4_be
+        // throw an exception if the output is null
+        if (m_outputDto == null) {
+            ApplicationExceptions appExps = new ApplicationExceptions();
+            appExps.add(new DomainObjectNotFoundException($(DomainObject.Upper1)Meta.getLabelToken()));
+            throw appExps;
+        }
+    }
+    // .//GEN-END:_inquiry_4_be
+$ScratchPad.clear()
+#foreach $field in $ResultsFields.values() #begin
+#if ($(field.Viewer) != null) #begin
+#set $wm_componentName = "$(field.Viewer.ClassName.JavaBeanStyle)"
+#if ($ScratchPad.get($wm_componentName) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_componentName,$wm_componentName) != null) #begin #end
+    // .//GEN-BEGIN:view$(field.Viewer.ClassName.Upper1)_1_be
+    /** This invokes the $(field.Viewer.ClassName.Upper1) screen.
+     * @param input The key value for which the Viewer is being invoked.
+     * @throws ApplicationExceptions This will be thrown in case any invalid data has been set.
+     * @throws FrameworkException Indicates some system error.
+     * @return The FormKey for the View screen.
+     */    
+    public FormKey view$(field.Viewer.ClassName.Upper1)($(field.DataType.JavaDataType) input)
+    throws ApplicationExceptions, FrameworkException {
+        $(field.Viewer.ClassName.Upper1) $(wm_componentName) = ($(field.Viewer.ClassName.Upper1)) run("$(field.Viewer.ComponentName)");
+        $(wm_componentName).setReturnToFormKey(FormKey.getCloseBrowserFormKey());
+        $(wm_componentName).set$(field.Viewer.FieldNameInTargetComponent.Upper1)(input);
+        // .//GEN-END:view$(field.Viewer.ClassName.Upper1)_1_be
+        // Add custom code before invoking the component //GEN-FIRST:view$(field.Viewer.ClassName.Upper1)_1
+
+
+        // .//GEN-LAST:view$(field.Viewer.ClassName.Upper1)_1
+        // .//GEN-BEGIN:view$(field.Viewer.ClassName.Upper1)_2_be
+        return $(wm_componentName).display();
+    }
+    // .//GEN-END:view$(field.Viewer.ClassName.Upper1)_2_be
+#end
+#end
+#end
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#set $wm_signature = ""
+#set $firstPass = "true"
+#foreach $field in $object.KeyFields.values() #begin
+#if ($firstPass == "true") #begin
+#set $firstPass = "false"
+#else
+#set $wm_signature = "$(wm_signature), "
+#end
+#set $wm_signature = "$(wm_signature)$(field.DataType.JavaDataType) $(field.FieldNameInTargetComponent.JavaBeanStyle)"
+#end
+#if ($(object.RelatedObjectViewer) != null) #begin
+    // .//GEN-BEGIN:view$(object.Name.Upper1)_1_be
+    /** This invokes the $(object.RelatedObjectViewer.ClassName.Upper1) screen.
+     * @throws ApplicationExceptions This will be thrown in case any invalid data has been set.
+     * @throws FrameworkException Indicates some system error.
+     * @return The FormKey for the View screen.
+     */    
+    public FormKey view$(object.Name.Upper1)($wm_signature) throws ApplicationExceptions, FrameworkException {
+        $(object.RelatedObjectViewer.ClassName.Upper1) $(object.RelatedObjectViewer.ClassName.JavaBeanStyle) = ($(object.RelatedObjectViewer.ClassName.Upper1)) run("$(object.RelatedObjectViewer.ComponentName)");
+        $(object.RelatedObjectViewer.ClassName.JavaBeanStyle).setReturnToFormKey(FormKey.getCloseBrowserFormKey());
+
+#foreach $field in $object.KeyFields.values() #begin
+        $(object.RelatedObjectViewer.ClassName.JavaBeanStyle).set$(field.FieldNameInTargetComponent.Upper1)($(field.FieldNameInTargetComponent.JavaBeanStyle));
+#end
+        // .//GEN-END:view$(object.Name.Upper1)_1_be
+        // Add custom code before invoking the component //GEN-FIRST:view$(object.Name.Upper1)_1
+
+
+        // .//GEN-LAST:view$(object.Name.Upper1)_1
+        // .//GEN-BEGIN:view$(object.Name.Upper1)_2_be
+        return $(object.RelatedObjectViewer.ClassName.JavaBeanStyle).display();
+    }
+    // .//GEN-END:view$(object.Name.Upper1)_2_be
+#end
+
+#if ($object.RelatedObjectUpdator != null) #begin
+    // .//GEN-BEGIN:_update$(object.Name.Upper1)_1_be
+    /** Calls the $(object.RelatedObjectUpdator.ComponentName) component for updating the $(object.Name.Upper1) object.
+     * @throws ApplicationExceptions This will be thrown in case any invalid data has been set.
+     * @throws FrameworkException Indicates some system error.
+     * @return The FormKey for the Update screen.
+     */
+    public FormKey update$(object.Name.Upper1)($wm_signature) throws ApplicationExceptions, FrameworkException {
+        if (m_update$(object.Name.Upper1) == null || !m_update$(object.Name.Upper1).isActive()) {
+            m_update$(object.Name.Upper1) = ($(object.RelatedObjectUpdator.ClassName.Upper1)) run("$(object.RelatedObjectUpdator.ComponentName)");
+            m_update$(object.Name.Upper1).setReturnToFormKey(getViewerFormKey());
+            addListeners$(object.Name.Upper1)(m_update$(object.Name.Upper1));
+        }
+
+#foreach $field in $object.KeyFields.values() #begin
+        m_update$(object.Name.Upper1).set$(field.FieldNameInTargetComponent.Upper1)($(field.FieldNameInTargetComponent.JavaBeanStyle));
+#end
+        if (m_update$(object.Name.Upper1) instanceof IMaintComponent)
+            ((IMaintComponent) m_update$(object.Name.Upper1)).setMode(IMaintComponent.MODE_UPDATE);
+        // .//GEN-END:_update$(object.Name.Upper1)_1_be
+        // Add custom code before invoking the component //GEN-FIRST:_update$(object.Name.Upper1)_2
+
+
+        // .//GEN-LAST:_update$(object.Name.Upper1)_2
+        // .//GEN-BEGIN:_update$(object.Name.Upper1)_2_be
+        return m_update$(object.Name.Upper1).display();
+    }
+
+    private IUpdateListener getUpdateListener$(object.Name.Upper1)() {
+        if (m_updateListener$(object.Name.Upper1) == null) {
+            m_updateListener$(object.Name.Upper1) = new IUpdateListener() {
+                public void updateDone(EventObject source) {
+                    try {
+                        // .//GEN-END:_update$(object.Name.Upper1)_2_be
+                        // Add custom code //GEN-FIRST:_update$(object.Name.Upper1)_1
+
+
+                        // .//GEN-LAST:_update$(object.Name.Upper1)_1
+                        // .//GEN-BEGIN:_update$(object.Name.Upper1)_3_be
+                        doInquiry();
+                    } catch (Exception e) {
+                        log.warn("Error in refreshing the screen after the Update", e);
+                    }
+                }
+            };
+        }
+        return m_updateListener$(object.Name.Upper1);
+    }
+    // .//GEN-END:_update$(object.Name.Upper1)_3_be
+#end
+
+#if ($object.RelatedObjectDeletor != null) #begin
+    // .//GEN-BEGIN:_delete$(object.Name.Upper1)_1_be
+    /** Calls the $(object.RelatedObjectDeletor.ComponentName) component for deleting the $(object.Name.Upper1) object.
+     * @throws ApplicationExceptions This will be thrown in case any invalid data has been set.
+     * @throws FrameworkException Indicates some system error.
+     * @return The FormKey for the Delete screen.
+     */
+    public FormKey delete$(object.Name.Upper1)($wm_signature) throws ApplicationExceptions, FrameworkException {
+        if (m_delete$(object.Name.Upper1) == null || !m_delete$(object.Name.Upper1).isActive()) {
+            m_delete$(object.Name.Upper1) = ($(object.RelatedObjectDeletor.ClassName.Upper1)) run("$(object.RelatedObjectDeletor.ComponentName)");
+            m_delete$(object.Name.Upper1).setReturnToFormKey(getViewerFormKey());
+            addListeners$(object.Name.Upper1)(m_delete$(object.Name.Upper1));
+        }
+
+#foreach $field in $object.KeyFields.values() #begin
+        m_delete$(object.Name.Upper1).set$(field.FieldNameInTargetComponent.Upper1)($(field.FieldNameInTargetComponent.JavaBeanStyle));
+#end
+        if (m_delete$(object.Name.Upper1) instanceof IMaintComponent)
+            ((IMaintComponent) m_delete$(object.Name.Upper1)).setMode(IMaintComponent.MODE_DELETE);
+        // .//GEN-END:_delete$(object.Name.Upper1)_1_be
+        // Add custom code before invoking the component //GEN-FIRST:_delete$(object.Name.Upper1)_2
+
+
+        // .//GEN-LAST:_delete$(object.Name.Upper1)_2
+        // .//GEN-BEGIN:_delete$(object.Name.Upper1)_2_be
+        return m_delete$(object.Name.Upper1).display();
+    }
+
+    private IDeleteListener getDeleteListener$(object.Name.Upper1)() {
+        if (m_deleteListener$(object.Name.Upper1) == null) {
+            m_deleteListener$(object.Name.Upper1) = new IDeleteListener() {
+                public void deleteDone(EventObject source) {
+                    try {
+                        // .//GEN-END:_delete$(object.Name.Upper1)_2_be
+                        // Add custom code //GEN-FIRST:_delete$(object.Name.Upper1)_1
+
+
+                        // .//GEN-LAST:_delete$(object.Name.Upper1)_1
+                        // .//GEN-BEGIN:_delete$(object.Name.Upper1)_3_be
+                        doInquiry();
+                    } catch (Exception e) {
+                        log.warn("Error in refreshing the screen after the Delete", e);
+                    }
+                }
+            };
+        }
+        return m_deleteListener$(object.Name.Upper1);
+    }
+    // .//GEN-END:_delete$(object.Name.Upper1)_3_be
+#end
+
+#if ($object.RelatedObjectUpdator != null || $object.RelatedObjectDeletor != null) #begin
+    // .//GEN-BEGIN:_addListeners$(object.Name.Upper1)_1_be
+    private void addListeners$(object.Name.Upper1)(Component comp) {
+
+#if ($object.RelatedObjectUpdator != null) #begin
+        if (comp  instanceof IUpdateComponent)
+            ((IUpdateComponent) comp).addUpdateListener(getUpdateListener$(object.Name.Upper1)());
+#end
+
+#if ($object.RelatedObjectDeletor != null) #begin
+        if (comp  instanceof IDeleteComponent)
+            ((IDeleteComponent) comp).addDeleteListener(getDeleteListener$(object.Name.Upper1)());
+#end
+    }
+    // .//GEN-END:_addListeners$(object.Name.Upper1)_1_be
+#end
+#end
+#end
+    // .//GEN-BEGIN:_createHeaderDto_1_be
+    private HeaderDto createHeaderDto() {
+        if (m_headerDto == null) {
+            m_headerDto = new HeaderDto();
+            m_headerDto.setUserId( getUserSession().getUserId() );
+            m_headerDto.setVariation( getUserSession().getVariation() );
+            // .//GEN-END:_createHeaderDto_1_be
+            // Add custom code before processing the action //GEN-FIRST:_createHeaderDto_1
+
+
+            // .//GEN-LAST:_createHeaderDto_1
+            // .//GEN-BEGIN:_createHeaderDto_2_be
+        }
+        return m_headerDto;
+    }
+    // .//GEN-END:_createHeaderDto_2_be
+    // .//GEN-BEGIN:_getViewerFormKey_1_be
+    public FormKey getViewerFormKey() {
+        return new FormKey($(Component.Upper1)Form.NAME, getComponentId());
+    }
+    // .//GEN-END:_getViewerFormKey_1_be
+
+#if ($Updator != null) #begin
+    // .//GEN-BEGIN:_updateObject_1_be
+    /** Calls the $(Updator.ComponentName) component for updating the $(DomainObject.Upper1) object.
+     * @throws ApplicationExceptions This will be thrown in case any invalid data has been set.
+     * @throws FrameworkException Indicates some system error.
+     * @return The FormKey for the Update screen.
+     */
+    public FormKey updateObject() throws ApplicationExceptions, FrameworkException {
+        if (m_updateComponent == null || !m_updateComponent.isActive()) {
+            m_updateComponent = ($(Updator.ClassName.Upper1)) run("$(Updator.ComponentName)");
+            m_updateComponent.setReturnToFormKey(getViewerFormKey());
+            addListeners(m_updateComponent);
+        }
+
+#foreach $field in $CriteriaFields.values() #begin
+        m_updateComponent.set$(field.Name.Upper1)(get$(field.Name.Upper1)());
+#end
+        if (m_updateComponent instanceof IMaintComponent)
+            ((IMaintComponent) m_updateComponent).setMode(IMaintComponent.MODE_UPDATE);
+        // .//GEN-END:_updateObject_1_be
+        // Add custom code before invoking the component //GEN-FIRST:_updateObject_2
+
+
+        // .//GEN-LAST:_updateObject_2
+        // .//GEN-BEGIN:_updateObject_2_be
+        return m_updateComponent.display();
+    }
+
+    private IUpdateListener getUpdateListener() {
+        if (m_updateListener == null) {
+            m_updateListener = new IUpdateListener() {
+                public void updateDone(EventObject source) {
+                    try {
+                        // .//GEN-END:_updateObject_2_be
+                        // Add custom code //GEN-FIRST:_updateObject_1
+
+
+                        // .//GEN-LAST:_updateObject_1
+                        // .//GEN-BEGIN:_updateObject_3_be
+                        doInquiry();
+                    } catch (Exception e) {
+                        log.warn("Error in refreshing the Results screen after the Update", e);
+                    }
+                }
+            };
+        }
+        return m_updateListener;
+    }
+    // .//GEN-END:_updateObject_3_be
+#end
+
+#if ($Deletor != null) #begin
+    // .//GEN-BEGIN:_deleteObject_1_be
+    /** Calls the $(Deletor.ComponentName) component for deleting the $(DomainObject.Upper1) object.
+     * @throws ApplicationExceptions This will be thrown in case any invalid data has been set.
+     * @throws FrameworkException Indicates some system error.
+     * @return The FormKey for the Delete screen.
+     */
+    public FormKey deleteObject() throws ApplicationExceptions, FrameworkException {
+        if (m_deleteComponent == null || !m_deleteComponent.isActive()) {
+            m_deleteComponent = ($(Deletor.ClassName.Upper1)) run("$(Deletor.ComponentName)");
+            m_deleteComponent.setReturnToFormKey(getViewerFormKey());
+            addListeners(m_deleteComponent);
+        }
+
+#foreach $field in $CriteriaFields.values() #begin
+        m_deleteComponent.set$(field.Name.Upper1)(get$(field.Name.Upper1)());
+#end
+        if (m_deleteComponent instanceof IMaintComponent)
+            ((IMaintComponent) m_deleteComponent).setMode(IMaintComponent.MODE_DELETE);
+        // .//GEN-END:_deleteObject_1_be
+        // Add custom code before invoking the component //GEN-FIRST:_deleteObject_2
+
+
+        // .//GEN-LAST:_deleteObject_2
+        // .//GEN-BEGIN:_deleteObject_2_be
+        return m_deleteComponent.display();
+    }
+
+    private IDeleteListener getDeleteListener() {
+        if (m_deleteListener == null) {
+            m_deleteListener = new IDeleteListener() {
+                public void deleteDone(EventObject source) {
+                    try {
+                        // .//GEN-END:_deleteObject_2_be
+                        // Add custom code //GEN-FIRST:_deleteObject_1
+
+
+                        // .//GEN-LAST:_deleteObject_1
+                        // .//GEN-BEGIN:_deleteObject_3_be
+                        // Quit this component and reset the ReturnFormKey on the DeleteComponent so as to close the browser
+                        ((Component) source.getSource()).setReturnToFormKey(quitAndReturnToCallingScreen());
+                    } catch (Exception e) {
+                        log.warn("Error in refreshing the Results screen after the Delete", e);
+                    }
+                }
+            };
+        }
+        return m_deleteListener;
+    }
+    // .//GEN-END:_deleteObject_3_be
+#end
+
+#if ($Updator != null || $Deletor != null) #begin
+    // .//GEN-BEGIN:_addListeners_1_be
+    private void addListeners(Component comp) {
+
+#if ($Updator != null) #begin
+        if (comp  instanceof IUpdateComponent)
+            ((IUpdateComponent) comp).addUpdateListener(getUpdateListener());
+#end
+
+#if ($Deletor != null) #begin
+        if (comp  instanceof IDeleteComponent)
+            ((IDeleteComponent) comp).addDeleteListener(getDeleteListener());
+#end
+    }
+    // .//GEN-END:_addListeners_1_be
+#end
+    // All the custom code goes here //GEN-FIRST:_custom
+
+
+
+
+
+
+    // .//GEN-LAST:_custom
+}

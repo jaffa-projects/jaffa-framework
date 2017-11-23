@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+<!-- This dtd is used for validating the Meta files for generating the various skeleton component files -->
+
+<!ELEMENT Root (PatternTemplate,Application,Module,Component,BasePackage,DomainObject?,DomainPackage?,Title?,MainLayout?,Screens?)>
+<!ELEMENT PatternTemplate (#PCDATA)>
+<!ELEMENT Application (#PCDATA)>
+<!ELEMENT Module (#PCDATA)>
+<!ELEMENT Component (#PCDATA)>
+<!ELEMENT BasePackage (#PCDATA)>
+<!ELEMENT DomainObject (#PCDATA)>
+<!ELEMENT DomainPackage (#PCDATA)>
+<!ELEMENT Title (#PCDATA)>
+<!ELEMENT MainLayout (#PCDATA)>         <!-- Default value = jaffa.MainLayout -->
+
+<!ELEMENT Screens (Screen+)>
+<!ELEMENT Screen (ScreenName,ScreenTitle?,ScreenFields?)>
+<!ELEMENT ScreenName (#PCDATA)>
+<!ELEMENT ScreenTitle (#PCDATA)>        <!-- Will use the contents of the Title element, if not specified -->
+<!ELEMENT ScreenFields (ScreenField+)>
+<!ELEMENT ScreenField (Name,DataType,WidgetType,Display,Label?,Width,WidgetCached,LinkedToComponent,Event?,DomainField?,DomainObject?,DomainPackage?,SubFields?)>
+<!ELEMENT Name (#PCDATA)>
+<!ELEMENT DataType (#PCDATA)>
+<!ELEMENT WidgetType (#PCDATA)>
+<!ELEMENT Display (#PCDATA)>
+<!ELEMENT Label (#PCDATA)>
+<!ELEMENT Width (#PCDATA)>
+<!ELEMENT WidgetCached (#PCDATA)>
+<!ELEMENT LinkedToComponent (#PCDATA)>
+<!ELEMENT Event (#PCDATA)>
+<!ELEMENT DomainField (#PCDATA)>
+<!ELEMENT SubFields (SubField+)>
+<!ELEMENT SubField (Name,DataType,WidgetType,Display,Label,Width,Event?,DomainField?,DomainObject?,DomainPackage?)>

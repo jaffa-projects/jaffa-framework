@@ -1,0 +1,5 @@
+#if ($Screens != null) #begin
+#foreach $screen in $Screens.values() #begin
+    <forward name="$(Module.Lower)_$(Component.Lower1)_$(screen.ScreenName.Lower1)" path="$(Application.Lower).$(Module.Lower).$(Component.Lower).$(screen.ScreenName.Lower1)"/>
+#end
+#end

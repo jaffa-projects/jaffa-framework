@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+            jxb:version="1.0"
+            elementFormDefault="qualified">
+
+
+  <!-- Source Chain is used by Viewer, Maintenance -->
+  <xsd:complexType name="sourceChain">
+    <xsd:sequence>
+      <xsd:element name="Source" 	type="source" minOccurs="1" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="source">
+    <xsd:sequence>
+      <xsd:element name="Object" 		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="Package" 		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="JoinFields" 		type="joinFields" minOccurs="1" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="joinFields">
+    <xsd:sequence>
+      <xsd:element name="JoinBetween"		type="joinBetween" minOccurs="1" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="joinBetween">
+    <xsd:sequence>
+      <xsd:element name="DomainObjectField"	type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="SourceField" 		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <!-- End - Source Chain -->
+  
+</xsd:schema>

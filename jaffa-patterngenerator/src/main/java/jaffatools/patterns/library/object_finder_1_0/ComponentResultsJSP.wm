@@ -1,0 +1,274 @@
+<%-- ----------------------------------------------------------------
+  -- Code Generated From JAFFA Framework Default Pattern           --
+  --                                                               --
+  -- The JAFFA Project can be found at http://jaffa.sourceforge.net--
+  -- and is available under the Lesser GNU Public License          --
+  -- ------------------------------------------------------------- --%>
+<%@ page language="java" %>
+<%@ page import="org.jaffa.presentation.portlet.widgets.taglib.TagHelper" %>
+<%@ page import="org.jaffa.components.finder.FinderComponent" %>
+<%@ page import="org.jaffa.presentation.portlet.widgets.taglib.UserGridTag" %>
+<%@ page import="org.jaffa.util.StringHelper" %>
+<%@ page import="org.jaffa.datatypes.Formatter" %>
+<%@ page import="$(BasePackage.Lower).components.$(Component.Lower).ui.$(Component.Upper1)ResultsForm" %>
+<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/WEB-INF/jaffa-portlet.tld" prefix="Portlet" %>
+
+<%
+    String xml = (String) request.getAttribute(FinderComponent.ATTRIBUTE_EXPORT_TYPE_XML);
+    if (xml != null) {
+        // Just spit out the XML, ignoring the rest of the JSP
+        response.setContentType("text/xml");
+        out.println(xml);
+    } else {
+        // continue with the JSP
+%>
+
+<html xmlns:x="urn:schemas-microsoft-com:office:excel">
+<head>
+
+#if ($(ResultsTitle) != null && $(ResultsTitle) != "") #begin
+  <title><Portlet:Label key="$(ResultsTitle)"/></title>
+#end
+  <link href="jaffa/css/jaffa.css" type="text/css" rel="StyleSheet">
+  <Portlet:Header/>
+</head>
+
+<body leftMargin="0" topMargin="0" marginwidth="0" marginheight="0">
+
+<Portlet:Form action="/$(Module.Lower)_$(Component.Lower1)Results">
+
+<bean:define id="component" name="<%= TagHelper.getFormName(pageContext) %>" property="component" type="org.jaffa.components.finder.FinderComponent"/>
+<bean:define id="exportType" name="component" property="exportType" type="java.lang.String"/>
+<bean:define id="outputType" type="java.lang.String" value="<%= UserGridTag.OUTPUT_TYPE_WEB_PAGE %>"/>
+<logic:equal name="exportType" value="<%= FinderComponent.EXPORT_TYPE_WEB_PAGE %>">
+    <% response.setContentType("text/html"); %>
+</logic:equal>
+<logic:equal name="exportType" value="<%= FinderComponent.EXPORT_TYPE_EXCEL %>">
+    <% outputType= UserGridTag.OUTPUT_TYPE_EXCEL; %>
+    <% response.setContentType("application/vnd.ms-excel"); %>
+</logic:equal>
+<logic:equal name="exportType" value="<%= FinderComponent.EXPORT_TYPE_XML %>">
+    <% outputType= UserGridTag.OUTPUT_TYPE_XML; %>
+    <% response.setContentType("text/xml"); %>
+</logic:equal>
+
+
+<logic:equal name="exportType" value="<%= FinderComponent.EXPORT_TYPE_WEB_PAGE %>">
+
+<table  class="outer" width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+  <tr>
+    <td>
+      <table class="header" width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+        <tr>
+          <td class="left"></td>
+          <td class="middle"><Portlet:Label key="$(ResultsTitle)"/></td>
+          <td class="right"></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table class="window" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td> </td>
+        </tr>
+        <tr>
+          <td>
+            <table width="100%" algin="center">
+              <tr>
+                <td>
+
+</logic:equal>
+
+
+#if ($Viewer == null) #begin
+                  <Portlet:UserGrid field="rows" userGridId="$(Module.Lower)_$(Component.Lower1)" outputType="<%= outputType %>">
+#else
+                  <Portlet:UserGrid field="rows" userGridId="$(Module.Lower)_$(Component.Lower1)" outputType="<%= outputType %>" detail="true" target="_blank">
+#end
+
+#foreach $field in $ResultsFields.values() #begin
+#set $wm_dataType = ""
+#if ($(field.DataType.Upper) == "STRING" || $(field.DataType.Upper) == "VARCHAR" || $(field.DataType.Upper) == "LONGSTRING" || $(field.DataType.Upper) == "LONGVARCHAR" || $(field.DataType.Upper) == "CLOB") #begin
+#set $wm_dataType = "CaseInsensitiveString"
+#elseif ($(field.DataType.Upper) == "INTEGER" || $(field.DataType.Upper) == "BIGINT") #begin
+#set $wm_dataType = "Number"
+#elseif ($(field.DataType.Upper) == "DECIMAL" || $(field.DataType.Upper) == "DOUBLE") #begin
+#set $wm_dataType = "Number"
+#elseif ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") #begin
+#set $wm_dataType = "CaseInsensitiveString"
+#elseif ($(field.DataType.Upper) == "DATE_ONLY" || $(field.DataType.Upper) == "DATEONLY") #begin
+#set $wm_dataType = "Date"
+#elseif ($(field.DataType.Upper) == "DATE_TIME" || $(field.DataType.Upper) == "DATETIME") #begin
+#set $wm_dataType = "Date"
+#elseif ($(field.DataType.Upper) == "CURRENCY") #begin
+#set $wm_dataType = "Number"
+#elseif ($(field.DataType.Upper) == "RAW" || $(field.DataType.Upper) == "LONGRAW" || $(field.DataType.Upper) == "BLOB") #begin
+#set $wm_dataType = "CaseInsensitiveString"
+#end
+#set $wm_displayAsKey = ""
+#if ($field.DisplayAsKey != null && $field.DisplayAsKey.Lower == "true") #begin
+#set $wm_displayAsKey = "key=\"true\""
+#end
+#if ($(field.Display.Lower) == "true") #begin
+#if ($(field.FunctionGuardName) != null) #begin
+                    <Portlet:FunctionGuard name="$(field.FunctionGuardName)">
+#end
+                    <Portlet:UserGridColumn label="$(field.Label)" dataType="$(wm_dataType)" $(wm_displayAsKey)>
+
+#if ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") #begin
+                      <Portlet:CheckBox field="$(field.Name.Lower1)" displayOnly="true"/>
+#else
+#set $wm_textAttributes = ""
+#if ($field.Layout != null && $field.Layout.Lower != "") #begin
+#set $wm_textAttributes = "layout=\"$(field.Layout)\""
+#else
+#if ($field.SourceChain != null) #begin
+#foreach $source in $field.SourceChain.values() #begin #end
+#set $wm_domain = "$(source.Package.Lower).$(source.Object.Upper1)"
+#else
+#set $wm_domain = "$(DomainPackage.Lower).$(DomainObject.Upper1)"
+#end
+#set $wm_textAttributes = "domain=\"$(wm_domain)\" domainField=\"$(field.DomainField.Upper1)\""
+#end
+                      <Portlet:Text field="$(field.Name.Lower1)" $(wm_textAttributes)/>
+#end
+
+#if ($(field.AppendField) != null) #begin
+#set $wm_appendBeginMarker = "\"\""
+#set $wm_appendEndMarker = "\"\""
+#if ($field.AppendField.AppendBeginMarker != null) #begin
+#set $wm_appendBeginMarker = "\"$(field.AppendField.AppendBeginMarker)\""
+#end
+#if ($field.AppendField.AppendEndMarker != null) #begin
+#set $wm_appendEndMarker = "\"$(field.AppendField.AppendEndMarker)\""
+#end
+#if ($field.AppendField.AppendBeginMarker == null && $field.AppendField.AppendEndMarker == null) #begin
+#set $wm_appendBeginMarker = "StringHelper.getDefaultDescriptionBeginMarker()"
+#set $wm_appendEndMarker = "StringHelper.getDefaultDescriptionEndMarker()"
+#end
+#foreach $field2 in $ResultsFields.values() #begin
+#if ($field2.Name.Lower1 == $field.AppendField.Name.Lower1) #begin
+#set $wm_appendField = $field2
+#end
+#end
+#if ($(wm_appendField.DataType.Upper) == "BOOLEAN" || $(wm_appendField.DataType.Upper) == "BIT") #begin
+                      <%= $(wm_appendBeginMarker) %><Portlet:CheckBox field="$(field.AppendField.Name.Lower1)" displayOnly="true"/><%= $(wm_appendEndMarker) %>
+#else
+#set $wm_parameters = "TagHelper.getModelMap(pageContext).get(\"$(field.AppendField.Name.Lower1)\")"
+#if ($wm_appendField.Layout != null && $wm_appendField.Layout.Lower != "") #begin
+#set $wm_parameters = "$(wm_parameters), \"$(wm_appendField.Layout)\""
+#else
+#set $wm_parameters = "$(wm_parameters), null"
+#end
+#if ($wm_appendField.SourceChain != null) #begin
+#foreach $source in $wm_appendField.SourceChain.values() #begin #end
+#set $wm_domain = "$(source.Package.Lower).$(source.Object.Upper1)"
+#else
+#set $wm_domain = "$(DomainPackage.Lower).$(DomainObject.Upper1)"
+#end
+#set $wm_parameters = "$(wm_parameters), \"$(wm_domain)\", \"$(wm_appendField.DomainField.Upper1)\", true, $(wm_appendBeginMarker), $(wm_appendEndMarker)"
+                      <%= StringHelper.formatDescription($(wm_parameters)) %>
+#end
+#end
+                    </Portlet:UserGridColumn>
+
+#if ($(field.FunctionGuardName) != null) #begin
+                    </Portlet:FunctionGuard>
+#end
+#end
+#end
+
+<logic:equal name="exportType" value="<%= FinderComponent.EXPORT_TYPE_WEB_PAGE %>">
+
+#if ($Viewer != null || $Updator != null || $Deletor != null) #begin
+                    <Portlet:UserGridColumn label="[label.Jaffa.Widgets.Button.Action]">
+
+#if ($Viewer != null) #begin
+                      <Portlet:ComponentGuard name="$(Viewer.ComponentName)">
+                        <Portlet:Button field="View" label="[label.Jaffa.Widgets.Button.View]" image="jaffa/imgs/icons/detail.gif" target="_blank"/>
+                      </Portlet:ComponentGuard>
+#end
+
+#if ($Updator != null) #begin
+                      <Portlet:ComponentGuard name="$(Updator.ComponentName)">
+                        <Portlet:Button field="Update" label="[label.Jaffa.Widgets.Button.Update]" image="jaffa/imgs/icons/update.gif"/>
+                      </Portlet:ComponentGuard>
+#end
+
+#if ($Deletor != null) #begin
+                      <Portlet:ComponentGuard name="$(Deletor.ComponentName)">
+                        <Portlet:Button field="Delete" label="[label.Jaffa.Widgets.Button.Delete]" image="jaffa/imgs/icons/delete.gif"  confirm="[label.Jaffa.Inquiry.delete.confirm]"/>
+                      </Portlet:ComponentGuard>
+#end
+                    </Portlet:UserGridColumn>
+#end
+</logic:equal>
+                  </Portlet:UserGrid>
+
+<logic:equal name="exportType" value="<%= FinderComponent.EXPORT_TYPE_WEB_PAGE %>">
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <logic:greaterThan name="<%= TagHelper.getFormName(pageContext) %>" property="numberOfRecords" value="0">
+                    <Portlet:Label key='label.Jaffa.Inquiry.numberOfRecords' arg0='<%= Formatter.format((($(Component.Upper1)ResultsForm) TagHelper.getFormBase(pageContext)).getNumberOfRecords()) %>'/>
+                    <logic:equal name="<%= TagHelper.getFormName(pageContext) %>" property="moreRecordsExist" value="true">
+                      <Portlet:Label key='label.Jaffa.Inquiry.moreRecordsPrefix'/>
+                      <Portlet:Button field="MoreRecords" type="link" label="[label.Jaffa.Inquiry.moreRecordsExist]"/>
+                      <Portlet:Label key='label.Jaffa.Inquiry.moreRecordsSuffix'/>
+                    </logic:equal>
+                  </logic:greaterThan>
+                </td>
+              </tr>
+              <tr>
+                <td align="center">
+                  <table width="70%">
+                    <tr>
+                      <td width="16%" align="center"><Portlet:Button field="Refresh" type="sized" label="[label.Jaffa.Widgets.Button.Refresh]"/></td>
+                      <td width="16%" align="center"><Portlet:Button field="ModifySearch" type="sized" label="[label.Jaffa.Widgets.Button.ModifySearch]" /></td>
+
+#if ($Creator != null) #begin
+                      <Portlet:ComponentGuard name="$(Creator.ComponentName)">
+                      <td width="16%" align="center"><Portlet:Button field="Create" type="sized" label="[label.Jaffa.Widgets.Button.CreateNew]"/></td>
+                      </Portlet:ComponentGuard>
+#end
+                      <td width="16%" align="center"><Portlet:Button field="Close" type="sized" label="[label.Jaffa.Widgets.Button.Close]" preprocess="false"/></td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table> <!--window-->
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table class="footer" width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="left"></td>
+          <td class="middle"></td>
+          <td class="right"></td>
+        </tr>
+        <tr></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</logic:equal>
+
+<Portlet:RaiseErrors/>
+</Portlet:Form>
+<Portlet:Footer/>
+</body>
+<html>
+
+<%
+    } // -> if (xml != null)
+%>

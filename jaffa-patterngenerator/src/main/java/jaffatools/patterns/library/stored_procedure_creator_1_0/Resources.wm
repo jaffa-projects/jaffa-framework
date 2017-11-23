@@ -1,0 +1,17 @@
+$(StoredProcedurePackage.Lower).$(StoredProcedure.Upper1).Name=$(StoredProcedure.Upper1)
+
+#set $wm_description = ""
+#if ($Description != null) #begin
+#set $wm_description = $Description
+#end
+$(StoredProcedurePackage.Lower).$(StoredProcedure.Upper1).Description=$(wm_description)
+
+
+#foreach $field in $Fields.values() #begin
+#set $wm_description = ""
+#if ($field.Description != null) #begin
+#set $wm_description = $field.Description
+#end
+$(StoredProcedurePackage.Lower).$(StoredProcedure.Upper1).Field.$(field.Name.Upper1).Name=$(field.Name.Space)
+$(StoredProcedurePackage.Lower).$(StoredProcedure.Upper1).Field.$(field.Name.Upper1).Description=$(field.Description)
+#end
