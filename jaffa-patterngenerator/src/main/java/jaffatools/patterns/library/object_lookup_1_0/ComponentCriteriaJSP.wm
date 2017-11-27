@@ -1,0 +1,180 @@
+<%-- ---------------------------------------------------------------- 
+  -- Code Generated From JAFFA Framework Default Pattern           --
+  --                                                               --
+  -- The JAFFA Project can be found at http://jaffa.sourceforge.net--
+  -- and is available under the Lesser GNU Public License          --
+  -- ------------------------------------------------------------- --%>
+<%@ page language="java" %>
+<%@ page import="org.jaffa.util.MessageHelper" %>
+<%@ page import="org.jaffa.presentation.portlet.widgets.taglib.TagHelper" %>
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/WEB-INF/jaffa-portlet.tld" prefix="Portlet" %>
+
+<html:html>
+    <HEAD>
+
+#if ($(CriteriaTitle) != null && $(CriteriaTitle) != "") #begin
+        <TITLE><Portlet:Label key="$(CriteriaTitle)"/></TITLE>
+#end
+	<SCRIPT type="text/javascript" src="jaffa/js/panels/reset.js"></SCRIPT>
+        <LINK href="jaffa/css/jaffa.css" type="text/css" rel="StyleSheet">	
+        <Portlet:Header/>
+    </HEAD>
+    
+    <BODY leftMargin="0" topMargin="0" marginwidth="0" marginheight="0">
+        <Portlet:Form action="/$(Module.Lower)_$(Component.Lower1)Criteria">        
+        
+<table class="outer" cellpadding="0" cellspacing="0" width="100%">
+  <tr> 
+    <td> <table class="header" cellspacing="0" cellpadding="0" width="100%">
+        <tr> 
+          <td class="left"></td>
+          <td class="middle"><Portlet:Label key="$(CriteriaTitle)"/></td>
+          <td class="right" align="right"></td>
+        </tr>
+      </table></td></tr>
+  <tr> 
+    <td> <table class="window" width="100%"  border="0" cellspacing="0" cellpadding="0">
+        <tr> 
+          <td> <table width="100%"  border="0" cellspacing="10" cellpadding="0">
+
+#foreach $field in $CriteriaFields.values() #begin
+#if ($(field.Display.Lower) == "true") #begin
+#if ($(field.FunctionGuardName) != null) #begin
+            <Portlet:FunctionGuard name="$(field.FunctionGuardName)">
+#end
+            <tr> 
+                <td class="label">
+
+#if ($field.Label != null && $field.Label.Lower != "") #begin
+                    <Portlet:Label key="$(field.Label)"/>:
+#elseif ($field.AltDomainObject != null) #begin
+                    <Portlet:Label domain="$(field.AltDomainObject.Package.Lower).$(field.AltDomainObject.Object.Upper1)" field="$(field.DomainField)"/>:
+#else
+                    <Portlet:Label domain="$(DomainPackage.Lower).$(DomainObject.Upper1)" field="$(field.DomainField)"/>:
+#end
+                </td>
+
+#if ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "checkbox") #begin
+                <td align="left" colspan="2">
+#else
+                <td align="left">
+#end
+
+#if (($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") && $field.Breakup == null) #begin
+                    <Portlet:DropDown field="$(field.Name.Lower1)"/>
+#elseif ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "checkbox") #begin
+                    <Portlet:Grid field="$(field.Name.Lower1)" displayOnly="true">
+                        <Portlet:GridColumn label="">
+                            <Portlet:CheckBox field="checked"/>
+                            <a class="checkboxlabel"><%= MessageHelper.replaceTokens(pageContext, (String) TagHelper.getModelMap(pageContext).get("description")) %></a>
+                        </Portlet:GridColumn>
+                    </Portlet:Grid>
+#elseif ($field.Breakup == null || $field.Breakup.WidgetType.Lower == "dropdown") #begin
+                    <Portlet:DropDown field="$(field.Name.Lower1)Dd"/>
+#end
+                </td>
+                <td align="left">
+
+#if (($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") && $field.Breakup == null) #begin
+#elseif ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "checkbox") #begin
+#elseif ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "dropdown") #begin
+                    <Portlet:DropDown field="$(field.Name.Lower1)"/>
+#else
+                    <Portlet:EditBox field="$(field.Name.Lower1)"/>
+#end
+                </td>
+            </tr>
+
+#if ($(field.FunctionGuardName) != null) #begin
+            </Portlet:FunctionGuard>
+#end
+#end
+#end
+
+#if ($OrderByFieldCombos != null) #begin
+	<tr>
+	<td class="label">
+        <Portlet:Label key="label.Jaffa.Inquiry.sort"/> :
+        </td>
+        <td colspan="2">
+        <Portlet:DropDown field="sortDropDown">
+
+#foreach $orderByFieldCombo in $OrderByFieldCombos.values() #begin
+#set $wm_label = ""
+#set $wm_value = ""
+#set $firstPass = "true"
+#foreach $field in $orderByFieldCombo.values() #begin
+#if ($field.DomainFieldName != null) #begin
+#if ($firstPass == "true") #begin
+#set $firstPass = "false"
+#else
+#set $wm_label = "$(wm_label) + \", \" + "
+#set $wm_value = "$(wm_value), "
+#end
+#if ($field.Label != null && $field.Label.Lower != "") #begin
+#set $wm_label = "$(wm_label)\"$(field.Label)\""
+#else
+#set $wm_label = "$(wm_label)$(DomainPackage.Lower).$(DomainObject.Upper1)Meta.META_$(field.DomainFieldName.Static).getLabelToken()"
+#end
+#set $wm_value = "$(wm_value)$(field.DomainFieldName.Upper1)"
+#if ($field.SortAscending != null && $field.SortAscending.Lower == "false") #begin
+#set $wm_label = "$(wm_label) + \"[label.Jaffa.Inquiry.OrderByField.SortDescending]\""
+#set $wm_value = "$(wm_value) desc"
+#else
+#set $wm_label = "$(wm_label) + \"[label.Jaffa.Inquiry.OrderByField.SortAscending]\""
+#set $wm_value = "$(wm_value)"
+#end
+#end
+#end
+            <Portlet:DropDownOption label='<%= $(wm_label) %>' value='$(wm_value)'/>
+#end
+        </Portlet:DropDown>
+	</td>
+        </tr>
+#end
+            <tr>
+                <td class="label">
+                    <Portlet:Label key="label.Jaffa.Inquiry.maxRecords"/>:
+                </td>
+                <td colspan="2">
+                    <Portlet:DropDown field="maxRecords"/>
+                </td>
+            </tr>
+	</table>
+
+             <br> <table width="70%" align="center">
+                <TR>
+                    <TD width="16%" align="center"><a class="WidgetButton8" href="javascript:resetForm()" ><%= MessageHelper.replaceTokens(pageContext, "[label.Jaffa.Widgets.Button.Clear]") %></a></TD>
+                    <TD width="16%" align="center"><Portlet:Button field="Search" type="sized"  label="[label.Jaffa.Widgets.Button.Search]" submit="true" guarded="true"/></TD>
+
+#if ($Creator != null) #begin
+                    <Portlet:ComponentGuard name="$(Creator.ComponentName)">
+                        <TD width="16%" align="center"><Portlet:Button field="Create" type="sized"  label="[label.Jaffa.Widgets.Button.CreateNew]"/></TD>
+                    </Portlet:ComponentGuard>
+#end
+                    <TD width="16%" align="center"><Portlet:Button  field="Close"  label="[label.Jaffa.Widgets.Button.Close]" type="sized" preprocess="false"/></TD>
+                </TR>
+            </TABLE>
+           <p>&nbsp;</p></td>
+        </tr>
+      </table></td>
+  </tr>
+  <tr> 
+    <td> <table class="footer" width="100%" cellpadding="0" cellspacing="0">
+        <tr> 
+          <td class="left"></td>
+          <td class="middle"></td>
+          <td class="right"></td>
+        </tr>
+        <tr></tr>
+      </table></td>
+  </tr>
+</table>
+
+        <Portlet:RaiseErrors/>
+        </Portlet:Form>
+        <Portlet:Footer/>
+    </BODY>
+</html:html>
+

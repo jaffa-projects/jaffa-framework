@@ -1,0 +1,21 @@
+#if ($Screens != null) #begin
+#foreach $screen in $Screens.values() #begin
+#if ($(screen.ScreenName) != null) #begin
+#set $wm_formMapping = "$(Module.Lower)_$(Component.Lower1)$(screen.ScreenName.Upper1)Form"
+#set $wm_action = "$(Component.Upper1)$(screen.ScreenName.Upper1)Action"
+#set $wm_actionMapping = "/$(Module.Lower)_$(Component.Lower1)$(screen.ScreenName.Upper1)"
+#else
+#set $wm_formMapping = "$(Module.Lower)_$(Component.Lower1)Form"
+#set $wm_action = "$(Component.Upper1)Action"
+#set $wm_actionMapping = "/$(Module.Lower)_$(Component.Lower1)"
+#end
+    <!-- $(wm_action) -->
+    <action    path="$(wm_actionMapping)"
+               type="$(BasePackage.Lower).components.$(Component.Lower).ui.$(wm_action)"
+               name="$(wm_formMapping)"
+               validate="false"
+               scope="request">
+    </action>
+
+#end
+#end

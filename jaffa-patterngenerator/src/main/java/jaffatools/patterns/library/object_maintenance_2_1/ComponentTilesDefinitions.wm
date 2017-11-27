@@ -1,0 +1,46 @@
+#if ($(MainLayout) != null && $(MainLayout.Lower) != "") #begin
+#set $wm_mainLayout = "$(MainLayout)"
+#else
+#set $wm_mainLayout = "jaffa.MainLayout"
+#end
+#if ($(MaintenanceLayout) != null && $(MaintenanceLayout.Lower) != "") #begin
+#set $wm_maintenanceLayout = "$(MaintenanceLayout)"
+#else
+#set $wm_maintenanceLayout = "jaffa.MaintenanceLayout"
+#end
+    <!-- $(Component.Upper1) -->
+
+#set $wm_title = $Title
+#set $wm_screenCounter = -1
+#foreach $screen in $Screens.values() #begin
+#set $wm_screenCounter = $wm_screenCounter + 1
+#set $wm_createModeTitle = $Title
+#set $wm_updateModeTitle = $Title
+#if ($(screen.CreateModeTitle) != null && $(screen.CreateModeTitle.Lower) != "") #begin
+#set $wm_createModeTitle = $screen.CreateModeTitle
+#end
+#if ($(screen.UpdateModeTitle) != null && $(screen.UpdateModeTitle.Lower) != "") #begin
+#set $wm_updateModeTitle = $screen.UpdateModeTitle
+#end
+    <definition name="$(Application.Lower).$(Module.Lower).$(Component.Lower).MaintenanceLayout.$(screen.Name.JavaBeanStyle)"  extends="$(wm_maintenanceLayout)">
+        <put name="body" value="/$(Application.Lower)/$(Module.Lower)/$(Component.Lower)/$(screen.Name.JavaBeanStyle).jsp"/>
+        <put name="action" value="/$(Application.Lower)_$(Module.Lower)_$(Component.JavaBeanStyle)"/>
+        <put name="currentScreenCounter" value="$(wm_screenCounter)"/>
+
+#if ($wm_createModeTitle != null && $wm_createModeTitle != "") #begin
+        <put name="createModeTitle" value="$(wm_createModeTitle)"/>
+#end
+
+#if ($wm_updateModeTitle != null && $wm_updateModeTitle != "") #begin
+        <put name="updateModeTitle" value="$(wm_updateModeTitle)"/>
+#end
+    </definition>
+    <definition name="$(Application.Lower).$(Module.Lower).$(Component.Lower).$(screen.Name.JavaBeanStyle)"  extends="$(wm_mainLayout)">
+
+#if ($wm_title != null && $wm_title != "") #begin
+        <put name="title" value="$(wm_title)"/>
+#end
+        <put name="body" value="$(Application.Lower).$(Module.Lower).$(Component.Lower).MaintenanceLayout.$(screen.Name.JavaBeanStyle)"/>
+    </definition>
+#end
+

@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<!DOCTYPE BuildPattern PUBLIC "-//JAFFA//DTD Pattern 1.0//EN" "http://jaffa.sourceforge.net/DTD/pattern_1_0.dtd">
+
+<BuildPattern>
+    <Name>ObjectMaintenancePattern</Name>
+
+    <PreRequesites>
+    </PreRequesites>
+    
+    <Components>
+        <Build>
+            <Template>patterns/library/object_maintenance_2_0/ComponentCreateInDto.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower).dto</Package>
+            <FileName>$(Component.Upper1)CreateInDto.java</FileName>
+            <Override>Merge</Override>
+        </Build>
+
+        <Build>
+            <Template>patterns/library/object_maintenance_2_0/ComponentRetrieveInDto.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower).dto</Package>
+            <FileName>$(Component.Upper1)RetrieveInDto.java</FileName>
+            <Override>Merge</Override>
+        </Build>
+
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelationshipToDomainObject.RelationshipTypeMany && $object.RelatedObjectFields != null) #begin
+        <Build>
+            <Template>patterns/library/object_maintenance_2_0/ComponentRelatedOutDto.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower).dto</Package>
+            <FileName>$(object.Name.Upper1)Dto.java</FileName>
+            <Override>Merge</Override>
+        </Build>
+
+#end
+#end
+#end
+        <Build>
+            <Template>patterns/library/object_maintenance_2_0/ComponentRetrieveOutDto.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower).dto</Package>
+            <FileName>$(Component.Upper1)RetrieveOutDto.java</FileName>
+            <Override>Merge</Override>
+        </Build>
+    
+        <Build>
+            <Template>patterns/library/object_maintenance_2_0/ComponentUpdateInDto.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower).dto</Package>
+            <FileName>$(Component.Upper1)UpdateInDto.java</FileName>
+            <Override>Merge</Override>
+        </Build>
+
+        <Build>
+            <Template>patterns/library/object_maintenance_2_0/ComponentDeleteInDto.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower).dto</Package>
+            <FileName>$(Component.Upper1)DeleteInDto.java</FileName>
+            <Override>Merge</Override>
+        </Build>
+
+        <Build>
+            <Template>patterns/library/object_maintenance_2_0/ComponentPrevalidateOutDto.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower).dto</Package>
+            <FileName>$(Component.Upper1)PrevalidateOutDto.java</FileName>
+            <Override>Merge</Override>
+        </Build>
+
+        <Build>
+            <Template>patterns/library/object_maintenance_2_0/IComponent.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower)</Package>
+            <FileName>I$(Component.Upper1).java</FileName>
+            <Override>Merge</Override>
+        </Build>
+
+        <Build>
+            <Template>patterns/library/object_maintenance_2_0/ComponentTx.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower).tx</Package>
+            <FileName>$(Component.Upper1)Tx.java</FileName>
+            <Override>Merge</Override>
+        </Build>
+    
+        <Build>
+            <Template>patterns/library/object_maintenance_2_0/ComponentController.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower).ui</Package>
+            <FileName>$(Component.Upper1)Component.java</FileName>
+            <Override>Merge</Override>
+        </Build>
+
+        <Build>
+            <Template>patterns/library/object_maintenance_2_0/ComponentForm.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower).ui</Package>
+            <FileName>$(Component.Upper1)Form.java</FileName>
+            <Override>Merge</Override>
+        </Build>
+
+        <Build>
+            <Template>patterns/library/object_maintenance_2_0/ComponentAction.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower).ui</Package>
+            <FileName>$(Component.Upper1)Action.java</FileName>
+            <Override>Merge</Override>
+        </Build>
+
+
+#foreach $screen in $Screens.values() #begin
+        <Build>
+            <Template>patterns/library/object_maintenance_2_0/ComponentJSP.wm</Template>
+            <Package>html.$(Application.Lower).$(Module.Lower).$(Component.Lower)</Package>
+            <FileName>$(screen.Name.Lower1).jsp</FileName>
+            <Override>OverrideIfMarkerPresentOrCreateTempFileIfMarkerAbsent</Override>
+        </Build>
+#end
+    
+        <Build>
+            <Template>patterns/library/object_maintenance_2_0/ComponentDefinitionXML.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower)</Package>
+            <FileName>ComponentDefinition.xfragment</FileName>
+            <Override>False</Override>
+        </Build>
+
+        <Build>
+            <Template>patterns/library/object_maintenance_2_0/ComponentStrutsFormBeanXML.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower)</Package>
+            <FileName>StrutsConfigFormBean.xfragment</FileName>
+            <Override>True</Override>
+        </Build>
+    
+        <Build>
+            <Template>patterns/library/object_maintenance_2_0/ComponentStrutsGlobalForwardXML.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower)</Package>
+            <FileName>StrutsConfigGlobalForward.xfragment</FileName>
+            <Override>True</Override>
+        </Build>
+    
+        <Build>
+            <Template>patterns/library/object_maintenance_2_0/ComponentStrutsActionXML.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower)</Package>
+            <FileName>StrutsConfigAction.xfragment</FileName>
+            <Override>True</Override>
+        </Build>
+        
+        <Build>
+            <Template>patterns/library/object_maintenance_2_0/ComponentTilesDefinitions.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower)</Package>
+            <FileName>ComponentTilesDefinitions.xfragment</FileName>
+            <Override>False</Override>
+        </Build>
+        
+        <Build>
+            <Template>patterns/library/object_maintenance_2_0/ComponentDefaultValues.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower)</Package>
+            <FileName>ComponentDefaultValues.properties</FileName>
+            <Override>False</Override>
+        </Build>
+    </Components>
+</BuildPattern>
+		

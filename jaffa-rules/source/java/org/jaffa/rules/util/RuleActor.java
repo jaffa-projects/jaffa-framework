@@ -112,10 +112,15 @@ public class RuleActor<T> {
      * Sets the actor's rule map from meta-data. This is the same as calling
      * setRuleMap(getPropertyMap(className, getName()))
      *
-     * @param className the name of the class this rule actor is for.
+     * @param classNames the names of the class hierarchy this rule actor is for.
      */
-    public void initializeRuleMapFromMetaData(String className) throws FrameworkException, ApplicationExceptions {
-        this.ruleMap = getPropertyRuleMap(className,name);
+    public void initializeRuleMapFromMetaData(List<String> classNames) throws FrameworkException, ApplicationExceptions {
+        for (String className : classNames) {
+            Map<String, List<RuleMetaData>> classRuleMap = getPropertyRuleMap(className, name);
+            if (classRuleMap != null) {
+                this.ruleMap.putAll(classRuleMap);
+            }
+        }
     }
 
     /**

@@ -1,0 +1,105 @@
+#if ($(MainLayout) != null && $(MainLayout.Lower) != "") #begin
+#set $wm_mainLayout = "$(MainLayout)"
+#else
+#set $wm_mainLayout = "jaffa.MainLayout"
+#end
+#if ($(LookupLayout) != null && $(LookupLayout.Lower) != "") #begin
+#set $wm_lookupLayout = "$(LookupLayout)"
+#else
+#set $wm_lookupLayout = "jaffa.LookupLayout"
+#end
+    <!-- $(Component.Upper1) Criteria -->
+    <definition name="$(Application.Lower).$(Module.Lower).$(Component.Lower).LookupLayout.criteria"  extends="$(wm_lookupLayout)">
+        <put name="body1" value="/$(Application.Lower)/$(Module.Lower)/$(Component.Lower)/criteria.jsp"/>
+        <put name="body2" value=""/>
+        <put name="action" value="/$(Application.Lower)_$(Module.Lower)_$(Component.JavaBeanStyle)"/>
+
+#if ($Creator != null) #begin
+        <put name="createComponent" value="$(Creator.ComponentName)"/>
+#end
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+
+#if ($Creator != null) #begin
+            <add value="CreateFromCriteria"/>
+#end
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="$(Application.Lower).$(Module.Lower).$(Component.Lower).criteria"  extends="$(wm_mainLayout)">
+
+#if ($(CriteriaTitle) != null && $(CriteriaTitle.Lower) != "") #begin
+        <put name="title" value="$(CriteriaTitle)"/>
+#end
+        <put name="body" value="$(Application.Lower).$(Module.Lower).$(Component.Lower).LookupLayout.criteria"/>
+    </definition>
+
+    <!-- $(Component.Upper1) Results -->
+    <definition name="$(Application.Lower).$(Module.Lower).$(Component.Lower).LookupLayout.results"  extends="$(wm_lookupLayout)">
+        <put name="body1" value=""/>
+        <put name="body2" value="/$(Application.Lower)/$(Module.Lower)/$(Component.Lower)/results.jsp"/>
+        <put name="action" value="/$(Application.Lower)_$(Module.Lower)_$(Component.JavaBeanStyle)"/>
+
+#if ($Creator != null) #begin
+        <put name="createComponent" value="$(Creator.ComponentName)"/>
+#end
+        <putList name="contextNavLinks">
+            <add value="ModifySearch"/>
+            <add value="Refresh"/>
+
+#if ($Creator != null) #begin
+            <add value="CreateFromResults"/>
+#end
+            <add value="Close"/>
+            <add value="Select"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="ModifySearch"/>
+            <add value="Select"/>
+        </putList>
+    </definition>
+    <definition name="$(Application.Lower).$(Module.Lower).$(Component.Lower).results"  extends="$(wm_mainLayout)">
+
+#if ($(ResultsTitle) != null && $(ResultsTitle.Lower) != "") #begin
+        <put name="title" value="$(ResultsTitle)"/>
+#end
+        <put name="body" value="$(Application.Lower).$(Module.Lower).$(Component.Lower).LookupLayout.results"/>
+    </definition>
+
+    <!-- $(Component.Upper1) ConsolidatedCriteriaAndResults -->
+    <definition name="$(Application.Lower).$(Module.Lower).$(Component.Lower).LookupLayout.consolidatedCriteriaAndResults"  extends="$(wm_lookupLayout)">
+        <put name="body1" value="/$(Application.Lower)/$(Module.Lower)/$(Component.Lower)/criteria.jsp"/>
+        <put name="body2" value="/$(Application.Lower)/$(Module.Lower)/$(Component.Lower)/results.jsp"/>
+        <put name="action" value="/$(Application.Lower)_$(Module.Lower)_$(Component.JavaBeanStyle)"/>
+
+#if ($Creator != null) #begin
+        <put name="createComponent" value="$(Creator.ComponentName)"/>
+#end
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+
+#if ($Creator != null) #begin
+            <add value="CreateFromResults"/>
+#end
+            <add value="Close"/>
+            <add value="Select"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="$(Application.Lower).$(Module.Lower).$(Component.Lower).consolidatedCriteriaAndResults"  extends="$(wm_mainLayout)">
+
+#if ($(ConsolidatedCriteriaAndResultsTitle) != null && $(ConsolidatedCriteriaAndResultsTitle.Lower) != "") #begin
+        <put name="title" value="$(ConsolidatedCriteriaAndResultsTitle)"/>
+#end
+        <put name="body" value="$(Application.Lower).$(Module.Lower).$(Component.Lower).LookupLayout.consolidatedCriteriaAndResults"/>
+    </definition>
+

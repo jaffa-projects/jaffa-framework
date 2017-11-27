@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+            jxb:version="1.0"
+            elementFormDefault="qualified">
+
+
+  <!-- This is shared by all patterns -->
+  <xsd:simpleType name="dataTypes">
+   <xsd:restriction base="xsd:string">
+   
+    <!-- UpperCase-->
+    <xsd:enumeration value="BOOLEAN"/>
+    <xsd:enumeration value="BOOLEAN_BIT"/>
+    <xsd:enumeration value="BOOLEAN_TF"/>
+    <xsd:enumeration value="BOOLEAN_YN"/>
+    <xsd:enumeration value="BOOLEAN_10"/>
+    <xsd:enumeration value="STRING"/>
+    <xsd:enumeration value="INTEGER"/>
+    <xsd:enumeration value="DECIMAL"/>
+    <xsd:enumeration value="DATE_ONLY"/>
+    <xsd:enumeration value="DATE_TIME"/>
+    <xsd:enumeration value="DATEONLY"/>
+    <xsd:enumeration value="DATETIME"/>
+    <xsd:enumeration value="CURRENCY"/>
+    <xsd:enumeration value="RAW"/>
+    <xsd:enumeration value="LONGSTRING"/>
+    <xsd:enumeration value="LONGRAW"/>
+    <xsd:enumeration value="CLOB"/>
+    <xsd:enumeration value="BLOB"/>
+    
+    <!-- LowerCase-->
+    <xsd:enumeration value="boolean"/>
+    <xsd:enumeration value="boolean_bit"/>
+    <xsd:enumeration value="boolean_tf"/>
+    <xsd:enumeration value="boolean_yn"/>
+    <xsd:enumeration value="boolean_10"/>
+    <xsd:enumeration value="string"/>
+    <xsd:enumeration value="integer"/>
+    <xsd:enumeration value="decimal"/>
+    <xsd:enumeration value="date_only"/>
+    <xsd:enumeration value="date_time"/>
+    <xsd:enumeration value="dateonly"/>
+    <xsd:enumeration value="datetime"/>
+    <xsd:enumeration value="currency"/>
+    <xsd:enumeration value="raw"/>
+    <xsd:enumeration value="longstring"/>
+    <xsd:enumeration value="longraw"/>
+    <xsd:enumeration value="clob"/>
+    <xsd:enumeration value="blob"/>
+    
+    <!-- TitleCase-->
+    <xsd:enumeration value="Boolean"/>
+    <xsd:enumeration value="Boolean_Bit"/>
+    <xsd:enumeration value="Boolean_TF"/>
+    <xsd:enumeration value="Boolean_YN"/>
+    <xsd:enumeration value="Boolean_10"/>
+    <xsd:enumeration value="String"/>
+    <xsd:enumeration value="Integer"/>
+    <xsd:enumeration value="Decimal"/>
+    <xsd:enumeration value="Date_Only"/>
+    <xsd:enumeration value="Date_Time"/>
+    <xsd:enumeration value="DateOnly"/>
+    <xsd:enumeration value="DateTime"/>
+    <xsd:enumeration value="Currency"/>
+    <xsd:enumeration value="Raw"/>
+    <xsd:enumeration value="LongString"/>
+    <xsd:enumeration value="LongRaw"/>
+    <xsd:enumeration value="Clob"/>
+    <xsd:enumeration value="Blob"/>
+   </xsd:restriction>
+  </xsd:simpleType>
+
+
+</xsd:schema>

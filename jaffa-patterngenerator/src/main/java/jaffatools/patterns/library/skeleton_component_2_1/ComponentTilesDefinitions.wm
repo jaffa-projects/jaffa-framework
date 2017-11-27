@@ -1,0 +1,40 @@
+#if ($Screens != null) #begin
+#if ($(MainLayout) != null && $(MainLayout.Lower) != "") #begin
+#set $wm_mainLayout = "$(MainLayout)"
+#else
+#set $wm_mainLayout = "jaffa.MainLayout"
+#end
+    <!-- $(Component.Upper1) -->
+
+#set $wm_title = $Title
+#set $wm_screenCounter = -1
+#foreach $screen in $Screens.values() #begin
+#set $wm_screenCounter = $wm_screenCounter + 1
+#set $wm_screenTitle = $Title
+#if ($(screen.ScreenTitle) != null && $(screen.ScreenTitle.Lower) != "") #begin
+#set $wm_screenTitle = $screen.ScreenTitle
+#end
+    <definition name="$(Application.Lower).$(Module.Lower).$(Component.Lower).Layout.$(screen.ScreenName.JavaBeanStyle)"  path="/jaffa/jsp/tiles/skeleton_component_2_0/SkeletonLayout.jsp">
+        <!-- JSPs to be included -->
+        <put name="historyNav"  value="/jaffa/jsp/tiles/historyNav.jsp"/>
+        <put name="contextNav"  value="/$(Application.Lower)/$(Module.Lower)/$(Component.Lower)/contextNav.jsp"/>
+        <put name="defaultNav"  value="/$(Application.Lower)/$(Module.Lower)/$(Component.Lower)/defaultNav.jsp"/>
+        <put name="body" value="/$(Application.Lower)/$(Module.Lower)/$(Component.Lower)/$(screen.ScreenName.JavaBeanStyle).jsp"/>
+
+        <!-- Parameters used by the JSPs -->
+        <put name="action" value="/$(Application.Lower)_$(Module.Lower)_$(Component.JavaBeanStyle)"/>
+        <put name="currentScreenCounter" value="$(wm_screenCounter)"/>
+
+#if ($wm_screenTitle != null && $wm_screenTitle != "") #begin
+        <put name="screenTitle" value="$(wm_screenTitle)"/>
+#end
+    </definition>
+    <definition name="$(Application.Lower).$(Module.Lower).$(Component.Lower).$(screen.ScreenName.JavaBeanStyle)"  extends="$(wm_mainLayout)">
+
+#if ($wm_title != null && $wm_title != "") #begin
+        <put name="title" value="$(wm_title)"/>
+#end
+        <put name="body" value="$(Application.Lower).$(Module.Lower).$(Component.Lower).Layout.$(screen.ScreenName.JavaBeanStyle)"/>
+    </definition>
+#end
+#end

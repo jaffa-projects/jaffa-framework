@@ -1,0 +1,19 @@
+$(DomainPackage.Lower).$(DomainObject.Upper1).Name=$(DomainObject.Upper1)
+
+#set $wm_description = ""
+#if ($Description != null) #begin
+#set $wm_description = $Description
+#end
+$(DomainPackage.Lower).$(DomainObject.Upper1).Description=$(wm_description)
+
+
+#foreach $field in $Fields.values() #begin
+#if ($(field.Ignore) == null || !$(field.Ignore.BooleanValue)) #begin
+#set $wm_description = ""
+#if ($field.Description != null) #begin
+#set $wm_description = $field.Description
+#end
+$(DomainPackage.Lower).$(DomainObject.Upper1).Field.$(field.Name.Upper1).Name=$(field.Name.Space)
+$(DomainPackage.Lower).$(DomainObject.Upper1).Field.$(field.Name.Upper1).Description=$(wm_description)
+#end
+#end

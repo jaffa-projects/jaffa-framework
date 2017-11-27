@@ -1,0 +1,7 @@
+    <!-- $(Component.Upper1)Criteria -->
+    <form-bean      name="$(Module.Lower)_$(Component.Lower1)CriteriaForm"
+                    type="$(BasePackage.Lower).components.$(Component.Lower).ui.$(Component.Upper1)CriteriaForm"/>
+
+    <!-- $(Component.Upper1)Results -->
+    <form-bean      name="$(Module.Lower)_$(Component.Lower1)ResultsForm"
+                    type="$(BasePackage.Lower).components.$(Component.Lower).ui.$(Component.Upper1)ResultsForm"/>

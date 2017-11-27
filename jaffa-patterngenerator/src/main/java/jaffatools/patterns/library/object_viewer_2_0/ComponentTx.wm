@@ -1,0 +1,424 @@
+// .//GEN-BEGIN:_1_be
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ * 
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/ 
+package $(BasePackage.Lower).components.$(Component.Lower).tx;
+
+import java.util.*;
+import java.lang.reflect.Method;
+import org.apache.log4j.Logger;
+import org.jaffa.exceptions.ApplicationExceptions;
+import org.jaffa.exceptions.FrameworkException;
+import org.jaffa.persistence.UOW;
+import org.jaffa.persistence.exceptions.UOWException;
+import org.jaffa.persistence.Criteria;
+
+import $(BasePackage.Lower).components.$(Component.Lower).I$(Component.Upper1);
+import $(BasePackage.Lower).components.$(Component.Lower).dto.$(Component.Upper1)InDto;
+import $(BasePackage.Lower).components.$(Component.Lower).dto.$(Component.Upper1)OutDto;
+import $(DomainPackage.Lower).$(DomainObject.Upper1);
+import $(DomainPackage.Lower).$(DomainObject.Upper1)Meta;
+
+$ScratchPad.clear()
+#foreach $field in $ResultsFields.values() #begin
+#if ($(field.SourceChain) != null) #begin
+#foreach $source in $field.SourceChain.values() #begin
+#set $wm_package = "$(source.Package.Lower).$(source.Object.Upper1)"
+#if ($ScratchPad.get($wm_package) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_package,$wm_package) != null) #begin #end
+import $(wm_package);
+import $(wm_package)Meta;
+#end
+#end
+#end
+#end
+
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#set $wm_package = "$(object.Package.Lower).$(object.ObjectName.Upper1)"
+#if ($ScratchPad.get($wm_package) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_package,$wm_package) != null) #begin #end
+import $(BasePackage.Lower).components.$(Component.Lower).dto.$(object.ObjectName.Upper1)Dto;
+import $(wm_package);
+import $(wm_package)Meta;
+#end
+#foreach $field in $object.RelatedObjectFields.values() #begin
+#if ($(field.SourceChain) != null) #begin
+#foreach $source in $field.SourceChain.values() #begin
+#set $wm_package = "$(source.Package.Lower).$(source.Object.Upper1)"
+#if ($ScratchPad.get($wm_package) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_package,$wm_package) != null) #begin #end
+import $(wm_package);
+import $(wm_package)Meta;
+#end
+#end
+#end
+#end
+#end
+#end
+$ScratchPad.clear()
+// .//GEN-END:_1_be
+// Add additional imports//GEN-FIRST:_imports
+
+
+
+
+// .//GEN-LAST:_imports
+// .//GEN-BEGIN:_2_be
+/** Viewer for $(DomainObject.Upper1) objects.
+*/
+public class $(Component.Upper1)Tx implements I$(Component.Upper1) {
+
+    private static Logger log = Logger.getLogger($(Component.Upper1)Tx.class);
+    
+    // .//GEN-END:_2_be
+    // .//GEN-BEGIN:_destroy_1_be
+    /**
+     * This should be invoked, when done with the component.
+     */
+    public void destroy() {
+        // .//GEN-END:_destroy_1_be
+        // Add custom code //GEN-FIRST:_destroy_1
+
+
+        // .//GEN-LAST:_destroy_1
+        // .//GEN-BEGIN:_destroy_2_be
+    }
+    // .//GEN-END:_destroy_2_be
+    // .//GEN-BEGIN:_read_1_be
+    /** Returns the details for $(DomainObject.Upper1).
+     * @param input The criteria based on which an object will be retrieved.
+     * @throws ApplicationExceptions This will be thrown if the criteria contains invalid data.
+     * @throws FrameworkException Indicates some system error.
+     * @return The object details. A null indicates, the object was not found.
+     */    
+    public $(Component.Upper1)OutDto read($(Component.Upper1)InDto input)
+    throws FrameworkException, ApplicationExceptions {
+        UOW uow = null;
+        try {
+            // Print Debug Information for the input
+            if (log.isDebugEnabled()) {
+                log.debug("Input: " + (input != null ? input.toString() : null));
+            }
+            
+            // create the UOW
+            uow = new UOW();
+            
+            // Build the Criteria Object
+            Criteria criteria = buildCriteria(input, uow);
+            // .//GEN-END:_read_1_be
+            // Add custom code before the query //GEN-FIRST:_read_1
+
+
+            // .//GEN-LAST:_read_1
+            // .//GEN-BEGIN:_read_2_be
+            // Execute The Query
+            Collection results = uow.query(criteria);
+            // .//GEN-END:_read_2_be
+            // Add custom code after the query //GEN-FIRST:_read_2
+
+
+            // .//GEN-LAST:_read_2
+            // .//GEN-BEGIN:_read_3_be
+            // Convert the domain objects into the outbound dto
+            $(Component.Upper1)OutDto output = buildDto(uow, results);
+            
+            // Print Debug Information for the output
+            if (log.isDebugEnabled()) {
+                log.debug("Output: " + (output != null ? output.toString() : null));
+            }
+            
+            return output;
+            
+        } finally {
+            if (uow != null)
+                uow.rollback();
+        }
+    }
+    // .//GEN-END:_read_3_be
+    // .//GEN-BEGIN:_buildCriteria_1_be
+    private Criteria buildCriteria($(Component.Upper1)InDto input, UOW uow) {
+        Criteria criteria = new Criteria();
+        criteria.setTable( $(DomainObject.Upper1)Meta.getName() );
+        // .//GEN-END:_buildCriteria_1_be
+        // Add custom criteria //GEN-FIRST:_buildCriteria_1
+
+
+        // .//GEN-LAST:_buildCriteria_1
+        // .//GEN-BEGIN:_buildCriteria_2_be
+
+#foreach $field in $CriteriaFields.values() #begin
+        criteria.addCriteria($(DomainObject.Upper1)Meta.$(field.DomainField.Static), input.get$(field.Name.Upper1)());
+#end
+        // .//GEN-END:_buildCriteria_2_be
+        // Add custom criteria //GEN-FIRST:_buildCriteria_2
+
+
+        // .//GEN-LAST:_buildCriteria_2
+        // .//GEN-BEGIN:_buildCriteria_3_be
+        return criteria;
+    }
+    // .//GEN-END:_buildCriteria_3_be
+    // .//GEN-BEGIN:_buildDto_1_be
+    private $(Component.Upper1)OutDto buildDto(UOW uow, Collection results)
+    throws UOWException {
+        $(Component.Upper1)OutDto output = null;
+        Iterator itr = results.iterator();
+        if (itr.hasNext()) {
+            // just return the details for the 1st record retrieved.
+            $(DomainObject.Upper1) $(DomainObject.Lower1) = ($(DomainObject.Upper1)) itr.next();
+            output = new $(Component.Upper1)OutDto();
+            // .//GEN-END:_buildDto_1_be
+            // Add custom code before all the setters //GEN-FIRST:_buildDto_1
+
+
+            // .//GEN-LAST:_buildDto_1
+$ScratchPad.clear()
+#foreach $field in $ResultsFields.values() #begin
+#if ( $field.SourceChain == null ) #begin
+            // .//GEN-BEGIN:_buildDto_$(field.Name.Upper1)_1_be
+            output.set$(field.Name.Upper1)($(DomainObject.Lower1).get$(field.DomainField.Upper1)());
+            // .//GEN-END:_buildDto_$(field.Name.Upper1)_1_be
+#else
+#set $wm_relatedClass = ""
+#set $(wm_relatedObject) = "chain"
+#foreach $source in $field.SourceChain.values() #begin
+#set $(wm_relatedObject) = "$(wm_relatedObject)$(source.Object.Upper1)"
+#foreach $joinField in $source.JoinFields.values() #begin
+#set $(wm_relatedObject) = "$(wm_relatedObject)$(joinField.DomainObjectField.Upper1)$(joinField.SourceField.Upper1)"
+#end
+#end
+#set $wm_relatedClass = "$(source.Object.Upper1)"
+#if ($ScratchPad.get($wm_relatedObject) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_relatedObject,$wm_relatedObject) != null) #begin #end
+            // .//GEN-BEGIN:_buildDto_$(field.Name.Upper1)_1_be
+            $(wm_relatedClass) $wm_relatedObject = null;
+            {
+
+#set $wm_previousSourceClass = ""
+#set $wm_sourceFirstPass = "true"
+#foreach $source in $field.SourceChain.values() #begin
+#if ($wm_sourceFirstPass = "true") #begin
+#set $wm_sourceFirstPass = "false"
+#set $ifCondition = ""
+#set $firstPass = "true"
+#foreach $joinField in $source.JoinFields.values() #begin
+#if ($firstPass = "true") #begin
+#set $firstPass = "false"
+#else
+#set $ifCondition = "$(ifCondition) && "
+#end
+#set $ifCondition = "$(ifCondition)$(DomainObject.Lower1).get$(joinField.DomainObjectField.Upper1)() != null"
+#end
+                if ($(ifCondition)) {
+                    Criteria criteria$(source.Object.Upper1) = new Criteria();
+                    criteria$(source.Object.Upper1).setTable($(source.Object.Upper1)Meta.getName());
+
+#foreach $joinField in $source.JoinFields.values() #begin
+                    criteria$(source.Object.Upper1).addCriteria($(source.Object.Upper1)Meta.$(joinField.SourceField.Static), $(DomainObject.Lower1).get$(joinField.DomainObjectField.Upper1)());
+#end
+#else
+#foreach $joinField in $source.JoinFields.values() #begin
+                    criteria$(wm_previousSourceClass).addInnerCriteria($(wm_previousSourceClass)Meta.$(joinField.DomainObjectField.Static), $(source.Object.Upper1)Meta.$(joinField.SourceField.Static));
+#end
+
+                    Criteria criteria$(source.Object.Upper1) = new Criteria();
+                    criteria$(source.Object.Upper1).setTable($(source.Object.Upper1)Meta.getName());
+                    criteria$(source.Object.Upper1).addAggregate(criteria$(wm_previousSourceClass));
+#end
+#set $wm_previousSourceClass = "$(source.Object.Upper1)"
+#end
+                    // .//GEN-END:_buildDto_$(field.Name.Upper1)_1_be
+                    // Add custom code to modify the criteria //GEN-FIRST:_buildDto_$(field.Name.Upper1)_1
+
+
+                    // .//GEN-LAST:_buildDto_$(field.Name.Upper1)_1
+                    // .//GEN-BEGIN:_buildDto_$(field.Name.Upper1)_2_be
+                    Iterator i = uow.query(criteria$(wm_previousSourceClass)).iterator();
+                    if (i.hasNext() )
+                        $wm_relatedObject = ($(wm_relatedClass)) i.next();
+                }
+            }
+            // .//GEN-END:_buildDto_$(field.Name.Upper1)_2_be
+#end
+            // .//GEN-BEGIN:_buildDto_$(field.Name.Upper1)_3_be
+            try {
+                output.set$(field.Name.Upper1)($(wm_relatedObject).get$(field.DomainField.Upper1)());
+            } catch (NullPointerException e) {
+                // Do nothing
+            }
+            // .//GEN-END:_buildDto_$(field.Name.Upper1)_3_be
+#end
+#end
+$ScratchPad.clear()            // .//GEN-BEGIN:_buildDto_2_be
+            // Add related objects, if required
+            addRelatedDtos(uow, output, $(DomainObject.Lower1));
+            // .//GEN-END:_buildDto_2_be
+            // Add custom code to pass values to the dto //GEN-FIRST:_buildDto_2
+
+
+            // .//GEN-LAST:_buildDto_2
+            // .//GEN-BEGIN:_buildDto_3_be
+        }
+        return output;
+    }
+    // .//GEN-END:_buildDto_3_be
+    // .//GEN-BEGIN:_addRelatedDtos_1_be
+    private void addRelatedDtos(UOW uow, $(Component.Upper1)OutDto output, $(DomainObject.Upper1) $(DomainObject.Lower1))
+    throws UOWException {
+        // .//GEN-END:_addRelatedDtos_1_be
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#set $ifCondition = ""
+#set $firstPass = "true"
+#foreach $joinField in $object.RelatedObjectJoinFields.values() #begin
+#if ($firstPass = "true") #begin
+#set $firstPass = "false"
+#else
+#set $ifCondition = "$(ifCondition) && "
+#end
+#set $ifCondition = "$(ifCondition)$(DomainObject.Lower1).get$(joinField.DomainField.Upper1)() != null"
+#end
+        // .//GEN-BEGIN:_addRelatedDtos_$(object.ObjectName.Upper1)_1_be
+        if ($(ifCondition)) {
+            Criteria criteria = new Criteria();
+            criteria.setTable($(object.ObjectName.Upper1)Meta.getName());
+
+#foreach $joinField in $object.RelatedObjectJoinFields.values() #begin
+            criteria.addCriteria($(object.ObjectName.Upper1)Meta.$(joinField.RelatedObjectDomainField.Static), $(DomainObject.Lower1).get$(joinField.DomainField.Upper1)());
+#end
+
+#if ($object.OrderByFields != null) #begin
+#foreach $field in $object.OrderByFields.values() #begin
+#if ($field.sortAscending != null && !$(field.sortAscending.BooleanValue))
+            criteria.addOrderBy("$(field.DomainFieldName.Upper1)", Criteria.ORDER_BY_DESC);
+#else
+            criteria.addOrderBy("$(field.DomainFieldName.Upper1)", Criteria.ORDER_BY_ASC);
+#end
+#end
+#end
+            // .//GEN-END:_addRelatedDtos_$(object.ObjectName.Upper1)_1_be
+            // Add custom code to set the criteria before the query //GEN-FIRST:_addRelatedDtos_$(object.ObjectName.Upper1)_1
+
+
+            // .//GEN-LAST:_addRelatedDtos_$(object.ObjectName.Upper1)_1
+            // .//GEN-BEGIN:_addRelatedDtos_$(object.ObjectName.Upper1)_2_be
+            Iterator itr = uow.query(criteria).iterator();
+            while (itr.hasNext()) {
+                $(object.ObjectName.Upper1) $(object.ObjectName.Lower1) = ($(object.ObjectName.Upper1)) itr.next();
+                $(object.ObjectName.Upper1)Dto dto = new $(object.ObjectName.Upper1)Dto();
+                // .//GEN-END:_addRelatedDtos_$(object.ObjectName.Upper1)_2_be
+                // Add custom code before all the setters //GEN-FIRST:_addRelatedDtos_$(object.ObjectName.Upper1)_2
+
+
+                // .//GEN-LAST:_addRelatedDtos_$(object.ObjectName.Upper1)_2
+$ScratchPad.clear()
+#foreach $field in $object.RelatedObjectFields.values() #begin
+#if ( $field.SourceChain == null ) #begin
+                // .//GEN-BEGIN:_addRelatedDtos_$(object.ObjectName.Upper1)_$(field.Name.Upper1)_1_be
+                dto.set$(field.Name.Upper1)($(object.ObjectName.Lower1).get$(field.DomainField.Upper1)());
+                // .//GEN-END:_addRelatedDtos_$(object.ObjectName.Upper1)_$(field.Name.Upper1)_1_be
+#else
+#set $wm_relatedClass = ""
+#set $(wm_relatedObject) = "chain"
+#foreach $source in $field.SourceChain.values() #begin
+#set $(wm_relatedObject) = "$(wm_relatedObject)$(source.Object.Upper1)"
+#foreach $joinField in $source.JoinFields.values() #begin
+#set $(wm_relatedObject) = "$(wm_relatedObject)$(joinField.DomainObjectField.Upper1)$(joinField.SourceField.Upper1)"
+#end
+#end
+#set $wm_relatedClass = "$(source.Object.Upper1)"
+#if ($ScratchPad.get($wm_relatedObject) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_relatedObject,$wm_relatedObject) != null) #begin #end
+                // .//GEN-BEGIN:_addRelatedDtos_$(object.ObjectName.Upper1)_$(field.Name.Upper1)_1_be
+                $(wm_relatedClass) $wm_relatedObject = null;
+                {
+
+#set $wm_previousSourceClass = ""
+#set $wm_sourceFirstPass = "true"
+#foreach $source in $field.SourceChain.values() #begin
+#if ($wm_sourceFirstPass = "true") #begin
+#set $wm_sourceFirstPass = "false"
+#set $ifCondition = ""
+#set $firstPass = "true"
+#foreach $joinField in $source.JoinFields.values() #begin
+#if ($firstPass = "true") #begin
+#set $firstPass = "false"
+#else
+#set $ifCondition = "$(ifCondition) && "
+#end
+#set $ifCondition = "$(ifCondition)$(object.ObjectName.Lower1).get$(joinField.DomainObjectField.Upper1)() != null"
+#end
+                    if ($(ifCondition)) {
+                        Criteria criteria$(source.Object.Upper1) = new Criteria();
+                        criteria$(source.Object.Upper1).setTable($(source.Object.Upper1)Meta.getName());
+
+#foreach $joinField in $source.JoinFields.values() #begin
+                        criteria$(source.Object.Upper1).addCriteria($(source.Object.Upper1)Meta.$(joinField.SourceField.Static), $(object.ObjectName.Lower1).get$(joinField.DomainObjectField.Upper1)());
+#end
+#else
+#foreach $joinField in $source.JoinFields.values() #begin
+                        criteria$(wm_previousSourceClass).addInnerCriteria($(wm_previousSourceClass)Meta.$(joinField.DomainObjectField.Static), $(source.Object.Upper1)Meta.$(joinField.SourceField.Static));
+#end
+
+                        Criteria criteria$(source.Object.Upper1) = new Criteria();
+                        criteria$(source.Object.Upper1).setTable($(source.Object.Upper1)Meta.getName());
+                        criteria$(source.Object.Upper1).addAggregate(criteria$(wm_previousSourceClass));
+#end
+#set $wm_previousSourceClass = "$(source.Object.Upper1)"
+#end
+                        // .//GEN-END:_addRelatedDtos_$(object.ObjectName.Upper1)_$(field.Name.Upper1)_1_be
+                        // Add custom code to modify the criteria //GEN-FIRST:_addRelatedDtos_$(object.ObjectName.Upper1)_$(field.Name.Upper1)_1
+
+
+                        // .//GEN-LAST:_addRelatedDtos_$(object.ObjectName.Upper1)_$(field.Name.Upper1)_1
+                        // .//GEN-BEGIN:_addRelatedDtos_$(object.ObjectName.Upper1)_$(field.Name.Upper1)_2_be
+                        Iterator i = uow.query(criteria$(wm_previousSourceClass)).iterator();
+                        if (i.hasNext() )
+                            $wm_relatedObject = ($(wm_relatedClass)) i.next();
+                    }
+                }
+                // .//GEN-END:_addRelatedDtos_$(object.ObjectName.Upper1)_$(field.Name.Upper1)_2_be
+#end
+                // .//GEN-BEGIN:_addRelatedDtos_$(object.ObjectName.Upper1)_$(field.Name.Upper1)_3_be
+                try {
+                    dto.set$(field.Name.Upper1)($(wm_relatedObject).get$(field.DomainField.Upper1)());
+                } catch (NullPointerException e) {
+                    // Do nothing
+                }
+                // .//GEN-END:_addRelatedDtos_$(object.ObjectName.Upper1)_$(field.Name.Upper1)_3_be
+#end
+#end
+$ScratchPad.clear()                // Add custom code to pass values to the dto //GEN-FIRST:_addRelatedDtos_$(object.ObjectName.Upper1)_3
+
+
+                // .//GEN-LAST:_addRelatedDtos_$(object.ObjectName.Upper1)_3
+                // .//GEN-BEGIN:_addRelatedDtos_$(object.ObjectName.Upper1)_3_be
+                output.add$(object.ObjectName.Upper1)(dto);
+            }
+        }
+        // .//GEN-END:_addRelatedDtos_$(object.ObjectName.Upper1)_3_be
+#end
+#end
+        // .//GEN-BEGIN:_addRelatedDtos_2_be
+    }
+    // .//GEN-END:_addRelatedDtos_2_be
+    // All the custom code goes here //GEN-FIRST:_custom
+
+
+
+
+
+
+    // .//GEN-LAST:_custom
+}

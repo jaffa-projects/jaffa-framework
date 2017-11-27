@@ -1,0 +1,33 @@
+#set $wm_primaryKey = ""
+#foreach $field in $Fields.values() {
+#if ($(field.PrimaryKey) != null && $(field.PrimaryKey.BooleanValue)) {
+#if ($wm_primaryKey == "") {
+#set $wm_primaryKey = '"$(field.DatabaseFieldName.Upper)"'
+} #else {
+#set $wm_primaryKey = '$(wm_primaryKey),"$(field.DatabaseFieldName.Upper)"'
+}
+}
+}
+#if ($wm_primaryKey != "") {
+SET QUOTED_IDENTIFIER ON
+GO
+
+-- Note: Depending on how we choose to implement Schemas, we may need to make this more complex by
+-- including such as: select schema_name()
+IF EXISTS (SELECT 1 
+             FROM sysobjects 
+            WHERE xtype='PK' AND name='$(DatabaseTable.Upper)P1'
+           ) 
+   BEGIN
+        SELECT 'Constraint already exists, therefore not creating constraint: $(DatabaseTable.Upper)P1.' 
+   END
+ELSE 
+   BEGIN
+        SELECT 'Constraint does not exist, therefore creating constraint: $(DatabaseTable.Upper)P1.'
+        ALTER TABLE "$(DatabaseTable.Upper)"
+           ADD CONSTRAINT "$(DatabaseTable.Upper)P1" PRIMARY KEY ($(wm_primaryKey))
+   END
+GO
+} #else {
+/* No Constraint currently defined for $(DatabaseTable.Upper) */
+}

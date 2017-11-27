@@ -2,22 +2,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
     <parent>
-        <artifactId>jaffa-parent</artifactId>
         <groupId>org.jaffa</groupId>
+        <artifactId>jaffa-parent</artifactId>
         <version>6.0.0-SNAPSHOT</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.jaffa</groupId>
     <artifactId>jaffa-monitoring</artifactId>
-    <version>6.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jaffa.version>6.0.0-SNAPSHOT</jaffa.version>
-        <jaffa.maven.tools.version>1.0.0-SNAPSHOT</jaffa.maven.tools.version>
         <ui.sourcedir>src/main/html</ui.sourcedir>
         <version.jar.plugin>2.4</version.jar.plugin>
         <context-salience>1-PRODUCT</context-salience>
@@ -45,17 +43,14 @@
         <dependency>
             <groupId>org.jaffa</groupId>
             <artifactId>jaffa-core</artifactId>
-            <version>${jaffa.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jaffa</groupId>
             <artifactId>jaffa-soa</artifactId>
-            <version>${jaffa.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jaffa</groupId>
             <artifactId>jaffa-components</artifactId>
-            <version>${jaffa.version}</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>

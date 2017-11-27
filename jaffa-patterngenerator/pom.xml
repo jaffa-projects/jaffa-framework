@@ -1,0 +1,144 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.jaffa</groupId>
+        <artifactId>jaffa-parent</artifactId>
+        <version>6.0.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>org.jaffa</groupId>
+    <artifactId>jaffa-patterngenerator</artifactId>
+
+    <name>Jaffa Pattern Generator</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- TODO - insert proper values for the gen.* properties!!!
+           Where do these come from during an official build? -->
+
+        <!-- Directory to hold the log files created during the
+             code generation process -->
+        <gen.logs>C:/Temp/logs</gen.logs>
+
+        <!-- The root directory for the generated source files
+             (java, sql, ...)
+             -->
+        <gen.root>C:/GOLDesp/Jaffa/trunk/DomainModel/source</gen.root>
+
+        <!-- Directory for the temporary file created when the pattern
+             template XML has the template metadata applied to it -->
+        <gen.temp>C:/Temp/TempMetaData</gen.temp>
+
+        <!-- The location of the webmacro.jar -->
+        <gen.webmacro>
+            ${build.directory}/../src/main/resources/webmacro.jar
+        </gen.webmacro>
+
+        <!-- The patterns located in DomainModel -->
+        <gen.domainMetadata>C:/GOLDesp/Jaffa/trunk/DomainModel/source/java</gen.domainMetadata>
+
+        <!-- The patterns located in JaffaTools -->
+        <gen.jaffaToolsMetadata>${build.sourceDirectory}/jaffatools</gen.jaffaToolsMetadata>
+
+        <!-- Where generated Java files should get written -->
+        <gen.javaDestination>C:/GOLDesp/Jaffa/trunk/DomainModel/source/java</gen.javaDestination>
+
+        <!-- Where generated SQL files should get written -->
+        <gen.sqlDestination>C:/GOLDesp/Jaffa/trunk/DomainModel/source/sql/install</gen.sqlDestination>
+
+        <!-- The default metadata source location when the exec:java target gets called -->
+        <gen.defaultMetadataDir>
+            C:/GOLDesp/Jaffa/trunk/DomainModel/build/patterns/domain_creator_1_1/requisitioning/purchase
+        </gen.defaultMetadataDir>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jaffa</groupId>
+            <artifactId>jaffa-core</artifactId>
+            <version>6.0.0-SNAPSHOT</version>
+        </dependency>
+        <!-- TODO put webmacro.jar into repository after we figure
+            out what version it is -->
+        <dependency>
+            <groupId>webmacro</groupId>
+            <artifactId>webmacro</artifactId>
+            <version>unknown</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/webmacro.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${version.junit}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+      <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>org.jaffa.tools.PatternGenerator</mainClass>
+                    <classpathScope>runtime</classpathScope>
+                    <!-- TODO input the real additional classpath elements for the webmacro jar
+                        and the pattern libraries. -->
+                    <additionalClasspathElements>
+                        <additionalClasspathElement>
+                            ${gen.webmacro}
+                        </additionalClasspathElement>
+                        <additionalClasspathElement>
+                            ${gen.domainMetadata}
+                        </additionalClasspathElement>
+                        <additionalClasspathElement>
+                            ${gen.jaffaToolsMetadata}
+                        </additionalClasspathElement>
+                    </additionalClasspathElements>
+                    <includeProjectDependencies>true</includeProjectDependencies>
+                    <workingDirectory>target/classes</workingDirectory>
+                    <arguments>
+                        <!-- TODO input the real default arguments -->
+                        <argument>${gen.defaultMetadataDir}</argument>
+                        <argument>${gen.javaDestination}</argument>
+                        <argument>${gen.sqlDestination}</argument>
+                    </arguments>
+                    <cleanupDaemonThreads>false</cleanupDaemonThreads>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

@@ -1,0 +1,5 @@
+    <forward name="$(Application.Lower)_$(Module.Lower)_$(Component.JavaBeanStyle)Criteria" path="$(Application.Lower).$(Module.Lower).$(Component.Lower).criteria"/>
+    <forward name="$(Application.Lower)_$(Module.Lower)_$(Component.JavaBeanStyle)Results" path="$(Application.Lower).$(Module.Lower).$(Component.Lower).results"/>
+    <forward name="$(Application.Lower)_$(Module.Lower)_$(Component.JavaBeanStyle)ConsolidatedCriteriaAndResults" path="$(Application.Lower).$(Module.Lower).$(Component.Lower).consolidatedCriteriaAndResults"/>
+    <forward name="$(Application.Lower)_$(Module.Lower)_$(Component.JavaBeanStyle)ExcelResults" path="$(Application.Lower).$(Module.Lower).$(Component.Lower).FinderExcelLayout"/>
+    <forward name="$(Application.Lower)_$(Module.Lower)_$(Component.JavaBeanStyle)XmlResults" path="$(Application.Lower).$(Module.Lower).$(Component.Lower).FinderXmlLayout"/>

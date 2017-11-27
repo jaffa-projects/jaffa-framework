@@ -1,0 +1,141 @@
+<%-- ----------------------------------------------------------------
+  -- Code Generated From JAFFA Framework Default Pattern           --
+  --                                                               --
+  -- The JAFFA Project can be found at http://jaffa.sourceforge.net--
+  -- and is available under the Lesser GNU Public License          --
+  -- //JAFFA-OVERWRITE: As long as this line exists, this file will be overwritten in all future runs of the pattern generator --
+  -- ------------------------------------------------------------- --%>
+<%@ page language="java" %>
+<%@ page import="org.jaffa.presentation.portlet.widgets.taglib.TagHelper" %>
+<%@ page import="org.jaffa.util.StringHelper" %>
+<%@ page import="org.jaffa.datatypes.Formatter" %>
+<%@ page import="org.jaffa.components.lookup.LookupComponent2" %>
+<%@ page import="org.jaffa.components.lookup.LookupForm" %>
+<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/jaffa-portlet.tld" prefix="Portlet" %>
+
+<bean:define id='component' name='<%= TagHelper.getFormName(pageContext) %>' property='component' type='org.jaffa.components.lookup.LookupComponent2'/>
+<bean:define id='inMultiSelectLookupMode' name='component' property='inMultiSelectLookupMode' type='java.lang.Boolean'/>
+
+<Portlet:UserGrid field="rows" userGridId="$(Module.Lower)_$(Component.Lower1)" detail="<%= !inMultiSelectLookupMode.booleanValue() %>">
+    <logic:equal name='inMultiSelectLookupMode' value='true'>
+        <Portlet:UserGridColumn label='[label.Jaffa.Widgets.Button.Select]' dataType='CaseInsensitiveString'>
+            <Portlet:CheckBox field='<%= LookupComponent2.MULTI_SELECT_CHECKBOX %>'/>
+        </Portlet:UserGridColumn>
+    </logic:equal>
+
+#foreach $field in $ResultsFields.values() #begin
+#set $wm_displayAsKey = ""
+#if ($field.DisplayAsKey != null && $(field.DisplayAsKey.BooleanValue)) #begin
+#set $wm_displayAsKey = "key=\"true\""
+#end
+#if ($(field.Display.BooleanValue)) #begin
+#if ($(field.FunctionGuardName) != null) #begin
+    <Portlet:FunctionGuard name="$(field.FunctionGuardName)">
+#end
+        <Portlet:UserGridColumn label="$(field.Label)" dataType="$(field.DataType.GridColumnDataType)" $(wm_displayAsKey)>
+
+#if ($(field.DataType.DataTypeBoolean)) #begin
+            <Portlet:CheckBox field="$(field.Name.Lower1)" displayOnly="true"/>
+#else
+#set $wm_textAttributes = ""
+#if ($field.Layout != null && $field.Layout.Lower != "") #begin
+#set $wm_textAttributes = "layout=\"$(field.Layout)\""
+#else
+#if ($field.SourceChain != null) #begin
+#foreach $source in $field.SourceChain.values() #begin #end
+#set $wm_domain = "$(source.Package.Lower).$(source.Object.Upper1)"
+#else
+#set $wm_domain = "$(DomainPackage.Lower).$(DomainObject.Upper1)"
+#end
+#if ($field.DomainField != null && $field.DomainField.Lower != "") #begin
+#set $wm_textAttributes = "domain=\"$(wm_domain)\" domainField=\"$(field.DomainField.Upper1)\""
+#end
+#end
+            <Portlet:Text field="$(field.Name.Lower1)" $(wm_textAttributes)/>
+#end
+
+#if ($(field.AppendField) != null) #begin
+#set $wm_appendBeginMarker = "\"\""
+#set $wm_appendEndMarker = "\"\""
+#if ($field.AppendField.AppendBeginMarker != null) #begin
+#set $wm_appendBeginMarker = "\"$(field.AppendField.AppendBeginMarker)\""
+#end
+#if ($field.AppendField.AppendEndMarker != null) #begin
+#set $wm_appendEndMarker = "\"$(field.AppendField.AppendEndMarker)\""
+#end
+#if ($field.AppendField.AppendBeginMarker == null && $field.AppendField.AppendEndMarker == null) #begin
+#set $wm_appendBeginMarker = "StringHelper.getDefaultDescriptionBeginMarker()"
+#set $wm_appendEndMarker = "StringHelper.getDefaultDescriptionEndMarker()"
+#end
+#foreach $field2 in $ResultsFields.values() #begin
+#if ($field2.Name.Lower1 == $field.AppendField.Name.Lower1) #begin
+#set $wm_appendField = $field2
+#end
+#end
+#if ($(wm_appendField.DataType.DataTypeBoolean)) #begin
+            <%= $(wm_appendBeginMarker) %><Portlet:CheckBox field="$(field.AppendField.Name.Lower1)" displayOnly="true"/><%= $(wm_appendEndMarker) %>
+#else
+#set $wm_parameters = "TagHelper.getModelMap(pageContext).get(\"$(field.AppendField.Name.Lower1)\")"
+#if ($wm_appendField.Layout != null && $wm_appendField.Layout.Lower != "") #begin
+#set $wm_parameters = "$(wm_parameters), \"$(wm_appendField.Layout)\""
+#else
+#set $wm_parameters = "$(wm_parameters), null"
+#end
+#if ($wm_appendField.SourceChain != null) #begin
+#foreach $source in $wm_appendField.SourceChain.values() #begin #end
+#set $wm_domain = "$(source.Package.Lower).$(source.Object.Upper1)"
+#else
+#set $wm_domain = "$(DomainPackage.Lower).$(DomainObject.Upper1)"
+#end
+#set $wm_parameters = "$(wm_parameters), \"$(wm_domain)\", \"$(wm_appendField.DomainField.Upper1)\", true, $(wm_appendBeginMarker), $(wm_appendEndMarker)"
+            <%= StringHelper.formatDescription($(wm_parameters)) %>
+#end
+#end
+        </Portlet:UserGridColumn>
+
+#if ($(field.FunctionGuardName) != null) #begin
+    </Portlet:FunctionGuard>
+#end
+#end
+#end
+
+    <Portlet:UserGridColumn label="[label.Jaffa.Widgets.Button.Action]">
+        <logic:equal name='inMultiSelectLookupMode' value='false'>
+            <Portlet:Button field="Select" label="[label.Jaffa.Widgets.Button.Select]" image="jaffa/imgs/icons/select.gif"/>
+        </logic:equal>
+
+#if ($Viewer != null) #begin
+        <Portlet:ComponentGuard name="$(Viewer.ComponentName)">
+                <Portlet:Button field="View" label="[label.Jaffa.Widgets.Button.View]" image="jaffa/imgs/icons/detail.gif" target="_blank"/>
+        </Portlet:ComponentGuard>
+#end
+
+#if ($Updator != null) #begin
+        <Portlet:ComponentGuard name="$(Updator.ComponentName)">
+                <Portlet:Button field="Update" label="[label.Jaffa.Widgets.Button.Update]" image="jaffa/imgs/icons/update.gif"/>
+        </Portlet:ComponentGuard>
+#end
+
+#if ($Deletor != null) #begin
+        <Portlet:ComponentGuard name="$(Deletor.ComponentName)">
+                <Portlet:Button field="Delete" label="[label.Jaffa.Widgets.Button.Delete]" image="jaffa/imgs/icons/delete.gif"  confirm="[label.Jaffa.Inquiry.delete.confirm]"/>
+        </Portlet:ComponentGuard>
+#end
+    </Portlet:UserGridColumn>
+</Portlet:UserGrid>
+
+<table>
+   <tr>
+        <td align='left'>
+           <logic:greaterThan name="<%= TagHelper.getFormName(pageContext) %>" property="numberOfRecords" value="0">
+               <Portlet:Label key='label.Jaffa.Inquiry.numberOfRecords' arg0='<%= Formatter.format(((LookupForm) TagHelper.getFormBase(pageContext)).getNumberOfRecords()) %>'/>
+               <logic:equal name="<%= TagHelper.getFormName(pageContext) %>" property="moreRecordsExist" value="true">
+               <Portlet:Label key='label.Jaffa.Inquiry.moreRecordsPrefix'/> <Portlet:Button field="MoreRecords" type="link" label="[label.Jaffa.Inquiry.moreRecordsExist]"/> <Portlet:Label key='label.Jaffa.Inquiry.moreRecordsSuffix'/> 
+               </logic:equal>
+           </logic:greaterThan>
+        </td>
+  
+    </tr>
+</table>

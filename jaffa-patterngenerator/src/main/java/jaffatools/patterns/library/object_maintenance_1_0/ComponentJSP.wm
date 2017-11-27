@@ -1,0 +1,257 @@
+<%-- ---------------------------------------------------------------- 
+  -- Code Generated From JAFFA Framework Default Pattern           --
+  --                                                               --
+  -- The JAFFA Project can be found at http://jaffa.sourceforge.net--
+  -- and is available under the Lesser GNU Public License          --
+  -- ------------------------------------------------------------- --%>
+<%@ page language="java" %>
+<%@ page import="org.jaffa.presentation.portlet.widgets.taglib.TagHelper" %>
+<%@ page import="org.jaffa.util.MessageHelper" %>
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
+<%@ taglib uri="/WEB-INF/jaffa-portlet.tld" prefix="Portlet" %>
+
+
+<html:html>
+    <HEAD>
+        <TITLE>$(Module.Lower)_$(Component.Lower1)</TITLE>
+	<SCRIPT type='text/javascript' src='jaffa/js/panels/reset.js'></SCRIPT>
+        <LINK href='jaffa/css/jaffa.css' type='text/css' rel='StyleSheet'>
+        <Portlet:Header/>
+    </HEAD>
+    
+    <BODY leftMargin='0' topMargin='0' marginwidth='0' marginheight='0'>
+        <Portlet:Form action='/$(Module.Lower)_$(Component.Lower1)'>
+
+
+        <table class='outer' cellpadding='0' cellspacing='0' width='100%'>
+          <tr> 
+            <td> <table class='header' cellspacing='0' cellpadding='0' width='100%'>
+                <tr> 
+                  <td class='left'></td>
+                  <td class='middle'><logic:equal property='updateMode' name='<%= TagHelper.getFormName(pageContext) %>' value='false'><Portlet:Label key='$(CreateTitle)'/></logic:equal><logic:equal property='updateMode' name='<%= TagHelper.getFormName(pageContext) %>' value='true'><Portlet:Label key='$(UpdateTitle)'/></logic:equal></td>
+                  <td class='right' align='right'></td>
+                </tr>
+              </table></tr></td>
+          <tr> 
+            <td> <table class='window' width='100%'  border='0' cellspacing='0' cellpadding='0'>
+            <tr>
+            <td>
+
+	<table width='100%' border='0' cellspacing='10' align='center'>
+
+#foreach $field in $Fields.values() #begin
+#if ($(field.Display.Lower) == "true") #begin
+#set $wm_isKey = "false"
+#foreach $keyField in $KeyFields.values() #begin
+#if ( $keyField.Name.Upper1 == $field.Name.Upper1 ) #begin
+#set $wm_isKey = "true"
+#end
+#end
+#if ($(field.FunctionGuardName) != null) #begin
+            <Portlet:FunctionGuard name='$(field.FunctionGuardName)'>
+#end
+            <tr> 
+                <td class="label">
+
+#if ($(field.Mandatory.Lower) == "true") #begin
+                    <a class="required">*</a>
+#end
+#if ($(field.Label) != null) #begin
+                    <Portlet:Label key='$(field.Label)'/>:
+#elseif ($(field.DomainField.Upper) != "") #begin
+                    <Portlet:Label domain='$(DomainPackage.Lower).$(DomainObject.Upper1)' field='$(field.DomainField)'/>:
+#end
+                </td>
+                <td align='left'>
+
+#if ($wm_isKey == "true" && ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT")) #begin
+#set $wm_keyTag = "<Portlet:CheckBox field='$(field.Name.Lower1)' displayOnly='true'/>"
+#elseif ($wm_isKey == "true") #begin
+#set $wm_textAttributes = ""
+#if ($field.Layout != null && $field.Layout.Lower != "") #begin
+#set $wm_textAttributes = "layout='$(field.Layout)'"
+#else
+#set $wm_domain = "$(DomainPackage.Lower).$(DomainObject.Upper1)"
+#set $wm_textAttributes = "domain='$(wm_domain)' domainField='$(field.DomainField.Upper1)'"
+#end
+#set $wm_keyTag = "<Portlet:Text field='$(field.Name.Lower1)' $(wm_textAttributes)/>"
+#end
+#if ($wm_isKey == "true") #begin
+                    <logic:equal property='updateMode' name='<%= TagHelper.getFormName(pageContext) %>' value='true'>
+                    $wm_keyTag
+                    </logic:equal>
+                    <logic:equal property='updateMode' name='<%= TagHelper.getFormName(pageContext) %>' value='false'>
+#end
+#if ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "checkbox") #begin
+                    <Portlet:Grid field='$(field.Name.Lower1)' displayOnly='true'>
+                        <Portlet:GridColumn label=''>
+                            <Portlet:CheckBox field='checked'/>
+                            <a class="checkboxlabel"><%= MessageHelper.replaceTokens(pageContext, (String) TagHelper.getModelMap(pageContext).get("description")) %></a>
+                        </Portlet:GridColumn>
+                    </Portlet:Grid>
+#elseif ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "dropdown") #begin
+                    <Portlet:DropDown field='$(field.Name.Lower1)'/>
+#elseif ($(field.DataType.Upper) == "STRING" || $(field.DataType.Upper) == "VARCHAR" || $(field.DataType.Upper) == "LONGSTRING" || $(field.DataType.Upper) == "LONGVARCHAR" || $(field.DataType.Upper) == "CLOB") #begin
+                    <Portlet:EditBox field='$(field.Name.Lower1)'/>
+#elseif ($(field.DataType.Upper) == "INTEGER" || $(field.DataType.Upper) == "BIGINT") #begin
+                    <Portlet:EditBox field='$(field.Name.Lower1)'/>
+#elseif ($(field.DataType.Upper) == "DECIMAL" || $(field.DataType.Upper) == "DOUBLE") #begin
+                    <Portlet:EditBox field='$(field.Name.Lower1)'/>
+#elseif ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") #begin
+                    <Portlet:CheckBox field='$(field.Name.Lower1)'/>
+#elseif ($(field.DataType.Upper) == "DATE_ONLY" || $(field.DataType.Upper) == "DATEONLY") #begin
+                    <Portlet:DateTime field='$(field.Name.Lower1)' dateOnly='true'/>
+#elseif ($(field.DataType.Upper) == "DATE_TIME" || $(field.DataType.Upper) == "DATETIME") #begin
+                    <Portlet:DateTime field='$(field.Name.Lower1)'/>
+#elseif ($(field.DataType.Upper) == "CURRENCY") #begin
+                    <Portlet:EditBox field='$(field.Name.Lower1)'/>
+#elseif ($(field.DataType.Upper) == "RAW" || $(field.DataType.Upper) == "LONGRAW" || $(field.DataType.Upper) == "BLOB") #begin
+                    <Portlet:EditBox field='$(field.Name.Lower1)'/>
+#end
+#if ($wm_isKey == "true") #begin
+                    </logic:equal>
+#end
+                </td>
+            </tr>
+
+#if ($(field.FunctionGuardName) != null) #begin
+            </Portlet:FunctionGuard>
+#end
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#set $wm_addedLookup = "false"
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.Display.Lower) == "true") #begin
+#set $wm_isKey = "false"
+#foreach $keyField in $KeyFields.values() #begin
+#if ( $keyField.Name.Upper1 == $field.Name.Upper1 ) #begin
+#set $wm_isKey = "true"
+#end
+#end
+#if ($(field.SourceChain) == null) #begin
+#set $wm_domainPackage = "$(foreignObject.Package.Lower)"
+#set $wm_domainObject = "$(foreignObject.Object.Upper1)"
+#else
+#foreach $source in $field.SourceChain.values() #begin #end
+#set $wm_domainPackage = "$(source.Package.Lower)"
+#set $wm_domainObject = "$(source.Object.Upper1)"
+#end
+#if ($(field.FunctionGuardName) != null) #begin
+            <Portlet:FunctionGuard name='$(field.FunctionGuardName)'>
+#end
+            <tr> 
+                <td class="label">
+
+#if ($(field.Mandatory.Lower) == "true") #begin
+                    <a class="required">*</a>
+#end
+#if ($(field.Label) != null) #begin
+                    <Portlet:Label key='$(field.Label)'/>:
+#else
+                    <Portlet:Label domain='$(wm_domainPackage).$(wm_domainObject)' field='$(field.DomainFieldInForeignObject)'/>:
+#end
+                </td>
+                <td align='left'>
+
+#if (($wm_isKey == "true" || $(field.KeyType.Upper) == "") && ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT")) #begin
+#set $wm_tag = "<Portlet:CheckBox field='$(field.Name.Lower1)' displayOnly='true'/>"
+#elseif ($wm_isKey == "true" || $(field.KeyType.Upper) == "") #begin
+#set $wm_textAttributes = ""
+#if ($field.Layout != null && $field.Layout.Lower != "") #begin
+#set $wm_textAttributes = "layout='$(field.Layout)'"
+#else
+#set $wm_domain = "$(wm_domainPackage).$(wm_domainObject)"
+#set $wm_textAttributes = "domain='$(wm_domain)' domainField='$(field.DomainFieldInForeignObject.Upper1)'"
+#end
+#set $wm_tag = "<Portlet:Text field='$(field.Name.Lower1)' $(wm_textAttributes)/>"
+#end
+#if ($wm_isKey == "true") #begin
+                    <logic:equal property='updateMode' name='<%= TagHelper.getFormName(pageContext) %>' value='true'>
+                    $wm_tag
+                    </logic:equal>
+                    <logic:equal property='updateMode' name='<%= TagHelper.getFormName(pageContext) %>' value='false'>
+#end
+#if ($(field.KeyType.Upper) == "") #begin
+                    $wm_tag
+#else
+#if ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "checkbox") #begin
+                    <Portlet:Grid field='$(field.Name.Lower1)' displayOnly='true'>
+                        <Portlet:GridColumn label=''>
+                            <Portlet:CheckBox field='checked'/>
+                            <a class="checkboxlabel"><%= MessageHelper.replaceTokens(pageContext, (String) TagHelper.getModelMap(pageContext).get("description")) %></a>
+                        </Portlet:GridColumn>
+                    </Portlet:Grid>
+#elseif ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "dropdown") #begin
+                    <Portlet:DropDown field='$(field.Name.Lower1)'/>
+#elseif ($(field.DataType.Upper) == "STRING" || $(field.DataType.Upper) == "VARCHAR" || $(field.DataType.Upper) == "LONGSTRING" || $(field.DataType.Upper) == "LONGVARCHAR" || $(field.DataType.Upper) == "CLOB") #begin
+                    <Portlet:EditBox field='$(field.Name.Lower1)'/>
+#elseif ($(field.DataType.Upper) == "INTEGER" || $(field.DataType.Upper) == "BIGINT") #begin
+                    <Portlet:EditBox field='$(field.Name.Lower1)'/>
+#elseif ($(field.DataType.Upper) == "DECIMAL" || $(field.DataType.Upper) == "DOUBLE") #begin
+                    <Portlet:EditBox field='$(field.Name.Lower1)'/>
+#elseif ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") #begin
+                    <Portlet:CheckBox field='$(field.Name.Lower1)'/>
+#elseif ($(field.DataType.Upper) == "DATE_ONLY" || $(field.DataType.Upper) == "DATEONLY") #begin
+                    <Portlet:DateTime field='$(field.Name.Lower1)' dateOnly='true'/>
+#elseif ($(field.DataType.Upper) == "DATE_TIME" || $(field.DataType.Upper) == "DATETIME") #begin
+                    <Portlet:DateTime field='$(field.Name.Lower1)'/>
+#elseif ($(field.DataType.Upper) == "CURRENCY") #begin
+                    <Portlet:EditBox field='$(field.Name.Lower1)'/>
+#elseif ($(field.DataType.Upper) == "RAW" || $(field.DataType.Upper) == "LONGRAW" || $(field.DataType.Upper) == "BLOB") #begin
+                    <Portlet:EditBox field='$(field.Name.Lower1)'/>
+#end
+#end
+#if ($wm_isKey == "true") #begin
+                    </logic:equal>
+#end
+
+#if ($(foreignObject.Lookup) != null && $wm_addedLookup == "false") #begin
+#set $wm_addedLookup = "true"
+                    <Portlet:ComponentGuard name="$(foreignObject.Lookup.Component)">
+                        <Portlet:Lookup component="$(foreignObject.Lookup.Component)" bypassCriteriaScreen="$(foreignObject.Lookup.BypassCriteriaScreen)" staticParameters="$(foreignObject.Lookup.StaticParameters)" dynamicParameters="$(foreignObject.Lookup.DynamicParameters)" targetFields="$(foreignObject.Lookup.TargetFields)">&nbsp;</Portlet:Lookup>
+                    </Portlet:ComponentGuard>
+#end
+                </td>
+            </tr>
+
+#if ($(field.FunctionGuardName) != null) #begin
+            </Portlet:FunctionGuard>
+#end
+#end
+#end
+#end
+#end
+
+            <br> <table width='70%' align='center'>
+                      <TR> 
+                        <logic:equal property='updateMode' name='<%= TagHelper.getFormName(pageContext) %>' value='false'><TD><a class='WidgetButton8' href='javascript:resetForm()' ><%= MessageHelper.replaceTokens(pageContext, "[label.Jaffa.Widgets.Button.Clear]") %></a></TD></logic:equal>
+                        <TD><Portlet:Button field='Cancel' label='[label.Jaffa.Widgets.Button.Cancel]' type='sized' preprocess='false'/></TD>
+                        <TD><Portlet:Button field='Save' label='[label.Jaffa.Widgets.Button.Save]' type='sized' submit='true' guarded='true'/></TD>
+                        <logic:equal property='updateMode' name='<%= TagHelper.getFormName(pageContext) %>' value='true'><TD><Portlet:Button field='Delete' label='[label.Jaffa.Widgets.Button.Delete]' type='sized' preprocess='false' guarded='true' confirm='[label.Jaffa.Inquiry.delete.confirm]'/></TD></logic:equal>
+                      </TR>
+                    </table>
+                    <p>&nbsp;</p></td>
+                </tr>
+              </table></td>
+          </tr>
+          <tr> 
+            <td> <table class='footer' width='100%' cellpadding='0' cellspacing='0'>
+                <tr> 
+                  <td class='left'></td>
+                  <td class='middle'></td>
+                  <td class='right'></td>
+                </tr>
+                <tr></tr>
+              </table></td>
+          </tr>
+        </table>
+        <Portlet:RaiseErrors/>
+        </Portlet:Form>
+        <Portlet:Footer/>
+    </BODY>
+</html:html>

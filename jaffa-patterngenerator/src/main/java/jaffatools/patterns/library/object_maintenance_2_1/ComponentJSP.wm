@@ -1,0 +1,482 @@
+<%-- ----------------------------------------------------------------
+  -- Code Generated From JAFFA Framework Default Pattern           --
+  --                                                               --
+  -- The JAFFA Project can be found at http://jaffa.sourceforge.net--
+  -- and is available under the Lesser GNU Public License          --
+  -- //JAFFA-OVERWRITE: As long as this line exists, this file will be overwritten in all future runs of the pattern generator --
+  -- ------------------------------------------------------------- --%>
+#set $wm_screenNumberKey = "WM_SCREEN_NUMBER_KEY"
+
+#if ($ScratchPad.get($(wm_screenNumberKey)) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($(wm_screenNumberKey), "0") != null) #begin #end
+#end
+
+#set $wm_screenNumberIterator = -1
+#set $wm_screenFound = "false"
+#foreach $screen in $Screens.values() #begin
+#set $wm_screenNumberIterator = $wm_screenNumberIterator + 1
+#if ($wm_screenFound == "false" && $ScratchPad.get($wm_screenNumberKey).equals("$(wm_screenNumberIterator)")) #begin
+#set $wm_screenFound = "true"
+#set $wm_screenNumberIterator = $wm_screenNumberIterator + 1
+## the following 'if' statement is used to invoke the 'add' method
+#if ($ScratchPad.put($wm_screenNumberKey, "$wm_screenNumberIterator") != null) #begin #end
+
+<%@ page language="java" %>
+<%@ page import="org.jaffa.components.maint.MaintForm" %>
+<%@ page import="org.jaffa.presentation.portlet.widgets.taglib.TagHelper" %>
+<%@ page import="org.jaffa.util.MessageHelper" %>
+<%@ page import="org.jaffa.util.StringHelper" %>
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
+<%@ taglib uri="/WEB-INF/jaffa-portlet.tld" prefix="Portlet" %>
+<%@ taglib uri='/WEB-INF/struts-tiles.tld' prefix='tiles' %>
+
+
+
+<table width='100%' border='0' cellspacing='0' align='center'>
+
+#if ($screen.References != null) #begin
+#foreach $reference in $screen.References.values() #begin
+#if ($reference.Name != null) #begin
+#foreach $field in $Fields.values() #begin
+#if ($(field.Name.Upper1) == $(reference.Name.Upper1)) #begin
+#if ($(field.Display.BooleanValue)) #begin
+#if ($field.RelatedObjectName == null || $field.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#set $wm_isKey = "false"
+#foreach $keyField in $KeyFields.values() #begin
+#if ( $keyField.Name.Upper1 == $field.Name.Upper1 ) #begin
+#set $wm_isKey = "true"
+#end
+#end
+#if ($field.RelatedObjectName == null) #begin
+#set $wm_domainPackage = "$(DomainPackage.Lower)"
+#set $wm_domainObject = "$(DomainObject.Upper1)"
+#set $wm_domainField = $field.DomainField
+#else
+#set $wm_relatedObject = $field.RelatedObjectName.getRelatedObject($(RelatedObjects))
+#set $wm_domainPackage = $wm_relatedObject.Package.Lower
+#set $wm_domainObject = $wm_relatedObject.ObjectName.Upper1
+#set $wm_domainField = $field.DomainField
+#end
+#if ($(field.StampType) != null) #begin
+  <logic:equal property='updateMode' name='<%= TagHelper.getFormName(pageContext) %>' value='true'>
+#end
+
+#if ($(field.FunctionGuardName) != null) #begin
+  <Portlet:FunctionGuard name='$(field.FunctionGuardName)'>
+#end
+  <Portlet:Property field='$(field.Name.JavaBeanStyle)'>
+  <tr> 
+
+#if ($(field.ValidateFieldHandler) != null && $(field.ValidateFieldHandler.BooleanValue) && ($(field.DataType.WidgetType) == "EditBox" || $(field.DataType.WidgetType) == "DateTime")) #begin
+#set $wm_validateAttribute = "validate='true'"
+#else
+#set $wm_validateAttribute = ""
+#end
+#if ($(field.Label) != null) #begin
+#set $wm_labelAttribute = " key='$(field.Label)'"
+#elseif ($field.DomainField.Upper != "") #begin
+#set $wm_labelAttribute = ""
+#else
+#set $wm_labelAttribute = " key='$(field.Name)'"
+#end
+#if ($field.Comment != null) #begin
+    <td colspan='2'>
+      <Portlet:FoldingSection id='$(field.Name.JavaBeanStyle)'$(wm_labelAttribute) closed='true'>
+        <table class='comments'><tr><td><Portlet:EditBox rows='10' $(wm_validateAttribute)/></td></tr></table>
+      </Portlet:FoldingSection>
+    </td>
+#else
+    <td class="label">
+      <Portlet:Label$(wm_labelAttribute)/>:
+    </td>
+    <td>
+
+#if (($wm_isKey == "true" || $(field.StampType) != null) && $(field.DataType.DataTypeBoolean)) #begin
+#set $wm_nonEditableTag = "<Portlet:CheckBox displayOnly='true'/>"
+#elseif ($wm_isKey == "true" || $(field.StampType) != null) #begin
+#set $wm_textAttributes = ""
+#if ($field.Layout != null && $field.Layout.Lower != "") #begin
+#set $wm_textAttributes = "layout='$(field.Layout)'"
+#end
+#set $wm_nonEditableTag = "<Portlet:Text $(wm_textAttributes)/>"
+#end
+#if ($(field.StampType) != null) #begin
+      $wm_nonEditableTag
+#else
+#if ($wm_isKey == "true") #begin
+      <logic:equal property='updateMode' name='<%= TagHelper.getFormName(pageContext) %>' value='true'>
+        $wm_nonEditableTag
+      </logic:equal>
+      <logic:equal property='updateMode' name='<%= TagHelper.getFormName(pageContext) %>' value='false'>
+        <% if (((MaintForm) TagHelper.getFormBase(pageContext)).isDisplayOnlyField("$(field.Name.JavaBeanStyle)")) { %>
+          $wm_nonEditableTag
+        <% } else { %>
+#end
+
+#if ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "checkbox") #begin
+          <Portlet:Grid field='$(field.Name.JavaBeanStyle)' displayOnly='true'>
+            <Portlet:GridColumn label=''>
+              <Portlet:CheckBox field='checked'/>
+              <a class="checkboxlabel"><%= MessageHelper.replaceTokens(pageContext, (String) TagHelper.getModelMap(pageContext).get("description")) %></a>
+            </Portlet:GridColumn>
+          </Portlet:Grid>
+#elseif ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "propertyeditor") #begin
+          <table width="100%">
+            <tr>
+              <td align='left'>
+                <Portlet:UserGrid userGridId="PropertyEditor" field='$(field.Name.JavaBeanStyle)'>
+                  <Portlet:UserGridColumn label="[label.Jaffa.Widgets.PropertyEditor.Key]">
+                    <Portlet:EditBox field='key' columns="20"/>
+                  </Portlet:UserGridColumn>
+                  <Portlet:UserGridColumn label="[label.Jaffa.Widgets.PropertyEditor.Value]">
+                    <Portlet:EditBox field='value' columns="40"/>
+                  </Portlet:UserGridColumn>
+                  <Portlet:UserGridColumn label="[label.Jaffa.Widgets.PropertyEditor.Comments]">
+                    <Portlet:EditBox field='comments' columns="40"/>
+                  </Portlet:UserGridColumn>
+                  <Portlet:UserGridColumn label="&nbsp;">
+                    <Portlet:Button field="remove" label="[label.Jaffa.Widgets.Button.Delete]" image="jaffa/imgs/icons/delete.gif"/>
+                  </Portlet:UserGridColumn>
+                </Portlet:UserGrid>
+              </td>
+            </tr>
+            <tr>
+              <td class='createNew'>
+                <Portlet:Button type="sized" field="$(field.Name.JavaBeanStyle)Add" label='[label.Jaffa.Widgets.Button.CreateNew]'/>
+              </td>
+            </tr>
+          </table>
+#elseif ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "dropdown") #begin
+          <Portlet:DropDown/>
+#elseif ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "radiobutton") #begin
+          <table>
+
+#if ($field.Breakup.StaticValues != null) #begin
+#foreach $staticValue in $field.Breakup.StaticValues.values() #begin
+            <tr>
+              <td>
+                <Portlet:RadioButton selectValue='$(staticValue.Code)'/><Portlet:Label key='$(staticValue.Description)'/>
+              </td>
+            </tr>
+#end
+#end
+          </table>
+#elseif ($(field.DataType.DataTypeDateTime) || $(field.DataType.DataTypeDateOnly)) #begin
+          <Portlet:EditBox $(wm_validateAttribute)/><Portlet:Calendar/>
+#else
+          <Portlet:$(field.DataType.WidgetType) $(wm_validateAttribute)/>
+#end
+
+#if ($wm_isKey == "true") #begin
+        <% } %>
+      </logic:equal>
+#end
+#end
+    </td>
+#end
+  </tr>
+  </Portlet:Property>
+
+#if ($(field.FunctionGuardName) != null) #begin
+  </Portlet:FunctionGuard>
+#end
+
+#if ($(field.StampType) != null) #begin
+  </logic:equal>
+#end
+#end
+#end
+#end
+#end
+
+#elseif ($reference.ForeignObjectName != null) #begin
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($(foreignObject.Name.Upper1) == $(reference.ForeignObjectName.Upper1)) #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#set $wm_addedLookup = "false"
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.Display.BooleanValue)) #begin
+#set $wm_isKey = "false"
+#foreach $keyField in $KeyFields.values() #begin
+#if ( $keyField.Name.Upper1 == $field.Name.Upper1 ) #begin
+#set $wm_isKey = "true"
+#end
+#end
+#if ($(field.DomainField.Upper1) != "" && $foreignObject.RelatedObjectName == null) #begin
+#set $wm_domainPackage = "$(DomainPackage.Lower)"
+#set $wm_domainObject = "$(DomainObject.Upper1)"
+#set $wm_domainField = $field.DomainField
+#elseif ($(field.DomainField.Upper1) != "" && $foreignObject.RelatedObjectName != null) #begin
+#set $wm_relatedObject = $foreignObject.RelatedObjectName.getRelatedObject($(RelatedObjects))
+#set $wm_domainPackage = $wm_relatedObject.Package.Lower
+#set $wm_domainObject = $wm_relatedObject.ObjectName.Upper1
+#set $wm_domainField = $field.DomainField
+#elseif ($(field.SourceChain) == null) #begin
+#set $wm_domainPackage = "$(foreignObject.Package.Lower)"
+#set $wm_domainObject = "$(foreignObject.Object.Upper1)"
+#set $wm_domainField = $field.DomainFieldInForeignObject
+#else
+#foreach $source in $field.SourceChain.values() #begin #end
+#set $wm_domainPackage = "$(source.Package.Lower)"
+#set $wm_domainObject = "$(source.Object.Upper1)"
+#set $wm_domainField = $field.DomainFieldInForeignObject
+#end
+#if ($(field.FunctionGuardName) != null) #begin
+  <Portlet:FunctionGuard name='$(field.FunctionGuardName)'>
+#end
+  <Portlet:Property field='$(field.Name.JavaBeanStyle)'>
+  <tr> 
+    <td class="label">
+
+#if ($(field.Label) != null) #begin
+      <Portlet:Label key='$(field.Label)'/>:
+#else
+      <Portlet:Label/>:
+#end
+    </td>
+    <td>
+
+#if (($wm_isKey == "true" || $(field.KeyType.Upper) == "") && $(field.DataType.DataTypeBoolean)) #begin
+#set $wm_nonEditableTag = "<Portlet:CheckBox displayOnly='true'/>"
+#elseif ($wm_isKey == "true" || $(field.KeyType.Upper) == "") #begin
+#set $wm_textAttributes = ""
+#if ($field.Layout != null && $field.Layout.Lower != "") #begin
+#set $wm_textAttributes = "layout='$(field.Layout)'"
+#end
+#set $wm_nonEditableTag = "<Portlet:Text $(wm_textAttributes)/>"
+#end
+#if ($(field.KeyType.Upper) == "") #begin
+      $wm_nonEditableTag
+#else
+#if ($wm_isKey == "true") #begin
+      <logic:equal property='updateMode' name='<%= TagHelper.getFormName(pageContext) %>' value='true'>
+        $wm_nonEditableTag
+      </logic:equal>
+      <logic:equal property='updateMode' name='<%= TagHelper.getFormName(pageContext) %>' value='false'>
+        <% if (((MaintForm) TagHelper.getFormBase(pageContext)).isDisplayOnlyField("$(field.Name.JavaBeanStyle)")) { %>
+          $wm_nonEditableTag
+        <% } else { %>
+#end
+#if ($(field.ValidateFieldHandler) != null && $(field.ValidateFieldHandler.BooleanValue) && ($(field.DataType.WidgetType) == "EditBox" || $(field.DataType.WidgetType) == "DateTime")) #begin
+#set $wm_validateAttribute = "validate='true'"
+#else
+#set $wm_validateAttribute = ""
+#end
+#if ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "checkbox") #begin
+          <Portlet:Grid field='$(field.Name.JavaBeanStyle)' displayOnly='true'>
+            <Portlet:GridColumn label=''>
+              <Portlet:CheckBox field='checked'/>
+              <a class="checkboxlabel"><%= MessageHelper.replaceTokens(pageContext, (String) TagHelper.getModelMap(pageContext).get("description")) %></a>
+            </Portlet:GridColumn>
+          </Portlet:Grid>
+#elseif ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "dropdown") #begin
+          <Portlet:DropDown/>
+#elseif ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "radiobutton") #begin
+          <table>
+
+#if ($field.Breakup.StaticValues != null) #begin
+#foreach $staticValue in $field.Breakup.StaticValues.values() #begin
+            <tr>
+              <td>
+                <Portlet:RadioButton selectValue='$(staticValue.Code)'/><Portlet:Label key='$(staticValue.Description)'/>
+              </td>
+            </tr>
+#end
+#end
+          </table>
+#elseif ($(field.DataType.DataTypeDateTime) || $(field.DataType.DataTypeDateOnly)) #begin
+          <Portlet:EditBox $(wm_validateAttribute)/><Portlet:Calendar/>
+#else
+          <Portlet:$(field.DataType.WidgetType) $(wm_validateAttribute)/>
+#end
+#end
+
+#if ($(foreignObject.Lookup) != null && $wm_addedLookup == "false") #begin
+#set $wm_addedLookup = "true"
+#set $wm_additionalLookupAttributes = ""
+#if ($(foreignObject.Lookup.BypassCriteriaScreen) != null) #begin
+#set $wm_additionalLookupAttributes = "$(wm_additionalLookupAttributes) bypassCriteriaScreen='$(foreignObject.Lookup.BypassCriteriaScreen.BooleanValue)'"
+#end
+#if ($(foreignObject.Lookup.StaticParameters) != null) #begin
+#set $wm_additionalLookupAttributes = "$(wm_additionalLookupAttributes) staticParameters='$(foreignObject.Lookup.StaticParameters)'"
+#end
+#if ($(foreignObject.Lookup.DynamicParameters) != null) #begin
+#set $wm_additionalLookupAttributes = "$(wm_additionalLookupAttributes) dynamicParameters='$(foreignObject.Lookup.DynamicParameters)'"
+#end
+          <Portlet:ComponentGuard name="$(foreignObject.Lookup.Component)">
+            <Portlet:Lookup component='$(foreignObject.Lookup.Component)' targetFields='$(foreignObject.Lookup.TargetFields)'$(wm_additionalLookupAttributes)>&nbsp;</Portlet:Lookup>
+          </Portlet:ComponentGuard>
+#end
+
+#if ($wm_isKey == "true") #begin
+        <% } %>
+      </logic:equal>
+#end
+    </td>
+  </tr>
+  </Portlet:Property>
+
+#if ($(field.FunctionGuardName) != null) #begin
+  </Portlet:FunctionGuard>
+#end
+#end
+#end
+#end
+#end
+#end
+#end
+
+#elseif ($reference.RelatedObjectName != null) #begin
+#if ($RelatedObjects != null) #begin
+  <logic:equal property='updateMode' name='<%= TagHelper.getFormName(pageContext) %>' value='true'>
+
+#foreach $object in $RelatedObjects.values() #begin
+#if ($(object.Name.Upper1) == $(reference.RelatedObjectName.Upper1)) #begin
+#if ($object.RelationshipToDomainObject.RelationshipTypeMany && $object.RelatedObjectFields != null) #begin
+#if ($(object.FunctionGuardName) != null) #begin
+  <Portlet:FunctionGuard name="$(object.FunctionGuardName)">
+#end
+  <tr>
+    <td colspan='2'>
+      <Portlet:FoldingSection id='$(object.Name.Upper1)' key='<%= $(object.Package.Lower).$(object.ObjectName.Upper1)Meta.getLabelToken() %>' closed='true'>
+        <table>
+          <tr>
+            <td>
+
+#if ($object.RelatedObjectViewer == null) #begin
+              <Portlet:UserGrid field="related$(object.Name.Upper1)" userGridId="$(Application.Lower)_$(Module.Lower)_$(Component.JavaBeanStyle)_$(object.Name.JavaBeanStyle)">
+#else
+              <Portlet:UserGrid field="related$(object.Name.Upper1)" userGridId="$(Application.Lower)_$(Module.Lower)_$(Component.JavaBeanStyle)_$(object.Name.JavaBeanStyle)" detail="true" target="_blank">
+#end
+
+#if ($object.RelatedObjectFields != null) #begin
+#foreach $field in $object.RelatedObjectFields.values() #begin
+#set $wm_attributes = ""
+#if ($field.Label != null) #begin
+#set $wm_attributes = "label='$(field.Label)'"
+#end
+#if ($field.DisplayAsKey != null && $(field.DisplayAsKey.BooleanValue)) #begin
+#set $wm_attributes = "$(wm_attributes) key='true'"
+#end
+#if ($(field.Display.BooleanValue)) #begin
+#if ($(field.FunctionGuardName) != null) #begin
+                <Portlet:FunctionGuard name="$(field.FunctionGuardName)">
+#end
+                <Portlet:Property field='$(field.Name.JavaBeanStyle)'>
+                <Portlet:UserGridColumn dataType="$(field.DataType.GridColumnDataType)" $(wm_attributes)>
+
+#if ($(field.DataType.DataTypeBoolean)) #begin
+                  <Portlet:CheckBox displayOnly="true"/>
+#else
+#set $wm_textAttributes = ""
+#if ($field.Layout != null && $field.Layout.Lower != "") #begin
+#set $wm_textAttributes = "layout=\"$(field.Layout)\""
+#end
+                  <Portlet:Text $(wm_textAttributes)/>
+#end
+
+#if ($(field.AppendField) != null) #begin
+#set $wm_appendBeginMarker = "\"\""
+#set $wm_appendEndMarker = "\"\""
+#if ($field.AppendField.AppendBeginMarker != null) #begin
+#set $wm_appendBeginMarker = "\"$(field.AppendField.AppendBeginMarker)\""
+#end
+#if ($field.AppendField.AppendEndMarker != null) #begin
+#set $wm_appendEndMarker = "\"$(field.AppendField.AppendEndMarker)\""
+#end
+#if ($field.AppendField.AppendBeginMarker == null && $field.AppendField.AppendEndMarker == null) #begin
+#set $wm_appendBeginMarker = "StringHelper.getDefaultDescriptionBeginMarker()"
+#set $wm_appendEndMarker = "StringHelper.getDefaultDescriptionEndMarker()"
+#end
+#foreach $field2 in $object.RelatedObjectFields.values() #begin
+#if ($field2.Name.JavaBeanStyle == $field.AppendField.Name.JavaBeanStyle) #begin
+#set $wm_appendField = $field2
+#end
+#end
+#if ($(wm_appendField.DataType.DataTypeBoolean)) #begin
+                  <%= $(wm_appendBeginMarker) %><Portlet:CheckBox field="$(field.AppendField.Name.JavaBeanStyle)" displayOnly="true"/><%= $(wm_appendEndMarker) %>
+#else
+#set $wm_parameters = "TagHelper.getModelMap(pageContext).get(\"$(field.AppendField.Name.JavaBeanStyle)\")"
+#if ($wm_appendField.Layout != null && $wm_appendField.Layout.Lower != "") #begin
+#set $wm_parameters = "$(wm_parameters), \"$(wm_appendField.Layout)\""
+#else
+#set $wm_parameters = "$(wm_parameters), null"
+#end
+#if ($wm_appendField.SourceChain != null) #begin
+#foreach $source in $wm_appendField.SourceChain.values() #begin #end
+#set $wm_domain = "$(source.Package.Lower).$(source.Object.Upper1)"
+#else
+#set $wm_domain = "$(object.Package.Lower).$(object.ObjectName.Upper1)"
+#end
+#set $wm_parameters = "$(wm_parameters), \"$(wm_domain)\", \"$(wm_appendField.DomainField.Upper1)\", true, $(wm_appendBeginMarker), $(wm_appendEndMarker)"
+                  <%= StringHelper.formatDescription($(wm_parameters)) %>
+#end
+#end
+                 </Portlet:UserGridColumn>
+                 </Portlet:Property>
+
+#if ($(field.FunctionGuardName) != null) #begin
+                 </Portlet:FunctionGuard>
+#end
+#end
+#end
+#end
+
+#if ($object.RelatedObjectViewer != null || $object.RelatedObjectUpdator != null || $object.RelatedObjectDeletor != null) #begin
+                 <Portlet:UserGridColumn label="[label.Jaffa.Widgets.Button.Action]">
+
+#if ($object.RelatedObjectViewer != null) #begin
+                  <Portlet:ComponentGuard name="$(object.RelatedObjectViewer.ComponentName)">
+                    <Portlet:Button field="View" label="[label.Jaffa.Widgets.Button.View]" image="jaffa/imgs/icons/detail.gif" target="_blank"/>
+                  </Portlet:ComponentGuard>
+#end
+
+#if ($object.RelatedObjectUpdator != null) #begin
+                  <Portlet:ComponentGuard name="$(object.RelatedObjectUpdator.ComponentName)">
+                    <Portlet:Button field="Update" label="[label.Jaffa.Widgets.Button.Update]" image="jaffa/imgs/icons/update.gif"/>
+                  </Portlet:ComponentGuard>
+#end
+
+#if ($object.RelatedObjectDeletor != null) #begin
+                  <Portlet:ComponentGuard name="$(object.RelatedObjectDeletor.ComponentName)">
+                    <Portlet:Button field="Delete" label="[label.Jaffa.Widgets.Button.Delete]" image="jaffa/imgs/icons/delete.gif"  confirm="[label.Jaffa.Inquiry.delete.confirm]"/>
+                  </Portlet:ComponentGuard>
+#end
+                </Portlet:UserGridColumn>
+#end
+              </Portlet:UserGrid>
+            </td>
+          </tr>
+          <tr>
+            <td class='createNew'>
+              <Portlet:Button field='Related$(object.Name.Upper1)_Create' type='sized' label='[label.Jaffa.Widgets.Button.CreateNew]'/>
+            </td>
+          </tr>
+        </table>
+      </Portlet:FoldingSection>
+    </td>
+  </tr>
+
+#if ($(object.FunctionGuardName) != null) #begin
+</Portlet:FunctionGuard>
+#end
+#end
+#end
+#end
+</logic:equal>
+#end
+#end
+#end
+#end
+</table>
+
+<%-- A maintenance component may consist of more than one screen. This hidden field is used to identify the current screen being displayed --%>
+<tiles:useAttribute name='currentScreenCounter' classname='String'/>
+<input type='hidden' name='<%= MaintForm.PARAMETER_CURRENT_SCREEN_COUNTER%>' value='<%= currentScreenCounter %>'/>
+
+#end
+#end

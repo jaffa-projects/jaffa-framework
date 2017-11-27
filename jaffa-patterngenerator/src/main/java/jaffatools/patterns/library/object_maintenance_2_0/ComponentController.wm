@@ -1,0 +1,1355 @@
+#set $wm_useForDirtyReadCheckField = null
+#foreach $field in $Fields.values() #begin
+#if ($field.UseForDirtyReadCheck != null && $field.UseForDirtyReadCheck.BooleanValue) #begin
+#if ($field.RelatedObjectName == null) #begin
+#set $wm_useForDirtyReadCheckField = $field
+#end
+#end
+#end
+// .//GEN-BEGIN:_1_be
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ *
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/
+ package $(BasePackage.Lower).components.$(Component.Lower).ui;
+
+import java.util.EventObject;
+import java.util.List;
+import org.apache.log4j.Logger;
+import org.jaffa.presentation.portlet.component.Component;
+import org.jaffa.presentation.portlet.FormKey;
+import org.jaffa.middleware.Factory;
+import org.jaffa.util.BeanHelper;
+import org.jaffa.components.codehelper.ICodeHelper;
+import org.jaffa.components.codehelper.dto.*;
+import org.jaffa.components.maint.*;
+import org.jaffa.components.finder.*;
+import org.jaffa.exceptions.ApplicationExceptions;
+import org.jaffa.exceptions.FrameworkException;
+
+import $(BasePackage.Lower).components.$(Component.Lower).I$(Component.Upper1);
+import $(BasePackage.Lower).components.$(Component.Lower).dto.*;
+
+$ScratchPad.clear()
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+
+#if ($object.RelatedObjectCreator != null) #begin
+#set $wm_package = "$(object.RelatedObjectCreator.Package.Lower).$(object.RelatedObjectCreator.ClassName.Upper1)"
+#if ($ScratchPad.get($wm_package) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_package,$wm_package) != null) #begin #end
+import $(wm_package);
+#end
+#end
+
+#if ($object.RelatedObjectViewer != null) #begin
+#set $wm_package = "$(object.RelatedObjectViewer.Package.Lower).$(object.RelatedObjectViewer.ClassName.Upper1)"
+#if ($ScratchPad.get($wm_package) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_package,$wm_package) != null) #begin #end
+import $(wm_package);
+#end
+#end
+
+#if ($object.RelatedObjectUpdator != null) #begin
+#set $wm_package = "$(object.RelatedObjectUpdator.Package.Lower).$(object.RelatedObjectUpdator.ClassName.Upper1)"
+#if ($ScratchPad.get($wm_package) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_package,$wm_package) != null) #begin #end
+import $(wm_package);
+#end
+#end
+
+#if ($object.RelatedObjectDeletor != null) #begin
+#set $wm_package = "$(object.RelatedObjectDeletor.Package.Lower).$(object.RelatedObjectDeletor.ClassName.Upper1)"
+#if ($ScratchPad.get($wm_package) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_package,$wm_package) != null) #begin #end
+import $(wm_package);
+#end
+#end
+#end
+#end
+$ScratchPad.clear()
+// .//GEN-END:_1_be
+// Add additional imports//GEN-FIRST:_imports
+
+
+
+
+// .//GEN-LAST:_imports
+// .//GEN-BEGIN:_2_be
+/** The controller for the $(Component.Upper1).
+ */
+public class $(Component.Upper1)Component extends MaintComponent2 {
+
+    private static Logger log = Logger.getLogger($(Component.Upper1)Component.class);
+    private I$(Component.Upper1) m_tx = null;
+
+
+#foreach $field in $Fields.values() #begin
+#if ($field.RelatedObjectName == null || $field.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+    private $(field.DataType.JavaDataType) m_$(field.Name.Lower1) = null;
+
+#if ($field.Breakup != null && $field.Breakup.DynamicValues != null) #begin
+    private CodeHelperOutElementDto m_$(field.Name.Lower1)Codes = null;
+#end
+
+#if ($field.Comment != null) #begin
+    private String m_$(field.Name.Lower1)_AdditionalComment = null;
+#end
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+    private $(field.DataType.JavaDataType) m_$(field.Name.Lower1) = null;
+
+#if ($field.Breakup != null && $field.Breakup.DynamicValues != null) #begin
+    private CodeHelperOutElementDto m_$(field.Name.Lower1)Codes = null;
+#end
+#end
+#end
+#end
+#end
+
+
+#set $wm_codeHelperAdded = "false"
+#foreach $field in $Fields.values() #begin
+#if ($field.RelatedObjectName == null || $field.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#if ($wm_codeHelperAdded == "false" && $field.Breakup != null && $field.Breakup.DynamicValues != null && $field.Breakup.DynamicValues.CodeHelperInterface == null) #begin
+#set $wm_codeHelperAdded = "true"
+    private ICodeHelper m_codeHelperTx = null;
+#elseif ($field.Breakup != null && $field.Breakup.DynamicValues != null && $field.Breakup.DynamicValues.CodeHelperInterface != null) #begin
+    private ICodeHelper m_$(field.Name.Lower1)CodeHelperTx = null;
+#end
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($wm_codeHelperAdded == "false" && $field.Breakup != null && $field.Breakup.DynamicValues != null && $field.Breakup.DynamicValues.CodeHelperInterface == null) #begin
+#set $wm_codeHelperAdded = "true"
+    private ICodeHelper m_codeHelperTx = null;
+#elseif ($field.Breakup != null && $field.Breakup.DynamicValues != null && $field.Breakup.DynamicValues.CodeHelperInterface != null) #begin
+    private ICodeHelper m_$(field.Name.Lower1)CodeHelperTx = null;
+#end
+#end
+#end
+#end
+#end
+
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelationshipToDomainObject.RelationshipTypeMany && $object.RelatedObjectFields != null) #begin
+    private $(object.Name.Upper1)Dto[] m_relatedObject$(object.Name.Upper1)Dto = null;
+
+#if ($object.RelatedObjectCreator != null) #begin
+    private $(object.RelatedObjectCreator.ClassName.Upper1) m_create$(object.Name.Upper1) = null;
+    private ICreateListener m_createListener$(object.Name.Upper1) = null;
+#end
+
+#if ($object.RelatedObjectUpdator != null) #begin
+    private $(object.RelatedObjectUpdator.ClassName.Upper1) m_update$(object.Name.Upper1) = null;
+    private IUpdateListener m_updateListener$(object.Name.Upper1) = null;
+#end
+
+#if ($object.RelatedObjectDeletor != null) #begin
+    private $(object.RelatedObjectDeletor.ClassName.Upper1) m_delete$(object.Name.Upper1) = null;
+    private IDeleteListener m_deleteListener$(object.Name.Upper1) = null;
+#end
+#end
+#end
+#end
+    // .//GEN-END:_2_be
+    // .//GEN-BEGIN:_quit_1_be
+    /** This should be invoked when done with the component.
+     */
+    public void quit() {
+        // .//GEN-END:_quit_1_be
+        // Add custom code before processing the method //GEN-FIRST:_quit_1
+
+
+        // .//GEN-LAST:_quit_1
+        // .//GEN-BEGIN:_quit_2_be
+        if (m_tx != null) {
+            m_tx.destroy();
+            m_tx = null;
+        }
+
+#set $wm_codeHelperAdded = "false"
+#foreach $field in $Fields.values() #begin
+#if ($field.RelatedObjectName == null || $field.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#if ($field.Breakup != null && $field.Breakup.DynamicValues != null) #begin
+#if ($wm_codeHelperAdded == "false" && $field.Breakup.DynamicValues.CodeHelperInterface == null) #begin
+#set $wm_codeHelperAdded = "true"
+        if (m_codeHelperTx != null) {
+            m_codeHelperTx.destroy();
+            m_codeHelperTx = null;
+        }
+#elseif ($field.Breakup.DynamicValues.CodeHelperInterface != null) #begin
+        if (m_$(field.Name.Lower1)CodeHelperTx != null) {
+            m_$(field.Name.Lower1)CodeHelperTx.destroy();
+            m_$(field.Name.Lower1)CodeHelperTx = null;
+        }
+#end
+        m_$(field.Name.Lower1)Codes = null;
+#end
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($field.Breakup != null && $field.Breakup.DynamicValues != null) #begin
+#if ($wm_codeHelperAdded == "false" && $field.Breakup.DynamicValues.CodeHelperInterface == null) #begin
+#set $wm_codeHelperAdded = "true"
+        if (m_codeHelperTx != null) {
+            m_codeHelperTx.destroy();
+            m_codeHelperTx = null;
+        }
+#elseif ($field.Breakup.DynamicValues.CodeHelperInterface != null) #begin
+        if (m_$(field.Name.Lower1)CodeHelperTx != null) {
+            m_$(field.Name.Lower1)CodeHelperTx.destroy();
+            m_$(field.Name.Lower1)CodeHelperTx = null;
+        }
+#end
+        m_$(field.Name.Lower1)Codes = null;
+#end
+#end
+#end
+#end
+#end
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelationshipToDomainObject.RelationshipTypeMany && $object.RelatedObjectFields != null) #begin
+        m_relatedObject$(object.Name.Upper1)Dto = null;
+
+#if ($object.RelatedObjectCreator != null) #begin
+        if (m_create$(object.Name.Upper1) != null) {
+            m_create$(object.Name.Upper1).quit();
+            m_create$(object.Name.Upper1) = null;
+        }
+        m_createListener$(object.Name.Upper1) = null;
+#end
+
+#if ($object.RelatedObjectUpdator != null) #begin
+        if (m_update$(object.Name.Upper1) != null) {
+            m_update$(object.Name.Upper1).quit();
+            m_update$(object.Name.Upper1) = null;
+        }
+        m_updateListener$(object.Name.Upper1) = null;
+#end
+
+#if ($object.RelatedObjectDeletor != null) #begin
+        if (m_delete$(object.Name.Upper1) != null) {
+            m_delete$(object.Name.Upper1).quit();
+            m_delete$(object.Name.Upper1) = null;
+        }
+        m_deleteListener$(object.Name.Upper1) = null;
+#end
+#end
+#end
+#end
+        super.quit();
+    }
+    // .//GEN-END:_quit_2_be
+
+#foreach $field in $Fields.values() #begin
+#if ($field.RelatedObjectName == null || $field.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+    // .//GEN-BEGIN:$(field.Name.Lower1)_1_be
+    /** Getter for property $(field.Name.Lower1).
+     * @return Value of property $(field.Name.Lower1).
+     */
+    public $(field.DataType.JavaDataType) get$(field.Name.Upper1)() {
+        return m_$(field.Name.Lower1);
+    }
+
+    /** Setter for property $(field.Name.Lower1).
+     * @param $(field.Name.Lower1) New value of property $(field.Name.Lower1).
+     */
+    public void set$(field.Name.Upper1)($(field.DataType.JavaDataType) $(field.Name.Lower1)) {
+        m_$(field.Name.Lower1) = $(field.Name.Lower1);
+    }
+
+#if ($field.Breakup != null && $field.Breakup.DynamicValues != null) #begin
+
+    /** Getter for property $(field.Name.Lower1)Codes.
+     * @return Value of property $(field.Name.Lower1)Dd.
+     */
+    public CodeHelperOutElementDto get$(field.Name.Upper1)Codes() {
+        return m_$(field.Name.Lower1)Codes;
+    }
+#end
+
+#if ($field.Comment != null) #begin
+
+    /** Getter for property $(field.Name.Lower1)_AdditionalComment.
+     * @return Value of property $(field.Name.Lower1)_AdditionalComment.
+     */
+    public String get$(field.Name.Upper1)_AdditionalComment() {
+        return m_$(field.Name.Lower1)_AdditionalComment;
+    }
+    
+    /** Setter for property $(field.Name.Lower1)_AdditionalComment.
+     * @param $(field.Name.Lower1)_AdditionalComment New value of property $(field.Name.Lower1)_AdditionalComment.
+     */
+    public void set$(field.Name.Upper1)_AdditionalComment(String $(field.Name.Lower1)_AdditionalComment) {
+        m_$(field.Name.Lower1)_AdditionalComment = $(field.Name.Lower1)_AdditionalComment;
+    }
+#end
+    // .//GEN-END:$(field.Name.Lower1)_1_be
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+    // .//GEN-BEGIN:$(field.Name.Lower1)_1_be
+    /** Getter for property $(field.Name.Lower1).
+     * @return Value of property $(field.Name.Lower1).
+     */
+    public $(field.DataType.JavaDataType) get$(field.Name.Upper1)() {
+        return m_$(field.Name.Lower1);
+    }
+
+    /** Setter for property $(field.Name.Lower1).
+     * @param $(field.Name.Lower1) New value of property $(field.Name.Lower1).
+     */
+    public void set$(field.Name.Upper1)($(field.DataType.JavaDataType) $(field.Name.Lower1)) {
+        m_$(field.Name.Lower1) = $(field.Name.Lower1);
+    }
+
+#if ($field.Breakup != null && $field.Breakup.DynamicValues != null) #begin
+    /** Getter for property $(field.Name.Lower1)Codes.
+     * @return Value of property $(field.Name.Lower1)Dd.
+     */
+    public CodeHelperOutElementDto get$(field.Name.Upper1)Codes() {
+        return m_$(field.Name.Lower1)Codes;
+    }
+#end
+    // .//GEN-END:$(field.Name.Lower1)_1_be
+#end
+#end
+#end
+#end
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelationshipToDomainObject.RelationshipTypeMany && $object.RelatedObjectFields != null) #begin
+#set $wm_signature = ""
+#set $firstPass = "true"
+#foreach $field in $object.RelatedObjectKeyFields.values() #begin
+#if ($firstPass == "true") #begin
+#set $firstPass = "false"
+#else
+#set $wm_signature = "$(wm_signature), "
+#end
+#set $wm_signature = "$(wm_signature)$(field.DataType.JavaDataType) $(field.FieldNameInTargetComponent.Lower1)"
+#end
+    // .//GEN-BEGIN:RelatedObject$(object.Name.Upper1)Dto_1_be
+    /** Getter for property RelatedObject$(object.Name.Upper1)Dto.
+     * @return Value of property RelatedObject$(object.Name.Upper1)Dto.
+     */
+    public $(object.Name.Upper1)Dto[] getRelatedObject$(object.Name.Upper1)Dto() {
+        return m_relatedObject$(object.Name.Upper1)Dto;
+    }
+    // .//GEN-END:RelatedObject$(object.Name.Upper1)Dto_1_be
+
+#if ($object.RelatedObjectCreator != null) #begin
+    // .//GEN-BEGIN:_create$(object.Name.Upper1)_1_be
+    /** Calls the $(object.RelatedObjectCreator.ComponentName) component for creating the $(object.Name.Upper1) object.
+     * @throws ApplicationExceptions This will be thrown in case any invalid data has been set.
+     * @throws FrameworkException Indicates some system error.
+     * @return The FormKey for the Create screen.
+     */
+    public FormKey create$(object.Name.Upper1)() throws ApplicationExceptions, FrameworkException {
+        if (m_create$(object.Name.Upper1) == null || !m_create$(object.Name.Upper1).isActive()) {
+            m_create$(object.Name.Upper1) = ($(object.RelatedObjectCreator.ClassName.Upper1)) run("$(object.RelatedObjectCreator.ComponentName)");
+            m_create$(object.Name.Upper1).setReturnToFormKey(determineFormKey());
+            addListeners$(object.Name.Upper1)(m_create$(object.Name.Upper1));
+        }
+
+#foreach $joinField in $object.RelatedObjectJoinFields.values() #begin
+        m_create$(object.Name.Upper1).set$(joinField.RelatedObjectFieldName.Upper1)(get$(joinField.Name.Upper1)());
+        m_create$(object.Name.Upper1).addDisplayOnlyField("$(joinField.RelatedObjectFieldName.Lower1)");
+#end
+        if (m_create$(object.Name.Upper1) instanceof IMaintComponent)
+            ((IMaintComponent) m_create$(object.Name.Upper1)).setMode(IMaintComponent.MODE_CREATE);
+        // .//GEN-END:_create$(object.Name.Upper1)_1_be
+        // Add custom code before invoking the component //GEN-FIRST:_create$(object.Name.Upper1)_2
+
+
+        // .//GEN-LAST:_create$(object.Name.Upper1)_2
+        // .//GEN-BEGIN:_create$(object.Name.Upper1)_2_be
+        return m_create$(object.Name.Upper1).display();
+    }
+
+    private ICreateListener getCreateListener$(object.Name.Upper1)() {
+        if (m_createListener$(object.Name.Upper1) == null) {
+            m_createListener$(object.Name.Upper1) = new ICreateListener() {
+                public void createDone(EventObject source) {
+                    try {
+                        // .//GEN-END:_create$(object.Name.Upper1)_2_be
+                        // Add custom code //GEN-FIRST:_create$(object.Name.Upper1)_1
+
+
+                        // .//GEN-LAST:_create$(object.Name.Upper1)_1
+                        // .//GEN-BEGIN:_create$(object.Name.Upper1)_3_be
+                        retrieve$(object.Name.Upper1)();
+                    } catch (Exception e) {
+                        log.warn("Error in refreshing the screen after the Create", e);
+                    }
+                }
+            };
+        }
+        return m_createListener$(object.Name.Upper1);
+    }
+    // .//GEN-END:_create$(object.Name.Upper1)_3_be
+#end
+
+#if ($object.RelatedObjectViewer != null) #begin
+    // .//GEN-BEGIN:_view$(object.Name.Upper1)_1_be
+    /** Calls the $(object.RelatedObjectViewer.ComponentName) component for viewing the $(object.Name.Upper1) object.
+     * @throws ApplicationExceptions This will be thrown in case any invalid data has been set.
+     * @throws FrameworkException Indicates some system error.
+     * @return The FormKey for the View screen.
+     */
+    public FormKey view$(object.Name.Upper1)($wm_signature) throws ApplicationExceptions, FrameworkException {
+        $(object.RelatedObjectViewer.ClassName.Upper1) viewComponent = ($(object.RelatedObjectViewer.ClassName.Upper1)) run("$(object.RelatedObjectViewer.ComponentName)");
+        viewComponent.setReturnToFormKey(FormKey.getCloseBrowserFormKey());
+
+#foreach $field in $object.RelatedObjectKeyFields.values() #begin
+        viewComponent.set$(field.FieldNameInTargetComponent.Upper1)($(field.FieldNameInTargetComponent.Lower1));
+#end
+        // .//GEN-END:_view$(object.Name.Upper1)_1_be
+        // Add custom code before invoking the component //GEN-FIRST:_view$(object.Name.Upper1)_1
+
+
+        // .//GEN-LAST:_view$(object.Name.Upper1)_1
+        // .//GEN-BEGIN:_view$(object.Name.Upper1)_2_be
+        return viewComponent.display();
+    }
+    // .//GEN-END:_view$(object.Name.Upper1)_2_be
+#end
+
+#if ($object.RelatedObjectUpdator != null) #begin
+    // .//GEN-BEGIN:_update$(object.Name.Upper1)_1_be
+    /** Calls the $(object.RelatedObjectUpdator.ComponentName) component for updating the $(object.Name.Upper1) object.
+     * @throws ApplicationExceptions This will be thrown in case any invalid data has been set.
+     * @throws FrameworkException Indicates some system error.
+     * @return The FormKey for the Update screen.
+     */
+    public FormKey update$(object.Name.Upper1)($wm_signature) throws ApplicationExceptions, FrameworkException {
+        if (m_update$(object.Name.Upper1) == null || !m_update$(object.Name.Upper1).isActive()) {
+            m_update$(object.Name.Upper1) = ($(object.RelatedObjectUpdator.ClassName.Upper1)) run("$(object.RelatedObjectUpdator.ComponentName)");
+            m_update$(object.Name.Upper1).setReturnToFormKey(determineFormKey());
+            addListeners$(object.Name.Upper1)(m_update$(object.Name.Upper1));
+        }
+
+#foreach $field in $object.RelatedObjectKeyFields.values() #begin
+        m_update$(object.Name.Upper1).set$(field.FieldNameInTargetComponent.Upper1)($(field.FieldNameInTargetComponent.Lower1));
+#end
+        if (m_update$(object.Name.Upper1) instanceof IMaintComponent)
+            ((IMaintComponent) m_update$(object.Name.Upper1)).setMode(IMaintComponent.MODE_UPDATE);
+        // .//GEN-END:_update$(object.Name.Upper1)_1_be
+        // Add custom code before invoking the component //GEN-FIRST:_update$(object.Name.Upper1)_2
+
+
+        // .//GEN-LAST:_update$(object.Name.Upper1)_2
+        // .//GEN-BEGIN:_update$(object.Name.Upper1)_2_be
+        return m_update$(object.Name.Upper1).display();
+    }
+
+    private IUpdateListener getUpdateListener$(object.Name.Upper1)() {
+        if (m_updateListener$(object.Name.Upper1) == null) {
+            m_updateListener$(object.Name.Upper1) = new IUpdateListener() {
+                public void updateDone(EventObject source) {
+                    try {
+                        // .//GEN-END:_update$(object.Name.Upper1)_2_be
+                        // Add custom code //GEN-FIRST:_update$(object.Name.Upper1)_1
+
+
+                        // .//GEN-LAST:_update$(object.Name.Upper1)_1
+                        // .//GEN-BEGIN:_update$(object.Name.Upper1)_3_be
+                        retrieve$(object.Name.Upper1)();
+                    } catch (Exception e) {
+                        log.warn("Error in refreshing the screen after the Update", e);
+                    }
+                }
+            };
+        }
+        return m_updateListener$(object.Name.Upper1);
+    }
+    // .//GEN-END:_update$(object.Name.Upper1)_3_be
+#end
+
+#if ($object.RelatedObjectDeletor != null) #begin
+    // .//GEN-BEGIN:_delete$(object.Name.Upper1)_1_be
+    /** Calls the $(object.RelatedObjectDeletor.ComponentName) component for deleting the $(object.Name.Upper1) object.
+     * @throws ApplicationExceptions This will be thrown in case any invalid data has been set.
+     * @throws FrameworkException Indicates some system error.
+     * @return The FormKey for the Delete screen.
+     */
+    public FormKey delete$(object.Name.Upper1)($wm_signature) throws ApplicationExceptions, FrameworkException {
+        if (m_delete$(object.Name.Upper1) == null || !m_delete$(object.Name.Upper1).isActive()) {
+            m_delete$(object.Name.Upper1) = ($(object.RelatedObjectDeletor.ClassName.Upper1)) run("$(object.RelatedObjectDeletor.ComponentName)");
+            m_delete$(object.Name.Upper1).setReturnToFormKey(determineFormKey());
+            addListeners$(object.Name.Upper1)(m_delete$(object.Name.Upper1));
+        }
+
+#foreach $field in $object.RelatedObjectKeyFields.values() #begin
+        m_delete$(object.Name.Upper1).set$(field.FieldNameInTargetComponent.Upper1)($(field.FieldNameInTargetComponent.Lower1));
+#end
+        if (m_delete$(object.Name.Upper1) instanceof IMaintComponent)
+            ((IMaintComponent) m_delete$(object.Name.Upper1)).setMode(IMaintComponent.MODE_DELETE);
+        // .//GEN-END:_delete$(object.Name.Upper1)_1_be
+        // Add custom code before invoking the component //GEN-FIRST:_delete$(object.Name.Upper1)_2
+
+
+        // .//GEN-LAST:_delete$(object.Name.Upper1)_2
+        // .//GEN-BEGIN:_delete$(object.Name.Upper1)_2_be
+        return m_delete$(object.Name.Upper1).display();
+    }
+
+    private IDeleteListener getDeleteListener$(object.Name.Upper1)() {
+        if (m_deleteListener$(object.Name.Upper1) == null) {
+            m_deleteListener$(object.Name.Upper1) = new IDeleteListener() {
+                public void deleteDone(EventObject source) {
+                    try {
+                        // .//GEN-END:_delete$(object.Name.Upper1)_2_be
+                        // Add custom code //GEN-FIRST:_delete$(object.Name.Upper1)_1
+
+
+                        // .//GEN-LAST:_delete$(object.Name.Upper1)_1
+                        // .//GEN-BEGIN:_delete$(object.Name.Upper1)_3_be
+                        retrieve$(object.Name.Upper1)();
+                    } catch (Exception e) {
+                        log.warn("Error in refreshing the screen after the Delete", e);
+                    }
+                }
+            };
+        }
+        return m_deleteListener$(object.Name.Upper1);
+    }
+    // .//GEN-END:_delete$(object.Name.Upper1)_3_be
+#end
+
+#if ($object.RelatedObjectCreator != null || $object.RelatedObjectUpdator != null || $object.RelatedObjectDeletor != null) #begin
+    // .//GEN-BEGIN:_addListeners$(object.Name.Upper1)_1_be
+    private void addListeners$(object.Name.Upper1)(Component comp) {
+
+#if ($object.RelatedObjectCreator != null) #begin
+        if (comp  instanceof ICreateComponent)
+            ((ICreateComponent) comp).addCreateListener(getCreateListener$(object.Name.Upper1)());
+#end
+
+#if ($object.RelatedObjectUpdator != null) #begin
+        if (comp  instanceof IUpdateComponent)
+            ((IUpdateComponent) comp).addUpdateListener(getUpdateListener$(object.Name.Upper1)());
+#end
+
+#if ($object.RelatedObjectDeletor != null) #begin
+        if (comp  instanceof IDeleteComponent)
+            ((IDeleteComponent) comp).addDeleteListener(getDeleteListener$(object.Name.Upper1)());
+#end
+    }
+    // .//GEN-END:_addListeners$(object.Name.Upper1)_1_be
+#end
+    // .//GEN-BEGIN:_retrieve$(object.Name.Upper1)_1_be
+    private void retrieve$(object.Name.Upper1)() throws ApplicationExceptions, FrameworkException {
+        // perform the retrieve
+        $(Component.Upper1)RetrieveOutDto retrieveOutDto = obtainRetrieveOutDto();
+
+        // clear the widget cache
+        getUserSession().getWidgetCache(getComponentId()).removeModel("related$(object.Name.Upper1)");
+
+        // obtain the data for the related object
+        if (retrieveOutDto != null)
+            m_relatedObject$(object.Name.Upper1)Dto = retrieveOutDto.get$(object.Name.Upper1)();
+    }
+    // .//GEN-END:_retrieve$(object.Name.Upper1)_1_be
+#end
+#end
+#end
+    // .//GEN-BEGIN:_doCreate_1_be
+    /** This will invoke the create method on the transaction to create a new domain object.
+     * @throws ApplicationExceptions Indicates some functional error.
+     * @throws FrameworkException Indicates some system error.
+     */
+    protected void doCreate() throws ApplicationExceptions, FrameworkException {
+        $(Component.Upper1)CreateInDto input = new $(Component.Upper1)CreateInDto();
+        // .//GEN-END:_doCreate_1_be
+        // Add custom code //GEN-FIRST:_doCreate_1
+
+
+        // .//GEN-LAST:_doCreate_1
+        // .//GEN-BEGIN:_doCreate_2_be
+        input.setHeaderDto(getHeaderDto());
+
+#foreach $field in $Fields.values() #begin
+#if ($(field.StampType) == null) #begin
+#if ($field.RelatedObjectName == null || $field.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#if ($field.Comment == null) #begin
+        input.set$(field.Name.Upper1)(get$(field.Name.Upper1)());
+#else
+        input.set$(field.Name.Upper1)_AdditionalComment(get$(field.Name.Upper1)_AdditionalComment());
+#end
+#end
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.KeyType.Upper) == "PRIMARY" || $(field.KeyType.Upper) == "CANDIDATE") #begin
+        input.set$(field.Name.Upper1)(get$(field.Name.Upper1)());
+#end
+#end
+#end
+#end
+#end
+        $(Component.Upper1)RetrieveOutDto output = createTx().create(input);
+        loadRetrieveOutDto(output);
+        // .//GEN-END:_doCreate_2_be
+        // Add custom code //GEN-FIRST:_doCreate_2
+
+
+        // .//GEN-LAST:_doCreate_2
+        // .//GEN-BEGIN:_doCreate_3_be
+    }
+    // .//GEN-END:_doCreate_3_be
+    // .//GEN-BEGIN:_doUpdate_1_be
+    /** This will invoke the update method on the transaction to update an existing domain object.
+     * @param performDirtyReadCheck this will determine if the Dirty Read check if to be performed prior to an update.
+     * @throws ApplicationExceptions Indicates some functional error.
+     * @throws FrameworkException Indicates some system error.
+     */
+    protected void doUpdate(boolean performDirtyReadCheck) throws ApplicationExceptions, FrameworkException {
+        $(Component.Upper1)UpdateInDto input = new $(Component.Upper1)UpdateInDto();
+        // .//GEN-END:_doUpdate_1_be
+        // Add custom code //GEN-FIRST:_doUpdate_1
+
+
+        // .//GEN-LAST:_doUpdate_1
+        // .//GEN-BEGIN:_doUpdate_2_be
+        input.setHeaderDto(getHeaderDto());
+        input.setPerformDirtyReadCheck(new Boolean(performDirtyReadCheck));
+
+#foreach $field in $Fields.values() #begin
+#if ($(field.StampType) == null) #begin
+#if ($field.RelatedObjectName == null || $field.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#if ($field.Comment == null) #begin
+        input.set$(field.Name.Upper1)(get$(field.Name.Upper1)());
+#else
+        input.set$(field.Name.Upper1)_AdditionalComment(get$(field.Name.Upper1)_AdditionalComment());
+#end
+#end
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.KeyType.Upper) == "PRIMARY" || $(field.KeyType.Upper) == "CANDIDATE") #begin
+        input.set$(field.Name.Upper1)(get$(field.Name.Upper1)());
+#end
+#end
+#end
+#end
+#end
+
+#if ($wm_useForDirtyReadCheckField != null) #begin
+#set $field = $wm_useForDirtyReadCheckField
+        input.set$(field.Name.Upper1)(get$(field.Name.Upper1)());
+#end
+        $(Component.Upper1)RetrieveOutDto output = createTx().update(input);
+        loadRetrieveOutDto(output);
+        // .//GEN-END:_doUpdate_2_be
+        // Add custom code //GEN-FIRST:_doUpdate_2
+
+
+        // .//GEN-LAST:_doUpdate_2
+        // .//GEN-BEGIN:_doUpdate_3_be
+    }
+    // .//GEN-END:_doUpdate_3_be
+    // .//GEN-BEGIN:_doDelete_1_be
+    /** This will invoke the delete method on the transaction to delete an existing domain object.
+     * @param performDirtyReadCheck this will determine if the Dirty Read check if to be performed prior to a delete.
+     * @throws ApplicationExceptions Indicates some functional error.
+     * @throws FrameworkException Indicates some system error.
+     */
+    protected void doDelete(boolean performDirtyReadCheck) throws ApplicationExceptions, FrameworkException {
+        $(Component.Upper1)DeleteInDto input = new $(Component.Upper1)DeleteInDto();
+        // .//GEN-END:_doDelete_1_be
+        // Add custom code //GEN-FIRST:_doDelete_1
+
+
+        // .//GEN-LAST:_doDelete_1
+        // .//GEN-BEGIN:_doDelete_2_be
+        input.setHeaderDto(getHeaderDto());
+        input.setPerformDirtyReadCheck(new Boolean(performDirtyReadCheck));
+
+#foreach $field in $KeyFields.values() #begin
+        input.set$(field.Name.Upper1)(get$(field.Name.Upper1)());
+#end
+
+#if ($wm_useForDirtyReadCheckField != null) #begin
+#set $field = $wm_useForDirtyReadCheckField
+        input.set$(field.Name.Upper1)(get$(field.Name.Upper1)());
+#end
+        createTx().delete(input);
+        // .//GEN-END:_doDelete_2_be
+        // Add custom code //GEN-FIRST:_doDelete_2
+
+
+        // .//GEN-LAST:_doDelete_2
+        // .//GEN-BEGIN:_doDelete_3_be
+    }
+    // .//GEN-END:_doDelete_3_be
+    // .//GEN-BEGIN:_doRetrieve_1_be
+    /** This will invoke the retrieve method on the transaction to retrieve an existing domain object.
+     * @throws ApplicationExceptions Indicates some functional error.
+     * @throws FrameworkException Indicates some system error.
+     */
+    protected void doRetrieve() throws ApplicationExceptions, FrameworkException {
+        $(Component.Upper1)RetrieveOutDto output = obtainRetrieveOutDto();
+        loadRetrieveOutDto(output);
+    }
+    // .//GEN-END:_doRetrieve_1_be
+    // .//GEN-BEGIN:_addScreens_1_be
+    /** This sets up the screen information.
+     * @param screens The component should add MaintComponent2.Screen objects to this list.
+     */
+    protected void addScreens(List screens) {
+
+#foreach $screen in $Screens.values() #begin
+        screens.add(new MaintComponent2.Screen("$(Module.Lower)_$(Component.Lower1)_$(screen.Name.Lower1)", $(screen.AvailableInUpdateMode.BooleanValue), $(screen.AvailableInCreateMode.BooleanValue), $(screen.SaveActionAvailableInCreateMode.BooleanValue), $(screen.PerformTxValidationOnNextAction.BooleanValue)));
+#end
+        // .//GEN-END:_addScreens_1_be
+        // Add custom code //GEN-FIRST:_addScreens_1
+
+
+        // .//GEN-LAST:_addScreens_1
+        // .//GEN-BEGIN:_addScreens_2_be
+    }
+    // .//GEN-END:_addScreens_2_be
+    // .//GEN-BEGIN:_doPrevalidateCreate_1_be
+    /** This performs prevalidations before creating a domain object.
+     * @throws ApplicationExceptions This will be thrown in case any invalid data has been set.
+     * @throws FrameworkException Indicates some system error.
+     */
+    protected void doPrevalidateCreate() throws ApplicationExceptions, FrameworkException {
+        $(Component.Upper1)CreateInDto input = new $(Component.Upper1)CreateInDto();
+        // .//GEN-END:_doPrevalidateCreate_1_be
+        // Add custom code //GEN-FIRST:_doPrevalidateCreate_1
+
+
+        // .//GEN-LAST:_doPrevalidateCreate_1
+        // .//GEN-BEGIN:_doPrevalidateCreate_2_be
+        input.setHeaderDto(getHeaderDto());
+
+#foreach $field in $Fields.values() #begin
+#if ($(field.StampType) == null) #begin
+#if ($field.RelatedObjectName == null || $field.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#if ($field.Comment == null) #begin
+        input.set$(field.Name.Upper1)(get$(field.Name.Upper1)());
+#else
+        input.set$(field.Name.Upper1)_AdditionalComment(get$(field.Name.Upper1)_AdditionalComment());
+#end
+#end
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.KeyType.Upper) == "PRIMARY" || $(field.KeyType.Upper) == "CANDIDATE") #begin
+        input.set$(field.Name.Upper1)(get$(field.Name.Upper1)());
+#end
+#end
+#end
+#end
+#end
+        $(Component.Upper1)PrevalidateOutDto output = createTx().prevalidateCreate(input);
+        loadPrevalidateOutDto(output);
+        // .//GEN-END:_doPrevalidateCreate_2_be
+        // Add custom code //GEN-FIRST:_doPrevalidateCreate_2
+
+
+        // .//GEN-LAST:_doPrevalidateCreate_2
+        // .//GEN-BEGIN:_doPrevalidateCreate_3_be
+    }
+    // .//GEN-END:_doPrevalidateCreate_3_be
+    // .//GEN-BEGIN:_doPrevalidateUpdate_1_be
+    /** This performs prevalidations before updating a domain object.
+     * @param performDirtyReadCheck this will determine if the Dirty Read check if to be performed prior to an update.
+     * @throws ApplicationExceptions This will be thrown in case any invalid data has been set.
+     * @throws FrameworkException Indicates some system error.
+     */
+    protected void doPrevalidateUpdate(boolean performDirtyReadCheck) throws ApplicationExceptions, FrameworkException {
+        $(Component.Upper1)UpdateInDto input = new $(Component.Upper1)UpdateInDto();
+        // .//GEN-END:_doPrevalidateUpdate_1_be
+        // Add custom code //GEN-FIRST:_doPrevalidateUpdate_1
+
+
+        // .//GEN-LAST:_doPrevalidateUpdate_1
+        // .//GEN-BEGIN:_doPrevalidateUpdate_2_be
+        input.setHeaderDto(getHeaderDto());
+        input.setPerformDirtyReadCheck(new Boolean(performDirtyReadCheck));
+
+#foreach $field in $Fields.values() #begin
+#if ($(field.StampType) == null) #begin
+#if ($field.RelatedObjectName == null || $field.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#if ($field.Comment == null) #begin
+        input.set$(field.Name.Upper1)(get$(field.Name.Upper1)());
+#else
+        input.set$(field.Name.Upper1)_AdditionalComment(get$(field.Name.Upper1)_AdditionalComment());
+#end
+#end
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.KeyType.Upper) == "PRIMARY" || $(field.KeyType.Upper) == "CANDIDATE") #begin
+        input.set$(field.Name.Upper1)(get$(field.Name.Upper1)());
+#end
+#end
+#end
+#end
+#end
+
+#if ($wm_useForDirtyReadCheckField != null) #begin
+#set $field = $wm_useForDirtyReadCheckField
+        input.set$(field.Name.Upper1)(get$(field.Name.Upper1)());
+#end
+        $(Component.Upper1)PrevalidateOutDto output = createTx().prevalidateUpdate(input);
+        loadPrevalidateOutDto(output);
+        // .//GEN-END:_doPrevalidateUpdate_2_be
+        // Add custom code //GEN-FIRST:_doPrevalidateUpdate_2
+
+
+        // .//GEN-LAST:_doPrevalidateUpdate_2
+        // .//GEN-BEGIN:_doPrevalidateUpdate_3_be
+    }
+    // .//GEN-END:_doPrevalidateUpdate_3_be
+    // .//GEN-BEGIN:_initDropDownCodes_1_be
+    /** This will retrieve the set of codes for dropdowns, if any are required
+     */
+    protected void initDropDownCodes() throws ApplicationExceptions, FrameworkException {
+        ApplicationExceptions appExps = null;
+        CodeHelperInDto input = null;
+
+#set $wm_codeHelperAdded = "false"
+#foreach $field in $Fields.values() #begin
+#if ($field.RelatedObjectName == null || $field.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#if ($field.Breakup != null && $field.Breakup.DynamicValues != null && $field.Breakup.DynamicValues.CodeHelperInterface == null) #begin
+#if ($wm_codeHelperAdded == "false") #begin
+#set $wm_codeHelperAdded = "true"
+        if (m_codeHelperTx == null)
+            m_codeHelperTx = (ICodeHelper) Factory.createObject(ICodeHelper.class);
+#end
+        if (m_$(field.Name.Lower1)Codes == null) {
+            if (input == null)
+                input = new CodeHelperInDto();
+            CodeHelperInElementDto codeHelperInElementDto = new CodeHelperInElementDto();
+            codeHelperInElementDto.setCode("$(field.Name.Lower1)");
+            codeHelperInElementDto.setDomainClassName("$(field.Breakup.DynamicValues.DomainClassName)");
+            codeHelperInElementDto.setCodeFieldName("$(field.Breakup.DynamicValues.CodeFieldName)");
+            codeHelperInElementDto.setDescriptionFieldName("$(field.Breakup.DynamicValues.DescriptionFieldName)");
+
+#if ($field.Breakup.DynamicValues.BreakupCriteriaFields != null) #begin
+#foreach $bfield in $field.Breakup.DynamicValues.BreakupCriteriaFields.values() #begin
+#set $wm_domainObject = "$(field.Breakup.DynamicValues.DomainClassName)"
+#if ($(bfield.DataType.CriteriaFieldTypeThrowsException)) #begin
+#if ($(bfield.DomainField.Lower) != "") #begin
+#set $wm_meta = "($(bfield.DataType.MetaFieldType)) $(wm_domainObject)Meta.META_$(bfield.DomainField.Static)"
+#else
+#set $wm_meta = "null"
+#end
+            try {
+                CriteriaElementDto criteriaElementDto = new CriteriaElementDto();
+                criteriaElementDto.setFieldName("$(bfield.DomainField.Upper1)");
+                criteriaElementDto.setCriteria($(bfield.DataType.CriteriaFieldType).get$(bfield.DataType.CriteriaFieldType)(CriteriaField.$(bfield.Operator), "$(bfield.Values)", $(wm_meta)));
+                codeHelperInElementDto.addCriteriaField(criteriaElementDto);
+            } catch (ValidationException e) {
+                if (appExps == null)
+                    appExps = new ApplicationExceptions();
+
+#if ($(bfield.DomainField.Lower) == "" && $(bfield.Label) != null && $(bfield.Label.Lower) != "") #begin
+                e.setField("$(bfield.Label)");
+#elseif ($(bfield.DomainField.Lower) == "" && ($(bfield.Label) == null || $(bfield.Label.Lower) == "")) #begin
+                e.setField("$(bfield.Name)");
+#end
+                appExps.add(e);
+            }
+#else
+##  this comment should prevent the following brace to be treated as a webmacro block marker
+            {
+                CriteriaElementDto criteriaElementDto = new CriteriaElementDto();
+                criteriaElementDto.setFieldName("$(bfield.DomainField.Upper1)");
+                criteriaElementDto.setCriteria($(bfield.DataType.CriteriaFieldType).get$(bfield.DataType.CriteriaFieldType)(CriteriaField.$(bfield.Operator), "$(bfield.Values)", null));
+                codeHelperInElementDto.addCriteriaField(criteriaElementDto);
+            }
+#end
+#end
+#end
+
+#if ($(field.Breakup.DynamicValues.AppendCodeAndDescription) != null && $(field.Breakup.DynamicValues.AppendCodeAndDescription.BooleanValue)) #begin
+            codeHelperInElementDto.setAppendCodeAndDescription(true);
+
+#if ($field.Breakup.DynamicValues.AppendBeginMarker != null) #begin
+            codeHelperInElementDto.setAppendBeginMarker("$(field.Breakup.DynamicValues.AppendBeginMarker)");
+#end
+
+#if ($field.Breakup.DynamicValues.AppendEndMarker != null) #begin
+            codeHelperInElementDto.setAppendEndMarker("$(field.Breakup.DynamicValues.AppendEndMarker)");
+#end
+#end
+            input.addCodeHelperInElementDto(codeHelperInElementDto);
+        }
+#end
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($field.Breakup != null && $field.Breakup.DynamicValues != null && $field.Breakup.DynamicValues.CodeHelperInterface == null) #begin
+#if ($wm_codeHelperAdded == "false") #begin
+#set $wm_codeHelperAdded = "true"
+        if (m_codeHelperTx == null)
+            m_codeHelperTx = (ICodeHelper) Factory.createObject(ICodeHelper.class);
+#end
+        if (m_$(field.Name.Lower1)Codes == null) {
+            if (input == null)
+                input = new CodeHelperInDto();
+            CodeHelperInElementDto codeHelperInElementDto = new CodeHelperInElementDto();
+            codeHelperInElementDto.setCode("$(field.Name.Lower1)");
+            codeHelperInElementDto.setDomainClassName("$(field.Breakup.DynamicValues.DomainClassName)");
+            codeHelperInElementDto.setCodeFieldName("$(field.Breakup.DynamicValues.CodeFieldName)");
+            codeHelperInElementDto.setDescriptionFieldName("$(field.Breakup.DynamicValues.DescriptionFieldName)");
+
+#if ($field.Breakup.DynamicValues.BreakupCriteriaFields != null) #begin
+#foreach $bfield in $field.Breakup.DynamicValues.BreakupCriteriaFields.values() #begin
+#set $wm_domainObject = "$(field.Breakup.DynamicValues.DomainClassName)"
+#if ($(bfield.DataType.CriteriaFieldTypeThrowsException)) #begin
+#if ($(bfield.DomainField.Lower) != "") #begin
+#set $wm_meta = "($(bfield.DataType.MetaFieldType)) $(wm_domainObject)Meta.META_$(bfield.DomainField.Static)"
+#else
+#set $wm_meta = "null"
+#end
+            try {
+                CriteriaElementDto criteriaElementDto = new CriteriaElementDto();
+                criteriaElementDto.setFieldName("$(bfield.DomainField.Upper1)");
+                criteriaElementDto.setCriteria($(bfield.DataType.CriteriaFieldType).get$(bfield.DataType.CriteriaFieldType)(CriteriaField.$(bfield.Operator), "$(bfield.Values)", $(wm_meta)));
+                codeHelperInElementDto.addCriteriaField(criteriaElementDto);
+            } catch (ValidationException e) {
+                if (appExps == null)
+                    appExps = new ApplicationExceptions();
+
+#if ($(bfield.DomainField.Lower) == "" && $(bfield.Label) != null && $(bfield.Label.Lower) != "") #begin
+                e.setField("$(bfield.Label)");
+#elseif ($(bfield.DomainField.Lower) == "" && ($(bfield.Label) == null || $(bfield.Label.Lower) == "")) #begin
+                e.setField("$(bfield.Name)");
+#end
+                appExps.add(e);
+            }
+#else
+##  this comment should prevent the following brace to be treated as a webmacro block marker
+            {
+                CriteriaElementDto criteriaElementDto = new CriteriaElementDto();
+                criteriaElementDto.setFieldName("$(bfield.DomainField.Upper1)");
+                criteriaElementDto.setCriteria($(bfield.DataType.CriteriaFieldType).get$(bfield.DataType.CriteriaFieldType)(CriteriaField.$(bfield.Operator), "$(bfield.Values)", null));
+                codeHelperInElementDto.addCriteriaField(criteriaElementDto);
+            }
+#end
+#end
+#end
+
+#if ($(field.Breakup.DynamicValues.AppendCodeAndDescription) != null && $(field.Breakup.DynamicValues.AppendCodeAndDescription.BooleanValue)) #begin
+            codeHelperInElementDto.setAppendCodeAndDescription(true);
+
+#if ($field.Breakup.DynamicValues.AppendBeginMarker != null) #begin
+            codeHelperInElementDto.setAppendBeginMarker("$(field.Breakup.DynamicValues.AppendBeginMarker)");
+#end
+
+#if ($field.Breakup.DynamicValues.AppendEndMarker != null) #begin
+            codeHelperInElementDto.setAppendEndMarker("$(field.Breakup.DynamicValues.AppendEndMarker)");
+#end
+#end
+            input.addCodeHelperInElementDto(codeHelperInElementDto);
+        }
+#end
+#end
+#end
+#end
+#end
+
+
+#if ($wm_codeHelperAdded != "false") #begin
+        // throw ApplicationExceptions, if any parsing errors occured
+        if (appExps != null && appExps.size() > 0)
+            throw appExps;
+
+        // Get the Codes and populate the respective fields
+        if (input != null) {
+            input.setHeaderDto(getHeaderDto());
+            CodeHelperOutDto output = m_codeHelperTx.getCodes(input);
+            if (output != null && output.getCodeHelperOutElementDtoCount() > 0) {
+                CodeHelperOutElementDto[] codeHelperOutElementDtos = output.getCodeHelperOutElementDtos();
+                for (int i = 0; i < codeHelperOutElementDtos.length; i++) {
+                    CodeHelperOutElementDto codeHelperOutElementDto = codeHelperOutElementDtos[i];
+                    String code = codeHelperOutElementDto.getCode();
+
+#set $wm_firstPass = "true"
+#foreach $field in $Fields.values() #begin
+#if ($field.RelatedObjectName == null || $field.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#if ($field.Breakup != null && $field.Breakup.DynamicValues != null && $field.Breakup.DynamicValues.CodeHelperInterface == null) #begin
+#if ($wm_firstPass == "true") #begin
+#set $wm_firstPass = "false"
+                    if (code.equals("$(field.Name.Lower1)"))
+#else
+                    else if (code.equals("$(field.Name.Lower1)"))
+#end
+                        m_$(field.Name.Lower1)Codes = codeHelperOutElementDto;
+#end
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($field.Breakup != null && $field.Breakup.DynamicValues != null && $field.Breakup.DynamicValues.CodeHelperInterface == null) #begin
+#if ($wm_firstPass == "true") #begin
+#set $wm_firstPass = "false"
+                    if (code.equals("$(field.Name.Lower1)"))
+#else
+                    else if (code.equals("$(field.Name.Lower1)"))
+#end
+                        m_$(field.Name.Lower1)Codes = codeHelperOutElementDto;
+#end
+#end
+#end
+#end
+#end
+                }
+            }
+        }
+#end
+
+
+
+#foreach $field in $Fields.values() #begin
+#if ($field.RelatedObjectName == null || $field.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#if ($field.Breakup != null && $field.Breakup.DynamicValues != null && $field.Breakup.DynamicValues.CodeHelperInterface != null) #begin
+        if (m_$(field.Name.Lower1)CodeHelperTx == null)
+            m_$(field.Name.Lower1)CodeHelperTx = (ICodeHelper) Factory.createObject($(field.Breakup.DynamicValues.CodeHelperInterface).class);
+        if (m_$(field.Name.Lower1)Codes == null) {
+            input = new CodeHelperInDto();
+            CodeHelperInElementDto codeHelperInElementDto = new CodeHelperInElementDto();
+            codeHelperInElementDto.setCode("$(field.Name.Lower1)");
+            codeHelperInElementDto.setDomainClassName("$(field.Breakup.DynamicValues.DomainClassName)");
+            codeHelperInElementDto.setCodeFieldName("$(field.Breakup.DynamicValues.CodeFieldName)");
+            codeHelperInElementDto.setDescriptionFieldName("$(field.Breakup.DynamicValues.DescriptionFieldName)");
+
+#if ($field.Breakup.DynamicValues.BreakupCriteriaFields != null) #begin
+#foreach $bfield in $field.Breakup.DynamicValues.BreakupCriteriaFields.values() #begin
+#set $wm_domainObject = "$(field.Breakup.DynamicValues.DomainClassName)"
+#if ($(bfield.DataType.CriteriaFieldTypeThrowsException)) #begin
+#if ($(bfield.DomainField.Lower) != "") #begin
+#set $wm_meta = "($(bfield.DataType.MetaFieldType)) $(wm_domainObject)Meta.META_$(bfield.DomainField.Static)"
+#else
+#set $wm_meta = "null"
+#end
+            try {
+                CriteriaElementDto criteriaElementDto = new CriteriaElementDto();
+                criteriaElementDto.setFieldName("$(bfield.DomainField.Upper1)");
+                criteriaElementDto.setCriteria($(bfield.DataType.CriteriaFieldType).get$(bfield.DataType.CriteriaFieldType)(CriteriaField.$(bfield.Operator), "$(bfield.Values)", $(wm_meta)));
+                codeHelperInElementDto.addCriteriaField(criteriaElementDto);
+            } catch (ValidationException e) {
+                if (appExps == null)
+                    appExps = new ApplicationExceptions();
+
+#if ($(bfield.DomainField.Lower) == "" && $(bfield.Label) != null && $(bfield.Label.Lower) != "") #begin
+                e.setField("$(bfield.Label)");
+#elseif ($(bfield.DomainField.Lower) == "" && ($(bfield.Label) == null || $(bfield.Label.Lower) == "")) #begin
+                e.setField("$(bfield.Name)");
+#end
+                appExps.add(e);
+            }
+#else
+##  this comment should prevent the following brace to be treated as a webmacro block marker
+            {
+                CriteriaElementDto criteriaElementDto = new CriteriaElementDto();
+                criteriaElementDto.setFieldName("$(bfield.DomainField.Upper1)");
+                criteriaElementDto.setCriteria($(bfield.DataType.CriteriaFieldType).get$(bfield.DataType.CriteriaFieldType)(CriteriaField.$(bfield.Operator), "$(bfield.Values)", null));
+                codeHelperInElementDto.addCriteriaField(criteriaElementDto);
+            }
+#end
+#end
+#end
+
+#if ($(field.Breakup.DynamicValues.AppendCodeAndDescription) != null && $(field.Breakup.DynamicValues.AppendCodeAndDescription.BooleanValue)) #begin
+            codeHelperInElementDto.setAppendCodeAndDescription(true);
+
+#if ($field.Breakup.DynamicValues.AppendBeginMarker != null) #begin
+            codeHelperInElementDto.setAppendBeginMarker("$(field.Breakup.DynamicValues.AppendBeginMarker)");
+#end
+
+#if ($field.Breakup.DynamicValues.AppendEndMarker != null) #begin
+            codeHelperInElementDto.setAppendEndMarker("$(field.Breakup.DynamicValues.AppendEndMarker)");
+#end
+#end
+            input.addCodeHelperInElementDto(codeHelperInElementDto);
+
+            // throw ApplicationExceptions, if any parsing errors occured
+            if (appExps != null && appExps.size() > 0)
+                throw appExps;
+
+            // Get the Codes
+            input.setHeaderDto(getHeaderDto());
+            CodeHelperOutDto output = m_$(field.Name.Lower1)CodeHelperTx.getCodes(input);
+            if (output != null && output.getCodeHelperOutElementDtoCount() > 0)
+                m_$(field.Name.Lower1)Codes = output.getCodeHelperOutElementDto(0);
+        }
+
+#end
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($field.Breakup != null && $field.Breakup.DynamicValues != null && $field.Breakup.DynamicValues.CodeHelperInterface != null) #begin
+        if (m_$(field.Name.Lower1)CodeHelperTx == null)
+            m_$(field.Name.Lower1)CodeHelperTx = (ICodeHelper) Factory.createObject($(field.Breakup.DynamicValues.CodeHelperInterface).class);
+        if (m_$(field.Name.Lower1)Codes == null) {
+            input = new CodeHelperInDto();
+            CodeHelperInElementDto codeHelperInElementDto = new CodeHelperInElementDto();
+            codeHelperInElementDto.setCode("$(field.Name.Lower1)");
+            codeHelperInElementDto.setDomainClassName("$(field.Breakup.DynamicValues.DomainClassName)");
+            codeHelperInElementDto.setCodeFieldName("$(field.Breakup.DynamicValues.CodeFieldName)");
+            codeHelperInElementDto.setDescriptionFieldName("$(field.Breakup.DynamicValues.DescriptionFieldName)");
+
+#if ($field.Breakup.DynamicValues.BreakupCriteriaFields != null) #begin
+#foreach $bfield in $field.Breakup.DynamicValues.BreakupCriteriaFields.values() #begin
+#set $wm_domainObject = "$(field.Breakup.DynamicValues.DomainClassName)"
+#if ($(bfield.DataType.CriteriaFieldTypeThrowsException)) #begin
+#if ($(bfield.DomainField.Lower) != "") #begin
+#set $wm_meta = "($(bfield.DataType.MetaFieldType)) $(wm_domainObject)Meta.META_$(bfield.DomainField.Static)"
+#else
+#set $wm_meta = "null"
+#end
+            try {
+                CriteriaElementDto criteriaElementDto = new CriteriaElementDto();
+                criteriaElementDto.setFieldName("$(bfield.DomainField.Upper1)");
+                criteriaElementDto.setCriteria($(bfield.DataType.CriteriaFieldType).get$(bfield.DataType.CriteriaFieldType)(CriteriaField.$(bfield.Operator), "$(bfield.Values)", $(wm_meta)));
+                codeHelperInElementDto.addCriteriaField(criteriaElementDto);
+            } catch (ValidationException e) {
+                if (appExps == null)
+                    appExps = new ApplicationExceptions();
+
+#if ($(bfield.DomainField.Lower) == "" && $(bfield.Label) != null && $(bfield.Label.Lower) != "") #begin
+                e.setField("$(bfield.Label)");
+#elseif ($(bfield.DomainField.Lower) == "" && ($(bfield.Label) == null || $(bfield.Label.Lower) == "")) #begin
+                e.setField("$(bfield.Name)");
+#end
+                appExps.add(e);
+            }
+#else
+##  this comment should prevent the following brace to be treated as a webmacro block marker
+            {
+                CriteriaElementDto criteriaElementDto = new CriteriaElementDto();
+                criteriaElementDto.setFieldName("$(bfield.DomainField.Upper1)");
+                criteriaElementDto.setCriteria($(bfield.DataType.CriteriaFieldType).get$(bfield.DataType.CriteriaFieldType)(CriteriaField.$(bfield.Operator), "$(bfield.Values)", null));
+                codeHelperInElementDto.addCriteriaField(criteriaElementDto);
+            }
+#end
+#end
+#end
+
+#if ($(field.Breakup.DynamicValues.AppendCodeAndDescription) != null && $(field.Breakup.DynamicValues.AppendCodeAndDescription.BooleanValue)) #begin
+            codeHelperInElementDto.setAppendCodeAndDescription(true);
+
+#if ($field.Breakup.DynamicValues.AppendBeginMarker != null) #begin
+            codeHelperInElementDto.setAppendBeginMarker("$(field.Breakup.DynamicValues.AppendBeginMarker)");
+#end
+
+#if ($field.Breakup.DynamicValues.AppendEndMarker != null) #begin
+            codeHelperInElementDto.setAppendEndMarker("$(field.Breakup.DynamicValues.AppendEndMarker)");
+#end
+#end
+            input.addCodeHelperInElementDto(codeHelperInElementDto);
+
+            // throw ApplicationExceptions, if any parsing errors occured
+            if (appExps != null && appExps.size() > 0)
+                throw appExps;
+
+            // Get the Codes
+            input.setHeaderDto(getHeaderDto());
+            CodeHelperOutDto output = m_$(field.Name.Lower1)CodeHelperTx.getCodes(input);
+            if (output != null && output.getCodeHelperOutElementDtoCount() > 0)
+                m_$(field.Name.Lower1)Codes = output.getCodeHelperOutElementDto(0);
+        }
+
+#end
+#end
+#end
+#end
+#end
+
+    }
+    // .//GEN-END:_initDropDownCodes_1_be
+    // .//GEN-BEGIN:_createTx_1_be
+    private I$(Component.Upper1) createTx() throws FrameworkException {
+        if (m_tx == null)
+            m_tx = (I$(Component.Upper1)) Factory.createObject(I$(Component.Upper1).class);
+        return m_tx;
+    }
+    // .//GEN-END:_createTx_1_be
+    // .//GEN-BEGIN:_obtainRetrieveOutDto_1_be
+    /** This will invoke the retrieve method on the transaction to retrieve an existing domain object.
+     * @throws ApplicationExceptions Indicates some functional error.
+     * @throws FrameworkException Indicates some system error.
+     * @return the $(Component.Upper1)RetrieveOutDto containing the output of the retrieve.
+     */
+    private $(Component.Upper1)RetrieveOutDto obtainRetrieveOutDto() throws ApplicationExceptions, FrameworkException {
+        $(Component.Upper1)RetrieveInDto input = new $(Component.Upper1)RetrieveInDto();
+        // .//GEN-END:_obtainRetrieveOutDto_1_be
+        // Add custom code //GEN-FIRST:_obtainRetrieveOutDto_1
+
+
+        // .//GEN-LAST:_obtainRetrieveOutDto_1
+        // .//GEN-BEGIN:_obtainRetrieveOutDto_2_be
+        input.setHeaderDto(getHeaderDto());
+
+#foreach $field in $KeyFields.values() #begin
+        input.set$(field.Name.Upper1)(get$(field.Name.Upper1)());
+#end
+        $(Component.Upper1)RetrieveOutDto output = createTx().retrieve(input);
+        // .//GEN-END:_obtainRetrieveOutDto_2_be
+        // Add custom code //GEN-FIRST:_obtainRetrieveOutDto_2
+
+
+        // .//GEN-LAST:_obtainRetrieveOutDto_2
+        // .//GEN-BEGIN:_obtainRetrieveOutDto_3_be
+        return output;
+    }
+    // .//GEN-END:_obtainRetrieveOutDto_3_be
+    // .//GEN-BEGIN:_loadRetrieveOutDto_1_be
+    /** This will load the contents of $(Component.Upper1)RetrieveOutDto into the component.
+     */
+    private void loadRetrieveOutDto($(Component.Upper1)RetrieveOutDto retrieveOutDto) {
+        // clear the widget cache
+        uncacheWidgetModels();
+
+        if (retrieveOutDto != null) {
+
+#foreach $field in $Fields.values() #begin
+#if ($field.RelatedObjectName == null || $field.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+            set$(field.Name.Upper1)(retrieveOutDto.get$(field.Name.Upper1)());
+
+#if ($field.Comment != null) #begin
+            set$(field.Name.Upper1)_AdditionalComment(null);
+#end
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+            set$(field.Name.Upper1)(retrieveOutDto.get$(field.Name.Upper1)());
+#end
+#end
+#end
+#end
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelationshipToDomainObject.RelationshipTypeMany && $object.RelatedObjectFields != null) #begin
+            m_relatedObject$(object.Name.Upper1)Dto = retrieveOutDto.get$(object.Name.Upper1)();
+#end
+#end
+#end
+        }
+        // .//GEN-END:_loadRetrieveOutDto_1_be
+        // Add custom code //GEN-FIRST:_loadRetrieveOutDto_1
+
+
+        // .//GEN-LAST:_loadRetrieveOutDto_1
+        // .//GEN-BEGIN:_loadRetrieveOutDto_2_be
+    }
+    // .//GEN-END:_loadRetrieveOutDto_2_be
+    // .//GEN-BEGIN:_loadPrevalidateOutDto_1_be
+    /** This will load the contents of $(Component.Upper1)PrevalidateOutDto into the component.
+     */
+    private void loadPrevalidateOutDto($(Component.Upper1)PrevalidateOutDto prevalidateOutDto) {
+        if (prevalidateOutDto != null) {
+
+#foreach $field in $Fields.values() #begin
+#if ($field.RelatedObjectName == null || $field.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+            set$(field.Name.Upper1)(prevalidateOutDto.get$(field.Name.Upper1)());
+
+#if ($field.Comment != null) #begin
+            set$(field.Name.Upper1)_AdditionalComment(prevalidateOutDto.get$(field.Name.Upper1)_AdditionalComment());
+#end
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+            set$(field.Name.Upper1)(prevalidateOutDto.get$(field.Name.Upper1)());
+#end
+#end
+#end
+#end
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelationshipToDomainObject.RelationshipTypeMany && $object.RelatedObjectFields != null) #begin
+            m_relatedObject$(object.Name.Upper1)Dto = prevalidateOutDto.get$(object.Name.Upper1)();
+#end
+#end
+#end
+        }
+        // .//GEN-END:_loadPrevalidateOutDto_1_be
+        // Add custom code //GEN-FIRST:_loadPrevalidateOutDto_1
+
+
+        // .//GEN-LAST:_loadPrevalidateOutDto_1
+        // .//GEN-BEGIN:_loadPrevalidateOutDto_2_be
+    }
+    // .//GEN-END:_loadPrevalidateOutDto_2_be
+    // All the custom code goes here //GEN-FIRST:_custom
+
+
+
+
+
+
+    // .//GEN-LAST:_custom
+}

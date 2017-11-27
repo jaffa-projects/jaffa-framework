@@ -77,6 +77,7 @@ public class PrinterDefinitionLookupComponent extends LookupComponent2 {
     public PrinterDefinitionLookupComponent() {
         super();
         super.setSortDropDown("PrinterId");
+        initializeThis();
     }
 
     /** Returns the Struts GlobalForward for the Criteria screen.

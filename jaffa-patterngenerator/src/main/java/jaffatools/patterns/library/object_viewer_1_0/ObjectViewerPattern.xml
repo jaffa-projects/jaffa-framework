@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<!DOCTYPE BuildPattern PUBLIC "-//JAFFA//DTD Pattern 1.0//EN" "http://jaffa.sourceforge.net/DTD/pattern_1_0.dtd">
+
+<BuildPattern>
+    <Name>ObjectViewerPattern</Name>
+
+    <PreRequesites>
+    </PreRequesites>
+    
+    <Components>
+        <Build>
+            <Template>patterns/library/object_viewer_1_0/ComponentViewerInDto.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower).dto</Package>
+            <FileName>$(Component.Upper1)InDto.java</FileName>
+            <Override>Merge</Override>
+        </Build>
+
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+        <Build>
+            <Template>patterns/library/object_viewer_1_0/ComponentViewerRelatedOutDto.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower).dto</Package>
+            <FileName>$(object.ObjectName.Upper1)Dto.java</FileName>
+            <Override>Merge</Override>
+        </Build>
+
+#end
+#end
+        <Build>
+            <Template>patterns/library/object_viewer_1_0/ComponentViewerOutDto.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower).dto</Package>
+            <FileName>$(Component.Upper1)OutDto.java</FileName>
+            <Override>Merge</Override>
+        </Build>
+    
+        <Build>
+            <Template>patterns/library/object_viewer_1_0/IComponent.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower)</Package>
+            <FileName>I$(Component.Upper1).java</FileName>
+            <Override>Merge</Override>
+        </Build>
+    
+        <Build>
+            <Template>patterns/library/object_viewer_1_0/ComponentTx.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower).tx</Package>
+            <FileName>$(Component.Upper1)Tx.java</FileName>
+            <Override>Merge</Override>
+        </Build>
+    
+        <Build>
+            <Template>patterns/library/object_viewer_1_0/ComponentController.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower).ui</Package>
+            <FileName>$(Component.Upper1)Component.java</FileName>
+            <Override>Merge</Override>
+        </Build>
+
+        <Build>
+            <Template>patterns/library/object_viewer_1_0/ComponentForm.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower).ui</Package>
+            <FileName>$(Component.Upper1)Form.java</FileName>
+            <Override>Merge</Override>
+        </Build>
+
+        <Build>
+            <Template>patterns/library/object_viewer_1_0/ComponentAction.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower).ui</Package>
+            <FileName>$(Component.Upper1)Action.java</FileName>
+            <Override>Merge</Override>
+        </Build>
+
+        <Build>
+            <Template>patterns/library/object_viewer_1_0/ComponentJSP.wm</Template>
+            <Package>html.$(Application.Lower).$(Module.Lower).$(Component.Lower).jsp</Package>
+            <FileName>view.jsp</FileName>
+            <Override>False</Override>
+        </Build>
+    
+        <Build>
+            <Template>patterns/library/object_viewer_1_0/ComponentDefinitionXML.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower)</Package>
+            <FileName>ComponentDefinition.xfragment</FileName>
+            <Override>False</Override>
+        </Build>
+
+        <Build>
+            <Template>patterns/library/object_viewer_1_0/ComponentStrutsFormBeanXML.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower)</Package>
+            <FileName>StrutsConfigFormBean.xfragment</FileName>
+            <Override>True</Override>
+        </Build>
+    
+        <Build>
+            <Template>patterns/library/object_viewer_1_0/ComponentStrutsGlobalForwardXML.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower)</Package>
+            <FileName>StrutsConfigGlobalForward.xfragment</FileName>
+            <Override>True</Override>
+        </Build>
+    
+        <Build>
+            <Template>patterns/library/object_viewer_1_0/ComponentStrutsActionXML.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower)</Package>
+            <FileName>StrutsConfigAction.xfragment</FileName>
+            <Override>True</Override>
+        </Build>
+    
+        <Build>
+            <Template>patterns/library/object_viewer_1_0/ApplicationResources.wm</Template>
+            <Package>java.$(BasePackage.Lower).components.$(Component.Lower)</Package>
+            <FileName>ApplicationResources.properties</FileName>
+            <Override>True</Override>
+        </Build>
+    </Components>
+</BuildPattern>
+		

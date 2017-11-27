@@ -1,0 +1,21 @@
+# This file will contain the default values for the $(Component.Upper1)Component
+# Uncomment and specify values for the desired fields
+
+# NOTE: This file will not be overridden or merged during component regeneration!!
+# You'll have to manually add/delete entries from this file after regenerating the component
+
+
+# mode=
+
+#foreach $field in $Fields.values() #begin
+# $(field.Name.JavaBeanStyle)=
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+# $(field.Name.JavaBeanStyle)=
+#end
+#end
+#end
+
