@@ -273,7 +273,7 @@
         <version.maven.project.info.reports.plugin>2.5.1</version.maven.project.info.reports.plugin>
         <version.pmd.plugin>2.7.1</version.pmd.plugin>
         <version.rar.plugin>2.2</version.rar.plugin>
-        <version.release.plugin>2.4.1</version.release.plugin>
+        <version.release.plugin>2.5.2</version.release.plugin>
         <version.resources.plugin>2.5</version.resources.plugin>
         <version.shade.plugin>1.5</version.shade.plugin>
         <version.site.plugin>3.3</version.site.plugin>
