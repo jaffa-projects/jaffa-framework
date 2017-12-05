@@ -1,0 +1,124 @@
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ * 
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/
+package $(BasePackage.Lower).components.$(Component.Lower).ui;
+
+import java.lang.reflect.Method;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.log4j.Logger;
+import org.jaffa.presentation.portlet.ActionBase;
+import org.jaffa.presentation.portlet.FormKey;
+import org.apache.struts.action.ActionErrors;
+import org.jaffa.exceptions.ApplicationExceptions;
+import org.jaffa.exceptions.FrameworkException;
+import org.jaffa.presentation.portlet.EventHandlerMissingRuntimeException;
+
+/** The Action class for handling events.
+ */
+public class $(Component.Upper1)Action extends ActionBase {
+
+    private static final Logger log = Logger.getLogger($(Component.Upper1)Action.class);
+
+
+$ScratchPad.clear()
+#if ($Screens != null) #begin
+#foreach $screen in $Screens.values() #begin
+#if ($(screen.ScreenFields) != null) #begin
+#foreach $field in $screen.ScreenFields.values() #begin
+#set $wm_fieldName = $(field.Name.Lower1)
+#if ($ScratchPad.get($wm_fieldName) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_fieldName,$wm_fieldName) != null) #begin #end
+#set $wm_wt = $field.WidgetType.Lower
+#if (($wm_wt == "editbox" || $wm_wt == "button" || $wm_wt == "table") && $(field.Event) != null) #begin
+    /** $(field.Event.Upper1) event handler for the field $(field.Name.Upper1).
+     * @return The FormKey.
+     */
+    public FormKey do_$(field.Name.Upper1)_$(field.Event.Upper1)() {
+        FormKey fk = null;
+        $(Component.Upper1)Form myForm = ($(Component.Upper1)Form) form;
+        $(Component.Upper1)Component myComp = ($(Component.Upper1)Component) myForm.getComponent();
+        // Add Event Handling logic
+
+        if (fk == null)
+            fk = myComp.determineFormKey();
+        return fk;
+    }
+
+#end
+#end
+#end
+#end
+#end
+#end
+$ScratchPad.clear()
+
+    /** Determines the currentFormKey
+     * This event is invoked when a user changes the settings of the UserGrid in the Results screen.
+     * @return The FormKey for the Results screen.
+     */
+    public FormKey do_refresh() {
+        $(Component.Upper1)Form myForm = ($(Component.Upper1)Form) form;
+        $(Component.Upper1)Component myComp = ($(Component.Upper1)Component) myForm.getComponent();
+        return myComp.determineFormKey();
+    }
+    
+    /** Quits the component and returns the FormKey for the calling screen.
+     * @return The FormKey for the calling screen. A null will be returned, if no calling screen was specified.
+     */
+    public FormKey do_Cancel_Clicked() {
+        return component.quitAndReturnToCallingScreen();
+    }
+    
+    /** This will invoke the doValidate() method for the current screen.
+     * It then moves to the next screen
+     * @return The FormKey for the next screen.
+     */
+    public FormKey do_Next_Clicked() {
+        $(Component.Upper1)Form myForm = ($(Component.Upper1)Form) form;
+        $(Component.Upper1)Component myComp = ($(Component.Upper1)Component) myForm.getComponent();
+        
+        if (invokeDoValidateForScreen(myComp.getCurrentScreenCounter())) {
+            myComp.determineAndSetNextScreen();
+        }
+        return myComp.determineFormKey();
+    }
+    
+    /** It moves to the previous screen
+     * @return The FormKey for the previous screen.
+     */
+    public FormKey do_Previous_Clicked() {
+        $(Component.Upper1)Form myForm = ($(Component.Upper1)Form) form;
+        $(Component.Upper1)Component myComp = ($(Component.Upper1)Component) myForm.getComponent();
+        myComp.determineAndSetPreviousScreen();
+        return myComp.determineFormKey();
+    }
+    
+    /* This will invoke the 'public boolean doValidate{n}(HttpServletRequest request)' method
+     */
+    private boolean invokeDoValidateForScreen(int screenCounter) {
+        String methodName = "doValidate" + screenCounter;
+        Method method = null;
+        try {
+            method = form.getClass().getMethod(methodName, new Class[] {HttpServletRequest.class});
+            if (method.getReturnType() != Boolean.TYPE)
+                throw new NoSuchMethodException();
+        } catch (NoSuchMethodException e) {
+            String str = "The method 'public boolean doValidate" + screenCounter + "(HttpServletRequest request) needs to be defined in the class " + form.getClass().getName();
+            System.err.println(str, e);
+            throw new EventHandlerMissingRuntimeException(str);
+        }
+        
+        try {
+            Boolean output = (Boolean) method.invoke(form, new Object[] {request});
+            return output.booleanValue();
+        } catch (Exception e) {
+            // should never happen
+            throw new RuntimeException(e);
+        }
+    }
+    
+}

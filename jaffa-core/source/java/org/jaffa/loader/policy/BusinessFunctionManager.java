@@ -55,7 +55,6 @@ import org.jaffa.loader.IRepository;
 import org.jaffa.loader.MapRepository;
 import org.jaffa.security.businessfunctionsdomain.BusinessFunction;
 import org.jaffa.security.businessfunctionsdomain.BusinessFunctions;
-import org.jaffa.util.ContextHelper;
 import org.jaffa.util.JAXBHelper;
 import org.springframework.core.io.Resource;
 import org.xml.sax.SAXException;
@@ -63,7 +62,9 @@ import org.xml.sax.SAXException;
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  *  BusinessFunctionManager
@@ -80,7 +81,17 @@ public class BusinessFunctionManager implements IManager {
      */
     private static final String CONFIGURATION_SCHEMA_FILE = "org/jaffa/security/businessfunctionsdomain/business-functions_1_0.xsd";
 
-    private IRepository<BusinessFunction> businessFunctionRepository = new MapRepository<>();
+    private IRepository<BusinessFunction> businessFunctionRepository = new MapRepository<>("BusinessFunction");
+
+    /**
+     * The list of repositories managed by this class
+     */
+    private HashMap managedRepositories = new HashMap<String, IRepository>() {
+        {
+            put(businessFunctionRepository.getName(), businessFunctionRepository);
+        }
+
+    };
 
     /**
      * registerResource - Registers the roles into the business function repository from the business-functions.xml files found in META-INF/roles.xml
@@ -102,6 +113,25 @@ public class BusinessFunctionManager implements IManager {
     }
 
     /**
+     * getRepositoryNames - Retrieve a String list of all the IRepositories managed by this IManager
+     * @return A list of repository names managed by this manager
+     */
+    @Override
+    public Set getRepositoryNames() {
+        return managedRepositories.keySet();
+    }
+
+    /**
+     * Retrieve an IRepository managed by this IManager via its String name
+     * @param name The name of the repository to be retrieved
+     * @return The retrieved repository, or empty if no matching repository was found.
+     */
+    @Override
+    public IRepository<?> getRepositoryByName(String name) {
+        return (IRepository<?>) managedRepositories.get(name);
+    }
+
+    /**
      * getResourceFileName - Returns the default XML file name of the business functions XSD.
      * @return the xml file name
      */
@@ -115,7 +145,7 @@ public class BusinessFunctionManager implements IManager {
      * @return a list of all BusinessFunctions
      */
     public List<BusinessFunction> getAllBusinessFunctions() {
-        return getBusinessFunctionRepository().getAllValues();
+        return getBusinessFunctionRepository().getValues();
     }
 
     /**

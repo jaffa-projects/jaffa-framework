@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <!-- Type Declarations - Based on legacy Queue declarations -->
+
+    <type name='Internal' description='Internal Transactions' label='Internal'>
+        <display-param name='type' label='[label.Jaffa.Messaging.BusinessEventLog.MessageType]'/>
+        <display-param name='JMSMessageID' label='[label.Jaffa.Messaging.Message.JMSMessageID]'/>
+        <display-param name='JMSPriority' label='[label.Jaffa.Messaging.MessageViewer.Priority]'/>
+        <display-param name='jaffa_userId' label='[label.Common.CreatedBy]'/>
+        <display-param name='JMSTimestamp' label='[label.Jaffa.Messaging.Message.JMSTimestamp]'/>
+    </type>
+
+    <type name='Poller' label='Poller'>
+        <display-param name='type' label='[label.Jaffa.Messaging.BusinessEventLog.MessageType]'/>
+        <display-param name='scheduleTaskId' label='[label.Jaffa.Messaging.BusinessEventLog.ScheduledTaskId]'/>
+    </type>
+
+    <type name='Event' label='Event'>
+        <display-param name='type' label='[label.Jaffa.Messaging.BusinessEventLog.MessageType]'/>
+        <display-param name='JMSMessageID' label='[label.Jaffa.Messaging.Message.JMSMessageID]'/>
+        <display-param name='JMSPriority' label='[label.Jaffa.Messaging.MessageViewer.Priority]'/>
+        <display-param name='jaffa_userId' label='[label.Common.CreatedBy]'/>
+        <display-param name='JMSTimestamp' label='[label.Jaffa.Messaging.Message.JMSTimestamp]'/>
+    </type>
+
+    <type name='Locks' label='Locks'>
+        <display-param name='topItemId' label='[label.Material.Core.Item.TopItemId]'/>
+        <display-param name='userTerminalId' label='[label.Material.Core.TransactionQueueEntry.UserTerminalId]'/>
+        <display-param name='part' label='[label.CatalogVendor.Core.Part.Part]'/>
+        <display-param name='cage' label='[label.CatalogVendor.Core.Part.Cage]'/>
+        <display-param name='serial' label='[label.Material.Core.Item.Serial]'/>
+        <display-param name='segregationCode' label='[label.ContractWarehouse.Core.SegregationCode.SegregationCode]'/>
+        <display-param name='eiac' label='[label.Structure.Core.LogicalStructure.Eiac]'/>
+        <display-param name='JMSTimestamp' label='[Label.Common.JMSTimestamp]'/>
+        <display-param name='JMSMessageID' label='[Label.Common.JMSMessageID]'/>
+    </type>
+
+    <type name='TransactionSingleton' description='Singleton Transaction' singleton='true' label='Transaction'>
+        <display-param name='voucher' label='[label.Material.Core.TransactionQueueEntry.Voucher]'/>
+        <display-param name='transactionCode' label='[label.Material.Core.TransactionQueueEntry.TransactionCode]'/>
+        <display-param name='part' label='[label.CatalogVendor.Core.Part.Part]'/>
+        <display-param name='cage' label='[label.CatalogVendor.Core.Part.Cage]'/>
+        <display-param name='serial' label='[label.Material.Core.Item.Serial]'/>
+        <display-param name='jaffa_userId' label='[label.Material.Core.TransactionQueueEntry.PostedBy]'/>
+        <display-param name='JMSTimestamp' label='[label.Material.Core.TransactionQueueEntry.SubmittedOn]'/>
+        <display-param name='JMSMessageID' label='[Label.Common.JMSMessageID]'/>
+        <security
+                browse="Material.Queues.ReadAll"
+                admin="Material.Queues.Maintain"/>
+    </type>
+
+    <!-- Jaffa SOA -->
+    <!-- Map SOAEventPoller to SOAEventPoller.poll() -->
+    <transaction
+            dataBean='org.jaffa.soa.services.SOAEventPoller'
+            type='Poller'
+            toClass='org.jaffa.soa.services.SOAEventPoller'
+            toMethod='poll'
+    >
+        <lock-check>
+            <param name='miro_locks_soa_soaEventPoller'>true</param>
+        </lock-check>
+        <header>
+            <param name='miro_locks_soa_soaEventPoller'>true</param>
+            <param name='type'>SOAEventPoller</param>
+            <param expression='true' name='scheduleTaskId'>bean.scheduleTaskId</param>
+        </header>
+    </transaction>
+
+    <!-- Map SOAEventQueueMessage to SOAEventHandler.invoke() -->
+    <transaction
+            dataBean='org.jaffa.soa.services.SOAEventQueueMessage'
+            type='Event'
+            toClass='org.jaffa.soa.services.SOAEventHandler'
+            toMethod='invoke'>
+        <header>
+            <param name='type'>SOAEventQueueMessage</param>
+            <param expression='true' name='eventId'>bean.eventId</param>
+            <param expression='true' name='eventName'>bean.eventName</param>
+            <param expression='true' name='description'>bean.description</param>
+            <param expression='true' name='createdOn'>bean.createdOn != null ? bean.createdOn.toString() : ""</param>
+            <param expression='true' name='createdBy'>bean.createdBy</param>
+        </header>
+    </transaction>
+
+    <!-- Map TransactionDependencyPoller to TransactionDependencyPoller.poll() -->
+    <transaction
+            dataBean='org.jaffa.transaction.services.TransactionDependencySweeper'
+            type='Poller'
+            toClass='org.jaffa.transaction.services.TransactionDependencySweeper'
+            toMethod='poll'
+    >
+        <lock-check>
+            <param name='miro_locks_soa_transactionDependencyPoller'>true</param>
+        </lock-check>
+        <header>
+            <param name='miro_locks_soa_transactionDependencyPoller'>true</param>
+            <param name='type'>TransactionDependencySweeper</param>
+            <param expression='true' name='scheduleTaskId'>bean.scheduleTaskId</param>
+        </header>
+    </transaction>
+
+    <!-- a multi-threaded test transaction -->
+    <transaction
+            dataBean='org.jaffa.transaction.tester.TestMessage'
+            type='Transaction'
+            toClass='org.jaffa.transaction.tester.TestConsumer'
+            toMethod='invoke'>
+        <header>
+            <param expression='true' name='emailAddress'>bean.emailAddress</param>
+            <param expression='true' name='fail'>bean.fail</param>
+            <param expression='true' name='delay'>bean.delay</param>
+            <param expression='true' name='dbQuery'>bean.dbQuery</param>
+            <param name='_keep'>true</param>
+        </header>
+    </transaction>
+
+    <!-- a singleton test transaction -->
+    <transaction
+            dataBean='org.jaffa.transaction.tester.TestMessageSingleton'
+            type='TransactionSingleton'
+            toClass='org.jaffa.transaction.tester.TestConsumer'
+            toMethod='invoke'>
+        <header>
+            <param expression='true' name='emailAddress'>bean.emailAddress</param>
+            <param expression='true' name='fail'>bean.fail</param>
+            <param expression='true' name='delay'>bean.delay</param>
+            <param expression='true' name='dbQuery'>bean.dbQuery</param>
+            <param name='_keep'>true</param>
+        </header>
+    </transaction>
+
+    <!-- Merge fragments //GEN-BEGIN:jaffa-transaction-config.xfragment -->
+    <!-- //GEN-END:jaffa-transaction-config.xfragment -->
+</config>

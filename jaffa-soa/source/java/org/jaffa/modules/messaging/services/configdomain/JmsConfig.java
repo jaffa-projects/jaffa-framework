@@ -124,7 +124,7 @@ public class JmsConfig {
      *     
      */
     public String getUser() {
-        return user;
+        return System.getProperty(user, user);
     }
 
     /**
@@ -148,7 +148,7 @@ public class JmsConfig {
      *     
      */
     public String getPassword() {
-        return password;
+        return System.getProperty(password, password);
     }
 
     /**

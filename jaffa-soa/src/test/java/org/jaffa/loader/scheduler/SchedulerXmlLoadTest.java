@@ -2,8 +2,6 @@ package org.jaffa.loader.scheduler;
 
 import org.jaffa.loader.SoaLoaderConfig;
 import org.jaffa.modules.scheduler.services.configdomain.Task;
-import org.jaffa.soa.services.SOAEventPoller;
-import org.jaffa.transaction.services.TransactionDependencySweeper;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -56,5 +54,27 @@ public class SchedulerXmlLoadTest {
         assertEquals("org.jaffa.soa.services.SOAEventPoller", schedulerManager.getSchedulerTaskByTypeName( "SOAEventPoller").getDataBean());
         assertEquals("org.jaffa.transaction.services.TransactionDependencySweeper",
                 schedulerManager.getSchedulerTaskByTypeName( "TransactionDependencySweeper").getDataBean());
+    }
+
+    /**
+     * Tests the ability of this IManager to retrieve a repository when given its String name
+     */
+    @Test
+    public void testGetRepositoryByName() throws Exception {
+        SchedulerManager schedulerManager = xmlLoaderConfig.getBean(SchedulerManager.class);
+
+        String repo = "Task";
+        assertEquals(repo, schedulerManager.getRepositoryByName(repo).getName());
+    }
+
+    /**
+     * Test the retrieval of the list of repositories managed by this class
+     */
+    @Test
+    public void testGetRepositoryNames() {
+        SchedulerManager schedulerManager = xmlLoaderConfig.getBean(SchedulerManager.class);
+        for (Object repositoryName : schedulerManager.getRepositoryNames()) {
+            assertEquals(repositoryName, schedulerManager.getRepositoryByName((String)repositoryName).getName());
+        }
     }
 }

@@ -1,0 +1,884 @@
+// .//GEN-BEGIN:_1_be
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ *
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/
+package $(BasePackage.Lower).components.$(Component.Lower).ui;
+
+import java.util.*;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.log4j.Logger;
+import org.jaffa.components.codehelper.dto.*;
+import org.jaffa.components.finder.*;
+import org.jaffa.components.maint.MaintForm;
+import org.jaffa.datatypes.Formatter;
+import org.jaffa.datatypes.*;
+import org.jaffa.datatypes.exceptions.MandatoryFieldException;
+import org.jaffa.metadata.*;
+import org.jaffa.presentation.portlet.widgets.controller.*;
+import org.jaffa.presentation.portlet.widgets.model.*;
+import org.jaffa.util.StringHelper;
+
+import $(BasePackage.Lower).components.$(Component.Lower).dto.*;
+import $(DomainPackage.Lower).$(DomainObject.Upper1)Meta;
+
+$ScratchPad.clear()
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#set $wm_package = "$(foreignObject.Package.Lower).$(foreignObject.Object.Upper1)"
+#if ($ScratchPad.get($wm_package) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_package,$wm_package) != null) #begin #end
+import $(wm_package)Meta;
+#end
+
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.SourceChain) != null) #begin
+#foreach $source in $field.SourceChain.values() #begin
+#set $wm_package = "$(source.Package.Lower).$(source.Object.Upper1)"
+#if ($ScratchPad.get($wm_package) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_package,$wm_package) != null) #begin #end
+import $(wm_package)Meta;
+#end
+#end
+#end
+#end
+#end
+#end
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#set $wm_package = "$(object.Package.Lower).$(object.ObjectName.Upper1)"
+#if ($ScratchPad.get($wm_package) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_package,$wm_package) != null) #begin #end
+import $(wm_package)Meta;
+#end
+#end
+#end
+$ScratchPad.clear()
+// .//GEN-END:_1_be
+// Add additional imports//GEN-FIRST:_imports
+
+
+
+
+// .//GEN-LAST:_imports
+// .//GEN-BEGIN:_2_be
+/** The FormBean class to support the maintenance jsp of the $(Component.Upper1).
+ */
+public class $(Component.Upper1)Form extends MaintForm {
+
+    private static Logger log = Logger.getLogger($(Component.Upper1)Form.class);
+
+    // .//GEN-END:_2_be
+    // Add additional variables//GEN-FIRST:variables
+
+
+    // .//GEN-LAST:variables
+
+#foreach $field in $Fields.values() #begin
+#set $wm_customBlockIncrement = 1
+#if ($field.RelatedObjectName == null || $field.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#if ($field.RelatedObjectName == null) #begin
+#set $wm_meta = "($(field.DataType.MetaFieldType)) $(DomainObject.Upper1)Meta.META_$(field.DomainField.Static)"
+#else
+#set $wm_relatedObject = $field.RelatedObjectName.getRelatedObject($(RelatedObjects))
+#set $wm_meta = "($(field.DataType.MetaFieldType)) $(wm_relatedObject.ObjectName.Upper1)Meta.META_$(field.DomainField.Static)"
+#end
+#if ($field.Breakup != null) #begin
+#set $wm_widgetType = $(field.Breakup.WidgetType.WidgetTypeBasedOnBreakup)
+#else
+#set $wm_widgetType = $(field.DataType.WidgetType)
+#end
+    // .//GEN-BEGIN:$(field.Name.JavaBeanStyle)_$(wm_customBlockIncrement)_be
+    /** Getter for property $(field.Name.JavaBeanStyle).
+     * @return Value of property $(field.Name.JavaBeanStyle).
+     */
+    public $(field.DataType.JavaDataType) get$(field.Name.Upper1)() {
+        return ( ($(Component.Upper1)Component) getComponent() ).get$(field.Name.Upper1)();
+    }
+
+    /** Setter for property $(field.Name.JavaBeanStyle).
+     * @param $(field.Name.JavaBeanStyle) New value of property $(field.Name.JavaBeanStyle).
+     */
+    public void set$(field.Name.Upper1)($(field.DataType.JavaDataType) $(field.Name.JavaBeanStyle)) {
+        ( ($(Component.Upper1)Component) getComponent() ).set$(field.Name.Upper1)($(field.Name.JavaBeanStyle));
+    }
+
+    /** Getter for property $(field.Name.JavaBeanStyle). This is invoked by the custom tag, when the jsp is rendered, to get the current value.
+     * @return Value of property $(field.Name.JavaBeanStyle).
+     */
+    public $(wm_widgetType)Model get$(field.Name.Upper1)WM() {
+#if ($(field.WMGetterCustomBlock) != null && $(field.WMGetterCustomBlock.Upper1) == "First") #begin
+
+
+        // .//GEN-END:$(field.Name.JavaBeanStyle)_$(wm_customBlockIncrement)_be
+        // Add custom code//GEN-FIRST:$(field.Name.Lower1)_getterBeginning
+
+#set $wm_customBlockIncrement = $wm_customBlockIncrement + 1
+
+        // .//GEN-LAST:$(field.Name.Lower1)_getterBeginning
+        // .//GEN-BEGIN:$(field.Name.JavaBeanStyle)_$(wm_customBlockIncrement)_be
+
+#end
+
+        $(wm_widgetType)Model w_$(field.Name.JavaBeanStyle) = ($(wm_widgetType)Model) getWidgetCache().getModel("$(field.Name.JavaBeanStyle)");
+        if (w_$(field.Name.JavaBeanStyle) == null) {
+
+#if ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "propertyeditor") #begin
+            w_$(field.Name.JavaBeanStyle) = PropertyEditorHelper.getPropertiesWM(this, "$(field.Name.JavaBeanStyle)", get$(field.Name.Upper1)());
+#else
+#if ($field.Breakup != null && $wm_widgetType == "DropDown") #begin
+#if ($(field.DomainField.Upper) != "") #begin
+            w_$(field.Name.JavaBeanStyle) = new $(wm_widgetType)Model((get$(field.Name.Upper1)() != null ? get$(field.Name.Upper1)() : ""), $(wm_meta));
+#else
+            w_$(field.Name.JavaBeanStyle) = new $(wm_widgetType)Model((get$(field.Name.Upper1)() != null ? get$(field.Name.Upper1)() : ""));
+#end
+
+#if ($field.Breakup.StaticValues != null) #begin
+#foreach $staticValue in $field.Breakup.StaticValues.values() #begin
+            w_$(field.Name.JavaBeanStyle).addOption("$(staticValue.Description)", "$(staticValue.Code)");
+#end
+#end
+
+#if ($field.Breakup.DynamicValues != null) #begin
+            CodeHelperOutElementDto dto = ( ($(Component.Upper1)Component) getComponent() ).get$(field.Name.Upper1)Codes();
+            if (dto != null && dto.getCodeHelperOutCodeDtoCount() > 0) {
+                CodeHelperOutCodeDto[] codes = dto.getCodeHelperOutCodeDtos();
+                for (int i = 0; i < codes.length; i++) {
+                    CodeHelperOutCodeDto code = codes[i];
+                    w_$(field.Name.JavaBeanStyle).addOption(Formatter.format(code.getDescription()), Formatter.format(code.getCode()));
+                }
+            }
+#end
+
+#elseif ($field.Breakup != null && $wm_widgetType == "RadioButton") #begin
+            w_$(field.Name.JavaBeanStyle) = new $(wm_widgetType)Model((get$(field.Name.Upper1)() != null ? get$(field.Name.Upper1)() : ""));
+
+#elseif ($field.Breakup != null && $wm_widgetType == "Grid") #begin
+            w_$(field.Name.JavaBeanStyle) = new GridModel();
+            Collection existingValues = null;
+            Object code = null;
+            GridModelRow row = null;
+            if (get$(field.Name.Upper1)() != null)
+                existingValues = StringHelper.convertToList(get$(field.Name.Upper1)());
+
+#if ($field.Breakup.StaticValues != null) #begin
+#foreach $staticValue in $field.Breakup.StaticValues.values() #begin
+            row = w_$(field.Name.JavaBeanStyle).newRow();
+            code = "$(staticValue.Code)";
+            row.addElement("code", code);
+            row.addElement("description", "$(staticValue.Description)");
+            if (existingValues != null && existingValues.contains(code))
+                row.addElement("checked", new CheckBoxModel(true));
+            else
+                row.addElement("checked", new CheckBoxModel(false));
+#end
+#end
+
+#if ($field.Breakup.DynamicValues != null) #begin
+            CodeHelperOutElementDto dto = ( ($(Component.Upper1)Component) getComponent() ).get$(field.Name.Upper1)Codes();
+            if (dto != null && dto.getCodeHelperOutCodeDtoCount() > 0) {
+                CodeHelperOutCodeDto[] codes = dto.getCodeHelperOutCodeDtos();
+                for (int i = 0; i < codes.length; i++) {
+                    CodeHelperOutCodeDto codeDto = codes[i];
+                    row = w_$(field.Name.JavaBeanStyle).newRow();
+                    code = codeDto.getCode();
+                    row.addElement("code", code);
+                    row.addElement("description", Formatter.format(codeDto.getDescription()));
+                    if (existingValues != null && existingValues.contains(code))
+                        row.addElement("checked", new CheckBoxModel(true));
+                    else
+                        row.addElement("checked", new CheckBoxModel(false));
+                }
+            }
+#end
+
+#elseif ($wm_widgetType == "EditBox" && $(field.DomainField.Upper) != "") #begin
+            if (get$(field.Name.Upper1)() != null)
+                w_$(field.Name.JavaBeanStyle) = new $(wm_widgetType)Model(get$(field.Name.Upper1)(), $(wm_meta));
+            else
+                w_$(field.Name.JavaBeanStyle) = new $(wm_widgetType)Model($(wm_meta));
+#elseif ($(wm_widgetType) == "DateTime" && $(field.DomainField.Upper) != "") #begin
+            w_$(field.Name.JavaBeanStyle) = new $(wm_widgetType)Model(get$(field.Name.Upper1)(), $(wm_meta));
+#elseif ($wm_widgetType == "CheckBox") #begin
+            if (get$(field.Name.Upper1)() != null)
+                w_$(field.Name.JavaBeanStyle) = new CheckBoxModel( get$(field.Name.Upper1)() );
+            else
+                w_$(field.Name.JavaBeanStyle) = new CheckBoxModel(false);
+#else
+            if (get$(field.Name.Upper1)() != null)
+                w_$(field.Name.JavaBeanStyle) = new $(wm_widgetType)Model( get$(field.Name.Upper1)() );
+            else
+                w_$(field.Name.JavaBeanStyle) = new $(wm_widgetType)Model();
+#end
+
+#if ($(field.Mandatory) != null && ($(wm_widgetType) == "EditBox" || $(wm_widgetType) == "DropDown" || $(wm_widgetType) == "DateTime")) #begin
+            w_$(field.Name.JavaBeanStyle).setMandatory($(field.Mandatory.BooleanValue));
+#end
+#end
+            // .//GEN-END:$(field.Name.JavaBeanStyle)_$(wm_customBlockIncrement)_be
+            // Add custom code //GEN-FIRST:$(field.Name.JavaBeanStyle)_1
+
+#set $wm_customBlockIncrement = $wm_customBlockIncrement + 1
+
+            // .//GEN-LAST:$(field.Name.JavaBeanStyle)_1
+            // .//GEN-BEGIN:$(field.Name.JavaBeanStyle)_$(wm_customBlockIncrement)_be
+            getWidgetCache().addModel("$(field.Name.JavaBeanStyle)", w_$(field.Name.JavaBeanStyle));
+        }
+        return w_$(field.Name.JavaBeanStyle);
+    }
+
+    /** Setter for property $(field.Name.JavaBeanStyle). This is invoked by the servlet, when a post is done on the JSP.
+     * @param value New value of property $(field.Name.JavaBeanStyle).
+     */
+    public void set$(field.Name.Upper1)WV(String value) {
+        $(wm_widgetType)Controller.updateModel(value, get$(field.Name.Upper1)WM());
+    }
+    // .//GEN-END:$(field.Name.JavaBeanStyle)_$(wm_customBlockIncrement)_be
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.DomainField.Upper1) != "" && $foreignObject.RelatedObjectName == null) #begin
+#set $wm_meta = "($(field.DataType.MetaFieldType)) $(DomainObject.Upper1)Meta.META_$(field.DomainField.Static)"
+#elseif ($(field.DomainField.Upper1) != "" && $foreignObject.RelatedObjectName != null) #begin
+#set $wm_relatedObject = $foreignObject.RelatedObjectName.getRelatedObject($(RelatedObjects))
+#set $wm_meta = "($(field.DataType.MetaFieldType)) $(wm_relatedObject.ObjectName.Upper1)Meta.META_$(field.DomainField.Static)"
+#elseif ($(field.SourceChain) == null) #begin
+#set $wm_meta = "($(field.DataType.MetaFieldType)) $(foreignObject.Object.Upper1)Meta.META_$(field.DomainFieldInForeignObject.Static)"
+#else
+#foreach $source in $field.SourceChain.values() #begin #end
+#set $wm_meta = "($(field.DataType.MetaFieldType)) $(source.Object.Upper1)Meta.META_$(field.DomainFieldInForeignObject.Static)"
+#end
+#if ($field.Breakup != null) #begin
+#set $wm_widgetType = $(field.Breakup.WidgetType.WidgetTypeBasedOnBreakup)
+#else
+#set $wm_widgetType = $(field.DataType.WidgetType)
+#end
+    // .//GEN-BEGIN:$(field.Name.JavaBeanStyle)_1_be
+    /** Getter for property $(field.Name.JavaBeanStyle).
+     * @return Value of property $(field.Name.JavaBeanStyle).
+     */
+    public $(field.DataType.JavaDataType) get$(field.Name.Upper1)() {
+        return ( ($(Component.Upper1)Component) getComponent() ).get$(field.Name.Upper1)();
+    }
+
+    /** Setter for property $(field.Name.JavaBeanStyle).
+     * @param $(field.Name.JavaBeanStyle) New value of property $(field.Name.JavaBeanStyle).
+     */
+    public void set$(field.Name.Upper1)($(field.DataType.JavaDataType) $(field.Name.JavaBeanStyle)) {
+        ( ($(Component.Upper1)Component) getComponent() ).set$(field.Name.Upper1)($(field.Name.JavaBeanStyle));
+    }
+
+    /** Getter for property $(field.Name.JavaBeanStyle). This is invoked by the custom tag, when the jsp is rendered, to get the current value.
+     * @return Value of property $(field.Name.JavaBeanStyle).
+     */
+    public $(wm_widgetType)Model get$(field.Name.Upper1)WM() {
+        $(wm_widgetType)Model w_$(field.Name.JavaBeanStyle) = ($(wm_widgetType)Model) getWidgetCache().getModel("$(field.Name.JavaBeanStyle)");
+        if (w_$(field.Name.JavaBeanStyle) == null) {
+
+#if ($field.Breakup != null && $wm_widgetType == "DropDown") #begin
+#if ($(field.DomainField.Upper) != "") #begin
+            w_$(field.Name.JavaBeanStyle) = new $(wm_widgetType)Model((get$(field.Name.Upper1)() != null ? get$(field.Name.Upper1)() : ""), $(wm_meta));
+#else
+            w_$(field.Name.JavaBeanStyle) = new $(wm_widgetType)Model((get$(field.Name.Upper1)() != null ? get$(field.Name.Upper1)() : ""));
+#end
+
+#if ($field.Breakup.StaticValues != null) #begin
+#foreach $staticValue in $field.Breakup.StaticValues.values() #begin
+            w_$(field.Name.JavaBeanStyle).addOption("$(staticValue.Description)", "$(staticValue.Code)");
+#end
+#end
+
+#if ($field.Breakup.DynamicValues != null) #begin
+            CodeHelperOutElementDto dto = ( ($(Component.Upper1)Component) getComponent() ).get$(field.Name.Upper1)Codes();
+            if (dto != null && dto.getCodeHelperOutCodeDtoCount() > 0) {
+                CodeHelperOutCodeDto[] codes = dto.getCodeHelperOutCodeDtos();
+                for (int i = 0; i < codes.length; i++) {
+                    CodeHelperOutCodeDto code = codes[i];
+                    w_$(field.Name.JavaBeanStyle).addOption(Formatter.format(code.getDescription()), Formatter.format(code.getCode()));
+                }
+            }
+#end
+
+#elseif ($field.Breakup != null && $wm_widgetType == "RadioButton") #begin
+            w_$(field.Name.JavaBeanStyle) = new $(wm_widgetType)Model((get$(field.Name.Upper1)() != null ? get$(field.Name.Upper1)() : ""));
+
+#elseif ($field.Breakup != null && $wm_widgetType == "Grid") #begin
+            w_$(field.Name.JavaBeanStyle) = new GridModel();
+            Collection existingValues = null;
+            Object code = null;
+            GridModelRow row = null;
+            if (get$(field.Name.Upper1)() != null)
+                existingValues = StringHelper.convertToList(get$(field.Name.Upper1)());
+
+#if ($field.Breakup.StaticValues != null) #begin
+#foreach $staticValue in $field.Breakup.StaticValues.values() #begin
+            row = w_$(field.Name.JavaBeanStyle).newRow();
+            code = "$(staticValue.Code)";
+            row.addElement("code", code);
+            row.addElement("description", "$(staticValue.Description)");
+            if (existingValues != null && existingValues.contains(code))
+                row.addElement("checked", new CheckBoxModel(true));
+            else
+                row.addElement("checked", new CheckBoxModel(false));
+#end
+#end
+
+#if ($field.Breakup.DynamicValues != null) #begin
+            CodeHelperOutElementDto dto = ( ($(Component.Upper1)Component) getComponent() ).get$(field.Name.Upper1)Codes();
+            if (dto != null && dto.getCodeHelperOutCodeDtoCount() > 0) {
+                CodeHelperOutCodeDto[] codes = dto.getCodeHelperOutCodeDtos();
+                for (int i = 0; i < codes.length; i++) {
+                    CodeHelperOutCodeDto codeDto = codes[i];
+                    row = w_$(field.Name.JavaBeanStyle).newRow();
+                    code = codeDto.getCode();
+                    row.addElement("code", code);
+                    row.addElement("description", Formatter.format(codeDto.getDescription()));
+                    if (existingValues != null && existingValues.contains(code))
+                        row.addElement("checked", new CheckBoxModel(true));
+                    else
+                        row.addElement("checked", new CheckBoxModel(false));
+                }
+            }
+#end
+
+#elseif ($wm_widgetType == "EditBox") #begin
+            if (get$(field.Name.Upper1)() != null)
+                w_$(field.Name.JavaBeanStyle) = new $(wm_widgetType)Model(get$(field.Name.Upper1)(), $(wm_meta));
+            else
+                w_$(field.Name.JavaBeanStyle) = new $(wm_widgetType)Model($(wm_meta));
+#elseif ($(wm_widgetType) == "DateTime") #begin
+            w_$(field.Name.JavaBeanStyle) = new $(wm_widgetType)Model(get$(field.Name.Upper1)(), $(wm_meta));
+#elseif ($wm_widgetType == "CheckBox") #begin
+            if (get$(field.Name.Upper1)() != null)
+                w_$(field.Name.JavaBeanStyle) = new CheckBoxModel( get$(field.Name.Upper1)() );
+            else
+                w_$(field.Name.JavaBeanStyle) = new CheckBoxModel(false);
+#else
+            if (get$(field.Name.Upper1)() != null)
+                w_$(field.Name.JavaBeanStyle) = new $(wm_widgetType)Model( get$(field.Name.Upper1)() );
+            else
+                w_$(field.Name.JavaBeanStyle) = new $(wm_widgetType)Model();
+#end
+
+#if ($(field.Mandatory) != null && ($(wm_widgetType) == "EditBox" || $(wm_widgetType) == "DropDown" || $(wm_widgetType) == "DateTime")) #begin
+            w_$(field.Name.JavaBeanStyle).setMandatory($(field.Mandatory.BooleanValue));
+#end
+            // .//GEN-END:$(field.Name.JavaBeanStyle)_1_be
+            // Add custom code //GEN-FIRST:$(field.Name.JavaBeanStyle)_1
+
+
+            // .//GEN-LAST:$(field.Name.JavaBeanStyle)_1
+            // .//GEN-BEGIN:$(field.Name.JavaBeanStyle)_2_be
+            getWidgetCache().addModel("$(field.Name.JavaBeanStyle)", w_$(field.Name.JavaBeanStyle));
+        }
+        return w_$(field.Name.JavaBeanStyle);
+    }
+
+    /** Setter for property $(field.Name.JavaBeanStyle). This is invoked by the servlet, when a post is done on the JSP.
+     * @param value New value of property $(field.Name.JavaBeanStyle).
+     */
+    public void set$(field.Name.Upper1)WV(String value) {
+        $(wm_widgetType)Controller.updateModel(value, get$(field.Name.Upper1)WM());
+    }
+    // .//GEN-END:$(field.Name.JavaBeanStyle)_2_be
+#end
+#end
+#end
+#end
+    // .//GEN-BEGIN:_doValidate_1_be
+    /** This method should be invoked to ensure a valid state of the FormBean. It will validate the data in the models and set the corresponding properties.
+     * Errors will be raised in the FormBean, if any validation fails.
+     * @param request The request stream
+     * @return A true indicates validations went through successfully. */
+    public boolean doValidate(HttpServletRequest request) {
+        boolean valid = super.doValidate(request);
+
+#set $wm_screenCounter = -1
+#foreach $screen in $Screens.values() #begin
+#set $wm_screenCounter = $wm_screenCounter + 1
+        if (!doValidate$(wm_screenCounter)(request))
+            valid = false;
+#end
+
+        // .//GEN-END:_doValidate_1_be
+        // Add custom validation code //GEN-FIRST:_doValidate_1
+
+
+        // .//GEN-LAST:_doValidate_1
+        // .//GEN-BEGIN:_doValidate_2_be
+        return valid;
+    }
+    // .//GEN-END:_doValidate_2_be
+
+#set $wm_screenCounter = -1
+#foreach $screen in $Screens.values() #begin
+#set $wm_screenCounter = $wm_screenCounter + 1
+    // .//GEN-BEGIN:_doValidate$(screen.Name.Upper1)_1_be
+    /** This method should be invoked to ensure a valid state of the FormBean. It will validate the data in the models and set the corresponding properties.
+     * Errors will be raised in the FormBean, if any validation fails.
+     * @param request The request stream
+     * @return A true indicates validations went through successfully. */
+    public boolean doValidate$(wm_screenCounter)(HttpServletRequest request) {
+        boolean valid = true;
+
+#if ($screen.References != null) #begin
+#foreach $reference in $screen.References.values() #begin
+#if ($reference.Name != null) #begin
+#foreach $field in $Fields.values() #begin
+#if ($(field.Name.Upper1) == $(reference.Name.Upper1)) #begin
+#if ($field.RelatedObjectName == null || $field.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#if ($field.Breakup != null) #begin
+#set $wm_widgetType = $(field.Breakup.WidgetType.WidgetTypeBasedOnBreakup)
+#else
+#set $wm_widgetType = $(field.DataType.WidgetType)
+#end
+#if ($(field.DomainField.Upper) != "") #begin
+#if ($field.RelatedObjectName == null) #begin
+#set $wm_meta = "($(field.DataType.MetaFieldType)) $(DomainObject.Upper1)Meta.META_$(field.DomainField.Static)"
+#else
+#set $wm_relatedObject = $field.RelatedObjectName.getRelatedObject($(RelatedObjects))
+#set $wm_meta = "($(field.DataType.MetaFieldType)) $(wm_relatedObject.ObjectName.Upper1)Meta.META_$(field.DomainField.Static)"
+#end
+#if ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "propertyeditor") #begin
+        // convert the property grid back into a string, and store it
+        set$(field.Name.Upper1)(PropertyEditorHelper.getProperties(get$(field.Name.Upper1)WM()));
+
+#else
+        try {
+
+#if ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "checkbox") #begin
+            String value = null;
+            StringBuffer buf = new StringBuffer();
+            if (get$(field.Name.Upper1)WM().getRows() != null) {
+                for (Iterator i = get$(field.Name.Upper1)WM().getRows().iterator(); i.hasNext(); ) {
+                    GridModelRow row = (GridModelRow) i.next();
+                    boolean checked = ((CheckBoxModel) row.getElement("checked")).getState();
+                    if (checked) {
+                        if (buf.length() > 0)
+                            buf.append(',');
+                        buf.append(row.getElement("code"));
+                    }
+                }
+            }
+            if (buf.length() > 0)
+                value = buf.toString();
+
+#if ($(field.Mandatory) == null) #begin
+            value = (String) FieldValidator.validateData(value, $(wm_meta), true);
+#elseif ($(field.Mandatory.BooleanValue)) #begin
+            value = (String) FieldValidator.validateData(value, $(wm_meta), $(field.Mandatory.BooleanValue));
+            if (value == null)
+                throw new MandatoryFieldException(($(wm_meta)).getLabelToken());
+#elseif (!$(field.Mandatory.BooleanValue)) #begin
+            value = (String) FieldValidator.validateData(value, $(wm_meta), $(field.Mandatory.BooleanValue));
+#end
+
+#elseif ($wm_widgetType == "EditBox") #begin
+            String htmlString = get$(field.Name.Upper1)WM().getValue();
+            if (htmlString != null && htmlString.length() == 0)
+                htmlString = null;
+
+#if ($(field.Mandatory) == null) #begin
+            $(field.DataType.JavaDataType) value = ($(field.DataType.JavaDataType)) FieldValidator.validateData(htmlString, $(wm_meta), true);
+#elseif ($(field.Mandatory.BooleanValue)) #begin
+            $(field.DataType.JavaDataType) value = ($(field.DataType.JavaDataType)) FieldValidator.validateData(htmlString, $(wm_meta), $(field.Mandatory.BooleanValue));
+            if (value == null)
+                throw new MandatoryFieldException(($(wm_meta)).getLabelToken());
+#elseif (!$(field.Mandatory.BooleanValue)) #begin
+            $(field.DataType.JavaDataType) value = ($(field.DataType.JavaDataType)) FieldValidator.validateData(htmlString, $(wm_meta), $(field.Mandatory.BooleanValue));
+#end
+
+#elseif ($wm_widgetType == "CheckBox") #begin
+            $(field.DataType.JavaDataType) value = new Boolean(get$(field.Name.Upper1)WM().getState());
+
+#if ($(field.Mandatory) == null) #begin
+            value = FieldValidator.validate(value, $(wm_meta), true);
+#elseif ($(field.Mandatory.BooleanValue)) #begin
+            value = FieldValidator.validate(value, $(wm_meta), $(field.Mandatory.BooleanValue));
+            if (value == null)
+                throw new MandatoryFieldException(($(wm_meta)).getLabelToken());
+#elseif (!$(field.Mandatory.BooleanValue)) #begin
+            value = FieldValidator.validate(value, $(wm_meta), $(field.Mandatory.BooleanValue));
+#end
+
+#elseif ($(field.DataType.DataTypeDateOnly)) #begin
+            $(field.DataType.JavaDataType) value = get$(field.Name.Upper1)WM().getDateOnlyValue();
+
+#if ($(field.Mandatory) == null) #begin
+            value = FieldValidator.validate(value, $(wm_meta), true);
+#elseif ($(field.Mandatory.BooleanValue)) #begin
+            value = FieldValidator.validate(value, $(wm_meta), $(field.Mandatory.BooleanValue));
+            if (value == null)
+                throw new MandatoryFieldException(($(wm_meta)).getLabelToken());
+#elseif (!$(field.Mandatory.BooleanValue)) #begin
+            value = FieldValidator.validate(value, $(wm_meta), $(field.Mandatory.BooleanValue));
+#end
+
+#else
+            $(field.DataType.JavaDataType) value = get$(field.Name.Upper1)WM().getValue();
+
+#if ($(field.Mandatory) == null) #begin
+            value = FieldValidator.validate(value, $(wm_meta), true);
+#elseif ($(field.Mandatory.BooleanValue)) #begin
+            value = FieldValidator.validate(value, $(wm_meta), $(field.Mandatory.BooleanValue));
+            if (value == null)
+                throw new MandatoryFieldException(($(wm_meta)).getLabelToken());
+#elseif (!$(field.Mandatory.BooleanValue)) #begin
+            value = FieldValidator.validate(value, $(wm_meta), $(field.Mandatory.BooleanValue));
+#end
+#end
+            set$(field.Name.Upper1)(value);
+        } catch (ValidationException e) {
+            valid = false;
+            raiseError(request, ($(wm_meta)).getLabelToken(), e);
+        }
+#end
+
+## else for the field.DomainField == null check
+#else
+#if ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "checkbox") #begin
+        {
+            String value = null;
+            StringBuffer buf = new StringBuffer();
+            if (get$(field.Name.Upper1)WM().getRows() != null) {
+                for (Iterator i = get$(field.Name.Upper1)WM().getRows().iterator(); i.hasNext(); ) {
+                    GridModelRow row = (GridModelRow) i.next();
+                    boolean checked = ((CheckBoxModel) row.getElement("checked")).getState();
+                    if (checked) {
+                        if (buf.length() > 0)
+                            buf.append(',');
+                        buf.append(row.getElement("code"));
+                    }
+                }
+            }
+            if (buf.length() > 0)
+                value = buf.toString();
+
+#if ($(field.Mandatory) != null && $(field.Mandatory.BooleanValue)) #begin
+            if (value == null) {
+                valid = false;
+
+#if ($(field.Label) != null) #begin
+                raiseError(request, "$(field.Label)", new MandatoryFieldException("$(field.Label)"));
+#elseif ($(field.Label) == null) #begin
+                raiseError(request, "$(field.Name)", new MandatoryFieldException("$(field.Name)"));
+#end
+            }
+#end
+            if (valid)
+                set$(field.Name.Upper1)(value);
+        }
+#elseif ($wm_widgetType == "CheckBox") #begin
+        {
+            Boolean value = new Boolean(get$(field.Name.Upper1)WM().getState());
+
+#if ($(field.Mandatory) != null && $(field.Mandatory.BooleanValue)) #begin
+            if (value == null) {
+                valid = false;
+
+#if ($(field.Label) != null) #begin
+                raiseError(request, "$(field.Label)", new MandatoryFieldException("$(field.Label)"));
+#elseif ($(field.Label) == null) #begin
+                raiseError(request, "$(field.Name)", new MandatoryFieldException("$(field.Name)"));
+#end
+            }
+#end
+            if (valid)
+                set$(field.Name.Upper1)(value);
+        }
+#elseif ($(field.DataType.DataTypeDateTime)) #begin
+        {
+            $(field.DataType.JavaDataType) value = get$(field.Name.Upper1)WM().getValue();
+
+#if ($(field.Mandatory) != null && $(field.Mandatory.BooleanValue)) #begin
+            if (value == null) {
+                valid = false;
+
+#if ($(field.Label) != null) #begin
+                raiseError(request, "$(field.Label)", new MandatoryFieldException("$(field.Label)"));
+#elseif ($(field.Label) == null) #begin
+                raiseError(request, "$(field.Name)", new MandatoryFieldException("$(field.Name)"));
+#end
+            }
+#end
+            if (valid)
+                set$(field.Name.Upper1)(value);
+        }
+#elseif ($(field.DataType.DataTypeDateOnly)) #begin
+        {
+            $(field.DataType.JavaDataType) value = get$(field.Name.Upper1)WM().getDateOnlyValue();
+
+#if ($(field.Mandatory) != null && $(field.Mandatory.BooleanValue)) #begin
+            if (value == null) {
+                valid = false;
+
+#if ($(field.Label) != null) #begin
+                raiseError(request, "$(field.Label)", new MandatoryFieldException("$(field.Label)"));
+#elseif ($(field.Label) == null) #begin
+                raiseError(request, "$(field.Name)", new MandatoryFieldException("$(field.Name)"));
+#end
+            }
+#end
+            if (valid)
+                set$(field.Name.Upper1)(value);
+        }
+#elseif ($(field.DataType.CriteriaFieldTypeThrowsException)) #begin
+        try {
+            String htmlString = get$(field.Name.Upper1)WM().getValue();
+            if (htmlString != null && htmlString.length() == 0)
+                htmlString = null;
+            $(field.DataType.JavaDataType) value = Parser.$(field.DataType.ParserMethod)(htmlString);
+
+#if ($(field.Mandatory) != null && $(field.Mandatory.BooleanValue)) #begin
+            if (value == null)
+
+#if ($(field.Label) != null) #begin
+                throw new MandatoryFieldException("$(field.Label)");
+#elseif ($(field.Label) == null) #begin
+                throw new MandatoryFieldException("$(field.Name)");
+#end
+#end
+            set$(field.Name.Upper1)(value);
+        } catch (ValidationException e) {
+            valid = false;
+#if ($(field.Label) != null) #begin
+            raiseError(request, "$(field.Label)", e);
+#else
+            raiseError(request, "$(field.Name)", e);
+#end
+        }
+## the following 'elseif' might appear redundant and can be replaced by an 'else' statement. But WebMacro goes crazy with the '{}' delimiters and hence the need for the 'elseif' + '#begin'
+#elseif (!$(field.DataType.CriteriaFieldTypeThrowsException)) #begin
+        {
+            String htmlString = get$(field.Name.Upper1)WM().getValue();
+            if (htmlString != null && htmlString.length() == 0)
+                htmlString = null;
+            $(field.DataType.JavaDataType) value = Parser.$(field.DataType.ParserMethod)(htmlString);
+
+#if ($(field.Mandatory) != null && $(field.Mandatory.BooleanValue)) #begin
+            if (value == null) {
+                valid = false;
+
+#if ($(field.Label) != null) #begin
+                raiseError(request, "$(field.Label)", new MandatoryFieldException("$(field.Label)"));
+#elseif ($(field.Label) == null) #begin
+                raiseError(request, "$(field.Name)", new MandatoryFieldException("$(field.Name)"));
+#end
+            }
+#end
+            if (valid)
+                set$(field.Name.Upper1)(value);
+        }
+#end
+#end
+#end
+#end
+#end
+
+#elseif ($reference.ForeignObjectName != null) #begin
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($(foreignObject.Name.Upper1) == $(reference.ForeignObjectName.Upper1)) #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.KeyType.Upper) == "PRIMARY" || $(field.KeyType.Upper) == "CANDIDATE") #begin
+#if ($(field.DomainField.Upper1) != "" && $foreignObject.RelatedObjectName == null) #begin
+#set $wm_meta = "($(field.DataType.MetaFieldType)) $(DomainObject.Upper1)Meta.META_$(field.DomainField.Static)"
+#elseif ($(field.DomainField.Upper1) != "" && $foreignObject.RelatedObjectName != null) #begin
+#set $wm_relatedObject = $foreignObject.RelatedObjectName.getRelatedObject($(RelatedObjects))
+#set $wm_meta = "($(field.DataType.MetaFieldType)) $(wm_relatedObject.ObjectName.Upper1)Meta.META_$(field.DomainField.Static)"
+#elseif ($(field.SourceChain) == null) #begin
+#set $wm_meta = "($(field.DataType.MetaFieldType)) $(foreignObject.Object.Upper1)Meta.META_$(field.DomainFieldInForeignObject.Static)"
+#else
+#foreach $source in $field.SourceChain.values() #begin #end
+#set $wm_meta = "($(field.DataType.MetaFieldType)) $(source.Object.Upper1)Meta.META_$(field.DomainFieldInForeignObject.Static)"
+#end
+#if ($field.Breakup != null) #begin
+#set $wm_widgetType = $(field.Breakup.WidgetType.WidgetTypeBasedOnBreakup)
+#else
+#set $wm_widgetType = $(field.DataType.WidgetType)
+#end
+        try {
+
+#if ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "checkbox") #begin
+            String value = null;
+            StringBuffer buf = new StringBuffer();
+            if (get$(field.Name.Upper1)WM().getRows() != null) {
+                for (Iterator i = get$(field.Name.Upper1)WM().getRows().iterator(); i.hasNext(); ) {
+                    GridModelRow row = (GridModelRow) i.next();
+                    boolean checked = ((CheckBoxModel) row.getElement("checked")).getState();
+                    if (checked) {
+                        if (buf.length() > 0)
+                            buf.append(',');
+                        buf.append(row.getElement("code"));
+                    }
+                }
+            }
+            if (buf.length() > 0)
+                value = buf.toString();
+
+#if ($(field.Mandatory) == null) #begin
+            value = (String) FieldValidator.validateData(value, $(wm_meta), true);
+#elseif ($(field.Mandatory.BooleanValue)) #begin
+            value = (String) FieldValidator.validateData(value, $(wm_meta), $(field.Mandatory.BooleanValue));
+            if (value == null)
+                throw new MandatoryFieldException(($(wm_meta)).getLabelToken());
+#elseif (!$(field.Mandatory.BooleanValue)) #begin
+            value = (String) FieldValidator.validateData(value, $(wm_meta), $(field.Mandatory.BooleanValue));
+#end
+
+#elseif ($wm_widgetType == "EditBox") #begin
+            String htmlString = get$(field.Name.Upper1)WM().getValue();
+            if (htmlString != null && htmlString.length() == 0)
+                htmlString = null;
+
+#if ($(field.Mandatory) == null) #begin
+            $(field.DataType.JavaDataType) value = ($(field.DataType.JavaDataType)) FieldValidator.validateData(htmlString, $(wm_meta), true);
+#elseif ($(field.Mandatory.BooleanValue)) #begin
+            $(field.DataType.JavaDataType) value = ($(field.DataType.JavaDataType)) FieldValidator.validateData(htmlString, $(wm_meta), $(field.Mandatory.BooleanValue));
+            if (value == null)
+                throw new MandatoryFieldException(($(wm_meta)).getLabelToken());
+#elseif (!$(field.Mandatory.BooleanValue)) #begin
+            $(field.DataType.JavaDataType) value = ($(field.DataType.JavaDataType)) FieldValidator.validateData(htmlString, $(wm_meta), $(field.Mandatory.BooleanValue));
+#end
+
+#elseif ($wm_widgetType == "CheckBox") #begin
+            $(field.DataType.JavaDataType) value = new Boolean(get$(field.Name.Upper1)WM().getState());
+
+#if ($(field.Mandatory) == null) #begin
+            value = FieldValidator.validate(value, $(wm_meta), true);
+#elseif ($(field.Mandatory.BooleanValue)) #begin
+            value = FieldValidator.validate(value, $(wm_meta), $(field.Mandatory.BooleanValue));
+            if (value == null)
+                throw new MandatoryFieldException(($(wm_meta)).getLabelToken());
+#elseif (!$(field.Mandatory.BooleanValue)) #begin
+            value = FieldValidator.validate(value, $(wm_meta), $(field.Mandatory.BooleanValue));
+#end
+
+#elseif ($(field.DataType.DataTypeDateOnly)) #begin
+            $(field.DataType.JavaDataType) value = get$(field.Name.Upper1)WM().getDateOnlyValue();
+
+#if ($(field.Mandatory) == null) #begin
+            value = FieldValidator.validate(value, $(wm_meta), true);
+#elseif ($(field.Mandatory.BooleanValue)) #begin
+            value = FieldValidator.validate(value, $(wm_meta), $(field.Mandatory.BooleanValue));
+            if (value == null)
+                throw new MandatoryFieldException(($(wm_meta)).getLabelToken());
+#elseif (!$(field.Mandatory.BooleanValue)) #begin
+            value = FieldValidator.validate(value, $(wm_meta), $(field.Mandatory.BooleanValue));
+#end
+
+#else
+            $(field.DataType.JavaDataType) value = get$(field.Name.Upper1)WM().getValue();
+
+#if ($(field.Mandatory) == null) #begin
+            value = FieldValidator.validate(value, $(wm_meta), true);
+#elseif ($(field.Mandatory.BooleanValue)) #begin
+            value = FieldValidator.validate(value, $(wm_meta), $(field.Mandatory.BooleanValue));
+            if (value == null)
+                throw new MandatoryFieldException(($(wm_meta)).getLabelToken());
+#elseif (!$(field.Mandatory.BooleanValue)) #begin
+            value = FieldValidator.validate(value, $(wm_meta), $(field.Mandatory.BooleanValue));
+#end
+#end
+            set$(field.Name.Upper1)(value);
+        } catch (ValidationException e) {
+            valid = false;
+            raiseError(request, ($(wm_meta)).getLabelToken(), e);
+        }
+#end
+#end
+#end
+#end
+#end
+#end
+#end
+#end
+#end
+        // .//GEN-END:_doValidate$(screen.Name.Upper1)_1_be
+        // Add custom validation code //GEN-FIRST:_doValidate$(screen.Name.Upper1)_1
+
+
+        // .//GEN-LAST:_doValidate$(screen.Name.Upper1)_1
+        // .//GEN-BEGIN:_doValidate$(screen.Name.Upper1)_2_be
+        return valid;
+    }
+    // .//GEN-END:_doValidate$(screen.Name.Upper1)_2_be
+#end
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelationshipToDomainObject.RelationshipTypeMany && $object.RelatedObjectFields != null) #begin
+    // .//GEN-BEGIN:Related$(object.Name.Upper1)_1_be
+    /** Getter for property related$(object.Name.Upper1). This is invoked by the custom tag, when the jsp is rendered, to get the current value.
+     * This gets the current data from the component.
+     * @return Value of property related$(object.Name.Upper1).
+     */
+    public GridModel getRelated$(object.Name.Upper1)WM() {
+        GridModel rows = (GridModel) getWidgetCache().getModel("related$(object.Name.Upper1)");
+        if (rows == null) {
+            rows = new GridModel();
+            populateRelated$(object.Name.Upper1)(rows);
+            getWidgetCache().addModel("related$(object.Name.Upper1)", rows);
+        }
+        return rows;
+    }
+    
+    /** Setter for property related$(object.Name.Upper1). This is invoked by the servlet, when a post is done on the screen.
+     * It sets the selected rows on the model.
+     * @param value New value of property related$(object.Name.Upper1).
+     */
+    public void setRelated$(object.Name.Upper1)WV(String value) {
+        GridController.updateModel(value, getRelated$(object.Name.Upper1)WM());
+    }
+    
+    private void populateRelated$(object.Name.Upper1)(GridModel rows) {
+        rows.clearRows();
+        $(object.Name.Upper1)Dto[] $(object.Name.JavaBeanStyle) = (($(Component.Upper1)Component) getComponent()).getRelatedObject$(object.Name.Upper1)Dto();
+        if ($(object.Name.JavaBeanStyle) != null) {
+            GridModelRow row = null;
+            for (int i = 0; i < $(object.Name.JavaBeanStyle).length; i++) {
+                $(object.Name.Upper1)Dto rowDto = $(object.Name.JavaBeanStyle)[i];
+                row = rows.newRow();
+
+#if ($object.RelatedObjectFields != null) #begin
+#foreach $field in $object.RelatedObjectFields.values() #begin
+#if ($(field.DataType.DataTypeBoolean)) #begin
+                row.addElement("$(field.Name.JavaBeanStyle)", new CheckBoxModel( (rowDto.get$(field.Name.Upper1)() != null ? rowDto.get$(field.Name.Upper1)() : Boolean.FALSE) ));
+#else
+                row.addElement("$(field.Name.JavaBeanStyle)", rowDto.get$(field.Name.Upper1)());
+#end
+#end
+#end
+                // .//GEN-END:Related$(object.Name.Upper1)_1_be
+                // Add custom code for the row //GEN-FIRST:Related$(object.Name.Upper1)_1
+
+
+                // .//GEN-LAST:Related$(object.Name.Upper1)_1
+                // .//GEN-BEGIN:Related$(object.Name.Upper1)_2_be
+            }
+        }
+    }
+    // .//GEN-END:Related$(object.Name.Upper1)_2_be
+#end
+#end
+#end
+    // All the custom code goes here //GEN-FIRST:_custom
+
+
+
+
+
+
+    // .//GEN-LAST:_custom
+}

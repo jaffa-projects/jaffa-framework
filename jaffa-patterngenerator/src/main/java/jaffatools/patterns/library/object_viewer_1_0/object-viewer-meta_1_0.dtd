@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+<!-- This dtd is used for validating the Meta files for generating the various object viewer files -->
+
+<!ELEMENT Root (PatternTemplate,Application,Module,Component,BasePackage,DomainObject,DomainPackage,Title?,CriteriaFields,ResultsFields,RelatedObjects?)>
+<!ELEMENT PatternTemplate (#PCDATA)>
+<!ELEMENT Application (#PCDATA)>
+<!ELEMENT Module (#PCDATA)>
+<!ELEMENT Component (#PCDATA)>
+<!ELEMENT BasePackage (#PCDATA)>
+<!ELEMENT DomainObject (#PCDATA)>
+<!ELEMENT DomainPackage (#PCDATA)>
+<!ELEMENT Title (#PCDATA)>
+
+<!ELEMENT CriteriaFields (CriteriaField+)>
+<!ELEMENT CriteriaField (Name,DataType,DomainField)>
+<!ELEMENT Name (#PCDATA)>
+<!ELEMENT DataType (#PCDATA)>
+<!ELEMENT DomainField (#PCDATA)>
+
+<!ELEMENT ResultsFields (ResultsField+)>
+<!ELEMENT ResultsField (Name,DataType,Display,Layout?,Label?,Width,DomainField,SourceChain?,Viewer?,AppendField?,FunctionGuardName?)>
+<!ELEMENT Display (#PCDATA)>
+<!ELEMENT Layout (#PCDATA)>
+<!ELEMENT Label (#PCDATA)>
+<!ELEMENT Width (#PCDATA)>
+<!ELEMENT FunctionGuardName (#PCDATA)>
+<!ELEMENT SourceChain (Source+)>
+<!ELEMENT Source (Object,Package,JoinFields)>
+<!ELEMENT Object (#PCDATA)>
+<!ELEMENT Package (#PCDATA)>
+<!ELEMENT JoinFields (JoinBetween+)>
+<!ELEMENT JoinBetween (DomainObjectField,SourceField)>
+<!ELEMENT DomainObjectField (#PCDATA)>
+<!ELEMENT SourceField (#PCDATA)>
+<!ELEMENT Viewer (ComponentName,ClassName,Package,FieldNameInTargetComponent)>
+<!ELEMENT ComponentName (#PCDATA)>
+<!ELEMENT ClassName (#PCDATA)>
+<!ELEMENT FieldNameInTargetComponent (#PCDATA)>
+<!ELEMENT AppendField (AppendBeginMarker?,Name,AppendEndMarker?)>
+<!ELEMENT AppendBeginMarker (#PCDATA)>
+<!ELEMENT AppendEndMarker (#PCDATA)>
+
+<!ELEMENT RelatedObjects (RelatedObject+)>
+<!ELEMENT RelatedObject (ObjectName,Package,RelatedObjectJoinFields,RelatedObjectFields,OrderByFields?,RelatedObjectViewer?,KeyFields,FunctionGuardName?)>
+<!ELEMENT ObjectName (#PCDATA)>
+<!ELEMENT RelatedObjectJoinFields (RelatedObjectJoinBetween+)>
+<!ELEMENT RelatedObjectJoinBetween (DomainObjectField,RelatedObjectFieldName)>
+<!ELEMENT RelatedObjectFieldName (#PCDATA)>
+<!ELEMENT RelatedObjectFields (RelatedObjectField+)>
+<!ELEMENT RelatedObjectField (Name,DataType,Display,DisplayAsKey?,Layout?,Label,Width,DomainField,SourceChain?,AppendField?,FunctionGuardName?)>
+<!ELEMENT DisplayAsKey (#PCDATA)>
+<!ELEMENT OrderByFields (OrderByField+)>
+<!ELEMENT OrderByField (DomainFieldName,sortAscending)>
+<!ELEMENT DomainFieldName (#PCDATA)>
+<!ELEMENT sortAscending (#PCDATA)>
+<!ELEMENT RelatedObjectViewer (ComponentName,ClassName,Package)>
+<!ELEMENT KeyFields (KeyField+)>
+<!ELEMENT KeyField (RelatedObjectFieldName,DataType,FieldNameInTargetComponent)>

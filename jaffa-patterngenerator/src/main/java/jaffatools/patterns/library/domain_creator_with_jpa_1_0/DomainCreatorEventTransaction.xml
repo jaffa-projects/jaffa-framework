@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<!DOCTYPE BuildPattern PUBLIC "-//JAFFA//DTD Pattern 1.0//EN" "http://jaffa.sourceforge.net/DTD/pattern_1_0.dtd">
+
+<BuildPattern>
+    <Name>DomainCreatorPattern</Name>
+
+    <PreRequesites>
+    </PreRequesites>
+
+    <Components>
+
+        <!-- generate the model with no lifecycle events -->
+        <Build>
+            <Template>patterns/library/domain_creator_with_jpa_1_0/DomainObjectNoRINoLifecycleEvents.wm</Template>
+            <Package>java.$(DomainPackage.Lower)</Package>
+            <FileName>$(DomainObject.Upper1).java</FileName>
+            <Override>Merge</Override>
+        </Build>
+
+        <Build>
+            <Template>patterns/library/domain_creator_1_1/MetaObject.wm</Template>
+            <Package>java.$(DomainPackage.Lower)</Package>
+            <FileName>$(DomainObject.Upper1)Meta.java</FileName>
+            <Override>Merge</Override>
+        </Build>
+
+        <Build>
+            <Template>patterns/library/domain_creator_1_1/Resources.wm</Template>
+            <Package>java.$(DomainPackage.Lower)</Package>
+            <FileName>$(DomainObject.Upper1)Resources.properties</FileName>
+            <Override>Merge</Override>
+        </Build>
+
+        <Build>
+            <Template>patterns/library/domain_creator_1_1/Mapping.wm</Template>
+            <Package>java.$(MappingPackage.Lower)</Package>
+            <FileName>$(DomainObject.Upper1).xml</FileName>
+            <Override>True</Override>
+        </Build>
+
+        <!-- uncomment to build for Oracle SQL Scripts -->
+        <Build>
+            <Template>patterns/library/domain_creator_1_1/CreateTable.wm</Template>
+            <Package>sql/install/oracle/tables</Package>
+            <FileName>$(DatabaseTable.Upper).sql</FileName>
+            <Override>True</Override>
+        </Build>
+        <!-- end -->
+
+        <!-- For SEPARATE Constraint Script -->
+        <Build>
+            <Template>patterns/library/domain_creator_1_1/CreateConstraint.wm</Template>
+            <Package>sql/install/oracle/constraints</Package>
+            <FileName>$(DatabaseTable.Upper).sql</FileName>
+            <Override>True</Override>
+        </Build>
+        <!-- end -->
+
+        <!-- uncomment to build for MSSQL Scripts -->
+        <Build>
+            <Template>patterns/library/domain_creator_1_1/CreateTableMSSQL.wm</Template>
+            <Package>sql/install/mssqlserver/tables</Package>
+            <FileName>$(DatabaseTable.Upper).sql</FileName>
+            <Override>True</Override>
+        </Build>
+        <!-- end -->
+
+        <!-- uncomment to build for MySQL Scripts -->
+        <Build>
+            <Template>patterns/library/domain_creator_1_1/CreateTableMySQL.wm</Template>
+            <Package>sql/install/mysql/tables</Package>
+            <FileName>$(DatabaseTable.Upper).sql</FileName>
+            <Override>True</Override>
+        </Build>
+        <!-- end -->
+
+        <!-- create new AOP fragment to represent the meta data -->
+        <Build>
+            <Template>patterns/library/domain_creator_1_1/MetaAop.wm</Template>
+            <Package>aop/1/domain</Package>
+            <FileName>$(DomainObject.Upper1)-aop.xml</FileName>
+            <Override>True</Override>
+        </Build>
+
+    </Components>
+</BuildPattern>
+

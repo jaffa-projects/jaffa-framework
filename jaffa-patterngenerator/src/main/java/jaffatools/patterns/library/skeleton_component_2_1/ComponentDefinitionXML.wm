@@ -1,0 +1,4 @@
+    <component id="$(Application.Upper1).$(Module.Upper1).$(Component.Upper1)">
+        <class>$(BasePackage.Lower).components.$(Component.Lower).ui.$(Component.Upper1)Component</class>
+        <type>Skeleton</type>
+    </component>

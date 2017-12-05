@@ -58,6 +58,7 @@ import java.util.Properties;
 
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNull;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 /**
@@ -96,5 +97,27 @@ public class ApplicationRulesXmlLoadTest {
         assertNotNull(navigationManager.getApplicationRulesRepository().query(key));
         navigationManager.unregisterProperties(key);
         assertNull(navigationManager.getApplicationRulesRepository().query(key));
+    }
+
+    /**
+     * Tests the ability of this IManager to retrieve a repository when given its String name
+     */
+    @Test
+    public void testGetRepositoryByName() throws Exception {
+        ApplicationRulesManager applicationRulesManager = xmlLoaderConfig.getBean(ApplicationRulesManager.class);
+
+        String repo = "Properties";
+        assertEquals(repo, applicationRulesManager.getRepositoryByName(repo).getName());
+    }
+
+    /**
+     * Test the retrieval of the list of repositories managed by this class
+     */
+    @Test
+    public void testGetRepositoryNames() {
+        ApplicationRulesManager applicationRulesManager = xmlLoaderConfig.getBean(ApplicationRulesManager.class);
+        for (Object repositoryName : applicationRulesManager.getRepositoryNames()) {
+            assertEquals("Properties", applicationRulesManager.getRepositoryByName((String) repositoryName).getName());
+        }
     }
 }

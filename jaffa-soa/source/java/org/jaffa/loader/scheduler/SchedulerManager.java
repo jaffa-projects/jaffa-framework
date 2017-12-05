@@ -62,7 +62,9 @@ import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * SchedulerManager will read the scheduler configuration file and provide those configurations to client classes.
@@ -80,7 +82,20 @@ public class SchedulerManager implements IManager {
      */
     private static final String CONFIGURATION_SCHEMA_FILE = "org/jaffa/modules/scheduler/services/configdomain/jaffa-scheduler-config_1_0.xsd";
 
-    private IRepository<Task> schedulerTaskRepository = new MapRepository<>();
+    /**
+     * Create the Task repository
+     */
+    private IRepository<Task> schedulerTaskRepository = new MapRepository<>("Task");
+
+    /**
+     * The list of repositories managed by this class
+     */
+    private HashMap managedRepositories = new HashMap<String, IRepository>() {
+        {
+            put(schedulerTaskRepository.getName(), schedulerTaskRepository);
+        }
+
+    };
 
     /**
      * Register the scheduler task to the repository.
@@ -116,6 +131,25 @@ public class SchedulerManager implements IManager {
     }
 
     /**
+     * getRepositoryNames - Retrieve a String list of all the IRepositories managed by this IManager
+     * @return A list of repository names managed by this manager
+     */
+    @Override
+    public Set getRepositoryNames() {
+        return managedRepositories.keySet();
+    }
+
+    /**
+     * Retrieve an IRepository managed by this IManager via its String name
+     * @param name The name of the repository to be retrieved
+     * @return The retrieved repository, or empty if no matching repository was found.
+     */
+    @Override
+    public IRepository<?> getRepositoryByName(String name) {
+        return (IRepository<?>) managedRepositories.get(name);
+    }
+
+    /**
      * Unregister the scheduler task name from the repository.
      *
      * @param contextKey
@@ -131,7 +165,7 @@ public class SchedulerManager implements IManager {
      * @return
      */
     public Task getSchedulerTaskByTypeName(String typeName) {
-        List<Task> tasks = schedulerTaskRepository.getAllValues();
+        List<Task> tasks = schedulerTaskRepository.getValues();
         for (Task task : tasks) {
             if (typeName.equalsIgnoreCase(task.getType())) return task;
         }
@@ -146,7 +180,7 @@ public class SchedulerManager implements IManager {
      * @return List of all values
      */
     public Task[] getAllSchedulerTasks() {
-        return schedulerTaskRepository.getAllValues().toArray(new Task[0]);
+        return schedulerTaskRepository.getValues().toArray(new Task[0]);
     }
 
 

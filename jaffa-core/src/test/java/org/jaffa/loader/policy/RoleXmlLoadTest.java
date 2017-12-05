@@ -110,4 +110,26 @@ public class RoleXmlLoadTest {
         roleManager.unregisterRole(key);
         assertNull(roleManager.getRole("CONTRACTOR"));
     }
+
+    /**
+     * Tests the ability of this IManager to retrieve a repository when given its String name
+     */
+    @Test
+    public void testGetRepositoryByName() throws Exception {
+        RoleManager roleManager = xmlLoaderConfig.getBean(RoleManager.class);
+
+        String repo = "Role";
+        assertEquals(repo, roleManager.getRepositoryByName(repo).getName());
+    }
+
+    /**
+     * Test the retrieval of the list of repositories managed by this class
+     */
+    @Test
+    public void testGetRepositoryNames() {
+        RoleManager roleManager = xmlLoaderConfig.getBean(RoleManager.class);
+        for (Object repositoryName : roleManager.getRepositoryNames()) {
+            assertEquals("Role", roleManager.getRepositoryByName((String)repositoryName).getName());
+        }
+    }
 }

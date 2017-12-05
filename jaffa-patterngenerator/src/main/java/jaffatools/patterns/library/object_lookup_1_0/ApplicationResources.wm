@@ -1,0 +1,20 @@
+
+#if ($(CriteriaTitle) != null && $(CriteriaTitle) != "") #begin
+$(CriteriaTitle)=Enter Text Here
+#end
+
+#if ($(ResultsTitle) != null && $(ResultsTitle) != "") #begin
+$(ResultsTitle)=Enter Text Here
+#end
+
+#foreach $field in $CriteriaFields.values() #begin
+#if ($(field.Label) != null && $(field.Label) != "") #begin
+$(field.Label)=Enter Text Here
+#end
+#end
+
+#foreach $field in $ResultsFields.values() #begin
+#if ($(field.Label) != null && $(field.Label) != "") #begin
+$(field.Label)=Enter Text Here
+#end
+#end

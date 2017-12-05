@@ -62,6 +62,8 @@ import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Set;
 
 
 /**
@@ -77,6 +79,9 @@ public class JndiJmsManager implements IManager {
     private static final String DEFAULT_JMS_JNDI_CONFIGURATION_FILE =
             "resources/jms-jndi-config.xml";
 
+    /**
+     * The configuration file
+     */
     private String jmsJndiConfigurationFile =
             System.getProperty(ConfigurationService.class.getName(),
                     DEFAULT_JMS_JNDI_CONFIGURATION_FILE);
@@ -93,8 +98,17 @@ public class JndiJmsManager implements IManager {
      * the value in the JndiConfig object.
      */
     private IRepository<JmsConfig> jmsRepository =
-            new MapRepository<>();
+            new MapRepository<>("JmsConfig");
 
+    /**
+     * The list of repositories managed by this class
+     */
+    private HashMap managedRepositories = new HashMap<String, IRepository>() {
+        {
+            put(jmsRepository.getName(), jmsRepository);
+        }
+
+    };
 
     /**
      * Unmarshall the contents of the configuration to create and register
@@ -121,6 +135,25 @@ public class JndiJmsManager implements IManager {
         return jmsJndiConfigurationFile;
     }
 
+    /**
+     * getRepositoryNames - Retrieve a String list of all the IRepositories managed by this IManager
+     * @return A list of repository names managed by this manager
+     */
+    @Override
+    public Set getRepositoryNames() {
+        return managedRepositories.keySet();
+    }
+
+    /**
+     * Retrieve an IRepository managed by this IManager via its String name
+     * @param name The name of the repository to be retrieved
+     * @return The retrieved repository, or empty if no matching repository was found.
+     */
+    @Override
+    public IRepository<?> getRepositoryByName(String name) {
+        return (IRepository<?>) managedRepositories.get(name);
+    }
+
     public IRepository<JmsConfig> getJmsRepository() {
         return jmsRepository;
     }
@@ -135,6 +168,6 @@ public class JndiJmsManager implements IManager {
      */
     public JmsConfig getJmsConfig() {
         //There should be only one entry of jmsJndiConfig
-        return jmsRepository.getAllValues()!=null && jmsRepository.getAllValues().size() > 0 ? jmsRepository.getAllValues().get(0) : null;
+        return jmsRepository.getValues()!=null && jmsRepository.getValues().size() > 0 ? jmsRepository.getValues().get(0) : null;
     }
 }

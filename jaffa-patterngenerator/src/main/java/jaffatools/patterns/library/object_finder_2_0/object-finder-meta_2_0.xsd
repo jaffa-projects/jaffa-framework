@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+            jxb:version="1.0">
+            
+  <xsd:include schemaLocation="../common_1_0/dataTypes_1_0.xsd"/>
+  <xsd:include schemaLocation="../common_1_0/sourceChain_1_0.xsd"/>
+  <xsd:include schemaLocation="../common_1_0/breakup_1_0.xsd"/>
+
+  <xsd:annotation>
+    <xsd:appinfo>
+      <jxb:schemaBindings>
+        <jxb:package name="org.jaffa.patterns.library.object_finder_meta_2_0.domain"/>
+      </jxb:schemaBindings>
+    </xsd:appinfo>
+  </xsd:annotation>
+
+  <xsd:element name="Root">
+    <xsd:annotation>
+      <xsd:appinfo>
+        <jxb:class name="ObjectFinderMeta"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+    
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="PatternTemplate" 	type="xsd:string" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="Application" 	type="xsd:string" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="Module" 		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="Component" 		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="BasePackage" 	type="xsd:string" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="DomainObject" 	type="xsd:string" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="DomainPackage" 	type="xsd:string" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="CriteriaTitle" 	type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="ResultsTitle" 	type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="ConsolidatedCriteriaAndResultsTitle" 	type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="MainLayout" 	        type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="FinderLayout" 	type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="FinderExcelLayout" 	type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="FinderXmlLayout" 	type="xsd:string" minOccurs="0" maxOccurs="1"/>
+
+        <xsd:element name="CriteriaFields" 	type="criteriaFields" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="ResultsFields" 	type="resultsFields" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="OrderByFieldCombos" 	type="orderByFieldCombos" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="Creator" 		type="creator" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="Viewer" 		type="viewer" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="Updator" 		type="updator" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="Deletor" 		type="deletor" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="KeyFields" 		type="keyFields" minOccurs="1" maxOccurs="1"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:complexType name="criteriaFields">
+    <xsd:sequence>
+      <xsd:element name="CriteriaField" type="criteriaField" minOccurs="1" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="criteriaField">
+    <xsd:sequence>
+        <xsd:element name="Name" 		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="DataType" 		type="dataTypes" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="Display" 		type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="Label" 		type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="DomainField" 	type="xsd:string" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="AltDomainObject" 	type="altDomainObject" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="Breakup" 		type="breakup" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="FunctionGuardName" 	type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="Lookup" 		type="lookup" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="altDomainObject">
+    <xsd:sequence>
+        <xsd:element name="Object" 		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="Package" 		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="CriteriaJoinFields" 	type="criteriaJoinFields" minOccurs="1" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="criteriaJoinFields">
+    <xsd:sequence>
+        <xsd:element name="CriteriaJoinBetween"	type="criteriaJoinBetween" minOccurs="1" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="criteriaJoinBetween">
+    <xsd:sequence>
+        <xsd:element name="DomainObjectField"	 type="xsd:string" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="AltDomainObjectField" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="lookup">
+    <xsd:sequence>
+      <xsd:element name="Component"		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="TargetFields"		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="BypassCriteriaScreen"	type="xsd:boolean" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="StaticParameters"	type="xsd:string" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="DynamicParameters"	type="xsd:string" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="resultsFields">
+    <xsd:sequence>
+      <xsd:element name="ResultsField" type="resultsField" minOccurs="1" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="resultsField">
+    <xsd:sequence>
+      <xsd:element name="Name"			type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="DataType"		type="dataTypes" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="Display"		type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="DisplayAsKey"		type="xsd:boolean" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="Layout"		type="xsd:string" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="Label"			type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="DomainField"		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="SourceChain" 		type="sourceChain" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="AppendField" 		type="appendField" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="FunctionGuardName"	type="xsd:string" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="appendField">
+    <xsd:sequence>
+      <xsd:element name="AppendBeginMarker"	type="xsd:string" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="Name"			type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="AppendEndMarker"	type="xsd:string" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="orderByFieldCombos">
+    <xsd:sequence>
+      <xsd:element name="OrderByFieldCombo"	type="orderByFieldCombo" minOccurs="1" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="orderByFieldCombo">
+    <xsd:sequence>
+      <xsd:element name="OrderByField"		type="orderByField" minOccurs="1" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="orderByField">
+    <xsd:sequence>
+      <xsd:element name="DomainFieldName"	type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="Label"			type="xsd:string" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="SortAscending"		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="creator">
+    <xsd:sequence>
+      <xsd:element name="ComponentName"		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="ClassName"		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="Package"		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="viewer">
+    <xsd:sequence>
+      <xsd:element name="ComponentName"		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="ClassName"		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="Package"		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="updator">
+    <xsd:sequence>
+      <xsd:element name="ComponentName"		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="ClassName"		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="Package"		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="deletor">
+    <xsd:sequence>
+      <xsd:element name="ComponentName"		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="ClassName"		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="Package"		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="keyFields">
+    <xsd:sequence>
+      <xsd:element name="KeyField"		type="keyField" minOccurs="1" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="keyField">
+    <xsd:sequence>
+      <xsd:element name="ResultsFieldName"		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="DataType"			type="dataTypes" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="FieldNameInTargetComponent"	type="xsd:string" minOccurs="1" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+<!-- Now Included! 
+
+  <xsd:complexType name="breakup">
+    <xsd:sequence>
+        <xsd:element name="WidgetType"	 	type="xsd:string" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="StaticValues"	type="staticValues" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="DynamicValues"	type="dynamicValues" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="InitialValue"	type="xsd:string" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="staticValues">
+    <xsd:sequence>
+        <xsd:element name="StaticValue"		type="staticValue" minOccurs="1" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="staticValue">
+    <xsd:sequence>
+        <xsd:element name="Code"	 	type="xsd:string" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="Description"		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="dynamicValues">
+    <xsd:sequence>
+        <xsd:element name="DomainClassName"		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="CodeFieldName"		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="DescriptionFieldName"	type="xsd:string" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="BreakupCriteriaFields"	type="breakupCriteriaFields" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="CodeHelperInterface"		type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="AppendCodeAndDescription"	type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="AppendBeginMarker"		type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="AppendEndMarker"		type="xsd:string" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="breakupCriteriaFields">
+    <xsd:sequence>
+        <xsd:element name="BreakupCriteriaField"	type="breakupCriteriaField" minOccurs="1" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="breakupCriteriaField">
+    <xsd:sequence>
+        <xsd:element name="DataType"		type="dataTypes" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="DomainField"		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="Operator"		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="Values"		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+
+  <xsd:complexType name="sourceChain">
+    <xsd:sequence>
+      <xsd:element name="Source" type="source" minOccurs="1" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="source">
+    <xsd:sequence>
+      <xsd:element name="Object" 		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="Package" 		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="JoinFields" 		type="joinFields" minOccurs="1" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="joinFields">
+    <xsd:sequence>
+      <xsd:element name="JoinBetween"		type="joinBetween" minOccurs="1" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="joinBetween">
+    <xsd:sequence>
+      <xsd:element name="DomainObjectField"	type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="SourceField" 		type="xsd:string" minOccurs="1" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+Included! -->
+
+</xsd:schema>

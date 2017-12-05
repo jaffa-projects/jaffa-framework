@@ -1,0 +1,132 @@
+<%-- ---------------------------------------------------------------- 
+  -- Code Generated From JAFFA Framework Default Pattern           --
+  --                                                               --
+  -- The JAFFA Project can be found at http://jaffa.sourceforge.net--
+  -- and is available under the Lesser GNU Public License          --
+  -- //JAFFA-OVERWRITE: As long as this line exists, this file will be overwritten in all future runs of the pattern generator --
+  -- ------------------------------------------------------------- --%>
+<%@ page language="java" %>
+<%@ page import="org.jaffa.util.MessageHelper" %>
+<%@ page import="org.jaffa.presentation.portlet.widgets.taglib.TagHelper" %>
+<%@ taglib uri="/WEB-INF/jaffa-portlet.tld" prefix="Portlet" %>
+
+<table>
+
+#foreach $field in $CriteriaFields.values() #begin
+#if ($(field.Display.BooleanValue)) #begin
+#if ($(field.FunctionGuardName) != null) #begin
+  <Portlet:FunctionGuard name="$(field.FunctionGuardName)">
+#end
+    <Portlet:Property field='$(field.Name.JavaBeanStyle)'>
+    <tr> 
+        <td class='label'>
+
+#if ($field.Label != null && $field.Label.Lower != "") #begin
+            <Portlet:Label key="$(field.Label)"/>:
+#else
+            <Portlet:Label/>:
+#end
+        </td>
+
+#if ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "checkbox") #begin
+        <td colspan="2">
+#else
+        <td>
+#end
+
+#if ($(field.DataType.DataTypeBoolean) && $field.Breakup == null) #begin
+            <Portlet:DropDown/>
+#elseif ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "checkbox") #begin
+            <Portlet:Grid field="$(field.Name.JavaBeanStyle)" displayOnly="true">
+                <Portlet:GridColumn label="">
+                    <Portlet:CheckBox field="checked"/>
+                    <a class="checkboxlabel"><%= MessageHelper.replaceTokens(pageContext, (String) TagHelper.getModelMap(pageContext).get("description")) %></a>
+                </Portlet:GridColumn>
+            </Portlet:Grid>
+#elseif ($field.Breakup == null || $field.Breakup.WidgetType.Lower == "dropdown") #begin
+            <Portlet:DropDown field="$(field.Name.JavaBeanStyle)Dd"/>
+#end
+        </td>
+        <td>
+
+#if ($(field.DataType.DataTypeBoolean) && $field.Breakup == null) #begin
+#elseif ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "checkbox") #begin
+#elseif ($field.Breakup != null && $field.Breakup.WidgetType.Lower == "dropdown") #begin
+            <Portlet:DropDown/>
+#else
+            <Portlet:EditBox/>
+#end
+
+#if (($(field.DataType.DataTypeDateTime) || $(field.DataType.DataTypeDateOnly)) && $field.Breakup == null) #begin
+            <Portlet:Calendar/>
+#end
+
+#if ($(field.Lookup) != null) #begin
+#set $wm_additionalLookupAttributes = ""
+#if ($(field.Lookup.BypassCriteriaScreen) != null) #begin
+#set $wm_additionalLookupAttributes = "$(wm_additionalLookupAttributes) bypassCriteriaScreen='$(field.Lookup.BypassCriteriaScreen.BooleanValue)'"
+#end
+#if ($(field.Lookup.StaticParameters) != null) #begin
+#set $wm_additionalLookupAttributes = "$(wm_additionalLookupAttributes) staticParameters='$(field.Lookup.StaticParameters)'"
+#end
+#if ($(field.Lookup.DynamicParameters) != null) #begin
+#set $wm_additionalLookupAttributes = "$(wm_additionalLookupAttributes) dynamicParameters='$(field.Lookup.DynamicParameters)'"
+#end
+            <Portlet:ComponentGuard name="$(field.Lookup.Component)">
+                <Portlet:Lookup component='$(field.Lookup.Component)' targetFields='$(field.Lookup.TargetFields)'$(wm_additionalLookupAttributes)>&nbsp;</Portlet:Lookup>
+            </Portlet:ComponentGuard>
+#end
+        </td>
+    </tr>
+    </Portlet:Property>
+
+#if ($(field.FunctionGuardName) != null) #begin
+  </Portlet:FunctionGuard>
+#end
+#end
+#end
+
+#if ($OrderByFieldCombos != null) #begin
+    <tr>
+	<td class='label'><Portlet:Label key="label.Jaffa.Inquiry.sort"/>:</td>
+        <td colspan="2">
+            <Portlet:DropDown field="sortDropDown">
+
+#foreach $orderByFieldCombo in $OrderByFieldCombos.values() #begin
+#set $wm_label = ""
+#set $wm_value = ""
+#set $firstPass = "true"
+#foreach $field in $orderByFieldCombo.values() #begin
+#if ($field.DomainFieldName != null) #begin
+#if ($firstPass == "true") #begin
+#set $firstPass = "false"
+#else
+#set $wm_label = "$(wm_label) + \", \" + "
+#set $wm_value = "$(wm_value), "
+#end
+#if ($field.Label != null && $field.Label.Lower != "") #begin
+#set $wm_label = "$(wm_label)\"$(field.Label)\""
+#else
+#set $wm_label = "$(wm_label)$(DomainPackage.Lower).$(DomainObject.Upper1)Meta.META_$(field.DomainFieldName.Static).getLabelToken()"
+#end
+#set $wm_value = "$(wm_value)$(field.DomainFieldName.Upper1)"
+#if ($field.SortAscending != null && $field.SortAscending.Lower == "false") #begin
+#set $wm_label = "$(wm_label) + \"[label.Jaffa.Inquiry.OrderByField.SortDescending]\""
+#set $wm_value = "$(wm_value) desc"
+#else
+#set $wm_label = "$(wm_label) + \"[label.Jaffa.Inquiry.OrderByField.SortAscending]\""
+#set $wm_value = "$(wm_value)"
+#end
+#end
+#end
+                <Portlet:DropDownOption label='<%= $(wm_label) %>' value='$(wm_value)'/>
+#end
+            </Portlet:DropDown>
+        </td>
+    </tr>
+#end
+    <tr>
+        <td class="label"><Portlet:Label key="label.Jaffa.Inquiry.maxRecords"/>:</td>
+        <td colspan="2"><Portlet:DropDown field="maxRecords"/></td>
+    </tr>
+</table>

@@ -48,6 +48,8 @@
  */
 package org.jaffa.components.finder;
 
+import org.jaffa.beans.factory.config.StaticContext;
+
 /**
  * This is the base class for all the output DTOs used by the Finder components.
  */
@@ -57,6 +59,13 @@ public class FinderOutDto {
     private Boolean moreRecordsExist = Boolean.FALSE;
     /** Indicates if there are more records than what are being returned by a query. */
     private Integer totalRecords;
+
+    /**
+     * Pass derived instances to the static context to be initialized.
+     */
+    public FinderOutDto() {
+        StaticContext.initialize(this);
+    }
 
     /** Getter for property moreRecordsExist.
      * @return Value of property moreRecordsExist.

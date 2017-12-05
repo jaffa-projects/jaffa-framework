@@ -7,11 +7,9 @@
   <interceptor name="case-type" class="org.jaffa.rules.jbossaop.interceptors.CaseTypeInterceptor" scope="PER_VM"/>
   <interceptor name="comment" class="org.jaffa.rules.jbossaop.interceptors.CommentInterceptor" scope="PER_VM"/>
   <interceptor name="component-guard" class="org.jaffa.rules.jbossaop.interceptors.ComponentGuardInterceptor" scope="PER_VM"/>
-  <interceptor name="flex-fields" class="org.jaffa.rules.jbossaop.interceptors.FlexFieldsInterceptor" scope="PER_VM"/>
   <interceptor name="foreign-key" class="org.jaffa.rules.jbossaop.interceptors.ForeignKeyInterceptor" scope="PER_VM"/>
   <interceptor name="function-guard" class="org.jaffa.rules.jbossaop.interceptors.FunctionGuardInterceptor" scope="PER_VM"/>
   <interceptor name="generic-foreign-key" class="org.jaffa.rules.jbossaop.interceptors.GenericForeignKeyInterceptor" scope="PER_VM"/>
-  <interceptor name="initialize" class="org.jaffa.rules.jbossaop.interceptors.InitializeInterceptor" scope="PER_VM"/>
   <interceptor name="in-list" class="org.jaffa.rules.jbossaop.interceptors.InListInterceptor" scope="PER_VM"/>
   <interceptor name="mandatory" class="org.jaffa.rules.jbossaop.interceptors.MandatoryInterceptor" scope="PER_VM"/>
   <interceptor name="max-length" class="org.jaffa.rules.jbossaop.interceptors.MaxLengthInterceptor" scope="PER_VM"/>
@@ -26,25 +24,4 @@
   <interceptor name="struts-FormBeanConfig" class="org.jaffa.rules.jbossaop.interceptors.StrutsFormBeanConfigInterceptor" scope="PER_VM"/>
     
   <interceptor name="metrics" class="org.jaffa.rules.jbossaop.interceptors.MetricsInterceptor" scope="PER_VM"/>
-  
-  <!-- Bind the necessary interceptors to the FlexBean -->
-  <bind pointcut='construction(org.jaffa.flexfields.FlexBean->new(..))'>
-    <interceptor-ref name='initialize'/>
-  </bind>
-  <bind pointcut='execution(* org.jaffa.flexfields.FlexBean->validate())'>
-    <interceptor-ref name='candidate-key'/>
-    <interceptor-ref name='case-type'/>
-    <interceptor-ref name='comment'/>
-    <interceptor-ref name='foreign-key'/>
-    <interceptor-ref name='generic-foreign-key'/>
-    <interceptor-ref name='in-list'/>
-    <interceptor-ref name='mandatory'/>
-    <interceptor-ref name='max-length'/>
-    <interceptor-ref name='max-value'/>
-    <interceptor-ref name='min-length'/>
-    <interceptor-ref name='min-value'/>
-    <interceptor-ref name='not-in-list'/>
-    <interceptor-ref name='partial-foreign-key'/>
-    <interceptor-ref name='pattern'/>
-  </bind> 
 </aop>

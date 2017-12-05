@@ -50,11 +50,9 @@
 package org.jaffa.rules;
 
 import junit.framework.TestCase;
-import org.jaffa.config.JaffaRulesConfig;
 import org.jaffa.rules.testmodels.VariationBean;
 import org.jaffa.security.VariationContext;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
  * It is recommened that the variant rules be put after the non-variant rules.
@@ -82,8 +80,10 @@ public class VariationTest extends TestCase {
         junit.textui.TestRunner.run(VariationTest.class);
     }
 
+    @Override
     protected void setUp() throws Exception {
-        ctx = new AnnotationConfigApplicationContext(JaffaRulesConfig.class);
+        super.setUp();
+        TestHelper.setupRepos();
     }
 
     public void testCoreRules() {
@@ -197,5 +197,11 @@ public class VariationTest extends TestCase {
             e.printStackTrace(System.err);
             fail();
         }
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        TestHelper.shutdownRepos();
     }
 }

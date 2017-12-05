@@ -53,6 +53,7 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 
+import org.jaffa.beans.factory.config.StaticContext;
 import org.jaffa.components.codehelper.dto.CodeHelperOutCodeDto;
 import org.jaffa.components.codehelper.dto.CodeHelperOutElementDto;
 import org.jaffa.datatypes.DateTime;
@@ -94,6 +95,15 @@ public abstract class FinderForm extends FormBase {
     public static final String MAX_RECORDS = "maxRecords";
     /** A global constant for the rows widget.*/
     public static final String ROWS = "rows";
+
+    /**
+     * Default Constructor
+     *
+     * Calls the Static Context Factory to allow Spring to initialize this object
+     */
+    public FinderForm() {
+        StaticContext.configure(this);
+    }
 
 
     // ************************************************************

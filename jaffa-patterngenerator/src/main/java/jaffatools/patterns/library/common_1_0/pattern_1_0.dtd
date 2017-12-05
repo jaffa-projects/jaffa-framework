@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+<!-- This dtd is used for validating the Pattern Templates, utitlised by the Pattern Generator, for generating the various components of a Pattern -->
+
+<!ELEMENT BuildPattern (Name,PreRequesites,Components)>
+<!ELEMENT Name (#PCDATA)>
+
+<!ELEMENT PreRequesites (Class*)>
+<!ELEMENT Class (#PCDATA)>
+
+<!ELEMENT Components (Build+)>
+<!ELEMENT Build (Template,Package,FileName,Override,Generate?)>
+<!ELEMENT Template (#PCDATA)>
+<!ELEMENT Package (#PCDATA)>
+<!ELEMENT FileName (#PCDATA)>
+<!ELEMENT Override (#PCDATA)>
+<!ELEMENT Generate (Type,ClassName?,Arguments?,WorkingDirectory?,CommandLine?)>
+<!ELEMENT Type (#PCDATA)>
+<!ELEMENT ClassName (#PCDATA)>
+<!ELEMENT Arguments (#PCDATA)>
+<!ELEMENT WorkingDirectory (#PCDATA)>
+<!ELEMENT CommandLine (#PCDATA)>

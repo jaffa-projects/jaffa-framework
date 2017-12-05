@@ -344,4 +344,43 @@ public class MessagingManagerTest {
         assertNotNull(messagingManager.getMessageFilterRepository());
     }
 
+    /**
+     * Test the ability to retrieve a managed repository name
+     */
+    @Test
+    public void testGetName() throws Exception {
+        //MessageInfoRepository
+        MessageInfo info = new MessageInfo();
+        String queueName = "q1";
+        info.setQueueName(queueName);
+        ContextKey contextKey = new ContextKey(queueName, "jaffa-messaging-config.xml", "DEF", "0-PLATFORM");
+        messagingManager.registerMessageInfo(contextKey, info);
+        assertEquals("MessageInfo", messagingManager.getRepositoryByName("MessageInfo").getName());
+
+        //MessageFilterRepository
+        MessageFilter filter = new MessageFilter();
+        String name = "q1";
+        filter.setFilterName(name);
+        contextKey = new ContextKey(name, "jaffa-messaging-config.xml", "DEF", "0-PLATFORM");
+        messagingManager.registerMessageFilter(contextKey, filter);
+        assertEquals("MessageFilter", messagingManager.getRepositoryByName("MessageFilter").getName());
+
+        //TopicInfoRepository
+        TopicInfo topicInfo = new TopicInfo();
+        String topicName = "t1";
+        topicInfo.setName(topicName);
+        contextKey = new ContextKey(topicName, "jaffa-messaging-config.xml", "DEF", "0-PLATFORM");
+        messagingManager.registerTopicInfo(contextKey, topicInfo);
+        assertEquals("TopicInfo", messagingManager.getRepositoryByName("TopicInfo").getName());
+
+        //QueueInfoRepository
+        QueueInfo qInfo = new QueueInfo();
+        String commonName = "q1";
+        qInfo.setName(commonName);
+        contextKey = new ContextKey(commonName, "jaffa-messaging-config.xml", "DEF", "0-PLATFORM");
+        messagingManager.registerQueueInfo(contextKey, qInfo);
+        assertEquals("QueueInfo", messagingManager.getRepositoryByName("QueueInfo").getName());
+
+    }
+
 }

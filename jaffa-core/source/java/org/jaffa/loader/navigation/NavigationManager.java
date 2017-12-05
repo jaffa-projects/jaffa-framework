@@ -61,6 +61,8 @@ import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Set;
 
 /**
  * NavigationManager - Handles the management of the GlobalMenu read from the navigation.xml file
@@ -82,10 +84,18 @@ public class NavigationManager implements IManager {
      */
     private static final String GLOBAL_MENU_ID = "globalMenu";
 
+    /** Create a GlobalMenu Repository */
+    private IRepository<GlobalMenu> navigationRepository = new MapRepository<>("GlobalMenu");
+
     /**
-     * Return the navigation map repository.
+     * The list of repositories managed by this class
      */
-    private IRepository<GlobalMenu> navigationRepository = new MapRepository<>();
+    private HashMap managedRepositories = new HashMap<String, IRepository>() {
+        {
+            put(navigationRepository.getName(), navigationRepository);
+        }
+
+    };
 
     private static final Logger log = Logger.getLogger(NavigationManager.class);
 
@@ -148,6 +158,26 @@ public class NavigationManager implements IManager {
      */
     public IRepository<GlobalMenu> getNavigationRepository() {
         return navigationRepository;
+    }
+
+
+    /**
+     * getRepositoryNames - Retrieve a String list of all the IRepositories managed by this IManager
+     * @return A list of repository names managed by this manager
+     */
+    @Override
+    public Set getRepositoryNames() {
+        return managedRepositories.keySet();
+    }
+
+    /**
+     * Retrieve an IRepository managed by this IManager via its String name
+     * @param name The name of the repository to be retrieved
+     * @return The retrieved repository, or empty if no matching repository was found.
+     */
+    @Override
+    public IRepository<?> getRepositoryByName(String name) {
+        return (IRepository<?>) managedRepositories.get(name);
     }
 
     /**

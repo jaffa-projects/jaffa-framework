@@ -1,0 +1,1 @@
+    <forward name="$(Module.Lower)_$(Component.Lower1)" path="$(Application.Lower).$(Module.Lower).$(Component.Lower)"/>

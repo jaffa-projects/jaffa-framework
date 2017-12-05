@@ -1,0 +1,122 @@
+#if ($(MainLayout) != null && $(MainLayout.Lower) != "") #begin
+#set $wm_mainLayout = "$(MainLayout)"
+#else
+#set $wm_mainLayout = "jaffa.MainLayout"
+#end
+#if ($(FinderLayout) != null && $(FinderLayout.Lower) != "") #begin
+#set $wm_finderLayout = "$(FinderLayout)"
+#else
+#set $wm_finderLayout = "jaffa.FinderLayout"
+#end
+#if ($(FinderExcelLayout) != null && $(FinderExcelLayout.Lower) != "") #begin
+#set $wm_finderExcelLayout = "$(FinderExcelLayout)"
+#else
+#set $wm_finderExcelLayout = "jaffa.FinderExcelLayout"
+#end
+#if ($(FinderXmlLayout) != null && $(FinderXmlLayout.Lower) != "") #begin
+#set $wm_finderXmlLayout = "$(FinderXmlLayout)"
+#else
+#set $wm_finderXmlLayout = "jaffa.FinderXmlLayout"
+#end
+    <!-- $(Component.Upper1) Criteria -->
+    <definition name="$(Application.Lower).$(Module.Lower).$(Component.Lower).FinderLayout.criteria"  extends="$(wm_finderLayout)">
+        <put name="body1" value="/$(Application.Lower)/$(Module.Lower)/$(Component.Lower)/criteria.jsp"/>
+        <put name="body2" value=""/>
+        <put name="action" value="/$(Application.Lower)_$(Module.Lower)_$(Component.JavaBeanStyle)"/>
+
+#if ($Creator != null) #begin
+        <put name="createComponent" value="$(Creator.ComponentName)"/>
+#end
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+
+#if ($Creator != null) #begin
+            <add value="CreateFromCriteria"/>
+#end
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="$(Application.Lower).$(Module.Lower).$(Component.Lower).criteria"  extends="$(wm_mainLayout)">
+
+#if ($(CriteriaTitle) != null && $(CriteriaTitle.Lower) != "") #begin
+        <put name="title" value="$(CriteriaTitle)"/>
+#end
+        <put name="body" value="$(Application.Lower).$(Module.Lower).$(Component.Lower).FinderLayout.criteria"/>
+    </definition>
+
+    <!-- $(Component.Upper1) Results -->
+    <definition name="$(Application.Lower).$(Module.Lower).$(Component.Lower).FinderLayout.results"  extends="$(wm_finderLayout)">
+        <put name="body1" value=""/>
+        <put name="body2" value="/$(Application.Lower)/$(Module.Lower)/$(Component.Lower)/results.jsp"/>
+        <put name="action" value="/$(Application.Lower)_$(Module.Lower)_$(Component.JavaBeanStyle)"/>
+
+#if ($Creator != null) #begin
+        <put name="createComponent" value="$(Creator.ComponentName)"/>
+#end
+        <putList name="contextNavLinks">
+            <add value="ModifySearch"/>
+            <add value="Refresh"/>
+
+#if ($Creator != null) #begin
+            <add value="CreateFromResults"/>
+#end
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="ModifySearch"/>
+        </putList>
+    </definition>
+    <definition name="$(Application.Lower).$(Module.Lower).$(Component.Lower).results"  extends="$(wm_mainLayout)">
+
+#if ($(ResultsTitle) != null && $(ResultsTitle.Lower) != "") #begin
+        <put name="title" value="$(ResultsTitle)"/>
+#end
+        <put name="body" value="$(Application.Lower).$(Module.Lower).$(Component.Lower).FinderLayout.results"/>
+    </definition>
+
+    <!-- $(Component.Upper1) ConsolidatedCriteriaAndResults -->
+    <definition name="$(Application.Lower).$(Module.Lower).$(Component.Lower).FinderLayout.consolidatedCriteriaAndResults"  extends="$(wm_finderLayout)">
+        <put name="body1" value="/$(Application.Lower)/$(Module.Lower)/$(Component.Lower)/criteria.jsp"/>
+        <put name="body2" value="/$(Application.Lower)/$(Module.Lower)/$(Component.Lower)/results.jsp"/>
+        <put name="action" value="/$(Application.Lower)_$(Module.Lower)_$(Component.JavaBeanStyle)"/>
+
+#if ($Creator != null) #begin
+        <put name="createComponent" value="$(Creator.ComponentName)"/>
+#end
+        <putList name="contextNavLinks">
+            <add value="Search"/>
+            <add value="Clear"/>
+
+#if ($Creator != null) #begin
+            <add value="CreateFromResults"/>
+#end
+            <add value="Close"/>
+        </putList>
+        <putList name="defaultNavLinks">
+            <add value="Close"/>
+            <add value="Search"/>
+        </putList>
+    </definition>
+    <definition name="$(Application.Lower).$(Module.Lower).$(Component.Lower).consolidatedCriteriaAndResults"  extends="$(wm_mainLayout)">
+
+#if ($(ConsolidatedCriteriaAndResultsTitle) != null && $(ConsolidatedCriteriaAndResultsTitle.Lower) != "") #begin
+        <put name="title" value="$(ConsolidatedCriteriaAndResultsTitle)"/>
+#end
+        <put name="body" value="$(Application.Lower).$(Module.Lower).$(Component.Lower).FinderLayout.consolidatedCriteriaAndResults"/>
+    </definition>
+
+    <!-- $(Component.Upper1) Results as Excel -->
+    <definition name="$(Application.Lower).$(Module.Lower).$(Component.Lower).FinderExcelLayout"  extends="$(wm_finderExcelLayout)">
+        <put name="body" value="/$(Application.Lower)/$(Module.Lower)/$(Component.Lower)/results.jsp"/>
+        <put name="action" value="/$(Application.Lower)_$(Module.Lower)_$(Component.JavaBeanStyle)"/>
+    </definition>
+
+    <!-- $(Component.Upper1) Results as Xml -->
+    <definition name="$(Application.Lower).$(Module.Lower).$(Component.Lower).FinderXmlLayout"  extends="$(wm_finderXmlLayout)">
+    </definition>
+

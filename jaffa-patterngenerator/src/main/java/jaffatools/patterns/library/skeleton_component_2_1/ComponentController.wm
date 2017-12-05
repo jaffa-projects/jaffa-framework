@@ -1,0 +1,239 @@
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ * 
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/
+package $(BasePackage.Lower).components.$(Component.Lower).ui;
+
+import java.util.*;
+import org.apache.log4j.Logger;
+import org.jaffa.presentation.portlet.component.Component;
+import org.jaffa.presentation.portlet.FormKey;
+import org.jaffa.middleware.Factory;
+import org.jaffa.components.dto.HeaderDto;
+import org.jaffa.security.VariationContext;
+import org.jaffa.exceptions.ApplicationExceptions;
+import org.jaffa.exceptions.FrameworkException;
+import $(BasePackage.Lower).components.$(Component.Lower).I$(Component.Upper1);
+
+
+/** The controller for the $(Component.Upper1).
+ */
+public class $(Component.Upper1)Component extends Component {
+    
+    private static Logger log = Logger.getLogger($(Component.Upper1)Component.class);
+    private I$(Component.Upper1) m_tx = null;
+    private List m_screens;
+    private int m_currentScreenCounter = 0;
+    private HeaderDto m_headerDto = null;
+
+
+$ScratchPad.clear()
+#if ($Screens != null) #begin
+#foreach $screen in $Screens.values() #begin
+#if ($(screen.ScreenFields) != null) #begin
+#foreach $field in $screen.ScreenFields.values() #begin
+#set $wm_fieldName = $(field.Name.JavaBeanStyle)
+#if ($ScratchPad.get($wm_fieldName) == null) #begin
+#if ($(field.LinkedToComponent.BooleanValue)) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_fieldName,$wm_fieldName) != null) #begin #end
+#set $wm_wt = $field.WidgetType.Lower
+#if ($wm_wt == "editbox" || $wm_wt == "checkbox" || $wm_wt == "datetime" || $wm_wt == "text" || $wm_wt == "dropdown" || $wm_wt == "radiobutton") #begin
+    private $(field.DataType.JavaDataType) m_$(field.Name.JavaBeanStyle);
+#end
+#end
+#end
+#end
+#end
+#end
+#end
+$ScratchPad.clear()
+
+
+
+$ScratchPad.clear()
+#if ($Screens != null) #begin
+#foreach $screen in $Screens.values() #begin
+#if ($(screen.ScreenFields) != null) #begin
+#foreach $field in $screen.ScreenFields.values() #begin
+#set $wm_fieldName = $(field.Name.JavaBeanStyle)
+#if ($ScratchPad.get($wm_fieldName) == null) #begin
+#if ($(field.LinkedToComponent.BooleanValue)) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_fieldName,$wm_fieldName) != null) #begin #end
+#set $wm_wt = $field.WidgetType.Lower
+#if ($wm_wt == "editbox" || $wm_wt == "checkbox" || $wm_wt == "datetime" || $wm_wt == "text" || $wm_wt == "dropdown" || $wm_wt == "radiobutton") #begin
+    /** Getter for property $(field.Name.JavaBeanStyle).
+     * @return Value of property $(field.Name.JavaBeanStyle).
+     */
+    public $(field.DataType.JavaDataType) get$(field.Name.Upper1)() {
+        return m_$(field.Name.JavaBeanStyle);
+    }
+
+    /** Setter for property $(field.Name.JavaBeanStyle).
+     * @param $(field.Name.JavaBeanStyle) New value of property $(field.Name.JavaBeanStyle).
+     */
+    public void set$(field.Name.Upper1)($(field.DataType.JavaDataType) $(field.Name.JavaBeanStyle)) {
+        m_$(field.Name.JavaBeanStyle) = $(field.Name.JavaBeanStyle);
+    }
+
+#end
+#end
+#end
+#end
+#end
+#end
+#end
+$ScratchPad.clear()
+
+
+    /** This should be invoked when done with the component.
+     */    
+    public void quit() {
+        if (m_tx != null) {
+            m_tx.destroy();
+            m_tx = null;
+        }
+        super.quit();
+    }
+
+
+    /** Getter for property currentScreenCounter.
+     * @return Value of property currentScreenCounter.
+     */
+    public int getCurrentScreenCounter() {
+        return m_currentScreenCounter;
+    }
+    
+    /** Setter for property currentScreenCounter.
+     * @param currentScreenCounter New value of property currentScreenCounter.
+     */
+    public void setCurrentScreenCounter(int currentScreenCounter) {
+        m_currentScreenCounter = currentScreenCounter;
+    }
+    
+    /** Getter for the Screens.
+     * @return the screens.
+     */
+    public String[] getScreens() {
+        return (String[]) m_screens.toArray(new String[0]);
+    }
+    
+    /** Getter for the current Screen.
+     * @return the current screen.
+     */
+    public String determineCurrentScreen() {
+        return (String) m_screens.get(m_currentScreenCounter);
+    }
+    
+    /** Getter for the next Screen.
+     * This takes into account the mode and if the following screen is available in create or update modes.
+     * A null will be returned in case no appropriate next screen is available.
+     * @return the next screen.
+     */
+    public String determineNextScreen() {
+        return determineAndSetNextScreen(false);
+    }
+    
+    /** This sets the currentScreenCounter to point to the next screen.
+     * This takes into account the mode and if the following screen is available in create or update modes.
+     * A null will be returned in case no appropriate next screen is available.
+     * @return the next screen.
+     */
+    public String determineAndSetNextScreen() {
+        return determineAndSetNextScreen(true);
+    }
+    
+    private String determineAndSetNextScreen(boolean setCurrentScreenCounter) {
+        String screen = null;
+        int i = m_currentScreenCounter + 1;
+        if (i < m_screens.size()) {
+            screen = (String) m_screens.get(i);
+            if (setCurrentScreenCounter)
+                m_currentScreenCounter = i;
+        }
+        return screen;
+    }
+    
+    /** Getter for the previous Screen.
+     * This takes into account the mode and if the previous screen is available in create or update modes.
+     * A null will be returned in case no appropriate previous screen is available.
+     * @return the previous screen.
+     */
+    public String determinePreviousScreen() {
+        return determineAndSetPreviousScreen(false);
+    }
+    
+    /** This sets the currentScreenCounter to point to the previous screen.
+     * This takes into account the mode and if the previous screen is available in create or update modes.
+     * A null will be returned in case no appropriate previous screen is available.
+     * @return the previous screen.
+     */
+    public String determineAndSetPreviousScreen() {
+        return determineAndSetPreviousScreen(true);
+    }
+    
+    private String determineAndSetPreviousScreen(boolean setCurrentScreenCounter) {
+        String screen = null;
+        int i = m_currentScreenCounter - 1;
+        if (i >= 0) {
+            screen = (String) m_screens.get(i);
+            if (setCurrentScreenCounter)
+                m_currentScreenCounter = i;
+        }
+        return screen;
+    }
+    
+    /** Getter for the current screen's FormKey.
+     * @return the FormKey for the current screen.
+     */
+    public FormKey determineFormKey() {
+        return new FormKey(determineCurrentScreen(), getComponentId());
+    }
+    
+    /** Brings up the first screen of the component.
+     * @throws ApplicationExceptions Indicates some functional error.
+     * @throws FrameworkException Indicates some system error.
+     * @return The FormKey.
+     */
+    public FormKey display() throws ApplicationExceptions, FrameworkException {
+        if (m_screens == null) {
+            m_screens = new ArrayList();
+            addScreens(m_screens);
+        }
+        return determineFormKey();
+    }
+    
+    /** This sets up the screen information.
+     * @param screens The component should add String objects to this list; each String representing a struts-forward name.
+     */
+    protected void addScreens(List screens) {
+
+#if ($Screens != null) #begin
+#foreach $screen in $Screens.values() #begin
+        screens.add("$(Application.Lower)_$(Module.Lower)_$(Component.JavaBeanStyle)_$(screen.ScreenName.JavaBeanStyle)");
+#end
+#end
+    }
+
+    private I$(Component.Upper1) createTx() throws FrameworkException {
+        if (m_tx == null)
+            m_tx = (I$(Component.Upper1)) Factory.createObject(I$(Component.Upper1).class);
+        return m_tx;
+    }
+
+    /** Returns the HeaderDto. This can be used for passing the header info to the Tx, where required.
+     * @return the HeaderDto.
+     */
+    protected HeaderDto getHeaderDto() {
+        if (m_headerDto == null) {
+            m_headerDto = new HeaderDto();
+            m_headerDto.setUserId(getUserSession().getUserId());
+            m_headerDto.setVariation(VariationContext.getVariation());
+        }
+        return m_headerDto;
+    }
+    
+}

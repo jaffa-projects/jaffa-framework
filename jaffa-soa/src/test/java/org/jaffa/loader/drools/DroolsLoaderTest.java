@@ -14,7 +14,7 @@ import static org.junit.Assert.assertNotNull;
 public class DroolsLoaderTest {
 
     private static AnnotationConfigApplicationContext droolLoaderConfig = new AnnotationConfigApplicationContext(CoreLoaderConfig.class,
-            SoaLoaderConfig.class);
+            CoreLoaderConfig.class, SoaLoaderConfig.class);
 
     /**
      * tests the drools files are loaded correctly

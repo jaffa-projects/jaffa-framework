@@ -88,6 +88,7 @@ public class FormSelectionMaintenanceComponent extends FinderComponent2 {
     public FormSelectionMaintenanceComponent() {
         super();
         super.setSortDropDown("FormName");
+        initializeThis();
     }
 
     /** Returns the Struts GlobalForward for the Criteria screen.

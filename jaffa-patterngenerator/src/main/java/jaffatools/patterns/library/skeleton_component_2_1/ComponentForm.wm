@@ -1,0 +1,401 @@
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ * 
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/
+package $(BasePackage.Lower).components.$(Component.Lower).ui;
+
+import javax.servlet.http.HttpServletRequest;
+import org.apache.log4j.Logger;
+import org.jaffa.presentation.portlet.FormBase;
+import org.jaffa.metadata.*;
+import org.jaffa.datatypes.*;
+import org.jaffa.presentation.portlet.widgets.model.*;
+import org.jaffa.presentation.portlet.widgets.controller.*;
+import org.jaffa.datatypes.exceptions.*;
+
+$ScratchPad.clear()
+#if ($DomainObject != null && $DomainPackage != null) #begin
+#set $wm_import = "$(DomainPackage.Lower).$(DomainObject.Upper1)Meta"
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_import,$wm_import) != null) #begin #end
+import $(wm_import);
+#end
+#if ($Screens != null) #begin
+#foreach $screen in $Screens.values() #begin
+#if ($(screen.ScreenFields) != null) #begin
+#foreach $field in $screen.ScreenFields.values() #begin
+#if ($field.DomainObject != null && $field.DomainPackage != null) #begin
+#set $wm_import = "$(field.DomainPackage.Lower).$(field.DomainObject.Upper1)Meta"
+#if ($ScratchPad.get($wm_import) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_import,$wm_import) != null) #begin #end
+import $(wm_import);
+#end
+#end
+#end
+#end
+#end
+#end
+$ScratchPad.clear()
+
+
+/** The FormBean class.
+ */
+public class $(Component.Upper1)Form extends FormBase {
+
+    private static Logger log = Logger.getLogger($(Component.Upper1)Form.class);
+
+
+$ScratchPad.clear()
+#if ($Screens != null) #begin
+#foreach $screen in $Screens.values() #begin
+#if ($(screen.ScreenFields) != null) #begin
+#foreach $field in $screen.ScreenFields.values() #begin
+#set $wm_fieldName = $(field.Name.JavaBeanStyle)
+#if ($ScratchPad.get($wm_fieldName) == null) #begin
+#set $wm_wt = $field.WidgetType.Lower
+#if (!$(field.LinkedToComponent.BooleanValue) && $wm_wt != "button" && $wm_wt != "grid" && $wm_wt != "usergrid" && $wm_wt != "table") #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_fieldName,$wm_fieldName) != null) #begin #end
+    private $(field.DataType.JavaDataType) m_$(field.Name.JavaBeanStyle);
+#end
+#end
+#end
+#end
+#end
+#end
+$ScratchPad.clear()
+
+
+$ScratchPad.clear()
+#if ($Screens != null) #begin
+#foreach $screen in $Screens.values() #begin
+#if ($(screen.ScreenFields) != null) #begin
+#foreach $field in $screen.ScreenFields.values() #begin
+#set $wm_fieldName = $(field.Name.JavaBeanStyle)
+#if ($ScratchPad.get($wm_fieldName) == null) #begin
+#set $wm_wt = $field.WidgetType.Lower
+#if (!$(field.WidgetCached.BooleanValue) && $wm_wt != "text" && $wm_wt != "button") #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_fieldName,$wm_fieldName) != null) #begin #end
+#set $wm_widgetModel = ""
+#if ($wm_wt == "editbox") #begin
+#set $wm_widgetModel = "EditBoxModel"
+#elseif ($wm_wt == "checkbox") #begin
+#set $wm_widgetModel = "CheckBoxModel"
+#elseif ($wm_wt == "datetime") #begin
+#set $wm_widgetModel = "DateTimeModel"
+#elseif ($wm_wt == "dropdown") #begin
+#set $wm_widgetModel = "DropDownModel"
+#elseif ($wm_wt == "radiobutton") #begin
+#set $wm_widgetModel = "RadioButtonModel"
+#elseif ($wm_wt == "grid") #begin
+#set $wm_widgetModel = "GridModel"
+#elseif ($wm_wt == "usergrid") #begin
+#set $wm_widgetModel = "GridModel"
+#elseif ($wm_wt == "table") #begin
+#set $wm_widgetModel = "TableModel"
+#end
+    private $wm_widgetModel w_$(field.Name.JavaBeanStyle);
+#end
+#end
+#end
+#end
+#end
+#end
+$ScratchPad.clear()
+
+
+
+$ScratchPad.clear()
+#if ($Screens != null) #begin
+#foreach $screen in $Screens.values() #begin
+#if ($(screen.ScreenFields) != null) #begin
+#foreach $field in $screen.ScreenFields.values() #begin
+#set $wm_fieldName = $(field.Name.JavaBeanStyle)
+#if ($ScratchPad.get($wm_fieldName) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_fieldName,$wm_fieldName) != null) #begin #end
+#set $wm_wt = $field.WidgetType.Lower
+#set $wm_dataType = $(field.DataType.JavaDataType)
+#set $wm_widgetModel = ""
+#set $wm_widgetController = ""
+#if ($wm_wt == "editbox") #begin
+#set $wm_widgetModel = "EditBoxModel"
+#set $wm_widgetController = "EditBoxController"
+#elseif ($wm_wt == "checkbox") #begin
+#set $wm_widgetModel = "CheckBoxModel"
+#set $wm_widgetController = "CheckBoxController"
+#elseif ($wm_wt == "datetime") #begin
+#set $wm_widgetModel = "DateTimeModel"
+#set $wm_widgetController = "DateTimeController"
+#elseif ($wm_wt == "dropdown") #begin
+#set $wm_widgetModel = "DropDownModel"
+#set $wm_widgetController = "DropDownController"
+#elseif ($wm_wt == "radiobutton") #begin
+#set $wm_widgetModel = "RadioButtonModel"
+#set $wm_widgetController = "RadioButtonController"
+#elseif ($wm_wt == "grid") #begin
+#set $wm_widgetModel = "GridModel"
+#set $wm_widgetController = "GridController"
+#elseif ($wm_wt == "usergrid") #begin
+#set $wm_widgetModel = "GridModel"
+#set $wm_widgetController = "GridController"
+#elseif ($wm_wt == "table") #begin
+#set $wm_widgetModel = "TableModel"
+#set $wm_widgetController = "TableController"
+#end
+#set $wm_meta = ""
+#if ($field.DomainField != null && $field.DomainObject != null) #begin
+#set $wm_meta = "($(field.DataType.MetaFieldType)) $(field.DomainObject.Upper1)Meta.META_$(field.DomainField.Static)"
+#elseif ($field.DomainField != null && $DomainObject != null) #begin
+#set $wm_meta = "($(field.DataType.MetaFieldType)) $(DomainObject.Upper1)Meta.META_$(field.DomainField.Static)"
+#end
+#if ($wm_wt != "table" && $wm_wt != "grid" && $wm_wt != "usergrid" && $wm_wt != "button") #begin
+    /** Getter for property $(field.Name.JavaBeanStyle).
+     * @return Value of property $(field.Name.JavaBeanStyle).
+     */
+    public $wm_dataType get$(field.Name.Upper1)() {
+
+#if ($(field.LinkedToComponent.BooleanValue)) #begin
+        return ( ($(Component.Upper1)Component) getComponent() ).get$(field.Name.Upper1)();
+#else
+        return m_$(field.Name.JavaBeanStyle);
+#end
+    }
+
+    /** Setter for property $(field.Name.JavaBeanStyle).
+     * @param $(field.Name.JavaBeanStyle) New value of property $(field.Name.JavaBeanStyle).
+     */
+    public void set$(field.Name.Upper1)($wm_dataType $(field.Name.JavaBeanStyle)) {
+
+#if ($(field.LinkedToComponent.BooleanValue)) #begin
+        ( ($(Component.Upper1)Component) getComponent() ).set$(field.Name.Upper1)($(field.Name.JavaBeanStyle));
+#else
+        m_$(field.Name.JavaBeanStyle) = $(field.Name.JavaBeanStyle);
+#end
+    }
+
+#end
+
+#if ($wm_wt != "text" && $wm_wt != "button") #begin
+    /** Getter for property $(field.Name.JavaBeanStyle). This is invoked by the custom tag, when the jsp is rendered, to get the current value.
+     * @return Value of property $(field.Name.JavaBeanStyle).
+     */
+    public $(wm_widgetModel) get$(field.Name.Upper1)WM() {
+
+#if ($(field.WidgetCached.BooleanValue)) #begin
+        $(wm_widgetModel) w_$(field.Name.JavaBeanStyle) = ($(wm_widgetModel)) getWidgetCache().getModel("$(field.Name.JavaBeanStyle)");
+#end
+        if (w_$(field.Name.JavaBeanStyle) == null) {
+
+#if ($wm_wt == "table") #begin
+            w_$(field.Name.JavaBeanStyle) = new $(wm_widgetModel)();
+
+#if ($field.SubFields != null) #begin
+#foreach $subField in $field.SubFields.values() #begin
+            w_$(field.Name.JavaBeanStyle).addColumn("$(subField.Name.Upper1)", "$(subField.DataType.Upper)");
+#end
+#end
+#end
+#elseif ($wm_wt == "grid" || $wm_wt == "usergrid") #begin
+            w_$(field.Name.JavaBeanStyle) = new $(wm_widgetModel)();
+#elseif ($wm_meta != "") #begin
+            w_$(field.Name.JavaBeanStyle) = new $(wm_widgetModel)(get$(field.Name.Upper1)(), $(wm_meta));
+#else
+            if (get$(field.Name.Upper1)() != null)
+                w_$(field.Name.JavaBeanStyle) = new $(wm_widgetModel)(get$(field.Name.Upper1)());
+            else
+
+#if ($wm_wt == "checkbox") #begin
+                w_$(field.Name.JavaBeanStyle) = new $(wm_widgetModel)(false);
+#elseif ($wm_wt == "dropdown" || $wm_wt == "radiobutton") #begin
+                w_$(field.Name.JavaBeanStyle) = new $(wm_widgetModel)("");
+#else
+                w_$(field.Name.JavaBeanStyle) = new $(wm_widgetModel)();
+#end
+#end
+
+#if ($(field.WidgetCached.BooleanValue)) #begin
+            getWidgetCache().addModel("$(field.Name.JavaBeanStyle)", w_$(field.Name.JavaBeanStyle));
+#end
+        }
+        return w_$(field.Name.JavaBeanStyle);
+    }
+
+    /** Setter for property $(field.Name.JavaBeanStyle). This is invoked by the servlet, when a post is done on the corresponding JSP.
+     * @param value New value of property $(field.Name.JavaBeanStyle).
+     */
+    public void set$(field.Name.Upper1)WV(String value) {
+        $(wm_widgetController).updateModel(value, get$(field.Name.Upper1)WM());
+    }
+
+#end
+#end
+#end
+#end
+#end
+#end
+$ScratchPad.clear()
+
+
+    /** This method should be invoked to ensure a valid state of the FormBean. It will validate the data in the models and set the corresponding properties.
+     * Errors will be raised in the FormBean, if any validation fails.
+     * @param request The request stream
+     * @return A true indicates validations went through successfully. */
+    public boolean doValidate(HttpServletRequest request) {
+        boolean valid = true;
+
+#if ($Screens != null) #begin
+#set $wm_screenCounter = -1
+#foreach $screen in $Screens.values() #begin
+#set $wm_screenCounter = $wm_screenCounter + 1
+        if (!doValidate$(wm_screenCounter)(request))
+            valid = false;
+#end
+#end
+        return valid;
+    }
+
+#if ($Screens != null) #begin
+#set $wm_screenCounter = -1
+#foreach $screen in $Screens.values() #begin
+#set $wm_screenCounter = $wm_screenCounter + 1
+    /** This method should be invoked to ensure a valid state of the FormBean. It will validate the data in the models and set the corresponding properties.
+     * Errors will be raised in the FormBean, if any validation fails.
+     * @param request The request stream
+     * @return A true indicates validations went through successfully. */
+    public boolean doValidate$(wm_screenCounter)(HttpServletRequest request) {
+        boolean valid = true;
+        String htmlString = null;
+
+#if ($(screen.ScreenFields) != null) #begin
+#foreach $field in $screen.ScreenFields.values() #begin
+#set $wm_wt = $field.WidgetType.Lower
+#set $wm_dataType = $(field.DataType.JavaDataType)
+#set $wm_parse = $(field.DataType.ParserMethod)
+#set $wm_widgetModel = ""
+#if ($wm_wt == "editbox") #begin
+#set $wm_widgetModel = "EditBoxModel"
+#elseif ($wm_wt == "checkbox") #begin
+#set $wm_widgetModel = "CheckBoxModel"
+#elseif ($wm_wt == "datetime") #begin
+#set $wm_widgetModel = "DateTimeModel"
+#elseif ($wm_wt == "dropdown") #begin
+#set $wm_widgetModel = "DropDownModel"
+#elseif ($wm_wt == "radiobutton") #begin
+#set $wm_widgetModel = "RadioButtonModel"
+#elseif ($wm_wt == "grid") #begin
+#set $wm_widgetModel = "GridModel"
+#elseif ($wm_wt == "usergrid") #begin
+#set $wm_widgetModel = "GridModel"
+#elseif ($wm_wt == "table") #begin
+#set $wm_widgetModel = "TableModel"
+#end
+#set $wm_meta = ""
+#if ($field.DomainField != null && $field.DomainObject != null) #begin
+#set $wm_meta = "($(field.DataType.MetaFieldType)) $(field.DomainObject.Upper1)Meta.META_$(field.DomainField.Static)"
+#elseif ($field.DomainField != null && $DomainObject != null) #begin
+#set $wm_meta = "($(field.DataType.MetaFieldType)) $(DomainObject.Upper1)Meta.META_$(field.DomainField.Static)"
+#end
+#if ($wm_wt != "text" && $wm_wt != "table" && $wm_wt != "grid" && $wm_wt != "usergrid" && $wm_wt != "button") #begin
+
+#if ($wm_meta == "") #begin
+#if ($wm_widgetModel == "EditBoxModel" && $(field.DataType.CriteriaFieldTypeThrowsException)) #begin
+        try {
+            htmlString = get$(field.Name.Upper1)WM().getValue();
+            if (htmlString != null && htmlString.length() == 0)
+                htmlString = null;
+            $wm_dataType $(field.Name.JavaBeanStyle)Value = Parser.$(wm_parse)(htmlString);
+            set$(field.Name.Upper1)($(field.Name.JavaBeanStyle)Value);
+        } catch (ValidationException e) {
+            valid = false;
+
+#if ($(field.Label) != null) #begin
+            raiseError(request, "$(field.Label)", e);
+#else
+            raiseError(request, "$(field.Name)", e);
+#end
+        }
+#elseif ($wm_widgetModel == "EditBoxModel") #begin
+        htmlString = get$(field.Name.Upper1)WM().getValue();
+        if (htmlString != null && htmlString.length() == 0)
+            htmlString = null;
+        $wm_dataType $(field.Name.JavaBeanStyle)Value = Parser.$(wm_parse)(htmlString);
+        set$(field.Name.Upper1)($(field.Name.JavaBeanStyle)Value);
+#elseif ($wm_widgetModel == "CheckBoxModel") #begin
+        $wm_dataType $(field.Name.JavaBeanStyle)Value = new Boolean(get$(field.Name.Upper1)WM().getState());
+        set$(field.Name.Upper1)($(field.Name.JavaBeanStyle)Value);
+#elseif ($(field.DataType.DataTypeDateOnly)) #begin
+        $wm_dataType $(field.Name.JavaBeanStyle)Value = get$(field.Name.Upper1)WM().getDateOnlyValue();
+        set$(field.Name.Upper1)($(field.Name.JavaBeanStyle)Value);
+#else
+        $wm_dataType $(field.Name.JavaBeanStyle)Value = get$(field.Name.Upper1)WM().getValue();
+        set$(field.Name.Upper1)($(field.Name.JavaBeanStyle)Value);
+#end
+
+#else
+        try {
+
+#if ($wm_widgetModel == "EditBoxModel") #begin
+            htmlString = get$(field.Name.Upper1)WM().getValue();
+            if (htmlString != null && htmlString.length() == 0)
+                htmlString = null;
+            $wm_dataType $(field.Name.JavaBeanStyle)Value = ($wm_dataType) FieldValidator.validateData(htmlString, $(wm_meta), false);
+#elseif ($wm_widgetModel == "CheckBoxModel") #begin
+            $wm_dataType $(field.Name.JavaBeanStyle)Value = new Boolean(get$(field.Name.Upper1)WM().getState());
+            $(field.Name.JavaBeanStyle)Value = FieldValidator.validate($(field.Name.JavaBeanStyle)Value, $(wm_meta), false);
+#elseif ($(field.DataType.DataTypeDateOnly)) #begin
+            $wm_dataType $(field.Name.JavaBeanStyle)Value = get$(field.Name.Upper1)WM().getDateOnlyValue();
+            $(field.Name.JavaBeanStyle)Value = FieldValidator.validate($(field.Name.JavaBeanStyle)Value, $(wm_meta), false);
+#else
+            $wm_dataType $(field.Name.JavaBeanStyle)Value = get$(field.Name.Upper1)WM().getValue();
+            $(field.Name.JavaBeanStyle)Value = FieldValidator.validate($(field.Name.JavaBeanStyle)Value, $(wm_meta), false);
+#end
+            set$(field.Name.Upper1)($(field.Name.JavaBeanStyle)Value);
+        } catch (ValidationException e) {
+            valid = false;
+            raiseError(request, ($(wm_meta)).getLabelToken(), e);
+        }
+
+#end
+#end
+#end
+#end
+        return valid;
+    }
+#end
+#end
+
+
+    /** Getter for property currentScreenCounter.
+     * @return Value of property currentScreenCounter.
+     */
+    public int getCurrentScreenCounter() {
+        return (($(Component.Upper1)Component) getComponent()).getCurrentScreenCounter();
+    }
+
+    /** Setter for property currentScreenCounter.
+     * @param currentScreenCounter New value of property currentScreenCounter.
+     */
+    public void setCurrentScreenCounter(int currentScreenCounter) {
+        (($(Component.Upper1)Component) getComponent()).setCurrentScreenCounter(currentScreenCounter);
+    }
+
+    /** Returns true if there is a Next screen after the current screen.
+     * @return true if there is a Next screen after the current screen.
+     */
+    public boolean isNextActionAvailable() {
+        return (($(Component.Upper1)Component) getComponent()).determineNextScreen() != null ? true : false;
+    }
+
+    /** Returns true if there is a Previous screen before the current screen.
+     * @return true if there is a Previous screen before the current screen.
+     */
+    public boolean isPreviousActionAvailable() {
+        return (($(Component.Upper1)Component) getComponent()).determinePreviousScreen() != null ? true : false;
+    }
+
+}

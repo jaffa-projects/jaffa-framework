@@ -55,13 +55,13 @@ import org.jaffa.loader.IManager;
 import org.jaffa.loader.IRepository;
 import org.jaffa.loader.MapRepository;
 import org.jaffa.modules.messaging.services.configdomain.*;
-import org.jaffa.util.ContextHelper;
 import org.jaffa.util.JAXBHelper;
 import org.springframework.core.io.Resource;
 import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -92,22 +92,36 @@ public class MessagingManager implements IManager {
     /** The MessageInfo repository.  The key is the data bean;
      *  the value in the MessageInfo object. */
     private IRepository<MessageInfo> messageInfoRepository =
-            new MapRepository<>();
+            new MapRepository<>("MessageInfo");
 
     /** The QueueInfo repository.  The key is the name;
      *  the value in the QueueInfo object. */
     private IRepository<QueueInfo> queueInfoRepository =
-            new MapRepository<>();
+            new MapRepository<>("QueueInfo");
 
     /** The TopicInfo repository.  The key is the name;
      *  the value in the TopicInfo object. */
     private IRepository<TopicInfo> topicInfoRepository =
-            new MapRepository<>();
+            new MapRepository<>("TopicInfo");
 
     /** The MessageFilter repository.  The key is the filter name;
      *  the value in the MessageFilter object. */
     private IRepository<MessageFilter> messageFilterRepository =
-            new MapRepository<>();
+            new MapRepository<>("MessageFilter");
+
+
+    /**
+     * The list of repositories managed by this class
+     */
+    private HashMap managedRepositories = new HashMap<String, IRepository>() {
+        {
+            put(messageInfoRepository.getName(), messageInfoRepository);
+            put(queueInfoRepository.getName(), queueInfoRepository);
+            put(topicInfoRepository.getName(), topicInfoRepository);
+            put(messageFilterRepository.getName(), messageFilterRepository);
+        }
+
+    };
 
     /**
      * Unmarshall the contents of the configuration to create and register
@@ -258,7 +272,7 @@ public class MessagingManager implements IManager {
      * @return all Queue Names
      */
     public String[] getQueueNames() {
-        return queueInfoRepository.getAllKeyIds().toArray(new String[0]);
+        return queueInfoRepository.getKeyIds().toArray(new String[0]);
     }
 
     /**
@@ -266,7 +280,7 @@ public class MessagingManager implements IManager {
      * @return all Topic Names
      */
     public String[] getTopicNames() {
-        return topicInfoRepository.getAllKeyIds().toArray(new String[0]);
+        return topicInfoRepository.getKeyIds().toArray(new String[0]);
     }
 
     /**
@@ -274,7 +288,7 @@ public class MessagingManager implements IManager {
      * @return list of all message filters
      */
     public List<MessageFilter> getMessageFilters() {
-        return messageFilterRepository.getAllValues();
+        return messageFilterRepository.getValues();
     }
 
     ////////////////////////////////////////////////////////////////////////
@@ -356,6 +370,25 @@ public class MessagingManager implements IManager {
     @Override
     public String getResourceFileName() {
         return DEFAULT_CONFIGURATION_FILE;
+    }
+
+    /**
+     * getRepositoryNames - Retrieve a String list of all the IRepositories managed by this IManager
+     * @return A list of repository names managed by this manager
+     */
+    @Override
+    public Set getRepositoryNames() {
+        return managedRepositories.keySet();
+    }
+
+    /**
+     * Retrieve an IRepository managed by this IManager via its String name
+     * @param name The name of the repository to be retrieved
+     * @return The retrieved repository, or empty if no matching repository was found.
+     */
+    @Override
+    public IRepository<?> getRepositoryByName(String name) {
+        return (IRepository<?>) managedRepositories.get(name);
     }
 
     public IRepository<MessageInfo> getMessageInfoRepository() {

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+    <!-- ================================================= -->
+    <!-- Flex Rules for Domain Object User -->
+    <!-- ================================================= -->
+
+    <!-- Enable Auditing and declare Flex fields -->
+    <metadata tag='jaffa.rules' class='org.jaffa.rules.testmodels.User'>
+        <domain-info name='User'/>
+        <flex-fields source='org.jaffa.rules.testmodels.User$Flex'/>
+        <audit/>
+        <property name='userId'>
+            <audit record-always='true'/>
+        </property>
+    </metadata>
+
+    <metadata tag='jaffa.rules' class='org.jaffa.rules.testmodels.User$Flex' execution-realm='business'>
+        <domain-info name='User$Flex'/>
+
+        <!-- Flex fields mapped to UserRef fields -->
+        <property name='plantBuildingLocation'>
+            <label value='Plant/Building Location'/>
+            <case-type value='upper'/>
+            <max-length value='20'/>
+            <flex-field domain-mapping='userRef1'/>
+            <audit/>
+        </property>
+        <property name='roomColumn'>
+            <label value='Room/Column'/>
+            <case-type value='upper'/>
+            <max-length value='20'/>
+            <flex-field domain-mapping='userRef2'/>
+            <audit/>
+        </property>
+        <property name='supervisor'>
+            <label value='Supervisor/Manager'/>
+            <case-type value='upper'/>
+            <max-length value='20'/>
+            <flex-field domain-mapping='userRef3'/>
+            <audit/>
+        </property>
+        <property name='supervisorPhone'>
+            <label value='Supervisor/Manager Ext'/>
+            <case-type value='upper'/>
+            <max-length value='20'/>
+            <flex-field domain-mapping='userRef4'/>
+            <audit/>
+        </property>
+        <property name='loginStatus'>
+            <label value='Login Status'/>
+            <case-type value='upper'/>
+            <max-length value='20'/>
+            <flex-field domain-mapping='userRef5'/>
+            <audit/>
+        </property>
+        <property name='ntAccountId'>
+            <label value='NT Account ID'/>
+            <case-type value='upper'/>
+            <max-length value='20'/>
+            <flex-field domain-mapping='userRef6'/>
+            <audit/>
+        </property>
+        <property name='city'>
+            <label value='City'/>
+            <case-type value='upper'/>
+            <max-length value='20'/>
+            <flex-field domain-mapping='userRef10'/>
+            <audit/>
+        </property>
+        <property name='timeZone'>
+            <label value='Time Zone'/>
+            <case-type value='upper'/>
+            <max-length value='20'/>
+            <flex-field domain-mapping='userRef11'/>
+            <audit/>
+        </property>
+        <property name='remarks'>
+            <label value='Remarks'/>
+            <case-type value='upper'/>
+            <max-length value='20'/>
+            <flex-field domain-mapping='userRef15'/>
+            <audit/>
+        </property>
+        <property name='reinstateDate'>
+            <label value='Reinstate Date'/>
+            <data-type value='DATE_ONLY'/>
+            <layout value='[ISO.dateonly.format]'/>
+            <flex-field/>
+        </property>
+    </metadata>
+
+    <metadata tag='jaffa.rules' class='org.jaffa.rules.testmodels.UserCriteria'>
+        <flex-fields source='org.jaffa.rules.testmodels.User$Flex'/>
+    </metadata>
+</aop>

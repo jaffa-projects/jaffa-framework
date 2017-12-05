@@ -113,6 +113,23 @@ public interface IRepository<T> {
     List<T> getAllValues();
 
     /**
+     * retrieves the keys in the repository based on current context and variation
+     * @return Set of keys
+     */
+    Set<ContextKey> getKeys();
+
+    /**
+     * retrieves the key ids in the repository based on current context and variation
+     * @return Set of keys
+     */
+    Set<String> getKeyIds();
+
+    /**
+     * retrives the values in the repository based on natural contextOrder on the current context and variation
+     * @return List of values
+     */
+    List<T> getValues();
+    /**
      * Returns the MapRepository for based on the context of User
      * @return Map
      */
@@ -133,4 +150,14 @@ public interface IRepository<T> {
      * @return
      */
     public T queryByVariation(String id, String variation);
+
+    /**
+     * Returns the Name of the repository
+     */
+    public String getName();
+
+    /**
+     * Returns the repository map
+     */
+    public Map getRepositoryMap();
 }

@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!DOCTYPE Root PUBLIC "-//JAFFA//DTD Domain Creator Meta 1.1//EN" "http://jaffa.sourceforge.net/DTD/domain-creator-meta_1_1.dtd">
+
+<!--
+Non-null values for the following elements will be retained, the next time this file is regenerated, provided the merge option is set in the TableInfo file.
+1- Table Level: Description, LabelToken
+2- Field Level: Description, LabelToken, Layout, Pattern, CaseType, Ignore
+-->
+
+<!-- IDEAL Mapping -->
+<Root>
+  <DomainObject>PurchaseRequestDelete</DomainObject>
+  <DomainPackage>com.mirotechnologies.requisitioning.purchase.domain</DomainPackage>
+  <DatabaseTable>PURCHASE_REQUESTS_DEL</DatabaseTable>
+  <MappingPackage>resources/jdbcengine</MappingPackage>
+  <PatternTemplate>patterns/library/domain_creator_1_2/DomainCreatorPattern.xml</PatternTemplate>
+  <Description></Description>
+  <LabelToken>[label.Requisitioning.Purchase.PurchaseRequestDelete]</LabelToken>
+  <Fields>
+    <Field>
+      <Name>OrderNo</Name>
+      <DataType>java.lang.String</DataType>
+      <DatabaseFieldName>ORDER_NO</DatabaseFieldName>
+      <DatabaseDataType>STRING</DatabaseDataType>
+      <PrimaryKey>T</PrimaryKey>
+      <LabelToken>[label.Requisitioning.Purchase.PurchaseRequestDelete.OrderNo]</LabelToken>
+      <Mandatory>T</Mandatory>
+      <IntSize>20</IntSize>
+      <Layout></Layout>
+      <Pattern></Pattern>
+      <CaseType>UpperCase</CaseType>
+      <Ignore>false</Ignore>
+    </Field>
+    <Field>
+      <Name>VersionNumber</Name>
+      <DataType>java.lang.Long</DataType>
+      <DatabaseFieldName>VERSION_NUMBER</DatabaseFieldName>
+      <DatabaseDataType>INTEGER</DatabaseDataType>
+      <PrimaryKey>F</PrimaryKey>
+      <LabelToken>[label.Requisitioning.Purchase.PurchaseRequestDelete.VersionNumber]</LabelToken>
+      <Mandatory>F</Mandatory>
+      <IntSize>10</IntSize>
+      <Layout></Layout>
+      <Pattern></Pattern>
+      <CaseType>UpperCase</CaseType>
+      <Ignore>false</Ignore>
+    </Field>
+    <Field>
+      <Name>DeletionCreatedOn</Name>
+      <DataType>org.jaffa.datatypes.DateTime</DataType>
+      <DatabaseFieldName>DELETION_CREATED_ON</DatabaseFieldName>
+      <DatabaseDataType>DATE_TIME</DatabaseDataType>
+      <PrimaryKey>F</PrimaryKey>
+      <LabelToken>[label.Requisitioning.Purchase.PurchaseRequestDelete.DeletionCreatedOn]</LabelToken>
+      <Mandatory>F</Mandatory>
+      <Layout></Layout>
+      <Pattern></Pattern>
+      <CaseType>UpperCase</CaseType>
+      <Ignore>false</Ignore>
+      <StampType>CreatedDateTime</StampType>
+    </Field>
+  </Fields>
+</Root>

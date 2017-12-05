@@ -48,25 +48,11 @@
  */
 package org.jaffa.flexfields;
 
-import java.lang.reflect.Array;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Properties;
-import java.util.TreeMap;
-import javax.xml.bind.annotation.XmlTransient;
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.beanutils.DynaClass;
 import org.apache.log4j.Logger;
-import org.jaffa.components.finder.BooleanCriteriaField;
-import org.jaffa.components.finder.CriteriaField;
-import org.jaffa.components.finder.CurrencyCriteriaField;
-import org.jaffa.components.finder.DateOnlyCriteriaField;
-import org.jaffa.components.finder.DateTimeCriteriaField;
-import org.jaffa.components.finder.DecimalCriteriaField;
-import org.jaffa.components.finder.FinderTx;
-import org.jaffa.components.finder.IntegerCriteriaField;
-import org.jaffa.components.finder.StringCriteriaField;
+import org.jaffa.beans.factory.config.StaticContext;
+import org.jaffa.components.finder.*;
 import org.jaffa.datatypes.Currency;
 import org.jaffa.datatypes.DataTypeMapper;
 import org.jaffa.datatypes.DateOnly;
@@ -81,20 +67,24 @@ import org.jaffa.rules.IObjectRuleIntrospector;
 import org.jaffa.rules.RulesEngineFactory;
 import org.jaffa.util.StringHelper;
 
+import javax.xml.bind.annotation.XmlTransient;
+import java.lang.reflect.Array;
+import java.util.*;
+
 /**
  * FlexBean implements the DynaBean interface.
  * <p>
  * It holds the following information when linked to a persistent object:
- *   flexClass: the associated DynaClass
- *   persistentObject: the persistent object for which this bean will hold FlexField instances.
- *   flexFields: the associated FlexField instances.
+ * flexClass: the associated DynaClass
+ * persistentObject: the persistent object for which this bean will hold FlexField instances.
+ * flexFields: the associated FlexField instances.
  * NOTE: For a persistent object, the setter will either set a flex field directly on the
  * associated persistent object, if a domain-mapping is provided, or the flex field will be
  * added to the flexFields property.
  * <p>
  * It holds the following information when linked to a non-persistent object:
- *   flexClass: the associated DynaClass
- *   flexParams: the associated FlexParam instances.
+ * flexClass: the associated DynaClass
+ * flexParams: the associated FlexParam instances.
  * NOTE: For a non-persistent object, the setter will always add the flex field to the
  * flexParams property.
  * <p>
@@ -102,9 +92,9 @@ import org.jaffa.util.StringHelper;
  */
 public class FlexCriteriaBean implements DynaBean {
 
-    private static Logger log = Logger.getLogger(FlexCriteriaBean.class);
+    private static final Logger log = Logger.getLogger(FlexCriteriaBean.class);
+    private final Map<String, FlexCriteriaParam> flexCriteriaParams = new TreeMap<>();
     private FlexClass flexClass;
-    private Map<String, FlexCriteriaParam> flexCriteriaParams = new TreeMap<String, FlexCriteriaParam>();
 
     /**
      * Creates a new instance.
@@ -114,6 +104,7 @@ public class FlexCriteriaBean implements DynaBean {
 
     /**
      * Creates a new instance.
+     *
      * @param flexClass the associated FlexClass.
      */
     public FlexCriteriaBean(FlexClass flexClass) {
@@ -123,6 +114,7 @@ public class FlexCriteriaBean implements DynaBean {
     // *************************
     // **** IMPLEMENTATION *****
     // *************************
+
     /**
      * NOTE: This is an unsupported operation for a FlexCriteriaBean instance.
      */
@@ -131,15 +123,21 @@ public class FlexCriteriaBean implements DynaBean {
     }
 
     /**
-     * Return the value of the input property.
-     * If the property has a domain-mapping (as determined from the associated FlexProperty, value will
-     * be obtained from the persistentObject. Else the value will be obtained from
-     * the appropriate FlexField instance.
-     * @param name the property name.
-     * @return value for the property.
+     * This is the recommended way to instantiate a FlexCriteriaBean.
+     * It obtains the appropriate FlexClass.
+     *
+     * @param object the associated object.
+     * @return a FlexCriteriaBean instance.
+     * @throws ApplicationExceptions if any application error occurs.
+     * @throws FrameworkException    if any framework error occurs.
      */
-    public Object get(String name) {
-        return getset(true, name, null, null);
+    public static FlexCriteriaBean instance(Object object) throws ApplicationExceptions, FrameworkException {
+        if (object instanceof FlexClass)
+            return instance((FlexClass) object);
+        else {
+            FlexClass flexClass = FlexClass.instance(object);
+            return instance(flexClass, object);
+        }
     }
 
     /**
@@ -157,12 +155,15 @@ public class FlexCriteriaBean implements DynaBean {
     }
 
     /**
-     * Return the FlexClass instance that describes the set of properties available for this FlexCriteriaBean.
-     * @return the FlexClass instance that describes the set of properties available for this FlexCriteriaBean.
+     * Creates an instance based on the input FlexClass and clears all the initial values.
+     *
+     * @param flexClass the associated FlexClass.
+     * @return a FlexCriteriaBean instance.
+     * @throws ApplicationExceptions if any application error occurs.
+     * @throws FrameworkException    if any framework error occurs.
      */
-    @XmlTransient
-    public DynaClass getDynaClass() {
-        return flexClass;
+    public static FlexCriteriaBean instance(FlexClass flexClass) throws ApplicationExceptions, FrameworkException {
+        return instance(flexClass, null);
     }
 
     /**
@@ -173,15 +174,26 @@ public class FlexCriteriaBean implements DynaBean {
     }
 
     /**
-     * Sets the value of the input property.
-     * If the property has a domain-mapping (as determined from the associated FlexProperty, value will
-     * be stamped on the persistentObject. Else the value will be stamped on
-     * the appropriate FlexField instance.
-     * @param name the property name.
-     * @param value the new value.
+     * This is the recommended way to instantiate a FlexCriteriaBean.
+     * It obtains the appropriate FlexClass.
+     *
+     * @param flexClass the associated FlexClass.
+     * @param object    the associated object.
+     * @return a FlexCriteriaBean instance. A null will be returned if the FlexClass has no dyna-properties.
+     * @throws ApplicationExceptions if any application error occurs.
+     * @throws FrameworkException    if any framework error occurs.
      */
-    public void set(String name, Object value) {
-        getset(false, name, value, null);
+    private static FlexCriteriaBean instance(FlexClass flexClass, Object object) throws ApplicationExceptions, FrameworkException {
+        FlexCriteriaBean flexCriteriaBean = null;
+        if (flexClass.getDynaProperties() != null && flexClass.getDynaProperties().length > 0) {
+            flexCriteriaBean = new FlexCriteriaBean(flexClass);
+            // Clear all the changes. This can happen if initialze rules are declared for any of the flex fields.
+            flexCriteriaBean.flexCriteriaParams.clear();
+        } else {
+            if (log.isDebugEnabled())
+                log.debug("FlexCriteriaBean will not be instantiated for the FlexClass '" + flexClass.getName() + "', since it has no dyna-properties");
+        }
+        return flexCriteriaBean;
     }
 
     /**
@@ -201,11 +213,64 @@ public class FlexCriteriaBean implements DynaBean {
     // ***********************************
     // **** METHODS TO SUPPORT TOOLS *****
     // ***********************************
+
+    /**
+     * Attempts to configure an object that implements the IFlexFields interface with optional flex field properties
+     * based upon the configuration loaded from the MetaClass Rule repositories. If the instance does not have any
+     * flex fields defined it will not be modified.
+     *
+     * @param flexCriteraInstance the instance to configure with the custom flex fields from the repositories
+     */
+    public static void configureFlexFields(IFlexCriteriaFields flexCriteraInstance) {
+        try {
+            FlexCriteriaBean flexCriteriaBean = instance(flexCriteraInstance);
+
+            if (flexCriteriaBean != null) {
+                // simulate the pointcut for construction(org.jaffa.flexfields.FlexBean->new(..)) which referenced
+                // the initialize interceptor. That logic has been ported to be set up by the static context instead.
+                StaticContext.initialize(flexCriteriaBean);
+
+                // assign the flexbean to the graphData object
+                flexCriteraInstance.setFlexCriteriaBean(flexCriteriaBean);
+            }
+        } catch (ApplicationExceptions | FrameworkException ex) {
+            log.error("An exception occurred while attempting to initialize flex fields on object of type " + flexCriteraInstance.getClass().getName(), ex);
+        }
+    }
+
+    /**
+     * Return the value of the input property.
+     * If the property has a domain-mapping (as determined from the associated FlexProperty, value will
+     * be obtained from the persistentObject. Else the value will be obtained from
+     * the appropriate FlexField instance.
+     *
+     * @param name the property name.
+     * @return value for the property.
+     */
+    public Object get(String name) {
+        return getset(true, name, null, null);
+    }
+
+    /**
+     * Return the FlexClass instance that describes the set of properties available for this FlexCriteriaBean.
+     *
+     * @return the FlexClass instance that describes the set of properties available for this FlexCriteriaBean.
+     */
+    @XmlTransient
+    public DynaClass getDynaClass() {
+        return flexClass;
+    }
+
+    // *****************************
+    // **** ADDITIONAL METHODS *****
+    // *****************************
+
     /**
      * Sets the FlexClass instance that describes the set of properties available for this FlexCriteriaBean.
-     *
+     * <p>
      * NOTE: This method will throw a ClassCastException if a non-FlexClass argument is passed.
      * DynaClass is used in the signature so that this property turns up as a valid read+write property via the JavaBeans Introspector.
+     *
      * @param flexClass new value for the property flexClass.
      */
     public void setDynaClass(DynaClass flexClass) {
@@ -213,7 +278,21 @@ public class FlexCriteriaBean implements DynaBean {
     }
 
     /**
+     * Sets the value of the input property.
+     * If the property has a domain-mapping (as determined from the associated FlexProperty, value will
+     * be stamped on the persistentObject. Else the value will be stamped on
+     * the appropriate FlexField instance.
+     *
+     * @param name  the property name.
+     * @param value the new value.
+     */
+    public void set(String name, Object value) {
+        getset(false, name, value, null);
+    }
+
+    /**
      * Getter for the property flexCriteriaParams.
+     *
      * @return the value of the property flexCriteriaParams.
      */
     public FlexCriteriaParam[] getFlexCriteriaParams() {
@@ -222,6 +301,7 @@ public class FlexCriteriaBean implements DynaBean {
 
     /**
      * Setter for the property flexCriteriaParams.
+     *
      * @param flexCriteriaParams new value for the property flexCriteriaParams.
      */
     public void setFlexCriteriaParams(FlexCriteriaParam[] flexCriteriaParams) {
@@ -231,11 +311,9 @@ public class FlexCriteriaBean implements DynaBean {
         }
     }
 
-    // *****************************
-    // **** ADDITIONAL METHODS *****
-    // *****************************
     /**
      * Returns debug info.
+     *
      * @return debug info.
      */
     @Override
@@ -269,56 +347,8 @@ public class FlexCriteriaBean implements DynaBean {
     }
 
     /**
-     * This is the recommended way to instantiate a FlexCriteriaBean.
-     * It obtains the appropriate FlexClass.
-     * @param object the associated object.
-     * @return a FlexCriteriaBean instance.
-     * @throws ApplicationExceptions if any application error occurs.
-     * @throws FrameworkException if any framework error occurs.
+     * Gets or Sets a property.
      */
-    public static FlexCriteriaBean instance(Object object) throws ApplicationExceptions, FrameworkException {
-        if (object instanceof FlexClass)
-            return instance((FlexClass) object);
-        else {
-            FlexClass flexClass = FlexClass.instance(object);
-            return instance(flexClass, object);
-        }
-    }
-
-    /**
-     * Creates an instance based on the input FlexClass and clears all the initial values.
-     * @param flexClass the associated FlexClass.
-     * @return a FlexCriteriaBean instance.
-     * @throws ApplicationExceptions if any application error occurs.
-     * @throws FrameworkException if any framework error occurs.
-     */
-    public static FlexCriteriaBean instance(FlexClass flexClass) throws ApplicationExceptions, FrameworkException {
-        return instance(flexClass, null);
-    }
-
-    /**
-     * This is the recommended way to instantiate a FlexCriteriaBean.
-     * It obtains the appropriate FlexClass.
-     * @param flexClass the associated FlexClass.
-     * @param object the associated object.
-     * @return a FlexCriteriaBean instance. A null will be returned if the FlexClass has no dyna-properties.
-     * @throws ApplicationExceptions if any application error occurs.
-     * @throws FrameworkException if any framework error occurs.
-     */
-    private static FlexCriteriaBean instance(FlexClass flexClass, Object object) throws ApplicationExceptions, FrameworkException {
-        FlexCriteriaBean flexCriteriaBean = null;
-        if (flexClass.getDynaProperties() != null && flexClass.getDynaProperties().length > 0) {
-            flexCriteriaBean = new FlexCriteriaBean(flexClass);
-            // Clear all the changes. This can happen if initialze rules are declared for any of the flex fields.
-            flexCriteriaBean.flexCriteriaParams.clear();
-        } else {
-            if (log.isDebugEnabled())
-                log.debug("FlexCriteriaBean will not be instantiated for the FlexClass '" + flexClass.getName() + "', since it has no dyna-properties");
-        }
-        return flexCriteriaBean;
-    }
-
-    /** Gets or Sets a property. */
     private Object getset(boolean get, String name, Object value, FlexCriteriaParam flexCriteriaParam) {
         if (flexCriteriaParam != null) {
             name = flexCriteriaParam.getName();
@@ -346,14 +376,16 @@ public class FlexCriteriaBean implements DynaBean {
         }
     }
 
-    /**Converted the input StringCriteriaField to a CriteriaField instance compatible with the input dataType. */
+    /**
+     * Converted the input StringCriteriaField to a CriteriaField instance compatible with the input dataType.
+     */
     private CriteriaField convertFromStringCriteriaField(StringCriteriaField criteriaField, Class dataType, String layout) {
         CriteriaField output = criteriaField;
         if (criteriaField != null && dataType != String.class) {
             // Create the value array compatible with the input dataType
             Object[] values = null;
             if (criteriaField.getValues() != null && criteriaField.getValues().length > 0) {
-                Collection valuesCol = new LinkedList();
+                Collection<Object> valuesCol = new LinkedList<>();
                 for (String value : criteriaField.getValues())
                     valuesCol.add(!dataType.isInstance(value) ? DataTypeMapper.instance().map(value, dataType, layout) : value);
                 values = valuesCol.toArray((Object[]) Array.newInstance(dataType, valuesCol.size()));
@@ -380,7 +412,13 @@ public class FlexCriteriaBean implements DynaBean {
         return output;
     }
 
-    /**Converted the input CriteriaField instance to a StringCriteriaField. */
+    // ****************************
+    // **** LIFECYCLE METHODS *****
+    // ****************************
+
+    /**
+     * Converted the input CriteriaField instance to a StringCriteriaField.
+     */
     private StringCriteriaField convertToStringCriteriaField(CriteriaField criteriaField, String layout) {
         StringCriteriaField output = null;
         if (criteriaField != null) {
@@ -390,7 +428,7 @@ public class FlexCriteriaBean implements DynaBean {
                 // Create an array of String values
                 String[] values = null;
                 if (criteriaField.returnValuesAsObjectArray() != null && criteriaField.returnValuesAsObjectArray().length > 0) {
-                    Collection<String> valuesCol = new LinkedList<String>();
+                    Collection<String> valuesCol = new LinkedList<>();
                     for (Object value : criteriaField.returnValuesAsObjectArray())
                         valuesCol.add((String) DataTypeMapper.instance().map(value, String.class, layout));
                     values = valuesCol.toArray(new String[valuesCol.size()]);
@@ -403,11 +441,9 @@ public class FlexCriteriaBean implements DynaBean {
         return output;
     }
 
-    // ****************************
-    // **** LIFECYCLE METHODS *****
-    // ****************************
     /**
      * Returns the criteria object used for retrieving records.
+     *
      * @return the criteria object used for retrieving records.
      */
     public Criteria returnQueryClause(Criteria criteria) throws FrameworkException {
@@ -442,7 +478,9 @@ public class FlexCriteriaBean implements DynaBean {
         return criteria;
     }
 
-    /** Returns an array of key field names for the input domain class. */
+    /**
+     * Returns an array of key field names for the input domain class.
+     */
     private String[] findKeys(String domainClassName) throws FrameworkException {
         // Search for the first available class-level primary-key rule
         IObjectRuleIntrospector introspector = RulesEngineFactory.getRulesEngine().getObjectRuleIntrospector(domainClassName, null);

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+<!-- This dtd is used for validating the Meta files for generating the various object maintenance files -->
+
+<!ELEMENT Root (PatternTemplate,Application,Module,Component,BasePackage,DomainObject,DomainPackage,Title?,MainLayout?,MaintenanceLayout?,KeyFields,Fields,ForeignObjects?,RelatedObjects?,Screens)>
+<!ELEMENT PatternTemplate (#PCDATA)>
+<!ELEMENT Application (#PCDATA)>
+<!ELEMENT Module (#PCDATA)>
+<!ELEMENT Component (#PCDATA)>
+<!ELEMENT BasePackage (#PCDATA)>
+<!ELEMENT DomainObject (#PCDATA)>
+<!ELEMENT DomainPackage (#PCDATA)>
+<!ELEMENT Title (#PCDATA)>
+<!ELEMENT MainLayout (#PCDATA)>
+<!ELEMENT MaintenanceLayout (#PCDATA)>
+
+<!ELEMENT KeyFields (KeyField+)>
+<!ELEMENT KeyField (Name,DataType,DomainField)>
+<!ELEMENT Name (#PCDATA)>
+<!ELEMENT DataType (#PCDATA)>
+<!ELEMENT DomainField (#PCDATA)>
+
+<!--
+Provide information for the fields of the Domain Object.
+Also provide information for the fields of the RelatedObjects which have a 1-to-1 relationship with the DomainObject.
+-->
+<!ELEMENT Fields (Field+)>
+<!ELEMENT Field (Name,DataType,Display,Mandatory?,ValidateFieldHandler?,Layout?,Label?,DomainField,Breakup?,FunctionGuardName?,StampType?,UseForDirtyReadCheck?,Voucher?,Comment?,RelatedObjectName?,WMGetterCustomBlock?)>
+<!ELEMENT Display (#PCDATA)>
+<!ELEMENT Mandatory (#PCDATA)>
+<!ELEMENT ValidateFieldHandler (#PCDATA)>
+<!ELEMENT Layout (#PCDATA)>
+<!ELEMENT Label (#PCDATA)>
+<!ELEMENT Breakup (WidgetType,StaticValues?,DynamicValues?)>
+<!ELEMENT WidgetType (#PCDATA)>
+<!ELEMENT StaticValues (StaticValue+)>
+<!ELEMENT StaticValue (Code,Description)>
+<!ELEMENT Code (#PCDATA)>
+<!ELEMENT Description (#PCDATA)>
+<!ELEMENT DynamicValues (DomainClassName,CodeFieldName,DescriptionFieldName,BreakupCriteriaFields?,CodeHelperInterface?,AppendCodeAndDescription?,AppendBeginMarker?,AppendEndMarker?)>
+<!ELEMENT DomainClassName (#PCDATA)>
+<!ELEMENT CodeFieldName (#PCDATA)>
+<!ELEMENT DescriptionFieldName (#PCDATA)>
+<!ELEMENT BreakupCriteriaFields (BreakupCriteriaField+)>
+<!ELEMENT BreakupCriteriaField (DataType,DomainField,Operator,Values)>
+<!ELEMENT Operator (#PCDATA)>
+<!ELEMENT Values (#PCDATA)>
+<!ELEMENT CodeHelperInterface (#PCDATA)>
+<!ELEMENT AppendCodeAndDescription (#PCDATA)>
+<!ELEMENT AppendBeginMarker (#PCDATA)>
+<!ELEMENT AppendEndMarker (#PCDATA)>
+<!ELEMENT FunctionGuardName (#PCDATA)>
+<!ELEMENT StampType (#PCDATA)> <!-- Possible values are CreatedUserId, CreatedDateTime, LastUpdatedUserId or LastUpdatedDateTime -->
+<!ELEMENT UseForDirtyReadCheck (#PCDATA)> <!-- Specify a true value, if this field should be used for dirty-read checks. Only ONE field should be used for dirty-read checks -->
+<!ELEMENT Voucher (Params?)>
+<!ATTLIST Voucher Prefix CDATA #REQUIRED Length CDATA #REQUIRED VoucherGeneratorImplementation CDATA #REQUIRED >
+<!ELEMENT Params (Param+)>
+<!ELEMENT Param EMPTY>
+<!ATTLIST Param Name CDATA #REQUIRED Value CDATA #REQUIRED >
+<!ELEMENT Comment EMPTY>
+<!ATTLIST Comment Lifo (true|false) "true" > <!-- NOTE: This attribute has been deprecated. Instead use a similar attribute of the Comment element in the domain-creator pattern -->
+<!ELEMENT RelatedObjectName (#PCDATA)>
+<!ELEMENT WMGetterCustomBlock (#PCDATA)> <!-- This can be either First, Last -->
+
+<!--
+This pattern supports MANY-TO-ONE relationships through the use of the 'ForeignObjects' element.
+Provide information for the foreign-fields of the Domain Object.
+Also provide information for the foreign-fields of the RelatedObjects which have a 1-to-1 relationship with the DomainObject.
+-->
+<!ELEMENT ForeignObjects (ForeignObject+)>
+<!ELEMENT ForeignObject (Name,Object,Package,ForeignFields,Lookup?,RelatedObjectName?)>
+<!ELEMENT Object (#PCDATA)>
+<!ELEMENT Package (#PCDATA)>
+<!ELEMENT ForeignFields (ForeignField+)>
+<!ELEMENT ForeignField (Name,DataType,Display,Mandatory?,ValidateFieldHandler?,Layout?,Label?,DomainField,DomainFieldInForeignObject,KeyType,SourceChain?,Breakup?,FunctionGuardName?)>
+<!ELEMENT DomainFieldInForeignObject (#PCDATA)>
+<!ELEMENT SourceChain (Source+)>
+<!ELEMENT Source (Object,Package,JoinFields)>
+<!ELEMENT JoinFields (JoinBetween+)>
+<!ELEMENT JoinBetween (DomainObjectField,SourceField)>
+<!ELEMENT DomainObjectField (#PCDATA)>
+<!ELEMENT KeyType (#PCDATA)> <!-- This can be either Primary, Technical or Candidate. Primary and Technical keytypes will be persisted. Primary and Candidate keytypes will be used for validations. If no keytype is specified, then it will merely be treated as an additional info display-only field-->
+<!ELEMENT SourceField (#PCDATA)>
+<!ELEMENT Lookup (Component,TargetFields,BypassCriteriaScreen?,StaticParameters?,DynamicParameters?)>
+<!ELEMENT BypassCriteriaScreen (#PCDATA)>
+<!ELEMENT StaticParameters (#PCDATA)>
+<!ELEMENT DynamicParameters (#PCDATA)>
+<!ELEMENT TargetFields (#PCDATA)>
+
+<!--
+This pattern supports ONE-TO-ONE and ONE-TO-MANY relationships through the use of the 'RelatedObjects' element.
+-->
+<!ELEMENT RelatedObjects (RelatedObject+)>
+<!ELEMENT RelatedObject (Name,ObjectName,Package,RelationshipToDomainObject,DeleteConstraint,RelatedObjectJoinFields,RelatedObjectFields?,OrderByFields?,RelatedObjectCreator?,RelatedObjectViewer?,RelatedObjectUpdator?,RelatedObjectDeletor?,RelatedObjectKeyFields,FunctionGuardName?)>
+<!ELEMENT ObjectName (#PCDATA)>
+<!--
+'RelationshipToDomainObject' can have the value One, Many
+One: The RelatedObject will be considered an extension of the DomainObject and its fields will be displayed like regular fields. In this case the fields should be defined in the 'Field' or 'ForeignObject' elements, as appropriate.
+Many: In this case the fields will be displayed in an UserGrid and the only way to add/update/delete them will be through a related component, which is rendered in a new screen altogether. In this case the fields should be defined in the 'RelatedObjectField' element.
+OneAndMany: Use this in the rare case where the RelatedObject can be, based on custom business logic, in one-to-one or one-to-many relationships with the domain object.
+-->
+<!ELEMENT RelationshipToDomainObject (#PCDATA)>
+<!ELEMENT DeleteConstraint (#PCDATA)> <!-- This can be either Restricted or Cascading -->
+<!ELEMENT RelatedObjectJoinFields (RelatedObjectJoinBetween+)>
+<!ELEMENT RelatedObjectJoinBetween (Name,DomainField,RelatedObjectFieldName,RelatedObjectDomainField)>
+<!ELEMENT RelatedObjectFieldName (#PCDATA)> <!-- This is the name of the field in the 'create component' of the related object -->
+<!ELEMENT RelatedObjectDomainField (#PCDATA)> <!-- This is the name of the field in the domain class of the related object -->
+<!ELEMENT RelatedObjectFields (RelatedObjectField+)>
+<!ELEMENT RelatedObjectField (Name,DataType,Display,DisplayAsKey?,Layout?,Label,DomainField,SourceChain?,AppendField?,FunctionGuardName?)>
+<!ELEMENT DisplayAsKey (#PCDATA)>
+<!ELEMENT AppendField (AppendBeginMarker?,Name,AppendEndMarker?)>
+<!ELEMENT OrderByFields (OrderByField+)>
+<!ELEMENT OrderByField (DomainFieldName,sortAscending)>
+<!ELEMENT DomainFieldName (#PCDATA)>
+<!ELEMENT sortAscending (#PCDATA)>
+<!ELEMENT RelatedObjectCreator (ComponentName,ClassName,Package)>
+<!ELEMENT RelatedObjectViewer (ComponentName,ClassName,Package)>
+<!ELEMENT RelatedObjectUpdator (ComponentName,ClassName,Package)>
+<!ELEMENT RelatedObjectDeletor (ComponentName,ClassName,Package,TxClass,DeleteInDtoClass)>
+<!ELEMENT ComponentName (#PCDATA)>
+<!ELEMENT ClassName (#PCDATA)>
+<!ELEMENT TxClass (#PCDATA)>
+<!ELEMENT DeleteInDtoClass (#PCDATA)>
+<!ELEMENT RelatedObjectKeyFields (RelatedObjectKeyField+)>
+<!ELEMENT RelatedObjectKeyField (RelatedObjectFieldName,DataType,FieldNameInTargetComponent)>
+<!ELEMENT FieldNameInTargetComponent (#PCDATA)>
+
+<!ELEMENT Screens (Screen+)>
+<!ELEMENT Screen (References)>
+<!ATTLIST Screen Name CDATA #REQUIRED>
+<!ATTLIST Screen AvailableInUpdateMode (true|false) #REQUIRED>
+<!ATTLIST Screen AvailableInCreateMode (true|false) #REQUIRED>
+<!ATTLIST Screen SaveActionAvailableInCreateMode (true|false) #REQUIRED>
+<!ATTLIST Screen PerformTxValidationOnNextAction (true|false) #REQUIRED>
+<!ATTLIST Screen CreateModeTitle CDATA #IMPLIED> <!-- Will use the contents of the Title element, if not specified -->
+<!ATTLIST Screen UpdateModeTitle CDATA #IMPLIED> <!-- Will use the contents of the Title element, if not specified -->
+<!ELEMENT References ((FieldReference|ForeignObjectReference|RelatedObjectReference)+)>
+<!ELEMENT FieldReference EMPTY>
+<!ATTLIST FieldReference Name CDATA #REQUIRED>
+<!ELEMENT ForeignObjectReference EMPTY>
+<!ATTLIST ForeignObjectReference ForeignObjectName CDATA #REQUIRED>
+<!ELEMENT RelatedObjectReference EMPTY>
+<!ATTLIST RelatedObjectReference RelatedObjectName CDATA #REQUIRED>

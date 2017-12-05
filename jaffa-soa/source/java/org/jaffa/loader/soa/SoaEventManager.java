@@ -1,14 +1,16 @@
 package org.jaffa.loader.soa;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.JAXBException;
 
 import org.jaffa.loader.ContextKey;
 import org.jaffa.loader.IManager;
 import org.jaffa.loader.IRepository;
+import org.jaffa.loader.MapRepository;
 import org.jaffa.soa.services.configdomain.SoaEventInfo;
 import org.jaffa.soa.services.configdomain.SoaEvents;
 import org.jaffa.util.JAXBHelper;
@@ -31,7 +33,17 @@ public class SoaEventManager implements IManager {
 	/**
 	 * This holds the SoaEventInfo with key of SoaEventName
 	 */
-    private IRepository<SoaEventInfo> soaEventRepository;
+    private IRepository<SoaEventInfo> soaEventRepository = new MapRepository<>("SoaEventInfo");
+
+	/**
+	 * The list of repositories managed by this class
+	 */
+	private HashMap managedRepositories = new HashMap<String, IRepository>() {
+		{
+			put(soaEventRepository.getName(), soaEventRepository);
+		}
+
+	};
 
 	/**
 	 * The location of the schema for the configuration file.
@@ -87,7 +99,7 @@ public class SoaEventManager implements IManager {
      * @return List of all values
      */
 	public SoaEventInfo[] getAllSoaEventInfo(List<String> contextOrderParam) {
-		return soaEventRepository.getAllValues().toArray(new SoaEventInfo[0]);
+		return soaEventRepository.getValues().toArray(new SoaEventInfo[0]);
 	}
 	
     /**
@@ -121,4 +133,27 @@ public class SoaEventManager implements IManager {
 		return DEFAULT_CONFIGURATION_FILE;
 	}
 
+	/**
+	 * getRepositoryNames - Retrieve a String list of all the IRepositories managed by this IManager
+	 * @return A list of repository names managed by this manager
+	 */
+	@Override
+	public Set getRepositoryNames() {
+		return managedRepositories.keySet();
+	}
+
+	/**
+	 * Retrieve an IRepository managed by this IManager via its String name
+	 * @param name The name of the repository to be retrieved
+	 * @return The retrieved repository, or empty if no matching repository was found.
+	 */
+	@Override
+	public IRepository<?> getRepositoryByName(String name) {
+		return (IRepository<?>) managedRepositories.get(name);
+	}
+
+
+    public void setSoaEventRepository(MapRepository<SoaEventInfo> soaEventRepository) {
+        this.soaEventRepository = soaEventRepository;
+    }
 }

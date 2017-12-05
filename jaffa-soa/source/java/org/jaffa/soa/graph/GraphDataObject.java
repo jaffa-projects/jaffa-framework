@@ -53,24 +53,23 @@
  */
 package org.jaffa.soa.graph;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.apache.log4j.Logger;
 import org.jaffa.exceptions.ApplicationException;
+import org.jaffa.exceptions.ApplicationExceptions;
+import org.jaffa.exceptions.FrameworkException;
+import org.jaffa.flexfields.FlexBean;
+import org.jaffa.flexfields.IFlexFields;
 import org.jaffa.rules.fieldvalidators.Validator;
 import org.jaffa.soa.dataaccess.GraphMapping;
 import org.jaffa.soa.dataaccess.MappingFactory;
 import org.jaffa.soa.dataaccess.TransformerUtils;
-import org.jaffa.exceptions.ApplicationExceptions;
-import org.jaffa.exceptions.FrameworkException;
 import org.jaffa.soa.events.ProcessEventGraph;
 import org.jaffa.util.BeanHelper;
 
-/** This is the base class for all Graph Data Objects (GDOs).
+import java.util.*;
+
+/**
+ * This is the base class for all Graph Data Objects (GDOs).
  * <p>
  * The primary feature of a GDO as compared to a simple POJO or JavaBean is
  * that we must distinguish between an a un-initialized property, and an
@@ -98,23 +97,27 @@ import org.jaffa.util.BeanHelper;
  * NOTE: That will only work if a Graph has been configured for dirty-read check, and if
  * the graph contains the field used for that check.
  *
- * @author  PaulE
+ * @author PaulE
  * @version 1.0
  */
-public abstract class GraphDataObject {
+public abstract class GraphDataObject implements IFlexFields {
 
-    private static Logger log = Logger.getLogger(GraphDataObject.class);
+    private static final Logger log = Logger.getLogger(GraphDataObject.class);
     protected transient java.beans.PropertyChangeSupport propertyChangeSupport = new java.beans.PropertyChangeSupport(this);
     private Boolean performDirtyReadCheck;
     private Boolean deleteObject;
     private String[] nullify;
     private ProcessEventGraph[] processEventGraphs;
-    private Map<String, Object> changes = new HashMap<String, Object>();
+    private final Map<String, Object> changes = new HashMap<>();
     private transient Validator<GraphDataObject> validator; //do not create a getter for validators, will cause serialization problems
+    private transient FlexBean flexBean;
+    private transient Boolean shouldLookupFlexbean = true;
 
     // TODO-SWAT add script event here
 
-    /** Creates a new instance of GraphDataObject */
+    /**
+     * Creates a new instance of GraphDataObject
+     */
     public GraphDataObject() {
         //log.debug("Create Change Listener");
         addPropertyChangeListener(new java.beans.PropertyChangeListener() {
@@ -126,16 +129,19 @@ public abstract class GraphDataObject {
         });
     }
 
-    /** Adds a PropertyChangeListener to the listener list.
+    /**
+     * Adds a PropertyChangeListener to the listener list.
+     *
      * @param l The listener to add.
      */
     public final void addPropertyChangeListener(java.beans.PropertyChangeListener l) {
         propertyChangeSupport.addPropertyChangeListener(l);
     }
 
-    /** Removes a PropertyChangeListener from the listener list.
-     * @param l The listener to remove.
+    /**
+     * Removes a PropertyChangeListener from the listener list.
      *
+     * @param l The listener to remove.
      */
     public final void removePropertyChangeListener(java.beans.PropertyChangeListener l) {
         propertyChangeSupport.removePropertyChangeListener(l);
@@ -147,19 +153,38 @@ public abstract class GraphDataObject {
      */
     public void clearChanges() {
         changes.clear();
+
+        // If this bean has flexfield support, clear the changes on it as well.
+        if (flexBean != null) {
+            flexBean.clearChanges();
+        }
     }
 
     /**
      * Has the bean changed since it was created or last cleared.
+     *
      * @return true if the bean has been modified
      */
     public boolean hasChanged() {
-        return changes != null && changes.size() > 0;
+        boolean returnValue = changes != null && changes.size() > 0;
+
+        // FlexField support:
+        // if this class supports flex fields, then the returned value should take that into account.
+        if (!returnValue && flexBean != null) {
+            if (log.isDebugEnabled()) {
+                log.debug("Invoking hasChanged() method on the FlexBean");
+            }
+
+            returnValue = flexBean.hasChanged();
+        }
+
+        return returnValue;
     }
 
     /**
      * Has the specified bean property been changed since the bean was
      * created or last cleared
+     *
      * @param property Name of bean property to check
      * @return true if the property has been modified
      */
@@ -171,10 +196,11 @@ public abstract class GraphDataObject {
      * Get the original value for this field, throw an error if this field has no
      * changed, so you should consider first checking with the  {@link #hasChanged(String)}
      * method
+     *
      * @param property Name of bean property to check
-     * @throws NoSuchFieldException Throw if the property has not been changed, or does not exist.
      * @return The object representing the original values. Primitives are return as their
      * Object counterparts.
+     * @throws NoSuchFieldException Throw if the property has not been changed, or does not exist.
      */
     public Object getOriginalValue(String property) throws NoSuchFieldException {
         if (changes.containsKey(property))
@@ -187,6 +213,7 @@ public abstract class GraphDataObject {
      * Returns a map of changed fields.
      * The map contains the name of the field and it's initial value.
      * NOTE: The returned map is a read-only view, and attempts to modify the returned map will result in an UnsupportedOperationException.
+     *
      * @return a map of changed fields.
      */
     public Map<String, Object> changedFields() {
@@ -201,9 +228,9 @@ public abstract class GraphDataObject {
      * The GraphDataObject is assumed to be valid if no exception is thrown.
      *
      * @throws ApplicationExceptions Contains an list of possible business logic
-     * exceptions that caused the validation to fail
-     * @throws FrameworkException Thrown if there is an environment/runtime problem
-     * that prevented the validation from being performed.
+     *                               exceptions that caused the validation to fail
+     * @throws FrameworkException    Thrown if there is an environment/runtime problem
+     *                               that prevented the validation from being performed.
      */
     public void validate() throws ApplicationExceptions, FrameworkException {
         // TODO-SWAT fire script event here
@@ -215,6 +242,13 @@ public abstract class GraphDataObject {
                 throw new ApplicationExceptions(exception);
             }
         }
+
+        // If this instance supports flex fields, call validate on the flexbean to validate the flexfield values.
+        // Note that the potential exceptions will be raised to the caller automatically and should not need to
+        // be wrapped.
+        if (flexBean != null) {
+            flexBean.validate();
+        }
     }
 
     /**
@@ -223,6 +257,7 @@ public abstract class GraphDataObject {
      * <p>
      * Property names that are suffixed with an asterisk (*) indicate
      * that the value <CODE>hasChanged()</CODE>.
+     *
      * @return test string listing the beans contents
      */
     public String toString() {
@@ -235,6 +270,7 @@ public abstract class GraphDataObject {
      * <p>
      * Property names that are suffixed with an asterisk (*) indicate
      * that the value <CODE>hasChanged()</CODE>.
+     *
      * @return test string listing the beans contents
      */
     public String toString(List objectStack) {
@@ -246,42 +282,54 @@ public abstract class GraphDataObject {
             changes.put(property, value);
     }
 
-    /** Getter for property performDirtyReadCheck.
+    /**
+     * Getter for property performDirtyReadCheck.
+     *
      * @return Value of property performDirtyReadCheck.
      */
     public Boolean getPerformDirtyReadCheck() {
         return performDirtyReadCheck;
     }
 
-    /** Setter for property performDirtyReadCheck.
+    /**
+     * Setter for property performDirtyReadCheck.
+     *
      * @param performDirtyReadCheck New value of property performDirtyReadCheck.
      */
     public void setPerformDirtyReadCheck(Boolean performDirtyReadCheck) {
         this.performDirtyReadCheck = performDirtyReadCheck;
     }
 
-    /** Getter for property deleteObject.
+    /**
+     * Getter for property deleteObject.
+     *
      * @return Value of property deleteObject.
      */
     public Boolean getDeleteObject() {
         return deleteObject;
     }
 
-    /** Setter for property deleteObject.
+    /**
+     * Setter for property deleteObject.
+     *
      * @param deleteObject New value of property deleteObject.
      */
     public void setDeleteObject(Boolean deleteObject) {
         this.deleteObject = deleteObject;
     }
 
-    /** Getter for property nullify.
+    /**
+     * Getter for property nullify.
+     *
      * @return Value of property nullify.
      */
     public String[] getNullify() {
         return this.nullify;
     }
 
-    /** Setter for property nullify.
+    /**
+     * Setter for property nullify.
+     *
      * @param nullify New value of property nullify.
      */
     public void setNullify(String[] nullify) {
@@ -296,6 +344,7 @@ public abstract class GraphDataObject {
 
     /**
      * Getter for property processEventGraphs.
+     *
      * @return Value of property processEventGraphs.
      */
     public ProcessEventGraph[] getProcessEventGraphs() {
@@ -304,6 +353,7 @@ public abstract class GraphDataObject {
 
     /**
      * Setter for property processEventGraphs.
+     *
      * @param processEventGraphs New value of property processEventGraphs.
      */
     public void setProcessEventGraphs(ProcessEventGraph[] processEventGraphs) {
@@ -321,16 +371,19 @@ public abstract class GraphDataObject {
         this.validator = validator;
     }
 
-    /** Returns the debug information
+    /**
+     * Returns the debug information
+     *
      * @return The debug information
      */
-    public String toXMLString(){
+    public String toXMLString() {
         return TransformerUtils.printXMLGraph(this);
     }
 
     /**
      * Compares this object with another Graph object.
      * Returns a true if both the objects have the same primary key.
+     *
      * @param obj the other Graph object.
      * @return a true if both the objects have the same primary key.
      */
@@ -374,6 +427,7 @@ public abstract class GraphDataObject {
 
     /**
      * Returns the hashCode of this object based on it's primary key.
+     *
      * @return the hashCode of this object based on it's primary key.
      */
     @Override
@@ -403,5 +457,43 @@ public abstract class GraphDataObject {
         if (log.isDebugEnabled())
             log.debug("Output from super.hashCode() is " + result);
         return result;
+    }
+
+    /**
+     * Returns a FlexBean instance that encapsulates the FlexFields for the persistent object.
+     * The FlexBean instance is created during object instantiation when StaticContext.configure is performed.
+     * For instances that have not been configured with flexbean support (via aop.xml configuration), this property
+     * will always return null.
+     *
+     * @return a FlexBean instance that encapsulates the FlexFields for the persistent object or null of the object does
+     * has not been configured to support flexbeans
+     */
+    public FlexBean getFlexBean() throws FrameworkException, ApplicationExceptions {
+        if (shouldLookupFlexbean) {
+            shouldLookupFlexbean = false;
+            FlexBean.configureFlexBean(this);
+        }
+        return flexBean;
+    }
+
+    /**
+     * Sets a FlexBean instance that encapsulates the FlexFields for an implementation class.
+     *
+     * @param flexBean a FlexBean instance.
+     * @throws ApplicationExceptions if any application error occurs.
+     * @throws FrameworkException    if any framework error occurs.
+     */
+    public void setFlexBean(FlexBean flexBean) throws ApplicationExceptions, FrameworkException {
+        if (flexBean == null) {
+            log.debug("flexBean is null");
+            return;
+        }
+        //copy the flexParams from the input to the current instance.
+        FlexBean currentInstance = getFlexBean();
+        if (currentInstance != null) {
+            currentInstance.setFlexParams(flexBean.getFlexParams());
+        } else {
+            this.flexBean = flexBean;
+        }
     }
 }

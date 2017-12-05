@@ -1,0 +1,18 @@
+
+#if ($Screens != null) #begin
+#foreach $screen in $Screens.values() #begin
+#if ($(screen.ScreenTitle) != null && $(screen.ScreenTitle) != "") #begin
+$(screen.ScreenTitle)=Enter Text Here
+#end
+#end
+
+#foreach $screen in $Screens.values() #begin
+#if ($screen.ScreenFields != null) #begin
+#foreach $field in $screen.ScreenFields.values() #begin
+#if ($(field.Label) != null && $(field.Label) != "") #begin
+$(field.Label)=Enter Text Here
+#end
+#end
+#end
+#end
+#end

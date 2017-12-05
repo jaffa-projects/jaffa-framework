@@ -97,4 +97,26 @@ public class NavigationXmlLoadTest {
         navigationManager.unregisterGlobalMenu(key);
         assertNull(navigationManager.getNavigationRepository().query(key));
     }
+
+    /**
+     * Tests the ability of this IManager to retrieve a repository when given its String name
+     */
+    @Test
+    public void testGetRepositoryByName() throws Exception {
+        NavigationManager navigationManager = xmlLoaderConfig.getBean(NavigationManager.class);
+
+        String repo = "GlobalMenu";
+        assertEquals(repo, navigationManager.getRepositoryByName(repo).getName());
+    }
+
+    /**
+     * Test the retrieval of the list of repositories managed by this class
+     */
+    @Test
+    public void testGetRepositoryNames() {
+        NavigationManager navigationManager = xmlLoaderConfig.getBean(NavigationManager.class);
+        for (Object repositoryName : navigationManager.getRepositoryNames()) {
+            assertEquals("GlobalMenu", navigationManager.getRepositoryByName((String) repositoryName).getName());
+        }
+    }
 }

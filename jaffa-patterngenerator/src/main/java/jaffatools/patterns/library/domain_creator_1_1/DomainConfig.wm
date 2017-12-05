@@ -1,0 +1,54 @@
+// .//GEN-BEGIN:1_be
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ *
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/
+package $(DomainPackage.Lower);
+
+import org.apache.log4j.Logger;
+import org.jaffa.persistence.PersistentConfig;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
+
+// .//GEN-END:1_be
+// Add additional imports//GEN-FIRST:imports
+
+// .//GEN-LAST:imports
+// .//GEN-BEGIN:2_be
+/**
+ * Auto Generated Java Configuration class for the $(DatabaseTable) table.
+ * @author  Auto-Generated
+ */
+@Configuration
+public class $(DomainObject.Upper1)Config extends PersistentConfig {
+
+    private static final Logger log = Logger.getLogger($(DomainObject.Upper1)Config.class);
+
+    /**
+     * Creates and returns an initialized instance of the $(DomainObject.Upper1) domain object.  The constructor of all
+     * classes that extend Persistent should call the initialize method (contained in this same class).
+     *
+     * @return an initialized instance of the $(DomainObject.Upper1) domain object
+     */
+    @Bean
+    @Scope("prototype")
+    public $(DomainObject.Upper1) $(DomainObject.Lower1)() {
+        return new $(DomainObject.Upper1)();
+    }
+
+    /**
+     * Initializes the passed in instance of the $(DomainObject.Upper1) domain object
+     *
+     * @param $(DomainObject.Lower1) the domain model to initialize
+     * @return the initialized instance of the $(DomainObject.Upper1) domain object that is passed in
+     */
+    @Bean
+    @Scope("prototype")
+    public $(DomainObject.Upper1) $(DomainObject.Lower1)($(DomainObject.Upper1) $(DomainObject.Lower1)) {
+        return persistent($(DomainObject.Lower1));
+    }
+}
+// .//GEN-END:2_be
