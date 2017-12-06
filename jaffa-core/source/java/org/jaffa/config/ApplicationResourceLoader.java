@@ -48,14 +48,17 @@
  */
 package org.jaffa.config;
 
+import org.apache.log4j.Logger;
+import org.jaffa.session.ContextManagerFactory;
+import org.jaffa.util.OrderedPathMatchingResourcePatternResolver;
+import org.springframework.core.io.Resource;
+
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-
-import org.apache.log4j.Logger;
-import org.jaffa.util.OrderedPathMatchingResourcePatternResolver;
-import org.springframework.core.io.Resource;
 
 /**
  * This class loads the
@@ -70,7 +73,8 @@ public class ApplicationResourceLoader {
 
 	public static final String PROP_APPLICATION_RESOURCES_DEFAULT = "ApplicationResourcesDefault";
 	public static final String PROP_APPLICATION_RESOURCES_DEFAULT_OVERRIDE = "ApplicationResourcesDefaultOverride";
-	
+	public static final String PROP_APPLICATION_RESOURCES_OVERRIDE="ApplicationResourcesOverride.properties";
+	public static final String DATA_DIRECTORY = "data.directory";
 	public static final String DEFAULT_PROP_LOCALE_KEY = "";
 	
 	public static final String FILE_PREFIX = "file:///";
@@ -271,12 +275,14 @@ public class ApplicationResourceLoader {
 			if (properties != null && properties.size() > 0) {
 				applicationResources.put(PROP_APPLICATION_RESOURCES_DEFAULT_OVERRIDE, properties);
 			}			
-
-			String applicationResourcesOverrideLocation = (String) Config
-					.getProperty(Config.PROP_APPLICATION_RESOURCES_OVERRIDE_LOCATION, null);
+            String dataDirectory = (String)ContextManagerFactory.instance().getProperty(DATA_DIRECTORY);
+			String applicationResourcesOverrideLocation = null;
+			if(dataDirectory!=null && dataDirectory.length() > 0){
+			    applicationResourcesOverrideLocation = dataDirectory + PROP_APPLICATION_RESOURCES_OVERRIDE;
+                Config.setProperty(Config.PROP_APPLICATION_RESOURCES_OVERRIDE_LOCATION, applicationResourcesOverrideLocation);
+            }
 
 			/*
-			 * * TODO: PROP_APPLICATION_RESOURCES_OVERRIDE_LOCATION is not set
 			 * in Config when this first invoked,so we need to make sure to set
 			 * the override location before this point
 			 */
@@ -284,6 +290,12 @@ public class ApplicationResourceLoader {
 			if (applicationResourcesOverrideLocation != null && !"".equals(applicationResourcesOverrideLocation)) {
 				//added file prefix for ant style search pattern to search the file from I/O File
 				Resource resource = resolver.getResource(FILE_PREFIX+applicationResourcesOverrideLocation);
+                if(resource!=null && !resource.exists()){
+                    Files.createFile(Paths.get(resource.getURI()));
+                }
+                if (properties == null) {
+                    properties = new Properties();
+                }
 				loadProperties(resource, properties);
 			}
 
