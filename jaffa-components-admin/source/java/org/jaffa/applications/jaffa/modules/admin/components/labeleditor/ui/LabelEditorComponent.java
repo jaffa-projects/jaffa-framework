@@ -215,8 +215,7 @@ public class LabelEditorComponent extends Component {
                 Properties applicationResourcesOverrideProperties = ApplicationResourceLoader.getInstance().getApplicationResourcesOverride();
                 
 				if (applicationResourcesDefaultProperties == null || applicationResourcesDefaultProperties.size() < 1
-						|| applicationResourcesOverrideProperties == null
-						|| applicationResourcesOverrideProperties.size() < 1) {
+						|| applicationResourcesOverrideProperties == null) {
 					String str = "There is no default, override properties. The Label Editor component cannot be used";
 					log.error(str);
 					throw new LabelEditorException(LabelEditorException.CONFIG_ERROR);
