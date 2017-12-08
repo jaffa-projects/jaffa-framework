@@ -44,8 +44,8 @@
         <!-- ******************************************************************* -->
         <!-- JAVA Compiler Options                                               -->
         <!-- ******************************************************************* -->
-        <javac.source>1.7</javac.source>
-        <javac.target>1.7</javac.target>
+        <javac.source>1.8</javac.source>
+        <javac.target>1.8</javac.target>
         <javac.compilerId>javac</javac.compilerId>
         <javac.fork>no</javac.fork>
         <javac.executable />
@@ -148,7 +148,7 @@
         <!-- maven-enforcer-plugin                                               -->
         <!-- ******************************************************************* -->
         <maven.min.version>3.3.9</maven.min.version>
-        <jdk.min.version>1.7</jdk.min.version>
+        <jdk.min.version>1.8</jdk.min.version>
 
         <!-- ******************************************************************* -->
         <!-- 3rd Party Libraries Versions                                        -->
