@@ -2201,13 +2201,6 @@ No public methods.
 public static IVoucherGenerator instance()
 ```
 ***
-**org.jaffa.config.AppConfigServlet**
-
-```
-public void destroy()
-public void init(ServletConfig servletConfig) throws ServletException
-```
-***
 **org.jaffa.config.ApplicationResourceLoader**
 
 ```

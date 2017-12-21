@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+        xmlns="http://maven.apache.org/POM/4.0.0">
 
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.jaffa</groupId>
         <artifactId>jaffa-parent</artifactId>
-        <version>6.0.1-SNAPSHOT</version>
+        <version>6.0.2-SNAPSHOT</version>
     </parent>
 
     <groupId>org.jaffa</groupId>
@@ -238,6 +241,33 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.0.2</version>
             </plugin>
+
+          <plugin>
+            <artifactId>maven-resources-plugin</artifactId>
+            <version>3.0.1</version>
+            <executions>
+              <execution>
+                <id>copy-resources</id>
+                <!-- here the phase you need -->
+                <phase>compile</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${project.build.outputDirectory}/META-INF/resources/help/datadic</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>${project.basedir}/build/patterns/domain_creator_1_1</directory>
+                      <includes>
+                        <include>*</include>
+                      </includes>
+                    </resource>
+                  </resources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+			
         </plugins>
         <sourceDirectory>source/java</sourceDirectory>
         <testResources>
