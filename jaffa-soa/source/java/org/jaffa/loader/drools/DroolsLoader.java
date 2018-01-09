@@ -38,7 +38,9 @@ public class DroolsLoader {
     @PostConstruct
     public void loadDrools() {
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+
         try {
+            manager.clearDroolsDirectory();
             Resource[] resources = resolver.getResources("classpath*:META-INF/rules/**/*.drl");
             if (resources != null) {
                 for (Resource resource : resources) {
