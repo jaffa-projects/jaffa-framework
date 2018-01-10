@@ -65,7 +65,7 @@
     </dependency>
     <dependency>
       <groupId>org.directwebremoting</groupId>
-      <artifactId>dwr-osgi</artifactId>
+      <artifactId>dwr</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.poi</groupId>
