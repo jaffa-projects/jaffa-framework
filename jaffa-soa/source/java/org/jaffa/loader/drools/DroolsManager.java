@@ -73,7 +73,7 @@ public class DroolsManager {
     private static final Logger log = Logger.getLogger(DroolsManager.class);
     private static final String DROOLS_COMPILER_PROPERTY = "drools.dialect.java.compiler";
     private static final String DROOLS_JANINO_COMPILER = "JANINO";
-    public static final String DROOLS_FILE_DIRECTORY = ".." + File.separator + "data" + File.separator + "rules" + File.separator;
+    public static final String DROOLS_FILE_DIRECTORY = System.getProperty("java.io.tmpdir") + File.separator +"rules" + File.separator;
 
     /**
      * Map holding service name with list of RuleAgentKeys, used in refreshAgent method.
