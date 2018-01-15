@@ -54,6 +54,7 @@ import org.jaffa.loader.IRepository;
 import org.jaffa.loader.MapRepository;
 import org.jaffa.presentation.portlet.component.ComponentDefinition;
 import org.jaffa.presentation.portlet.component.componentdomain.Component;
+import org.jaffa.security.VariationContext;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -91,7 +92,7 @@ public class ComponentManagerTest {
         String name = "q1";
         component.setId(name);
         ComponentDefinition definition = new ComponentDefinition(component);
-        ContextKey key = new ContextKey(name, "components.xml", "DEF", "0-PLATFORM");
+        ContextKey key = new ContextKey(name, "components.xml", VariationContext.NULL_VARIATION, "0-PLATFORM");
         manager.registerComponentDefinition(key, definition);
         ComponentDefinition retrievedDefinition = manager.getComponentDefinition(name);
         assertEquals(definition, retrievedDefinition);
