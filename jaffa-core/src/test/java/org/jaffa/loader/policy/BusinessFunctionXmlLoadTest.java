@@ -2,6 +2,7 @@ package org.jaffa.loader.policy;
 
 import org.jaffa.loader.ContextKey;
 import org.jaffa.loader.CoreLoaderConfig;
+import org.jaffa.security.VariationContext;
 import org.jaffa.security.businessfunctionsdomain.BusinessFunction;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -47,7 +48,7 @@ public class BusinessFunctionXmlLoadTest {
         BusinessFunctionManager businessFunctionManager = xmlLoaderConfig.getBean(BusinessFunctionManager.class);
         assertNull(businessFunctionManager.getBusinessFunction("Jaffa.WebServices.Test"));
         BusinessFunction businessFunction = new BusinessFunction();
-        ContextKey key = new ContextKey("Jaffa.WebServices.Test", "business-functions.xml", "DEF", "100-Highest");
+        ContextKey key = new ContextKey("Jaffa.WebServices.Test", "business-functions.xml", VariationContext.NULL_VARIATION, "100-Highest");
         businessFunctionManager.registerBusinessFunction(key, businessFunction);
         assertNotNull(businessFunctionManager.getBusinessFunction("Jaffa.WebServices.Test"));
         businessFunctionManager.unregisterBusinessFunction(key);
