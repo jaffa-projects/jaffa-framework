@@ -74,7 +74,7 @@ public class VariationContext {
      */
     public static String getVariation() {
         String variation = ((String) variationContext.get());
-        return variation != null ? variation : DEFAULT_VARIATION;
+        return variation != null ? variation : NULL_VARIATION;
     }
 
 }

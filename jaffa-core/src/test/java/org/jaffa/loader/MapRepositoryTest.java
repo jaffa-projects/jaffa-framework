@@ -1,5 +1,6 @@
 package org.jaffa.loader;
 
+import org.jaffa.security.VariationContext;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -100,9 +101,9 @@ public class MapRepositoryTest {
      */
     @Test
     public void testKeyOrder(){
-        ContextKey platformLevelRule = new ContextKey("apprule", "file1.xml", "DEF", "0-PLATFORM");
-        ContextKey productLevelRule = new ContextKey("apprule", "file2.xml", "DEF", "1-PRODUCT");
-        ContextKey customerLevelRule = new ContextKey("apprule", "file3.xml", "DEF", "2-CUSTOMER");
+        ContextKey platformLevelRule = new ContextKey("apprule", "file1.xml", VariationContext.NULL_VARIATION, "0-PLATFORM");
+        ContextKey productLevelRule = new ContextKey("apprule", "file2.xml", VariationContext.NULL_VARIATION, "1-PRODUCT");
+        ContextKey customerLevelRule = new ContextKey("apprule", "file3.xml", VariationContext.NULL_VARIATION, "2-CUSTOMER");
         ContextKey addOncustomerLevelRule = new ContextKey("apprule", "file4.xml", "cust-code", "2-CUSTOMER");
 
 

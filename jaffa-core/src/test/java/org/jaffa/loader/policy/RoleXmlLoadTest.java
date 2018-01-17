@@ -51,6 +51,7 @@ package org.jaffa.loader.policy;
 
 import org.jaffa.loader.ContextKey;
 import org.jaffa.loader.CoreLoaderConfig;
+import org.jaffa.security.VariationContext;
 import org.jaffa.security.securityrolesdomain.GrantFunctionAccess;
 import org.jaffa.security.securityrolesdomain.Role;
 import org.junit.Test;
@@ -104,7 +105,7 @@ public class RoleXmlLoadTest {
         GrantFunctionAccess grantFunctionAccess = new GrantFunctionAccess();
         grantFunctionAccess.setName("Function 1");
         contractorRole.getGrantFunctionAccess().add(grantFunctionAccess);
-        ContextKey key = new ContextKey("CONTRACTOR", "roles.xml", "DEF", "100-Highest");
+        ContextKey key = new ContextKey("CONTRACTOR", "roles.xml", VariationContext.NULL_VARIATION, "100-Highest");
         roleManager.registerRole(key, contractorRole);
         assertNotNull(roleManager.getRole("CONTRACTOR"));
         roleManager.unregisterRole(key);

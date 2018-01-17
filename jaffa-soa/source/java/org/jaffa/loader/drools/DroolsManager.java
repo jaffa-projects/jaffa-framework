@@ -78,7 +78,7 @@ public class DroolsManager {
     /**
      * Map holding service name with list of RuleAgentKeys, used in refreshAgent method.
      */
-    private Map<String, List<RuleAgentKey>> serviceNameMap = new HashMap<>();
+    private Map<String, Set<RuleAgentKey>> serviceNameMap = new HashMap<>();
 
     /**
      * Map containing RuleAgentKey and StringBuilder, used by registerDrool method.
@@ -133,9 +133,9 @@ public class DroolsManager {
         droolPath.append(" " + path);
 
         droolsFiles.put(ruleAgentKey, droolPath);
-        List<RuleAgentKey> ruleAgentKeys = serviceNameMap.get(serviceName);
+        Set<RuleAgentKey> ruleAgentKeys = serviceNameMap.get(serviceName);
         if (ruleAgentKeys == null) {
-            ruleAgentKeys = new ArrayList<>();
+            ruleAgentKeys = new HashSet<>();
         }
 
         ruleAgentKeys.add(ruleAgentKey);
@@ -191,7 +191,7 @@ public class DroolsManager {
      * refresh the rules based on its polling period and out-of-date file stamps
      */
     public synchronized void refreshAgent(String serviceName) {
-        if (VariationContext.getVariation().equals(VariationContext.DEFAULT_VARIATION)) {
+        if (VariationContext.getVariation().equals(VariationContext.NULL_VARIATION)) {
             if (serviceNameMap.get(serviceName) != null) {
                 for (RuleAgentKey ruleAgentKey1 : serviceNameMap.get(serviceName)) {
                     synchronized (ruleAgents) {
