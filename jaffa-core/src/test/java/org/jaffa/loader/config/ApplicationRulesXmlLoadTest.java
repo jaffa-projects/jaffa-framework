@@ -76,8 +76,8 @@ public class ApplicationRulesXmlLoadTest {
     public void testXmlLoad() {
         ApplicationRulesManager applicationRulesManager = xmlLoaderConfig.getBean(ApplicationRulesManager.class);
         assertNotNull(applicationRulesManager.getApplicationRulesRepository());
-        Properties properties = applicationRulesManager.getApplicationRulesRepository().getAllValues().get(0);
-        assertFalse(properties.isEmpty());
+        String property = applicationRulesManager.getApplicationRulesRepository().getAllValues().get(0);
+        assertNotNull(property);
     }
 
     /**
@@ -86,17 +86,14 @@ public class ApplicationRulesXmlLoadTest {
      */
     @Test
     public void testApplicationRulesRegistration() {
-        ApplicationRulesManager navigationManager = xmlLoaderConfig.getBean(ApplicationRulesManager.class);
-        ContextKey key = new ContextKey("BNG", "Application_Rules", "DEF", "100-Highest");
-        assertNull(navigationManager.getApplicationRulesRepository().query(key));
-        Properties properties = new Properties();
-        properties.setProperty("test", "testValue");
-        properties.setProperty("test2", "testValue2");
+        ApplicationRulesManager applicationRulesManager = xmlLoaderConfig.getBean(ApplicationRulesManager.class);
+        ContextKey key = new ContextKey("test", "Application_Rules", "DEF", "100-Highest");
+        assertNull(applicationRulesManager.getApplicationRulesRepository().query(key));
 
-        navigationManager.registerProperties(key, properties);
-        assertNotNull(navigationManager.getApplicationRulesRepository().query(key));
-        navigationManager.unregisterProperties(key);
-        assertNull(navigationManager.getApplicationRulesRepository().query(key));
+        applicationRulesManager.registerProperties(key, "test1");
+        assertNotNull(applicationRulesManager.getApplicationRulesRepository().query(key));
+        applicationRulesManager.unregisterProperties(key);
+        assertNull(applicationRulesManager.getApplicationRulesRepository().query(key));
     }
 
     /**

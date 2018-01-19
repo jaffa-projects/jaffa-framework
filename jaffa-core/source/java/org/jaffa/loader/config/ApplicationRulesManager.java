@@ -73,7 +73,7 @@ public class ApplicationRulesManager implements IManager {
     /**
      * Instantiates a new Properties repository
      */
-    private IRepository<Properties> applicationRulesRepository = new MapRepository<>("Properties");
+    private IRepository<String> applicationRulesRepository = new MapRepository<>("Properties");
 
 
     /**
@@ -96,10 +96,10 @@ public class ApplicationRulesManager implements IManager {
      * registerProperties - Registers an individual Properties object into the IRepository
      *
      * @param contextKey
-     * @param properties
+     * @param property
      */
-    public void registerProperties(ContextKey contextKey, Properties properties) {
-        getApplicationRulesRepository().register(contextKey, properties);
+    public void registerProperties(ContextKey contextKey, String property) {
+        getApplicationRulesRepository().register(contextKey, property);
     }
 
     /**
@@ -116,7 +116,7 @@ public class ApplicationRulesManager implements IManager {
      *
      * @return A repository of properties
      */
-    public IRepository<Properties> getApplicationRulesRepository() {
+    public IRepository<String> getApplicationRulesRepository() {
         return applicationRulesRepository;
     }
 
@@ -144,7 +144,7 @@ public class ApplicationRulesManager implements IManager {
      *
      * @param applicationRulesRepository
      */
-    public void setApplicationRulesRepository(IRepository<Properties> applicationRulesRepository) {
+    public void setApplicationRulesRepository(IRepository<String> applicationRulesRepository) {
         this.applicationRulesRepository = applicationRulesRepository;
     }
 
@@ -166,11 +166,11 @@ public class ApplicationRulesManager implements IManager {
      * @return ApplicationRules_{variation} properties
      */
     public Properties getApplicationRulesVariation(String variation) {
-        IRepository<Properties> propertyRepository = getApplicationRulesRepository();
+        IRepository<String> propertyRepository = getApplicationRulesRepository();
         Properties properties = new Properties();
         if (null != propertyRepository) {
-            Map<String, Properties> variationRepo = propertyRepository.getRepositoryByVariation(variation);
-            properties = variationRepo.get(variation);
+            Map<String, String> variationRepo = propertyRepository.getRepositoryByVariation(variation);
+            properties.putAll(variationRepo);
         }
         return properties;
     }
@@ -198,8 +198,10 @@ public class ApplicationRulesManager implements IManager {
                 }
             }
             if (!properties.isEmpty()) {
-                ContextKey key = new ContextKey(variation, resource.getURI().toString(), variation, precedence);
-                registerProperties(key, properties);
+                for(Object property : properties.keySet()){
+                    ContextKey key = new ContextKey((String)property, resource.getURI().toString(), variation, precedence);
+                    registerProperties(key, properties.getProperty((String)property));
+                }
             }
         }
     }

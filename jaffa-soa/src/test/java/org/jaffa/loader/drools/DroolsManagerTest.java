@@ -9,6 +9,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import static org.jaffa.loader.drools.DroolsManager.DROOLS_FILE_DIRECTORY;
 import static org.junit.Assert.*;
 
 /**
@@ -47,10 +48,12 @@ public class DroolsManagerTest {
         Resource customerResource = pathMatchingResourcePatternResolver.getResource(CUSTOMER_DRL_PATH);
         droolsManager.registerDrool(customerResource, "Customer");
 
+        String systemProp = System.getProperty("java.io.tmpdir");
+
         //verify
-        assertEquals(" .."+File.separator+"data"+File.separator+"rules"+File.separator+"default"+File.separator+"testservice"+File.separator+"DEF"+File.separator+"TestService.drl", droolsManager.getDroolsFiles().get(new RuleAgentKey(SERVICE_NAME, VariationContext.DEFAULT_VARIATION)).toString());
+        assertEquals(" " +Paths.get(DROOLS_FILE_DIRECTORY+"default"+File.separator+"testservice"+File.separator+"DEF"+File.separator+"TestService.drl").toString(), droolsManager.getDroolsFiles().get(new RuleAgentKey(SERVICE_NAME, VariationContext.DEFAULT_VARIATION)).toString());
         //verify
-        assertEquals(" .."+File.separator+"data"+File.separator+"rules"+File.separator+"default"+File.separator+"testservice"+File.separator+"Customer"+File.separator+"TestService.drl", droolsManager.getDroolsFiles().get(new RuleAgentKey(SERVICE_NAME, "Customer")).toString());
+        assertEquals(" " + Paths.get(DROOLS_FILE_DIRECTORY+"default"+File.separator+"testservice"+File.separator+"Customer"+File.separator+"TestService.drl").toString(), droolsManager.getDroolsFiles().get(new RuleAgentKey(SERVICE_NAME, "Customer")).toString());
     }
 
     /**
@@ -110,7 +113,7 @@ public class DroolsManagerTest {
         //verify
         assertNotNull(droolsManager.getRuleAgents().get(new RuleAgentKey(SERVICE_NAME, VariationContext.NULL_VARIATION)));
         assertNull(droolsManager.getRuleAgents().get(new RuleAgentKey(SERVICE_NAME, VariationContext.DEFAULT_VARIATION)));
-        assertEquals(" .."+File.separator+"data"+File.separator+"rules"+File.separator+"default"+File.separator+"testservice"+File.separator+"Customer"+File.separator+"TestService.drl .."+File.separator+"data"+File.separator+"rules"+File.separator+"default"+File.separator+"testservice"+File.separator+"TestService.drl", droolsManager.getDroolsFiles().get(new RuleAgentKey(SERVICE_NAME, "Customer")).toString());
+        assertEquals(" " + Paths.get(DROOLS_FILE_DIRECTORY+"default"+File.separator+"testservice"+File.separator+"Customer"+File.separator+"TestService.drl").toString()+ " " + Paths.get(DROOLS_FILE_DIRECTORY+"default"+File.separator+"testservice"+File.separator+"TestService.drl").toString(), droolsManager.getDroolsFiles().get(new RuleAgentKey(SERVICE_NAME, "Customer")).toString());
     }
 
     /**
@@ -141,7 +144,7 @@ public class DroolsManagerTest {
     public void clearDroolsDirectoryTest(){
         droolsManager.clearDroolsDirectory();
         assertFalse("Directory still exists",
-                Files.exists(Paths.get(DroolsManager.DROOLS_FILE_DIRECTORY)));
+                Files.exists(Paths.get(DROOLS_FILE_DIRECTORY)));
     }
 
 }

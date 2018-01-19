@@ -628,7 +628,8 @@ public class RuleActor<T> {
 
         S newException = null;
         String errorCode = rule.getParameter("errorCode");
-        Object[] arguments = getErrorArgumentArray(targetObject, rule);
+        Object[] baseArguments = getErrorArgumentArray(targetObject, rule);
+		Object[] arguments = new Object[]{ rule.getParameter(RuleMetaData.PARAMETER_VALUE) };
         String propertyLabel = getPropertyLabel(targetObject, targetPropertyName);
 
         try {
@@ -640,7 +641,7 @@ public class RuleActor<T> {
         }
 
         if (errorCode != null) {
-            return new ApplicationException(errorCode, arguments, newException);
+            return new ApplicationException(errorCode, baseArguments, newException);
         }
 
         return newException;
