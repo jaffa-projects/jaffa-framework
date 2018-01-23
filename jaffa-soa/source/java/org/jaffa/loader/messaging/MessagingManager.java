@@ -171,6 +171,52 @@ public class MessagingManager implements IManager {
     }
 
     /**
+     * Unregister the message objects defined by a particular resource.
+     * @param resource the object that contains the xml config file.
+     * @param context key with which config file to be registered.
+     * @param variation key with which config file to be registered.
+     * @throws JAXBException
+     * @throws SAXException
+     * @throws IOException
+     */
+    @Override
+    public void unregisterResource(Resource resource, String context, String variation)
+            throws JAXBException, SAXException, IOException {
+
+        Config config = JAXBHelper.unmarshalConfigFile(Config.class, resource,
+                CONFIGURATION_SCHEMA_FILE);
+
+        List<Object> messageObjects = config.getMessageOrQueueOrTopic();
+
+        if (messageObjects != null) {
+            for (final Object o : messageObjects) {
+
+                if (o instanceof MessageInfo) {
+                    final MessageInfo info = (MessageInfo) o;
+                    validateMessageInfo(info);
+                    ContextKey contextKey = new ContextKey(info.getDataBean(), resource.getURI().toString(), variation, context);
+                    unregisterMessageInfo(contextKey);
+                } else if (o instanceof QueueInfo) {
+                    final QueueInfo info = (QueueInfo) o;
+                    ContextKey contextKey = new ContextKey(info.getName(), resource.getURI().toString(), variation, context);
+                    unregisterQueueInfo(contextKey);
+                } else if (o instanceof TopicInfo) {
+                    final TopicInfo info = (TopicInfo) o;
+                    ContextKey contextKey = new ContextKey(info.getName(), resource.getURI().toString(), variation, context);
+                    unregisterTopicInfo(contextKey);
+                } else if (o instanceof MessageFilter) {
+                    final MessageFilter filter = (MessageFilter) o;
+                    ContextKey contextKey = new ContextKey(filter.getFilterName(), resource.getURI().toString(), variation, context);
+                    unregisterMessageFilter(contextKey);
+                } else {
+                    log.warn("MessagingObject.registerResource, unexpected object: " + o);
+                }
+            }   // for
+            checkForQueueAndTopicNamingConflicts();
+        }
+    }
+
+    /**
      * Check whether the proposed MessageInfo object is adequately specified.
      * @param messageInfo the object to check
      */

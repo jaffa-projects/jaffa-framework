@@ -94,7 +94,7 @@ public class BusinessFunctionManager implements IManager {
     };
 
     /**
-     * registerResource - Registers the roles into the business function repository from the business-functions.xml files found in META-INF/roles.xml
+     * registerResource - Registers the roles into the business function repository from a business-functions.xml file.
      * @param resource the object that contains the xml config file.
      * @param context  key with which config file to be registered.
      * @throws JAXBException
@@ -108,6 +108,25 @@ public class BusinessFunctionManager implements IManager {
             for (final BusinessFunction businessFunction : businessFunctions.getBusinessFunction()) {
                 ContextKey contextKey = new ContextKey(businessFunction.getName(), resource.getURI().toString(), variation, context);
                 registerBusinessFunction(contextKey, businessFunction);
+            }
+        }
+    }
+
+    /**
+     * unregisterResource - Unregisters the roles from the business function repository using a business-functions.xml file.
+     * @param resource the object that contains the xml config file.
+     * @param context  key with which config file to be registered.
+     * @throws JAXBException
+     * @throws SAXException
+     * @throws IOException
+     */
+    @Override
+    public void unregisterResource(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
+        BusinessFunctions businessFunctions = JAXBHelper.unmarshalConfigFile(BusinessFunctions.class, resource, CONFIGURATION_SCHEMA_FILE);
+        if (businessFunctions.getBusinessFunction() != null) {
+            for (final BusinessFunction businessFunction : businessFunctions.getBusinessFunction()) {
+                ContextKey contextKey = new ContextKey(businessFunction.getName(), resource.getURI().toString(), variation, context);
+                unregisterBusinessFunction(contextKey);
             }
         }
     }
