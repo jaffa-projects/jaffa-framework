@@ -53,6 +53,7 @@ import org.jaffa.session.ContextManagerFactory;
 import org.jaffa.util.OrderedPathMatchingResourcePatternResolver;
 import org.springframework.core.io.Resource;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -278,7 +279,7 @@ public class ApplicationResourceLoader {
             String dataDirectory = (String)ContextManagerFactory.instance().getProperty(DATA_DIRECTORY);
 			String applicationResourcesOverrideLocation = null;
 			if(dataDirectory!=null && dataDirectory.length() > 0){
-			    applicationResourcesOverrideLocation = dataDirectory + PROP_APPLICATION_RESOURCES_OVERRIDE;
+			    applicationResourcesOverrideLocation = dataDirectory + File.separator+ PROP_APPLICATION_RESOURCES_OVERRIDE;
                 Config.setProperty(Config.PROP_APPLICATION_RESOURCES_OVERRIDE_LOCATION, applicationResourcesOverrideLocation);
             }
 
