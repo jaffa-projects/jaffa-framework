@@ -50,6 +50,7 @@
 package org.jaffa.presentation.portlet;
 
 import org.jaffa.exceptions.CustomRuntimeException;
+import org.owasp.encoder.Encode;
 
 /** This exception is thrown if no method is found for handling the eventId passed to perform method of the Action. In case no eventId is passed, this exception is thrown, if no defaultAction is provided by the Action
  */
@@ -61,18 +62,22 @@ public class EventHandlerMissingRuntimeException extends CustomRuntimeException 
     }
 
     /** Constructs the exception with the specified detail message
+     * Escape the message for html to prevent XSS.
+     *
      * @param msg the detail message
      */
     public EventHandlerMissingRuntimeException(String msg) {
-        super(msg);
+        super(Encode.forHtml(msg));
     }
 
     /** Constructs the exception with the specified detail message and nested exception
+     * Escape the message for html to prevent XSS.
+     *
      * @param msg the detail message
      * @param sourceException the nested exception
      */
     public EventHandlerMissingRuntimeException(String msg, Throwable sourceException) {
-        super(msg, sourceException);
+        super(Encode.forHtml(msg), sourceException);
     }
 }
 

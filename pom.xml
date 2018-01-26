@@ -219,6 +219,7 @@
         <version.org.quartz-scheduler.quartz-oracle>2.1.7</version.org.quartz-scheduler.quartz-oracle>
         <version.org.javassist>3.18.1-GA</version.org.javassist>
         <version.org.jrobin>1.5.9</version.org.jrobin>
+        <version.org.owasp.encoder>1.2</version.org.owasp.encoder>
         <version.oro>2.0.8</version.oro>
         <version.struts>1.2.7</version.struts>
         <version.trove>1.0.2</version.trove>
@@ -1757,6 +1758,11 @@
                 <groupId>org.jrobin</groupId>
                 <artifactId>jrobin</artifactId>
                 <version>${version.org.jrobin}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.owasp.encoder</groupId>
+                <artifactId>encoder</artifactId>
+                <version>${version.org.owasp.encoder}</version>
             </dependency>
             <dependency>
                 <groupId>jmock</groupId>
