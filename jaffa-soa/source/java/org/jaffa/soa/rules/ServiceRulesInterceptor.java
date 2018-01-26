@@ -148,7 +148,7 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
      * @param name The name of this service, used in the {@link getRuleBase()} method for configuring what RuleBase will be loaded
      */
     public ServiceRulesInterceptor(String name) {
-        m_serviceName = name;
+        m_serviceName = name.toLowerCase();
         ruleBase = getRuleBase();
 
         if (ruleBase != null) {
