@@ -130,6 +130,25 @@ public class JndiJmsManager implements IManager {
         jmsRepository.register(contextKey, jmsConfig);
     }
 
+    /**
+     * Unregister the JmsConfig objects defined by a particular resource.
+     * @param resource the object that contains the xml config file.
+     * @param context key with which config file to be registered.
+     * @param variation key with which config file to be registered.
+     * @throws JAXBException
+     * @throws SAXException
+     * @throws IOException
+     */
+    @Override
+    public void unregisterResource(Resource resource, String context, String variation)
+            throws JAXBException, SAXException, IOException {
+        JndiConfig config = JAXBHelper.unmarshalConfigFile(JndiConfig.class, resource,
+                JMS_JNDI_CONFIGURATION_SCHEMA_FILE);
+        JmsConfig jmsConfig = config.getJmsConfig();
+        ContextKey contextKey = new ContextKey(jmsConfig.getUser(), resource.getURI().toString(), variation, context);
+        jmsRepository.unregister(contextKey);
+    }
+
     @Override
     public String getResourceFileName() {
         return jmsJndiConfigurationFile;

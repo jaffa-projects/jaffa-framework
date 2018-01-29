@@ -46,59 +46,18 @@
  * SUCH DAMAGE.
  * ====================================================================
  */
+package org.jaffa.api;
 
-package org.jaffa.loader;
-
-import org.springframework.core.io.Resource;
-import org.xml.sax.SAXException;
-
-import javax.xml.bind.JAXBException;
-import java.io.IOException;
-import java.util.Set;
-
-/**
- * Interface for xml managers to registerXml and getResourceFileName.
- */
-public interface IManager {
+public class ApiException extends Exception{
+    private int code;
 
     /**
-     * Registers the XML config file to repository.
-     * @param resource the object that contains the xml config file.
-     * @param precedence associated with the module based on its definition in manifest
-     * @param variation associated with the module based on its definition in manifest
-     * @throws JAXBException if xml file is not valid.
-     * @throws SAXException if xml file is not valid.
-     * @throws IOException if resource does not found.
+     * ApiException - Provide a Swagger exception to API test files
+     * @param code  The error code
+     * @param msg   The error message
      */
-    void registerResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException;
-
-    /**
-     * Unregisters the XML config file to repository.
-     * @param resource the object that contains the xml config file.
-     * @param precedence associated with the module based on its definition in manifest
-     * @param variation associated with the module based on its definition in manifest
-     * @throws JAXBException if xml file is not valid.
-     * @throws SAXException if xml file is not valid.
-     * @throws IOException if resource does not found.
-     */
-    void unregisterResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException;
-
-    /**
-     * Gets the name of xml config file.
-     * @return xml config file name
-     */
-    String getResourceFileName();
-
-    /**
-     * Gets a list of all of the repository names managed by the application
-     * @return  A list of managed repositories
-     */
-    Set getRepositoryNames();
-
-    /**
-     * Gets the data within a specified repository
-     * @param name The repository to retrieve data from
-     * @return The repository data, or null if the repository does not exist
-     */
-    IRepository getRepositoryByName(String name);
+    public ApiException(int code, String msg) {
+        super(msg);
+        this.code = code;
+    }
 }

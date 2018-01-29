@@ -55,6 +55,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 
 /**
  * Loads the Xml Config files and registers them to the Repository.
@@ -65,6 +66,7 @@ public class ResourceLoader<T extends IManager> {
      * Create a ContextHelper logger
      */
     private static Logger logger = Logger.getLogger(ContextHelper.class);
+    private File dataDirectory = new File("C:/Repositories/jaffa-framework/jaffa-update-config/data/config");
 
     /**
      * Create a ManagerRepositoryService singleton to store managers
@@ -113,6 +115,12 @@ public class ResourceLoader<T extends IManager> {
                     } catch (Exception e) {
                         logger.error("Exception occurred while registering XML " + resource.getURI().toString() + " exception " + e);
                     }
+                }
+            }
+            //for each zip in data_dir
+            for(File file : dataDirectory.listFiles()) {
+                if (file.getName().endsWith(".zip")) {
+                    ConfigApiHelper.loadCustomConfiguration(file, "REGISTER");
                 }
             }
         }catch(Exception w){

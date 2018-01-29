@@ -176,7 +176,7 @@ public class ApplicationRulesManager implements IManager {
     }
 
     /**
-     * registerResource - Provides a method which submits the contents of the resource file to the application rules
+     * registerResource - Provides a method which loads the contents of the resource file to the application rules
      * repository.
      *
      * @param resource   the object that contains the xml config file.
@@ -190,11 +190,11 @@ public class ApplicationRulesManager implements IManager {
     public void registerResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException {
         Properties properties = new Properties();
         if (resource != null && resource.getInputStream() != null) {
-            properties.load(resource.getInputStream());
-            for (Object property : properties.keySet()) {
-                String systemPropertyValue = System.getProperty((String) property);
-                if (systemPropertyValue != null && !"".equals(systemPropertyValue)) {
-                    properties.setProperty((String) property, systemPropertyValue);
+            loadPropertiesResource(resource, properties);
+            if (!properties.isEmpty()) {
+                for(Object property : properties.keySet()){
+                    ContextKey key = new ContextKey((String)property, resource.getURI().toString(), variation, precedence);
+                    registerProperties(key, properties.getProperty((String)property));
                 }
             }
             if (!properties.isEmpty()) {
@@ -207,12 +207,40 @@ public class ApplicationRulesManager implements IManager {
     }
 
     /**
-     * getResourceFileName - Provides the file name of the resource file.
+     * unregisterResource - Provides a method which unregisters a given properties resource.
      *
-     * @return
+     * @param resource   the object that contains the xml config file.
+     * @param precedence associated with the module based on its definition in manifest
+     * @param variation  associated with the module based on its definition in manifest
+     * @throws JAXBException
+     * @throws SAXException
+     * @throws IOException
      */
     @Override
+    public void unregisterResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException {
+        Properties properties = new Properties();
+        if (resource != null && resource.getInputStream() != null) {
+            loadPropertiesResource(resource, properties);
+            for (Object property : properties.keySet()) {
+                ContextKey key = new ContextKey((String) property, resource.getURI().toString(), variation, precedence);
+                unregisterProperties(key);
+            }
+        }
+    }
+
     public String getResourceFileName() {
         return DEFAULT_PROPERTY_FILE_NAME;
+    }
+
+    // Helper methods follow...
+
+    private void loadPropertiesResource(Resource resource, Properties properties) throws IOException {
+        properties.load(resource.getInputStream());
+        for (Object property : properties.keySet()) {
+            String systemPropertyValue = System.getProperty((String) property);
+            if (systemPropertyValue != null && !"".equals(systemPropertyValue)) {
+                properties.setProperty((String) property, systemPropertyValue);
+            }
+        }
     }
 }

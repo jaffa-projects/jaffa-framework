@@ -108,8 +108,8 @@ public class SoaEventManager implements IManager {
      */
     public String[] getSoaEventNames() {
         return soaEventRepository.getAllKeys().toArray(new String[0]);
-    }	
-    
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -125,7 +125,22 @@ public class SoaEventManager implements IManager {
 		}
 	}
 
-    /**
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void unregisterResource(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
+		SoaEvents soaEvents = JAXBHelper.unmarshalConfigFile(SoaEvents.class, resource, CONFIGURATION_SCHEMA_FILE);
+
+		if (soaEvents != null) {
+			for (SoaEventInfo soaEventInfo : soaEvents.getSoaEvent()) {
+				ContextKey contextKey = new ContextKey(soaEventInfo.getName(), resource.getURI().toString(), variation, context);
+				unregisterSoaEventInfo(contextKey);
+			}
+		}
+	}
+
+	/**
      * {@inheritDoc}
      */
 	@Override
