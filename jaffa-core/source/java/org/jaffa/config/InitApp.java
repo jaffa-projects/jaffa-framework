@@ -49,23 +49,18 @@
 
 package org.jaffa.config;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.ServletException;
-import javax.servlet.ServletConfig;
-import java.io.*;
-import java.util.*;
-import java.net.URL;
-import java.net.MalformedURLException;
 import org.apache.log4j.Logger;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.xml.DOMConfigurator;
-import org.apache.log4j.BasicConfigurator;
-import org.jaffa.util.URLHelper;
-import org.jaffa.util.PropertyMessageResourcesFactory;
-import org.jaffa.util.PropertyMessageResources;
 import org.jaffa.presentation.portlet.session.SessionManager;
+import org.jaffa.util.URLHelper;
 
-/** This servlet is called by web.xml as part of the startup process.
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+/** This servlet listener is invoked when servlet context is initialized.
  * It is used to initialize the Logging API and to also get a handle on
  * the base diretory that the web application is deployed in. This can be used as
  * a reference point for locating resources relative to the deployment of the web app.
@@ -91,30 +86,28 @@ import org.jaffa.presentation.portlet.session.SessionManager;
  * These parameters control the working of the 'Jaffa.Admin.LabelEditor' component.
  *
  */
-public class InitApp extends HttpServlet {
+@WebListener
+public class InitApp implements ServletContextListener {
     
     private static Logger log = null;
     private final static String UTF_8 = "UTF-8";
-    
-    /** This is invoked by the servlet container when the servlet is first loaded.
-     * It first invokes the init method of the super class.
-     * It then initialises the logging API and gets a handle on the webapp which invoked this servlet.
-     * @param cfg the Servlet configuration passed by the container.
-     * @throws ServletException if any error occurs.
-     */
-    public void init(ServletConfig cfg) throws ServletException {
-        // default init
-        super.init(cfg);
-        
+
+
+
+    @Override
+    public void contextInitialized(ServletContextEvent servletContextEvent) {
         // custom inits
-        initLog4j();
-        initBaseDir();
+        initializeLogField();
+        initBaseDir(servletContextEvent);
         initGarbageCollectionOfIdleComponents();
         checkUserGridSettingsUrls();
-        initApplicationResourcesParameters();
     }
-    
-    
+
+    @Override
+    public void contextDestroyed(ServletContextEvent servletContextEvent) {
+        destroy();
+    }
+
     /** This is invoked by the servlet container when the servlet is destroyed.
      * It clears up the settings related to the logging API.
      * It then invokes the destroy method of the super class.
@@ -122,62 +115,18 @@ public class InitApp extends HttpServlet {
     public void destroy() {
         // destroy custom stuff
         destroyGarbageCollectionOfIdleComponents();
-        destroyLog4j();
-        
-        // destroy the default
-        super.destroy();
     }
-    
-    /** Initialize log4j using the file specified in the 'framework.Log4JConfig' property in the config.properties file.
-     * This will be set to either 'none', 'default' or a classpath-relative file name. If there is no configuration setting
-     * 'default' wil be assumed.
-     *
-     * For more information look at the documentation in 'config.properties'
-     */
-    private void initLog4j() {
-        //Read setting from configuration file
-        String fileName = (String) Config.getProperty(Config.PROP_LOG4J_CONFIG, "default");
-        
-        if ( fileName.equalsIgnoreCase("none") ) {
-            // do nothing.. Assume that log4j would have been initialized by some other container
-            initializeLogField();
-            log.info("Skipped log4j configuration. Should be done by Web/J2EE Server first!");
-        } else if ( fileName.equalsIgnoreCase("default") ) {
-            defaultLog4j();
-        } else {
-            try {
-                URL u = URLHelper.newExtendedURL(fileName);
-                DOMConfigurator.configureAndWatch(u.getPath());
-                initializeLogField();
-                if ( log.isInfoEnabled() )
-                    log.info("Configured log4j using the configuration file (relative to classpath): " + fileName );
-            } catch (Exception e) {
-                System.err.println( "Error in initializing Log4j using the configFile (relative to classpath): " + fileName );
-                e.printStackTrace();
-                defaultLog4j();
-            }
-        }
-    }
-    
-    private void defaultLog4j() {
-        BasicConfigurator.configure();
-        initializeLogField();
-        if ( log.isInfoEnabled() )
-            log.info("Configured log4j using the Basic Configurator" );
-    }
-    
-    private void destroyLog4j() {
-        LogManager.shutdown();
-    }
-    
-    
+
+
+
+
     /** Initialize the base directory. This is the physical root of the web application.
      * This will be used inside the server to get a real path to relative files...
      */
-    private void initBaseDir() {
+    private void initBaseDir(ServletContextEvent servletContextEvent) {
         try {
             String baseFile = (String) Config.getProperty(Config.PROP_WEB_SERVER_ROOT_FILE, "/index.html");
-            URL u = getServletContext().getResource( baseFile );
+            URL u = servletContextEvent.getServletContext().getResource( baseFile );
             String base = "";
             if(u == null) {
                 log.fatal("Base Web File Not Found '" + baseFile + "', Can't Set Web Root");
@@ -204,13 +153,13 @@ public class InitApp extends HttpServlet {
         if (log == null)
             log = Logger.getLogger(InitApp.class);
     }
-    
+
     private void initGarbageCollectionOfIdleComponents() {
         if (log.isInfoEnabled())
             log.info("Starting a Thread to Garbage Collect idle components");
         SessionManager.startGarbageCollectionOfIdleComponents();
     }
-    
+
     private void destroyGarbageCollectionOfIdleComponents() {
         if (log.isInfoEnabled())
             log.info("Stopping the Thread to Garbage Collect idle components");
@@ -244,118 +193,5 @@ public class InitApp extends HttpServlet {
             }
         }
     }
-    
-    /** This method will check the values for the optional sevlet parameters - framework.ApplicationResourcesLocation, framework.ApplicationResourcesDefaultLocation and framework.ApplicationResourcesOverrideLocation.
-     * It will set the appropriate dynamic properties in the org.jaffa.config.Config class.
-     * It will then invoke the generateApplicationResources() method to combine the ApplicationResources.default and ApplicationResources.override files into the ApplicationResources.properties file.
-     */
-    private void initApplicationResourcesParameters() {
-      String value = (String) Config.getProperty(Config.PROP_MESSAGE_RESOURCES_BUNDLE, null);
-        if (value != null && !value.endsWith(".properties"))
-            value += ".properties";
-        value = determineLocation(value);
-        Config.setProperty(Config.PROP_APPLICATION_RESOURCES_LOCATION, value);
-        if (log.isInfoEnabled())
-            log.info("Config.PROP_APPLICATION_RESOURCES_LOCATION set to: " + value);
-        
-        value = determineLocation(getServletConfig().getInitParameter(Config.PROP_APPLICATION_RESOURCES_DEFAULT_LOCATION));
-        Config.setProperty(Config.PROP_APPLICATION_RESOURCES_DEFAULT_LOCATION, value);
-        if (log.isInfoEnabled())
-            log.info("Config.PROP_APPLICATION_RESOURCES_DEFAULT_LOCATION set to: " + value);
-        
-        value = determineLocation(getServletConfig().getInitParameter(Config.PROP_APPLICATION_RESOURCES_OVERRIDE_LOCATION));
-        Config.setProperty(Config.PROP_APPLICATION_RESOURCES_OVERRIDE_LOCATION, value);
-        if (log.isInfoEnabled())
-            log.info("Config.PROP_APPLICATION_RESOURCES_OVERRIDE_LOCATION set to: " + value);
-        
-        try {
-            generateApplicationResources();
-        } catch (IOException e) {
-            log.fatal("Error in generating ApplicationResources.properties from the Default and Override files", e);
-        }
-        //Reset PropertyMessageResources to make sure override labels are loaded properly
-        if(PropertyMessageResourcesFactory.getDefaultMessageResources()!=null && PropertyMessageResourcesFactory.getDefaultMessageResources() instanceof PropertyMessageResources) {
-            ((PropertyMessageResources) PropertyMessageResourcesFactory.getDefaultMessageResources()).flushCache();
-        }
-    }
-    
-    /** This will check the input in the classpath. If not found, it'll then assume to be in the File system.
-     * It will then return the physical location of the file in the filesystem.
-     */
-    private static String determineLocation(String input) {
-        String output = null;
-        if (input != null && input.trim().length() > 0) {
-            try {
-                final URL url = URLHelper.newExtendedURL(input);
-                output = url.getPath();
-            } catch (MalformedURLException e) {
-                final File f = new File(input);
-                output = f.getPath();
-            }
-        }
-        return output;
-    }
-    
-    
-    /** Combines the ApplicationResources.default and ApplicationResources.override files into the ApplicationResources.properties file.
-     * The locations for the files are obtained from the dynamic properties set in the Config class.
-     * If the locations are not set, then nothing will be done.
-     * @throws IOException if any I/O error occurs.
-     */
-    public static void generateApplicationResources() throws IOException {
 
-        String applicationResourcesLocation = (String) Config.getProperty(Config.PROP_APPLICATION_RESOURCES_LOCATION, null);
-        String applicationResourcesDefaultLocation = (String) Config.getProperty(Config.PROP_APPLICATION_RESOURCES_DEFAULT_LOCATION, null);
-        String applicationResourcesOverrideLocation = (String) Config.getProperty(Config.PROP_APPLICATION_RESOURCES_OVERRIDE_LOCATION, null);
-        
-        if (applicationResourcesLocation == null ||
-        (applicationResourcesDefaultLocation == null && applicationResourcesOverrideLocation == null)) {
-            if (log.isInfoEnabled())
-                log.info("The locations have not been set for ApplicationResources.properties and its default, override file. No new ApplicationResources.properties file generated.");
-        } else {
-          OutputStreamWriter applicationResourcesOutputStream = null;
-          BufferedReader applicationResourcesDefaultReader = null;
-          BufferedReader applicationResourcesOverrideReader = null;
-            try {
-                // Load the 2 properties file, such that the Override file overrides the Default file
-                final Properties properties = new Properties();
-
-                if (applicationResourcesDefaultLocation != null) {
-                  applicationResourcesDefaultReader = new BufferedReader(new InputStreamReader(new FileInputStream(applicationResourcesDefaultLocation),UTF_8));
-                  properties.load(applicationResourcesDefaultReader);
-                }
-                if (applicationResourcesOverrideLocation != null) {
-                    final File applicationResourcesOverrideFile = new File(applicationResourcesOverrideLocation);
-                    if (applicationResourcesOverrideFile.exists()) {
-                      applicationResourcesOverrideReader = new BufferedReader(new InputStreamReader(new FileInputStream(applicationResourcesOverrideFile),UTF_8));
-                      properties.load(applicationResourcesOverrideReader);
-                    }
-                }
-                // Generate the header String
-                StringBuffer buf = new StringBuffer("Generated ");
-                buf.append(applicationResourcesLocation);
-                buf.append(" from ");
-                if (applicationResourcesDefaultLocation != null)
-                    buf.append(applicationResourcesDefaultLocation);
-                if (applicationResourcesDefaultLocation != null && applicationResourcesOverrideLocation != null)
-                    buf.append(" and ");
-                if (applicationResourcesOverrideLocation != null)
-                    buf.append(applicationResourcesOverrideLocation);
-                String header = buf.toString();
-                
-                // Write out the loaded properties to the ApplicationResources.properties
-                applicationResourcesOutputStream = new OutputStreamWriter(new FileOutputStream(applicationResourcesLocation, false), UTF_8);
-                properties.store(applicationResourcesOutputStream, header);
-                if (log!=null && log.isInfoEnabled())
-                    log.info(header);
-            } finally {
-                if (applicationResourcesOutputStream != null)
-                    applicationResourcesOutputStream.close();
-                if (applicationResourcesDefaultReader != null)
-                  applicationResourcesDefaultReader.close();
-                if (applicationResourcesOverrideReader != null)
-                  applicationResourcesOverrideReader.close();
-            }
-        }
-    }
 }

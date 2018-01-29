@@ -8,6 +8,8 @@
 package org.jaffa.transaction.domain;
 
 import org.apache.log4j.Logger;
+
+import java.io.Serializable;
 import java.util.*;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
@@ -51,14 +53,15 @@ public class TransactionField extends Persistent {
 
     private static final Logger log = Logger.getLogger(TransactionField.class);
 
-    @XmlElement(name="transactionId")
-    @Id
-    @Basic(optional = false)
-    @Column(name = "TRANSACTION_ID")
+    /** Holds value of property m_compositeKey. */
+    @XmlElement(name="compositeKey")
+    @EmbeddedId
+    private CompositeKey m_compositeKey;
+
+    @Transient
     private java.lang.String m_transactionId;
 
-    @XmlElement(name="fieldName")
-    @Column(name = "FIELD_NAME")
+    @Transient
     private java.lang.String m_fieldName;
 
     @XmlElement(name="value")
@@ -121,15 +124,35 @@ public class TransactionField extends Persistent {
     }
     // .//GEN-END:2_be
     // .//GEN-BEGIN:transactionId_be
+    /** Getter for property m_compositeKey.
+     * @return Value of property m_compositeKey.
+     */
+    public CompositeKey getCompositeKey() {
+        return m_compositeKey;
+    }
+
+    /** Setter for property m_compositeKey.
+     * @sets Value of property m_compositeKey.
+     */
+    public void setCompositeKey(CompositeKey compositeKey) {
+        this.m_compositeKey = compositeKey;
+    }
+
     /**
      * Getter for property transactionId.
      *
      * @return Value of property transactionId.
      */
     public java.lang.String getTransactionId() {
-        return m_transactionId;
+        if(m_transactionId!=null){
+            if(getCompositeKey() == null)
+                setCompositeKey(new CompositeKey());
+
+            getCompositeKey().setTransactionId(m_transactionId);
+        }
+        return getCompositeKey()!=null ? getCompositeKey().getTransactionId() : null;
     }
-    
+
     /**
      * Use this method to update the property transactionId.
      * This method will do nothing and simply return if the input value is the same as the current value.
@@ -146,8 +169,11 @@ public class TransactionField extends Persistent {
     public void setTransactionId(java.lang.String transactionId)
     throws ValidationException, UpdatePrimaryKeyException, ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException {
         // ignore, if the current value and new value are the same
-        if (m_transactionId == null ? transactionId == null : m_transactionId.equals(transactionId))
+        if (getTransactionId() == null ? transactionId == null : getTransactionId().equals(transactionId))
             return;
+
+        if(getCompositeKey() == null)
+            setCompositeKey(new CompositeKey());
 
         // this is part of the primary key.. do not update if its a database occurence.
         if (isDatabaseOccurence())
@@ -161,7 +187,8 @@ public class TransactionField extends Persistent {
         // .//GEN-LAST:transactionId
         // .//GEN-BEGIN:transactionId_1_be
         super.update();
-        super.addInitialValue(TransactionFieldMeta.TRANSACTION_ID, m_transactionId);
+        super.addInitialValue(TransactionFieldMeta.TRANSACTION_ID, getTransactionId());
+        getCompositeKey().setTransactionId(transactionId);
         m_transactionId = transactionId;
         m_transactionObject = null;
         // .//GEN-END:transactionId_1_be
@@ -224,7 +251,13 @@ public class TransactionField extends Persistent {
      * @return Value of property fieldName.
      */
     public java.lang.String getFieldName() {
-        return m_fieldName;
+        if(m_fieldName!=null){
+            if(getCompositeKey() == null)
+                setCompositeKey(new CompositeKey());
+
+            getCompositeKey().setFieldName(m_fieldName);
+        }
+        return getCompositeKey()!=null ? getCompositeKey().getFieldName() : null;
     }
     
     /**
@@ -243,8 +276,11 @@ public class TransactionField extends Persistent {
     public void setFieldName(java.lang.String fieldName)
     throws ValidationException, UpdatePrimaryKeyException, ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException {
         // ignore, if the current value and new value are the same
-        if (m_fieldName == null ? fieldName == null : m_fieldName.equals(fieldName))
+        if (getFieldName() == null ? fieldName == null : getFieldName().equals(fieldName))
             return;
+
+        if(getCompositeKey() == null)
+            setCompositeKey(new CompositeKey());
 
         // this is part of the primary key.. do not update if its a database occurence.
         if (isDatabaseOccurence())
@@ -258,8 +294,10 @@ public class TransactionField extends Persistent {
         // .//GEN-LAST:fieldName
         // .//GEN-BEGIN:fieldName_1_be
         super.update();
-        super.addInitialValue(TransactionFieldMeta.FIELD_NAME, m_fieldName);
+        super.addInitialValue(TransactionFieldMeta.FIELD_NAME, getFieldName());
+        getCompositeKey().setFieldName(fieldName);
         m_fieldName = fieldName;
+        m_transactionObject = null;
         // .//GEN-END:fieldName_1_be
         // Add custom code after setting the value//GEN-FIRST:fieldName_3
 
@@ -543,4 +581,73 @@ public class TransactionField extends Persistent {
     }
 
     // .//GEN-LAST:custom
+
+    @Embeddable
+    @XmlAccessorType(XmlAccessType.FIELD)
+    public static class CompositeKey implements Serializable {
+
+        @XmlElement(name="transactionId")
+        @Column(name = "TRANSACTION_ID")
+        private java.lang.String m_transactionId;
+
+        @XmlElement(name="fieldName")
+        @Column(name = "FIELD_NAME")
+        private java.lang.String m_fieldName;
+
+        /** Getter for property m_transactionId.
+         * @return Value of property m_transactionId.
+         */
+        public java.lang.String getTransactionId() {
+            return m_transactionId;
+        }
+
+        /** Setter for property m_transactionId.
+         * @sets Value of property m_transactionId.
+         */
+        public void setTransactionId(java.lang.String transactionId){
+            m_transactionId = transactionId;
+        }
+
+        /** Getter for property m_fieldName.
+         * @return Value of property m_fieldName.
+         */
+        public java.lang.String getFieldName() {
+            return m_fieldName;
+        }
+
+        /** Setter for property m_fieldName.
+         * @sets Value of property m_fieldName.
+         */
+        public void setFieldName(java.lang.String fieldName){
+            m_fieldName = fieldName;
+        }
+        /**
+         * Compares this candidateKey with another candidateKey object.
+         * Returns a true if both the objects have the same candidate key.
+         *
+         * @param obj the other Persistent object.
+         * @return a true if both the objects have the same candidate key.
+         */
+        public boolean equals(Object obj) {
+            if (obj != null && this.getClass() == obj.getClass()) {
+                boolean equals = true;
+                equals = equals && (getTransactionId() == null ? ((TransactionField.CompositeKey) obj).getTransactionId() == null : getTransactionId().equals(((TransactionField.CompositeKey) obj).getTransactionId()));
+                equals = equals && (getFieldName() == null ? ((TransactionField.CompositeKey) obj).getFieldName() == null : getFieldName().equals(((TransactionField.CompositeKey) obj).getFieldName()));
+                return equals;
+            }
+            return super.equals(obj);
+        }
+
+        /**
+         * Returns the hashCode of this object based on it's candidate key.
+         *
+         * @return the hashCode of this object based on it's candidate key.
+         */
+        public int hashCode() {
+            int i = 0;
+            i += getTransactionId()!=null ? getTransactionId().hashCode() : 0;
+            i += getFieldName()!=null ? getFieldName().hashCode() : 0;
+            return i;
+        }
+    }
 }
