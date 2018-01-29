@@ -23,12 +23,6 @@ import java.util.zip.ZipInputStream;
 public class ConfigApiHelper {
     private static final Logger log = Logger.getLogger(ConfigApiHelper.class);
 
-    public static void loadCustomConfiguration(File filePath, String source) throws IOException {
-        File tempDir = extractToTemporaryDirectory(filePath);
-        modifyResources(tempDir, source);
-        removeExtractedFiles(tempDir);
-    }
-
     /**
      * findContextSalienceInManifest() - When given a compressed file, parse its MANIFEST and return the
      * Context-Salience value if it exists
@@ -67,7 +61,7 @@ public class ConfigApiHelper {
      * @return The temporary directory containing the compressed contents
      * @throws IOException  Thrown when the provided compressed file does not exist or cannot be read
      */
-    static File extractToTemporaryDirectory(File file) throws IOException {
+    public static File extractToTemporaryDirectory(File file) throws IOException {
         //Create temporary directory
         File tempDir = new File(file.getAbsolutePath().substring(0, file.getAbsolutePath().length() - 4));
         tempDir.mkdir();
@@ -105,7 +99,7 @@ public class ConfigApiHelper {
      * @param file  The configuration file to be registered or unregistered
      * @param source    The API endpoint that calls the method
      */
-    static boolean modifyResources(File file, String source) {
+    public static boolean modifyResources(File file, String source) {
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         for(IManager manager : ManagerRepositoryService.getInstance().getManagerMap().values()) {
             Resource resource = resolver.getResource("file:" + file.getAbsolutePath() +
@@ -137,7 +131,7 @@ public class ConfigApiHelper {
      * @param directory The directory containing the extracted compressed file entries
      * @throws IOException  Thrown when the directory does not exist or cannot be read
      */
-    static boolean removeExtractedFiles(File directory) throws IOException {
+    public static boolean removeExtractedFiles(File directory) throws IOException {
         File metaInfDirectory = new File(directory + "/META-INF/");
         File[] children = metaInfDirectory.listFiles();
         if (children != null) {

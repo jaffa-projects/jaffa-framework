@@ -118,11 +118,13 @@ public class ResourceLoader<T extends IManager> {
                 }
             }
             //for each zip in data_dir
+            /* TODO: Finish persistence
             for(File file : dataDirectory.listFiles()) {
                 if (file.getName().endsWith(".zip")) {
                     ConfigApiHelper.loadCustomConfiguration(file, "REGISTER");
                 }
             }
+            */
         }catch(Exception w){
             throw new RuntimeException(w.getCause());
         }

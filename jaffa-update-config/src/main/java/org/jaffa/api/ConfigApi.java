@@ -114,7 +114,9 @@ public class ConfigApi implements IConfigApi {
         }
 
         //Extract files to gain access to configuration resources
-        ConfigApiHelper.loadCustomConfiguration(filePath, source);
+        File tempDir = ConfigApiHelper.extractToTemporaryDirectory(filePath);
+        ConfigApiHelper.modifyResources(tempDir, source);
+        ConfigApiHelper.removeExtractedFiles(tempDir);
         if (!Files.deleteIfExists(filePath.toPath())) {
             log.warn(filePath + " was not successfully deleted");
         }
@@ -211,7 +213,9 @@ public class ConfigApi implements IConfigApi {
 
         //Copy files to server and register resources
         Files.copy(new ByteArrayInputStream(payload), filePath.toPath());
-        ConfigApiHelper.loadCustomConfiguration(filePath, source);
+        File tempDir = ConfigApiHelper.extractToTemporaryDirectory(filePath);
+        ConfigApiHelper.modifyResources(tempDir, source);
+        ConfigApiHelper.removeExtractedFiles(tempDir);
 
         log.info("The resources in " + filePath + " have finished registering configurations to the repositories");
         Response.ResponseBuilder response = Response.status(Response.Status.OK);
