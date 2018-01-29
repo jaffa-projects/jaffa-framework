@@ -142,7 +142,16 @@ public class ConfigApiHelper {
         File[] children = metaInfDirectory.listFiles();
         if (children != null) {
             for (int i = 0; i < children.length; i++) {
-                Files.delete(children[i].toPath());
+                int count = 0;
+                while (count < 3) {
+                    try {
+                        Files.delete(children[i].toPath());
+                        break;
+                    } catch (FileSystemException ex) {
+                        System.gc();
+                        count++;
+                    }
+                }
             }
             if (!Files.deleteIfExists(metaInfDirectory.toPath())) {
                 log.warn("The temporary files were not successfully removed from " + metaInfDirectory);
