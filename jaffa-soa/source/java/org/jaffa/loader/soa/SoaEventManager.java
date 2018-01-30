@@ -110,9 +110,10 @@ public class SoaEventManager implements IManager {
         return soaEventRepository.getAllKeys().toArray(new String[0]);
     }
 
-	/**
-	 * {@inheritDoc}
-	 */
+
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public void registerResource(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
 		SoaEvents soaEvents = JAXBHelper.unmarshalConfigFile(SoaEvents.class, resource, CONFIGURATION_SCHEMA_FILE);

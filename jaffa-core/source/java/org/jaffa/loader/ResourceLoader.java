@@ -51,10 +51,12 @@ package org.jaffa.loader;
 
 import org.apache.log4j.Logger;
 import org.jaffa.util.ContextHelper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 
 /**
  * Loads the Xml Config files and registers them to the Repository.
@@ -62,9 +64,19 @@ import javax.annotation.PostConstruct;
 public class ResourceLoader<T extends IManager> {
 
     /**
+     * Notionally use a property to point to the custom config directory.
+     * We'll default to "./custom_config_dir" if not defined.
+     */
+    @Value("${custom.config.path:custom_configurations}")
+    private String customConfigPath;
+
+    /**
      * Create a ContextHelper logger
      */
     private static Logger logger = Logger.getLogger(ContextHelper.class);
+
+    // TODO: Stop hardcoding this...
+    private File dataDirectory = new File("C:/Repositories/jaffa-framework/jaffa-update-config/data/config");
 
     /**
      * Create a ManagerRepositoryService singleton to store managers
@@ -115,8 +127,24 @@ public class ResourceLoader<T extends IManager> {
                     }
                 }
             }
-        }catch(Exception w){
+
+         }catch(Exception w){
             throw new RuntimeException(w.getCause());
+        }
+    }
+
+    public void loadCustomConfigurations() {
+
+        // TODO: Finish persistence
+
+        /**
+         * Load all zip files from the custom config directory.
+         */
+        File customConfigDirectory = new File(customConfigPath);
+        for(File file : customConfigDirectory.listFiles()) {
+            if (file.getName().endsWith(".zip")) {
+                ConfigApiHelper.modifyResources(file, "REGISTER");
+            }
         }
     }
 

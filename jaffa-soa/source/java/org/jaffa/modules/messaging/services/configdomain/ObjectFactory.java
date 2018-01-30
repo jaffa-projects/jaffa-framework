@@ -8,6 +8,8 @@
 
 package org.jaffa.modules.messaging.services.configdomain;
 
+import org.jaffa.soa.transformation.meta.Config;
+
 import javax.xml.bind.annotation.XmlRegistry;
 
 

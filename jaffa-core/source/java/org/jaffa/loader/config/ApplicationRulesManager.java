@@ -59,6 +59,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -189,7 +190,7 @@ public class ApplicationRulesManager implements IManager {
     @Override
     public void registerResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException {
         Properties properties = new Properties();
-        if (resource != null && resource.getInputStream() != null) {
+        if (resource != null) {
             loadPropertiesResource(resource, properties);
             if (!properties.isEmpty()) {
                 for(Object property : properties.keySet()){
@@ -224,12 +225,6 @@ public class ApplicationRulesManager implements IManager {
         }
     }
 
-    /**
-     * getResourceFileName - Provides the file name of the resource file.
-     *
-     * @return
-     */
-    @Override
     public String getResourceFileName() {
         return DEFAULT_PROPERTY_FILE_NAME;
     }
@@ -237,12 +232,17 @@ public class ApplicationRulesManager implements IManager {
     // Helper methods follow...
 
     private void loadPropertiesResource(Resource resource, Properties properties) throws IOException {
-        properties.load(resource.getInputStream());
-        for (Object property : properties.keySet()) {
-            String systemPropertyValue = System.getProperty((String) property);
-            if (systemPropertyValue != null && !"".equals(systemPropertyValue)) {
-                properties.setProperty((String) property, systemPropertyValue);
+        InputStream resourceInputStream = resource.getInputStream();
+        if (resourceInputStream != null) {
+            properties.load(resourceInputStream);
+            for (Object property : properties.keySet()) {
+                String systemPropertyValue = System.getProperty((String) property);
+                if (systemPropertyValue != null && !"".equals(systemPropertyValue)) {
+                    properties.setProperty((String) property, systemPropertyValue);
+                }
             }
+            resourceInputStream.close();
         }
     }
 }
+

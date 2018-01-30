@@ -130,9 +130,7 @@ public class PolicyCache {
      * @return
      */
     private synchronized static PolicyCache createPolicyCacheInstance() {
-        String fileLocation = getFileLocation();
-        String defaultFileLocation = getDefaultFileLocation();
-        return fileLocation.equals(defaultFileLocation) ? getDefaultInstance() : new PolicyCache(fileLocation);
+        return new PolicyCache();
     }
 
     /**
@@ -140,11 +138,12 @@ public class PolicyCache {
      *
      * @return
      */
+    @Deprecated
     private static PolicyCache getDefaultInstance() {
         String variation = DEFAULT_KEY;
         PolicyCache policyCache = c_policyCacheByVariation.get(variation);
         if (policyCache == null) {
-            PolicyCache generatedPolicyCache = new PolicyCache(getDefaultFileLocation());
+            PolicyCache generatedPolicyCache = new PolicyCache();
             policyCache = c_policyCacheByVariation.putIfAbsent(variation, generatedPolicyCache);
             if (policyCache == null)
                 policyCache = generatedPolicyCache;
@@ -155,7 +154,7 @@ public class PolicyCache {
     /**
      * Read the roles in from the XMLdocument and cache them.
      */
-    private PolicyCache(String initFile) {
+    private PolicyCache() {
         if (m_roleMap == null) {
             RoleManager roleManager = getRoleManager();
             if (null != roleManager)

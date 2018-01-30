@@ -242,7 +242,7 @@ public class MapRepository<T> implements IRepository<T> {
 
     /**
      * Adds repositoryKey to contextKeyCache
-     * @param repositoryKey
+     * @param repositoryKey The ContextKey to be added to ContextKeyCache
      */
     private void addToContextKeyCache(ContextKey repositoryKey){
         TreeSet<ContextKey> contextKeyCacheValue = contextKeyCache.get(repositoryKey.getId());
@@ -255,10 +255,15 @@ public class MapRepository<T> implements IRepository<T> {
 
     /**
      * Removes repositoryKey from contextKeyCache
-     * @param repositoryKey
+     * @param repositoryKey The ContextKey to be removed from ContextKeyCache
      */
     private void removeFromContextKeyCache(ContextKey repositoryKey){
-        contextKeyCache.remove(repositoryKey.getId());
+        if(contextKeyCache.get(repositoryKey.getId()).size() > 1) {
+            contextKeyCache.get(repositoryKey.getId()).remove(repositoryKey);
+        }
+        else {
+            contextKeyCache.remove(repositoryKey.getId());
+        }
     }
 
     /**
