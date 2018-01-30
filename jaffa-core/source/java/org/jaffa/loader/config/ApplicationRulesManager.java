@@ -54,6 +54,7 @@ import org.jaffa.loader.IManager;
 import org.jaffa.loader.IRepository;
 import org.jaffa.loader.MapRepository;
 import org.jaffa.security.VariationContext;
+import org.jaffa.util.StringHelper;
 import org.springframework.core.io.Resource;
 import org.xml.sax.SAXException;
 
@@ -63,6 +64,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * ApplicationRulesManager - ApplicationManager is the managing class for all application rules as defined by the
@@ -193,9 +196,10 @@ public class ApplicationRulesManager implements IManager {
             properties.load(resource.getInputStream());
             for (Object property : properties.keySet()) {
                 String systemPropertyValue = System.getProperty((String) property);
-                if (systemPropertyValue != null && !"".equals(systemPropertyValue)) {
-                    properties.setProperty((String) property, systemPropertyValue);
+                if (systemPropertyValue == null || "".equals(systemPropertyValue)) {
+                    systemPropertyValue = replaceTokens(properties, properties.getProperty((String)property));
                 }
+                properties.setProperty((String) property, systemPropertyValue);
             }
             if (!properties.isEmpty()) {
                 for(Object property : properties.keySet()){
@@ -214,5 +218,27 @@ public class ApplicationRulesManager implements IManager {
     @Override
     public String getResourceFileName() {
         return DEFAULT_PROPERTY_FILE_NAME;
+    }
+
+    private String replaceTokens(Properties properties, String appRuleValue) {
+        //Regular expression to find ${word} tokens in the application rule value
+        Pattern pt = Pattern.compile("\\$\\{([^}]*)\\}");
+        Matcher matcher = pt.matcher(appRuleValue);
+
+        while (matcher.find()) {
+          String tokenValue = getPropertyValue(properties,  matcher.group(1));
+            if (tokenValue != null) {
+                appRuleValue = StringHelper.replace(appRuleValue, matcher.group(0), tokenValue);
+            }
+        }
+        return appRuleValue;
+    }
+
+    private String getPropertyValue(Properties properties, String key){
+        String systemPropertyValue = System.getProperty(key);
+        if (systemPropertyValue == null || "".equals(systemPropertyValue)) {
+            systemPropertyValue = properties.getProperty(key);
+        }
+        return systemPropertyValue;
     }
 }
