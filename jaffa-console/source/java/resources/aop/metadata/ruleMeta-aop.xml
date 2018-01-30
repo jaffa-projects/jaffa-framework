@@ -150,11 +150,12 @@
       <data-type>STRING</data-type>
       <rule-info is-class='false' is-property='true'/>
     </property>
+    <template value='[component]' />
     <property name='component'>
       <label value='Component' />
       <data-type>STRING</data-type>
       <rule-info is-class='false' is-property='true'/>
-    </property>	
+    </property>
   </metadata>
 
   <metadata tag='jaffa.rules' class='org.jaffa.rules.meta.generic-foreign-key' execution-realm='business'>
