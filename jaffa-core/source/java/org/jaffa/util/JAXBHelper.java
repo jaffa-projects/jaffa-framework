@@ -50,15 +50,7 @@ package org.jaffa.util;
 
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.Map;
 import java.util.WeakHashMap;
 import javax.xml.XMLConstants;
@@ -235,6 +227,9 @@ public class JAXBHelper {
         SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         Schema schema = schemaFactory.newSchema(URLHelper.newExtendedURL(configurationSchemaFile));
         unmarshaller.setSchema(schema);
-        return (T) unmarshaller.unmarshal(XmlHelper.stripDoctypeDeclaration(resource.getInputStream()));
+        InputStream is = resource.getInputStream();
+        T config = (T) unmarshaller.unmarshal(XmlHelper.stripDoctypeDeclaration(is));
+        is.close();
+        return config;
     }
 }
