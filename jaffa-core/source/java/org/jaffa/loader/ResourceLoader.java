@@ -57,6 +57,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Loads the Xml Config files and registers them to the Repository.
@@ -65,7 +66,8 @@ public class ResourceLoader<T extends IManager> {
 
     /**
      * Notionally use a property to point to the custom config directory.
-     * We'll default to "./custom_config_dir" if not defined.
+     * We'll default to "./custom_configurations" if not defined.
+     * TODO: Make sure using this property is OK.
      */
     @Value("${custom.config.path:custom_configurations}")
     private String customConfigPath;
@@ -74,9 +76,6 @@ public class ResourceLoader<T extends IManager> {
      * Create a ContextHelper logger
      */
     private static Logger logger = Logger.getLogger(ContextHelper.class);
-
-    // TODO: Stop hardcoding this...
-    private File dataDirectory = new File("C:/Repositories/jaffa-framework/jaffa-update-config/data/config");
 
     /**
      * Create a ManagerRepositoryService singleton to store managers
@@ -128,24 +127,38 @@ public class ResourceLoader<T extends IManager> {
                 }
             }
 
-         }catch(Exception w){
+            loadAllCustomConfigurations();
+
+         } catch (Exception w) {
             throw new RuntimeException(w.getCause());
         }
     }
 
-    public void loadCustomConfigurations() {
+    /**
+     * Loads all custom configurations in the custom config directory.
+     * @throws IOException
+     */
+    public void loadAllCustomConfigurations() throws IOException {
 
-        // TODO: Finish persistence
-
-        /**
-         * Load all zip files from the custom config directory.
-         */
+        // Load all zip files from the custom config directory.
         File customConfigDirectory = new File(customConfigPath);
         for(File file : customConfigDirectory.listFiles()) {
+            // TODO: Fix hardcoded .zip.
             if (file.getName().endsWith(".zip")) {
-                ConfigApiHelper.modifyResources(file, "REGISTER");
+                loadCustomConfiguration(file);
             }
         }
+    }
+
+    /**
+     * Loads a single custom configuration .zip file.
+     * @param file
+     * @throws IOException
+     */
+    public void loadCustomConfiguration(File file) throws IOException {
+        File zipRoot = ConfigApiHelper.extractToTemporaryDirectory(file);
+        ConfigApiHelper.registerResources(zipRoot);
+        ConfigApiHelper.removeDirTree(zipRoot);
     }
 
 }
