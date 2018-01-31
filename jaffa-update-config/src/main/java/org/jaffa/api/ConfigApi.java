@@ -82,16 +82,6 @@ public class ConfigApi implements IConfigApi {
             File.separator + "config");
 
     /**
-     * Constructor to create DATA_DIRECTORY configuration location if it does not already exist
-     */
-    public ConfigApi() {
-        if (!dataDirectory.exists()) {
-            dataDirectory.mkdir();
-        }
-    }
-
-
-    /**
      * Corresponds to DELETE endpoint. Unregister all configurations within the provided compressed file and delete
      * the file itself
      *
@@ -115,7 +105,7 @@ public class ConfigApi implements IConfigApi {
 
         //Extract files to gain access to configuration resources
         File tempDir = ConfigApiHelper.extractToTemporaryDirectory(filePath);
-        ConfigApiHelper.modifyResources(tempDir, source);
+        ConfigApiHelper.modifyResources(tempDir, this.getFileContents(filePath).getContextSalience(), source);
         ConfigApiHelper.removeExtractedFiles(tempDir);
         if (!Files.deleteIfExists(filePath.toPath())) {
             log.warn(filePath + " was not successfully deleted");
@@ -193,6 +183,11 @@ public class ConfigApi implements IConfigApi {
         File filePath = new File(this.dataDirectory + File.separator + fileToPost);
         String source = "REGISTER";
 
+        //Avoid NoSuchFileExceptions by double-checking that DATA_DIRECTORY exists
+        if (!dataDirectory.exists()) {
+            dataDirectory.mkdir();
+        }
+
         //Provide HTTP error for empty request
         if (payload.length <= BYTE_ARRAY_INIT_LENGTH) {
             log.warn("A file was not included in your API POST request");
@@ -214,7 +209,7 @@ public class ConfigApi implements IConfigApi {
         //Copy files to server and register resources
         Files.copy(new ByteArrayInputStream(payload), filePath.toPath());
         File tempDir = ConfigApiHelper.extractToTemporaryDirectory(filePath);
-        ConfigApiHelper.modifyResources(tempDir, source);
+        ConfigApiHelper.modifyResources(tempDir, this.getFileContents(filePath).getContextSalience(), source);
         ConfigApiHelper.removeExtractedFiles(tempDir);
 
         log.info("The resources in " + filePath + " have finished registering configurations to the repositories");

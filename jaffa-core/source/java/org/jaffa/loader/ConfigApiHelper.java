@@ -98,7 +98,7 @@ public class ConfigApiHelper {
      * @param file  The configuration file to be registered or unregistered
      * @param source    The API endpoint that calls the method
      */
-    public static boolean modifyResources(File file, String source) {
+    public static boolean modifyResources(File file, String contextSalience, String source) {
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         for(IManager manager : ManagerRepositoryService.getInstance().getManagerMap().values()) {
             Resource resource = resolver.getResource("file:" + file.getAbsolutePath() +
@@ -106,11 +106,11 @@ public class ConfigApiHelper {
             try {
                 if (resource.getFile().exists()) {
                     if (source.toUpperCase().equals("UNREGISTER")) { //Unregister resource
-                        manager.unregisterResource(resource, ContextHelper.getContextSalience(resource.getURI().toString()),
+                        manager.unregisterResource(resource, contextSalience,
                                 ContextHelper.getVariationSalience(resource.getURI().toString()));
                         log.debug(resource.getFilename() + " was successfully unregistered from " + manager);
                     } else { //Register resource
-                        manager.registerResource(resource, ContextHelper.getContextSalience(resource.getURI().toString()),
+                        manager.registerResource(resource, contextSalience,
                                 ContextHelper.getVariationSalience(resource.getURI().toString()));
                         ManagerRepositoryService.getInstance().add(manager.getClass().getSimpleName(), manager);
                         log.debug(resource.getFilename() + " was successfully registered to " + manager);

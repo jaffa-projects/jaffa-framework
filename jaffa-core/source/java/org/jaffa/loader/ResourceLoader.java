@@ -66,7 +66,6 @@ public class ResourceLoader<T extends IManager> {
      * Create a ContextHelper logger
      */
     private static Logger logger = Logger.getLogger(ContextHelper.class);
-    private File dataDirectory = new File("C:/Repositories/jaffa-framework/jaffa-update-config/data/config");
 
     /**
      * Create a ManagerRepositoryService singleton to store managers
@@ -117,14 +116,6 @@ public class ResourceLoader<T extends IManager> {
                     }
                 }
             }
-            //for each zip in data_dir
-            /* TODO: Finish persistence
-            for(File file : dataDirectory.listFiles()) {
-                if (file.getName().endsWith(".zip")) {
-                    ConfigApiHelper.loadCustomConfiguration(file, "REGISTER");
-                }
-            }
-            */
         }catch(Exception w){
             throw new RuntimeException(w.getCause());
         }
