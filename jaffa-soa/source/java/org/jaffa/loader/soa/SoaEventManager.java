@@ -110,6 +110,7 @@ public class SoaEventManager implements IManager {
         return soaEventRepository.getAllKeys().toArray(new String[0]);
     }
 
+
     /**
      * {@inheritDoc}
      */
@@ -119,7 +120,7 @@ public class SoaEventManager implements IManager {
 
 		if (soaEvents != null) {
 			for (SoaEventInfo soaEventInfo : soaEvents.getSoaEvent()) {
-			    ContextKey contextKey = new ContextKey(soaEventInfo.getName(), resource.getURI().toString(), variation, context);
+				ContextKey contextKey = new ContextKey(soaEventInfo.getName(), resource.getURI().toString(), variation, context);
 				registerSoaEventInfo(contextKey, soaEventInfo);
 			}
 		}

@@ -198,12 +198,6 @@ public class ApplicationRulesManager implements IManager {
                     registerProperties(key, properties.getProperty((String)property));
                 }
             }
-            if (!properties.isEmpty()) {
-                for(Object property : properties.keySet()){
-                    ContextKey key = new ContextKey((String)property, resource.getURI().toString(), variation, precedence);
-                    registerProperties(key, properties.getProperty((String)property));
-                }
-            }
         }
     }
 
@@ -220,11 +214,13 @@ public class ApplicationRulesManager implements IManager {
     @Override
     public void unregisterResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException {
         Properties properties = new Properties();
-        if (resource != null) {
+        if (resource != null && resource.getInputStream() != null) {
             loadPropertiesResource(resource, properties);
-            for (Object property : properties.keySet()) {
-                ContextKey key = new ContextKey((String) property, resource.getURI().toString(), variation, precedence);
-                unregisterProperties(key);
+            if (!properties.isEmpty()) {
+                for(Object property : properties.keySet()){
+                    ContextKey key = new ContextKey((String)property, resource.getURI().toString(), variation, precedence);
+                    unregisterProperties(key);
+                }
             }
         }
     }
@@ -249,3 +245,4 @@ public class ApplicationRulesManager implements IManager {
         }
     }
 }
+

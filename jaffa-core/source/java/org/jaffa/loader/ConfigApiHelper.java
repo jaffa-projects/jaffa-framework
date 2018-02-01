@@ -4,12 +4,15 @@ import org.apache.log4j.Logger;
 import org.jaffa.util.ContextHelper;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
@@ -62,12 +65,14 @@ public class ConfigApiHelper {
      */
     public static File extractToTemporaryDirectory(File file) throws IOException {
         //Create temporary directory
+        // TODO: Fix harcoded '4' - why 4? Probably should use utility method that searches backwards for '.'.
         File tempDir = new File(file.getAbsolutePath().substring(0, file.getAbsolutePath().length() - 4));
         tempDir.mkdir();
 
         //Extract compressed contents to temporary directory
         ZipInputStream zis = new ZipInputStream(new FileInputStream(file.getAbsolutePath()));
         ZipEntry zipEntry = zis.getNextEntry();
+        // TODO: Fix magic number.
         byte[] buffer = new byte[1024];
         while (zipEntry != null) {
             String fileName = zipEntry.getName();
@@ -94,34 +99,52 @@ public class ConfigApiHelper {
     }
 
     /**
-     * Register or Unregister configuration files in IManager implentations, based on the source of the method call
+     * Register configuration files in IManager implementationss, based on the source of the method call
      * @param file  The configuration file to be registered or unregistered
-     * @param source    The API endpoint that calls the method
+     * @return  Success or failure of the operation
      */
-    public static boolean modifyResources(File file, String contextSalience, String source) {
-        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+    public static boolean registerResources(File file) {
+        boolean isSuccess = true;
+        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         for(IManager manager : ManagerRepositoryService.getInstance().getManagerMap().values()) {
-            Resource resource = resolver.getResource("file:" + file.getAbsolutePath() +
-                    "/META-INF/" + manager.getResourceFileName());
+            Resource resource = getMetaInfResource(file, resolver, manager);
             try {
                 if (resource.getFile().exists()) {
-                    if (source.toUpperCase().equals("UNREGISTER")) { //Unregister resource
-                        manager.unregisterResource(resource, contextSalience,
-                                ContextHelper.getVariationSalience(resource.getURI().toString()));
-                        log.debug(resource.getFilename() + " was successfully unregistered from " + manager);
-                    } else { //Register resource
-                        manager.registerResource(resource, contextSalience,
-                                ContextHelper.getVariationSalience(resource.getURI().toString()));
-                        ManagerRepositoryService.getInstance().add(manager.getClass().getSimpleName(), manager);
-                        log.debug(resource.getFilename() + " was successfully registered to " + manager);
-                    }
+                    manager.registerResource(resource, ContextHelper.getContextSalience(resource.getURI().toString()),
+                            ContextHelper.getVariationSalience(resource.getURI().toString()));
+                    ManagerRepositoryService.getInstance().add(manager.getClass().getSimpleName(), manager);
+                    log.debug(resource.getFilename() + " was successfully registered to " + manager);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                log.warn("The resource " + resource.getFilename() + " failed to " + source);
+                isSuccess = false;
+                log.error("The resource " + resource.getFilename() + " failed to register", e);
             }
         }
-        return true;
+        return isSuccess;
+    }
+
+    /**
+     * Unregister configuration files in IManager implementations, based on the source of the method call
+     * @param file  The configuration file to be registered or unregistered
+     * @return  Success or failure of the operation
+     */
+    public static boolean unregisterResources(File file) {
+        boolean isSuccess = true;
+        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        for(IManager manager : ManagerRepositoryService.getInstance().getManagerMap().values()) {
+            Resource resource = getMetaInfResource(file, resolver, manager);
+            try {
+                if (resource.getFile().exists()) {
+                    manager.unregisterResource(resource, ContextHelper.getContextSalience(resource.getURI().toString()),
+                            ContextHelper.getVariationSalience(resource.getURI().toString()));
+                    log.debug(resource.getFilename() + " was successfully unregistered from " + manager);
+                }
+            } catch (Exception e) {
+                isSuccess = false;
+                log.warn("The resource " + resource.getFilename() + " failed to unregister", e);
+            }
+        }
+        return isSuccess;
     }
 
     /**
@@ -145,5 +168,26 @@ public class ConfigApiHelper {
             }
         }
         return directory.exists();
+    }
+
+    /**
+     * Remove a directory recursively ("rm -rf").
+     * @param dir  Directory to be removed.
+     * @throws IOException
+     */
+    // TODO: Move this to a utility class. Apache commons has this functionality, but the Java 8 version is succinct.
+    public static void removeDirTree(File dir) throws IOException {
+
+        Files.walk(dir.toPath())
+                .map(Path::toFile)
+                .sorted((o1, o2) -> -o1.compareTo(o2))
+                .forEach(File::delete);
+    }
+
+    // Helper methods...
+
+    private static Resource getMetaInfResource(File file, ResourcePatternResolver resolver, IManager manager) {
+        return resolver.getResource("file:" + file.getAbsolutePath() +
+                "/META-INF/" + manager.getResourceFileName());
     }
 }
