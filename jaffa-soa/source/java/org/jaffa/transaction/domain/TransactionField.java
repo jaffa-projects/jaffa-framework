@@ -66,7 +66,7 @@ public class TransactionField extends Persistent {
     private java.lang.String m_transactionId;
 
     @Transient
- 	private java.lang.String m_fieldName;
+    private java.lang.String m_fieldName;
 
     private transient Transaction m_transactionObject;
 
