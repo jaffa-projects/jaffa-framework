@@ -62,6 +62,12 @@ public class TransactionField extends Persistent {
     @Column(name = "VALUE")
     private java.lang.String m_value;
 
+    @Transient
+    private java.lang.String m_transactionId;
+
+    @Transient
+    private java.lang.String m_fieldName;
+
     private transient Transaction m_transactionObject;
 
     /**
