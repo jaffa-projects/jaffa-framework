@@ -12,7 +12,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
@@ -23,6 +22,7 @@ import java.util.zip.ZipInputStream;
  * Static helper methods to perform functions for the ConfigApi endpoint methods
  */
 public class ConfigApiHelper {
+    private static final int BUFFER_SIZE = 1024;
     private static final Logger log = Logger.getLogger(ConfigApiHelper.class);
 
     /**
@@ -65,15 +65,13 @@ public class ConfigApiHelper {
      */
     public static File extractToTemporaryDirectory(File file) throws IOException {
         //Create temporary directory
-        // TODO: Fix harcoded '4' - why 4? Probably should use utility method that searches backwards for '.'.
-        File tempDir = new File(file.getAbsolutePath().substring(0, file.getAbsolutePath().length() - 4));
+        File tempDir = new File(file.getAbsolutePath().split("\\.")[0]);
         tempDir.mkdir();
 
         //Extract compressed contents to temporary directory
         ZipInputStream zis = new ZipInputStream(new FileInputStream(file.getAbsolutePath()));
         ZipEntry zipEntry = zis.getNextEntry();
-        // TODO: Fix magic number.
-        byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[BUFFER_SIZE];
         while (zipEntry != null) {
             String fileName = zipEntry.getName();
             File newFile = new File(tempDir + File.separator + fileName);
@@ -103,14 +101,14 @@ public class ConfigApiHelper {
      * @param file  The configuration file to be registered or unregistered
      * @return  Success or failure of the operation
      */
-    public static boolean registerResources(File file) {
+    public static boolean registerResources(File file, String contextSalience) {
         boolean isSuccess = true;
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         for(IManager manager : ManagerRepositoryService.getInstance().getManagerMap().values()) {
             Resource resource = getMetaInfResource(file, resolver, manager);
             try {
                 if (resource.getFile().exists()) {
-                    manager.registerResource(resource, ContextHelper.getContextSalience(resource.getURI().toString()),
+                    manager.registerResource(resource, contextSalience,
                             ContextHelper.getVariationSalience(resource.getURI().toString()));
                     ManagerRepositoryService.getInstance().add(manager.getClass().getSimpleName(), manager);
                     log.debug(resource.getFilename() + " was successfully registered to " + manager);
@@ -128,14 +126,14 @@ public class ConfigApiHelper {
      * @param file  The configuration file to be registered or unregistered
      * @return  Success or failure of the operation
      */
-    public static boolean unregisterResources(File file) {
+    public static boolean unregisterResources(File file, String contextSalience) {
         boolean isSuccess = true;
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         for(IManager manager : ManagerRepositoryService.getInstance().getManagerMap().values()) {
             Resource resource = getMetaInfResource(file, resolver, manager);
             try {
                 if (resource.getFile().exists()) {
-                    manager.unregisterResource(resource, ContextHelper.getContextSalience(resource.getURI().toString()),
+                    manager.unregisterResource(resource, contextSalience,
                             ContextHelper.getVariationSalience(resource.getURI().toString()));
                     log.debug(resource.getFilename() + " was successfully unregistered from " + manager);
                 }
@@ -175,7 +173,6 @@ public class ConfigApiHelper {
      * @param dir  Directory to be removed.
      * @throws IOException
      */
-    // TODO: Move this to a utility class. Apache commons has this functionality, but the Java 8 version is succinct.
     public static void removeDirTree(File dir) throws IOException {
 
         Files.walk(dir.toPath())

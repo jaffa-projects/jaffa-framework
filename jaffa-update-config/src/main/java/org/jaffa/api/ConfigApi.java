@@ -90,7 +90,6 @@ public class ConfigApi implements IConfigApi {
      * @throws IOException When the endpoint has difficulty accessing or removing the file
      */
     public Response deleteCustomConfigFile(String compressedFile) throws IOException {
-        String source = "UNREGISTER";
         String fileToDelete = ConfigApiHelper.verifyExtension(compressedFile, FILE_EXTENSION);
         File filePath = new File(this.dataDirectory + File.separator + fileToDelete);
 
@@ -105,7 +104,7 @@ public class ConfigApi implements IConfigApi {
 
         //Extract files to gain access to configuration resources
         File tempDir = ConfigApiHelper.extractToTemporaryDirectory(filePath);
-        ConfigApiHelper.modifyResources(tempDir, this.getFileContents(filePath).getContextSalience(), source);
+        ConfigApiHelper.unregisterResources(tempDir, this.getFileContents(filePath).getContextSalience());
         ConfigApiHelper.removeExtractedFiles(tempDir);
         if (!Files.deleteIfExists(filePath.toPath())) {
             log.warn(filePath + " was not successfully deleted");
@@ -181,7 +180,6 @@ public class ConfigApi implements IConfigApi {
                                               String compressedFile, byte[] payload) throws IOException {
         String fileToPost = ConfigApiHelper.verifyExtension(compressedFile, FILE_EXTENSION);
         File filePath = new File(this.dataDirectory + File.separator + fileToPost);
-        String source = "REGISTER";
 
         //Avoid NoSuchFileExceptions by double-checking that DATA_DIRECTORY exists
         if (!dataDirectory.exists()) {
@@ -209,7 +207,7 @@ public class ConfigApi implements IConfigApi {
         //Copy files to server and register resources
         Files.copy(new ByteArrayInputStream(payload), filePath.toPath());
         File tempDir = ConfigApiHelper.extractToTemporaryDirectory(filePath);
-        ConfigApiHelper.modifyResources(tempDir, this.getFileContents(filePath).getContextSalience(), source);
+        ConfigApiHelper.registerResources(tempDir, this.getFileContents(filePath).getContextSalience());
         ConfigApiHelper.removeExtractedFiles(tempDir);
 
         log.info("The resources in " + filePath + " have finished registering configurations to the repositories");
