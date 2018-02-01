@@ -49,58 +49,62 @@
 
 package org.jaffa.presentation.portlet;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletException;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionForm;
 import org.apache.log4j.Logger;
 import org.jaffa.presentation.portlet.component.ComponentManager;
 import org.jaffa.presentation.portlet.component.Component;
-import org.jaffa.presentation.portlet.FormKey;
 import org.jaffa.presentation.portlet.session.UserSession;
+
 import java.security.AccessControlException;
+
 import org.jaffa.exceptions.ApplicationExceptions;
 
-
-/** This Action invokes the component passed in the request-stream
- *
+/**
+ * This Action invokes the component passed in the request-stream
+ * <p/>
  * The internal parameters that can be passed are
- *      component -> The name of the component to execute
- *      finalUrl -> The place to go after executing the component. This should be a valid forward mapping as defined in the struts-config.xml file.
+ * component -> The name of the component to execute
+ * finalUrl -> The place to go after executing the component. This should be a valid forward mapping as defined in the struts-config.xml file.
  * All other paramters will be introspected on the component being executed, prior to
  * calling its 'display()' method.
  */
 public class StartComponentAction extends ActionBase {
+
     private static Logger log = Logger.getLogger(StartComponentAction.class);
 
-    /** Constant to denote the 'component' parameter passed to this Action.*/
+    /**
+     * Constant to denote the 'component' parameter passed to this Action.
+     */
     public static final String COMPONENT_PARAMETER = "component";
 
-    /** Constant to denote the 'finalUrl' parameter passed to this Action.*/
+    /**
+     * Constant to denote the 'finalUrl' parameter passed to this Action.
+     */
     public static final String FINALURL_PARAMETER = "finalUrl";
 
-    /** Where to go (via struts forwards) if component access is denied */
+    /**
+     * Where to go (via struts forwards) if component access is denied
+     */
     private static final String NO_ACCESS_FORWARD = "jaffa_noComponentAccess";
 
-    /** Invokes the component passed in the request stream.
-     * @throws Exception if the application business logic throws an exception
+    /**
+     * Invokes the component passed in the request stream.
+     *
      * @return A FormKey instance which describes the current Component & Form
+     * @throws Exception if the application business logic throws an exception
      */
-    public FormKey defaultAction()
-    throws Exception {
+    public FormKey defaultAction() throws Exception {
 
         // Get the component & finalUrl parameter-values from the request-stream
         String initialComponent = request.getParameter(COMPONENT_PARAMETER);
         String finalUrl = request.getParameter(FINALURL_PARAMETER);
-        if ( log.isDebugEnabled() )
+        if (log.isDebugEnabled())
             log.debug("Received the Initial Parameters - component=" + initialComponent + ", finalUrl=" + finalUrl);
 
         // set the default value for initialComponent
         if (initialComponent == null) {
-            if(finalUrl!= null){
+            if (finalUrl != null) {
                 // if there is just a finalUrl and no component specified, just redirect to this URL
+                // the form key escapes the input for XSS prevention
                 return new FormKey(finalUrl, null);
             } else {
                 String str = "The parameter " + COMPONENT_PARAMETER + " should be passed";
@@ -109,15 +113,10 @@ public class StartComponentAction extends ActionBase {
             }
         }
 
-
-
-
-
         /**********************************************************
          * Create Component To Run
          * **********************************************************/
-        if ( log.isDebugEnabled() )
-            log.debug("Calling the ComponentManager to run " + initialComponent);
+        if (log.isDebugEnabled()) log.debug("Calling the ComponentManager to run " + initialComponent);
 
         Component comp = null;
         try {
@@ -133,8 +132,9 @@ public class StartComponentAction extends ActionBase {
         HistoryNav.initializeHistoryNav(request, finalUrl);
 
         // Set the ReturnToFromKey property of the component
-        if (finalUrl != null)
+        if (finalUrl != null) {
             comp.setReturnToFormKey(new FormKey(finalUrl, null));
+        }
 
         // Set the parameters on the component using reflection
         comp.reflectAndSetParms(request);
@@ -145,8 +145,7 @@ public class StartComponentAction extends ActionBase {
             fk = comp.display();
         } catch (ApplicationExceptions e) {
             String str = "Error in invoking the display method of the Component " + comp.getClass().getName();
-            if (log.isDebugEnabled())
-                log.debug(str);
+            if (log.isDebugEnabled()) log.debug(str);
             throw e;
         } catch (Exception e) {
             String str = "Error in invoking the display method of the Component " + comp.getClass().getName();
@@ -156,5 +155,5 @@ public class StartComponentAction extends ActionBase {
 
         return fk;
     }
-    
+
 }

@@ -58,10 +58,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.Globals;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import javax.servlet.ServletException;
-import org.jaffa.presentation.portlet.FormBase;
 import org.jaffa.util.EventHandler;
 import org.apache.log4j.Logger;
 import java.lang.reflect.Method;
@@ -73,11 +70,8 @@ import org.jaffa.datatypes.Parser;
 import org.jaffa.config.Config;
 import java.lang.reflect.Field;
 import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
-import org.jaffa.presentation.portlet.FormKeyChangeEvent;
-import org.jaffa.presentation.portlet.FormKeyChangeListener;
 import org.jaffa.exceptions.ApplicationExceptions;
 import org.jaffa.exceptions.TokenMismatchException;
 
@@ -381,6 +375,7 @@ public class ActionBase extends Action {
             }
         }
 
+        // the exception escapes the eventId on the way out to prevent XSS
         if (m == null) {
             String str = "No method found for handling the event " + eventId;
             log.error(str);
