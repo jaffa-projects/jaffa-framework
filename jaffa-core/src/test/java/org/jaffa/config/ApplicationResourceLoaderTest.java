@@ -49,74 +49,107 @@
 
 package org.jaffa.config;
 
+import org.jaffa.loader.CoreLoaderConfig;
+import org.jaffa.loader.config.ApplicationResourcesManager;
+import org.jaffa.loader.config.ApplicationRulesManager;
+import org.jaffa.presentation.portlet.session.LocaleContext;
+import org.jaffa.presentation.portlet.session.UserSession;
+import org.jaffa.session.ContextManagerFactory;
+import org.jaffa.struts.tiles.JaffaI18nFactorySet;
+import org.jaffa.util.MessageHelper;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpSession;
+
+import java.util.Locale;
+import java.util.Properties;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.util.Locale;
-
-import org.jaffa.util.MessageHelper;
-import org.junit.Test;
-
 /**
- * 
  * Unit test for ApplicationResourceLoader
- * 
+ * <p>
  * This test class test both ApplicationResourceLoader and
  * PropertyMessageResources
- *
  */
 public class ApplicationResourceLoaderTest {
 
-	@Test
-	public void testApplicationResourceLoader() {
+    private static AnnotationConfigApplicationContext resourceLoaderConfig = new AnnotationConfigApplicationContext(CoreLoaderConfig.class);
+
+    /**
+     * setting the up objects/properties before a Test is run
+     * @throws Exception
+     */
+    @Before
+    public void setup() throws Exception {
+        ApplicationResourcesManager applicationResourcesManager = resourceLoaderConfig.getBean(ApplicationResourcesManager.class);
+
+        MockHttpServletRequest request = new MockHttpServletRequest();
+
+        // creating user session
+        UserSession us = UserSession.getUserSession(request);
+        us.setUserId("USER");
+        us.setVariation("NULL");
+
+        // creating mock http session for the same use session
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("org.jaffa.presentation.portlet.session.UserInfo", us);
+
+        // setting the mock session into request
+        request.setSession(session);
+        ContextManagerFactory.instance().setThreadContext(request);
+         String overrideFileDir = ClassLoader.getSystemResource("ApplicationResourcesOverride.properties").getFile();
+        overrideFileDir = overrideFileDir.substring(1,overrideFileDir.lastIndexOf("/"));
+        ContextManagerFactory.instance().setProperty("data.directory",overrideFileDir);
+    }
+
+    @Test
+    public void testApplicationResourceLoader() {
 
 		/*
-		 * ApplicationResourceLoader Test
+         * ApplicationResourceLoader Test
 		 */
-		ApplicationResourceLoader resourceLoader = ApplicationResourceLoader.getInstance();
+        ApplicationResourceLoader resourceLoader = new ApplicationResourceLoader();
 
-		String defaultResourceLoadResult = (resourceLoader.getApplicationResources().get("") == null
-				|| resourceLoader.getApplicationResources().get("").size() < 1) ? "Default Resource Load Fail"
-						: "Default Resource Load Success";
+        Properties defaultProperties = resourceLoader.getLocaleProperties("");
+        String defaultResourceLoadResult = (defaultProperties == null || defaultProperties.size() < 1)
+                ? "Default Resource Load Fail" : "Default Resource Load Success";
 
-		String localeResourceLoadResult = (resourceLoader.getApplicationResources().get("ar_OM") == null
-				|| resourceLoader.getApplicationResources().get("ar_OM").size() < 1) ? "Locale Resource Load Fail"
-						: "Locale Resource Load Success";
+        Properties localeProperties = resourceLoader.getLocaleProperties("ar_OM");
+        String localeResourceLoadResult = (localeProperties == null || localeProperties.size() < 1)
+                ? "Locale Resource Load Fail" : "Locale Resource Load Success";
 
-		// Checking provided two resources available in memory(this include
-		// extra one for default to use it in label editor)
-		assertEquals(4, resourceLoader.getApplicationResources().size());
+        Properties overrideProperties = resourceLoader.getApplicationResourcesOverride();
+        System.out.println(overrideProperties);
 
-		// Default Resource
-		assertEquals("Default Resource Load Success", defaultResourceLoadResult);
+        // Default Resource
+        assertEquals("Default Resource Load Success", defaultResourceLoadResult);
 
-		// Locale Specific Resource
-		assertEquals("Locale Resource Load Success", localeResourceLoadResult);
+        // Locale Specific Resource
+        assertEquals("Locale Resource Load Success", localeResourceLoadResult);
 
-		// Override resource check
-		assertEquals("Printer Name", resourceLoader.getApplicationResources().get("")
-				.getProperty("label.Jaffa.Printing.PrinterDefinition.RealPrinterName"));
+        // Override resource check
+        assertEquals("Printer Name", defaultProperties.getProperty("label.Jaffa.Printing.PrinterDefinition.RealPrinterName"));
 
-		assertEquals("Edit Label",
-				resourceLoader.getApplicationResources().get("").getProperty("label.Jaffa.Admin.LabelEditor.Label"));
+        assertEquals("Edit Label", defaultProperties.getProperty("label.Jaffa.Admin.LabelEditor.Label"));
 
-		assertEquals("Label",
-				resourceLoader.getApplicationResourcesDefault().get("label.Jaffa.Admin.LabelEditor.Label"));
+        assertEquals("Label", resourceLoader.getApplicationResourcesDefault().get("label.Jaffa.Admin.LabelEditor.Label"));
 
-		assertEquals("Edit Label",
-				resourceLoader.getApplicationResourcesOverride().get("label.Jaffa.Admin.LabelEditor.Label"));
+        assertEquals("Edit Label", resourceLoader.getApplicationResourcesOverride().get("label.Jaffa.Admin.LabelEditor.Label"));
 
-		
+
 		/*
 		 * PropertyMessageResources Test
 		 */
+        // Default Language Test
+        assertEquals("Edit Label", MessageHelper.findMessage("label.Jaffa.Admin.LabelEditor.Label", null));
 
-		// Default Language Test
-		assertEquals("Edit Label", MessageHelper.findMessage("label.Jaffa.Admin.LabelEditor.Label", null));
-
-		// Locale ar_OM Test
-		Locale.setDefault(new Locale.Builder().setLanguage("ar").setRegion("OM").build());
-		assertNotNull(MessageHelper.findMessage("label.Jaffa.Admin.LabelEditor.Label", null));
-	}
+        // Locale ar_OM Test
+        LocaleContext.setLocale(new Locale.Builder().setLanguage("ar").setRegion("OM").build());
+        assertNotNull(MessageHelper.findMessage("label.Jaffa.Admin.LabelEditor.Label", null));
+    }
 
 }

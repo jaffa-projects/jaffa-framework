@@ -49,7 +49,10 @@
 package org.jaffa.config;
 
 import org.apache.log4j.Logger;
+import org.jaffa.loader.config.ApplicationResourcesManager;
+import org.jaffa.security.VariationContext;
 import org.jaffa.session.ContextManagerFactory;
+import org.jaffa.util.ContextHelper;
 import org.jaffa.util.OrderedPathMatchingResourcePatternResolver;
 import org.springframework.core.io.Resource;
 
@@ -57,312 +60,162 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 /**
- * This class loads the
- * ApplicationResource.properties,ApplicationResource.override and
- * ApplicationResource_{language}_{country}.properties into memory on startup by
- * Servlet listener and will be used in PropertyMessageResources.loadLocale.
- * 
+ * ApplicationResourceLoader is the resource loader proxy class to get the resources
+ * from repository and it also get the override resources from data directory
  */
 public class ApplicationResourceLoader {
 
-	private static final Logger log = Logger.getLogger(ApplicationResourceLoader.class);
+    private static final Logger log = Logger.getLogger(ApplicationResourceLoader.class);
 
-	public static final String PROP_APPLICATION_RESOURCES_DEFAULT = "ApplicationResourcesDefault";
-	public static final String PROP_APPLICATION_RESOURCES_DEFAULT_OVERRIDE = "ApplicationResourcesDefaultOverride";
-	public static final String PROP_APPLICATION_RESOURCES_OVERRIDE="ApplicationResourcesOverride.properties";
-	public static final String DATA_DIRECTORY = "data.directory";
-	public static final String DEFAULT_PROP_LOCALE_KEY = "";
-	
-	public static final String FILE_PREFIX = "file:///";
-	
+    public static final String PROP_APPLICATION_RESOURCES_OVERRIDE = "ApplicationResourcesOverride.properties";
+    public static final String DATA_DIRECTORY = "data.directory";
+    public static final String DEFAULT_PROP_LOCALE_KEY = "";
+    public static final String FILE_PREFIX = "file:///";
+    private static final String ERROR_READING_APP_RESOURCES_OVERRIDE = "Error reading :";
 
-	// Default Errors
-	private static final String APP_RESOURCES_NOT_FOUND = "ApplicationResources.properties not found in jar!META-INF";
-	private static final String ERROR_READING_APP_RESOURCES = "Error reading jar!META-INF/ApplicationResources.properties";
+    /**
+     * singleton instance of the ApplicationResourceLoader
+     */
+    private static ApplicationResourceLoader instance;
 
-	// Override Errors
-	private static final String APP_RESOURCES_OVERRIDE_NOT_FOUND = "ApplicationResources.override not found in jar!META-INF";
-	private static final String ERROR_READING_APP_RESOURCES_OVERRIDE = "Error reading jar!META-INF/ApplicationResources.override";
+    private static ApplicationResourcesManager applicationResourcesManager;
 
-	// Locale Errors
-	private static final String APP_RESOURCES_LOCALE_NOT_FOUND = "ApplicationResource_{language}_{country}.properties not found in jar!META-INF";
-	private static final String ERROR_READING_APP_RESOURCES_LOCALE = "Error reading jar!META-INF/ApplicationResource_{language}_{country}.properties";
+    /**
+     * private constructor and it can be only instantiated via getInstance()
+     * method
+     */
+    public ApplicationResourceLoader() {
+    }
 
-	/**
-	 * singleton instance of the ApplicationResourceLoader
-	 */
-	private static ApplicationResourceLoader instance;
+    /**
+     * This method will return the instance of the ApplicationResourceLoader.
+     *
+     * @return ApplicationResourceLoader
+     */
+    public static ApplicationResourceLoader getInstance() {
+        if (instance == null) {
+            instance = new ApplicationResourceLoader();
+            if (log.isDebugEnabled()) {
+                log.debug("Singleton ApplicationResourceLoader Created");
+            }
+        }
+        return instance;
+    }
 
-	/**
-	 * The collection of properties per locale.
-	 */
-	private Map<String, Properties> applicationResources = new HashMap<String, Properties>();
+    public static ApplicationResourcesManager getApplicationResourcesManager() {
+        return applicationResourcesManager;
+    }
 
-	/**
-	 * This method gets the properties object based on input locale.
-	 * 
-	 * @param locale
-	 * @return
-	 */
-	public Properties getLocaleProperties(String locale) {
-		return applicationResources.get(locale);
-	}
+    public static void setApplicationResourcesManager(ApplicationResourcesManager applicationResourcesManager) {
+        ApplicationResourceLoader.applicationResourcesManager = applicationResourcesManager;
+    }
 
-	/**
-	 * This method gets the properties object for default application resources.
-	 * 
-	 * @return ApplicationResourceDefault
-	 */
-	public Properties getApplicationResourcesDefault() {
-		return applicationResources.get(PROP_APPLICATION_RESOURCES_DEFAULT);
-	}
 
-	/**
-	 * This method gets the properties object for override application resources
-	 * .
-	 * 
-	 * @return ApplicationResourceOverride
-	 */
-	public Properties getApplicationResourcesOverride() {
-		OrderedPathMatchingResourcePatternResolver resolver = OrderedPathMatchingResourcePatternResolver.getInstance();
-		return loadOverrideResources(resolver);
-	}
+    /**
+     * This method gets the properties object based on input locale.
+     *
+     * @param locale
+     * @return
+     */
+    public Properties getLocaleProperties(String locale) {
+        Properties properties = null;
+        if (DEFAULT_PROP_LOCALE_KEY.equals(locale)) {
+            //default resources
+            properties = getApplicationResourcesDefault();
+        } else {
+            properties = new Properties();
 
-	/**
-	 * This method gets the collection of properties for all available locale.
-	 * 
-	 * @return map
-	 */
-	public Map<String, Properties> getApplicationResources() {
-		return applicationResources;
-	}
+            //locale resources
+            if (log.isDebugEnabled()) {
+                log.debug("locale :" + locale);
+            }
+            Properties defaultProperties = getApplicationResourcesManager().getApplicationResourcesLocale(locale);
+            if (null != defaultProperties) {
+                properties.putAll(defaultProperties);
+            }
 
-	/**
-	 * private constructor and it can be only instantiated via getInstance()
-	 * method
-	 */
-	private ApplicationResourceLoader() {
-		// load resources from class path/META-INF/Data Directory
-		loadResources();
-	}
+            Set<Map.Entry<String, String>> variationSalience = ContextHelper.getVariationSalienceMap().entrySet();
+            for (Map.Entry<String, String> variationSalienceEntry : variationSalience) {
+                if (!VariationContext.NULL_VARIATION.equals(variationSalienceEntry.getValue())) {
+                    Properties variationProperties = getApplicationResourcesManager().getApplicationResourcesLocaleVariation(locale, variationSalienceEntry.getValue());
+                    if (null != variationProperties) {
+                        properties.putAll(variationProperties);
+                    }
 
-	/**
-	 * This method will return the instance of the ApplicationResourceLoader.
-	 * 
-	 * @return ApplicationResourceLoader
-	 */
-	public static ApplicationResourceLoader getInstance() {
-		if (instance == null) {
-			instance = new ApplicationResourceLoader();
-			if (log.isDebugEnabled()) {
-				log.debug("Singleton ApplicationResourceLoader Created");
-			}
-		}
-		return instance;
-	}
+                }
+            }
+        }
+        Properties overrideProperties = getApplicationResourcesOverride();
+        if (null != overrideProperties) {
+            properties.putAll(overrideProperties);
+        }
+        return properties;
+    }
 
-	/**
-	 * Load all resources from properties files.
-	 */
-	private void loadResources() {
-		OrderedPathMatchingResourcePatternResolver resolver = OrderedPathMatchingResourcePatternResolver.getInstance();
-		loadDefaultResources(resolver);
-		loadLocaleResources(resolver);
-	}
+    /**
+     * This method gets the properties object for default application resources.
+     *
+     * @return ApplicationResourceDefault
+     */
+    public Properties getApplicationResourcesDefault() {
+        Properties properties = new Properties();
+        //default resources
+        Properties defaultProperties = getApplicationResourcesManager().getApplicationResources();
+        if (null != defaultProperties) {
+            properties.putAll(defaultProperties);
+        }
+        Set<Map.Entry<String, String>> variationSalience = ContextHelper.getVariationSalienceMap().entrySet();
+        for (Map.Entry<String, String> variationSalienceEntry : variationSalience) {
+            if (!VariationContext.NULL_VARIATION.equals(variationSalienceEntry.getValue())) {
+                Properties variationProperties = getApplicationResourcesManager().getApplicationResourcesVariation(variationSalienceEntry.getValue());
+                if (null != variationProperties) {
+                    properties.putAll(variationProperties);
+                }
 
-	/**
-	 * This method loads the default properties from
-	 * jar!META-INF/ApplicationResources.properties.
-	 *
-	 * @param resolver
-	 */
-	private void loadDefaultResources(OrderedPathMatchingResourcePatternResolver resolver) {
+            }
+        }
+        return properties;
+    }
 
-		if (log.isDebugEnabled()) {
-			log.debug("ApplicationResourceLoader::loadDefaultResources");
-		}
+    /**
+     * This method gets the properties object for override application resources.
+     *
+     * @return ApplicationResourceOverride
+     */
+    public Properties getApplicationResourcesOverride() {
+        if (log.isDebugEnabled()) {
+            log.debug("ApplicationResourceLoader::loadOverrideResources");
+        }
+        OrderedPathMatchingResourcePatternResolver resolver = OrderedPathMatchingResourcePatternResolver.getInstance();
 
-		Properties defaultProperties = getDefaultResources(resolver);
-		Properties overriddeProperties = loadOverrideResources(resolver);
-
-		Properties appResourceProperties = new Properties();
-
-		if (defaultProperties != null && defaultProperties.size() > 0) {
-			appResourceProperties.putAll(defaultProperties);
-		}
-
-		if (overriddeProperties != null && overriddeProperties.size() > 0) {
-			appResourceProperties.putAll(overriddeProperties);
-		}
-
-		if (appResourceProperties.size() > 0) {
-			// loading the ApplicationResource.properties(default)
-			applicationResources.put("", appResourceProperties);
-		}
-	}
-
-	private Properties getDefaultResources(OrderedPathMatchingResourcePatternResolver resolver) {
-		Properties properties = null;
-
-		try {
-			Resource[] resources = resolver.getResources("classpath*:META-INF/ApplicationResources.properties");
-			if (resources != null) {
-				for (Resource resource : resources) {
-					if (properties == null) {
-						properties = new Properties();
-					}
-					loadProperties(resource, properties);
-				}
-			} else {
-				log.error(APP_RESOURCES_NOT_FOUND);
-			}
-
-			// Storing default resource in memory to use it in label editor
-			if (properties != null && properties.size() > 0) {
-				applicationResources.put(PROP_APPLICATION_RESOURCES_DEFAULT, properties);
-			}
-
-		} catch (IOException e) {
-			log.error(ERROR_READING_APP_RESOURCES, e);
-			throw new RuntimeException(ERROR_READING_APP_RESOURCES, e);
-		}
-
-		return properties;
-	}
-
-	/**
-	 * This method load override properties from customer jar/blue print
-	 * jar/data directory
-	 * 
-	 * @param resolver
-	 * @param properties
-	 */
-	private Properties loadOverrideResources(OrderedPathMatchingResourcePatternResolver resolver) {
-		if (log.isDebugEnabled()) {
-			log.debug("ApplicationResourceLoader::loadOverrideResources");
-		}
-		Properties properties = null;
-		try {
-			// First load the override resource from customer jar/blue print jar
-			/*
-			 * TODO - Question: Are we going to move the override file under
-			 * jar!META-INF or going to leave under resources folder in jar?
-			 * Based on above question we need to consider changing the resource
-			 * path.
-			 * 
-			 */
-			//The default override from jar will not be loaded again if its loaded already.
-			properties = applicationResources.get(PROP_APPLICATION_RESOURCES_DEFAULT_OVERRIDE);
-			if (properties == null) {
-				Resource[] resources = resolver.getResources("classpath*:META-INF/ApplicationResources.override");
-				if (resources != null) {
-					for (Resource resource : resources) {
-						if (properties == null) {
-							properties = new Properties();
-						}
-						loadProperties(resource, properties);
-					}
-				} else {
-					log.error(APP_RESOURCES_OVERRIDE_NOT_FOUND);
-				}
-			}
-
-			//Storing override resource in memory to use it in label editor
-			if (properties != null && properties.size() > 0) {
-				applicationResources.put(PROP_APPLICATION_RESOURCES_DEFAULT_OVERRIDE, properties);
-			}			
-            String dataDirectory = (String)ContextManagerFactory.instance().getProperty(DATA_DIRECTORY);
-			String applicationResourcesOverrideLocation = null;
-			if(dataDirectory!=null && dataDirectory.length() > 0){
-			    applicationResourcesOverrideLocation = dataDirectory + File.separator+ PROP_APPLICATION_RESOURCES_OVERRIDE;
+        Properties properties = new Properties();
+        String dataDirectory = (String) ContextManagerFactory.instance().getProperty(DATA_DIRECTORY);
+        String applicationResourcesOverrideLocation = null;
+        try {
+            if (dataDirectory != null && dataDirectory.length() > 0) {
+                applicationResourcesOverrideLocation = dataDirectory + File.separator + PROP_APPLICATION_RESOURCES_OVERRIDE;
                 Config.setProperty(Config.PROP_APPLICATION_RESOURCES_OVERRIDE_LOCATION, applicationResourcesOverrideLocation);
             }
 
-			/*
-			 * in Config when this first invoked,so we need to make sure to set
-			 * the override location before this point
-			 */
-			// Next load the override resource from customer data directory. Always reload the data directory override
-			if (applicationResourcesOverrideLocation != null && !"".equals(applicationResourcesOverrideLocation)) {
-				//added file prefix for ant style search pattern to search the file from I/O File
-				Resource resource = resolver.getResource(FILE_PREFIX+applicationResourcesOverrideLocation);
-                if(resource!=null && !resource.exists()){
+            if (applicationResourcesOverrideLocation != null && !"".equals(applicationResourcesOverrideLocation)) {
+                //added file prefix for ant style search pattern to search the file from I/O File
+                Resource resource = resolver.getResource(FILE_PREFIX + applicationResourcesOverrideLocation);
+                if (resource != null && !resource.exists()) {
                     Files.createFile(Paths.get(resource.getURI()));
                 }
-                if (properties == null) {
-                    properties = new Properties();
-                }
-				loadProperties(resource, properties);
-			}
+                properties.load(resource.getInputStream());
+            }
 
-		} catch (IOException e) {
-			log.error(ERROR_READING_APP_RESOURCES_OVERRIDE, e);
-			throw new RuntimeException(ERROR_READING_APP_RESOURCES_OVERRIDE, e);
-		}
-		return properties;
-	}
+        } catch (IOException e) {
+            log.error(ERROR_READING_APP_RESOURCES_OVERRIDE + applicationResourcesOverrideLocation, e);
+            throw new RuntimeException(ERROR_READING_APP_RESOURCES_OVERRIDE + applicationResourcesOverrideLocation, e);
+        }
+        return properties;
+    }
 
-	/**
-	 * This method loads the locale specific resources into memory based on
-	 * derived/available locale from
-	 * ApplicationResource_{language}_{country}_{variation}.properties
-	 * 
-	 * @param resolver
-	 */
-	private void loadLocaleResources(OrderedPathMatchingResourcePatternResolver resolver) {
-		if (log.isDebugEnabled()) {
-			log.debug("ApplicationResourceLoader::loadLocaleResources");
-		}
-		try {
-			/*
-			 * TODO - Are we going to move the locale properties file
-			 * (ApplicationResource_{language}_{country}_{variation}.
-			 * properties) under jar!META-INF or going to leave under resources
-			 * folder in jar? Based on above question we need to consider
-			 * changing the resource path.
-			 */
-			Resource[] resources = resolver.getResources("classpath*:META-INF/ApplicationResources_*.properties");
-			if (resources != null && resources.length > 0) {
-				for (Resource resource : resources) {
-					Properties localeProperties = new Properties();
-
-					// derives locale key from resource file name(e.g. ar_OM,
-					// ar_OM_JWL)
-					String localeKey = resource.getFilename();
-					if (localeKey != null && localeKey.indexOf("_") > 0) {
-						localeKey = localeKey.substring(localeKey.indexOf("_") + 1);
-					}
-					if (localeKey != null && localeKey.indexOf(".") > 0) {
-						localeKey = localeKey.substring(0, localeKey.indexOf("."));
-					}
-
-					loadProperties(resource, localeProperties);
-
-					// loading the properties into memory per locale
-					applicationResources.put(localeKey, localeProperties);
-				}
-			} else {
-				log.info(APP_RESOURCES_LOCALE_NOT_FOUND);
-			}
-		} catch (IOException e) {
-			log.error(ERROR_READING_APP_RESOURCES_OVERRIDE, e);
-			throw new RuntimeException(ERROR_READING_APP_RESOURCES_LOCALE, e);
-		}
-	}
-
-	private void loadProperties(Resource resource, Properties properties) throws IOException {
-		if (resource != null) {
-			if (log.isDebugEnabled()) {
-				log.debug("Properties Resource Location: " + resource.getURL());
-			}
-			if (resource != null && resource.getInputStream() != null) {
-				properties.load(resource.getInputStream());
-			}
-		}
-	}
 }
