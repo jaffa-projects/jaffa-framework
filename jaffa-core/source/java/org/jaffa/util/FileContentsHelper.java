@@ -46,7 +46,7 @@
  * SUCH DAMAGE.
  * ====================================================================
  */
-package org.jaffa.model;
+package org.jaffa.util;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
@@ -58,10 +58,10 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * FileContents - A custom object for storing the contents and context-salience of a custom configuration compresssed file
+ * FileContentsHelper - A custom object for storing the contents and context-salience of a custom configuration compresssed file
  */
 
-public class FileContents {
+public class FileContentsHelper {
 
     ///////////////////////////////////////////////////////////////
     //// CREATE JSON PROPERTIES ///////////////////////////////////
@@ -79,7 +79,7 @@ public class FileContents {
     ///////////////////////////////////////////////////////////////
     //// CONFIGURE contextSalience PROPERTY ///////////////////////
     ///////////////////////////////////////////////////////////////
-    public FileContents contextSalience(String contextSalience) {
+    public FileContentsHelper contextSalience(String contextSalience) {
         this.contextSalience = contextSalience;
         return this;
     }
@@ -102,7 +102,7 @@ public class FileContents {
     ///////////////////////////////////////////////////////////////
     //// CONFIGURE name PROPERTY //////////////////////////////////
     ///////////////////////////////////////////////////////////////
-    public FileContents name(String name) {
+    public FileContentsHelper name(String name) {
         this.name = name;
         return this;
   }
@@ -125,7 +125,7 @@ public class FileContents {
     ///////////////////////////////////////////////////////////////
     //// CONFIGURE contents PROPERTY //////////////////////////////
     ///////////////////////////////////////////////////////////////
-    public FileContents contents(List<String> contents) {
+    public FileContentsHelper contents(List<String> contents) {
         this.contents = contents;
         return this;}
 
@@ -134,7 +134,7 @@ public class FileContents {
      * @param contentsItem  The configuration file found in the custom compressed file
      * @return  This instance with an updated contents list
      */
-  public FileContents addContentsItem(String contentsItem) {
+  public FileContentsHelper addContentsItem(String contentsItem) {
     if (this.contents == null) {
       this.contents = new ArrayList<>();
     }
@@ -178,7 +178,7 @@ public class FileContents {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    FileContents fileContents = (FileContents) o;
+    FileContentsHelper fileContents = (FileContentsHelper) o;
     return Objects.equals(this.name, fileContents.name) &&
         Objects.equals(this.contents, fileContents.contents);
   }
@@ -199,7 +199,7 @@ public class FileContents {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class FileContents {\n");
+    sb.append("class FileContentsHelper {\n");
 
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
       sb.append("    context-salience: ").append(toIndentedString(contextSalience)).append("\n");

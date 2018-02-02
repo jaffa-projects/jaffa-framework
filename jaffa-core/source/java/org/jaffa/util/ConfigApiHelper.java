@@ -1,7 +1,8 @@
-package org.jaffa.loader;
+package org.jaffa.util;
 
 import org.apache.log4j.Logger;
-import org.jaffa.util.ContextHelper;
+import org.jaffa.loader.IManager;
+import org.jaffa.loader.ManagerRepositoryService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -12,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Enumeration;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
@@ -146,29 +148,6 @@ public class ConfigApiHelper {
     }
 
     /**
-     * After resources have been registered or unregistered, remove the temporary directory containing the extracted
-     * ZIP entries
-     * @param directory The directory containing the extracted compressed file entries
-     * @throws IOException  Thrown when the directory does not exist or cannot be read
-     */
-    public static boolean removeExtractedFiles(File directory) throws IOException {
-        File metaInfDirectory = new File(directory + "/META-INF/");
-        File[] children = metaInfDirectory.listFiles();
-        if (children != null) {
-            for (int i = 0; i < children.length; i++) {
-                Files.deleteIfExists(children[i].toPath());
-            }
-            if (!Files.deleteIfExists(metaInfDirectory.toPath())) {
-                log.warn("The temporary files were not successfully removed from " + metaInfDirectory);
-            }
-            if (!Files.deleteIfExists(directory.toPath())) {
-                log.warn("The temporary files were not successfully removed from " + directory);
-            }
-        }
-        return directory.exists();
-    }
-
-    /**
      * Remove a directory recursively ("rm -rf").
      * @param dir  Directory to be removed.
      * @throws IOException
@@ -181,10 +160,61 @@ public class ConfigApiHelper {
                 .forEach(File::delete);
     }
 
-    // Helper methods...
+
+    /**
+     * getFileContents() - When given a compressed file, parse through and return an object containing the
+     * filename, context-salience from MANIFEST, and an array of configuration file contents
+     * @param file  The compressed file to read
+     * @return  An object containing the compressed file contents and additional information
+     * @throws IOException  Thrown when the compressed file does not exist or cannot be read
+     */
+    public static FileContentsHelper getFileContents(File file) throws IOException {
+        String manifestFile = "META-INF/MANIFEST.MF";
+        FileContentsHelper fileContents = new FileContentsHelper();
+
+        ZipFile zipFile = new ZipFile(file);
+
+        fileContents.setName(file.getName());
+
+        Enumeration<? extends ZipEntry> entries = zipFile.entries();
+        while (entries.hasMoreElements()) {
+            ZipEntry configFile = entries.nextElement();
+            fileContents.addContentsItem(new File(configFile.toString()).getName());
+            if (configFile.getName().toUpperCase().equals(manifestFile)) {
+                fileContents.setContextSalience(ConfigApiHelper.findContextSalienceInManifest(zipFile));
+            }
+        }
+        zipFile.close();
+
+        return fileContents;
+    }
 
     private static Resource getMetaInfResource(File file, ResourcePatternResolver resolver, IManager manager) {
         return resolver.getResource("file:" + file.getAbsolutePath() +
                 "/META-INF/" + manager.getResourceFileName());
     }
+
+    /*TODO: Remove if the removeDirTree method works as expected
+    /**
+     * After resources have been registered or unregistered, remove the temporary directory containing the extracted
+     * ZIP entries
+     * @param directory The directory containing the extracted compressed file entries
+     * @throws IOException  Thrown when the directory does not exist or cannot be read
+    public static boolean removeExtractedFiles(File directory) throws IOException {
+        File metaInfDirectory = new File(directory + "/META-INF/");
+        File[] children = metaInfDirectory.listFiles();
+        if (children != null) {
+            for (File child : children) {
+                Files.deleteIfExists(child.toPath());
+            }
+            if (!Files.deleteIfExists(metaInfDirectory.toPath())) {
+                log.warn("The temporary files were not successfully removed from " + metaInfDirectory);
+            }
+            if (!Files.deleteIfExists(directory.toPath())) {
+                log.warn("The temporary files were not successfully removed from " + directory);
+            }
+        }
+        return directory.exists();
+    }
+        */
 }
