@@ -47,12 +47,6 @@
  * ====================================================================
  */
 package org.jaffa.util;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -66,13 +60,8 @@ public class FileContentsHelper {
     ///////////////////////////////////////////////////////////////
     //// CREATE JSON PROPERTIES ///////////////////////////////////
     ///////////////////////////////////////////////////////////////
-    @JsonProperty("name")
     private String name = null;
-
-    @JsonProperty("context-salience")
     private String contextSalience = null;
-
-    @JsonProperty("contents")
     private List<String> contents = null;
 
 
@@ -87,8 +76,6 @@ public class FileContentsHelper {
      * Retrieve the value from the contextSalience variable
      * @return contextSalience  The contextSalience retrieved
      **/
-    @ApiModelProperty(value = "Context-Salience (from MANIFEST)")
-    @Valid
     public String getContextSalience() {
         return contextSalience;
     }
@@ -111,8 +98,6 @@ public class FileContentsHelper {
    * Retrieve the value from the name variable
    * @return name The name retrieved
   **/
-  @ApiModelProperty(example = "C:\\FileDirectory\\CompressedFile.zip", required = true, value = "Compressed filename")
-  @NotNull
   public String getName() {
     return name;
   }
@@ -146,8 +131,6 @@ public class FileContentsHelper {
    * Retrieve the contents of the custom compressed file
    * @return contents   The contents of the custom compressed file
   **/
-  @ApiModelProperty(value = "The contents of the custom compressed file")
-  @Valid
   public List<String> getContents() {
     return contents;
   }

@@ -50,12 +50,14 @@
 package org.jaffa.loader;
 
 import org.apache.log4j.Logger;
+import org.jaffa.util.ConfigApiHelper;
 import org.jaffa.util.ContextHelper;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Loads the Xml Config files and registers them to the Repository.
@@ -127,20 +129,18 @@ public class ResourceLoader<T extends IManager> {
                 }
             }
 
-            //TODO: Uncomment
-            // loadAllCustomConfigurations();
+            loadAllCustomConfigurations();
 
          } catch (Exception w) {
             throw new RuntimeException(w.getCause());
         }
     }
 
-    /*TODO: Fix content salience needing to be input
     /**
      * Loads all custom configurations in the custom config directory.
      * @throws IOException
+     */
     public void loadAllCustomConfigurations() throws IOException {
-
         // Load all zip files from the custom config directory.
         File customConfigDirectory = new File(customConfigPath);
         for(File file : customConfigDirectory.listFiles()) {
@@ -154,11 +154,10 @@ public class ResourceLoader<T extends IManager> {
      * Loads a single custom configuration .zip file.
      * @param file
      * @throws IOException
-
+     */
     public void loadCustomConfiguration(File file) throws IOException {
         File zipRoot = ConfigApiHelper.extractToTemporaryDirectory(file);
-        ConfigApiHelper.registerResources(zipRoot);
+        ConfigApiHelper.registerResources(zipRoot, ConfigApiHelper.getFileContents(zipRoot).getContextSalience());
         ConfigApiHelper.removeDirTree(zipRoot);
     }
-    */
 }

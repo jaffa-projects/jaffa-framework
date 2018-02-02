@@ -28,25 +28,6 @@ public class ConfigApiHelper {
     private static final Logger log = Logger.getLogger(ConfigApiHelper.class);
 
     /**
-     * findContextSalienceInManifest() - When given a compressed file, parse its MANIFEST and return the
-     * Context-Salience value if it exists
-     * @param zipFile   The compressed file containing the MANIFEST file to parse
-     * @return  The Context-Salience value retrieved from the MANIFEST file
-     * @throws IOException  Thrown when the provided compressed file does not exist or cannot be read
-     */
-    public static String findContextSalienceInManifest(ZipFile zipFile) throws IOException {
-        String contextSalience;
-
-        JarFile jar = new JarFile(zipFile.getName());
-        Manifest manifest = jar.getManifest();
-        contextSalience = manifest.getMainAttributes().getValue("Context-Salience");
-        log.debug("ConfigApi received the following Context-Salience from MANIFEST: " + contextSalience);
-
-        return contextSalience;
-    }
-
-
-    /**
      * Verify that the user supplied a file extension in the URL, and add it if not
      * @param input The user URL input
      * @param extension The file extension expected (defaults to ZIP)
@@ -187,6 +168,24 @@ public class ConfigApiHelper {
         zipFile.close();
 
         return fileContents;
+    }
+
+    /**
+     * findContextSalienceInManifest() - When given a compressed file, parse its MANIFEST and return the
+     * Context-Salience value if it exists
+     * @param zipFile   The compressed file containing the MANIFEST file to parse
+     * @return  The Context-Salience value retrieved from the MANIFEST file
+     * @throws IOException  Thrown when the provided compressed file does not exist or cannot be read
+     */
+    private static String findContextSalienceInManifest(ZipFile zipFile) throws IOException {
+        String contextSalience;
+
+        JarFile jar = new JarFile(zipFile.getName());
+        Manifest manifest = jar.getManifest();
+        contextSalience = manifest.getMainAttributes().getValue("Context-Salience");
+        log.debug("ConfigApi received the following Context-Salience from MANIFEST: " + contextSalience);
+
+        return contextSalience;
     }
 
     private static Resource getMetaInfResource(File file, ResourcePatternResolver resolver, IManager manager) {
