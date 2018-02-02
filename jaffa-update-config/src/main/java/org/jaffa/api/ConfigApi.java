@@ -55,14 +55,11 @@ import javax.ws.rs.core.Response;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import org.apache.log4j.*;
-import org.jaffa.loader.ConfigApiHelper;
-import org.jaffa.model.FileContents;
+import org.jaffa.util.ConfigApiHelper;
+import org.jaffa.util.FileContentsHelper;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -104,8 +101,8 @@ public class ConfigApi implements IConfigApi {
 
         //Extract files to gain access to configuration resources
         File tempDir = ConfigApiHelper.extractToTemporaryDirectory(filePath);
-        ConfigApiHelper.unregisterResources(tempDir, this.getFileContents(filePath).getContextSalience());
-        ConfigApiHelper.removeExtractedFiles(tempDir);
+        ConfigApiHelper.unregisterResources(tempDir, ConfigApiHelper.getFileContents(filePath).getContextSalience());
+        ConfigApiHelper.removeDirTree(tempDir);
         if (!Files.deleteIfExists(filePath.toPath())) {
             log.warn(filePath + " was not successfully deleted");
         }
@@ -148,13 +145,13 @@ public class ConfigApi implements IConfigApi {
      */
     public Response getCustomConfigFileList() throws IOException {
         File[] allFilesInDirectory = dataDirectory.listFiles();
-        List<FileContents> compressedFilesInDirectory = new ArrayList<>();
+        List<FileContentsHelper> compressedFilesInDirectory = new ArrayList<>();
         Response.ResponseBuilder response;
 
         if (allFilesInDirectory != null) {
             for (File file : allFilesInDirectory) {
                 if (file.getName().endsWith(FILE_EXTENSION)) {
-                    FileContents fileContents = this.getFileContents(file);
+                    FileContentsHelper fileContents = ConfigApiHelper.getFileContents(file);
                     compressedFilesInDirectory.add(fileContents);
                 }
             }
@@ -207,24 +204,25 @@ public class ConfigApi implements IConfigApi {
         //Copy files to server and register resources
         Files.copy(new ByteArrayInputStream(payload), filePath.toPath());
         File tempDir = ConfigApiHelper.extractToTemporaryDirectory(filePath);
-        ConfigApiHelper.registerResources(tempDir, this.getFileContents(filePath).getContextSalience());
-        ConfigApiHelper.removeExtractedFiles(tempDir);
+        ConfigApiHelper.registerResources(tempDir, ConfigApiHelper.getFileContents(filePath).getContextSalience());
+        ConfigApiHelper.removeDirTree(tempDir);
 
         log.info("The resources in " + filePath + " have finished registering configurations to the repositories");
         Response.ResponseBuilder response = Response.status(Response.Status.OK);
         return response.build();
     }
 
+    /*TODO: Remove if i can get it to work in ConfigApiHelper
     /**
      * getFileContents() - When given a compressed file, parse through and return an object containing the
      * filename, context-salience from MANIFEST, and an array of configuration file contents
      * @param file  The compressed file to read
      * @return  An object containing the compressed file contents and additional information
      * @throws IOException  Thrown when the compressed file does not exist or cannot be read
-     */
-    private FileContents getFileContents(File file) throws IOException {
+
+    private FileContentsHelper getFileContents(File file) throws IOException {
         String manifestFile = "META-INF/MANIFEST.MF";
-        FileContents fileContents = new FileContents();
+        FileContentsHelper fileContents = new FileContentsHelper();
 
         ZipFile zipFile = new ZipFile(file);
 
@@ -242,6 +240,7 @@ public class ConfigApi implements IConfigApi {
 
         return fileContents;
     }
+    */
 }
 
 
