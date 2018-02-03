@@ -83,9 +83,26 @@ public class FormKey implements Cloneable, Comparable, Serializable {
      * @param title       The title.
      */
     public FormKey(String formName, String componentId, String title) {
-        m_formName = Encode.forHtml(formName);
-        m_componentId = Encode.forHtml(componentId);
-        m_title = Encode.forHtml(title);
+        this(formName, componentId, title, false);
+    }
+
+    /**
+     * Constructs an instance of the FormKey class
+     *
+     * @param formName    The formName
+     * @param componentId The componentId
+     * @param title       The title.
+     */
+    public FormKey(String formName, String componentId, String title, boolean isRiaComponent) {
+        if(!isRiaComponent) {
+            m_formName = Encode.forHtml(formName);
+            m_componentId = Encode.forHtml(componentId);
+            m_title = Encode.forHtml(title);
+        }else{
+            m_formName = formName;
+            m_componentId = componentId;
+            m_title = title;
+        }
     }
 
     /**
