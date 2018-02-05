@@ -58,15 +58,15 @@ public class TransactionField extends Persistent {
     @EmbeddedId
     private CompositeKey m_compositeKey;
 
+    @XmlElement(name="value")
+    @Column(name = "VALUE")
+    private java.lang.String m_value;
+
     @Transient
     private java.lang.String m_transactionId;
 
     @Transient
     private java.lang.String m_fieldName;
-
-    @XmlElement(name="value")
-    @Column(name = "VALUE")
-    private java.lang.String m_value;
 
     private transient Transaction m_transactionObject;
 
@@ -144,12 +144,6 @@ public class TransactionField extends Persistent {
      * @return Value of property transactionId.
      */
     public java.lang.String getTransactionId() {
-        if(m_transactionId!=null){
-            if(getCompositeKey() == null)
-                setCompositeKey(new CompositeKey());
-
-            getCompositeKey().setTransactionId(m_transactionId);
-        }
         return getCompositeKey()!=null ? getCompositeKey().getTransactionId() : null;
     }
 
@@ -169,7 +163,7 @@ public class TransactionField extends Persistent {
     public void setTransactionId(java.lang.String transactionId)
     throws ValidationException, UpdatePrimaryKeyException, ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException {
         // ignore, if the current value and new value are the same
-        if (getTransactionId() == null ? transactionId == null : getTransactionId().equals(transactionId))
+        if ((getTransactionId() == null && transactionId == null) ||(getTransactionId() != null && getTransactionId().equals(transactionId)))
             return;
 
         if(getCompositeKey() == null)
@@ -189,7 +183,6 @@ public class TransactionField extends Persistent {
         super.update();
         super.addInitialValue(TransactionFieldMeta.TRANSACTION_ID, getTransactionId());
         getCompositeKey().setTransactionId(transactionId);
-        m_transactionId = transactionId;
         m_transactionObject = null;
         // .//GEN-END:transactionId_1_be
         // Add custom code after setting the value//GEN-FIRST:transactionId_3
@@ -251,12 +244,6 @@ public class TransactionField extends Persistent {
      * @return Value of property fieldName.
      */
     public java.lang.String getFieldName() {
-        if(m_fieldName!=null){
-            if(getCompositeKey() == null)
-                setCompositeKey(new CompositeKey());
-
-            getCompositeKey().setFieldName(m_fieldName);
-        }
         return getCompositeKey()!=null ? getCompositeKey().getFieldName() : null;
     }
     
@@ -276,7 +263,7 @@ public class TransactionField extends Persistent {
     public void setFieldName(java.lang.String fieldName)
     throws ValidationException, UpdatePrimaryKeyException, ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException {
         // ignore, if the current value and new value are the same
-        if (getFieldName() == null ? fieldName == null : getFieldName().equals(fieldName))
+        if ((getFieldName() == null && fieldName == null) ||(getFieldName() != null && getFieldName().equals(fieldName)))
             return;
 
         if(getCompositeKey() == null)
@@ -296,7 +283,6 @@ public class TransactionField extends Persistent {
         super.update();
         super.addInitialValue(TransactionFieldMeta.FIELD_NAME, getFieldName());
         getCompositeKey().setFieldName(fieldName);
-        m_fieldName = fieldName;
         m_transactionObject = null;
         // .//GEN-END:fieldName_1_be
         // Add custom code after setting the value//GEN-FIRST:fieldName_3
@@ -490,8 +476,8 @@ public class TransactionField extends Persistent {
     public String toString() {
         StringBuffer buf = new StringBuffer();
         buf.append("<TransactionField>");
-        buf.append("<transactionId>"); if (m_transactionId != null) buf.append(m_transactionId); buf.append("</transactionId>");
-        buf.append("<fieldName>"); if (m_fieldName != null) buf.append(m_fieldName); buf.append("</fieldName>");
+        buf.append("<transactionId>"); if (getCompositeKey() != null) buf.append(getCompositeKey().getTransactionId()); buf.append("</transactionId>");
+        buf.append("<fieldName>"); if (getCompositeKey() != null) buf.append(getCompositeKey().getFieldName()); buf.append("</fieldName>");
         buf.append("<value>"); if (m_value != null) buf.append(m_value); buf.append("</value>");
         // .//GEN-END:toString_1_be
         // Add custom debug information//GEN-FIRST:toString_1
@@ -629,7 +615,7 @@ public class TransactionField extends Persistent {
          * @return a true if both the objects have the same candidate key.
          */
         public boolean equals(Object obj) {
-            if (obj != null && this.getClass() == obj.getClass()) {
+            if (obj != null && obj instanceof TransactionField) {
                 boolean equals = true;
                 equals = equals && (getTransactionId() == null ? ((TransactionField.CompositeKey) obj).getTransactionId() == null : getTransactionId().equals(((TransactionField.CompositeKey) obj).getTransactionId()));
                 equals = equals && (getFieldName() == null ? ((TransactionField.CompositeKey) obj).getFieldName() == null : getFieldName().equals(((TransactionField.CompositeKey) obj).getFieldName()));

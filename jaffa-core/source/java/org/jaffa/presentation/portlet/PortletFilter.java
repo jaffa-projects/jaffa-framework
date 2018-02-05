@@ -75,6 +75,7 @@ import org.jaffa.exceptions.ComponentExpiredException;
 import org.jaffa.presentation.portlet.session.UserSessionSetupException;
 import org.jaffa.session.ContextManagerFactory;
 import org.jaffa.util.LocaleHelper;
+import org.owasp.encoder.Encode;
 
 /** This servlet filter is a replacement for the JAFFA PortletServlet and the portlet.security  package.
  * It will invoke the SecurityManager to execute the rest of the request-processing under a SecurityContext. The SecurityContext is stored as a thread variable, which enables a servlet un-aware program (eg. the Persistence Engine) to get a user's authentication information.
@@ -228,7 +229,8 @@ public class PortletFilter implements Filter {
                 String str = "Component " + componentId + " has expired";
                 log.error(str);
                 // This exception should be picked up in web.xml and directed to the appropriate JSP, eg. 'pageExpired.jsp'
-                throw new ServletException(str, new ComponentExpiredException());
+                // escape the message for html to prevent XSS
+                throw new ServletException(Encode.forHtml(str), new ComponentExpiredException());
             } else {
                 UserSession.getUserSession(request).getComponent(componentId).updateLastActivityDate();
             }

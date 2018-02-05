@@ -51,20 +51,27 @@ package org.jaffa.presentation.portlet.component;
 import org.apache.log4j.Logger;
 import org.jaffa.presentation.portlet.session.UserSession;
 import org.jaffa.presentation.portlet.component.componentdomain.Loader;
+
 import java.util.Map;
 import java.util.HashMap;
+
 import org.jaffa.security.SecurityManager;
+import org.owasp.encoder.Encode;
+
 import java.security.AccessControlException;
 
-/** This is a Factory for creating Component instances
+/**
+ * This is a Factory for creating Component instances
  */
 public class ComponentManager {
 
     private static Logger log = Logger.getLogger(ComponentManager.class);
 
-    /** Creates an instance of the named component. This component is then added to the UserSession. This may throw the runtime ComponentCreationRuntimeException
+    /**
+     * Creates an instance of the named component. This component is then added to the UserSession. This may throw the runtime ComponentCreationRuntimeException
+     *
      * @param comp The name of the component to create. There should be a valid definition for this name in the 'components.xml' file
-     * @param us The UserSession to which this component will be added
+     * @param us   The UserSession to which this component will be added
      * @return An instance of the Component
      */
     public static Component run(String comp, UserSession us) {
@@ -73,8 +80,9 @@ public class ComponentManager {
         try {
 
             // see if this user has access to this component
-            if (!SecurityManager.checkComponentAccess(comp))
-                throw new AccessControlException("No Access To Component " + comp);
+            if (!SecurityManager.checkComponentAccess(comp)) {
+                throw new AccessControlException("No Access To Component " + Encode.forHtml(comp));
+            }
 
             //Find the Definition
             ComponentDefinition cd = find(comp);
@@ -82,16 +90,13 @@ public class ComponentManager {
                 // Not Found
                 String str = "No ComponentDefinition found for " + comp;
                 log.error(str);
-                throw new ComponentCreationRuntimeException(str);
+                throw new ComponentCreationRuntimeException(Encode.forHtml(str));
             }
 
             // Get the ClassObject of the component
-            Class clazz = null;
-            if (cd.isRia())
-                clazz = RiaWrapperComponent.class;
-            else
-                clazz = Class.forName(cd.getComponentClass());
-
+            Class clazz;
+            if (cd.isRia()) clazz = RiaWrapperComponent.class;
+            else clazz = Class.forName(cd.getComponentClass());
 
             // Create an instance of the component
             Component compInst = (Component) clazz.newInstance();
@@ -104,26 +109,19 @@ public class ComponentManager {
             if (log.isInfoEnabled())
                 log.info("Created component " + comp + " having id " + compInst.getComponentId() + " for user " + (us == null ? "null" : us.getUserId()));
             return compInst;
-        } catch (ClassNotFoundException e) {
-            String str = "Error in running the Component " + comp;
-            log.error(str, e);
-            throw new ComponentCreationRuntimeException(str, e);
-        } catch (InstantiationException e) {
-            String str = "Error in running the Component " + comp;
-            log.error(str, e);
-            throw new ComponentCreationRuntimeException(str, e);
-        } catch (IllegalAccessException e) {
-            String str = "Error in running the Component " + comp;
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            String str = "Error in running the Component " + Encode.forHtml(comp);
             log.error(str, e);
             throw new ComponentCreationRuntimeException(str, e);
         }
     }
 
-    /** Locate the named component. This routine uses a cache of ComponentDefinitions.
+    /**
+     * Locate the named component. This routine uses a cache of ComponentDefinitions.
      * If the cache has not been initialized, this will initialize it by reading in
      * and XML file into the component domain objects (via JAXB), and then create a
      * pool of component definition objects.
-     *
+     * <p/>
      * If the specified component id not found a null is returned
      */
     public static ComponentDefinition find(String comp) {
@@ -134,22 +132,22 @@ public class ComponentManager {
             return null;
         }
 
-        if (componentPool.containsKey(comp))
-            return componentPool.get(comp);
+        if (componentPool.containsKey(comp)) return componentPool.get(comp);
         else {
             // Not Found
-            if (log.isDebugEnabled())
-                log.debug("No ComponentDefinition found for " + comp);
+            if (log.isDebugEnabled()) log.debug("No ComponentDefinition found for " + comp);
             return null;
         }
     }
 
-    /** Get the component requirements, this is Map of mandatory business functions
+    /**
+     * Get the component requirements, this is Map of mandatory business functions
      * that a user must have access to, to run this component. Each entry in the map is a
      * component and its 'required' functions is stored as the 'value'. The 'value' is stored
      * as and Array([]) of Strings .
      * If the value in the map for a given a component is null, it has no required business functions
      * and is therefore not constrained by the security system.
+     *
      * @return a Map containing component requirements.
      */
     public static Map<String, String[]> getComponentRequirements() {
@@ -165,10 +163,8 @@ public class ComponentManager {
         for (Map.Entry<String, ComponentDefinition> me : componentPool.entrySet()) {
             String comp = me.getKey();
             String[] funcs = me.getValue().getMandatoryFunctions();
-            if (funcs != null && funcs.length != 0)
-                m.put(comp, funcs);
-            else
-                m.put(comp, null);
+            if (funcs != null && funcs.length != 0) m.put(comp, funcs);
+            else m.put(comp, null);
         }
 
         return m;

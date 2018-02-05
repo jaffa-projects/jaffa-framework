@@ -202,29 +202,7 @@ public class ContextManager implements IContextManager {
      */
     public Object getProperty(Object key) {
         Map m = getThreadContext();
-        Object contextValue = m != null ? m.get(key) : null;
-        if (contextValue != null && contextValue instanceof String) {
-            contextValue = replaceTokens((String)contextValue);
-        }
-        return contextValue;
-    }
-
-    private String replaceTokens(String appRuleValue) {
-        //Regular expression to find ${word} tokens in the application rule value
-        Pattern pt = Pattern.compile("\\$\\{([^}]*)\\}");
-        Matcher matcher = pt.matcher(appRuleValue);
-
-        while (matcher.find()) {
-            String tokenName = matcher.group(1);
-            String tokenValue = (String) getProperty(tokenName);
-            if (log.isDebugEnabled()) {
-                log.debug("Token Name Used " + tokenName + " and its value " + tokenValue);
-            }
-            if (tokenValue != null) {
-                appRuleValue = StringHelper.replace(appRuleValue, matcher.group(0), tokenValue);
-            }
-        }
-        return appRuleValue;
+        return m != null ? m.get(key) : null;
     }
 
     /**
