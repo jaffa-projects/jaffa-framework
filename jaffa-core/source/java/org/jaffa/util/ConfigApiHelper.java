@@ -163,7 +163,7 @@ public class ConfigApiHelper {
             fileContents.addContentsItem(new File(configFile.toString()).getName());
             if (configFile.getName().toUpperCase().equals(manifestFile)) {
                 fileContents.setContextSalience(ConfigApiHelper.findContextSalienceInManifest(zipFile));
-            }
+           }
         }
         zipFile.close();
 

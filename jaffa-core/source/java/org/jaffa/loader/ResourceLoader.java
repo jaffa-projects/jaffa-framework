@@ -157,7 +157,7 @@ public class ResourceLoader<T extends IManager> {
      */
     public void loadCustomConfiguration(File file) throws IOException {
         File zipRoot = ConfigApiHelper.extractToTemporaryDirectory(file);
-        ConfigApiHelper.registerResources(zipRoot, ConfigApiHelper.getFileContents(zipRoot).getContextSalience());
+        ConfigApiHelper.registerResources(zipRoot, ConfigApiHelper.getFileContents(file).getContextSalience());
         ConfigApiHelper.removeDirTree(zipRoot);
     }
 }

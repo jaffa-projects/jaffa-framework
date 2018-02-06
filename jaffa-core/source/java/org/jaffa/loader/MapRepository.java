@@ -257,12 +257,13 @@ public class MapRepository<T> implements IRepository<T> {
      * Removes repositoryKey from contextKeyCache
      * @param repositoryKey The ContextKey to be removed from ContextKeyCache
      */
-    private void removeFromContextKeyCache(ContextKey repositoryKey){
-        if(contextKeyCache.get(repositoryKey.getId()).size() > 1) {
-            contextKeyCache.get(repositoryKey.getId()).remove(repositoryKey);
-        }
-        else {
-            contextKeyCache.remove(repositoryKey.getId());
+    private void removeFromContextKeyCache(ContextKey repositoryKey) {
+        if (contextKeyCache.get(repositoryKey.getId()) != null) {
+            if (contextKeyCache.get(repositoryKey.getId()).size() > 1) {
+                contextKeyCache.get(repositoryKey.getId()).remove(repositoryKey);
+            } else {
+                contextKeyCache.remove(repositoryKey.getId());
+            }
         }
     }
 

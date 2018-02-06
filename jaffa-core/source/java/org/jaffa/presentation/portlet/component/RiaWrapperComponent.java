@@ -77,7 +77,7 @@ public class RiaWrapperComponent extends Component {
             }
         log.debug("Forward to Web 2.0 URL - " + url);
         quit();
-        return new FormKey( url , null);
+        return new FormKey( url , null, null, true);
     }
 
     /**

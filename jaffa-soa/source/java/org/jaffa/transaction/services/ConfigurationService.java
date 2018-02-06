@@ -151,7 +151,7 @@ public final class ConfigurationService {
      * @throws ClassNotFoundException if dataBeanClassName is not found on the classpath
      */
     public TransactionInfo getTransactionInfo(String dataBeanClassName) throws ClassNotFoundException {
-        return transactionManager.getTransactionInfo(dataBeanClassName);
+        return transactionManager.getTransactionInfo(Class.forName(dataBeanClassName));
     }
 
     /**

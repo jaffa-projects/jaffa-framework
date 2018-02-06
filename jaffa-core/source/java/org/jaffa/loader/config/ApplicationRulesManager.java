@@ -54,6 +54,7 @@ import org.jaffa.loader.IManager;
 import org.jaffa.loader.IRepository;
 import org.jaffa.loader.MapRepository;
 import org.jaffa.security.VariationContext;
+import org.jaffa.util.StringHelper;
 import org.springframework.core.io.Resource;
 import org.xml.sax.SAXException;
 
@@ -64,6 +65,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * ApplicationRulesManager - ApplicationManager is the managing class for all application rules as defined by the
@@ -190,14 +193,26 @@ public class ApplicationRulesManager implements IManager {
     @Override
     public void registerResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException {
         Properties properties = new Properties();
-        if (resource != null) {
-            loadPropertiesResource(resource, properties);
+        InputStream resourceInputStream = resource.getInputStream();
+        if (resource != null  && resourceInputStream != null) {
+            properties.load(resourceInputStream);
+            for (Object property : properties.keySet()) {
+                String systemPropertyValue = System.getProperty((String) property);
+                if (systemPropertyValue == null || "".equals(systemPropertyValue)) {
+                    systemPropertyValue = replaceTokens(properties, properties.getProperty((String) property));
+                }
+                properties.setProperty((String) property, systemPropertyValue);
+            }
             if (!properties.isEmpty()) {
-                for(Object property : properties.keySet()){
-                    ContextKey key = new ContextKey((String)property, resource.getURI().toString(), variation, precedence);
-                    registerProperties(key, properties.getProperty((String)property));
+                loadPropertiesResource(resourceInputStream, properties);
+                if (!properties.isEmpty()) {
+                    for (Object property : properties.keySet()) {
+                        ContextKey key = new ContextKey((String) property, resource.getURI().toString(), variation, precedence);
+                        registerProperties(key, properties.getProperty((String) property));
+                    }
                 }
             }
+            resourceInputStream.close();
         }
     }
 
@@ -214,14 +229,16 @@ public class ApplicationRulesManager implements IManager {
     @Override
     public void unregisterResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException {
         Properties properties = new Properties();
-        if (resource != null && resource.getInputStream() != null) {
-            loadPropertiesResource(resource, properties);
+        InputStream resourceInputStream = resource.getInputStream();
+        if (resource != null && resourceInputStream != null) {
+            loadPropertiesResource(resourceInputStream, properties);
             if (!properties.isEmpty()) {
                 for(Object property : properties.keySet()){
                     ContextKey key = new ContextKey((String)property, resource.getURI().toString(), variation, precedence);
                     unregisterProperties(key);
                 }
             }
+            resourceInputStream.close();
         }
     }
 
@@ -231,8 +248,7 @@ public class ApplicationRulesManager implements IManager {
 
     // Helper methods follow...
 
-    private void loadPropertiesResource(Resource resource, Properties properties) throws IOException {
-        InputStream resourceInputStream = resource.getInputStream();
+    private void loadPropertiesResource(InputStream resourceInputStream, Properties properties) throws IOException {
         if (resourceInputStream != null) {
             properties.load(resourceInputStream);
             for (Object property : properties.keySet()) {
@@ -241,8 +257,29 @@ public class ApplicationRulesManager implements IManager {
                     properties.setProperty((String) property, systemPropertyValue);
                 }
             }
-            resourceInputStream.close();
         }
+    }
+
+    private String replaceTokens(Properties properties, String appRuleValue) {
+        //Regular expression to find ${word} tokens in the application rule value
+        Pattern pt = Pattern.compile("\\$\\{([^}]*)\\}");
+        Matcher matcher = pt.matcher(appRuleValue);
+
+        while (matcher.find()) {
+          String tokenValue = getPropertyValue(properties,  matcher.group(1));
+            if (tokenValue != null) {
+                appRuleValue = StringHelper.replace(appRuleValue, matcher.group(0), tokenValue);
+            }
+        }
+        return appRuleValue;
+    }
+
+    private String getPropertyValue(Properties properties, String key){
+        String systemPropertyValue = System.getProperty(key);
+        if (systemPropertyValue == null || "".equals(systemPropertyValue)) {
+            systemPropertyValue = properties.getProperty(key);
+        }
+        return systemPropertyValue;
     }
 }
 
