@@ -49,11 +49,16 @@
 
 package org.jaffa.config;
 
+import java.util.Enumeration;
 import java.util.PropertyResourceBundle;
 import java.util.MissingResourceException;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResources;
+import org.jaffa.util.StringHelper;
 
 /** This class manages all the access to the frameworks configuration data
  * In addition it is used for all text string translation.
@@ -154,7 +159,7 @@ public class Config {
     // Static data to hold all the properties
     /////////////////////////////////////////////////////////////////////////////
     private static final String CONFIG_RESOURCE = "org.jaffa.config.framework";
-    private static PropertyResourceBundle m_staticProperties;
+    private static HashMap m_staticProperties;
 
     /**
      * @associates Object
@@ -200,7 +205,7 @@ public class Config {
         if(m_staticProperties == null)
             initResources();
 
-      Object obj = m_staticProperties.getObject(key);
+      Object obj = m_staticProperties.get(key);
         //obj = m_staticProperties.getMessage(key);
 
         // If nothing was returned, see it it was an undefiend key...
@@ -239,7 +244,16 @@ public class Config {
     private static void initResources() {
         if (m_staticProperties == null)
             try {
-                m_staticProperties = ( PropertyResourceBundle )PropertyResourceBundle.getBundle(CONFIG_RESOURCE);
+                m_staticProperties = new HashMap();
+                PropertyResourceBundle staticPropertiesFromBundle = ( PropertyResourceBundle )PropertyResourceBundle.getBundle(CONFIG_RESOURCE);
+                if(staticPropertiesFromBundle!=null){
+                    Enumeration<String> keys = staticPropertiesFromBundle.getKeys();
+                    while(keys.hasMoreElements()){
+                        String key = keys.nextElement();
+                        String value = staticPropertiesFromBundle.getString(key);
+                        m_staticProperties.put(key, replaceTokens(value));
+                    }
+                }
                 //m_staticProperties = MessageResources.getMessageResources(CONFIG_RESOURCE);
 
             } catch (MissingResourceException e) {
@@ -248,6 +262,28 @@ public class Config {
                 throw new RuntimeException("Fatal Error: missing resource bundle: " + CONFIG_RESOURCE);
             }
 
+    }
+
+    private static String replaceTokens(String configValue) {
+        //Regular expression to find ${word} tokens in the application rule value
+        Pattern pt = Pattern.compile("\\$\\{([^}]*)\\}");
+        Matcher matcher = pt.matcher(configValue);
+
+        while (matcher.find()) {
+            String tokenValue = getPropertyValue(matcher.group(1));
+            if (tokenValue != null) {
+                configValue = StringHelper.replace(configValue, matcher.group(0), tokenValue);
+            }
+        }
+        return configValue;
+    }
+
+    private static String getPropertyValue(String sysProperty){
+        String systemPropertyValue = System.getProperty(sysProperty);
+        if (systemPropertyValue == null || "".equals(systemPropertyValue)) {
+            return sysProperty;
+        }
+        return systemPropertyValue;
     }
 
 }
