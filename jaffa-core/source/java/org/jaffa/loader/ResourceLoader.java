@@ -64,15 +64,10 @@ import java.io.IOException;
  * Loads the Xml Config files and registers them to the Repository.
  */
 public class ResourceLoader<T extends IManager> {
-    private static final String FILE_EXTENSION = ".zip";
+    private static final String ARCHIVE_EXTENSION = ".zip";
 
-    /**
-     * Notionally use a property to point to the custom config directory.
-     * We'll default to "./custom_configurations" if not defined.
-     * TODO: Make sure using this property is OK.
-     */
-    @Value("${data_directory:config}")
-    private String customConfigPath;
+    private String customConfigPath = System.getenv("data.directory") +
+            File.separator + "config";
 
     /**
      * Create a ContextHelper logger
@@ -144,7 +139,7 @@ public class ResourceLoader<T extends IManager> {
         // Load all zip files from the custom config directory.
         File customConfigDirectory = new File(customConfigPath);
         for(File file : customConfigDirectory.listFiles()) {
-            if (file.getName().endsWith(FILE_EXTENSION)) {
+            if (file.getName().endsWith(ARCHIVE_EXTENSION)) {
                 loadCustomConfiguration(file);
             }
         }

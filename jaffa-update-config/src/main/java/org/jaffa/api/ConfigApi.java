@@ -69,7 +69,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class ConfigApi implements IConfigApi {
-    private static final String DATA_DIR_ENV_NAME = "data_directory";
+    private static final String DATA_DIR_ENV_NAME = "data.directory";
     private static final String FILE_EXTENSION = ".zip";
     private static final int BYTE_ARRAY_INIT_LENGTH = 17;
     private static final Logger log = Logger.getLogger(ConfigApi.class);
@@ -103,10 +103,7 @@ public class ConfigApi implements IConfigApi {
         File tempDir = ConfigApiHelper.extractToTemporaryDirectory(filePath);
         ConfigApiHelper.unregisterResources(tempDir, ConfigApiHelper.getFileContents(filePath).getContextSalience());
         ConfigApiHelper.removeDirTree(tempDir);
-        if (!Files.deleteIfExists(filePath.toPath())) {
-            log.warn(filePath + " was not successfully deleted");
-        }
-
+        ConfigApiHelper.removeZipFile(filePath);
         Response.ResponseBuilder response = Response.status(Response.Status.OK);
         return response.build();
     }

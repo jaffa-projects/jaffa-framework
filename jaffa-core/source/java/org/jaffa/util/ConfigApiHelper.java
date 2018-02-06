@@ -79,6 +79,15 @@ public class ConfigApiHelper {
         return tempDir;
     }
 
+    public static void removeZipFile(File file) throws IOException {
+        try {
+            Files.deleteIfExists(file.toPath());
+        }
+        catch (IOException ex) {
+            removeZipFile(file);
+        }
+    }
+
     /**
      * Register configuration files in IManager implementationss, based on the source of the method call
      * @param file  The configuration file to be registered or unregistered
@@ -193,28 +202,4 @@ public class ConfigApiHelper {
         return resolver.getResource("file:" + file.getAbsolutePath() +
                 "/META-INF/" + manager.getResourceFileName());
     }
-
-    /*TODO: Remove if the removeDirTree method works as expected
-    /**
-     * After resources have been registered or unregistered, remove the temporary directory containing the extracted
-     * ZIP entries
-     * @param directory The directory containing the extracted compressed file entries
-     * @throws IOException  Thrown when the directory does not exist or cannot be read
-    public static boolean removeExtractedFiles(File directory) throws IOException {
-        File metaInfDirectory = new File(directory + "/META-INF/");
-        File[] children = metaInfDirectory.listFiles();
-        if (children != null) {
-            for (File child : children) {
-                Files.deleteIfExists(child.toPath());
-            }
-            if (!Files.deleteIfExists(metaInfDirectory.toPath())) {
-                log.warn("The temporary files were not successfully removed from " + metaInfDirectory);
-            }
-            if (!Files.deleteIfExists(directory.toPath())) {
-                log.warn("The temporary files were not successfully removed from " + directory);
-            }
-        }
-        return directory.exists();
-    }
-        */
 }
