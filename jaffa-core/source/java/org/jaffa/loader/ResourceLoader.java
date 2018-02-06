@@ -52,6 +52,7 @@ package org.jaffa.loader;
 import org.apache.log4j.Logger;
 import org.jaffa.util.ConfigApiHelper;
 import org.jaffa.util.ContextHelper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
@@ -70,9 +71,8 @@ public class ResourceLoader<T extends IManager> {
      * We'll default to "./custom_configurations" if not defined.
      * TODO: Make sure using this property is OK.
      */
-    //Value("${custom.config.path:custom_configurations}")
-    private String customConfigPath = System.getenv("data_directory") +
-            File.separator + "config";
+    @Value("${data_directory:config}")
+    private String customConfigPath;
 
     /**
      * Create a ContextHelper logger

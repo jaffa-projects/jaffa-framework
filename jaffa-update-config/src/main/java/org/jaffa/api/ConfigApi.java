@@ -211,36 +211,6 @@ public class ConfigApi implements IConfigApi {
         Response.ResponseBuilder response = Response.status(Response.Status.OK);
         return response.build();
     }
-
-    /*TODO: Remove if i can get it to work in ConfigApiHelper
-    /**
-     * getFileContents() - When given a compressed file, parse through and return an object containing the
-     * filename, context-salience from MANIFEST, and an array of configuration file contents
-     * @param file  The compressed file to read
-     * @return  An object containing the compressed file contents and additional information
-     * @throws IOException  Thrown when the compressed file does not exist or cannot be read
-
-    private FileContentsHelper getFileContents(File file) throws IOException {
-        String manifestFile = "META-INF/MANIFEST.MF";
-        FileContentsHelper fileContents = new FileContentsHelper();
-
-        ZipFile zipFile = new ZipFile(file);
-
-        fileContents.setName(file.getName());
-
-        Enumeration<? extends ZipEntry> entries = zipFile.entries();
-        while (entries.hasMoreElements()) {
-            ZipEntry configFile = entries.nextElement();
-            fileContents.addContentsItem(new File(configFile.toString()).getName());
-            if (configFile.getName().toUpperCase().equals(manifestFile)) {
-                fileContents.setContextSalience(ConfigApiHelper.findContextSalienceInManifest(zipFile));
-            }
-        }
-        zipFile.close();
-
-        return fileContents;
-    }
-    */
 }
 
 

@@ -165,6 +165,7 @@ public class ConfigApiHelper {
                 fileContents.setContextSalience(ConfigApiHelper.findContextSalienceInManifest(zipFile));
            }
         }
+        zipFile.stream().close();
         zipFile.close();
 
         return fileContents;
