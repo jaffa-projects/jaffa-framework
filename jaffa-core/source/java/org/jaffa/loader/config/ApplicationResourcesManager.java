@@ -255,7 +255,7 @@ public class ApplicationResourcesManager implements IManager {
             if (!properties.isEmpty()) {
                 if (isLocaleResource) {
                     //locale resources
-                    ContextKey key = new ContextKey(locale, resource.getURI().toString(), variation, precedence);
+                    ContextKey key = new ContextKey(locale+"_"+variation, resource.getURI().toString(), variation, precedence);
                     registerLocaleProperties(key, properties);
                 } else {
                     //default resource

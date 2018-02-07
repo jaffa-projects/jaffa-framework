@@ -19,7 +19,7 @@ public class ApplicationResourcesLoadTest {
     public void testResourceLoad() {
         ApplicationResourcesManager applicationResourcesManager = resourceLoaderConfig.getBean(ApplicationResourcesManager.class);
         Properties defaultProperty = applicationResourcesManager.getApplicationResources();
-        Properties localeProperty = applicationResourcesManager.getApplicationResourcesLocale("ar_OM");
+        Properties localeProperty = applicationResourcesManager.getApplicationResourcesLocale("ar_OM_NULL");
         assertNotNull(defaultProperty);
         assertNotNull(localeProperty);
         assertEquals(localeProperty.size(),6);

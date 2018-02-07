@@ -49,26 +49,28 @@
 
 package org.jaffa.applications.jaffa.modules.admin.components.labeleditor.ui;
 
+import org.apache.log4j.Logger;
+import org.apache.struts.util.MessageResources;
+import org.jaffa.applications.jaffa.modules.admin.components.labeleditor.ui.exceptions.LabelEditorException;
+import org.jaffa.components.navigation.NavAccessor;
+import org.jaffa.components.navigation.NavCache;
+import org.jaffa.config.ApplicationResourceLoader;
+import org.jaffa.config.Config;
+import org.jaffa.exceptions.FrameworkException;
+import org.jaffa.presentation.portlet.FormKey;
+import org.jaffa.presentation.portlet.component.Component;
+import org.jaffa.presentation.portlet.session.LocaleContext;
+import org.jaffa.security.VariationContext;
+import org.jaffa.util.FindFiles;
+import org.jaffa.util.ListProperties;
+import org.jaffa.util.PropertyMessageResources;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.servlet.http.HttpServletRequest;
-import org.apache.log4j.Logger;
-import org.apache.struts.util.MessageResources;
-import org.jaffa.util.PropertyMessageResources;
-import org.jaffa.config.ApplicationResourceLoader;
-import org.jaffa.config.Config;
-import org.jaffa.config.InitApp;
-import org.jaffa.presentation.portlet.component.Component;
-import org.jaffa.presentation.portlet.FormKey;
-import org.jaffa.exceptions.FrameworkException;
-import org.jaffa.util.FindFiles;
-import org.jaffa.util.ListProperties;
-import org.jaffa.applications.jaffa.modules.admin.components.labeleditor.ui.exceptions.LabelEditorException;
-import org.jaffa.components.navigation.NavAccessor;
-import org.jaffa.components.navigation.NavCache;
-import javax.servlet.http.HttpSession;
 
 /** This is the component controller for the Label Editor.
  *
@@ -211,8 +213,17 @@ public class LabelEditorComponent extends Component {
         
         if (getLabelFilter() != null || (getDisplayOverridesOnly() != null && getDisplayOverridesOnly().booleanValue())) {
             try {
-                Properties applicationResourcesDefaultProperties = ApplicationResourceLoader.getInstance().getApplicationResourcesDefault();
-                Properties applicationResourcesOverrideProperties = ApplicationResourceLoader.getInstance().getApplicationResourcesOverride();
+                Properties applicationResourcesDefaultProperties = null;
+                Properties applicationResourcesOverrideProperties = null;
+
+                String localeKey = localeKey(LocaleContext.getLocale());
+                if (ApplicationResourceLoader.getApplicationResourcesManager().getApplicationResourcesLocaleRepository().query(localeKey) != null) {
+                    applicationResourcesDefaultProperties = ApplicationResourceLoader.getInstance().getApplicationResourcesLocale(localeKey);
+                    applicationResourcesOverrideProperties = ApplicationResourceLoader.getInstance().getApplicationResourcesOverride(localeKey);
+                } else{
+                    applicationResourcesDefaultProperties = ApplicationResourceLoader.getInstance().getApplicationResourcesDefault();
+                    applicationResourcesOverrideProperties = ApplicationResourceLoader.getInstance().getApplicationResourcesOverride(null);
+                }
                 
 				if (applicationResourcesDefaultProperties == null || applicationResourcesDefaultProperties.size() < 1
 						|| applicationResourcesOverrideProperties == null) {
@@ -288,7 +299,8 @@ public class LabelEditorComponent extends Component {
             Properties applicationResourcesOverrideProperties = loadPropertiesFromFile(applicationResourcesOverrideLocation, true);
             
             ApplicationResourceLoader appResourceLoader = ApplicationResourceLoader.getInstance();
-            
+            String localeKey = localeKey(LocaleContext.getLocale());
+
             // Either update or remove a property
             for (Iterator itr = m_labels.keySet().iterator(); itr.hasNext(); ) {
                 String label = (String) itr.next();
@@ -298,15 +310,18 @@ public class LabelEditorComponent extends Component {
 					//setting the override label into override file
 					applicationResourcesOverrideProperties.setProperty(label, override);
 					//Applying the changes into ApplicationResources in memory
-					appResourceLoader.getLocaleProperties(ApplicationResourceLoader.DEFAULT_PROP_LOCALE_KEY)
-							.setProperty(label, override);
+					appResourceLoader.getLocaleProperties(localeKey).setProperty(label, override);
 				} else {
 					//removing the override from file if there is any
 					applicationResourcesOverrideProperties.remove(label);
 					//remove it from memory
-					appResourceLoader.getApplicationResourcesOverride().remove(label);
-					//reverting/leaving the default value if the override removed.
-					appResourceLoader.getLocaleProperties(ApplicationResourceLoader.DEFAULT_PROP_LOCALE_KEY)
+                    if (ApplicationResourceLoader.getApplicationResourcesManager().getApplicationResourcesLocaleRepository().query(localeKey) != null) {
+                        appResourceLoader.getApplicationResourcesOverride(localeKey).remove(label);
+                    } else {
+                        appResourceLoader.getApplicationResourcesOverride(null);
+                    }
+                    //reverting/leaving the default value if the override removed.
+					appResourceLoader.getLocaleProperties(LocaleContext.getLocale().toString())
 							.setProperty(label, appResourceLoader.getApplicationResourcesDefault().getProperty(label));
 				}
             }
@@ -370,8 +385,17 @@ public class LabelEditorComponent extends Component {
         
         try {
             // load the ApplicationResources.default and ApplicationResources.override files
-            Properties applicationResourcesDefaultProperties = ApplicationResourceLoader.getInstance().getApplicationResourcesDefault();
-            Properties applicationResourcesOverrideProperties = ApplicationResourceLoader.getInstance().getApplicationResourcesOverride();
+            Properties applicationResourcesDefaultProperties = null;
+            Properties applicationResourcesOverrideProperties = null;
+
+            String localeKey = localeKey(LocaleContext.getLocale());
+            if (ApplicationResourceLoader.getApplicationResourcesManager().getApplicationResourcesLocaleRepository().query(localeKey) != null) {
+                applicationResourcesDefaultProperties = ApplicationResourceLoader.getInstance().getApplicationResourcesLocale(localeKey);
+                applicationResourcesOverrideProperties = ApplicationResourceLoader.getInstance().getApplicationResourcesOverride(localeKey);
+            } else{
+                applicationResourcesDefaultProperties = ApplicationResourceLoader.getInstance().getApplicationResourcesDefault();
+                applicationResourcesOverrideProperties = ApplicationResourceLoader.getInstance().getApplicationResourcesOverride(null);
+            }
             
             // Migrate all the displayed override values to the appropriate fragment file
             if (m_searchPathForSourceFragments != null && m_sourceFragmentName != null) {
@@ -513,6 +537,15 @@ public class LabelEditorComponent extends Component {
                 }
             }
         }
+    }
+
+    private String localeKey(Locale locale) {
+        if (locale == null)
+            return "";
+        else if (locale.getVariant() != null && locale.getVariant().length() > 0)
+            return locale.toString();
+        else
+            return locale.toString() + '_' + VariationContext.getVariation();
     }
     
 }

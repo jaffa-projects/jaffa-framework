@@ -114,7 +114,7 @@ public class ApplicationResourceLoaderTest {
 		 */
         ApplicationResourceLoader resourceLoader = new ApplicationResourceLoader();
 
-        Properties defaultProperties = resourceLoader.getLocaleProperties("");
+        Properties defaultProperties = resourceLoader.getLocaleProperties("en_GB_NULL");
         String defaultResourceLoadResult = (defaultProperties == null || defaultProperties.size() < 1)
                 ? "Default Resource Load Fail" : "Default Resource Load Success";
 
@@ -122,7 +122,7 @@ public class ApplicationResourceLoaderTest {
         String localeResourceLoadResult = (localeProperties == null || localeProperties.size() < 1)
                 ? "Locale Resource Load Fail" : "Locale Resource Load Success";
 
-        Properties overrideProperties = resourceLoader.getApplicationResourcesOverride();
+        Properties overrideProperties = resourceLoader.getApplicationResourcesOverride(null);
         System.out.println(overrideProperties);
 
         // Default Resource
@@ -138,7 +138,7 @@ public class ApplicationResourceLoaderTest {
 
         assertEquals("Label", resourceLoader.getApplicationResourcesDefault().get("label.Jaffa.Admin.LabelEditor.Label"));
 
-        assertEquals("Edit Label", resourceLoader.getApplicationResourcesOverride().get("label.Jaffa.Admin.LabelEditor.Label"));
+        assertEquals("Edit Label", resourceLoader.getApplicationResourcesOverride(null).get("label.Jaffa.Admin.LabelEditor.Label"));
 
 
 		/*

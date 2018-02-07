@@ -52,7 +52,6 @@ import org.apache.log4j.Logger;
 import org.jaffa.loader.config.ApplicationResourcesManager;
 import org.jaffa.security.VariationContext;
 import org.jaffa.session.ContextManagerFactory;
-import org.jaffa.util.ContextHelper;
 import org.jaffa.util.OrderedPathMatchingResourcePatternResolver;
 import org.springframework.core.io.Resource;
 
@@ -60,9 +59,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 /**
  * ApplicationResourceLoader is the resource loader proxy class to get the resources
@@ -72,7 +69,7 @@ public class ApplicationResourceLoader {
 
     private static final Logger log = Logger.getLogger(ApplicationResourceLoader.class);
 
-    public static final String PROP_APPLICATION_RESOURCES_OVERRIDE = "ApplicationResourcesOverride.properties";
+    public static final String PROP_APPLICATION_RESOURCES_OVERRIDE = "ApplicationResourcesOverride";
     public static final String DATA_DIRECTORY = "data.directory";
     public static final String DEFAULT_PROP_LOCALE_KEY = "";
     public static final String FILE_PREFIX = "file:///";
@@ -119,38 +116,22 @@ public class ApplicationResourceLoader {
     /**
      * This method gets the properties object based on input locale.
      *
-     * @param locale
+     * @param localeKey
      * @return
      */
-    public Properties getLocaleProperties(String locale) {
+    public Properties getLocaleProperties(String localeKey) {
         Properties properties = null;
-        if (DEFAULT_PROP_LOCALE_KEY.equals(locale)) {
+        Properties overrideProperties = null;
+        if (getApplicationResourcesManager().getApplicationResourcesLocaleRepository().query(localeKey) != null) {
+            //locale resources
+            properties = getApplicationResourcesLocale(localeKey);
+            overrideProperties = getApplicationResourcesOverride(localeKey);
+        } else {
             //default resources
             properties = getApplicationResourcesDefault();
-        } else {
-            properties = new Properties();
-
-            //locale resources
-            if (log.isDebugEnabled()) {
-                log.debug("locale :" + locale);
-            }
-            Properties defaultProperties = getApplicationResourcesManager().getApplicationResourcesLocale(locale);
-            if (null != defaultProperties) {
-                properties.putAll(defaultProperties);
-            }
-
-            Set<Map.Entry<String, String>> variationSalience = ContextHelper.getVariationSalienceMap().entrySet();
-            for (Map.Entry<String, String> variationSalienceEntry : variationSalience) {
-                if (!VariationContext.NULL_VARIATION.equals(variationSalienceEntry.getValue())) {
-                    Properties variationProperties = getApplicationResourcesManager().getApplicationResourcesLocaleVariation(locale, variationSalienceEntry.getValue());
-                    if (null != variationProperties) {
-                        properties.putAll(variationProperties);
-                    }
-
-                }
-            }
+            overrideProperties = getApplicationResourcesOverride(null);
         }
-        Properties overrideProperties = getApplicationResourcesOverride();
+
         if (null != overrideProperties) {
             properties.putAll(overrideProperties);
         }
@@ -169,14 +150,37 @@ public class ApplicationResourceLoader {
         if (null != defaultProperties) {
             properties.putAll(defaultProperties);
         }
-        Set<Map.Entry<String, String>> variationSalience = ContextHelper.getVariationSalienceMap().entrySet();
-        for (Map.Entry<String, String> variationSalienceEntry : variationSalience) {
-            if (!VariationContext.NULL_VARIATION.equals(variationSalienceEntry.getValue())) {
-                Properties variationProperties = getApplicationResourcesManager().getApplicationResourcesVariation(variationSalienceEntry.getValue());
-                if (null != variationProperties) {
-                    properties.putAll(variationProperties);
-                }
+        //Load the variation properties based on Current Variation Context.
+        if (!VariationContext.NULL_VARIATION.equals(VariationContext.getVariation())) {
+            Properties variationProperties = getApplicationResourcesManager().getApplicationResourcesVariation(VariationContext.getVariation());
+            if (null != variationProperties) {
+                properties.putAll(variationProperties);
+            }
 
+        }
+        return properties;
+    }
+
+    /**
+     * This method gets the properties object for locale application resources.
+     *
+     * @return getApplicationResourcesLocale
+     */
+    public Properties getApplicationResourcesLocale(String localeKey) {
+        Properties properties = new Properties();
+        //locale resources
+        if (log.isDebugEnabled()) {
+            log.debug("locale :" + localeKey);
+        }
+        Properties defaultProperties = getApplicationResourcesManager().getApplicationResourcesLocale(localeKey);
+        if (null != defaultProperties) {
+            properties.putAll(defaultProperties);
+        }
+
+        if (!VariationContext.NULL_VARIATION.equals(VariationContext.getVariation())) {
+            Properties variationProperties = getApplicationResourcesManager().getApplicationResourcesLocaleVariation(localeKey, VariationContext.getVariation());
+            if (null != variationProperties) {
+                properties.putAll(variationProperties);
             }
         }
         return properties;
@@ -187,7 +191,7 @@ public class ApplicationResourceLoader {
      *
      * @return ApplicationResourceOverride
      */
-    public Properties getApplicationResourcesOverride() {
+    public Properties getApplicationResourcesOverride(String localeKey) {
         if (log.isDebugEnabled()) {
             log.debug("ApplicationResourceLoader::loadOverrideResources");
         }
@@ -198,7 +202,7 @@ public class ApplicationResourceLoader {
         String applicationResourcesOverrideLocation = null;
         try {
             if (dataDirectory != null && dataDirectory.length() > 0) {
-                applicationResourcesOverrideLocation = dataDirectory + File.separator + PROP_APPLICATION_RESOURCES_OVERRIDE;
+                applicationResourcesOverrideLocation = dataDirectory + File.separator + PROP_APPLICATION_RESOURCES_OVERRIDE+(localeKey!=null?"_"+localeKey:"")+".properties";
                 Config.setProperty(Config.PROP_APPLICATION_RESOURCES_OVERRIDE_LOCATION, applicationResourcesOverrideLocation);
             }
 
