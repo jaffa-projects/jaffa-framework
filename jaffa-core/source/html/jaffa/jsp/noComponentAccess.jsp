@@ -9,6 +9,7 @@
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="/WEB-INF/jaffa-portlet.tld" prefix="Portlet" %>
 <%@page import="org.jaffa.util.MessageHelper"%>
+<%@ page import="org.owasp.encoder.Encode" %>
 <html>
 <head>
     <title><%= MessageHelper.findMessage("title.Jaffa.NoComponentAccess.titleHeader", null) %></title>
@@ -21,6 +22,6 @@
 <%= MessageHelper.findMessage("label.Jaffa.NoComponentAccess.NoAuthorityExecuteMsg", null) %>
 </p>
 <BR>
-<%= MessageHelper.findMessage("label.Jaffa.NoComponentAccess.ComponentName", null) %>: <i><%=request.getAttribute("componentName")%></i>
+<%= MessageHelper.findMessage("label.Jaffa.NoComponentAccess.ComponentName", null) %>: <i><%=Encode.forHtml((String) request.getAttribute("componentName"))%></i>
 </body>
 </html>
