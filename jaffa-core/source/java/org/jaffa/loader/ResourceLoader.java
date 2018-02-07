@@ -123,7 +123,7 @@ public class ResourceLoader<T extends IManager> {
                 }
             }
 
-            if (dataDirectory != null) {
+            if (dataDirectory != null && new File(customConfigPath).exists()) {
                 loadAllCustomConfigurations();
             }
 
