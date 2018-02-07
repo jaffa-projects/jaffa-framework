@@ -249,13 +249,11 @@ public class ApplicationRulesManager implements IManager {
     // Helper methods follow...
 
     private void loadPropertiesResource(InputStream resourceInputStream, Properties properties) throws IOException {
-        if (resourceInputStream != null) {
-            properties.load(resourceInputStream);
-            for (Object property : properties.keySet()) {
-                String systemPropertyValue = System.getProperty((String) property);
-                if (systemPropertyValue != null && !"".equals(systemPropertyValue)) {
-                    properties.setProperty((String) property, systemPropertyValue);
-                }
+        properties.load(resourceInputStream);
+        for (Object property : properties.keySet()) {
+            String systemPropertyValue = System.getProperty((String) property);
+            if (systemPropertyValue != null && !"".equals(systemPropertyValue)) {
+                properties.setProperty((String) property, systemPropertyValue);
             }
         }
     }

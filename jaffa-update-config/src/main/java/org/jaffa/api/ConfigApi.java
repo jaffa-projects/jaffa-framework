@@ -75,7 +75,7 @@ public class ConfigApi implements IConfigApi {
     private static final Logger log = Logger.getLogger(ConfigApi.class);
 
     private Gson gson = new Gson();
-    private File dataDirectory = new File(System.getenv(DATA_DIR_ENV_NAME) +
+    private File dataDirectory = new File(System.getProperty(DATA_DIR_ENV_NAME) +
             File.separator + "config");
 
     /**

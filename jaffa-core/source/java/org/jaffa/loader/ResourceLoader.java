@@ -66,7 +66,7 @@ import java.io.IOException;
 public class ResourceLoader<T extends IManager> {
     private static final String ARCHIVE_EXTENSION = ".zip";
 
-    private String customConfigPath = System.getenv("data.directory") +
+    private String customConfigPath = System.getProperty("data.directory") +
             File.separator + "config";
 
     /**
