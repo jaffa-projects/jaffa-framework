@@ -37,7 +37,7 @@ public class RepositoryJsonServiceTest {
     public void setUp() throws Exception {
         managerRepositoryService = ManagerRepositoryService.getInstance();
         repositoryJsonService = new RepositoryJsonService();
-        testKey = new ContextKey("testKey", "file1.xml", "DEF", "1-PRODUCT");
+        testKey = new ContextKey("testKey", "file1.xml", "NULL", "1-PRODUCT");
         testManager = new SchedulerManager();
         testTask = new Task();
 
@@ -67,9 +67,9 @@ public class RepositoryJsonServiceTest {
     public void getRepositoryNames() throws Exception {
         String actual = repositoryJsonService.getRepositoryNames();
         assertEquals(
-                "[\"TypeInfo\",\"TransactionInfo\",\"Properties\",\"Role\",\"ComponentDefinition\"," +
-                        "\"Task\",\"MessageFilter\",\"MessageInfo\",\"QueueInfo\",\"TopicInfo\",\"SoaEventInfo\"," +
-                        "\"BusinessFunction\",\"JmsConfig\",\"GlobalMenu\"]", actual);
+                "[\"GlobalMenu\",\"BusinessFunction\",\"Task\",\"Properties\",\"SoaEventInfo\"," +
+                    "\"TransactionInfo\",\"TypeInfo\",\"Role\",\"JmsConfig\",\"ComponentDefinition\"," +
+                    "\"QueueInfo\",\"MessageFilter\",\"TopicInfo\",\"MessageInfo\"]", actual);
 
     }
 

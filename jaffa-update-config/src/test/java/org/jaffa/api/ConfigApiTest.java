@@ -28,17 +28,6 @@ package org.jaffa.api;
 import org.junit.Test;
 import org.junit.Before;
 
-import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
-import org.apache.cxf.jaxrs.client.ClientConfiguration;
-import org.apache.cxf.jaxrs.client.WebClient;
-
-
-import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
-
-import java.util.ArrayList;
-import java.util.List;
-
-
 /**
  * API tests for IConfigApi
  */

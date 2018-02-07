@@ -65,9 +65,8 @@ import java.io.IOException;
  */
 public class ResourceLoader<T extends IManager> {
     private static final String ARCHIVE_EXTENSION = ".zip";
-
-    private String customConfigPath = System.getProperty("data.directory") +
-            File.separator + "config";
+    private String dataDirectory = System.getProperty("data.directory");
+    private String customConfigPath = dataDirectory + File.separator + "config";
 
     /**
      * Create a ContextHelper logger
@@ -124,7 +123,9 @@ public class ResourceLoader<T extends IManager> {
                 }
             }
 
-            loadAllCustomConfigurations();
+            if (dataDirectory != null) {
+                loadAllCustomConfigurations();
+            }
 
          } catch (Exception w) {
             throw new RuntimeException(w.getCause());
