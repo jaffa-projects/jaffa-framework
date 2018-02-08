@@ -3,6 +3,7 @@ package org.jaffa.rules;
 import org.apache.log4j.Logger;
 import org.jaffa.rules.commons.AbstractLoader;
 import org.jaffa.rules.commons.AopConstants;
+import org.jaffa.util.ContextHelper;
 import org.jaffa.util.FileHelper;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -223,7 +224,8 @@ class ResourceWrapper{
     public String getAopResourcePath() {
         try {
             return getResource()!=null && getResource().getURL()!=null
-                    && getResource().getURL().toString()!=null ? getResource().getURL().toString().substring(getResource().getURL().toString().indexOf("aop")) : null;
+                    && getResource().getURL().toString()!=null
+                    ? ContextHelper.getContextSalience(getResource().getURI().toString())+ File.separator + getResource().getURL().toString().substring(getResource().getURL().toString().indexOf("aop")) : null;
         } catch (IOException e) {
             logger.error("Error while accessing aop xml",e);
         }

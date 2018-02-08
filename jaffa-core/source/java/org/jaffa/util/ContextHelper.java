@@ -71,8 +71,8 @@ public class ContextHelper {
 
     public static final String META_INF_MANIFEST_FILE = "META-INF/MANIFEST.MF";
 
-    public static Map<String, String> contextSalienceMap = new HashMap<>();
-    public static Map<String, String> variationSalienceMap = new HashMap<>();
+    private static Map<String, String> contextSalienceMap = new HashMap<>();
+    private static Map<String, String> variationSalienceMap = new HashMap<>();
 
     private static Logger logger = Logger.getLogger(ContextHelper.class);
 
@@ -91,14 +91,14 @@ public class ContextHelper {
         } else {
             try {
                 String manifestPath = contextPath.substring(0, contextPath.lastIndexOf("!") + 1) + "/" + META_INF_MANIFEST_FILE;
-                if (!contextSalienceMap.containsKey(manifestPath)) {
+                if (!getContextSalienceMap().containsKey(manifestPath)) {
                     if (logger.isDebugEnabled())
                         logger.debug("manifestPath={}" + manifestPath);
                     String contextSalienceRead = getManifestParameter(manifestPath, true);
                     contextSalience = contextSalienceRead != null ? contextSalienceRead : contextSalience;
-                    contextSalienceMap.put(manifestPath, contextSalience);
+                    getContextSalienceMap().put(manifestPath, contextSalience);
                 } else {
-                    contextSalience = contextSalienceMap.get(manifestPath);
+                    contextSalience = getContextSalienceMap().get(manifestPath);
                 }
             } catch (Exception w) {
                 logger.error("Exception occurred while getting context salience " + w);
@@ -123,14 +123,14 @@ public class ContextHelper {
         } else {
             try {
                 String manifestPath = contextPath.substring(0, contextPath.lastIndexOf("!") + 1) + "/" + META_INF_MANIFEST_FILE;
-                if (!variationSalienceMap.containsKey(manifestPath)) {
+                if (!getVariationSalienceMap().containsKey(manifestPath)) {
                     if (logger.isDebugEnabled())
                         logger.debug("manifestPath={}" + manifestPath);
                     String variationSalienceRead = getManifestParameter(manifestPath, false);
                     variationSalience = variationSalienceRead != null ? variationSalienceRead : variationSalience;
-                    variationSalienceMap.put(manifestPath, variationSalience);
+                    getVariationSalienceMap().put(manifestPath, variationSalience);
                 } else {
-                    variationSalience = variationSalienceMap.get(manifestPath);
+                    variationSalience = getVariationSalienceMap().get(manifestPath);
                 }
             } catch (Exception w) {
                 logger.error("Excpetion occurred while getting variation salience " + w);
@@ -183,5 +183,21 @@ public class ContextHelper {
     public static String getManifestParameter(Manifest manifest, boolean readContextSalience) {
         Attributes attributes = manifest.getMainAttributes();
         return attributes.getValue(readContextSalience ? CONTEXT_SALIENCE : VARIATION_SALIENCE);
+    }
+
+    public static Map<String, String> getContextSalienceMap() {
+        return contextSalienceMap;
+    }
+
+    public static void setContextSalienceMap(Map<String, String> contextSalienceMap) {
+        ContextHelper.contextSalienceMap = contextSalienceMap;
+    }
+
+    public static Map<String, String> getVariationSalienceMap() {
+        return variationSalienceMap;
+    }
+
+    public static void setVariationSalienceMap(Map<String, String> variationSalienceMap) {
+        ContextHelper.variationSalienceMap = variationSalienceMap;
     }
 }
