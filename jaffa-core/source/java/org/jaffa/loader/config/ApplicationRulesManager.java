@@ -62,7 +62,6 @@ import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -141,33 +140,7 @@ public class ApplicationRulesManager implements IManager {
      */
     @Override
     public IRepository<?> getRepositoryByName(String name) {
-        MapRepository<String> propertyRepository = new MapRepository<>("Properties");
-        IRepository requestedRepository = (IRepository) managedRepositories.get(name);
-        Iterator<ContextKey> contextKeyIterator = requestedRepository.getKeys().iterator();
-        while (contextKeyIterator.hasNext()) {
-            ContextKey contextKey = contextKeyIterator.next();
-            Properties contextKeyProperties = (Properties) requestedRepository.getValues().get(0);
-            registerProperties(propertyRepository, contextKey, contextKeyProperties);
-
-        }
-        return propertyRepository;
-    }
-
-    /**
-     * registerProperties() - Registers each property from a provided ContextKey for repository access
-     * @param mapRepository The repository to register the properties to
-     * @param key   The ContextKey corresponding to the property values
-     * @param properties    The Properties object containing property key/value pairs
-     */
-
-    private void registerProperties(MapRepository<String> mapRepository, ContextKey key, Properties properties) {
-        Iterator<String> contextKeyPropertiesIterator = properties.stringPropertyNames().iterator();
-        while (contextKeyPropertiesIterator.hasNext()) {
-            String propertyKey = contextKeyPropertiesIterator.next();
-            String propertyValue = properties.getProperty(propertyKey);
-            mapRepository.register(
-                    new ContextKey(propertyKey, key.getFileName(), key.getVariation(), key.getPrecedence()), propertyValue);
-        }
+        return (IRepository<?>) managedRepositories.get(name);
     }
 
     /**
@@ -207,7 +180,7 @@ public class ApplicationRulesManager implements IManager {
     }
 
     /**
-     * registerResource - Provides a method which loads the contents of the resource file to the application rules
+     * registerResource - Provides a method which submits the contents of the resource file to the application rules
      * repository.
      *
      * @param resource   the object that contains the xml config file.
@@ -220,26 +193,21 @@ public class ApplicationRulesManager implements IManager {
     @Override
     public void registerResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException {
         Properties properties = new Properties();
-        InputStream resourceInputStream = resource.getInputStream();
-        if (resource != null  && resourceInputStream != null) {
-            properties.load(resourceInputStream);
+        if (resource != null && resource.getInputStream() != null) {
+            properties.load(resource.getInputStream());
             for (Object property : properties.keySet()) {
                 String systemPropertyValue = System.getProperty((String) property);
                 if (systemPropertyValue == null || "".equals(systemPropertyValue)) {
-                    systemPropertyValue = replaceTokens(properties, properties.getProperty((String) property));
+                    systemPropertyValue = replaceTokens(properties, properties.getProperty((String)property));
                 }
                 properties.setProperty((String) property, systemPropertyValue);
             }
             if (!properties.isEmpty()) {
-                loadPropertiesResource(resourceInputStream, properties);
-                if (!properties.isEmpty()) {
-                    for (Object property : properties.keySet()) {
-                        ContextKey key = new ContextKey((String) property, resource.getURI().toString(), variation, precedence);
-                        registerProperties(key, properties.getProperty((String) property));
-                    }
+                for(Object property : properties.keySet()){
+                    ContextKey key = new ContextKey((String)property, resource.getURI().toString(), variation, precedence);
+                    registerProperties(key, properties.getProperty((String)property));
                 }
             }
-            resourceInputStream.close();
         }
     }
 
@@ -269,10 +237,6 @@ public class ApplicationRulesManager implements IManager {
         }
     }
 
-    public String getResourceFileName() {
-        return DEFAULT_PROPERTY_FILE_NAME;
-    }
-
     // Helper methods follow...
 
     private void loadPropertiesResource(InputStream resourceInputStream, Properties properties) throws IOException {
@@ -285,13 +249,23 @@ public class ApplicationRulesManager implements IManager {
         }
     }
 
+    /**
+     * getResourceFileName - Provides the file name of the resource file.
+     *
+     * @return
+     */
+    @Override
+    public String getResourceFileName() {
+        return DEFAULT_PROPERTY_FILE_NAME;
+    }
+
     private String replaceTokens(Properties properties, String appRuleValue) {
         //Regular expression to find ${word} tokens in the application rule value
         Pattern pt = Pattern.compile("\\$\\{([^}]*)\\}");
         Matcher matcher = pt.matcher(appRuleValue);
 
         while (matcher.find()) {
-          String tokenValue = getPropertyValue(properties,  matcher.group(1));
+            String tokenValue = getPropertyValue(properties,  matcher.group(1));
             if (tokenValue != null) {
                 appRuleValue = StringHelper.replace(appRuleValue, matcher.group(0), tokenValue);
             }
@@ -307,4 +281,3 @@ public class ApplicationRulesManager implements IManager {
         return systemPropertyValue;
     }
 }
-
