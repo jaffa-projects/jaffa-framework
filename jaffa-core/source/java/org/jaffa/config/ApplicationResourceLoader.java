@@ -148,7 +148,7 @@ public class ApplicationResourceLoader {
     public Properties getApplicationResourcesDefault() {
         Properties properties = new Properties();
         //default resources
-        Properties defaultProperties = getApplicationResourcesManager().getApplicationResources();
+        Properties defaultProperties = getApplicationResourcesManager()!=null ? getApplicationResourcesManager().getApplicationResources() : null;
         if (null != defaultProperties) {
             properties.putAll(defaultProperties);
         }
