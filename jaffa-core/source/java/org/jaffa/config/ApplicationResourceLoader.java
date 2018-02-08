@@ -122,7 +122,9 @@ public class ApplicationResourceLoader {
     public Properties getLocaleProperties(String localeKey) {
         Properties properties = null;
         Properties overrideProperties = null;
-        if (getApplicationResourcesManager().getApplicationResourcesLocaleRepository().query(localeKey) != null) {
+        if (getApplicationResourcesManager()!=null
+                && getApplicationResourcesManager().getApplicationResourcesLocaleRepository()!=null
+                && getApplicationResourcesManager().getApplicationResourcesLocaleRepository().query(localeKey) != null) {
             //locale resources
             properties = getApplicationResourcesLocale(localeKey);
             overrideProperties = getApplicationResourcesOverride(localeKey);
