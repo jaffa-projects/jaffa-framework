@@ -147,7 +147,7 @@ public class ResourceLoader<T extends IManager> {
     }
 
     /**
-     * Loads a single custom configuration .zip file.
+     * Loads a single custom configuration compressed file.
      * @param file
      * @throws IOException
      */
