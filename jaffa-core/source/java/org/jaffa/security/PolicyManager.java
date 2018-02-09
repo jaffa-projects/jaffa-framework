@@ -127,7 +127,7 @@ public class PolicyManager {
     /** Clear the cached policy. Will be reloaded on the next access.
      */
     public static void clearCache() {
-        PolicyCache.clearCache();
+        //PolicyCache.clearCache();
         c_functionRoleIndexByVariation.clear();
         c_componentRoleIndexByVariation.clear();
     }
