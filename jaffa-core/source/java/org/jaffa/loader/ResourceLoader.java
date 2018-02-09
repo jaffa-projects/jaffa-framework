@@ -134,7 +134,7 @@ public class ResourceLoader<T extends IManager> {
 
     /**
      * Loads all custom configurations in the custom config directory.
-     * @throws IOException
+     * @throws IOException  When a file cannot be accessed or operations cannot be performed on it
      */
     public void loadAllCustomConfigurations() throws IOException {
         // Load all zip files from the custom config directory.
@@ -148,8 +148,8 @@ public class ResourceLoader<T extends IManager> {
 
     /**
      * Loads a single custom configuration compressed file.
-     * @param file
-     * @throws IOException
+     * @param file  The compressed configuration archive
+     * @throws IOException  When a file cannot be accessed or operations cannot be performed on it
      */
     public void loadCustomConfiguration(File file) throws IOException {
         File zipRoot = ConfigApiHelper.extractToTemporaryDirectory(file);

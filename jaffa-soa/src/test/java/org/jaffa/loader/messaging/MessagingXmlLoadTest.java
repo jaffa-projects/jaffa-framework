@@ -18,11 +18,10 @@ public class MessagingXmlLoadTest {
     private static AnnotationConfigApplicationContext xmlLoaderConfig =
             new AnnotationConfigApplicationContext(SoaLoaderConfig.class);
 
-    /**
 
     /**
      * Test load the XML config for the scheduler task repository.
-
+     */
     @Test
     public void testXmlLoad(){
         MessagingManager messagingManager = xmlLoaderConfig.getBean(MessagingManager.class);
@@ -47,7 +46,7 @@ public class MessagingXmlLoadTest {
 
     /**
      * Verify that the MessagingManager can get all queue names registered in the repository.
-
+     */
     @Test
     public void testGetQueueNames() {
         MessagingManager messagingManager = xmlLoaderConfig.getBean(MessagingManager.class);
@@ -63,7 +62,7 @@ public class MessagingXmlLoadTest {
 
     /**
      * Verify that the MessagingManager can get all topic names registered in the repository.
-
+     */
     @Test
     public void testGetTopicNames() {
         MessagingManager messagingManager = xmlLoaderConfig.getBean(MessagingManager.class);
@@ -77,7 +76,7 @@ public class MessagingXmlLoadTest {
 
     /**
      * Tests the ability of this IManager to retrieve a repository when given its String name
-
+     */
     @Test
     public void testGetRepositoryByName() throws Exception {
         MessagingManager messagingManager = xmlLoaderConfig.getBean(MessagingManager.class);
@@ -88,7 +87,7 @@ public class MessagingXmlLoadTest {
 
     /**
      * Test the retrieval of the list of repositories managed by this class
-
+     */
     @Test
     public void testGetRepositoryNames() {
         MessagingManager messagingManager = xmlLoaderConfig.getBean(MessagingManager.class);
@@ -96,5 +95,4 @@ public class MessagingXmlLoadTest {
             assertEquals(repositoryName, messagingManager.getRepositoryByName((String) repositoryName).getName());
         }
     }
-    */
 }

@@ -55,7 +55,7 @@ import org.jaffa.loader.IManager;
 import org.jaffa.loader.IRepository;
 import org.jaffa.loader.MapRepository;
 import org.jaffa.modules.messaging.services.configdomain.*;
-import org.jaffa.transaction.services.configdomain.Config;
+import org.jaffa.modules.messaging.services.configdomain.Config;
 import org.jaffa.util.JAXBHelper;
 import org.springframework.core.io.Resource;
 import org.xml.sax.SAXException;
@@ -141,7 +141,7 @@ public class MessagingManager implements IManager {
         Config config = JAXBHelper.unmarshalConfigFile(Config.class, resource,
                 CONFIGURATION_SCHEMA_FILE);
 
-        List<Object> messageObjects = config.getTransactionOrType();
+        List<Object> messageObjects = config.getMessageOrQueueOrTopic();
 
         if (messageObjects != null) {
             for (final Object o : messageObjects) {
@@ -187,7 +187,7 @@ public class MessagingManager implements IManager {
         Config config = JAXBHelper.unmarshalConfigFile(Config.class, resource,
                 CONFIGURATION_SCHEMA_FILE);
 
-        List<Object> messageObjects = config.getTransactionOrType();
+        List<Object> messageObjects = config.getMessageOrQueueOrTopic();
 
         if (messageObjects != null) {
             for (final Object o : messageObjects) {

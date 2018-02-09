@@ -52,73 +52,74 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * FileContentsHelper - A custom object for storing the contents and context-salience of a custom configuration compresssed file
+ * FileContentsHelper - A custom object for storing the contents and context-salience of a
+ * custom configuration archive file.
+ * @author Matthew Wayles
+ * @version 1.0
  */
 
 public class FileContentsHelper {
+  // CREATE JSON PROPERTIES
+  private String name = null;
+  private String contextSalience = null;
+  private List<String> contents = null;
 
-    ///////////////////////////////////////////////////////////////
-    //// CREATE JSON PROPERTIES ///////////////////////////////////
-    ///////////////////////////////////////////////////////////////
-    private String name = null;
-    private String contextSalience = null;
-    private List<String> contents = null;
+  // CONFIGURE contextSalience PROPERTY
+  public FileContentsHelper contextSalience(String contextSalience) {
+    this.contextSalience = contextSalience;
+    return this;
+  }
+  /**
+   * Retrieve the value from the contextSalience variable
+   * @return contextSalience  The contextSalience retrieved
+   **/
+  public String getContextSalience() {
+    return contextSalience;
+  }
 
+  /**
+   * Set the context-salience value
+   * @param contextSalience The contextSalience to set
+   */
+  public void setContextSalience(String contextSalience) {
 
-    ///////////////////////////////////////////////////////////////
-    //// CONFIGURE contextSalience PROPERTY ///////////////////////
-    ///////////////////////////////////////////////////////////////
-    public FileContentsHelper contextSalience(String contextSalience) {
-        this.contextSalience = contextSalience;
-        return this;
-    }
-    /**
-     * Retrieve the value from the contextSalience variable
-     * @return contextSalience  The contextSalience retrieved
-     **/
-    public String getContextSalience() {
-        return contextSalience;
-    }
-
-    public void setContextSalience(String contextSalience) {
-
-        this.contextSalience = contextSalience;
-    }
+    this.contextSalience = contextSalience;
+  }
 
 
-    ///////////////////////////////////////////////////////////////
-    //// CONFIGURE name PROPERTY //////////////////////////////////
-    ///////////////////////////////////////////////////////////////
-    public FileContentsHelper name(String name) {
-        this.name = name;
-        return this;
+  // CONFIGURE name PROPERTY
+  public FileContentsHelper name(String name) {
+    this.name = name;
+    return this;
   }
 
   /**
    * Retrieve the value from the name variable
    * @return name The name retrieved
-  **/
+   **/
   public String getName() {
     return name;
   }
 
+  /**
+   * Set the name value
+   * @param name The name to set
+   */
   public void setName(String name) {
     this.name = name;
   }
 
 
-    ///////////////////////////////////////////////////////////////
-    //// CONFIGURE contents PROPERTY //////////////////////////////
-    ///////////////////////////////////////////////////////////////
-    public FileContentsHelper contents(List<String> contents) {
-        this.contents = contents;
-        return this;}
+  // CONFIGURE contents PROPERTY
+  public FileContentsHelper contents(List<String> contents) {
+    this.contents = contents;
+    return this;}
 
-    /**
-     * Add a configuration file found in compressed file to contents list
-     * @param contentsItem  The configuration file found in the custom compressed file
-     * @return  This instance with an updated contents list
-     */
+  /**
+   * Add a configuration file found in compressed file to contents list
+   * @param contentsItem  The configuration file found in the custom compressed file
+   * @return  This instance with an updated contents list
+   */
   public FileContentsHelper addContentsItem(String contentsItem) {
     if (this.contents == null) {
       this.contents = new ArrayList<>();
@@ -127,33 +128,31 @@ public class FileContentsHelper {
     return this;
   }
 
-   /**
+  /**
    * Retrieve the contents of the custom compressed file
    * @return contents   The contents of the custom compressed file
-  **/
+   **/
   public List<String> getContents() {
     return contents;
   }
 
-    /**
-     * Create a String list to hold the custom compressed contents
-     * @param contents  A List<String> object
-     */
+  /**
+   * Create a String list to hold the custom compressed contents
+   * @param contents  A List<String> object
+   */
   public void setContents(List<String> contents) {
     this.contents = contents;
   }
 
 
-    ///////////////////////////////////////////////////////////////
-    //// HELPER METHODS  /////////// //////////////////////////////
-    ///////////////////////////////////////////////////////////////
 
-    /**
-     * Custom swagger-generated equals comparator
-     * @param o The operand to compare
-     * @return  Boolean value indicated equality
-     */
-    @Override
+  // HELPER METHODS
+  /**
+   * Custom swagger-generated equals comparator
+   * @param o The operand to compare
+   * @return  Boolean value indicated equality
+   */
+  @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;
@@ -166,26 +165,26 @@ public class FileContentsHelper {
         Objects.equals(this.contents, fileContents.contents);
   }
 
-    /**
-     * Custom swagger-generated hash translator
-     * @return  The hashcode value of the name, contents objects
-     */
+  /**
+   * Custom swagger-generated hash translator
+   * @return  The hashcode value of the name, contents objects
+   */
   @Override
   public int hashCode() {
     return Objects.hash(name, contents);
   }
 
-    /**
-     * Custom swagger-generated toString translator
-     * @return  A string representation of the object
-     */
+  /**
+   * Custom swagger-generated toString translator
+   * @return  A string representation of the object
+   */
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class FileContentsHelper {\n");
 
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
-      sb.append("    context-salience: ").append(toIndentedString(contextSalience)).append("\n");
+    sb.append("    context-salience: ").append(toIndentedString(contextSalience)).append("\n");
     sb.append("    contents: ").append(toIndentedString(contents)).append("\n");
     sb.append("}");
     return sb.toString();

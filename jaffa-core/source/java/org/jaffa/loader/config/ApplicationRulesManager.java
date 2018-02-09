@@ -233,8 +233,12 @@ public class ApplicationRulesManager implements IManager {
         }
     }
 
-    // Helper methods follow...
-
+  /**
+   * loadPropertiesResouce - Load the properties from provided resource file
+   * @param resourceInputStream The input data from the provided resource file
+   * @param properties  The properties object to inject properties into
+   * @throws IOException    When a file cannot be accessed or operations cannot be performed on it
+   */
     private void loadPropertiesResource(InputStream resourceInputStream, Properties properties) throws IOException {
         properties.load(resourceInputStream);
         for (Object property : properties.keySet()) {
@@ -248,7 +252,7 @@ public class ApplicationRulesManager implements IManager {
     /**
      * getResourceFileName - Provides the file name of the resource file.
      *
-     * @return
+     * @return  The resource file name
      */
     @Override
     public String getResourceFileName() {
@@ -269,6 +273,13 @@ public class ApplicationRulesManager implements IManager {
         return appRuleValue;
     }
 
+  /**
+   * getPropertyValue - The value of a property in a Properties object
+   * @param properties  The Properties object to search
+   * @param key The key corresponding to the queried value
+   * @return    The system property value found in a properties object, or null if the
+   * property does not exist.
+   */
     private String getPropertyValue(Properties properties, String key){
         String systemPropertyValue = System.getProperty(key);
         if (systemPropertyValue == null || "".equals(systemPropertyValue)) {

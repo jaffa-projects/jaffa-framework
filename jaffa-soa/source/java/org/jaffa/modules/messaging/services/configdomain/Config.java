@@ -48,87 +48,86 @@
  */
 
 
-package org.jaffa.api;
+package org.jaffa.modules.messaging.services.configdomain;
 
-import org.junit.Test;
-import org.junit.Before;
+import java.util.ArrayList;
+import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElements;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 
 /**
- * API tests for IConfigApi - These tests still need to be written and comprehensively tested. This class is
- * simply a skeleton to populate with tests when we are tasked to do so.
+ * <p>Java class for anonymous complex type.
+ *
+ * <p>The following schema fragment specifies the expected content contained within this class.
+ *
+ * <pre>
+ * &lt;complexType&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;choice maxOccurs="unbounded" minOccurs="0"&gt;
+ *           &lt;element name="message" type="{}messageInfo"/&gt;
+ *           &lt;element name="queue" type="{}queueInfo"/&gt;
+ *           &lt;element name="topic" type="{}topicInfo"/&gt;
+ *           &lt;element name="message-filter" type="{}message-filter"/&gt;
+ *         &lt;/choice&gt;
+ *       &lt;/sequence&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
+ * </pre>
+ *
+ *
  */
-public class ConfigApiTest {
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "", propOrder = {
+    "messageOrQueueOrTopic"
+})
+@XmlRootElement(name = "config")
+public class Config {
 
+  @XmlElements({
+      @XmlElement(name = "queue", type = QueueInfo.class),
+      @XmlElement(name = "message-filter", type = MessageFilter.class),
+      @XmlElement(name = "message", type = MessageInfo.class),
+      @XmlElement(name = "topic", type = TopicInfo.class)
+  })
+  protected List<Object> messageOrQueueOrTopic;
 
-    private IConfigApi api;
-    
-    @Before
-    public void setup() {
+  /**
+   * Gets the value of the messageOrQueueOrTopic property.
+   *
+   * <p>
+   * This accessor method returns a reference to the live list,
+   * not a snapshot. Therefore any modification you make to the
+   * returned list will be present inside the JAXB object.
+   * This is why there is not a <CODE>set</CODE> method for the messageOrQueueOrTopic property.
+   *
+   * <p>
+   * For example, to add a new item, do as follows:
+   * <pre>
+   *    getMessageOrQueueOrTopic().add(newItem);
+   * </pre>
+   *
+   *
+   * <p>
+   * Objects of the following type(s) are allowed in the list
+   * {@link QueueInfo }
+   * {@link MessageFilter }
+   * {@link MessageInfo }
+   * {@link TopicInfo }
+   *
+   *
+   */
+  public List<Object> getMessageOrQueueOrTopic() {
+    if (messageOrQueueOrTopic == null) {
+      messageOrQueueOrTopic = new ArrayList<Object>();
     }
-
-    
-    /**
-     * Deletes a zip file and rolls back its configurations
-     *
-     * Removes configurations contained within a ZIP file and deletes the file entirely.
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void deleteConfigZipFileTest() {
-        //POST random configs
-        //DELETE random configs
-        //ASSERT configs aren't there
-        //ASSERT ZipFile is deleted from repository's JSON response
-    }
-    
-    /**
-     * Retrieve a specific configuration ZIP file
-     *
-     * Retrieve and download a specific configuration ZIP file from the $DATA_DIRECTORY location.
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void getConfigZipFileTest() {
-        //GET zip file
-        //ASSERT file downloaded
-        
-        
-    }
-    
-    /**
-     * Retrieve the list of ZIP files that contain configurations within a directory
-     *
-     * This service endpoint scans the filesystem at the $DATA_DIRECTORY location and provides a list of all ZIP files contained within that location. These KIP files will store configuration XML files that will load and overwrite configuration properties depending on Context and Variation salience.
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void getConfigZipFileListTest() {
-        //GET zip file list from data.directory
-        //ASSERT that the list contains the expected items
-        
-        
-    }
-    
-    /**
-     * Upload a new configuration ZIP file.
-     *
-     * Creates a ZIP file of configurations and populates GOLDesp repositories with the new values (depending on salience).
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void putConfigZipFileTest() {
-        //POST a configuration file to a repository
-        //ASSERT that the configurations are included in repository's JSON response
-        
-        
-    }
-    
+    return this.messageOrQueueOrTopic;
+  }
 }

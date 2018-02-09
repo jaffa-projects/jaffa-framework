@@ -15,7 +15,7 @@
     <bean id="repositoryUpdateServiceBean"
           class="org.jaffa.api.ConfigApi"/>
 
-    <jaxrs:server address="/prit">
+    <jaxrs:server address="/git">
         <jaxrs:providers>
             <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
         </jaxrs:providers>

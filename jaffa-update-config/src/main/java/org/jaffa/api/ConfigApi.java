@@ -66,12 +66,14 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * ConfigAPI - A controller for REST service endpoints that provide the ability to dynamically manipulate
  * GOLD configurations and properties through the use of custom compressed files.
+ * @author Matthew Wayles
+ * @version 1.0
  */
 @RestController
 public class ConfigApi implements IConfigApi {
-    private static final String DATA_DIR_ENV_NAME = "data.directory";
     private static final String FILE_EXTENSION = ".zip";
     private static final int BYTE_ARRAY_INIT_LENGTH = 17;
+    private static final String DATA_DIR_ENV_NAME = "data.directory";
     private static final Logger log = Logger.getLogger(ConfigApi.class);
 
     private Gson gson = new Gson();

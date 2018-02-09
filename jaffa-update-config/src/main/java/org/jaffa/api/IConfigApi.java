@@ -55,6 +55,13 @@ import javax.ws.rs.core.Response;
 
 import java.io.IOException;
 
+
+/**
+ * IConfigApi - Apache CXF RESTful service to provide dynamic repository updates from compressed resource archives
+ * in a specific location on the file system. Uses swagger annotations.
+ * @author Matthew Wayles
+ * @version 1.0
+ */
 @Path("/")
 @Api(value = "/", description = "Product RESTful Implementation Toolkit")
 public interface IConfigApi {

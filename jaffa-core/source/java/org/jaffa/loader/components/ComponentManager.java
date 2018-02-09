@@ -226,11 +226,9 @@ public class ComponentManager implements IManager {
         this.componentRepository = repository;
     }
 
-    // Helper methods follow.
-
     /**
      * Create a component definition from a given component
-     * @param The component to create a definition of
+     * @param component The component to create a definition of
      * @return  The component definition
      * @throws IOException  If the component can not be accessed or operations can not be performed on it
      */
