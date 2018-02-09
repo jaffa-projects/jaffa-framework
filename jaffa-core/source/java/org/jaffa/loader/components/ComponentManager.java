@@ -229,10 +229,10 @@ public class ComponentManager implements IManager {
     // Helper methods follow.
 
     /**
-     * Create a component
-     * @param component
-     * @return
-     * @throws IOException
+     * Create a component definition from a given component
+     * @param The component to create a definition of
+     * @return  The component definition
+     * @throws IOException  If the component can not be accessed or operations can not be performed on it
      */
     private ComponentDefinition createComponentDefinition(Component component) throws IOException {
         ComponentDefinition definition;
