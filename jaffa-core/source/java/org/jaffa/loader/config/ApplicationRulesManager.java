@@ -193,23 +193,19 @@ public class ApplicationRulesManager implements IManager {
     @Override
     public void registerResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException {
         Properties properties = new Properties();
-        if (resource != null && resource.getInputStream() != null) {
-            properties.load(resource.getInputStream());
-            for (Object property : properties.keySet()) {
-                String systemPropertyValue = System.getProperty((String) property);
-                if (systemPropertyValue == null || "".equals(systemPropertyValue)) {
-                    systemPropertyValue = replaceTokens(properties, properties.getProperty((String)property));
-                }
-                properties.setProperty((String) property, systemPropertyValue);
-            }
+        InputStream resourceInputStream = resource.getInputStream();
+        if (resource != null && resourceInputStream != null) {
+            loadPropertiesResource(resourceInputStream, properties);
             if (!properties.isEmpty()) {
                 for(Object property : properties.keySet()){
                     ContextKey key = new ContextKey((String)property, resource.getURI().toString(), variation, precedence);
                     registerProperties(key, properties.getProperty((String)property));
                 }
             }
+            resourceInputStream.close();
         }
     }
+
 
     /**
      * unregisterResource - Provides a method which unregisters a given properties resource.
