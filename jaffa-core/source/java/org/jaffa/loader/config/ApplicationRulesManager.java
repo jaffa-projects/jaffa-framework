@@ -261,7 +261,7 @@ public class ApplicationRulesManager implements IManager {
         Matcher matcher = pt.matcher(appRuleValue);
 
         while (matcher.find()) {
-            String tokenValue = getPropertyValue(properties,  matcher.group(1));
+          String tokenValue = getPropertyValue(properties,  matcher.group(1));
             if (tokenValue != null) {
                 appRuleValue = StringHelper.replace(appRuleValue, matcher.group(0), tokenValue);
             }
