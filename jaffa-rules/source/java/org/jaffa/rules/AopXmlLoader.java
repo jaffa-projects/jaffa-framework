@@ -78,7 +78,7 @@ public class AopXmlLoader {
      * @param path The path to search for aop xml files
      * @throws IOException When a file or resource cannot be directly loaded.
      */
-    private void processAopPath(String path) throws IOException {
+    public void processAopPath(String path) throws IOException {
         // If it is a file or folder, don't bother with the matcher
         File resourcePath = new File(path);
 
