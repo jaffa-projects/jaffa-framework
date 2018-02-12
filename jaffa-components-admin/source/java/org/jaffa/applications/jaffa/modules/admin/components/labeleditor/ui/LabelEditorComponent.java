@@ -363,7 +363,7 @@ public class LabelEditorComponent extends Component {
      */
     private void clearCacheAndRefreshMenu(HttpServletRequest request){
         // Clear the cache
-        NavCache.getInstance().clearCache();
+        //NavCache.getInstance().clearCache();
         //get the HttpSession from User Session
         HttpSession session = (HttpSession)getUserSession().getHttpSession();
         //refresh the Menu for current session

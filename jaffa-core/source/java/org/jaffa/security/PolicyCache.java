@@ -78,14 +78,14 @@ public class PolicyCache {
     private static RoleManager roleManager;
 
     /**
-     * Returns the list Role domain objects. This are the objects created from the XML file. This is a cached copy and should not be modified.
+     * Returns the list Role domain objects. These are the objects created from the XML file. This is a cached copy and should not be modified.
      * Changing this will not effect the contents of the loaded policy, as the
      * policy will load on application startup.
      *
      * @return The root Roles domain object for the current policy
      */
     public static Roles getRoles() {
-        RoleManager roleManager = getInstance().getRoleManager();
+        RoleManager roleManager = getRoleManager();
         if (null != roleManager)
             return roleManager.getRoles();
         return new Roles();
@@ -97,12 +97,13 @@ public class PolicyCache {
      * @return The returned Map is keyed on Role name (String), and each entry is a List of business function names.
      */
     static Map<String, List<String>> getRoleMap() {
-        return getInstance().m_roleMap;
+        return createPolicyCacheInstance().m_roleMap;
     }
 
     /**
      * Clear the cached policy. Will be reloaded on the next access.
      */
+    @Deprecated
     static void clearCache() {
         c_policyCacheByVariation.clear();
     }
@@ -112,6 +113,7 @@ public class PolicyCache {
      *
      * @return An instance of the PolicyCache.
      */
+    @Deprecated
     private static PolicyCache getInstance() {
         String variation = VariationContext.getVariation();
         PolicyCache policyCache = c_policyCacheByVariation.get(variation);
