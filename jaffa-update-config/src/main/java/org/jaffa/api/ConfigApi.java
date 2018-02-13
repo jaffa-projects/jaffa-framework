@@ -49,7 +49,6 @@
 package org.jaffa.api;
 
 import com.google.gson.Gson;
-import io.swagger.annotations.ApiParam;
 
 import javax.ws.rs.core.Response;
 import java.io.*;
@@ -118,8 +117,7 @@ public class ConfigApi implements IConfigApi {
      * @param compressedFile The compressed file to download
      * @return The compressed file as an attachment to download
      */
-    public Response getCustomConfigFile(@ApiParam(value = "Compressed File to be downloaded", required = true)
-                                             String compressedFile) {
+    public Response getCustomConfigFile(String compressedFile) {
         compressedFile = ConfigApiHelper.verifyExtension(compressedFile, FILE_EXTENSION);
         File responseFile = new File(this.dataDirectory  + File.separator + compressedFile);
 
@@ -172,8 +170,7 @@ public class ConfigApi implements IConfigApi {
      * @return HTTP Response indicating success or failure
      * @throws IOException When the endpoint has difficulty accessing or uploading the file
      */
-    public Response postCustomConfigFile(@ApiParam(value = "Name of uploaded compressed file", required = true)
-                                              String compressedFile, byte[] payload) throws IOException {
+    public Response postCustomConfigFile(String compressedFile, byte[] payload) throws IOException {
         String fileToPost = ConfigApiHelper.verifyExtension(compressedFile, FILE_EXTENSION);
         File filePath = new File(this.dataDirectory + File.separator + fileToPost);
 

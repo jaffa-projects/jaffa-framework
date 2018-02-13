@@ -48,8 +48,6 @@
  */
 package org.jaffa.api;
 
-import io.swagger.annotations.*;
-
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
@@ -63,7 +61,6 @@ import java.io.IOException;
  * @version 1.0
  */
 @Path("/")
-@Api(value = "/", description = "Product RESTful Implementation Toolkit")
 public interface IConfigApi {
 
     /**
@@ -76,12 +73,6 @@ public interface IConfigApi {
     @DELETE
     @Path("/config/{zipFile}")
     @Produces({"application/x-www-form-urlencoded"})
-    @ApiOperation(value = "Deletes a zip file and rolls back its configurations", tags = {"config",})
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful operation"),
-            @ApiResponse(code = 400, message = "Bad request. Check $DATA_DIRECTORY variable"),
-            @ApiResponse(code = 404, message = "Service not found"),
-            @ApiResponse(code = 405, message = "Validation exception")})
     Response deleteCustomConfigFile(@PathParam("zipFile") String zipFile) throws IOException;
 
     /**
@@ -93,12 +84,6 @@ public interface IConfigApi {
     @GET
     @Path("/config/{zipFile}")
     @Produces({"application/zip"})
-    @ApiOperation(value = "Retrieve a specific configuration ZIP file", tags = {"config",})
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful operation"),
-            @ApiResponse(code = 400, message = "Bad request. Check $DATA_DIRECTORY variable"),
-            @ApiResponse(code = 404, message = "Service not found"),
-            @ApiResponse(code = 405, message = "Validation exception")})
     Response getCustomConfigFile(@PathParam("zipFile") String zipFile);
 
     /**
@@ -110,13 +95,6 @@ public interface IConfigApi {
     @Path("/config")
     @Consumes({"application/x-www-form-urlencoded"})
     @Produces({"application/json"})
-    @ApiOperation(value = "Retrieve the list of ZIP files that contain configurations within a directory", tags = {"config",})
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful operation"),
-            @ApiResponse(code = 204, message = "No Content"),
-            @ApiResponse(code = 400, message = "Bad request. Check $DATA_DIRECTORY variable"),
-            @ApiResponse(code = 404, message = "Service not found"),
-            @ApiResponse(code = 405, message = "Invalid input")})
     Response getCustomConfigFileList() throws IOException;
 
     /**
@@ -130,12 +108,6 @@ public interface IConfigApi {
     @Path("/config/{zipFile}")
     @Consumes({"application/octet-stream", "application/zip" })
     @Produces({"application/json"})
-    @ApiOperation(value = "Upload a new configuration ZIP file.", tags = {"config"})
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful operation"),
-            @ApiResponse(code = 400, message = "Bad request. Check $DATA_DIRECTORY variable"),
-            @ApiResponse(code = 404, message = "Service not found"),
-            @ApiResponse(code = 405, message = "Validation exception")})
     Response postCustomConfigFile(@PathParam("zipFile") String zipFile, byte[] payload) throws IOException;
 }
 
