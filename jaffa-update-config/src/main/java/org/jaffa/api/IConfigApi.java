@@ -113,6 +113,7 @@ public interface IConfigApi {
     @ApiOperation(value = "Retrieve the list of ZIP files that contain configurations within a directory", tags = {"config",})
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successful operation"),
+            @ApiResponse(code = 204, message = "No Content"),
             @ApiResponse(code = 400, message = "Bad request. Check $DATA_DIRECTORY variable"),
             @ApiResponse(code = 404, message = "Service not found"),
             @ApiResponse(code = 405, message = "Invalid input")})
