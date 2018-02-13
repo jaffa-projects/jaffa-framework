@@ -47,58 +47,88 @@
  * ====================================================================
  */
 
-package org.jaffa.loader;
 
-import org.springframework.core.io.Resource;
-import org.xml.sax.SAXException;
+package org.jaffa.api;
 
-import javax.xml.bind.JAXBException;
-import java.io.IOException;
-import java.util.Set;
+import org.junit.Test;
+import org.junit.Before;
 
 /**
- * Interface for xml managers to registerXml and getResourceFileName.
+ * API tests for IConfigApi - These tests still need to be written and comprehensively tested. This class is
+ * simply a skeleton to populate with tests when we are tasked to do so.
  */
-public interface IManager {
+public class ConfigApiTest {
 
-    /**
-     * Registers the XML config file to repository.
-     * @param resource the object that contains the xml config file.
-     * @param precedence associated with the module based on its definition in manifest
-     * @param variation associated with the module based on its definition in manifest
-     * @throws JAXBException if xml file is not valid.
-     * @throws SAXException if xml file is not valid.
-     * @throws IOException if resource does not found.
-     */
-    void registerResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException;
 
-    /**
-     * Unregisters the XML config file to repository.
-     * @param resource the object that contains the xml config file.
-     * @param precedence associated with the module based on its definition in manifest
-     * @param variation associated with the module based on its definition in manifest
-     * @throws JAXBException if xml file is not valid.
-     * @throws SAXException if xml file is not valid.
-     * @throws IOException if resource does not found.
-     */
-    void unregisterResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException;
+    private IConfigApi api;
+    
+    @Before
+    public void setup() {
+    }
 
+    
     /**
-     * Gets the name of xml config file.
-     * @return xml config file name
+     * Deletes a zip file and rolls back its configurations
+     *
+     * Removes configurations contained within a ZIP file and deletes the file entirely.
+     *
+     * @throws ApiException
+     *          if the Api call fails
      */
-    String getResourceFileName();
-
+    @Test
+    public void deleteConfigZipFileTest() {
+        //POST random configs
+        //DELETE random configs
+        //ASSERT configs aren't there
+        //ASSERT ZipFile is deleted from repository's JSON response
+    }
+    
     /**
-     * Gets a list of all of the repository names managed by the application
-     * @return  A list of managed repositories
+     * Retrieve a specific configuration ZIP file
+     *
+     * Retrieve and download a specific configuration ZIP file from the $DATA_DIRECTORY location.
+     *
+     * @throws ApiException
+     *          if the Api call fails
      */
-    Set getRepositoryNames();
-
+    @Test
+    public void getConfigZipFileTest() {
+        //GET zip file
+        //ASSERT file downloaded
+        
+        
+    }
+    
     /**
-     * Gets the data within a specified repository
-     * @param name The repository to retrieve data from
-     * @return The repository data, or null if the repository does not exist
+     * Retrieve the list of ZIP files that contain configurations within a directory
+     *
+     * This service endpoint scans the filesystem at the $DATA_DIRECTORY location and provides a list of all ZIP files contained within that location. These KIP files will store configuration XML files that will load and overwrite configuration properties depending on Context and Variation salience.
+     *
+     * @throws ApiException
+     *          if the Api call fails
      */
-    IRepository getRepositoryByName(String name);
+    @Test
+    public void getConfigZipFileListTest() {
+        //GET zip file list from data.directory
+        //ASSERT that the list contains the expected items
+        
+        
+    }
+    
+    /**
+     * Upload a new configuration ZIP file.
+     *
+     * Creates a ZIP file of configurations and populates GOLDesp repositories with the new values (depending on salience).
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void putConfigZipFileTest() {
+        //POST a configuration file to a repository
+        //ASSERT that the configurations are included in repository's JSON response
+        
+        
+    }
+    
 }

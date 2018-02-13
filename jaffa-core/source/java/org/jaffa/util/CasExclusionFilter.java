@@ -46,59 +46,51 @@
  * SUCH DAMAGE.
  * ====================================================================
  */
+package org.jaffa.util;
 
-package org.jaffa.loader;
+import org.apache.commons.lang.StringUtils;
 
-import org.springframework.core.io.Resource;
-import org.xml.sax.SAXException;
-
-import javax.xml.bind.JAXBException;
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Set;
 
 /**
- * Interface for xml managers to registerXml and getResourceFileName.
+ * Top-level Central Authentication Service (CAS) web.xml filter that directs the HTTP filter chain to skip
+ * all other CAS filters if a certain endpoint is reached. This allows portions of a CAS-protected webapp to
+ * bypass CAS authentication but retain security through Tomcat Basic Authentication
+ * @author Matthew Wayles
+ * @version 1.0
  */
-public interface IManager {
+public class CasExclusionFilter implements Filter{
 
-    /**
-     * Registers the XML config file to repository.
-     * @param resource the object that contains the xml config file.
-     * @param precedence associated with the module based on its definition in manifest
-     * @param variation associated with the module based on its definition in manifest
-     * @throws JAXBException if xml file is not valid.
-     * @throws SAXException if xml file is not valid.
-     * @throws IOException if resource does not found.
-     */
-    void registerResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException;
+  /**
+   * Initialize the filter
+   * @param request The HTTP request for endpoint access
+   * @throws ServletException General exception thrown by a servlet when it encounters difficulty
+   */
+    public void init(FilterConfig request) throws ServletException {
 
-    /**
-     * Unregisters the XML config file to repository.
-     * @param resource the object that contains the xml config file.
-     * @param precedence associated with the module based on its definition in manifest
-     * @param variation associated with the module based on its definition in manifest
-     * @throws JAXBException if xml file is not valid.
-     * @throws SAXException if xml file is not valid.
-     * @throws IOException if resource does not found.
-     */
-    void unregisterResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException;
+    }
 
-    /**
-     * Gets the name of xml config file.
-     * @return xml config file name
-     */
-    String getResourceFileName();
+  /**
+   * Implementation of filter operations when it is triggered. This filter skips all subseqwuent filters unless they
+   * are configured with the FORWARD dispatcher
+   * @param request The HTTP request for endpoint access
+   * @param response    The HTTP response supplied by the server
+   * @param chain   The linear chain of filters
+   * @throws IOException    When a filter, endpoint, or server component cannot be accesses
+   * @throws ServletException   General exception thrown by a servlet when it encounters difficulty
+   */
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        request.getRequestDispatcher(((HttpServletRequest) request).getServletPath() +
+                StringUtils.defaultString(((HttpServletRequest)request).getPathInfo()) ).forward(request, response);
+    }
 
-    /**
-     * Gets a list of all of the repository names managed by the application
-     * @return  A list of managed repositories
-     */
-    Set getRepositoryNames();
+  /**
+   * Remove the filter from the filter chain
+   */
+  public void destroy() {
 
-    /**
-     * Gets the data within a specified repository
-     * @param name The repository to retrieve data from
-     * @return The repository data, or null if the repository does not exist
-     */
-    IRepository getRepositoryByName(String name);
+    }
+
 }

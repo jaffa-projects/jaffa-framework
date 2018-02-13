@@ -123,16 +123,38 @@ public class ComponentManager implements IManager {
 
         if (componentList != null) {
             for (final Component component : componentList) {
-                ComponentDefinition definition;
-                try {
-                    definition = new ComponentDefinition(component);
-                } catch (ComponentDefinitionException e) {
-                    // wrap the thrown exception in an IOException to conform
-                    // to the interface
-                    throw new IOException(e.getMessage(), e);
-                }
+                ComponentDefinition definition = createComponentDefinition(component);
                 ContextKey contextKey = new ContextKey(definition.getComponentName(), resource.getURI().toString(), variation, context);
                 registerComponentDefinition(contextKey, definition);
+            }
+        }
+    }
+
+    /**
+     * Unregister a given component resource.
+     * @param resource the object that contains the xml config file.
+     * @param context key with which config file to be registered.
+     * @param variation with which config file to be registered.
+     * @throws JAXBException
+     * @throws SAXException
+     * @throws IOException for file opening or reading errors, or when an
+     * attempt to create a ComponentDefinition throws a
+     * ComponentDefinitionException
+     */
+    @Override
+    public void unregisterResource(Resource resource, String context, String variation)
+            throws JAXBException, SAXException, IOException {
+
+        Components components = JAXBHelper.unmarshalConfigFile(Components.class,
+                resource, COMPONENT_XSD);
+
+        List<Component> componentList = components.getComponent();
+
+        if (componentList != null) {
+            for (final Component component : componentList) {
+                ComponentDefinition definition = createComponentDefinition(component);
+                ContextKey contextKey = new ContextKey(definition.getComponentName(), resource.getURI().toString(), variation, context);
+                unregisterComponentDefinition(contextKey);
             }
         }
     }
@@ -202,6 +224,24 @@ public class ComponentManager implements IManager {
     public void setComponentRepository(
             IRepository<ComponentDefinition> repository) {
         this.componentRepository = repository;
+    }
+
+    /**
+     * Create a component definition from a given component
+     * @param component The component to create a definition of
+     * @return  The component definition
+     * @throws IOException  If the component can not be accessed or operations can not be performed on it
+     */
+    private ComponentDefinition createComponentDefinition(Component component) throws IOException {
+        ComponentDefinition definition;
+        try {
+            definition = new ComponentDefinition(component);
+        } catch (ComponentDefinitionException e) {
+            // wrap the thrown exception in an IOException to conform
+            // to the interface
+            throw new IOException(e.getMessage(), e);
+        }
+        return definition;
     }
 
 }

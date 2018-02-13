@@ -268,6 +268,52 @@ public class ApplicationResourcesManager implements IManager {
         }
     }
 
+    /**
+     * unregisterResource - Provides a method which removes the contents of the resource file to the application resource
+     * repository.
+     *
+     * @param resource   the object that contains the xml config file.
+     * @param precedence associated with the module based on its definition in manifest
+     * @param variation  associated with the module based on its definition in manifest
+     * @throws JAXBException
+     * @throws SAXException
+     * @throws IOException
+     */
+    @Override
+    public void unregisterResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException {
+
+        if (resource != null && resource.getInputStream() != null) {
+            Properties properties = new Properties();
+            properties.load(resource.getInputStream());
+
+            boolean isLocaleResource = Boolean.FALSE;
+            String locale = null;
+            if (log.isDebugEnabled()) {
+                log.debug("Filename :" + resource.getFilename());
+            }
+            if ((resource.getFilename().indexOf("_") > 0)) {
+                locale = resource.getFilename().substring(resource.getFilename().indexOf("_") + 1, resource.getFilename().lastIndexOf("."));
+                isLocaleResource = Boolean.TRUE;
+            }
+
+            if (!properties.isEmpty()) {
+                if (isLocaleResource) {
+                    //locale resources
+                    ContextKey key = new ContextKey(locale+"_"+variation, resource.getURI().toString(), variation, precedence);
+                    unregisterLocaleProperties(key);
+                } else {
+                    //default resource
+                    for (Object property : properties.keySet()) {
+                        ContextKey key = new ContextKey((String) property, resource.getURI().toString(), variation, precedence);
+                        unregisterProperties(key);
+                    }
+                }
+            }
+        }
+    }
+
+
+
 
     /**
      * getResourceFileName - Provides the file name of the resource file.

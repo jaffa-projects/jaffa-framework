@@ -18,6 +18,7 @@ public class MessagingXmlLoadTest {
     private static AnnotationConfigApplicationContext xmlLoaderConfig =
             new AnnotationConfigApplicationContext(SoaLoaderConfig.class);
 
+
     /**
      * Test load the XML config for the scheduler task repository.
      */

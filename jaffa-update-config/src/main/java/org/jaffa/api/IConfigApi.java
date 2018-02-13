@@ -46,59 +46,68 @@
  * SUCH DAMAGE.
  * ====================================================================
  */
+package org.jaffa.api;
 
-package org.jaffa.loader;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
 
-import org.springframework.core.io.Resource;
-import org.xml.sax.SAXException;
-
-import javax.xml.bind.JAXBException;
 import java.io.IOException;
-import java.util.Set;
+
 
 /**
- * Interface for xml managers to registerXml and getResourceFileName.
+ * IConfigApi - Apache CXF RESTful service to provide dynamic repository updates from compressed resource archives
+ * in a specific location on the file system. Uses swagger annotations.
+ * @author Matthew Wayles
+ * @version 1.0
  */
-public interface IManager {
+@Path("/")
+public interface IConfigApi {
 
     /**
-     * Registers the XML config file to repository.
-     * @param resource the object that contains the xml config file.
-     * @param precedence associated with the module based on its definition in manifest
-     * @param variation associated with the module based on its definition in manifest
-     * @throws JAXBException if xml file is not valid.
-     * @throws SAXException if xml file is not valid.
-     * @throws IOException if resource does not found.
+     * Unregister configurations contained in a custom ZIP file from the IRepository
+     * implementations, then remove the ZIP file itself
+     * @param zipFile   The custom ZIP file located in DATA_DIRECTORY/config to be deleted
+     * @return  HTTP Response indicating operation success or failure
+     * @throws IOException  When the endpoint has difficulty accessing or removing the file
      */
-    void registerResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException;
+    @DELETE
+    @Path("/config/{zipFile}")
+    @Produces({"application/x-www-form-urlencoded"})
+    Response deleteCustomConfigFile(@PathParam("zipFile") String zipFile) throws IOException;
 
     /**
-     * Unregisters the XML config file to repository.
-     * @param resource the object that contains the xml config file.
-     * @param precedence associated with the module based on its definition in manifest
-     * @param variation associated with the module based on its definition in manifest
-     * @throws JAXBException if xml file is not valid.
-     * @throws SAXException if xml file is not valid.
-     * @throws IOException if resource does not found.
+     * Download a ZIP file contained in the server's DATA_DIRECTORY/config location
+     * @param zipFile   The custom ZIP file to be downloaded
+     * @return  HTTP Response indicating operation success or failure
+     * @throws IOException  When the endpoint has difficulty accessing or downloading the file
      */
-    void unregisterResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException;
+    @GET
+    @Path("/config/{zipFile}")
+    @Produces({"application/zip"})
+    Response getCustomConfigFile(@PathParam("zipFile") String zipFile);
 
     /**
-     * Gets the name of xml config file.
-     * @return xml config file name
+     * Retrieve a JSON list of available ZIP configurations in the DATA_DIRECTORY/config location
+     * @return  HTTP Response indicating operation success or failure
+     * @throws IOException  When the endpoint has difficulty accessing or manipulating the file
      */
-    String getResourceFileName();
+    @GET
+    @Path("/config")
+    @Consumes({"application/x-www-form-urlencoded"})
+    @Produces({"application/json"})
+    Response getCustomConfigFileList() throws IOException;
 
     /**
-     * Gets a list of all of the repository names managed by the application
-     * @return  A list of managed repositories
+     * Upload a ZIP file to the server's DATA_DIRECTORY/config location and register configurations to the IRepository
+     * implementations
+     * @param zipFile   The custom ZIP file to be downloaded
+     * @return  HTTP Response indicating operation success or failure
+     * @throws IOException  When the endpoint has difficulty accessing or downloading the file
      */
-    Set getRepositoryNames();
-
-    /**
-     * Gets the data within a specified repository
-     * @param name The repository to retrieve data from
-     * @return The repository data, or null if the repository does not exist
-     */
-    IRepository getRepositoryByName(String name);
+    @POST
+    @Path("/config/{zipFile}")
+    @Consumes({"application/octet-stream", "application/zip" })
+    @Produces({"application/json"})
+    Response postCustomConfigFile(@PathParam("zipFile") String zipFile, byte[] payload) throws IOException;
 }
+

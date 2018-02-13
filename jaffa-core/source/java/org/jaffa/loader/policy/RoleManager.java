@@ -123,6 +123,28 @@ public class RoleManager implements IManager {
     }
 
     /**
+     * unregisterResource - Unregisters the roles from the role repository using the roles.xml files found in META-INF/roles.xml
+     * that exist in the classpath. This is used to return the repository to its original state before a custom
+     * configuration was added.
+     * @param resource the object that contains the xml config file.
+     * @param context  key with which config file to be registered.
+     * @throws JAXBException
+     * @throws SAXException
+     * @throws IOException
+     */
+    @Override
+    public void unregisterResource(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
+
+        Roles roles = JAXBHelper.unmarshalConfigFile(Roles.class, resource, CONFIGURATION_SCHEMA_FILE);
+        if (roles.getRole() != null) {
+            for (final Role role : roles.getRole()) {
+                ContextKey key = new ContextKey(role.getName(), resource.getURI().toString(), variation, context);
+                unregisterRole(key);
+            }
+        }
+    }
+
+    /**
      * getResourceFileName - Returns the default XML file name of the security roles XSD.
      * @return return the name of the roles XSD file
      */

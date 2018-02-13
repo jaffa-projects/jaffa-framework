@@ -9,14 +9,12 @@ import org.jaffa.loader.messaging.MessagingManager;
 import org.jaffa.loader.navigation.NavigationManager;
 import org.jaffa.loader.policy.BusinessFunctionManager;
 import org.jaffa.loader.policy.RoleManager;
+import org.jaffa.loader.scheduler.SchedulerManager;
 import org.jaffa.loader.soa.SoaEventManager;
 import org.jaffa.loader.transaction.TransactionManager;
+import org.jaffa.modules.scheduler.services.configdomain.Task;
 import org.junit.Before;
 import org.junit.Test;
-
-import javax.ws.rs.NotFoundException;
-
-import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
 
@@ -28,8 +26,8 @@ public class RepositoryJsonServiceTest {
     private ContextKey testKey;
     private ManagerRepositoryService managerRepositoryService;
     private RepositoryJsonService repositoryJsonService;
-    private ApplicationRulesManager testManager;
-    private Properties testProperties;
+    private SchedulerManager testManager;
+    private Task testTask;
 
     /**
      * This setup function registers resources to each managed repository to produce correct retrieval results
@@ -39,18 +37,20 @@ public class RepositoryJsonServiceTest {
     public void setUp() throws Exception {
         managerRepositoryService = ManagerRepositoryService.getInstance();
         repositoryJsonService = new RepositoryJsonService();
-        testKey = new ContextKey("testKey", "file1.xml", "DEF", "1-PRODUCT");
-        testManager = new ApplicationRulesManager();
-        testProperties= new Properties();
+        testKey = new ContextKey("testKey", "file1.xml", "NULL", "1-PRODUCT");
+        testManager = new SchedulerManager();
+        testTask = new Task();
 
         //Must populate a repository element in order to retrieve data
-        testProperties.setProperty("Property1","PropertyValue1");
-        testProperties.setProperty("Property2","PropertyValue2");
-        testManager.registerProperties(testKey, testProperties);
+        testTask.setAutoCreateDataBean(true);
+        testTask.setDataBean("DataBeanTest");
+        testTask.setType("TestType");
+        testManager.registerSchedulerTask(testKey, testTask);
 
         //Add managers to ManagerRepositoryService
-        managerRepositoryService.add("Properties", testManager);
+        managerRepositoryService.add("Task", testManager);
         managerRepositoryService.add("ComponentManager", new ComponentManager());
+        managerRepositoryService.add("ApplicationRulesManager", new ApplicationRulesManager());
         managerRepositoryService.add("NavigationManager", new NavigationManager());
         managerRepositoryService.add("BusinessFunctionManager", new BusinessFunctionManager());
         managerRepositoryService.add("RoleManager", new RoleManager());
@@ -61,52 +61,33 @@ public class RepositoryJsonServiceTest {
     }
 
     /**
-     * testGetRepositoryNames - Validates that a returned list of repository names can be converted to a JSON array
+     * getRepositoryNames - Validates that a returned list of repository names can be converted to a JSON array
      */
     @Test
-    public void testGetRepositoryNames() throws Exception {
+    public void getRepositoryNames() throws Exception {
         String actual = repositoryJsonService.getRepositoryNames();
         assertEquals(
-                "[\"TypeInfo\",\"TransactionInfo\",\"Role\",\"ComponentDefinition\"," +
-                        "\"MessageFilter\",\"MessageInfo\",\"QueueInfo\",\"TopicInfo\",\"SoaEventInfo\"," +
-                        "\"BusinessFunction\",\"JmsConfig\",\"GlobalMenu\",\"Properties\"]", actual);
+                "[\"GlobalMenu\",\"BusinessFunction\",\"Task\",\"Properties\",\"SoaEventInfo\"," +
+                    "\"TransactionInfo\",\"TypeInfo\",\"Role\",\"JmsConfig\",\"ComponentDefinition\"," +
+                    "\"QueueInfo\",\"MessageFilter\",\"TopicInfo\",\"MessageInfo\"]", actual);
 
     }
+
     /**
-     * testGetRepository - Returns a named repository
+     * getRepository - Returns a named repository
      */
     @Test
-    public void testGetRepository() throws Exception {
-        assertEquals("{\"Property2\":\"PropertyValue2\",\"Property1\":\"PropertyValue1\"}",
-                repositoryJsonService.getRepository("Properties"));
+    public void getRepository() throws Exception {
+        assertEquals("{\"testKey\":{\"autoCreateDataBean\":true,\"dataBean\":\"DataBeanTest\",\"type\":\"TestType\"}}",
+                repositoryJsonService.getRepository("Task"));
     }
 
     /**
-     * testRepositoryNameNotFound - Verifies that the proper exception is thrown when a non-existent repository
-     * it queried
-     * @throws Exception 404 Not Found
-     */
-    @Test(expected = NotFoundException.class)
-    public void testRepositoryNameNotFoundException() throws Exception {
-        repositoryJsonService.getRepository("Non-Existent");
-    }
-
-    /**
-     * testGetRepository - Returns a named repository
+     * getRepository - Returns a named repository
      */
     @Test
-    public void testGetRepositoryValue() throws Exception {
-        assertEquals("\"PropertyValue1\"",
-                repositoryJsonService.getRepositoryValue("Properties", "Property1"));
-    }
-
-    /**
-     * testRepositoryValueNotFound - Verifies that the proper exception is thrown when a non-existent ID
-     * it queried
-     * @throws Exception 404 Not Found
-     */
-    @Test(expected = NotFoundException.class)
-    public void testRepositoryValueNotFoundException() throws Exception {
-        repositoryJsonService.getRepositoryValue("Properties", "Non-Existent_ID");
+    public void getRepositoryValue() throws Exception {
+        assertEquals("{\"autoCreateDataBean\":true,\"dataBean\":\"DataBeanTest\"," +
+                "\"type\":\"TestType\"}", repositoryJsonService.getRepositoryValue("Task", "testKey"));
     }
 }
