@@ -9,7 +9,6 @@
         <version>6.0.6-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.jaffa</groupId>
     <artifactId>jaffa-soa</artifactId>
 
     <name>Jaffa SOA</name>

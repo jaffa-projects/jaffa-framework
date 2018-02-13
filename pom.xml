@@ -2065,6 +2065,8 @@
                 <module>jaffa-ria</module>
                 <module>jaffa-rules</module>
                 <module>jaffa-soa</module>
+                <module>jaffa-monitoring</module>
+                <module>jaffa-update-config</module>
                 <!--<module>patterns</module>-->
             </modules>
         </profile>

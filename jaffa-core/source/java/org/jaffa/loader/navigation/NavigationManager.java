@@ -118,6 +118,24 @@ public class NavigationManager implements IManager {
     }
 
     /**
+     * unregisterXML - Unregisters the navigation global menu from the IRepository
+     * @param resource the object that contains the xml config file.
+     * @param precedence associated with the module based on its definition in manifest
+     * @param variation associated with the module based on its definition in manifest
+     * @throws JAXBException
+     * @throws SAXException
+     * @throws IOException
+     */
+    @Override
+    public void unregisterResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException {
+        GlobalMenu globalMenu = JAXBHelper.unmarshalConfigFile(GlobalMenu.class, resource, CONFIGURATION_SCHEMA_FILE);
+        if (globalMenu != null) {
+            ContextKey key = new ContextKey(GLOBAL_MENU_ID, resource.getURI().toString(), variation, precedence);
+            unregisterGlobalMenu(key);
+        }
+    }
+
+    /**
      * registerGlobalMenu - Registers an individual GlobalMenu object into the IRepository
      * @param contextKey
      * @param globalMenu

@@ -62,7 +62,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.jaffa.components.navigation.domain.ComponentAction;
 import org.jaffa.components.navigation.domain.MenuOption;
-import org.jaffa.components.navigation.NavAccessor;
 import org.jaffa.presentation.portlet.component.ComponentDefinition;
 import org.jaffa.presentation.portlet.component.ComponentManager;
 import org.jaffa.security.SecurityManager;

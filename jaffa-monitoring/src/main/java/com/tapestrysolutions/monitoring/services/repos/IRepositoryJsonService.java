@@ -6,6 +6,8 @@ import javax.ws.rs.core.MediaType;
 
 /**
  * IRepositoryJsonService - Apache CXF service to provide JSON responses for all IRepository objects.
+ * @author Matthew Wayles
+ * @version 1.0
  */
 @Path("/repository")
 public interface IRepositoryJsonService {
