@@ -141,16 +141,7 @@ public class ApplicationRulesManager implements IManager {
      */
     @Override
     public IRepository<?> getRepositoryByName(String name) {
-        MapRepository<String> propertyRepository = new MapRepository<>("Properties");
-        IRepository requestedRepository = (IRepository) managedRepositories.get(name);
-        Iterator<ContextKey> contextKeyIterator = requestedRepository.getKeys().iterator();
-        while (contextKeyIterator.hasNext()) {
-            ContextKey contextKey = contextKeyIterator.next();
-            Properties contextKeyProperties = (Properties) requestedRepository.getValues().get(0);
-            registerProperties(propertyRepository, contextKey, contextKeyProperties);
-
-        }
-        return propertyRepository;
+        return (IRepository<?>) managedRepositories.get(name);
     }
 
     /**
