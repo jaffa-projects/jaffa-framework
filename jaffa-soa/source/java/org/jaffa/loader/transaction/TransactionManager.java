@@ -143,6 +143,29 @@ public class TransactionManager implements IManager {
      * {@inheritDoc}
      */
     @Override
+    public void unregisterResource(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
+
+        Config config = JAXBHelper.unmarshalConfigFile(Config.class, resource, CONFIGURATION_SCHEMA_FILE);
+
+        if (config.getTransactionOrType() != null) {
+            for (final Object o : config.getTransactionOrType()) {
+                if (o.getClass() == TransactionInfo.class) {
+                    final TransactionInfo transactionInfo = (TransactionInfo) o;
+                    ContextKey contextKey = new ContextKey(transactionInfo.getDataBean(), resource.getURI().toString(), variation, context);
+                    unregisterTransactionInfo(contextKey);
+                } else if (o.getClass() == TypeInfo.class) {
+                    final TypeInfo typeInfo = (TypeInfo) o;
+                    ContextKey contextKey = new ContextKey(typeInfo.getName(), resource.getURI().toString(), variation, context);
+                    unregisterTypeInfo(contextKey);
+                }
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String getResourceFileName() {
         return DEFAULT_CONFIGURATION_FILE;
     }

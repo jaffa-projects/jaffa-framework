@@ -50,6 +50,8 @@
 package org.jaffa.loader;
 
 import org.jaffa.components.navigation.NavCache;
+import org.jaffa.config.ApplicationResourceLoader;
+import org.jaffa.loader.config.ApplicationResourcesManager;
 import org.jaffa.loader.config.ApplicationRulesManager;
 import org.jaffa.loader.navigation.NavigationManager;
 import org.jaffa.loader.policy.BusinessFunctionManager;
@@ -65,6 +67,26 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class CoreLoaderConfig {
+
+    /**
+     * @return Returns an ResourceLoader for the ApplicationResourcesManager
+     */
+    @Bean
+    public ResourceLoader<ApplicationResourcesManager> applicationResourceManagerPropertiesLoader() {
+        ResourceLoader<ApplicationResourcesManager> resourceManagerResourceLoader = new ResourceLoader<>();
+        resourceManagerResourceLoader.setManager(applicationResourcesManager());
+        return resourceManagerResourceLoader;
+    }
+
+    /**
+     * @return Returns a ApplicationResourcesManager
+     */
+    @Bean
+    public ApplicationResourcesManager applicationResourcesManager() {
+        ApplicationResourcesManager applicationResourcesManager = new ApplicationResourcesManager();
+        ApplicationResourceLoader.setApplicationResourcesManager(applicationResourcesManager);
+        return applicationResourcesManager;
+    }
 
     /****************************************************/
     /*************  Role & BusinessFunction Manager  ****/
@@ -149,6 +171,5 @@ public class CoreLoaderConfig {
         ContextManager.setApplicationRulesManager(applicationRulesManager);
         return applicationRulesManager;
     }
-
 }
 

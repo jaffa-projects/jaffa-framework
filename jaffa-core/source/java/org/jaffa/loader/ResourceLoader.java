@@ -50,16 +50,23 @@
 package org.jaffa.loader;
 
 import org.apache.log4j.Logger;
+import org.jaffa.util.ConfigApiHelper;
 import org.jaffa.util.ContextHelper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Loads the Xml Config files and registers them to the Repository.
  */
 public class ResourceLoader<T extends IManager> {
+    private static final String ARCHIVE_EXTENSION = ".zip";
+    private String dataDirectory = System.getProperty("data.directory");
+    private String customConfigPath = dataDirectory + File.separator + "config";
 
     /**
      * Create a ContextHelper logger
@@ -115,9 +122,38 @@ public class ResourceLoader<T extends IManager> {
                     }
                 }
             }
-        }catch(Exception w){
+
+            if (dataDirectory != null && new File(customConfigPath).exists()) {
+                loadAllCustomConfigurations();
+            }
+
+         } catch (Exception w) {
             throw new RuntimeException(w.getCause());
         }
     }
 
+    /**
+     * Loads all custom configurations in the custom config directory.
+     * @throws IOException  When a file cannot be accessed or operations cannot be performed on it
+     */
+    public void loadAllCustomConfigurations() throws IOException {
+        // Load all zip files from the custom config directory.
+        File customConfigDirectory = new File(customConfigPath);
+        for(File file : customConfigDirectory.listFiles()) {
+            if (file.getName().endsWith(ARCHIVE_EXTENSION)) {
+                loadCustomConfiguration(file);
+            }
+        }
+    }
+
+    /**
+     * Loads a single custom configuration compressed file.
+     * @param file  The compressed configuration archive
+     * @throws IOException  When a file cannot be accessed or operations cannot be performed on it
+     */
+    public void loadCustomConfiguration(File file) throws IOException {
+        File zipRoot = ConfigApiHelper.extractToTemporaryDirectory(file);
+        ConfigApiHelper.registerResources(zipRoot, ConfigApiHelper.getFileContents(file).getContextSalience());
+        ConfigApiHelper.removeDirTree(zipRoot);
+    }
 }

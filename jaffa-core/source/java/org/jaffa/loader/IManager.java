@@ -62,7 +62,7 @@ import java.util.Set;
 public interface IManager {
 
     /**
-     * registers the XML config file to repository.
+     * Registers the XML config file to repository.
      * @param resource the object that contains the xml config file.
      * @param precedence associated with the module based on its definition in manifest
      * @param variation associated with the module based on its definition in manifest
@@ -73,7 +73,18 @@ public interface IManager {
     void registerResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException;
 
     /**
-     * gets the name of xml config file.
+     * Unregisters the XML config file to repository.
+     * @param resource the object that contains the xml config file.
+     * @param precedence associated with the module based on its definition in manifest
+     * @param variation associated with the module based on its definition in manifest
+     * @throws JAXBException if xml file is not valid.
+     * @throws SAXException if xml file is not valid.
+     * @throws IOException if resource does not found.
+     */
+    void unregisterResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException;
+
+    /**
+     * Gets the name of xml config file.
      * @return xml config file name
      */
     String getResourceFileName();

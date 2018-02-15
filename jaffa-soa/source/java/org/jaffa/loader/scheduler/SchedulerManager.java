@@ -126,6 +126,21 @@ public class SchedulerManager implements IManager {
      * {@inheritDoc}
      */
     @Override
+    public void unregisterResource(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
+
+        Config config = JAXBHelper.unmarshalConfigFile(Config.class, resource, CONFIGURATION_SCHEMA_FILE);
+        if (config.getTask() != null) {
+            for (final Task schedulerTask : config.getTask()) {
+                ContextKey contextKey = new ContextKey(schedulerTask.getDataBean(), resource.getURI().toString(), variation, context);
+                unregisterSchedulerTask(contextKey);
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String getResourceFileName() {
         return DEFAULT_CONFIGURATION_FILE;
     }
