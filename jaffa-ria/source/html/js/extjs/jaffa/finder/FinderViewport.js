@@ -269,7 +269,19 @@ Jaffa.form.FinderViewport = Ext.extend(Ext.Viewport, {
           view: (viewport.groupTextTpl) ? viewport.groupTextTpl : ((viewport.maintenancePanel) ? new Ext.grid.GroupingView({
             hideGroupedColumn:true,
             displayEmptyFields:true,
-            groupTextTpl:'{text} ' + '({values.rs.length} ' + '{[values.rs.length > 1 ? this.recordsText : this.recordText]})  '
+            groupTextTpl:'{text} ' + '({values.rs.length} ' + '{[values.rs.length > 1 ? this.recordsText : this.recordText]})  ',
+            onLoad: function(grid,data,p){
+               if (p && p.initial==true){
+       	          if (Ext.isGecko) {
+	                 if (!this.scrollToTopTask) {
+	                    this.scrollToTopTask = new Ext.util.DelayedTask(this.scrollToTop, this);
+	                 }
+	                 this.scrollToTopTask.delay(1);
+	              } else {
+	                  this.scrollToTop();
+	              }
+	           }
+	        }
           }) : new Ext.ux.grid.MultiGroupingView({
             hideGroupedColumn:true,
             displayEmptyFields:true,
