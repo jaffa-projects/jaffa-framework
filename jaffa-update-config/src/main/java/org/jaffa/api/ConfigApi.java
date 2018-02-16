@@ -56,6 +56,11 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jaffa.rules.AopXmlLoader;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
+
 import org.apache.log4j.*;
 import org.jaffa.util.ConfigApiHelper;
 import org.jaffa.util.FileContentsHelper;
@@ -201,6 +206,12 @@ public class ConfigApi implements IConfigApi {
         Files.copy(new ByteArrayInputStream(payload), filePath.toPath());
         File tempDir = ConfigApiHelper.extractToTemporaryDirectory(filePath);
         ConfigApiHelper.registerResources(tempDir, ConfigApiHelper.getFileContents(filePath).getContextSalience());
+        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        Resource[] aopResources = resolver.getResources(tempDir + "/META-INF/aop/*.xml");
+        for(Resource aopResource : aopResources){
+            AopXmlLoader.getInstance().processAopPath(aopResource.getURI().getPath());
+        }
+
         ConfigApiHelper.removeDirTree(tempDir);
 
         log.info("The resources in " + filePath + " have finished registering configurations to the repositories");

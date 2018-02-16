@@ -326,6 +326,8 @@ public class JaffaRulesConfig {
                         AopConstants.DEFAULT_AOP_PATTERN;
 
         List<String> paths = Arrays.asList(aopPath.split(";"));
-        return new AopXmlLoader(paths);
+        AopXmlLoader aopXmlLoader = new AopXmlLoader(paths);
+        AopXmlLoader.setInstance(aopXmlLoader);
+        return aopXmlLoader;
     }
 }

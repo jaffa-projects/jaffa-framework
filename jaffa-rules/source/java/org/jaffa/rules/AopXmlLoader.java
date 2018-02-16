@@ -37,6 +37,7 @@ public class AopXmlLoader {
     private final DocumentBuilder builder;
     private final PathMatchingResourcePatternResolver resolver;
     private final Map<XPathExpression, AbstractLoader> repoMap;
+    private static AopXmlLoader aopXmlLoader;
 
     /**
      * Loads AOP.xml files from the given path. When an invalid file is found, it will be rejected
@@ -184,6 +185,14 @@ public class AopXmlLoader {
         } catch (XPathExpressionException | JaffaRulesFrameworkException | IOException | SAXException e) {
             logger.error("An Error occurred while attempting to load an AOP resource from:" + reportedPath);
         }
+    }
+
+    public static AopXmlLoader getInstance(){
+        return aopXmlLoader;
+    }
+
+    public static void setInstance(AopXmlLoader aopXmlLoader){
+        AopXmlLoader.aopXmlLoader = aopXmlLoader;
     }
 }
 
