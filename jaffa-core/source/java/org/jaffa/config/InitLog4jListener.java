@@ -65,7 +65,7 @@ import javax.servlet.ServletContextListener;
  *         <param-name>log4jLocation</param-name>
  *         <param-value>conf/app-log4j.xml</param-value>
  *       </context-param>
- *       <!-- Defaulted to 6 Seconds -->
+ *       <!-- Defaulted to 60 Seconds -->
  *       <context-param>
  *         <param-name>log4jWatchInterval</param-name>
  *         <param-value>60000</param-value>
