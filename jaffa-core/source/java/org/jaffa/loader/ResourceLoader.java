@@ -64,9 +64,9 @@ import java.io.IOException;
  * Loads the Xml Config files and registers them to the Repository.
  */
 public class ResourceLoader<T extends IManager> {
-    private static final String ARCHIVE_EXTENSION = ".zip";
-    private String dataDirectory = System.getProperty("data.directory");
-    private String customConfigPath = dataDirectory + File.separator + "config";
+    public static final String ARCHIVE_EXTENSION = ".zip";
+    private static String dataDirectory = System.getProperty("data.directory");
+    public static String customConfigPath = dataDirectory + File.separator + "config";
 
     /**
      * Create a ContextHelper logger

@@ -106,14 +106,16 @@ public class ConfigApiHelper {
         Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
         while(zipEntries.hasMoreElements()){
             ZipEntry zipEntry = zipEntries.nextElement();
-            Path entryPath = Paths.get(tempDirPath + File.separator + zipEntry.getName());
+            Path entryPath = Paths.get(tempDirPath + File.separator + file.getName() + File.separator + zipEntry.getName());
             if(zipEntry.isDirectory()){
-                Files.createDirectory(entryPath);
+                Files.createDirectories(entryPath);
             }else {
                 InputStream is = zipFile.getInputStream(zipEntry);
                 Files.copy(is, entryPath);
+                is.close();
             }
         }
+        zipFile.close();
         log.debug("Extracted " + file + "to " + tempDirPath);
         return tempDirPath.toFile();
     }
@@ -131,7 +133,7 @@ public class ConfigApiHelper {
             log.info("Successfully removed " + file.getName() + "from the filesystem");
         }
         catch (IOException ex) {
-            removeZipFile(file);
+            log.error("Could not Remove the file " + file.getName() + "from the filesystem");
         }
     }
 

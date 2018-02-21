@@ -108,6 +108,9 @@ public class ConfigApi implements IConfigApi {
         //Extract files to gain access to configuration resources
         File tempDir = ConfigApiHelper.extractToTemporaryDirectory(filePath);
         ConfigApiHelper.unregisterResources(tempDir, ConfigApiHelper.getFileContents(filePath).getContextSalience());
+
+        AopXmlLoader.getInstance().unloadAop(tempDir.getPath());
+
         ConfigApiHelper.removeDirTree(tempDir);
         ConfigApiHelper.removeZipFile(filePath);
         Response.ResponseBuilder response = Response.status(Response.Status.OK);
@@ -206,11 +209,7 @@ public class ConfigApi implements IConfigApi {
         Files.copy(new ByteArrayInputStream(payload), filePath.toPath());
         File tempDir = ConfigApiHelper.extractToTemporaryDirectory(filePath);
         ConfigApiHelper.registerResources(tempDir, ConfigApiHelper.getFileContents(filePath).getContextSalience());
-        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        Resource[] aopResources = resolver.getResources(tempDir + "/META-INF/aop/*.xml");
-        for(Resource aopResource : aopResources){
-            AopXmlLoader.getInstance().processAopPath(aopResource.getURI().getPath());
-        }
+        AopXmlLoader.getInstance().processAopPath(tempDir.getPath());
 
         ConfigApiHelper.removeDirTree(tempDir);
 

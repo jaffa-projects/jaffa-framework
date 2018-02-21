@@ -94,7 +94,7 @@ public class AopXmlLoader {
             // See if the matcher can resolve classpath related paths.
             Resource[] matches = resolver.getResources(path);
             List<ResourceWrapper> resourceWrapperList = new ArrayList<>();
-            for(Resource match : matches){
+            for (Resource match : matches) {
                 resourceWrapperList.add(new ResourceWrapper(match));
             }
             resourceWrapperList.sort(Comparator.comparing(ResourceWrapper::getAopResourcePath));
@@ -106,7 +106,7 @@ public class AopXmlLoader {
                 if (logger.isDebugEnabled()) {
                     logger.debug("Attempting to load " + match.toString());
                 }
-                if(match.getResource()!=null) {
+                if (match.getResource() != null) {
                     loadStream(match.getResource().getInputStream(), match.getResource().getURI().toString());
                 }
             }
@@ -187,11 +187,70 @@ public class AopXmlLoader {
         }
     }
 
-    public static AopXmlLoader getInstance(){
+
+    /**
+     * Attempts to unload a given stream into the repositories.  Will perform light validation against the document to
+     * see if it appears to be a JBoss AOP xml file.
+     *
+     * @param reportedPath A friendly name for the resource for reporting purposes
+     */
+    public void unloadAop(String reportedPath) {
+        try {
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("Processing AOP XML resourcepath " + reportedPath);
+            }
+
+            File resourcePath = new File(reportedPath);
+
+            if (resourcePath.exists() && resourcePath.isDirectory()) {
+                unloadDirectory(resourcePath);
+            }else {
+                for (XPathExpression xPathStatement : repoMap.keySet()) {
+                    AbstractLoader repo = repoMap.get(xPathStatement);
+
+                    repo.unload(reportedPath);
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("unloading Repo " + reportedPath);
+                    }
+                }
+            }
+        } catch (JaffaRulesFrameworkException  | IOException e) {
+            logger.error("An Error occurred while attempting to unload an AOP resource from:" + reportedPath);
+        }
+    }
+
+        /**
+         * Recursively finds files within a folder path and attempts to load the files into the repositories.
+         *
+         * @param folder The folder to recursively search
+         * @throws FileNotFoundException Thrown when an invalid path is provided
+         */
+    private void unloadDirectory(File folder) throws FileNotFoundException {
+        File[] children = folder.listFiles();
+
+        if (children == null) {
+            return;
+        }
+
+        // alphabetical sort
+        FileHelper.sortFiles(children);
+
+        for (File child : children) {
+            if (child.isDirectory()) {
+                unloadDirectory(child);
+            } else if (child.getName().endsWith("-aop.xml")) {
+                unloadAop(child.toURI().toString());
+            }
+        }
+    }
+
+
+    public static AopXmlLoader getInstance() {
         return aopXmlLoader;
     }
 
-    public static void setInstance(AopXmlLoader aopXmlLoader){
+    public static void setInstance(AopXmlLoader aopXmlLoader) {
         AopXmlLoader.aopXmlLoader = aopXmlLoader;
     }
 }
@@ -199,19 +258,22 @@ public class AopXmlLoader {
 /**
  * Wrapper class for Spring Resource which is used to sort aop xml files alphabetically
  */
-class ResourceWrapper{
+class ResourceWrapper {
 
     private static final Logger logger = Logger.getLogger(ResourceWrapper.class);
 
-    public ResourceWrapper(Resource resource){
+    public ResourceWrapper(Resource resource) {
         this.resource = resource;
     }
 
-    /** holds Spring Resource **/
+    /**
+     * holds Spring Resource
+     **/
     private Resource resource;
 
     /**
      * Getter for Resource
+     *
      * @return
      */
     public Resource getResource() {
@@ -220,6 +282,7 @@ class ResourceWrapper{
 
     /**
      * Setter for Resource
+     *
      * @param resource
      */
     public void setResource(Resource resource) {
@@ -228,15 +291,16 @@ class ResourceWrapper{
 
     /**
      * Returns resource path of each resource in context with aop
+     *
      * @return
      */
     public String getAopResourcePath() {
         try {
-            return getResource()!=null && getResource().getURL()!=null
-                    && getResource().getURL().toString()!=null
-                    ? ContextHelper.getContextSalience(getResource().getURI().toString())+ File.separator + getResource().getURL().toString().substring(getResource().getURL().toString().indexOf("aop")) : null;
+            return getResource() != null && getResource().getURL() != null
+                    && getResource().getURL().toString() != null
+                    ? ContextHelper.getContextSalience(getResource().getURI().toString()) + File.separator + getResource().getURL().toString().substring(getResource().getURL().toString().indexOf("aop")) : null;
         } catch (IOException e) {
-            logger.error("Error while accessing aop xml",e);
+            logger.error("Error while accessing aop xml", e);
         }
         return null;
     }
