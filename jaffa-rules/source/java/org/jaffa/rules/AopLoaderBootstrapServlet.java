@@ -33,7 +33,7 @@ public class AopLoaderBootstrapServlet extends HttpServlet {
         List<String> paths = Arrays.asList(jbossPath.split(";"));
 
         try {
-            new AopXmlLoader(paths);
+            AopXmlLoader.getInstance().processAopPaths(paths);
         } catch (JaffaRulesFrameworkException e) {
             logger.error("An error occurred while attempting to create the AopXmlLoader instance. AOP files may not have been loaded into the appropriate repositories", e);
         }

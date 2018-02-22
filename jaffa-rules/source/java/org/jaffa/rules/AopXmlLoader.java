@@ -34,10 +34,17 @@ import java.util.stream.Collectors;
  */
 public class AopXmlLoader {
     private static final Logger logger = Logger.getLogger(AopXmlLoader.class);
-    private final DocumentBuilder builder;
-    private final PathMatchingResourcePatternResolver resolver;
-    private final Map<XPathExpression, AbstractLoader> repoMap;
-    private static AopXmlLoader aopXmlLoader;
+    private DocumentBuilder builder;
+    private PathMatchingResourcePatternResolver resolver;
+    private Map<XPathExpression, AbstractLoader> repoMap;
+    private static AopXmlLoader aopXmlLoader = new AopXmlLoader();
+
+    /**
+     * Made AopXmlLoader Singleton instance by default
+     */
+    private AopXmlLoader() {
+
+    }
 
     /**
      * Loads AOP.xml files from the given path. When an invalid file is found, it will be rejected
@@ -48,7 +55,7 @@ public class AopXmlLoader {
      *
      * @param aopPaths A list of paths that should be searched for AOP files and loaded into the Repositories
      */
-    public AopXmlLoader(List<String> aopPaths) throws JaffaRulesFrameworkException {
+    public void processAopPaths(List<String> aopPaths) throws JaffaRulesFrameworkException {
         resolver = new PathMatchingResourcePatternResolver();
 
         try {
@@ -205,7 +212,7 @@ public class AopXmlLoader {
 
             if (resourcePath.exists() && resourcePath.isDirectory()) {
                 unloadDirectory(resourcePath);
-            }else {
+            } else {
                 for (XPathExpression xPathStatement : repoMap.keySet()) {
                     AbstractLoader repo = repoMap.get(xPathStatement);
 
@@ -215,17 +222,17 @@ public class AopXmlLoader {
                     }
                 }
             }
-        } catch (JaffaRulesFrameworkException  | IOException e) {
+        } catch (JaffaRulesFrameworkException | IOException e) {
             logger.error("An Error occurred while attempting to unload an AOP resource from:" + reportedPath);
         }
     }
 
-        /**
-         * Recursively finds files within a folder path and attempts to load the files into the repositories.
-         *
-         * @param folder The folder to recursively search
-         * @throws FileNotFoundException Thrown when an invalid path is provided
-         */
+    /**
+     * Recursively finds files within a folder path and attempts to load the files into the repositories.
+     *
+     * @param folder The folder to recursively search
+     * @throws FileNotFoundException Thrown when an invalid path is provided
+     */
     private void unloadDirectory(File folder) throws FileNotFoundException {
         File[] children = folder.listFiles();
 
@@ -248,10 +255,6 @@ public class AopXmlLoader {
 
     public static AopXmlLoader getInstance() {
         return aopXmlLoader;
-    }
-
-    public static void setInstance(AopXmlLoader aopXmlLoader) {
-        AopXmlLoader.aopXmlLoader = aopXmlLoader;
     }
 }
 
