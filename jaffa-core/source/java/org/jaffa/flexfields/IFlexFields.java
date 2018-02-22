@@ -72,4 +72,22 @@ public interface IFlexFields {
      * @throws FrameworkException if any framework error occurs.
      */
     public void setFlexBean(FlexBean flexBean) throws ApplicationExceptions, FrameworkException;
+
+    /**
+     * This is default method in this interface to find the object implemented
+     * this interface has the FlexBean Configured or not.
+     *
+     * @param object
+     * @return boolean
+     */
+    public static boolean hasFlexBean(Object object){
+        if (object instanceof IFlexFields) {
+            try {
+                return ((IFlexFields) object).getFlexBean() != null ? true : false;
+            } catch (ApplicationExceptions | FrameworkException e) {
+                throw new RuntimeException(e.getCause());
+            }
+        }
+        return false;
+    }
 }
