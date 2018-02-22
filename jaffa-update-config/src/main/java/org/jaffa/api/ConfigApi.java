@@ -56,6 +56,11 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jaffa.rules.AopXmlLoader;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
+
 import org.apache.log4j.*;
 import org.jaffa.util.ConfigApiHelper;
 import org.jaffa.util.FileContentsHelper;
@@ -103,6 +108,9 @@ public class ConfigApi implements IConfigApi {
         //Extract files to gain access to configuration resources
         File tempDir = ConfigApiHelper.extractToTemporaryDirectory(filePath);
         ConfigApiHelper.unregisterResources(tempDir, ConfigApiHelper.getFileContents(filePath).getContextSalience());
+
+        AopXmlLoader.getInstance().unloadAop(tempDir.getPath());
+
         ConfigApiHelper.removeDirTree(tempDir);
         ConfigApiHelper.removeZipFile(filePath);
         Response.ResponseBuilder response = Response.status(Response.Status.OK);
@@ -201,6 +209,8 @@ public class ConfigApi implements IConfigApi {
         Files.copy(new ByteArrayInputStream(payload), filePath.toPath());
         File tempDir = ConfigApiHelper.extractToTemporaryDirectory(filePath);
         ConfigApiHelper.registerResources(tempDir, ConfigApiHelper.getFileContents(filePath).getContextSalience());
+        AopXmlLoader.getInstance().processAopPath(tempDir.getPath());
+
         ConfigApiHelper.removeDirTree(tempDir);
 
         log.info("The resources in " + filePath + " have finished registering configurations to the repositories");
