@@ -261,9 +261,10 @@ public class ApplicationRulesManager implements IManager {
         properties.load(resourceInputStream);
         for (Object property : properties.keySet()) {
             String systemPropertyValue = System.getProperty((String) property);
-            if (systemPropertyValue != null && !"".equals(systemPropertyValue)) {
-                properties.setProperty((String) property, systemPropertyValue);
+            if (systemPropertyValue == null || "".equals(systemPropertyValue)) {
+                systemPropertyValue = replaceTokens(properties, properties.getProperty((String) property));
             }
+            properties.setProperty((String) property, systemPropertyValue);
         }
     }
 

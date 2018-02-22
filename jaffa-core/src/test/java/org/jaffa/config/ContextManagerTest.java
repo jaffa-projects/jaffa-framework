@@ -120,15 +120,15 @@ public class ContextManagerTest {
         // Property from variation
         assertEquals("true", iContextManager.getProperty("org.jaffa.config.hidemaintenancepanel"));
 
-        assertEquals("${datadist.rootFolder}/outbound", iContextManager.getProperty("datadist.outboundFolder"));
+        assertEquals("datadist_root/outbound", iContextManager.getProperty("datadist.outboundFolder"));
 
-        assertEquals("${datadist.outboundFolder}/fragments", iContextManager.getProperty("datadist.outboundFolder.fragments"));
+        assertEquals("datadist_root/outbound/fragments", iContextManager.getProperty("datadist.outboundFolder.fragments"));
 
-        assertEquals("${interfaces.rootFolder}/outbound/test", iContextManager.getProperty("interfaces.outboundTestFolder"));
+        assertEquals("c:/test/interfaces_root/outbound/test", iContextManager.getProperty("interfaces.outboundTestFolder"));
 
-        assertEquals("http://${pentaho.host}:${pentaho.port}/pentaho", iContextManager.getProperty("pentaho.url"));
+        assertEquals("http://pentaho_host.mypentaho.com:80967/pentaho", iContextManager.getProperty("pentaho.url"));
 
-        assertEquals("${container.home}/server/${tomcat.config}/conf/report-security.txt", iContextManager.getProperty("usersecurity.reportsecurity.securityFilterKeyFile"));
+        assertEquals("C:/apache-tomcat-8.5.16/server/Goldesp/conf/report-security.txt", iContextManager.getProperty("usersecurity.reportsecurity.securityFilterKeyFile"));
 
 
 
