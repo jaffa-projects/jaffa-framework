@@ -97,7 +97,7 @@ public class ConfigApiHelper {
      */
     public static File extractToTemporaryDirectory(File file) throws IOException {
         //Create temporary directory if it doesn't exist
-        Path tempDirPath = Paths.get(TEMP_DIRECTORY);
+        Path tempDirPath = Paths.get(TEMP_DIRECTORY + file.getName());
         if(!Files.isDirectory(tempDirPath)) {
             Files.createDirectories(tempDirPath);
         }
@@ -106,7 +106,7 @@ public class ConfigApiHelper {
         Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
         while(zipEntries.hasMoreElements()){
             ZipEntry zipEntry = zipEntries.nextElement();
-            Path entryPath = Paths.get(tempDirPath + File.separator + file.getName() + File.separator + zipEntry.getName());
+            Path entryPath = Paths.get(tempDirPath + File.separator + zipEntry.getName());
             if(!Files.exists(entryPath.getParent())){
                 Files.createDirectories(entryPath.getParent());
             }
