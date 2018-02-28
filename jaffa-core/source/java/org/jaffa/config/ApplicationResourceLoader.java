@@ -58,6 +58,7 @@ import org.springframework.core.io.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 
@@ -212,7 +213,9 @@ public class ApplicationResourceLoader {
                 //added file prefix for ant style search pattern to search the file from I/O File
                 Resource resource = resolver.getResource(FILE_PREFIX + applicationResourcesOverrideLocation);
                 if (resource != null && !resource.exists()) {
-                    Files.createFile(Paths.get(resource.getURI()));
+                    Path resourcePath = Paths.get(resource.getURI());
+                    Files.createDirectories(resourcePath.getParent());
+                    Files.createFile(resourcePath);
                 }
                 properties.load(resource.getInputStream());
             }
