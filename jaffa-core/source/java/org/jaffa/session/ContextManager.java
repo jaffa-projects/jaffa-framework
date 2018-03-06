@@ -340,20 +340,7 @@ public class ContextManager implements IContextManager {
      * @return the global context.
      */
     private Map<Object, Object> getGlobalContext() {
-        if (m_global == null) {
-            synchronized (this) {
-                if (m_global == null) {
-                    Properties props = null;
-                    props = (applicationRulesManager != null) ? applicationRulesManager.getApplicationRulesGlobal() : null;
-
-                    // Cache an unmodifiable view
-                    if (props != null) {
-                        m_global = Collections.unmodifiableMap(props);
-                    }
-                }
-            }
-        }
-        return m_global;
+        return applicationRulesManager != null ? applicationRulesManager.getApplicationRulesGlobal() : null;
     }
 
     /**
@@ -364,22 +351,7 @@ public class ContextManager implements IContextManager {
      * @return the variation context.
      */
     private Map getVariationContext(String variation) {
-        if (!m_variation.containsKey(variation)) {
-            synchronized (m_variation) {
-                if (!m_variation.containsKey(variation)) {
-                    Properties props = null;
-                    if (props == null || props.size() == 0) {
-                        props = applicationRulesManager.getApplicationRulesVariation(variation);
-                    }
-
-                    // Cache an unmodifiable view
-                    if (props != null) {
-                        m_variation.put(variation, Collections.unmodifiableMap(props));
-                    }
-                }
-            }
-        }
-        return (Map) m_variation.get(variation);
+        return applicationRulesManager!=null ? applicationRulesManager.getApplicationRulesVariation(variation) : null;
     }
 
     /**

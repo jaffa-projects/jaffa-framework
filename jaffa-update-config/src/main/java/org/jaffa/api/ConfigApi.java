@@ -107,7 +107,7 @@ public class ConfigApi implements IConfigApi {
 
         //Extract files to gain access to configuration resources
         File tempDir = ConfigApiHelper.extractToTemporaryDirectory(filePath);
-        ConfigApiHelper.unregisterResources(tempDir, ConfigApiHelper.getFileContents(filePath).getContextSalience());
+        ConfigApiHelper.unregisterResources(tempDir, ConfigApiHelper.getFileContents(filePath));
 
         AopXmlLoader.getInstance().unloadAop(tempDir.getPath());
 
@@ -208,7 +208,8 @@ public class ConfigApi implements IConfigApi {
         //Copy files to server and register resources
         Files.copy(new ByteArrayInputStream(payload), filePath.toPath());
         File tempDir = ConfigApiHelper.extractToTemporaryDirectory(filePath);
-        ConfigApiHelper.registerResources(tempDir, ConfigApiHelper.getFileContents(filePath).getContextSalience());
+        FileContentsHelper fileContents =  ConfigApiHelper.getFileContents(filePath);
+        ConfigApiHelper.registerResources(tempDir, fileContents);
         AopXmlLoader.getInstance().processAopPath(tempDir.getPath());
 
         ConfigApiHelper.removeDirTree(tempDir);
