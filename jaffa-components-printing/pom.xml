@@ -43,7 +43,6 @@
     <dependency>
       <groupId>com.lowagie</groupId>
       <artifactId>itext</artifactId>
-	  <scope>provided</scope>
       <exclusions>
         <exclusion>
           <groupId>bouncycastle</groupId>
