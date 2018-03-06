@@ -1036,6 +1036,15 @@ Ext.override(Ext.grid.EditorGridPanel, {
 });
 
 /**
+ * Default to HTML encoding all grid cell contents.  Each column can set a renderer if necessary.
+ */
+Ext.override(Ext.grid.ColumnModel, {
+    defaults: {
+        renderer: Ext.util.Format.htmlEncode
+    }
+});
+
+/**
  * overrides to allow a custom css class to add on column. This allowed editable columns be marked
  * differently from non-editable ones. At mean time the color of editable columns changes when row is selected.
  * This override provides 'editable' flag and 'record' to cell template. The template will use editable==true to set the
