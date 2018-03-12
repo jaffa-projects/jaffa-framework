@@ -49,7 +49,6 @@
 package org.jaffa.persistence.engines.jdbcengine.datasource;
 
 import org.apache.log4j.Logger;
-import org.jaffa.exceptions.ApplicationException;
 import org.jaffa.exceptions.ApplicationExceptions;
 import org.jaffa.exceptions.FrameworkException;
 import org.jaffa.persistence.Criteria;
@@ -145,14 +144,6 @@ public class PersistentTransaction {
             if (log.isDebugEnabled())
                 log.debug("Invoking the PreAdd trigger on the Persistent object");
             for (ILifecycleHandler lifeCycleHandler : handlers) {
-                try {
-                    lifeCycleHandler.validate();
-                } catch (ApplicationExceptions aes) {
-                    ApplicationException ae = aes.getApplicationExceptionArray()[0];
-                    throw new PreAddFailedException(ae.getArguments(), ae.getCause());
-                } catch (FrameworkException fe) {
-                    throw new PreAddFailedException(fe.getArguments(), fe.getCause());
-                }
                 lifeCycleHandler.preAdd();
             }
         }
@@ -228,14 +219,6 @@ public class PersistentTransaction {
             if (log.isDebugEnabled())
                 log.debug("Invoking the PreUpdate trigger on the Persistent object");
             for (ILifecycleHandler lifecycleHandler : handlers) {
-                try {
-                    lifecycleHandler.validate();
-                } catch (ApplicationExceptions aes) {
-                    ApplicationException ae = aes.getApplicationExceptionArray()[0];
-                    throw new UpdateFailedException(ae.getArguments(), ae.getCause());
-                } catch (FrameworkException fe) {
-                    throw new UpdateFailedException(fe.getArguments(), fe.getCause());
-                }
                 lifecycleHandler.preUpdate();
             }
         }
