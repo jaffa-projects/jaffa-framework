@@ -17,9 +17,7 @@ AuditTransactionGrid = function(groupStore, id) {
     {dataIndex: 'fieldName'},
     {dataIndex: 'fieldLabel'},
     {dataIndex: 'fromValue'},
-    {dataIndex: 'toValue'},
-    {dataIndex: 'overflowFlag'},
-    {dataIndex: 'multilineHtmlFlag'}
+    {dataIndex: 'toValue'}
   ];
 
   var groupView = new Ext.ux.grid.MultiGroupingView({

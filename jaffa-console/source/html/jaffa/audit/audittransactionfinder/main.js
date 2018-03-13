@@ -96,14 +96,6 @@ var AuditTransactionRecord = Jaffa.data.Record.create([
     filter: true,
     sortFieldName: 'ToValue',
     sortable: true
-  },{
-    name: 'overflowFlag',
-    hidden: true,
-    alwaysHidden: true
-  },{
-    name: 'multilineHtmlFlag',
-    hidden: true,
-    alwaysHidden: true
   }
 ]);
 
