@@ -41,7 +41,7 @@
                     showRelationShip: true,
                     docType:'DO_DOC',
                     topicName: 'OutboundEvents',
-                    env: '<%= request.getParameter("env") %>'
+                    env: '<%= StringHelper.escapeJavascript(request.getParameter("env")) %>'
                 };
 
                 var security = {

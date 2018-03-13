@@ -27,6 +27,7 @@ Note: The implementation is generic that applies to a master object class aggreg
 <%@ page import = "org.apache.poi.ss.usermodel.Workbook" %>
 <%@ page import = "org.apache.poi.xssf.streaming.SXSSFWorkbook" %>
 <%@ page import = "org.jaffa.session.ContextManagerFactory" %>
+<%@ page import="org.jaffa.util.StringHelper" %>
 
 <%@ taglib uri='/WEB-INF/jaffa-portlet.tld' prefix='j' %>
 
@@ -36,20 +37,20 @@ final Logger log = Logger.getLogger("js.extjs.jaffa.exportToExcel");
 QueryServiceConfig master = new QueryServiceConfig();
 QueryServiceConfig child = null;
 
-master.setCriteriaClassName(request.getParameter("criteriaClassName"));
-master.setCriteriaObject(request.getParameter("criteriaObject"));
-master.setServiceClassName(request.getParameter("serviceClassName"));
-master.setServiceClassMethodName(request.getParameter("serviceClassMethodName"));
-master.setColumnModel(ExcelExportService.jsonArrayToBeanArray(request.getParameter("columnModel"), null));
+master.setCriteriaClassName(StringHelper.escapeJavascript(request.getParameter("criteriaClassName")));
+master.setCriteriaObject(StringHelper.escapeJavascript(request.getParameter("criteriaObject")));
+master.setServiceClassName(StringHelper.escapeJavascript(request.getParameter("serviceClassName")));
+master.setServiceClassMethodName(StringHelper.escapeJavascript(request.getParameter("serviceClassMethodName")));
+master.setColumnModel(ExcelExportService.jsonArrayToBeanArray(StringHelper.escapeJavascript(request.getParameter("columnModel")), null));
 
-String mkfns = request.getParameter("masterKeyFieldNames");
+String mkfns = StringHelper.escapeJavascript(request.getParameter("masterKeyFieldNames"));
 if (mkfns != null) {
     child = new QueryServiceConfig();
     child.setMasterKeyFieldNames(ExcelExportService.jsonArrayToBeanArray(mkfns, null));
-    child.setCriteriaClassName(request.getParameter("detailCriteriaClassName"));
-    child.setCriteriaObject(request.getParameter("detailCriteria"));
-    child.setServiceClassName(request.getParameter("detailServiceClassName"));
-    child.setColumnModel(ExcelExportService.jsonArrayToBeanArray(request.getParameter("detailColumnModel"), null));
+    child.setCriteriaClassName(StringHelper.escapeJavascript(request.getParameter("detailCriteriaClassName")));
+    child.setCriteriaObject(StringHelper.escapeJavascript(request.getParameter("detailCriteria")));
+    child.setServiceClassName(StringHelper.escapeJavascript(request.getParameter("detailServiceClassName")));
+    child.setColumnModel(ExcelExportService.jsonArrayToBeanArray(StringHelper.escapeJavascript(request.getParameter("detailColumnModel")), null));
 }
 if(log.isDebugEnabled()) {
     log.debug("criteriaClassName = " + master.getCriteriaClassName());
@@ -66,7 +67,7 @@ if(log.isDebugEnabled()) {
 }
 
 Workbook wb;
-String sheetName = request.getParameter("sheetName");
+String sheetName = StringHelper.escapeJavascript(request.getParameter("sheetName"));
 
 String legacyExport = (String) ContextManagerFactory.instance().getProperty("jaffa.widgets.exportToExcel.legacy");
 if (legacyExport!=null && legacyExport.equals("T")){

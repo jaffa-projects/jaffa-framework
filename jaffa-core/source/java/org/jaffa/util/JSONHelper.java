@@ -59,7 +59,8 @@ public class JSONHelper {
     }
 
     /**
-     * Convert the request parameter map to a json string. 
+     * Convert the request parameter map to a json string.
+     *
      * @param request
      * @return
      */

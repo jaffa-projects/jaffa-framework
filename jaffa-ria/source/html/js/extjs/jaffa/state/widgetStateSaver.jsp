@@ -22,6 +22,7 @@
 <%@page import = "org.apache.log4j.Logger" %>
 <%@page import = "org.jaffa.session.ContextManagerFactory" %>
 <%@page import = "org.jaffa.util.URLHelper" %>
+<%@ page import="org.jaffa.util.StringHelper" %>
 <%!
     private static final Logger log = Logger.getLogger("js.extjs.jaffa.state.widgetStateSaver");
     private static final String APPLICATION_STATE_URL = "classpath:///resources/presentation";
@@ -183,10 +184,10 @@
 %>
 <%
     String currentUserId = request.getUserPrincipal().getName();
-    String pageRef = request.getParameter("pageRef");
-    String eventId = request.getParameter("eventId");
-    String name = request.getParameter("name");
-    String data = request.getParameter("data");
+    String pageRef = StringHelper.escapeJavascript(request.getParameter("pageRef"));
+    String eventId = StringHelper.escapeJavascript(request.getParameter("eventId"));
+    String name = StringHelper.escapeJavascript(request.getParameter("name"));
+    String data = StringHelper.escapeJavascript(request.getParameter("data"));
 
     if ("save".equals(eventId)) {
         writeProperty(currentUserId, pageRef, name, data);
