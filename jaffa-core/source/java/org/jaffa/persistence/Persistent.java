@@ -90,6 +90,11 @@ public abstract class Persistent implements IPersistent, IFlexFields {
     // handlers to inject custom code around lifecycle events
     private List<ILifecycleHandler> lifecycleHandlers = new ArrayList<>();
 
+    // handler list referencing prepended lifecycle handlers
+    private List<ILifecycleHandler> prependedHandlers = new ArrayList<>();
+    //handler list referencing appended lifecycle handlers
+    private List<ILifecycleHandler> appendedHandlers = new ArrayList<>();
+
     /**
      * Adds a new handler to the beginning of the list of all handlers.
      */
@@ -100,6 +105,7 @@ public abstract class Persistent implements IPersistent, IFlexFields {
 
         // maintain order of the input list
         lifecycleHandlers.addAll(0, handlers);
+        prependedHandlers.addAll(handlers);
     }
 
     /**
@@ -110,6 +116,7 @@ public abstract class Persistent implements IPersistent, IFlexFields {
             handler.setTargetBean(this);
             lifecycleHandlers.add(handler);
         }
+        appendedHandlers.addAll(handlers);
     }
 
     /**
@@ -563,7 +570,11 @@ public abstract class Persistent implements IPersistent, IFlexFields {
      * @throws FrameworkException    Indicates some system error
      */
     public void validate() throws ApplicationExceptions, FrameworkException {
-        // TODO-SWAT fire validateBegins() event
+        if(prependedHandlers!=null && prependedHandlers.size() > 0){
+            for(ILifecycleHandler prependedHandler : prependedHandlers){
+                prependedHandler.validate();
+            }
+        }
         doValidate();
 
         // FlexField support:
@@ -575,7 +586,11 @@ public abstract class Persistent implements IPersistent, IFlexFields {
             flexBean.validate();
         }
 
-        // TODO-SWAT fire validateEnds() event
+        if(appendedHandlers!=null && appendedHandlers.size() > 0){
+            for(ILifecycleHandler appendedHandler : appendedHandlers){
+                appendedHandler.validate();
+            }
+        }
     }
 
     /**
