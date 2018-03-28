@@ -293,18 +293,17 @@ Ext.onReady(function () {
             bodyStyle: 'background-color:white;padding: 10px;',
             html: "<div><h1>"+Labels.get('title.Jaffa.SC.SystemConfigDesktop')+"</h1><br>" +
                 Labels.get('label.Jaffa.SC.SystemConfigDesktop.SystemConfigDesktopSummary')+"<br>" +
-                (security.hasFlexFieldInquiry ? "<h2>"+Labels.get('label.Jaffa.SC.SystemConfigDesktop.FlexFieldEditor')+"</h2><br>" +
+                /*(security.hasFlexFieldInquiry ? "<h2>"+Labels.get('label.Jaffa.SC.SystemConfigDesktop.FlexFieldEditor')+"</h2><br>" +
                     Labels.get('label.Jaffa.SC.SystemConfigDesktop.FlexFieldsSummary')+"<br>" +
                     "<div class='intro-img'><h2>"+Labels.get('label.Jaffa.SC.SystemConfigDesktop.FlexFieldTree')+"</h2><img src='jaffa/sc/imgs/flexfieldtree.PNG'></div>" +
-                    "<div class='intro-img'><h2>"+Labels.get('label.Jaffa.SC.SystemConfigDesktop.FlexFieldEditorPanel')+"</h2><img src='jaffa/sc/imgs/flexfieldtab.PNG'></div><br class='clearboth'>" : "") +
+                    "<div class='intro-img'><h2>"+Labels.get('label.Jaffa.SC.SystemConfigDesktop.FlexFieldEditorPanel')+"</h2><img src='jaffa/sc/imgs/flexfieldtab.PNG'></div><br class='clearboth'>" : "") +*/
                 (security.hasRuleInquiry ? "<h2>"+Labels.get('label.Jaffa.SC.SystemConfigDesktop.BusinessRuleEditor')+"</h2><br>" +
 					Labels.get('label.Jaffa.SC.SystemConfigDesktop.BusinessRuleEditorSummary')+"<br>" +
                     "<ul><li class='intro-list'>"+Labels.get('label.Jaffa.SC.SystemConfigDesktop.BusinessRuleTreeDesc')+"</li>" +
                     "<li class='intro-list'>"+Labels.get('label.Jaffa.SC.SystemConfigDesktop.BusinessRuleSearchPanelDesc')+"</li>" +
-                    "<li class='intro-list'>"+Labels.get('label.Jaffa.SC.SystemConfigDesktop.BusinessRuleEditorPanelDesc')+"</li></ul>" +
                     "<div class='intro-img'><h2>"+Labels.get('label.Jaffa.SC.SystemConfigDesktop.BusinessRuleTree')+"</h2><img src='jaffa/sc/imgs/busruletree.PNG'></div>" +
                     "<div class='intro-img'><h2>"+Labels.get('label.Jaffa.SC.SystemConfigDesktop.BusinessRuleSearchPanel')+"</h2><img src='jaffa/sc/imgs/busrulesearch.PNG'></div>" +
-                    "<div class='intro-img'><h2>"+Labels.get('label.Jaffa.SC.SystemConfigDesktop.BusinessRuleEditorPanel')+"</h2><img src='jaffa/sc/imgs/busruleed.PNG'></div><br class='clearboth'>" : "") +
+                    "<br class='clearboth'>" : "") +
                 (security.hasSoaEventInquiry ? "<h2>"+Labels.get('label.Jaffa.SC.SystemConfigDesktop.SOAEvents')+"</h2><br>" +
                     Labels.get('label.Jaffa.SC.SystemConfigDesktop.SOAEventsSummary')+"<br>" +
                     "<ul><li class='intro-list'>"+Labels.get('label.Jaffa.SC.SystemConfigDesktop.SOAEventTreeDesc')+"</li>" +
@@ -574,7 +573,7 @@ Ext.onReady(function () {
         }));
     }
 	
-	if (security.hasFlexFieldInquiry){
+	/*if (security.hasFlexFieldInquiry){
 		viewport.addAccordionPanel(new Jaffa.SC.FlexTree({
 		  listeners: {
 			'click': function(node, event){
@@ -591,7 +590,7 @@ Ext.onReady(function () {
 			}
 		  }
 		}));
-	}
+	}*/
 
     viewport.header.topToolbar.refreshBtn.enable();
     viewport.doLayout();
