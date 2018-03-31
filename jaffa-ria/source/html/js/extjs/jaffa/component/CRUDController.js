@@ -371,7 +371,7 @@ Jaffa.component.CRUDController = Ext.extend(Jaffa.component.PanelController, {
           else {
             Ext.MessageBox.show({
               titleToken: 'label.jaffa.jaffaRIA.jaffa.DWRService.Validation.Error',
-              msg: (serverResponse) ? serverResponse.errors[0].localizedMessage : this.PreValidationFailedMsgText,
+              msg: (serverResponse) ? Ext.util.Format.htmlEncode(serverResponse.errors[0].localizedMessage) : this.PreValidationFailedMsgText,
               buttons: Ext.MessageBox.OK,
               icon: Ext.MessageBox.ERROR
             });
@@ -591,12 +591,12 @@ Jaffa.component.CRUDController = Ext.extend(Jaffa.component.PanelController, {
                   warn: (type === "org.jaffa.soa.rules.WarningEventException")
                 };
               } else
-                msg += (appExp.localizedMessage || this.defaultLocalizedErrorMessage) + '\n<br>';
+                msg += (Ext.util.Format.htmlEncode(appExp.localizedMessage) || this.defaultLocalizedErrorMessage) + '\n<br>';
             }
           } else if (responseEl.runtimeError) {
             // FrameworkException
             ok = false;
-            msg += responseEl.runtimeError.localizedMessage + '\n<br>';
+            msg += Ext.util.Format.htmlEncode(responseEl.runtimeError.localizedMessage) + '\n<br>';
           }
         }
       } else {
@@ -689,7 +689,7 @@ Jaffa.component.CRUDController = Ext.extend(Jaffa.component.PanelController, {
       // Handle is something REAL BAD happens
       console.debug("Internal Errors on Save",response, ex);
       Ext.get(document.body).unmask();
-      var txt = response;
+      var txt = Ext.util.Format.htmlEncode(response);
       if(ex) {
         if((ex.cause && ex.cause.applicationExceptionArray) ||
           ((response==null||response=="") && ex.cause) ||
@@ -699,7 +699,7 @@ Jaffa.component.CRUDController = Ext.extend(Jaffa.component.PanelController, {
         txt="";
           var e = ex.applicationExceptionArray;
           for (var j=0;j<e.length;j++) {
-            txt += e[j].localizedMessage + '\n<br>';
+            txt += Ext.util.Format.htmlEncode(e[j].localizedMessage) + '\n<br>';
             }
         } else {
           // console.error("Internal Error: ", ex);

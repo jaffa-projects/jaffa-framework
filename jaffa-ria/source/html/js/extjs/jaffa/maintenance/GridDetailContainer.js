@@ -265,7 +265,7 @@ Jaffa.maintenance.GridDetailContainer = Ext.extend(Ext.Panel, {
       },
       //Calls validate data method on detail panel
       validate: function(cb) {
-        var msg = this.validateData();
+        var msg = this.validateData(); // TODO can we escape the return of this for XSS or does this include html styling?
         if (msg) {
           Ext.MessageBox.show({
             buttons: {
