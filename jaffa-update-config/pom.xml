@@ -8,7 +8,7 @@
     <artifactId>jaffa-update-config</artifactId>
     <packaging>jar</packaging>
     <name>jaffa-update-config</name>
-    <version>6.0.9-SNAPSHOT</version>
+    <version>6.0.9</version>
 
     <!--////////////////////////////////////////////////////-->
     <!--// PARENT PROPERTIES ///////////////////////////////-->
@@ -16,7 +16,7 @@
     <parent>
         <groupId>org.jaffa</groupId>
         <artifactId>jaffa-parent</artifactId>
-        <version>6.0.9-SNAPSHOT</version>
+        <version>6.0.9</version>
     </parent>
 
     <!--////////////////////////////////////////////////////-->
