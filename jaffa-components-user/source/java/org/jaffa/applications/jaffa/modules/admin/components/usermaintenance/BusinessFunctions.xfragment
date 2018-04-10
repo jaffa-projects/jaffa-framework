@@ -1,3 +1,0 @@
-    <business-function name="Jaffa.Admin.User.Maintenance">
-        <description>Able to run the UserMaintenance component</description>
-    </business-function>

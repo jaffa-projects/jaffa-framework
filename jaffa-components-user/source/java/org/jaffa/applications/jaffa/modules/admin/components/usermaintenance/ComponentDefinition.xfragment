@@ -1,5 +1,0 @@
-    <component id="Jaffa.Admin.UserMaintenance">
-        <class>org.jaffa.applications.jaffa.modules.admin.components.usermaintenance.ui.UserMaintenanceComponent</class>
-        <type>ObjectMaintenance</type>
-        <mandatory-function name="Jaffa.Admin.User.Maintenance"/>
-    </component>

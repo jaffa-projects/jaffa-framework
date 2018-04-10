@@ -1,3 +1,0 @@
-    <business-function name="Jaffa.Admin.User.Details">
-        <description>Able to run the UserViewer component</description>
-    </business-function>

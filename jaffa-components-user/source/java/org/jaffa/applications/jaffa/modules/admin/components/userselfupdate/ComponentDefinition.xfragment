@@ -1,5 +1,0 @@
-    <component id="Jaffa.Admin.UserSelfUpdate">
-        <class>org.jaffa.applications.jaffa.modules.admin.components.userselfupdate.ui.UserSelfUpdateComponent</class>
-        <type>ObjectMaintenance</type>
-        <mandatory-function name="Jaffa.Admin.User.SelfUpdate"/>
-    </component>
