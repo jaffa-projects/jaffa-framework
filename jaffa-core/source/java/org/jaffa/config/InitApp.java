@@ -189,7 +189,7 @@ public class InitApp implements ServletContextListener {
                 else if (log.isInfoEnabled())
                     log.info("The " + (isDefault ? "default" : "") + " User Grid Settings folder- " + f);
             } catch (MalformedURLException e) {
-                log.warn("Bad URL for the " + (isDefault ? "default" : "") + " User Grid Settings folder- " + propValue, e);
+                log.warn("Bad URL for the " + (isDefault ? "default" : "") + " User Grid Settings folder- " + propValue);
             }
         }
     }
