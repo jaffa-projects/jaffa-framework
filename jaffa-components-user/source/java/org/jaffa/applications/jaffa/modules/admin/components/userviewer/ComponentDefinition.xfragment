@@ -1,0 +1,5 @@
+    <component id="Jaffa.Admin.UserViewer">
+        <class>org.jaffa.applications.jaffa.modules.admin.components.userviewer.ui.UserViewerComponent</class>
+        <type>ObjectViewer</type>
+        <mandatory-function name="Jaffa.Admin.User.Details"/>
+    </component>

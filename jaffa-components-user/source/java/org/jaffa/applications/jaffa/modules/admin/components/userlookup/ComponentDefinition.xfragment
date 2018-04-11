@@ -1,4 +1,5 @@
     <component id="Jaffa.Admin.UserLookup">
         <class>org.jaffa.applications.jaffa.modules.admin.components.userlookup.ui.UserLookupComponent</class>
         <type>ObjectLookup</type>
+        <mandatory-function name="Jaffa.Admin.User.Lookup"/>
     </component>
