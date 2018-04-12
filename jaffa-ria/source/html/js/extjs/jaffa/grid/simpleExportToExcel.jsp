@@ -33,8 +33,15 @@
 
             CreationHelper createHelper = wb.getCreationHelper();
 
-            //Creating worksheet
-            Sheet sheet = wb.createSheet(sheetName);
+            // Creating worksheet
+			Sheet sheet = null;
+			if (sheetName != null) {
+				if (sheetName.length() > 31)
+				sheetName = sheetName.substring(0, 31);
+				char replaceChar = '_';
+				sheetName = sheetName.replace('\u0003',replaceChar).replace(':',replaceChar).replace('/',replaceChar).replace("\\\\",Character.toString(replaceChar)).replace('?',replaceChar).replace('*',replaceChar).replace(']',replaceChar).replace('[',replaceChar);
+			}
+			sheet = wb.createSheet(sheetName);
 
             //creating a custom palette for the workbook
             CellStyle style = wb.createCellStyle();
