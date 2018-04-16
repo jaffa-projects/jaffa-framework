@@ -11,7 +11,7 @@
 
     <groupId>org.jaffa</groupId>
     <artifactId>jaffa-parent</artifactId>
-    <version>6.0.10-SNAPSHOT</version>
+    <version>6.0.11-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Java Application Framework For All</name>
@@ -34,7 +34,7 @@
         <!-- ******************************************************************* -->
         <!-- Jaffa Maven Tools Version                                                       -->
         <!-- ******************************************************************* -->
-        <jaffa.maven.tools.version>1.0.1-SNAPSHOT</jaffa.maven.tools.version>
+        <jaffa.maven.tools.version>1.0.0</jaffa.maven.tools.version>
 
         <!-- ******************************************************************* -->
         <!-- UI Source Directory                                                 -->
