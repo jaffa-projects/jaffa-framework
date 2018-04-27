@@ -600,9 +600,28 @@ Jaffa.form.FinderViewport = Ext.extend(Ext.Viewport, {
     }
   },
   doCancel:function (textOnly) {
-    this.resetMaintenancePanel()
-    this.togglePanelFields(textOnly);
-    this.maintenancePanelRef.setTitle(this.maintenancePanelRef.baseTitle || this.title);
+  // Here Whenever user tries to modify any field on click of Cancel button
+	// Say field name is "Description", from value "testDescp" to "testDescp1"
+	// Then after click on "yes" here, re-intializing to original value
+	// i.e, the Description field value again appears as "testDescp" 
+	// Ex: ScreenName = LocationCodes
+	if (this && this.maintenancePanelRef && 
+		(!(this.maintenancePanelRef.isDirty) && (textOnly != undefined))) {
+		this.maintenancePanelRef.collapse();
+	}	
+	if(textOnly) {
+		if(this && this.maintenancePanelRef) {
+			this.maintenancePanelRef.setDisabled(false);
+		}
+		if(this && this.maintenancePanelRef && 
+			this.maintenancePanelRef.loadData) {
+			this.maintenancePanelRef.loadData(true);
+		}
+	} else {
+			this.resetMaintenancePanel();
+			this.togglePanelFields(textOnly);
+			this.maintenancePanelRef.setTitle(this.maintenancePanelRef.baseTitle || this.title);
+	}
   },
   togglePanelFields:function (textOnly) {
     this.maintenancePanelRef.cascade(function (item) {
