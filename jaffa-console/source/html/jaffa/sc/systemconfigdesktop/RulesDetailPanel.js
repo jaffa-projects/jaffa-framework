@@ -19,7 +19,7 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
       name: 'description',
       type: 'string'
     },{
-      name: 'globalRule',
+      name: 'currentValue',
       type: 'string'
     },{
       name: 'defaultValue',
@@ -119,8 +119,8 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         sortable: true,
         renderer: this.ruleRenderer
       },{
-        header: Labels.get('label.Jaffa.SC.SystemConfigDesktop.global'),
-        dataIndex: 'globalRule',
+        header: Labels.get('label.Jaffa.SC.SystemConfigDesktop.current'),
+        dataIndex: 'currentValue',
         width : 200,
         sortable: true,
         renderer: this.ruleRenderer
@@ -141,7 +141,7 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             if (grid.activeEditor){ 
                 return false;
             }
-            if (grid.getColumnModel().getColumnAt(columnIndex).dataIndex!=='defaultValue' && grid.getColumnModel().getColumnAt(columnIndex).dataIndex !== 'globalRule'){
+            if (grid.getColumnModel().getColumnAt(columnIndex).dataIndex!=='defaultValue' && grid.getColumnModel().getColumnAt(columnIndex).dataIndex !== 'currentValue'){
                 return;
             }
             var record = grid.getStore().getAt(rowIndex);
@@ -165,7 +165,7 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
       //this.controller.setDirty(true);
       //this.setDirty(true);
       if (operation=='edit'){
-        this.controller.updateRule(this.id, record.get('rule'),record.get('varRule'),record.get('globalRule'));
+        this.controller.updateRule(this.id, record.get('rule'),record.get('varRule'),record.get('currentValue'));
       }
     }, this);
 
@@ -228,8 +228,8 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
       classPath:propArray.slice(0,(propArray.length>1?propArray.length-1:0)).join('.'),
       ruleName:(propArray.length>1?propArray[propArray.length-1]:property),
       label:(propMeta&&propMeta.label)?propMeta.label:(propArray.length>1?propArray[propArray.length-1]:property),
-      varRule:Jaffa.SC.BusinessRules.varRules[property],
-      globalRule:Jaffa.SC.BusinessRules.globalRules[property],
+      //varRule:Jaffa.SC.BusinessRules.varRules[property],
+      currentValue: Jaffa.SC.BusinessRules.varRules[property]? Jaffa.SC.BusinessRules.varRules[property] : Jaffa.SC.BusinessRules.globalRules[property],
       defaultValue: defaultValue,
       description: (propMeta&&propMeta.annotation)?propMeta.annotation:'',
       metaData: propMeta}));
