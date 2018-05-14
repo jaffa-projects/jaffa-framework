@@ -102,7 +102,9 @@ public class AopXmlLoader {
             Resource[] matches = resolver.getResources(path);
             List<ResourceWrapper> resourceWrapperList = new ArrayList<>();
             for (Resource match : matches) {
-                resourceWrapperList.add(new ResourceWrapper(match));
+                ResourceWrapper resourceWrapper = new ResourceWrapper(match);
+                if(resourceWrapper.getAopResourcePath() != null)
+                    resourceWrapperList.add(resourceWrapper);
             }
             resourceWrapperList.sort(Comparator.comparing(ResourceWrapper::getAopResourcePath));
             if (logger.isDebugEnabled()) {
