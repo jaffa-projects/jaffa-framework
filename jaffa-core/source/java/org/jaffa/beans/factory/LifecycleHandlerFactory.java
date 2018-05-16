@@ -93,13 +93,14 @@ public class LifecycleHandlerFactory implements ILifecycleHandlerFactory {
             for (ILifecycleHandlerProvider provider : prependedHandlerProviders.get(handler.getClass())) {
                 handlers.add(provider.getHandler());
             }
-            Class clazz = handler.getClass();
-            while(clazz!=null){
-                clazz = clazz.getSuperclass();
-                if(clazz!=null && prependedHandlerProviders.containsKey(clazz)){
-                    for (ILifecycleHandlerProvider provider : prependedHandlerProviders.get(clazz)) {
-                        handlers.add(provider.getHandler());
-                    }
+        }
+        Class clazz = handler.getClass();
+        while(clazz!=null){
+            clazz = clazz.getSuperclass();
+            if(clazz!=null && prependedHandlerProviders.containsKey(clazz)){
+                handlers = handlers != null ? handlers : new ArrayList<>();
+                for (ILifecycleHandlerProvider provider : prependedHandlerProviders.get(clazz)) {
+                    handlers.add(provider.getHandler());
                 }
             }
         }
@@ -114,13 +115,14 @@ public class LifecycleHandlerFactory implements ILifecycleHandlerFactory {
             for (ILifecycleHandlerProvider provider : appendedHandlerProviders.get(handler.getClass())) {
                 handlers.add(provider.getHandler());
             }
-            Class clazz = handler.getClass();
-            while(clazz!=null){
-                clazz = clazz.getSuperclass();
-                if(clazz!=null && appendedHandlerProviders.containsKey(clazz)){
-                    for (ILifecycleHandlerProvider provider : appendedHandlerProviders.get(clazz)) {
-                        handlers.add(provider.getHandler());
-                    }
+        }
+        Class clazz = handler.getClass();
+        while(clazz!=null){
+            clazz = clazz.getSuperclass();
+            if(clazz!=null && appendedHandlerProviders.containsKey(clazz)){
+                handlers = handlers != null ? handlers : new ArrayList<>();
+                for (ILifecycleHandlerProvider provider : appendedHandlerProviders.get(clazz)) {
+                    handlers.add(provider.getHandler());
                 }
             }
         }
