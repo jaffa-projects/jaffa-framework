@@ -94,8 +94,8 @@ Should be included in the main JSP that loads all the java script using the foll
 %>
 <%
 boolean editor = SecurityTag.hasComponentAccess(request, "Jaffa.Admin.LabelEditor");
-String ref = StringHelper.escapeJavascript(request.getParameter("ref"));
-String token = StringHelper.escapeJavascript(request.getParameter("token"));
+String ref=(String)request.getParameter("ref");
+String token=(String)request.getParameter("token");
 if(ref!=null&&token==null) {
     // Read the tokens for this page and create and populate the Labels object
     TreeSet<String> t = readLabelTokens(ref, request);

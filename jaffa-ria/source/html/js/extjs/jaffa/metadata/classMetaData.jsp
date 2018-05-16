@@ -525,9 +525,9 @@ private String[] findAggregateObjectNames(Class clazz) {
   return aggregateObjectNames;
 }
 %><%
-String className = StringHelper.escapeJavascript(request.getParameter("className"));
-String outputClassName = StringHelper.escapeJavascript(request.getParameter("outputClassName"));
-String objectString = StringHelper.escapeJavascript(request.getParameter("object"));
+String className = request.getParameter("className");
+String outputClassName = request.getParameter("outputClassName");
+String objectString = request.getParameter("object");
 Boolean legacy = Parser.parseBoolean(request.getParameter("legacy"));
 className = className != null ? className.trim() : null;
 objectString = objectString != null ? objectString.trim() : null;

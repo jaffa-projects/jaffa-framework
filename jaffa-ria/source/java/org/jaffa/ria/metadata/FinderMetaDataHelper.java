@@ -136,30 +136,25 @@ public class FinderMetaDataHelper {
       private static Map<String, String> getParameters(HttpServletRequest request) throws Exception {
           // Create a Map and load it with non-null request parameters
           Map<String, String> m = new HashMap<String, String>();
-          String component = StringHelper.escapeJavascript(request.getParameter("component"));
-          if (component != null) {
+          String component = request.getParameter("component");
+          if (component != null)
               m.put("component", component);
-          }
-          String bypassCriteriaScreen = StringHelper.escapeJavascript(request.getParameter("bypassCriteriaScreen"));
-          if (bypassCriteriaScreen != null) {
+          String bypassCriteriaScreen = request.getParameter("bypassCriteriaScreen");
+          if (bypassCriteriaScreen != null)
               m.put("bypassCriteriaScreen", bypassCriteriaScreen);
-          }
-          String dynamicParameters = StringHelper.escapeJavascript(request.getParameter("dynamicParameters"));
-          if (dynamicParameters != null) {
+          String dynamicParameters = request.getParameter("dynamicParameters");
+          if (dynamicParameters != null)
               m.put("dynamicParameters", dynamicParameters);
-          }
-          String staticParameters = StringHelper.escapeJavascript(request.getParameter("staticParameters"));
-          if (staticParameters != null) {
+          String staticParameters = request.getParameter("staticParameters");
+          if (staticParameters != null)
               m.put("staticParameters", staticParameters);
-          }
-          String targetFields = StringHelper.escapeJavascript(request.getParameter("targetFields"));
-          if (targetFields != null) {
+          String targetFields = request.getParameter("targetFields");
+          if (targetFields != null)
               m.put("targetFields", targetFields);
-          }
 
           // Use the PropertyRuleIntrospector to determine the parameters which were not passed in the request
-          String className = StringHelper.escapeJavascript(request.getParameter("className"));
-          String propertyName = StringHelper.escapeJavascript(request.getParameter("propertyName"));
+          String className = request.getParameter("className");
+          String propertyName = request.getParameter("propertyName");
           if (className != null && propertyName != null) {
               IPropertyRuleIntrospector i = RulesEngineFactory.getRulesEngine().getPropertyRuleIntrospector(className, propertyName, null);
               Properties p = i.getForeignKeyInfo();
