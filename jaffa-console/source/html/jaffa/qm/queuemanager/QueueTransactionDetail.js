@@ -28,7 +28,7 @@ Jaffa.QM.QueueTransactionDetail = Ext.extend(Ext.Panel, {
 
     if (appFields.length > 0){
       for (var i = 0; i < appFields.length; i++){
-        tabGeneral.items[tabGeneral.items.length] = {appFieldMapping:appFields[i].name, fieldLabel:appFields[i].label?appFields[i].label:appFields[i].name, mapping:'dummyMapping', textOnly: true};
+        tabGeneral.items[tabGeneral.items.length] = {appFieldMapping:appFields[i].name, fieldLabel:appFields[i].label?appFields[i].label:appFields[i].name, mapping:'dummyMapping', textOnly: true, labelWidth: false, labelStyle: 'width: auto'};
       }
     }
 

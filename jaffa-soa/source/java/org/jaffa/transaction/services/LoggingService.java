@@ -58,6 +58,7 @@ import org.apache.log4j.MDC;
 import org.jaffa.modules.messaging.domain.BusinessEventLogMeta;
 import org.jaffa.transaction.domain.Transaction;
 import org.jaffa.transaction.domain.TransactionField;
+import org.jaffa.transaction.domain.TransactionFieldMeta;
 import org.jaffa.transaction.services.configdomain.Param;
 import org.jaffa.transaction.services.configdomain.TransactionInfo;
 
@@ -126,13 +127,13 @@ public class LoggingService {
         	MDC.put(BusinessEventLogMeta.MESSAGE_ID, transaction.getId());
         
         try {
-        	//Add in scheduledTaskId to MDC if it has been passed in as TransactionField
-        	if (transaction.getTransactionFieldArray() != null) {
-        		for(TransactionField tField: transaction.getTransactionFieldArray()) { 
-        			if("JaffaTransactionInvokerScheduledTaskId".equals(tField.getFieldName())) 
-        				MDC.put(BusinessEventLogMeta.SCHEDULED_TASK_ID, tField.getValue());
-        		}
-        	}
+            //Add in scheduledTaskId to MDC if it has been passed in as TransactionField
+            if (transaction.getTransactionFieldArray() != null) {
+                for(TransactionField tField: transaction.getTransactionFieldArray()) {
+                    if(TransactionFieldMeta.JAFFA_TRANSACTION_TASK_ID.equals(tField.getFieldName()))
+                        MDC.put(BusinessEventLogMeta.SCHEDULED_TASK_ID, tField.getValue());
+                }
+            }
         }
         catch(Exception e) {
         	if (log.isDebugEnabled())

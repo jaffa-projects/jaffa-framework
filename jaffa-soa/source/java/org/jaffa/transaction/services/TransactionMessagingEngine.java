@@ -64,6 +64,7 @@ import org.jaffa.transaction.domain.Transaction;
 import org.jaffa.transaction.domain.Transaction.Direction;
 import org.jaffa.transaction.domain.Transaction.Status;
 import org.jaffa.transaction.domain.TransactionField;
+import org.jaffa.transaction.domain.TransactionFieldMeta;
 import org.jaffa.util.ExceptionHelper;
 
 import java.util.Collection;
@@ -283,7 +284,7 @@ public class TransactionMessagingEngine implements IMessagingEngine {
                 TransactionField[] transactionFields = transaction.getTransactionFieldArray();
                 if (transactionFields != null) {
                     for (TransactionField field : transaction.getTransactionFieldArray()) {
-                        if ("JaffaTransactionInvokerScheduledTaskId".equals(field.getFieldName())) {
+                        if (TransactionFieldMeta.JAFFA_TRANSACTION_TASK_ID.equals(field.getFieldName())) {
                             scheduledId = field.getValue();
                             break;
                         }
