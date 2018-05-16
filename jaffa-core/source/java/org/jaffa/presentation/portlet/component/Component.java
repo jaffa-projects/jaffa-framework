@@ -318,8 +318,6 @@ public abstract class Component implements IComponent {
         for (Enumeration enumeration = request.getParameterNames(); enumeration.hasMoreElements();) {
             String parameterName = (String) enumeration.nextElement();
             try {
-                // todo this can set any value on any field, this is a XSS vulnerability if any of these components
-                // todo reflect back a value at any point and the UI doesn't protect against it
                 BeanHelper.setField(this, parameterName, request.getParameter(parameterName));
             } catch (Exception e) {
                 // do nothing
