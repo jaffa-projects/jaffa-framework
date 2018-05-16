@@ -60,6 +60,7 @@
 <%@ page import="javax.management.MalformedObjectNameException" %>
 <%@ page import="org.apache.activemq.broker.jmx.DurableSubscriptionViewMBean" %>
 <%@ page import="javax.jms.TopicSubscriber" %>
+<%@ page import="org.jaffa.util.StringHelper" %>
 
 <%!
 
@@ -478,12 +479,12 @@
 
     JmsConfig jmsConfig = ConfigurationService.getInstance().getJmsConfig();
 
-    String action = (String)request.getParameter("action");
-    String topicName = (String)request.getParameter("topicName");
-    String subscriptionName = (String)request.getParameter("subscriptionName");
-    String clientID = (String)request.getParameter("clientID");
-    String selector = (String)request.getParameter("messageSelector");
-    String pendingMessageSize = (String)request.getParameter("pendingMessageSize");
+    String action = request.getParameter("action");
+    String topicName = StringHelper.escapeJavascript(request.getParameter("topicName"));
+    String subscriptionName = StringHelper.escapeJavascript(request.getParameter("subscriptionName"));
+    String clientID = StringHelper.escapeJavascript(request.getParameter("clientID"));
+    String selector = StringHelper.escapeJavascript(request.getParameter("messageSelector"));
+    String pendingMessageSize = request.getParameter("pendingMessageSize");
     String userName = jmsConfig.getUser();    
     String password = jmsConfig.getPassword();   
     String providerURL = null;
