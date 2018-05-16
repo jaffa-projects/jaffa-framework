@@ -496,7 +496,9 @@ Jaffa.form.FinderViewport = Ext.extend(Ext.Viewport, {
   onRowDeSelect:function (sm, rowIndex, rec) {
     if (!this.supressRowDeSelect) {
       if (sm.getCount() != 1) {
+        this.rowDeselect = true;
         this.cancelData(true);
+        this.rowDeselect = false;
       } else {
         this.loadRecord(sm.getSelected());
       }
@@ -605,23 +607,19 @@ Jaffa.form.FinderViewport = Ext.extend(Ext.Viewport, {
 	// Then after click on "yes" here, re-intializing to original value
 	// i.e, the Description field value again appears as "testDescp" 
 	// Ex: ScreenName = LocationCodes
-	if (this && this.maintenancePanelRef && 
-		(!(this.maintenancePanelRef.isDirty) && (textOnly != undefined))) {
-		this.maintenancePanelRef.collapse();
-	}	
-	if(textOnly) {
-		if(this && this.maintenancePanelRef) {
-			this.maintenancePanelRef.setDisabled(false);
-		}
-		if(this && this.maintenancePanelRef && 
-			this.maintenancePanelRef.loadData) {
-			this.maintenancePanelRef.loadData(true);
-		}
-	} else {
-			this.resetMaintenancePanel();
-			this.togglePanelFields(textOnly);
-			this.maintenancePanelRef.setTitle(this.maintenancePanelRef.baseTitle || this.title);
-	}
+    if(textOnly) {
+      if(this && this.maintenancePanelRef) {
+        if(this.maintenancePanelRef.isDirty && this.maintenancePanelRef.loadData){
+          this.maintenancePanelRef.loadData(true);
+        } else if(!this.rowDeselect) {
+            this.maintenancePanelRef.collapse();
+        }
+      }
+    } else {
+      this.resetMaintenancePanel();
+      this.togglePanelFields(textOnly);
+      this.maintenancePanelRef.setTitle(this.maintenancePanelRef.baseTitle || this.title);
+    }
   },
   togglePanelFields:function (textOnly) {
     this.maintenancePanelRef.cascade(function (item) {

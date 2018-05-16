@@ -128,7 +128,7 @@ public class TransactionFieldMeta {
     
 // .//GEN-END:2_be
 // All the custom code goes here//GEN-FIRST:custom
-
+public static String JAFFA_TRANSACTION_TASK_ID = "Jaffa Transaction Task ID";
 
 
 
