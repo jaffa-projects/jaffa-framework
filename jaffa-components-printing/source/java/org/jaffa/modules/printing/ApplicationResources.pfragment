@@ -36,6 +36,27 @@ label.Jaffa.Printing.FormSelection.Event=Event
 label.Jaffa.Printing.FormSelection.FormName=Form Name
 label.Jaffa.Printing.FormSelection.InvalidSelect=Are you sure you want to exit the screen without generating a form or label?
 
+label.Jaffa.Printing.FormSelection.Key.voucher=Voucher
+label.Jaffa.Printing.FormSelection.Key.transactionCode=TCN
+label.Jaffa.Printing.FormSelection.Key.assetId=Asset ID
+label.Jaffa.Printing.FormSelection.Key.workOrderNo=Work Order No
+label.Jaffa.Printing.FormSelection.Key.requestId=Part Request ID
+label.Jaffa.Printing.FormSelection.Key.itemId=Item ID
+label.Jaffa.Printing.FormSelection.Key.uid=UID
+label.Jaffa.Printing.FormSelection.Key.rfTagId=RF Tag ID
+label.Jaffa.Printing.FormSelection.Key.proformaName=Proforma Name
+label.Jaffa.Printing.FormSelection.Key.checkType=Check Type
+label.Jaffa.Printing.FormSelection.Key.engineSerial=Engine Serial
+label.Jaffa.Printing.FormSelection.Key.checkDate=Check Date
+label.Jaffa.Printing.FormSelection.Key.serial=Serial
+label.Jaffa.Printing.FormSelection.Key.defaultName=Default Name
+label.Jaffa.Printing.FormSelection.Key.requisitionNumber=Requisition Number
+label.Jaffa.Printing.FormSelection.Key.supplyDiscrepancyNo=Supply Discrepancy Number
+label.Jaffa.Printing.FormSelection.Key.itemIdList=Item ID List
+label.Jaffa.Printing.FormSelection.Key.transportationControlNo=Transportation Control No
+label.Jaffa.Printing.FormSelection.Key.sourceDocNo=Source Document No
+label.Jaffa.Printing.FormSelection.Key.installRemoveIdList=Install/Remove ID
+
 label.Jaffa.Printing.FormSelection.Key1=Key1
 label.Jaffa.Printing.FormSelection.Key2=Key2
 label.Jaffa.Printing.FormSelection.Key3=Key3
