@@ -120,7 +120,7 @@ public class PropsFilePropertiesSource extends net.jawr.web.resource.bundle.fact
 						log.debug("Properties Resource Location: " + resource.getURL());
 					}
 					if (resource != null && resource.getInputStream() != null) {
-						properties.load(resource.getInputStream());
+						properties.load(resource.getInputStream()); //here
 					}
 				}
 			} else {
