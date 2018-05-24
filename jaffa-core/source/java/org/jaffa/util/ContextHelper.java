@@ -95,7 +95,7 @@ public class ContextHelper {
                     if (logger.isDebugEnabled())
                         logger.debug("manifestPath={}" + manifestPath);
                     String contextSalienceRead = getManifestParameter(manifestPath, true);
-                    contextSalience = contextSalienceRead != null ? contextSalienceRead : contextSalience;
+                    contextSalience = contextSalienceRead != null && !"".equals(contextSalienceRead.trim()) ? contextSalienceRead : contextSalience;
                     getContextSalienceMap().put(manifestPath, contextSalience);
                 } else {
                     contextSalience = getContextSalienceMap().get(manifestPath);
@@ -127,13 +127,13 @@ public class ContextHelper {
                     if (logger.isDebugEnabled())
                         logger.debug("manifestPath={}" + manifestPath);
                     String variationSalienceRead = getManifestParameter(manifestPath, false);
-                    variationSalience = variationSalienceRead != null ? variationSalienceRead : variationSalience;
+                    variationSalience = variationSalienceRead != null && !"".equals(variationSalienceRead.trim()) ? variationSalienceRead : variationSalience;
                     getVariationSalienceMap().put(manifestPath, variationSalience);
                 } else {
                     variationSalience = getVariationSalienceMap().get(manifestPath);
                 }
             } catch (Exception w) {
-                logger.error("Excpetion occurred while getting variation salience " + w);
+                logger.error("Exception occurred while getting variation salience " + w);
             }
         }
 

@@ -217,6 +217,18 @@ public class ContextManager implements IContextManager {
     }
 
     /**
+     * Removes the property in the thread context.
+     * This property will be available only for the duration of the thread and will not be persisted.
+     *
+     * @param key   the key for a property.
+     * @return the previous value of the specified key in this property list, or null if it did not have one.
+     */
+    public Object removeProperty(Object key) {
+        Map m = getThreadContext();
+        return m != null ? m.remove(key) : null;
+    }
+
+    /**
      * Returns a set containing all the keys in the different contexts.
      *
      * @return a set containing all the keys in the different contexts.
@@ -260,6 +272,7 @@ public class ContextManager implements IContextManager {
         if (userPreferencesFileName != null) {
             Map<Object, Object> m = getUserPreferences(userPreferencesFileName);
             m.put(name, value);
+            setProperty(name, value);
 
             // Save the property to file
             storePropertiesToFile((Properties) m, userPreferencesFileName);
@@ -278,6 +291,7 @@ public class ContextManager implements IContextManager {
         if (userPreferencesFileName != null) {
             Map<Object, Object> m = getUserPreferences(userPreferencesFileName);
             m.remove(name);
+            removeProperty(name);
 
             // Save the property to file
             storePropertiesToFile((Properties) m, userPreferencesFileName);
@@ -302,6 +316,7 @@ public class ContextManager implements IContextManager {
                 String name = (String) enumeration.nextElement();
                 String value = userPreferences.getProperty(name);
                 m.put(name, value);
+                setProperty(name, value);
             }
 
             // Save the property to file
@@ -325,6 +340,7 @@ public class ContextManager implements IContextManager {
             while (iterator.hasNext()) {
                 String name = (String) iterator.next();
                 m.remove(name);
+                removeProperty(name);
             }
 
             // Save the property to file
@@ -340,20 +356,7 @@ public class ContextManager implements IContextManager {
      * @return the global context.
      */
     private Map<Object, Object> getGlobalContext() {
-        if (m_global == null) {
-            synchronized (this) {
-                if (m_global == null) {
-                    Properties props = null;
-                    props = (applicationRulesManager != null) ? applicationRulesManager.getApplicationRulesGlobal() : null;
-
-                    // Cache an unmodifiable view
-                    if (props != null) {
-                        m_global = Collections.unmodifiableMap(props);
-                    }
-                }
-            }
-        }
-        return m_global;
+        return applicationRulesManager != null ? applicationRulesManager.getApplicationRulesGlobal() : null;
     }
 
     /**
@@ -364,22 +367,7 @@ public class ContextManager implements IContextManager {
      * @return the variation context.
      */
     private Map getVariationContext(String variation) {
-        if (!m_variation.containsKey(variation)) {
-            synchronized (m_variation) {
-                if (!m_variation.containsKey(variation)) {
-                    Properties props = null;
-                    if (props == null || props.size() == 0) {
-                        props = applicationRulesManager.getApplicationRulesVariation(variation);
-                    }
-
-                    // Cache an unmodifiable view
-                    if (props != null) {
-                        m_variation.put(variation, Collections.unmodifiableMap(props));
-                    }
-                }
-            }
-        }
-        return (Map) m_variation.get(variation);
+        return applicationRulesManager!=null ? applicationRulesManager.getApplicationRulesVariation(variation) : null;
     }
 
     /**

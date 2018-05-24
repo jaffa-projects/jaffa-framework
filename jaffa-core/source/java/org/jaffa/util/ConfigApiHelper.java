@@ -51,6 +51,9 @@ package org.jaffa.util;
 import org.apache.log4j.Logger;
 import org.jaffa.loader.IManager;
 import org.jaffa.loader.ManagerRepositoryService;
+import org.jaffa.loader.policy.RoleManager;
+import org.jaffa.security.PolicyManager;
+import org.jaffa.security.VariationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -143,15 +146,18 @@ public class ConfigApiHelper {
      * @param file  The configuration file to be registered or unregistered
      * @return  Success or failure of the operation
      */
-    public static boolean registerResources(File file, String contextSalience) {
+    public static boolean registerResources(File file, FileContentsHelper fileContents) {
         boolean isSuccess = true;
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         for(IManager manager : ManagerRepositoryService.getInstance().getManagerMap().values()) {
             Resource resource = getMetaInfResource(file, resolver, manager);
             try {
                 if (resource.getFile().exists()) {
-                    manager.registerResource(resource, contextSalience,
-                            ContextHelper.getVariationSalience(resource.getURI().toString()));
+                    if(manager instanceof RoleManager){
+                        PolicyManager.clearCache();
+                    }
+                    manager.registerResource(resource, fileContents.getContextSalience(),
+                            fileContents.getVariationSalience());
                     ManagerRepositoryService.getInstance().add(manager.getClass().getSimpleName(), manager);
                     log.debug(resource.getFilename() + " was successfully registered to " + manager);
                 }
@@ -168,15 +174,15 @@ public class ConfigApiHelper {
      * @param file  The configuration file to be registered or unregistered
      * @return  Success or failure of the operation
      */
-    public static boolean unregisterResources(File file, String contextSalience) {
+    public static boolean unregisterResources(File file, FileContentsHelper fileContents) {
         boolean isSuccess = true;
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         for(IManager manager : ManagerRepositoryService.getInstance().getManagerMap().values()) {
             Resource resource = getMetaInfResource(file, resolver, manager);
             try {
                 if (resource.getFile().exists()) {
-                    manager.unregisterResource(resource, contextSalience,
-                            ContextHelper.getVariationSalience(resource.getURI().toString()));
+                    manager.unregisterResource(resource, fileContents.getContextSalience(),
+                            fileContents.getVariationSalience());
                     log.debug(resource.getFilename() + " was successfully unregistered from " + manager);
                 }
             } catch (Exception e) {
@@ -222,6 +228,7 @@ public class ConfigApiHelper {
             fileContents.addContentsItem(new File(configFile.toString()).getName());
             if (configFile.getName().toUpperCase().equals(manifestFile)) {
                 fileContents.setContextSalience(ConfigApiHelper.findContextSalienceInManifest(zipFile));
+                fileContents.setVariationSalience(ConfigApiHelper.findVariationSalienceInMainfest(zipFile));
            }
         }
         //zipFile.stream().close();
@@ -249,6 +256,24 @@ public class ConfigApiHelper {
         return contextSalience;
     }
 
+    /**
+     * findVariationSalienceInManifest() - When given a compressed file, parse its MANIFEST and return the
+     * Variation-Salience value if it exists
+     * @param zipFile   The compressed file containing the MANIFEST file to parse
+     * @return  The Context-Salience value retrieved from the MANIFEST file
+     * @throws IOException  Thrown when the provided compressed file does not exist or cannot be read
+     */
+    private static String findVariationSalienceInMainfest(ZipFile zipFile) throws IOException {
+        String variationSalience;
+
+        JarFile jar = new JarFile(zipFile.getName());
+        Manifest manifest = jar.getManifest();
+        variationSalience = manifest.getMainAttributes().getValue("Variation-Salience");
+        log.debug("ConfigApi received the following Variation-Salience from MANIFEST: " + variationSalience);
+        jar.close();
+
+        return variationSalience!=null && variationSalience.length() > 0 ? variationSalience : VariationContext.NULL_VARIATION;
+    }
   /**
    * getMetaInfoResource - Retrieves resource files from the META-INF directory within a configuration archive
    * @param file    The configuration archive file

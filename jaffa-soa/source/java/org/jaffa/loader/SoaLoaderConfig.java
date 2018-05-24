@@ -51,6 +51,7 @@ package org.jaffa.loader;
 
 import org.jaffa.loader.drools.DroolsLoader;
 import org.jaffa.loader.drools.DroolsManager;
+import org.jaffa.loader.messaging.JndiJmsManager;
 import org.jaffa.loader.messaging.MessagingManager;
 import org.jaffa.loader.scheduler.SchedulerManager;
 import org.jaffa.loader.soa.SoaEventManager;
@@ -122,6 +123,29 @@ public class SoaLoaderConfig {
         ConfigurationService.getInstance().setMessagingManager(messagingManager);
         return messagingManager;
     }
+
+
+    /**
+     * @return the jndiJms manager's XML loader
+     */
+    @Bean
+    public ResourceLoader<JndiJmsManager> jmsjndiJmsManagerXmlLoader() {
+        ResourceLoader<JndiJmsManager> jndiJmsManagerResourceLoader =
+                new ResourceLoader<>() ;
+        jndiJmsManagerResourceLoader.setManager(jndiJmsManager());
+        return jndiJmsManagerResourceLoader;
+    }
+    /**
+     * Creates and initializes the messaging manager.
+     * @return the newly created jndiJmsManager
+     */
+    @Bean
+    public JndiJmsManager jndiJmsManager() {
+        JndiJmsManager jndiJmsManager = new JndiJmsManager();
+        ConfigurationService.getInstance().setJndiJmsManager(jndiJmsManager);
+        return jndiJmsManager;
+    }
+
 
     /**
      * Loads the SchedulerManager

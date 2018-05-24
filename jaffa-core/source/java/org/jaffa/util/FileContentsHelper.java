@@ -62,13 +62,24 @@ public class FileContentsHelper {
   // CREATE JSON PROPERTIES
   private String name = null;
   private String contextSalience = null;
+  private String variationSalience = null;
   private List<String> contents = null;
 
-  // CONFIGURE contextSalience PROPERTY
-  public FileContentsHelper contextSalience(String contextSalience) {
-    this.contextSalience = contextSalience;
-    return this;
+  /**
+   * Retrieve the value from the variationSalience variable
+   * @return variationSalience  The variationSalience retrieved
+   **/
+  public String getVariationSalience() {
+    return variationSalience;
   }
+  /**
+   * Set the variation-salience value
+   * @param variationSalience The variationSalience to set
+   */
+  public void setVariationSalience(String variationSalience) {
+    this.variationSalience = variationSalience;
+  }
+
   /**
    * Retrieve the value from the contextSalience variable
    * @return contextSalience  The contextSalience retrieved

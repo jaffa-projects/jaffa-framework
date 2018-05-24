@@ -235,6 +235,13 @@ Jaffa.finder.CriteriaPanel = Ext.extend(Ext.Panel, {
    */
   ,
   search: function(criteria) {
+	// disabling the comment panel when we click on the Search button
+	// ex: Default Comments screen - below comments section
+	if(this && this.grid && this.grid.refOwner && this.grid.refOwner.ownerCt 
+		&& this.grid.refOwner.ownerCt.maintenancePanelRef){	
+		this.grid.refOwner.ownerCt.maintenancePanelRef.setDisabled(true);
+		this.grid.refOwner.ownerCt.maintenancePanelRef.collapse();
+	}
     criteria = criteria || this.getCriteriaFromPanel();
     if(criteria == false){
       return false;

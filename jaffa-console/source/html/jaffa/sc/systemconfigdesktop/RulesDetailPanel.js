@@ -19,10 +19,7 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
       name: 'description',
       type: 'string'
     },{
-      name: 'varRule',
-      type: 'string'
-    },{
-      name: 'globalRule',
+      name: 'currentValue',
       type: 'string'
     },{
       name: 'defaultValue',
@@ -37,6 +34,31 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
       )
     });
 
+    this.ruleRenderer =  function(value, metadata, record, rowIndex, colIndex, store){
+      var meta;
+      if (record && record.get('metaData')){
+        meta = record.get('metaData');
+      } else {
+        return value;
+      }
+
+      if (meta.inList){
+        var valueList = value.split(',');
+        var renderedList = [];
+        for (var i = 0; i < valueList.length; i++){
+          for (var j = 0; j < meta.inList.length; j++){
+            if (meta.inList[j][0] == valueList[i])
+              renderedList[renderedList.length] = meta.inList[j][1];
+          }
+        }
+        value = renderedList.join(', ');
+      }
+
+      metadata.css = 'editable';
+
+      return value;
+    };
+    
     var tbar;
     if (this.enableSearch)
       tbar = [
@@ -94,17 +116,14 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         header: Labels.get('label.Jaffa.SC.SystemConfigDesktop.defaultValue'),
         dataIndex: 'defaultValue',
         width : 200,
-        sortable: true
+        sortable: true,
+        renderer: this.ruleRenderer
       },{
-        header: Labels.get('label.Jaffa.SC.SystemConfigDesktop.variation'),
-        dataIndex: 'varRule',
+        header: Labels.get('label.Jaffa.SC.SystemConfigDesktop.current'),
+        dataIndex: 'currentValue',
         width : 200,
         sortable: true,
-      },{
-        header: Labels.get('label.Jaffa.SC.SystemConfigDesktop.global'),
-        dataIndex: 'globalRule',
-        width : 200,
-        sortable: true,
+        renderer: this.ruleRenderer
       }],
       ds: new Ext.data.Store({
         scope: this,
@@ -115,18 +134,38 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
           direction: "ASC"
         },
         reader: new Ext.data.JsonReader({idProperty : 'rule'}, this.ruleRecord)
-      })
-  })
+      }),
+      listeners:{
+        'cellclick': {
+          fn: function (grid, rowIndex, columnIndex, e){
+            if (grid.activeEditor){ 
+                return false;
+            }
+            if (grid.getColumnModel().getColumnAt(columnIndex).dataIndex!=='defaultValue' && grid.getColumnModel().getColumnAt(columnIndex).dataIndex !== 'currentValue'){
+                return;
+            }
+            var record = grid.getStore().getAt(rowIndex);
+            var _editor = "";
+            if (record.get('metaData') && record.get('metaData').readOnly === true){
+                return false;
+            }
+            var fieldConfig = this.buildEditor(record);
+            _editor = new Ext.grid.GridEditor(Ext.ComponentMgr.create(fieldConfig));
+            grid.getColumnModel().setEditor(columnIndex,_editor);
+          }
+        }
+      }
+    })
 
     Ext.grid.EditorGridPanel.superclass.initComponent.call(this);
 
     if (this.path) this.loadFromPath(this.path);
 
     this.store.on('update', function(store, record, operation){
-      this.controller.setDirty(true);
-      this.setDirty(true);
+      //this.controller.setDirty(true);
+      //this.setDirty(true);
       if (operation=='edit'){
-        this.controller.updateRule(this.id, record.get('rule'),record.get('varRule'),record.get('globalRule'));
+        this.controller.updateRule(this.id, record.get('rule'),record.get('varRule'),record.get('currentValue'));
       }
     }, this);
 
@@ -189,8 +228,8 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
       classPath:propArray.slice(0,(propArray.length>1?propArray.length-1:0)).join('.'),
       ruleName:(propArray.length>1?propArray[propArray.length-1]:property),
       label:(propMeta&&propMeta.label)?propMeta.label:(propArray.length>1?propArray[propArray.length-1]:property),
-      varRule:Jaffa.SC.BusinessRules.varRules[property],
-      globalRule:Jaffa.SC.BusinessRules.globalRules[property],
+      //varRule:Jaffa.SC.BusinessRules.varRules[property],
+      currentValue: Jaffa.SC.BusinessRules.varRules[property]? Jaffa.SC.BusinessRules.varRules[property] : Jaffa.SC.BusinessRules.globalRules[property],
       defaultValue: defaultValue,
       description: (propMeta&&propMeta.annotation)?propMeta.annotation:'',
       metaData: propMeta}));
@@ -208,7 +247,7 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         scope: this,
         fn : function(btn) {
           if (btn == 'yes') {
-            this.setDirty(false);
+            //this.setDirty(false);
             this.search(searchString);
           }
         }
@@ -267,35 +306,48 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
           return ClassMetaData.BusinessRules.fields[p.join('.')];
       }
 
-    var p = property.split('.');
-    p = p[p.length-1];
-    if (ClassMetaData.BusinessRules.fields['**.' + p])
-      return ClassMetaData.BusinessRules.fields['**.' + p];
-  }
-  return null;
-},
-_dirty: false,
-    setDirty: function(dirty) {
-  if (dirty && !this._dirty){
-    this.setTitle(this.baseTitle + '*');
-    this._dirty = true;
-  }
-  if (!dirty) {
-    this.store.commitChanges();
-    this._dirty = false;
-    this.setTitle(this.baseTitle);
-  }
-},
-refresh: function(){
-  this.setDirty(false);
-  if (this.path){
-    this.loadFromPath(this.path);
-  }else if (this.searchString){
-    this.search(this.searchString);
-  }
-  if (this.store.sortInfo && this.store.sortInfo.field && this.store.sortInfo.direction){
-    this.store.sort(this.store.sortInfo.field,this.store.sortInfo.direction);
-  }
-}
+      var p = property.split('.');
+      p = p[p.length-1];
+      if (ClassMetaData.BusinessRules.fields['**.' + p])
+        return ClassMetaData.BusinessRules.fields['**.' + p];
+    }
+    return null;
+   },
+   buildEditor: function (record) {
+        var meta = record.get('metaData'),config = {};
+        config.xtype = 'textfield';
 
+        if (meta && meta.inList) {
+            config.store = meta.inList;
+            config.minChars = 0;
+            config.triggerAction = 'all';
+            config.initialized = 'all';
+            config.maxHeight = 150;
+            config.resizable = true;
+        }
+        return config;
+   },
+   _dirty: false,
+   setDirty: function(dirty) {
+     if (dirty && !this._dirty){
+       this.setTitle(this.baseTitle + '*');
+       this._dirty = true;
+     }
+     if (!dirty) {
+       this.store.commitChanges();
+       this._dirty = false;
+       this.setTitle(this.baseTitle);
+     }
+   },
+   refresh: function(){
+     this.setDirty(false);
+     if (this.path){
+       this.loadFromPath(this.path);
+     }else if (this.searchString){
+       this.search(this.searchString);
+     }
+     if (this.store.sortInfo && this.store.sortInfo.field && this.store.sortInfo.direction){
+       this.store.sort(this.store.sortInfo.field,this.store.sortInfo.direction);
+     }
+   }
 });

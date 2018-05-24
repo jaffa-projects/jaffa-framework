@@ -4,8 +4,8 @@
 
     <parent>
         <groupId>org.jaffa</groupId>
-        <artifactId>jaffa-parent</artifactId>
-        <version>6.0.7-SNAPSHOT</version>
+        <artifactId>jaffa-framework</artifactId>
+        <version>6.0.14-SNAPSHOT</version>
     </parent>
 
     <groupId>org.jaffa</groupId>

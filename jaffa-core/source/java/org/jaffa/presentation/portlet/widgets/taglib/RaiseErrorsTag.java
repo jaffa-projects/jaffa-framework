@@ -113,10 +113,10 @@ public class RaiseErrorsTag extends CustomTag implements IFormTag {
             buf.append("addMessage(\"");
             String messageHtml = StringHelper.convertToHTML(MessageHelper.findMessage(pageContext, error.getKey(), error.getValues()));
             String labelEditorLink = TagHelper.getLabelEditorLink(pageContext, error.getKey());
-            String message = messageHtml + labelEditorLink;
-
             // escape the message for html to prevent XSS
-            buf.append(Encode.forHtml(message));
+            String message = Encode.forHtml(messageHtml) + labelEditorLink;
+            
+            buf.append(message);
             buf.append("\");");
         }
 
