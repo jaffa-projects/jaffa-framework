@@ -121,10 +121,11 @@ public abstract class GraphDataObject implements IFlexFields {
     public GraphDataObject() {
         //log.debug("Create Change Listener");
         addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 valueChanged(evt.getPropertyName(), evt.getOldValue());
-                log.debug("Field '" + evt.getPropertyName() + "' updated from '" + evt.getOldValue() + "' to '" + evt.getNewValue() + "'");
+                if(log.isDebugEnabled()) {
+                    log.debug("Field '" + evt.getPropertyName() + "' updated from '" + evt.getOldValue() + "' to '" + evt.getNewValue() + "'");
+                }
             }
         });
     }
@@ -485,7 +486,9 @@ public abstract class GraphDataObject implements IFlexFields {
      */
     public void setFlexBean(FlexBean flexBean) throws ApplicationExceptions, FrameworkException {
         if (flexBean == null) {
-            log.debug("flexBean is null");
+            if(log.isDebugEnabled()) {
+                log.debug("flexBean is null");
+            }
             return;
         }
         //copy the flexParams from the input to the current instance.
