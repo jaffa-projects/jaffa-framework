@@ -129,7 +129,7 @@ public class InitApp implements ServletContextListener {
             URL u = servletContextEvent.getServletContext().getResource( baseFile );
             String base = "";
             if(u == null) {
-                log.fatal("Base Web File Not Found '" + baseFile + "', Can't Set Web Root");
+                log.warn("Base Web File Not Found '" + baseFile + "', Can't Set Web Root");
                 return;
             } else {
                 // Try to split the file with the OS native seporator
