@@ -168,6 +168,9 @@ public abstract class Persistent implements IPersistent, IFlexFields {
 
         // Initialize the fields
         obj.m_uow = null;
+        obj.lifecycleHandlers = null;
+        obj.appendedHandlers = null;
+        obj.prependedHandlers = null;
         //obj.m_modified = false;
         obj.m_databaseOccurence = false;
         obj.m_locking = Criteria.LOCKING_OPTIMISTIC;
