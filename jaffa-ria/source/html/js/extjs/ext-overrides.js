@@ -138,7 +138,7 @@ Ext.override(Ext.data.JsonReader, {
                         return o;
                     };
                 } else {
-                    return (re.test(expr)) ?
+                    return(re.test(expr)) ?
                         new Function("obj", "try{return obj." + expr + "} catch(e){return null}") :
                         function (obj) {
                             return obj == null ? null : obj[expr];
@@ -704,8 +704,8 @@ Ext.override(Ext.Element, {
 
         return function (el) {
             return !this.dom.firstChild || // if this Element has no children, return false immediately
-            !el ||
-            isXUL(el) ? false : Ext.lib.Dom.isAncestor(this.dom, el.dom ? el.dom : el);
+                !el ||
+                isXUL(el) ? false : Ext.lib.Dom.isAncestor(this.dom, el.dom ? el.dom : el);
         };
     }()
 });
@@ -1497,7 +1497,7 @@ Ext.override(Ext.form.Checkbox, {
         }
         this.wrap = this.el.wrap({cls: 'x-form-check-wrap'});
         if (this.boxLabel && this.boxLabel != '&#160;') { //Override: do not add label if it is empty
-            this.wrap.createChild({tag: 'label', htmlFor: this.el.id, cls: 'x-form-cb-label', html: this.boxLabel});
+            this.wrap.createChild({tag: 'label', htmlFor: this.el.id, cls: 'x-form-cb-label', html: this.boxLabel });
         }
         if (this.checked) {
             this.setValue(true);
@@ -1619,61 +1619,3 @@ Ext.override(Ext.Panel, {
     });
 })();
 
-/**
- * Override all components to add a flag for allowing markup.  We can add overrides to all components
- * that use renderers to escape for html to protect against XSS attacks.  If a specific component needs to
- * allow markup, the allowMarkup flag can be set to true.
- */
-Ext.override(Ext.Component, {
-    config: {
-        allowMarkup: false
-    }
-});
-
-/**
- * Button text values
- */
-Ext.Button.override({
-    setTextOriginal: Ext.Button.prototype.setText,
-    setText: function (text) {
-        if (!this.config.allowMarkup) {
-            text = Ext.util.Format.htmlEncode(text);
-        }
-        return this.setTextOriginal(text);
-    }
-});
-
-/**
- * Panel title text values
- */
-Ext.Panel.override({
-    setTitleOriginal: Ext.Panel.prototype.setTitle,
-    setTitle: function (title, iconCls) {
-        if (!this.config.allowMarkup) {
-            title = Ext.util.Format.htmlEncode(title);
-        }
-        return this.setTitleOriginal(title, iconCls);
-    }
-});
-
-/**
- * Text field set value
- */
-Ext.form.TextField.override({
-    setValueOriginal: Ext.form.TextField.prototype.setValue,
-    setValue: function (v) {
-        if (!this.config.allowMarkup) {
-            v = Ext.util.Format.htmlEncode(v);
-        }
-        return this.setValueOriginal(v);
-    }
-});
-
-/**
- * Default to HTML encoding all grid cell contents.
- */
-Ext.grid.ColumnModel.override({
-    defaults: {
-        defaultRenderer: Ext.util.Format.htmlEncode
-    }
-});

@@ -1325,7 +1325,7 @@ Ext.extend(Jaffa.DWRService, Ext.util.Observable, {
     saveError : function(cbOk,cbError,response, ex) {
       // Handle is something REAL BAD happens
       console.debug("Internal Errors on Save",response, ex);
-      var txt = Ext.util.Format.htmlEncode(response);
+      var txt = response;
       if(ex) {
         if((ex.cause && ex.cause.applicationExceptionArray) ||
           ((response==null||response=="") && ex.cause) ||
@@ -1335,7 +1335,7 @@ Ext.extend(Jaffa.DWRService, Ext.util.Observable, {
         txt="";
           var e = ex.applicationExceptionArray;
           for (var j=0;j<e.length;j++) {
-            txt += Ext.util.Format.htmlEncode(e[j].localizedMessage) + '\n<br>';
+            txt += e[j].localizedMessage + '\n<br>';
             }
         } else {
           //console.error("Internal Error: ", ex);
@@ -1385,7 +1385,7 @@ Ext.extend(Jaffa.DWRService, Ext.util.Observable, {
               } else if(type === "org.jaffa.soa.rules.WarningEventException") {
                 this.pending[this.pending.length] = { event: appExp.arguments[0], text:appExp.localizedMessage, params: appExp.params, warn:true };
               } else
-                msg += Ext.util.Format.htmlEncode(appExp.localizedMessage) + '\n<br>';
+                msg += appExp.localizedMessage + '\n<br>';
             }
           } else if (responseEl.runtimeError) {
             // FrameworkException

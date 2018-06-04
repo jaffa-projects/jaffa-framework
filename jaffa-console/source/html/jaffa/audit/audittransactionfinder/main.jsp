@@ -29,21 +29,21 @@
   String domainObjectName = "";
   String auditFieldsList = "{}";
   if (request.getParameter("domainObject")!=null){
-    IObjectRuleIntrospector introspector = RulesEngineFactory.getRulesEngine().getObjectRuleIntrospector(StringHelper.escapeJavascript(request.getParameter("domainObject")), null);
+    IObjectRuleIntrospector introspector = RulesEngineFactory.getRulesEngine().getObjectRuleIntrospector(request.getParameter("domainObject"), null);
     if (introspector!=null){
       domainObjectLabel =  MessageHelper.replaceTokens(introspector.getLabel());
       if (introspector.getAuditInfo()!=null)
         domainObjectName = introspector.getAuditInfo().getProperty("name","");
       else{
-        String[] nameSegments = StringHelper.escapeJavascript(request.getParameter("domainObject")).split("\\.");
+        String[] nameSegments = request.getParameter("domainObject").split("\\.");
         if (nameSegments.length>0)
           domainObjectName = nameSegments[nameSegments.length-1];
         else
-          domainObjectName = StringHelper.escapeJavascript(request.getParameter("domainObject"));
+          domainObjectName=request.getParameter("domainObject");
       }
     }
 
-    Map<String, Properties> mapFields = new AuditTransactionViewService().getAuditableProperties(StringHelper.escapeJavascript(request.getParameter("domainObject")));
+    Map<String, Properties> mapFields = new AuditTransactionViewService().getAuditableProperties(request.getParameter("domainObject"));
     if (mapFields!=null) 
       auditFieldsList = JSONHelper.map2json(mapFields);
   }

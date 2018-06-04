@@ -59,8 +59,7 @@ public class JSONHelper {
     }
 
     /**
-     * Convert the request parameter map to a json string.
-     *
+     * Convert the request parameter map to a json string. 
      * @param request
      * @return
      */
@@ -70,8 +69,6 @@ public class JSONHelper {
         for (Iterator<String> it=params.keySet().iterator(); it.hasNext();) {
             String k = it.next();
             String[] v = params.get(k);
-            // TODO this builds up the params objects and should probably escape with the StringHelper
-            // TODO like we do when reading params in jsp pages.
             if (v==null || v.length==0) {
                 continue;
             } else if (v.length==1) {

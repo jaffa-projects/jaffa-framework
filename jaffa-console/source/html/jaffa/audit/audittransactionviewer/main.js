@@ -72,7 +72,7 @@ Ext.onReady(function(){
       //@FIXME: Use label for the error message
       Ext.MessageBox.show({
           titleToken: 'title.Jaffa.Audit.AuditTransactionFinder.LoadError',
-          msg: Labels.get('title.Jaffa.Audit.AuditTransactionFinder.AuditTransaction')+' ' + Ext.util.Format.htmlEncode(params.transactionId) + ' '+Labels.get('label.Jaffa.Audit.AuditTransactionFinder.NotFound'),
+          msg: Labels.get('title.Jaffa.Audit.AuditTransactionFinder.AuditTransaction')+' ' + params.transactionId + ' '+Labels.get('label.Jaffa.Audit.AuditTransactionFinder.NotFound'),
           width: 400,
           buttons: Ext.MessageBox.OK,
           fn: function(){
