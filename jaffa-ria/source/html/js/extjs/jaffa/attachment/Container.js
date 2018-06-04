@@ -346,7 +346,7 @@ Jaffa.attachment.Grid = Ext.extend(Ext.grid.GridPanel, {
                   proxy.update(graphs, function (response) {
                     if (response && response.errors && response.errors.length > 0) {
                       Ext.MessageBox.show({
-                        msg: response.errors[0].localizedMessage,
+                        msg: Ext.util.Format.htmlEncode(response.errors[0].localizedMessage),
                         buttons: Ext.MessageBox.OK,
                         icon: Ext.MessageBox.ERROR
                       });

@@ -18,6 +18,7 @@ Should be included in the main JSP that loads all the java script using the foll
 <%@page import="org.jaffa.datatypes.Parser" %>
 <%@page import="org.jaffa.session.ContextManagerFactory" %>
 <%@ page import="org.jaffa.util.MessageHelper" %>
+<%@ page import="org.jaffa.util.StringHelper" %>
 
 /**
  * The textHtmlHandler is invoked when a DWR request encounters an expired Session.
@@ -38,7 +39,7 @@ dwr.engine.setTextHtmlHandler(function() {
 * redirect the user to the login screen
 */
 redirect = function () {
-    document.location = params.appCtx + '/<%= (String) request.getParameter("ref") %>';
+    document.location = params.appCtx + '/<%= StringHelper.escapeJavascript(request.getParameter("ref")) %>';
 }
 
 <%
