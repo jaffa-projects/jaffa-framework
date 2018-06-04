@@ -69,7 +69,7 @@ Jaffa.Transaction.DetailPanel = {
             if(serverResponse && serverResponse[0].errors){
               Ext.MessageBox.show({
                 title: serverResponse[0].errors[0].className,
-                msg: Ext.util.Format.htmlEncode(serverResponse[0].errors[0].localizedMessage),
+                msg: serverResponse[0].errors[0].localizedMessage,
                 icon: Ext.MessageBox.ERROR
               });
             } else {
@@ -78,7 +78,7 @@ Jaffa.Transaction.DetailPanel = {
           }, function(errorResponse){
               Ext.MessageBox.show({
                 titleToken: 'label.jaffaRIA.MessageBox.alertErrorMsgText',
-                msg: Ext.util.Format.htmlEncode(errorResponse),
+                msg: errorResponse,
                 icon: Ext.MessageBox.ERROR
               });
           });

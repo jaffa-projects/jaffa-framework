@@ -880,11 +880,11 @@ Jaffa.maintenance.plugins.InlineRowEditor = Ext.extend(Ext.ux.grid.RowEditor, {
           var appExps = responseEl.errors.applicationExceptionArray ? responseEl.errors.applicationExceptionArray : responseEl.errors;
           for (var j = 0; j < appExps.length; j++) {
             var appExp = appExps[j];
-            msg += (Ext.util.Format.htmlEncode(appExp.localizedMessage) || this.defaultLocalizedErrorMessage) + '\n<br>';
+            msg += (appExp.localizedMessage || this.defaultLocalizedErrorMessage) + '\n<br>';
           }
         } else if (responseEl.runtimeError) {
           // FrameworkException
-          msg += Ext.util.Format.htmlEncode(responseEl.runtimeError.localizedMessage) + '\n<br>';
+          msg += responseEl.runtimeError.localizedMessage + '\n<br>';
         }
       }
     }

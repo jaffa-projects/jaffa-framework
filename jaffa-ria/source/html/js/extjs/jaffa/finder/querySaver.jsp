@@ -6,7 +6,6 @@
 <%@page import = "java.io.*,java.net.*,java.util.*" %>
 <%@page import = "org.jaffa.util.URLHelper,org.jaffa.util.MessageHelper,org.jaffa.security.SecurityTag, org.jaffa.session.ContextManagerFactory" %>
 <%@page import = "org.apache.log4j.Logger" %>
-<%@ page import="org.jaffa.util.StringHelper" %>
 <%!
     private static final Logger log = Logger.getLogger("js.extjs.jaffa.querySaver");
     private static final String PROPERTY_USER_PREFERENCES_FOLDER = "user.preferences.folder";
@@ -85,11 +84,11 @@
     }
 %>
 <%
-    String pageRef = StringHelper.escapeJavascript(request.getParameter("pageRef"));
-    String eventId = StringHelper.escapeJavascript(request.getParameter("eventId"));
+    String pageRef = request.getParameter("pageRef");
+    String eventId = request.getParameter("eventId");
     Boolean isDefault = Boolean.valueOf(request.getParameter("isDefault"));
-    String queryName = StringHelper.escapeJavascript(request.getParameter("queryName"));
-    String data = StringHelper.escapeJavascript(request.getParameter("jsonData"));
+    String queryName = request.getParameter("queryName");
+    String data = request.getParameter("jsonData");
     boolean hasQueryName = queryName != null && queryName.length()>0;
 
     if ("saveQuery".equals(eventId) && hasQueryName) {

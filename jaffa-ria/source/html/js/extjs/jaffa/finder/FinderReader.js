@@ -25,7 +25,7 @@ Jaffa.data.FinderReader = Ext.extend(Ext.data.JsonReader, {
       if (Ext.isArray(o.errors)) {
         var msg = '';
         for (var i=0; i<o.errors.length; i++) {
-          msg += Ext.util.Format.htmlEncode(o.errors[i].localizedMessage) + '\n<br>';
+          msg += o.errors[i].localizedMessage + '\n<br>';
         }
         if (msg) {
           // CallBack to post save method

@@ -29,7 +29,6 @@ Jaffa.maintenance.PendingEventPanel = Ext.extend(Ext.Panel, {
    * Returns false if the validations fail.
    */
   validate: function() {
-    // TODO can we escape the return of this for XSS or does this include html styling?
     var errors = Jaffa.component.PanelController.prototype.validatePanelFields(this);
     if (errors) {
       Ext.MessageBox.show({

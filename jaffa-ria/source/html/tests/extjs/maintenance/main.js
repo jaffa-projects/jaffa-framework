@@ -280,7 +280,7 @@ Ext.onReady(function(){
               //@FIXME: Use label for the error message
               Ext.MessageBox.show({
                   title: 'Load Error',
-                  msg: 'DefaultWorkOrder ' + Ext.util.Format.htmlEncode(params.defaultName) + ' Not Found',
+                  msg: 'DefaultWorkOrder ' + params.defaultName + ' Not Found',
                   width: 400,
                   buttons: Ext.MessageBox.OK,
                   fn: function(){
@@ -317,7 +317,7 @@ Ext.onReady(function(){
               //@FIXME: Use label for the error message
               Ext.MessageBox.show({
                   title: 'Load Error',
-                  msg: 'Default Work Orders ' + Ext.util.Format.htmlEncode(params.defaultName) + ' Not Found',
+                  msg: 'Default Work Orders ' + params.defaultName + ' Not Found',
                   width: 400,
                   buttons: Ext.MessageBox.OK,
                   fn: function(){
