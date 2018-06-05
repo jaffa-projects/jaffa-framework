@@ -369,7 +369,7 @@ public class MappingFilter {
         }
 
         // Add flex fields
-        if (IFlexFields.hasFlexBean(gdo)) {
+        if (IFlexFields.class.isAssignableFrom(gdo)) {
             try {
                 if (fieldList != null) {
                     String fullName = (prefix != null ? prefix : "") + "flexBean";
