@@ -15,10 +15,10 @@
     <field gdo="description"/>
     <field gdo="remarks"/>
     <field gdo="supercededBy"/>
-    <field gdo="createdOn"/>
-    <field gdo="createdBy"/>
-    <field gdo="lastChangedOn"/>
-    <field gdo="lastChangedBy"/>
+    <field gdo="createdOn" no-cloning="true"/>
+    <field gdo="createdBy" no-cloning="true"/>
+    <field gdo="lastChangedOn" no-cloning="true"/>
+    <field gdo="lastChangedBy" no-cloning="true"/>
     <field gdo="data"/>
   </map-fields>
 </bean-mapping>
