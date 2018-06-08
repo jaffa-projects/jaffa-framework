@@ -394,7 +394,7 @@ public class PortletFilter implements Filter {
      * @return true if the level for PortletFilter is declared to be DEBUG.
      */
     protected boolean setupLog4jMdc(HttpServletRequest request) {
-        if (log.isDebugEnabled()) {
+        if (log.isInfoEnabled()) {
             StringBuffer buf = new StringBuffer();
             String value = null;
 
