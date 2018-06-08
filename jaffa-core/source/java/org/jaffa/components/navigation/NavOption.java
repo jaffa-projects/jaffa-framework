@@ -59,6 +59,9 @@ package org.jaffa.components.navigation;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.log4j.Logger;
 import org.jaffa.components.navigation.domain.ComponentAction;
 import org.jaffa.components.navigation.domain.MenuOption;
@@ -139,7 +142,7 @@ public class NavOption {
             m_target = mOpt.getComponentAction().getTarget();
         } else if(mOpt.getUrlAction() != null) {
             m_type = TYPE_URL;
-            m_url = mOpt.getUrlAction().getUrl().getValue();
+            setUrl(mOpt.getUrlAction().getUrl().getValue());
             m_urlFinal = mOpt.getUrlAction().getUrl().isAppendFinal();
             m_target = mOpt.getUrlAction().getTarget();
 
@@ -275,6 +278,22 @@ public class NavOption {
         return TYPE_URL.equals(m_type);
     }
 
+    private void setUrl(String m_url) {
+        this.m_url = checkReplaceEnvRef(m_url);
+    }
 
-
+    private static final String envRegex = "\\$\\{(.+)}";
+    final Pattern envPattern = Pattern.compile(envRegex);
+    //Support looking up environment variables
+    protected String checkReplaceEnvRef(String input){
+        if(input != null) {
+            Matcher m = envPattern.matcher(input);
+            while (m.find()) {
+                String match = m.group(1);
+                String envLookup = System.getenv(match);
+                input = input.replace("${" + match + "}", envLookup);
+            }
+        }
+        return input;
+    }
 }
