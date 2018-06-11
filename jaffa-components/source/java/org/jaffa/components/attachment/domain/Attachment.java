@@ -1613,7 +1613,7 @@ public class Attachment extends Persistent {
 
 
 
-        if (getDocumentReferenceId() == null && attachmentDataImpl!=null) {
+        if (getDocumentReferenceId() == null && attachmentDataImpl!=null && (getAttachmentType() == null || Arrays.asList(new String[] {"E","D"}).contains(getAttachmentType()))) {
             if (log.isDebugEnabled())
                 log.debug("Attachment is stored in external data repository");
 
