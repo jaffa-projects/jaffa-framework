@@ -458,10 +458,9 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
         for (PendingEventException event : m_pendingEvents) {
             //@TODO - See if there was a ProcessEvent for this pending event,
             //If there was, don't raise it
-            if (events != null && events.toArray().length >0 && !events.contains(event.getArguments()[0])) {
+            if (!events.contains(event.getArguments()[0])) {
                 if (log.isDebugEnabled()) log.debug("ABORT due to pending event", event);
                     applicationExceptions.add(event);
-                    events.add((String) event.getArguments()[0]);
             } 
             else {
                 if (log.isDebugEnabled()) log.debug("Pending event satisfied by Process Event - " + event.getArguments()[0]);
