@@ -57,7 +57,7 @@ import org.jaffa.rules.initializers.RuleInitializerFactory;
 import org.jaffa.rules.rulemeta.DefaultRuleHelper;
 import org.jaffa.rules.rulemeta.IRuleEvaluator;
 import org.jaffa.rules.validators.*;
-import org.jaffa.util.ConfigApiHelper;
+import org.jaffa.api.ConfigApiCore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
@@ -358,8 +358,8 @@ public class JaffaRulesConfig {
      * @throws IOException  When a file cannot be accessed or operations cannot be performed on it
      */
     public void loadCustomConfiguration(File file, AopXmlLoader aopXmlLoader) throws IOException {
-        File zipRoot = ConfigApiHelper.extractToTemporaryDirectory(file);
+        File zipRoot = ConfigApiCore.extractToTemporaryDirectory(file);
         aopXmlLoader.processAopPath(zipRoot.getAbsolutePath());
-        ConfigApiHelper.removeDirTree(zipRoot);
+        ConfigApiCore.removeDirTree(zipRoot);
     }
 }

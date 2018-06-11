@@ -46,89 +46,88 @@
  * SUCH DAMAGE.
  * ====================================================================
  */
+package org.jaffa.api.cluster;
 
-
-package org.jaffa.api;
-
-import org.junit.Test;
-import org.junit.Before;
+import com.google.gson.annotations.Expose;
 
 /**
- * API tests for IConfigApi - These tests still need to be written and comprehensively tested. This class is
- * simply a skeleton to populate with tests when we are tasked to do so.
+ * This class creates a HATEOAS URL Link object for use with the Jaffa API
+ *
+ * @author Matthew Wayles
+ * @version 1.0
  */
-public class ConfigApiTest {
+public class Link {
+    @Expose
+    private String href;
+    @Expose
+    private String rel;
+    @Expose
+    private String type;
 
+    /**
+     * Create a Link object with provided parameters
+     *
+     * @param myUrl  The URL to be included in the link
+     * @param myRel  The relationship to be included in the link
+     * @param myType The HTTP request type to be included in the link
+     */
+    public Link(String myUrl, String myRel, String myType) {
+        this.href = myUrl;
+        this.rel = myRel;
+        this.type = myType;
+    }
 
-    private IConfigApi api;
-    
-    @Before
-    public void setup() {
+    /**
+     * Retrieve the value from the URL variable
+     *
+     * @return url  The url retrieved
+     **/
+    public String getUrl() {
+        return href;
     }
 
-    
     /**
-     * Deletes a zip file and rolls back its configurations
+     * Set the URL value for this link
      *
-     * Removes configurations contained within a ZIP file and deletes the file entirely.
-     *
-     * @throws ApiException
-     *          if the Api call fails
+     * @param url The URL to set
      */
-    @Test
-    public void deleteConfigZipFileTest() {
-        //POST random configs
-        //DELETE random configs
-        //ASSERT configs aren't there
-        //ASSERT ZipFile is deleted from repository's JSON response
+    public void setUrl(String url) {
+        this.href = url;
     }
-    
+
     /**
-     * Retrieve a specific configuration ZIP file
+     * Retrieve the value from the relationship variable
      *
-     * Retrieve and download a specific configuration ZIP file from the $DATA_DIRECTORY location.
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void getConfigZipFileTest() {
-        //GET zip file
-        //ASSERT file downloaded
-        
-        
+     * @return rel  The relationship retrieved
+     **/
+    public String getRel() {
+        return rel;
     }
-    
+
     /**
-     * Retrieve the list of ZIP files that contain configurations within a directory
+     * Set the relationship value for this link
      *
-     * This service endpoint scans the filesystem at the $DATA_DIRECTORY location and provides a list of all ZIP files contained within that location. These KIP files will store configuration XML files that will load and overwrite configuration properties depending on Context and Variation salience.
-     *
-     * @throws ApiException
-     *          if the Api call fails
+     * @param rel The relationship to set
      */
-    @Test
-    public void getConfigZipFileListTest() {
-        //GET zip file list from data.directory
-        //ASSERT that the list contains the expected items
-        
-        
+    public void setRel(String rel) {
+        this.rel = rel;
     }
-    
+
     /**
-     * Upload a new configuration ZIP file.
+     * Retrieve the value from the type variable
      *
-     * Creates a ZIP file of configurations and populates GOLDesp repositories with the new values (depending on salience).
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void putConfigZipFileTest() {
-        //POST a configuration file to a repository
-        //ASSERT that the configurations are included in repository's JSON response
-        
-        
+     * @return type  The type retrieved
+     **/
+    public String getType() {
+        return type;
     }
-    
+
+    /**
+     * Set the type value for this link
+     *
+     * @param type The type to set
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
 }

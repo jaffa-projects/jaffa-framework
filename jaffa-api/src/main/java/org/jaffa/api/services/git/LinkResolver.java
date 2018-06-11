@@ -46,18 +46,68 @@
  * SUCH DAMAGE.
  * ====================================================================
  */
-package org.jaffa.api;
+package org.jaffa.api.services.git;
 
-public class ApiException extends Exception{
-    private int code;
+import org.apache.cxf.message.Message;
+import org.apache.cxf.phase.PhaseInterceptorChain;
+import org.jaffa.api.FileContents;
+import org.jaffa.api.cluster.Link;
+import org.jaffa.api.cluster.NodeInformation;
+
+/**
+ * LinkResolver - A class to consolidate the links that will be appended to FileContents and NodeInformation
+ * objects.
+ *
+ * @author Matthew Wayles
+ * @version 1.0
+ */
+public class LinkResolver {
 
     /**
-     * ApiException - Provide a Swagger exception to API test files
-     * @param code  The error code
-     * @param msg   The error message
+     * Add links to a FileContents object. Currently, the only operations that can be performed on these resources
+     * are download and delete. The HTTP message base path is used to avoid hard-coding the URI to the service endpoint.
+     *
+     * @param fileContents The FileContents object to add the links to
+     * @return The same FileContents object sent to this method, with its links variable populated.
      */
-    public ApiException(int code, String msg) {
-        super(msg);
-        this.code = code;
+    public static FileContents addLinks(FileContents fileContents) {
+        String href = "";
+        Message message = PhaseInterceptorChain.getCurrentMessage();
+
+        if (message != null) {
+            href += fileContents.getUrl() + message.get(Message.BASE_PATH) + "/config/" + fileContents.getName();
+        }
+
+        if (fileContents.getLinks() == null) {
+            fileContents.addLink(new Link(href, "download", "GET"));
+            fileContents.addLink(new Link(href, "delete", "DELETE"));
+        }
+
+        return fileContents;
+    }
+
+    /**
+     * Add links to a NodeInformation object. Currently, the only operations that can be performed on these resources
+     * are self, list, and add. The HTTP message base path is used to avoid hard-coding the URI to the service endpoint.
+     *
+     * @param nodeInformation The NodeInformation object to add the links to
+     * @return The same NodeInformation object sent to this method, with its links variable populated.
+     */
+    public static NodeInformation addLinks(NodeInformation nodeInformation) {
+        String url = "";
+        Message message = PhaseInterceptorChain.getCurrentMessage();
+
+        if (message != null) {
+            url += nodeInformation.getHref() + message.get(Message.BASE_PATH) + "/config/";
+
+        }
+
+        if (nodeInformation.getLinks() != null && nodeInformation.getLinks().isEmpty()) {
+            nodeInformation.addLink(new Link(url + "clusterMetadata", "self", "GET"));
+            nodeInformation.addLink(new Link(url, "list", "GET"));
+            nodeInformation.addLink(new Link(url + "{fileName}", "add", "POST"));
+        }
+
+        return nodeInformation;
     }
 }

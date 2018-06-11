@@ -46,7 +46,7 @@
  * SUCH DAMAGE.
  * ====================================================================
  */
-package org.jaffa.util;
+package org.jaffa.api;
 
 import org.apache.log4j.Logger;
 import org.jaffa.loader.IManager;
@@ -67,30 +67,18 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 
 /**
- * This class provides static helper methods to perform functions for the ConfigApi endpoints
+ * This class provides helper methods for the Configuration API to perform operations in the ResourceLoader in jaffa-core.
+ * Sicne jaffa-core does not have the jaffa-update-config dependency, these methods must live in jaffa-core.
  * @author Matthew Wayles
  * @version 1.0
  */
-public class ConfigApiHelper {
-    private static final int BUFFER_SIZE = 1024;
-    private static final Logger log = Logger.getLogger(ConfigApiHelper.class);
+public class ConfigApiCore {
+    private static final String TEMP_DIRECTORY = System.getProperty("java.io.tmpdir") + File.separator +"config" + File.separator;
+    private static final Logger log = Logger.getLogger(ConfigApiCore.class);
 
-    public static final String TEMP_DIRECTORY = System.getProperty("java.io.tmpdir") + File.separator +"config" + File.separator;
-    /**
-     * Verify that the user supplied a file extension in the URL, and add it if not
-     * @param input The user URL input
-     * @param extension The file extension expected (defaults to ZIP)
-     * @return  The user input with appended file extension
-     */
-    public static String verifyExtension(String input, String extension) {
-        if (!input.endsWith(extension)) {
-            input += extension;
-        }
-        return input;
-    }
+
 
     /**
      * Extract a compressed file's contents to a temporary directory at the provided path
@@ -124,40 +112,23 @@ public class ConfigApiHelper {
         return tempDirPath.toFile();
     }
 
-  /**
-   * In certain cases, a configuration archive cannot be immediately removed from the filesystem because
-   * its contents are still undergoing removal operations of their own. This method allows the contents to
-   * complete their processes and release the file handle so that the zip parent can be removed
-   * @param file    The configuration archive to remove
-   * @throws IOException    When a file cannot be accessed or operations cannot be performed on it
-   */
-    public static void removeZipFile(File file) throws IOException {
-        try {
-            Files.deleteIfExists(file.toPath());
-            log.info("Successfully removed " + file.getName() + "from the filesystem");
-        }
-        catch (IOException ex) {
-            log.error("Could not Remove the file " + file.getName() + "from the filesystem");
-        }
-    }
-
     /**
      * Register configuration files in IManager implementationss, based on the source of the method call
      * @param file  The configuration file to be registered or unregistered
      * @return  Success or failure of the operation
      */
-    public static boolean registerResources(File file, FileContentsHelper fileContents) {
+    public static boolean registerResources(File file, FileContents fileContents) {
         boolean isSuccess = true;
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         for(IManager manager : ManagerRepositoryService.getInstance().getManagerMap().values()) {
             Resource resource = getMetaInfResource(file, resolver, manager);
             try {
                 if (resource.getFile().exists()) {
-                    if(manager instanceof RoleManager){
+                    if(manager instanceof RoleManager) {
                         PolicyManager.clearCache();
                     }
                     manager.registerResource(resource, fileContents.getContextSalience(),
-                            fileContents.getVariationSalience());
+                        fileContents.getVariationSalience());
                     ManagerRepositoryService.getInstance().add(manager.getClass().getSimpleName(), manager);
                     log.debug(resource.getFilename() + " was successfully registered to " + manager);
                 }
@@ -174,7 +145,7 @@ public class ConfigApiHelper {
      * @param file  The configuration file to be registered or unregistered
      * @return  Success or failure of the operation
      */
-    public static boolean unregisterResources(File file, FileContentsHelper fileContents) {
+    public static boolean unregisterResources(File file, FileContents fileContents) {
         boolean isSuccess = true;
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         for(IManager manager : ManagerRepositoryService.getInstance().getManagerMap().values()) {
@@ -182,7 +153,7 @@ public class ConfigApiHelper {
             try {
                 if (resource.getFile().exists()) {
                     manager.unregisterResource(resource, fileContents.getContextSalience(),
-                            fileContents.getVariationSalience());
+                        fileContents.getVariationSalience());
                     log.debug(resource.getFilename() + " was successfully unregistered from " + manager);
                 }
             } catch (Exception e) {
@@ -201,11 +172,10 @@ public class ConfigApiHelper {
     public static void removeDirTree(File dir) throws IOException {
 
         Files.walk(dir.toPath())
-                .map(Path::toFile)
-                .sorted((o1, o2) -> -o1.compareTo(o2))
-                .forEach(File::delete);
+            .map(Path::toFile)
+            .sorted((o1, o2) -> -o1.compareTo(o2))
+            .forEach(File::delete);
     }
-
 
     /**
      * getFileContents() - When given a compressed file, parse through and return an object containing the
@@ -214,28 +184,30 @@ public class ConfigApiHelper {
      * @return  An object containing the compressed file contents and additional information
      * @throws IOException  Thrown when the compressed file does not exist or cannot be read
      */
-    public static FileContentsHelper getFileContents(File file) throws IOException {
+    public static FileContents getFileContents(File file) throws IOException {
         String manifestFile = "META-INF/MANIFEST.MF";
-        FileContentsHelper fileContents = new FileContentsHelper();
+        FileContents fileContents = new FileContents();
 
         ZipFile zipFile = new ZipFile(file);
 
         fileContents.setName(file.getName());
+        fileContents.setUrl(System.getProperty("app.base.url"));
 
         Enumeration<? extends ZipEntry> entries = zipFile.entries();
         while (entries.hasMoreElements()) {
-            ZipEntry configFile = entries.nextElement();
-            fileContents.addContentsItem(new File(configFile.toString()).getName());
-            if (configFile.getName().toUpperCase().equals(manifestFile)) {
-                fileContents.setContextSalience(ConfigApiHelper.findContextSalienceInManifest(zipFile));
-                fileContents.setVariationSalience(ConfigApiHelper.findVariationSalienceInMainfest(zipFile));
-           }
+            ZipEntry zipFileEntry = entries.nextElement();
+            fileContents.addContentsItem(new File(zipFileEntry.toString()).getName());
+            if (zipFileEntry.getName().toUpperCase().equals(manifestFile)) {
+                fileContents.setContextSalience(findContextSalienceInManifest(zipFile));
+                fileContents.setVariationSalience(findVariationSalienceInManifest(zipFile));
+            }
         }
         //zipFile.stream().close();
         zipFile.close();
 
         return fileContents;
     }
+
 
     /**
      * findContextSalienceInManifest() - When given a compressed file, parse its MANIFEST and return the
@@ -257,32 +229,34 @@ public class ConfigApiHelper {
     }
 
     /**
-     * findVariationSalienceInManifest() - When given a compressed file, parse its MANIFEST and return the
+     * findVariationSalienceInManafest() - When given a compressed file, parse its MANIFEST and return the
      * Variation-Salience value if it exists
      * @param zipFile   The compressed file containing the MANIFEST file to parse
-     * @return  The Context-Salience value retrieved from the MANIFEST file
+     * @return  The Variation-Salience value retrieved from the MANIFEST file
      * @throws IOException  Thrown when the provided compressed file does not exist or cannot be read
      */
-    private static String findVariationSalienceInMainfest(ZipFile zipFile) throws IOException {
+    private static String findVariationSalienceInManifest(ZipFile zipFile) throws IOException {
         String variationSalience;
 
         JarFile jar = new JarFile(zipFile.getName());
-        Manifest manifest = jar.getManifest();
-        variationSalience = manifest.getMainAttributes().getValue("Variation-Salience");
+        Manifest manigest = jar.getManifest();
+        variationSalience = manigest.getMainAttributes().getValue("Variation-Salience");
         log.debug("ConfigApi received the following Variation-Salience from MANIFEST: " + variationSalience);
         jar.close();
 
         return variationSalience!=null && variationSalience.length() > 0 ? variationSalience : VariationContext.NULL_VARIATION;
     }
-  /**
-   * getMetaInfoResource - Retrieves resource files from the META-INF directory within a configuration archive
-   * @param file    The configuration archive file
-   * @param resolver    The resource pattern resolver
-   * @param manager The current manager containing the repository to inject resources into
-   * @return    The resource file retrieved from META-INF
-   */
+
+    /**
+     * getMetaInfResource - Retrieves resource files from the META-INF directory within a configuration archive
+     * @param file    The configuration archive file
+     * @param resolver    The resource pattern resolver
+     * @param manager The current manager containing the repository to inject resources into
+     * @return    The resource file retrieved from META-INF
+     */
     private static Resource getMetaInfResource(File file, ResourcePatternResolver resolver, IManager manager) {
         return resolver.getResource("file:" + file.getAbsolutePath() +
-                "/META-INF/" + manager.getResourceFileName());
+            "/META-INF/" + manager.getResourceFileName());
     }
+
 }

@@ -46,115 +46,172 @@
  * SUCH DAMAGE.
  * ====================================================================
  */
-package org.jaffa.util;
+package org.jaffa.api;
+
+import com.google.gson.annotations.Expose;
+import org.jaffa.api.cluster.Link;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 /**
- * FileContentsHelper - A custom object for storing the contents and context-salience of a
+ * FileContents - A custom object for storing the contents and context-salience of a
  * custom configuration archive file.
+ *
  * @author Matthew Wayles
  * @version 1.0
  */
 
-public class FileContentsHelper {
-  // CREATE JSON PROPERTIES
-  private String name = null;
-  private String contextSalience = null;
-  private String variationSalience = null;
-  private List<String> contents = null;
+public class FileContents {
+    @Expose
+    private String name = null;
+    @Expose
+    private String contextSalience = null;
+    @Expose
+    private String variationSalience = null;
+    @Expose
+    private List<String> contents = null;
+    @Expose
+    private List<Link> links;
 
-  /**
-   * Retrieve the value from the variationSalience variable
-   * @return variationSalience  The variationSalience retrieved
-   **/
-  public String getVariationSalience() {
-    return variationSalience;
-  }
-  /**
-   * Set the variation-salience value
-   * @param variationSalience The variationSalience to set
-   */
-  public void setVariationSalience(String variationSalience) {
-    this.variationSalience = variationSalience;
-  }
+    private String url = null;
 
-  /**
-   * Retrieve the value from the contextSalience variable
-   * @return contextSalience  The contextSalience retrieved
-   **/
-  public String getContextSalience() {
-    return contextSalience;
-  }
-
-  /**
-   * Set the context-salience value
-   * @param contextSalience The contextSalience to set
-   */
-  public void setContextSalience(String contextSalience) {
-
-    this.contextSalience = contextSalience;
-  }
-
-
-  // CONFIGURE name PROPERTY
-  public FileContentsHelper name(String name) {
-    this.name = name;
-    return this;
-  }
-
-  /**
-   * Retrieve the value from the name variable
-   * @return name The name retrieved
-   **/
-  public String getName() {
-    return name;
-  }
-
-  /**
-   * Set the name value
-   * @param name The name to set
-   */
-  public void setName(String name) {
-    this.name = name;
-  }
-
-
-  // CONFIGURE contents PROPERTY
-  public FileContentsHelper contents(List<String> contents) {
-    this.contents = contents;
-    return this;}
-
-  /**
-   * Add a configuration file found in compressed file to contents list
-   * @param contentsItem  The configuration file found in the custom compressed file
-   * @return  This instance with an updated contents list
-   */
-  public FileContentsHelper addContentsItem(String contentsItem) {
-    if (this.contents == null) {
-      this.contents = new ArrayList<>();
+    /**
+     * Retrieve the value from the contextSalience variable
+     *
+     * @return contextSalience  The contextSalience retrieved
+     **/
+    public String getContextSalience() {
+        return this.contextSalience;
     }
-    this.contents.add(contentsItem);
-    return this;
-  }
+
+    /**
+     * Set the context-salience value
+     *
+     * @param contextSalience The contextSalience to set
+     */
+    void setContextSalience(String contextSalience) {
+
+        this.contextSalience = contextSalience;
+    }
+
+    /**
+     * Retrieve the value from the variationSalience variable
+     *
+     * @return variationSalience  The variationSalience retrieved
+     */
+    public String getVariationSalience() {
+        return variationSalience;
+    }
+
+    /**
+     * Set the variation-salience value
+     *
+     * @param variationSalience The variationSalience to set
+     */
+    public void setVariationSalience(String variationSalience) {
+        this.variationSalience = variationSalience;
+    }
+
+    /**
+     * Retrieve the value from the URL variable
+     *
+     * @return url  The url retrieved
+     **/
+    public String getUrl() {
+        return url;
+    }
+
+    /**
+     * Set the URL value
+     *
+     * @param url The URL to set
+     */
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+
+    /**
+     * Retrieve the value from the name variable
+     *
+     * @return name The name retrieved
+     **/
+    public String getName() {
+        return this.name;
+    }
+
+    /**
+     * Set the name value
+     *
+     * @param name The name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Retrieve the contents of the custom compressed file
+     *
+     * @return contents   The contents of the custom compressed file
+     **/
+    public List<String> getContents() {
+        return this.contents;
+    }
+
+    /**
+     * Create a String list to hold the custom compressed contents
+     *
+     * @param contents A List<String> object
+     */
+    public void setContents(List<String> contents) {
+        this.contents = contents;
+    }
+
+    /**
+     * Add a configuration file found in compressed file to contents list
+     *
+     * @param contentsItem The configuration file found in the custom compressed file
+     * @return This instance with an updated contents list
+     */
+    FileContents addContentsItem(String contentsItem) {
+        if (this.contents == null) {
+            setContents(new ArrayList<>());
+        }
+        this.contents.add(contentsItem);
+        return this;
+    }
+
+    /**
+     * Retrieve the links associated with the custom compressed file
+     *
+     * @return links  The links associated with the custom compressed file
+     **/
+    public List<Link> getLinks() {
+        return this.links;
+    }
+
+    /**
+     * Create a Link object list to hold the compressed file links
+     *
+     * @param links A List<Link> object
+     */
+    public void setLinks(List<Link> links) {
+        this.links = links;
+    }
 
   /**
-   * Retrieve the contents of the custom compressed file
-   * @return contents   The contents of the custom compressed file
-   **/
-  public List<String> getContents() {
-    return contents;
-  }
-
-  /**
-   * Create a String list to hold the custom compressed contents
-   * @param contents  A List<String> object
+   * Add a link to a compressed file object
+   *
+   * @param link The link to add to the custom compressed file
    */
-  public void setContents(List<String> contents) {
-    this.contents = contents;
+  public void addLink(Link link) {
+    if (this.links == null) {
+      setLinks(new ArrayList<>());
+    }
+    links.add(link);
   }
-
 
 
   // HELPER METHODS
@@ -171,7 +228,7 @@ public class FileContentsHelper {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    FileContentsHelper fileContents = (FileContentsHelper) o;
+    FileContents fileContents = (FileContents) o;
     return Objects.equals(this.name, fileContents.name) &&
         Objects.equals(this.contents, fileContents.contents);
   }
@@ -192,7 +249,7 @@ public class FileContentsHelper {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class FileContentsHelper {\n");
+    sb.append("class FileContents {\n");
 
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    context-salience: ").append(toIndentedString(contextSalience)).append("\n");
