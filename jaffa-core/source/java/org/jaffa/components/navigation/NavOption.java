@@ -291,7 +291,7 @@ public class NavOption {
             while (m.find()) {
                 String match = m.group(1);
                 String envLookup = System.getenv(match);
-                input = input.replace("${" + match + "}", envLookup);
+                if(envLookup != null) input = input.replace("${" + match + "}", envLookup);
             }
         }
         return input;
