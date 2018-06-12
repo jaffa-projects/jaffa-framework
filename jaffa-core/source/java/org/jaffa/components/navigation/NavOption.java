@@ -290,7 +290,7 @@ public class NavOption {
             Matcher m = envPattern.matcher(input);
             while (m.find()) {
                 String match = m.group(1);
-                String envLookup = System.getenv(match);
+                String envLookup = System.getProperty(match);
                 if(envLookup != null) input = input.replace("${" + match + "}", envLookup);
             }
         }
