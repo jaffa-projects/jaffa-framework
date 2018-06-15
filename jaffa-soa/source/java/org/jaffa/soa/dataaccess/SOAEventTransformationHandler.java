@@ -230,6 +230,21 @@ public class SOAEventTransformationHandler extends SOAEventBaseHandler implement
     }
 
     @Override
+    public void startQueryService() throws FrameworkException, ApplicationExceptions {
+
+    }
+
+    @Override
+    public void startUpdateService() throws FrameworkException, ApplicationExceptions {
+
+    }
+
+    @Override
+    public void endService() throws FrameworkException, ApplicationExceptions {
+
+    }
+
+    @Override
     public ITransformationHandler getHandler() {
         return new SOAEventTransformationHandler(ruleMetaData);
     }

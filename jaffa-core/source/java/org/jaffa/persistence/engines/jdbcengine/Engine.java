@@ -423,6 +423,14 @@ public class Engine implements IJdbcPersistenceEngine {
         return m_pt.removePersistenceLoggingPlugin(persistenceLoggingPlugin);
     }
 
+    /** Returns the PersistenceLoggingPlugin at the specified position in this list..
+     * @param index of the PersistenceLoggingPlugin to return.
+     * @return the PersistenceLoggingPlugin at the specified position in this list
+     */
+    public IPersistenceLoggingPlugin getPersistenceLoggingPlugin(int index) {
+        return m_pt.getPersistenceLoggingPlugin(index);
+    }
+
     /**
      * Returns a Collection of Persistent objects to be deleted from the persistent store.
      *

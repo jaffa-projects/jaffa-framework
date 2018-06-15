@@ -264,6 +264,10 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
      */
     public synchronized void update(IPersistent domainObject) throws ApplicationExceptions, FrameworkException {
         if (hasRulesSession()) {
+            //Check if this is the top of the Plugins then add changes otherwise return
+            if(!m_uow.getPersistenceLoggingPlugin(0).equals(this))
+                return;
+
             // Add all field changes to the session
             FieldChanged[] fieldChanges = getFieldChanges(domainObject);
             if (fieldChanges != null) {
@@ -492,5 +496,16 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
 
     public static void setDroolsManager(DroolsManager droolsManager) {
         ServiceRulesInterceptor.droolsManager = droolsManager;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof ServiceRulesInterceptor){
+            ServiceRulesInterceptor newObj = (ServiceRulesInterceptor) o;
+            if(this.m_uow.equals(newObj.m_uow) && this.m_serviceName.equals(newObj.m_serviceName)){
+                return true;
+            }
+        }
+        return false;
     }
 }

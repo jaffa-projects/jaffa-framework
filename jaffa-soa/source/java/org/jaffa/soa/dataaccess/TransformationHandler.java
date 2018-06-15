@@ -110,6 +110,32 @@ public class TransformationHandler implements ITransformationHandler {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void endService() throws  ApplicationExceptions, FrameworkException{
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void startUpdateService() throws FrameworkException, ApplicationExceptions{
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void startQueryService() throws FrameworkException, ApplicationExceptions {
+
+    }
+
+
+
+    /**
      * Adds a new handler to the beginning of the list of all handlers.
      */
     public void prependTransformationHandlers(List<ITransformationHandler> handlers) {
@@ -145,6 +171,8 @@ public class TransformationHandler implements ITransformationHandler {
     public void setTargetBean(ITransformationHandler targetBean) {
         this.targetBean = targetBean;
     }
+
+
 
     /**
      * Gets this handler's target handler instance - that would be the instance of the handler that this instance

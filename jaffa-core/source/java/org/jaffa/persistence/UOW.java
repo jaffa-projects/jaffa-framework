@@ -433,6 +433,15 @@ public class UOW {
         return m_engine.removePersistenceLoggingPlugin(persistenceLoggingPlugin);
     }
 
+
+    /** Returns the PersistenceLoggingPlugin at the specified position in this list..
+     * @param index of the PersistenceLoggingPlugin to return.
+     * @return the PersistenceLoggingPlugin at the specified position in this list
+     */
+    public IPersistenceLoggingPlugin getPersistenceLoggingPlugin(int index) {
+        return m_engine.getPersistenceLoggingPlugin(index);
+    }
+
     /**
      * Returns true if the UOW is active. The UOW becomes inactive after a commit or a rollback.
      *

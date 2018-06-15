@@ -547,6 +547,15 @@ public class PersistentTransaction {
         return persistenceLoggingPlugins.remove(persistenceLoggingPlugin);
     }
 
+
+    /** Returns the PersistenceLoggingPlugin at the specified position in this list..
+     * @param index of the PersistenceLoggingPlugin to return.
+     * @return the PersistenceLoggingPlugin at the specified position in this list
+     */
+    public IPersistenceLoggingPlugin getPersistenceLoggingPlugin(int index){
+        return persistenceLoggingPlugins.get(index);
+    }
+
     /**
      * Clears the collections that hold the adds, updates, and deletes
      */

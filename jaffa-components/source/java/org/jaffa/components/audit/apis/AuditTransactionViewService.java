@@ -91,14 +91,15 @@ public class AuditTransactionViewService extends GraphService<AuditTransactionCr
     public AuditTransactionViewQueryResponse query(AuditTransactionCriteria criteria) {
         criteria.queryView(true);
         AuditTransactionViewQueryResponse response = super._query(criteria);
-        try {
+        /*try {
             super.handler.removeHiddenFields(response);
         } catch (FrameworkException e) {
             log.error("Exception thrown while removing hidden fields from the response", e);
             response = super.createGraphQueryResponse(null, e);
-        }
+        }*/
         return response;
     }
+
 
     public Map<String, Properties> getAuditableClasses() throws FrameworkException {
         Map<String, Properties> output = null;

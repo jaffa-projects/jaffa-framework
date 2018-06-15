@@ -60,10 +60,7 @@ import org.jaffa.persistence.util.PersistentHelper;
 import org.jaffa.soa.graph.*;
 import org.jaffa.util.ExceptionHelper;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.*;
 
 /**
@@ -81,7 +78,7 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
     protected Class<Q> graphQueryResponseClass;
     protected Class<U> graphUpdateResponseClass;
     protected Class<H> handlerClass;
-    protected H handler;
+    //protected H handler;
 
 
     static {
@@ -259,13 +256,6 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
                         break;
                     }
                 } finally {
-                    /* Ensure that a new handler is used for each Graph,
-                     * since a handler may instantiate the ServiceRulesInterceptor
-                     * and plug it into the UOW for that Graph. The plugin can then
-                     * be used to intercept database i/o and fire Drools rules.
-                     */
-                    handler = null;
-
                     if (uow != null && uow.isActive()) {
                         try {
                             uow.rollback();
@@ -547,13 +537,26 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
         G output = null;
         if (log.isDebugEnabled())
             log.debug("Create/Update Input Graph Object: " + path + '\n' + TransformerUtils.printGraph(graph));
+        H handler = null;
         try {
             addContext();
-            output = (G) DataTransformer.updateGraph(path, graph, uow, createHandler(uow));
+            handler = createHandler(uow);
+            if (handler != null)
+                handler.startUpdateService();
+
+            output = (G) DataTransformer.updateGraph(path, graph, uow, handler);
             if (log.isDebugEnabled())
                 log.debug(output != null ? "Entry created " + output : "Entry updated");
-        }finally {
+        } catch (Exception e) {
+            throw ExceptionHelper.throwAFR(e);
+        } finally {
             unsetContext();
+            try {
+                if (handler != null)
+                    handler.endService();
+            } catch (Exception e) {
+                throw ExceptionHelper.throwAFR(e);
+            }
         }
         return output;
     }
@@ -583,15 +586,34 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
         // Loop through each graph
         Collection<G> outputCol = new LinkedList<G>();
         GraphMapping graphMapping = MappingFactory.getInstance(graphDataClass);
-        for (int i = 0; i < graphs.length; i++) {
-            String p = (path != null ? path + '.' : "") + graphMapping.getDomainClassShortName() + '[' + i + ']';
-            G output = localUpdate(p, graphs[i], uow);
-            if (output != null)
-                outputCol.add(output);
+        H handler = null;
+        G[] response = null;
+        try {
+            addContext();
+            handler = createHandler(uow);
+            if (handler != null)
+                handler.startUpdateService();
+            for (int i = 0; i < graphs.length; i++) {
+                String p = (path != null ? path + '.' : "") + graphMapping.getDomainClassShortName() + '[' + i + ']';
+                G output = (G) DataTransformer.updateGraph(p, graphs[i], uow, handler);
+                if (output != null)
+                    outputCol.add(output);
+            }
+
+            response = outputCol.size() > 0 ? outputCol.toArray((G[]) Array.newInstance(graphDataClass, outputCol.size())) : null;
+            if (log.isDebugEnabled())
+                log.debug(toString(graphs, response));
+        } catch (Exception e) {
+            throw ExceptionHelper.throwAFR(e);
+        } finally {
+            unsetContext();
+            try {
+                if (handler != null)
+                    handler.endService();
+            } catch (Exception e) {
+                throw ExceptionHelper.throwAFR(e);
+            }
         }
-        G[] response = outputCol.size() > 0 ? outputCol.toArray((G[]) Array.newInstance(graphDataClass, outputCol.size())) : null;
-        if (log.isDebugEnabled())
-            log.debug(toString(graphs, response));
         return response;
     }
 
@@ -631,10 +653,12 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
             Collection<G> graphs = new LinkedList<G>();
             GraphMapping graphMapping = MappingFactory.getInstance(graphDataClass);
             MappingFilter mappingFilter = null; //create an instance only if a row is found
-            createHandler(uow);
+            H handler = createHandler(uow);
 
-            if (handler != null)
+            if (handler != null) {
                 handler.preQuery(null, criteria, graphCriteria, graphMapping.getDomainClass());
+                handler.startQueryService();
+            }
 
             for (Object domain : uow.query(criteria)) {
                 if (mappingFilter == null)
@@ -642,6 +666,10 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
                 G graph = graphDataClass.newInstance();
                 DataTransformer.buildGraphFromDomain(domain, graph, graphMapping, mappingFilter, null, false, graphCriteria, handler);
                 graphs.add(graph);
+            }
+
+            if(handler != null){
+                handler.endService();
             }
             return graphs.toArray((G[]) Array.newInstance(graphDataClass, graphs.size()));
         } catch (Exception e) {
@@ -734,8 +762,11 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
      */
     protected H createHandler(UOW uow) {
         try {
-            if (handler == null && handlerClass != null)
-                handler = (H) handlerClass.getConstructor(UOW.class).newInstance(uow);
+            H handler = null;
+            if (handlerClass != null) {
+                Constructor c = handlerClass.getConstructor(UOW.class);
+                handler = (H) c.newInstance(uow);
+            }
             return handler;
         } catch (Exception e) {
             throw new RuntimeException("Can't Create Update Handler Object : " + handlerClass, e);

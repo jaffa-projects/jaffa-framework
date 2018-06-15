@@ -341,4 +341,19 @@ public interface ITransformationHandler {
      * @param targetBean the target instance of the transformation handler this instance is operating on.
      */
     void setTargetBean(ITransformationHandler targetBean);
+
+    /**
+     * Called before the query is being executed.
+     */
+    void startQueryService() throws ApplicationException, ApplicationExceptions, FrameworkException;
+
+    /**
+     * Called before the update is being executed.
+     */
+    void startUpdateService() throws ApplicationException, ApplicationExceptions, FrameworkException;
+
+    /**
+     * Called after Service execution is completed.
+     */
+    void endService() throws ApplicationException, ApplicationExceptions, FrameworkException;
 }
