@@ -83,7 +83,10 @@ public class UOW {
     private IPersistenceEngine m_engine;
     private IMessagingEngine m_messagingEngine;
     private Throwable m_pointOfCreation = new Exception("This exception can be used for pinpointing the code which fails to close an UOW instance");
+    private static ThreadLocal<Integer> connectionsInThreadContext = ThreadLocal.withInitial(()->{return new Integer(0);});
+    private boolean counted = false;
 
+    private static Integer globalConnectionCount = 0;
     /**
      * Creates new UOW. A connection is established with the underlying persistence store.
      *
@@ -92,6 +95,13 @@ public class UOW {
     public UOW() throws UOWException {
         m_engine = PersistenceEngineFactory.newInstance(this);
         m_inactive = false;
+
+        if(log.isDebugEnabled()) {
+            connectionsInThreadContext.set((connectionsInThreadContext.get()) + 1);
+            counted = true;
+            globalConnectionCount++;
+            log.debug("Database Connection Count: " + connectionsInThreadContext.get() + ", Global Count: " + globalConnectionCount);
+        }
     }
 
     /**
@@ -446,6 +456,13 @@ public class UOW {
      * Closes the connection and marks the UOW as inactive
      */
     public void close() {
+        if(log.isDebugEnabled()) {
+            if (counted) {
+                connectionsInThreadContext.set(connectionsInThreadContext.get() - 1);
+                globalConnectionCount--;
+                counted = false;
+            }
+        }
         if (m_engine != null) {
             m_engine.close();
             m_engine = null;
