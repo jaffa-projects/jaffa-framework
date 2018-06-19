@@ -260,6 +260,20 @@ public class MapRepository<T> implements IRepository<T> {
         }
         contextKeyCacheValue.add(repositoryKey);
         contextKeyCache.put(repositoryKey.getId(), contextKeyCacheValue);
+
+        //Update Cached Repositories
+        synchronized (lockObject1){
+            if(repositoryCache!=null && repositoryCache.get(VariationContext.getVariation())!=null){
+                Map<String, T> myRepository = repositoryCache.get(VariationContext.getVariation());
+                myRepository.put(repositoryKey.getId(), query(repositoryKey.getId()));
+            }
+        }
+        synchronized (lockObject2){
+            if(repositoryCacheByVariation!=null && repositoryCacheByVariation.get(VariationContext.getVariation())!=null){
+                Map<String, T> myRepository = repositoryCacheByVariation.get(VariationContext.getVariation());
+                myRepository.put(repositoryKey.getId(), queryByVariation(repositoryKey.getId(), VariationContext.getVariation()));
+            }
+        }
     }
 
     /**
@@ -272,6 +286,20 @@ public class MapRepository<T> implements IRepository<T> {
                 contextKeyCache.get(repositoryKey.getId()).remove(repositoryKey);
             } else {
                 contextKeyCache.remove(repositoryKey.getId());
+            }
+        }
+
+        //Update Cached Repositories
+        synchronized (lockObject1){
+            if(repositoryCache!=null && repositoryCache.get(VariationContext.getVariation())!=null){
+                Map<String, T> myRepository = repositoryCache.get(VariationContext.getVariation());
+                myRepository.remove(repositoryKey.getId());
+            }
+        }
+        synchronized (lockObject2){
+            if(repositoryCacheByVariation!=null && repositoryCacheByVariation.get(VariationContext.getVariation())!=null){
+                Map<String, T> myRepository = repositoryCacheByVariation.get(VariationContext.getVariation());
+                myRepository.remove(repositoryKey.getId());
             }
         }
     }
@@ -293,7 +321,9 @@ public class MapRepository<T> implements IRepository<T> {
                         myRepository.put(repoKey, value);
                     }
                 }
-                repositoryCache.put(VariationContext.getVariation(), myRepository);
+                if(myRepository.size() > 0) {
+                    repositoryCache.put(VariationContext.getVariation(), myRepository);
+                }
                 return myRepository;
             }
         }
@@ -317,7 +347,9 @@ public class MapRepository<T> implements IRepository<T> {
                         variationRepository.put(repoKey, value);
                     }
                 }
-                repositoryCacheByVariation.put(VariationContext.getVariation(), variationRepository);
+                if(variationRepository.size() > 0) {
+                    repositoryCacheByVariation.put(VariationContext.getVariation(), variationRepository);
+                }
                 return variationRepository;
             }
         }
