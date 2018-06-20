@@ -69,23 +69,6 @@ public class MapRepository<T> implements IRepository<T> {
     private Map<String, TreeSet<ContextKey>> contextKeyCache = new HashMap<>();
 
     /**
-     * Cache for Repositories
-     */
-    private Map<String, Map<String, T>> repositoryCache = new HashMap<>();
-
-
-    /**
-     * Cache for Repositories by Variation
-     */
-    private Map<String, Map<String, T>> repositoryCacheByVariation = new HashMap<>();
-
-    /**
-     * Lock Object
-     */
-    private final Object lockObject1 = new Object();
-    private final Object lockObject2 = new Object();
-
-    /**
      * The name of the repository
      */
     private String repositoryName;
@@ -260,26 +243,6 @@ public class MapRepository<T> implements IRepository<T> {
         }
         contextKeyCacheValue.add(repositoryKey);
         contextKeyCache.put(repositoryKey.getId(), contextKeyCacheValue);
-
-        //Update Cached Repositories
-        synchronized (lockObject1){
-            if(repositoryCache!=null && repositoryCache.get(VariationContext.getVariation())!=null){
-                Map<String, T> myRepository = repositoryCache.get(VariationContext.getVariation());
-                T repoElement = query(repositoryKey.getId());
-                if(repoElement!=null) {
-                    myRepository.put(repositoryKey.getId(), repoElement);
-                }
-            }
-        }
-        synchronized (lockObject2){
-            if(repositoryCacheByVariation!=null && repositoryCacheByVariation.get(VariationContext.getVariation())!=null){
-                Map<String, T> myRepository = repositoryCacheByVariation.get(VariationContext.getVariation());
-                T repoElement = queryByVariation(repositoryKey.getId(), VariationContext.getVariation());
-                if(repoElement!=null) {
-                    myRepository.put(repositoryKey.getId(), repoElement);
-                }
-            }
-        }
     }
 
     /**
@@ -294,45 +257,22 @@ public class MapRepository<T> implements IRepository<T> {
                 contextKeyCache.remove(repositoryKey.getId());
             }
         }
-
-        //Update Cached Repositories
-        synchronized (lockObject1){
-            if(repositoryCache!=null && repositoryCache.get(VariationContext.getVariation())!=null){
-                Map<String, T> myRepository = repositoryCache.get(VariationContext.getVariation());
-                myRepository.remove(repositoryKey.getId());
-            }
-        }
-        synchronized (lockObject2){
-            if(repositoryCacheByVariation!=null && repositoryCacheByVariation.get(VariationContext.getVariation())!=null){
-                Map<String, T> myRepository = repositoryCacheByVariation.get(VariationContext.getVariation());
-                myRepository.remove(repositoryKey.getId());
-            }
-        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Map<String, T> getMyRepository(){
-        if(repositoryCache.get(VariationContext.getVariation())!=null){
-            return repositoryCache.get(VariationContext.getVariation());
-        }else {
-            synchronized (lockObject1) {
-                Map<String, T> myRepository = new HashMap<>();
-                Set<String> repoKeys = contextKeyCache.keySet();
-                for (String repoKey : repoKeys) {
-                    T value = query(repoKey);
-                    if (value != null) {
-                        myRepository.put(repoKey, value);
-                    }
-                }
-                if(myRepository.size() > 0) {
-                    repositoryCache.put(VariationContext.getVariation(), myRepository);
-                }
-                return myRepository;
+    public synchronized Map<String, T> getMyRepository(){
+        Map<String, T> myRepository = new HashMap<>();
+        Set<String> repoKeys = contextKeyCache.keySet();
+        for(String repoKey : repoKeys){
+            T value = query(repoKey);
+            if(value!=null) {
+                myRepository.put(repoKey, value);
             }
         }
+        return myRepository;
     }
 
 
@@ -340,24 +280,15 @@ public class MapRepository<T> implements IRepository<T> {
      * {@inheritDoc}
      */
     @Override
-    public Map<String, T> getRepositoryByVariation(String variation){
-        if(repositoryCacheByVariation.get(VariationContext.getVariation())!=null){
-            return repositoryCacheByVariation.get(VariationContext.getVariation());
-        }else {
-            synchronized (lockObject2) {
-                Map<String, T> variationRepository = new HashMap<>();
-                Set<String> repoKeys = contextKeyCache.keySet();
-                for (String repoKey : repoKeys) {
-                    T value = queryByVariation(repoKey, variation);
-                    if (value != null) {
-                        variationRepository.put(repoKey, value);
-                    }
-                }
-                if(variationRepository.size() > 0) {
-                    repositoryCacheByVariation.put(VariationContext.getVariation(), variationRepository);
-                }
-                return variationRepository;
+    public synchronized Map<String, T> getRepositoryByVariation(String variation){
+        Map<String, T> variationRepository = new HashMap<>();
+        Set<String> repoKeys = contextKeyCache.keySet();
+        for(String repoKey : repoKeys){
+            T value = queryByVariation(repoKey, variation);
+            if(value!=null) {
+                variationRepository.put(repoKey, value);
             }
         }
+        return variationRepository;
     }
 }
