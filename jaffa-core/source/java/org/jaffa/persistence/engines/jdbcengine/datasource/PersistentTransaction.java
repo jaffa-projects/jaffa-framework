@@ -549,11 +549,16 @@ public class PersistentTransaction {
 
 
     /** Returns the PersistenceLoggingPlugin at the specified position in this list..
-     * @param index of the PersistenceLoggingPlugin to return.
+     * @param class name of the PersistenceLoggingPlugin to return.
      * @return the PersistenceLoggingPlugin at the specified position in this list
      */
-    public IPersistenceLoggingPlugin getPersistenceLoggingPlugin(int index){
-        return persistenceLoggingPlugins.get(index);
+    public IPersistenceLoggingPlugin getPersistenceLoggingPluginByClass(Class<?> clazz){
+        for(IPersistenceLoggingPlugin persistenceLoggingPlugin : persistenceLoggingPlugins){
+            if(persistenceLoggingPlugin.getClass() == clazz){
+                return persistenceLoggingPlugin;
+            }
+        }
+        return null;
     }
 
     /**

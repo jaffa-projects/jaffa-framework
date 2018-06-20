@@ -61,6 +61,7 @@ import org.jaffa.exceptions.FrameworkException;
 import org.jaffa.persistence.Criteria;
 import org.jaffa.persistence.UOW;
 import org.jaffa.soa.graph.GraphCriteria;
+import org.jaffa.soa.rules.ServiceRulesInterceptor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +83,9 @@ public class TransformationHandler implements ITransformationHandler {
     private boolean loggingActive = true;
     private ITransformationHandler targetBean;
     private List<ITransformationHandler> transformationHandlers = new ArrayList<>();
+    protected ServiceRulesInterceptor m_serviceRulesInterceptor = null;
+    protected String m_serviceName = null;
+    protected UOW m_uow;
 
     /**
      * Pass this instance to the StaticContext to be configured.
@@ -107,14 +111,7 @@ public class TransformationHandler implements ITransformationHandler {
      */
     public TransformationHandler(UOW uow) {
         this();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void endService() throws  ApplicationExceptions, FrameworkException{
-
+        m_uow = uow;
     }
 
     /**
@@ -122,7 +119,36 @@ public class TransformationHandler implements ITransformationHandler {
      */
     @Override
     public void startUpdateService() throws FrameworkException, ApplicationExceptions{
+        if(m_serviceName != null) {
+            if (log.isDebugEnabled()) {
+                log.debug(" Before Service Rule Interceptor");
+            }
+            m_serviceRulesInterceptor = new ServiceRulesInterceptor(m_serviceName);
+            if (log.isDebugEnabled()) {
+                log.debug(" After Service Rule Interceptor");
+            }
+            m_uow.addPersistenceLoggingPlugin(0, m_serviceRulesInterceptor);
+        }
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void endService() throws ApplicationException,FrameworkException, ApplicationExceptions{
+        if (m_uow != null && m_serviceRulesInterceptor != null) {
+            try {
+                if (log.isDebugEnabled()) {
+                    log.debug(" Before Firing of Drools Rules");
+                }
+                m_serviceRulesInterceptor.writeLog();
+                if (log.isDebugEnabled()) {
+                    log.debug(" After Firing of Drools Rules");
+                }
+            } finally {
+                m_uow.removePersistenceLoggingPlugin(m_serviceRulesInterceptor);
+            }
+        }
     }
 
     /**
@@ -131,6 +157,16 @@ public class TransformationHandler implements ITransformationHandler {
     @Override
     public void startQueryService() throws FrameworkException, ApplicationExceptions {
 
+    }
+
+    /**
+     * gets the ServiceRulesInterceptor associate with this service
+     * @return ServiceRulesInterceptor
+     * @throws ApplicationExceptions
+     * @throws FrameworkException
+     */
+    public ServiceRulesInterceptor getServiceRulesInterceptor() throws ApplicationExceptions, FrameworkException {
+        return m_serviceRulesInterceptor;
     }
 
 

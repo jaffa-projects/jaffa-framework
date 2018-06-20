@@ -435,11 +435,11 @@ public class UOW {
 
 
     /** Returns the PersistenceLoggingPlugin at the specified position in this list..
-     * @param index of the PersistenceLoggingPlugin to return.
+     * @param clazz name of the PersistenceLoggingPlugin class to return.
      * @return the PersistenceLoggingPlugin at the specified position in this list
      */
-    public IPersistenceLoggingPlugin getPersistenceLoggingPlugin(int index) {
-        return m_engine.getPersistenceLoggingPlugin(index);
+    public IPersistenceLoggingPlugin getPersistenceLoggingPluginByClass(Class<?> clazz) {
+        return m_engine.getPersistenceLoggingPluginByClass(clazz);
     }
 
     /**

@@ -541,8 +541,9 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
         try {
             addContext();
             handler = createHandler(uow);
-            if (handler != null)
+            if (handler != null) {
                 handler.startUpdateService();
+            }
 
             output = (G) DataTransformer.updateGraph(path, graph, uow, handler);
             if (log.isDebugEnabled())
@@ -552,8 +553,9 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
         } finally {
             unsetContext();
             try {
-                if (handler != null)
+                if (handler != null) {
                     handler.endService();
+                }
             } catch (Exception e) {
                 throw ExceptionHelper.throwAFR(e);
             }
@@ -591,8 +593,9 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
         try {
             addContext();
             handler = createHandler(uow);
-            if (handler != null)
+            if (handler != null) {
                 handler.startUpdateService();
+            }
             for (int i = 0; i < graphs.length; i++) {
                 String p = (path != null ? path + '.' : "") + graphMapping.getDomainClassShortName() + '[' + i + ']';
                 G output = (G) DataTransformer.updateGraph(p, graphs[i], uow, handler);
@@ -608,8 +611,9 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
         } finally {
             unsetContext();
             try {
-                if (handler != null)
+                if (handler != null) {
                     handler.endService();
+                }
             } catch (Exception e) {
                 throw ExceptionHelper.throwAFR(e);
             }

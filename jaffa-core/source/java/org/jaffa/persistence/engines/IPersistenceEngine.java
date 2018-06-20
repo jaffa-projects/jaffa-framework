@@ -193,8 +193,8 @@ public interface IPersistenceEngine {
     public boolean removePersistenceLoggingPlugin(IPersistenceLoggingPlugin persistenceLoggingPlugin);
 
     /** Returns the PersistenceLoggingPlugin at the specified position in this list..
-     * @param index of the PersistenceLoggingPlugin to return.
+     * @param clazz name of the PersistenceLoggingPlugin class to return.
      * @return the PersistenceLoggingPlugin at the specified position in this list
      */
-    public IPersistenceLoggingPlugin getPersistenceLoggingPlugin(int index);
+    public IPersistenceLoggingPlugin getPersistenceLoggingPluginByClass(Class<?> clazz);
 }

@@ -356,4 +356,5 @@ public interface ITransformationHandler {
      * Called after Service execution is completed.
      */
     void endService() throws ApplicationException, ApplicationExceptions, FrameworkException;
+
 }
