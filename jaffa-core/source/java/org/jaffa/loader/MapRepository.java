@@ -265,13 +265,19 @@ public class MapRepository<T> implements IRepository<T> {
         synchronized (lockObject1){
             if(repositoryCache!=null && repositoryCache.get(VariationContext.getVariation())!=null){
                 Map<String, T> myRepository = repositoryCache.get(VariationContext.getVariation());
-                myRepository.put(repositoryKey.getId(), query(repositoryKey.getId()));
+                T repoElement = query(repositoryKey.getId());
+                if(repoElement!=null) {
+                    myRepository.put(repositoryKey.getId(), repoElement);
+                }
             }
         }
         synchronized (lockObject2){
             if(repositoryCacheByVariation!=null && repositoryCacheByVariation.get(VariationContext.getVariation())!=null){
                 Map<String, T> myRepository = repositoryCacheByVariation.get(VariationContext.getVariation());
-                myRepository.put(repositoryKey.getId(), queryByVariation(repositoryKey.getId(), VariationContext.getVariation()));
+                T repoElement = queryByVariation(repositoryKey.getId(), VariationContext.getVariation());
+                if(repoElement!=null) {
+                    myRepository.put(repositoryKey.getId(), repoElement);
+                }
             }
         }
     }
