@@ -119,17 +119,20 @@ public class RepositoryJsonService implements IRepositoryJsonService {
     }
 
     /**
-     * createRepositoryMap() - Add values to local repository map for access by web services
-     * @param name  The repository name
-     * @param repository    The local repository to be populated
-     * @param manager   The manager hosting the requested repository
+     * createRepositoryMap() - Add values to local repositoryMap map for access by web services
+     * @param name  The repositoryMap name
+     * @param repositoryMap    The local repositoryMap to be populated
+     * @param manager   The manager hosting the requested repositoryMap
      */
-    private Map createRepositoryMap(String name, Map repository, IManager manager) {
-        for (Object repositoryKey : manager.getRepositoryByName(name).getAllKeys()) {
+    private Map createRepositoryMap(String name, Map repositoryMap, IManager manager) {
+        IRepository repository = manager.getRepositoryByName(name);
+        for (Object repositoryKey : repository.getAllKeys()) {
             ContextKey contextKey = (ContextKey) repositoryKey;
-            repository.put(contextKey.getId(), manager.getRepositoryByName(name).query(contextKey.getId()));
+            String contextKeyId = contextKey.getId();
+            Object value = repository.query(contextKeyId);
+            repositoryMap.put(contextKeyId, value);
         }
-        return repository;
+        return repositoryMap;
     }
 
     /**

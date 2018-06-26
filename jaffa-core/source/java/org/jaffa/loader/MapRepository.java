@@ -118,8 +118,10 @@ public class MapRepository<T> implements IRepository<T> {
             TreeSet<ContextKey> contextKeysForId = contextKeyCache.get(id);
             if (contextKeysForId!=null && contextKeysForId.size() > 0) {
                 for (ContextKey contextKey : contextKeysForId) {
-                    if ((contextKey.getVariation() != null && contextKey.getVariation().equals(VariationContext.getVariation()))
-                            || contextKey.getVariation().equals(VariationContext.NULL_VARIATION)) {
+                    String variation = contextKey.getVariation();
+                    if (variation != null &&
+                            (variation.equals(VariationContext.getVariation())
+                            || variation.equals(VariationContext.NULL_VARIATION))) {
                         return repositoryMap.get(contextKey);
                     }
                 }

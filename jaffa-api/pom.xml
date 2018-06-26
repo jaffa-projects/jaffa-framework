@@ -100,6 +100,10 @@
             <groupId>org.jaffa</groupId>
             <artifactId>jaffa-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.jaffa</groupId>
+            <artifactId>jaffa-soa</artifactId>
+        </dependency>
         <!--////////////////////////////////////////////////////-->
         <!--// CXF DEPENDENCIES ////////////////////////////////-->
         <!--////////////////////////////////////////////////////-->

@@ -62,6 +62,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Enumeration;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -103,7 +104,9 @@ public class ConfigApiCore {
             }
             if(!zipEntry.isDirectory()){
                 InputStream is = zipFile.getInputStream(zipEntry);
-                Files.copy(is, entryPath);
+                // There could be leftovers from previous writes to the temporary directory.
+                // Just overwrite them.  They are temporary, after all.
+                Files.copy(is, entryPath, StandardCopyOption.REPLACE_EXISTING);
                 is.close();
             }
         }

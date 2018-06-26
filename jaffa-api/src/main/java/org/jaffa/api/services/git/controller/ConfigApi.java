@@ -67,6 +67,7 @@ import org.apache.log4j.*;
 import org.jaffa.api.FileContents;
 import org.jaffa.api.cluster.NodeInformation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -93,6 +94,7 @@ public class ConfigApi implements IConfigApi {
     private Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
     @Autowired
+    @Qualifier("ClusterMetadataDAO")
     IClusterMetadataDAO clusterMetadata;
 
     /**
@@ -231,8 +233,10 @@ public class ConfigApi implements IConfigApi {
         }
 
         //Add file to node metadata
-        registerMetadata(fileToPostPath);
-
+        boolean doRegister = true; // TODO remove this debug flag
+        if (doRegister) {
+            registerMetadata(fileToPostPath);
+        }
         return response.build();
     }
 

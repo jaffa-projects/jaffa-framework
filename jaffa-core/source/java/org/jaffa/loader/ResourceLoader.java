@@ -126,8 +126,9 @@ public class ResourceLoader<T extends IManager> {
                 loadAllCustomConfigurations();
             }
 
-         } catch (Exception w) {
-            throw new RuntimeException(w.getCause());
+         } catch (Exception exc) {
+            logger.error(exc.getMessage());
+            throw new RuntimeException(exc.getCause());
         }
     }
 
