@@ -58,6 +58,7 @@ import org.jaffa.persistence.Criteria;
 import org.jaffa.persistence.UOW;
 import org.jaffa.persistence.util.PersistentHelper;
 import org.jaffa.soa.graph.*;
+import org.jaffa.soa.rules.ServiceRulesInterceptor;
 import org.jaffa.util.ExceptionHelper;
 
 import java.lang.reflect.*;
@@ -78,6 +79,8 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
     protected Class<Q> graphQueryResponseClass;
     protected Class<U> graphUpdateResponseClass;
     protected Class<H> handlerClass;
+    protected Class<? extends ServiceRulesInterceptor> serviceRulesInterceptorClass;
+    private String ruleBaseName;
     //protected H handler;
 
 
@@ -117,16 +120,34 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
     }
 
     /**
-     * Constructs a new instance of the GraphService.
-     * @param graphCriteriaClass type token for creating GraphCriteria instances.
-     * @param graphDataClass type token for creating GraphDataObject instances.
-     * @param graphQueryResponseClass type token for creating GraphQueryResponse instances.
-     * @param graphUpdateResponseClass type token for creating GraphUpdateResponse instances.
-     * @param handlerClass type token for creating ITransformationHandler instances.
+     * Constructs a new instance of the GraphService with ruleBase.
+     */
+    protected GraphService(String ruleBaseName) {
+        this();
+        this.ruleBaseName = ruleBaseName;
+    }
+
+    /**
+     * sets the ServiceRulesInterceptorClass on GraphService
      *
-     * NOTE: From a subclass, there is no need to explicitly pass the Class instances for the already defined type arguments.
-     * Instead use the default constructor, which determines the various Class instances using the standard API. This constructor
-     * should however be used when constructing an instance directly.
+     * @param serviceRulesInterceptorClass
+     */
+    public void setServiceRulesInterceptorClass(Class<? extends ServiceRulesInterceptor> serviceRulesInterceptorClass) {
+        this.serviceRulesInterceptorClass = serviceRulesInterceptorClass;
+    }
+
+    /**
+     * Constructs a new instance of the GraphService.
+     *
+     * @param graphCriteriaClass       type token for creating GraphCriteria instances.
+     * @param graphDataClass           type token for creating GraphDataObject instances.
+     * @param graphQueryResponseClass  type token for creating GraphQueryResponse instances.
+     * @param graphUpdateResponseClass type token for creating GraphUpdateResponse instances.
+     * @param handlerClass             type token for creating ITransformationHandler instances.
+     *                                 <p>
+     *                                 NOTE: From a subclass, there is no need to explicitly pass the Class instances for the already defined type arguments.
+     *                                 Instead use the default constructor, which determines the various Class instances using the standard API. This constructor
+     *                                 should however be used when constructing an instance directly.
      */
     protected GraphService(Class<C> graphCriteriaClass, Class<G> graphDataClass, Class<Q> graphQueryResponseClass, Class<U> graphUpdateResponseClass, Class<H> handlerClass) {
         this.graphCriteriaClass = graphCriteriaClass;
@@ -144,6 +165,7 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
      * When an error occurs, one or more instances of ServiceError, indicating
      * some kind of internal system error (like a problem accessing the database),
      * or listing the business logic errors will be returned in the response.
+     *
      * @param graphCriteria the graph criteria.
      * @return An array of Graphs, the content of this graph is based on the result filter 'rules', as provided in the criteria object.
      * while processing. When an error occurs, an array of ServiceError instances will be returned
@@ -207,6 +229,7 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
      * graph to be rolled back, and the graph will be returned in a response object
      * along with a list of the errors. In the case of a runtime error (as opposed to
      * and data/validation error) the update is retried before it is treated as an error.
+     *
      * @param graphs The set of Object Graphs to Update/Create.
      * @return An array of response objects, each response contains a copy of the Graph
      * that failed and the list of errors as to why it failed. In case the domain object is created,
@@ -270,7 +293,9 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
         return response.size() > 0 ? response.toArray((U[]) Array.newInstance(graphUpdateResponseClass, response.size())) : null;
     }
 
-    /** Prevalidates a Graph. This method can be used to default data into a Graph.
+    /**
+     * Prevalidates a Graph. This method can be used to default data into a Graph.
+     *
      * @param graph The graph to prevalidate.
      * @return The input graph with defaulted data.
      */
@@ -308,8 +333,9 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
      * some kind of internal system error (like a problem accessing the database),
      * or listing the business logic errors will be returned in the response.
      * NOTE: All domain objects will be cloned in the same transaction.
+     *
      * @param graphCriteria the graph criteria.
-     * @param newGraph supplies values for the key fields and others.
+     * @param newGraph      supplies values for the key fields and others.
      * @return An array of response objects, each response contains a copy of the Graph
      * that failed and the list of errors as to why it failed. In case the domain object is created,
      * the response will contain the root Graph with the key-fields only.
@@ -327,8 +353,9 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
      * some kind of internal system error (like a problem accessing the database),
      * or listing the business logic errors will be returned in the response.
      * NOTE: All domain objects will be mass-updated in the same transaction.
+     *
      * @param graphCriteria the graph criteria.
-     * @param newGraph supplies new non-key values.
+     * @param newGraph      supplies new non-key values.
      * @return An array of response objects, each response contains a copy of the Graph
      * that failed and the list of errors as to why it failed.
      */
@@ -345,9 +372,10 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
      * some kind of internal system error (like a problem accessing the database),
      * or listing the business logic errors will be returned in the response.
      * NOTE: All domain objects will be cloned/mass-updated in the same transaction.
+     *
      * @param graphCriteria the graph criteria.
-     * @param newGraph supplies new values.
-     * @param clone if true, cloning will be performed. Else a mass-update will be performed.
+     * @param newGraph      supplies new values.
+     * @param clone         if true, cloning will be performed. Else a mass-update will be performed.
      * @return An array of response objects, each response contains a copy of the Graph
      * that failed and the list of errors as to why it failed. In case the domain object is created,
      * the response will contain the root Graph with the key-fields only.
@@ -355,6 +383,7 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
     protected U[] cloneOrMassUpdate(C graphCriteria, G newGraph, boolean clone) {
         UOW uow = null;
         Collection<U> responseCol = new LinkedList<U>();
+        ServiceRulesInterceptor serviceRulesInterceptor = null;
         try {
             if (log.isDebugEnabled())
                 log.debug("Input to " + (clone ? "clone" : "mass-update") + ": criteria=" + graphCriteria + ", newGraph=" + newGraph);
@@ -370,23 +399,49 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
 
             if (log.isDebugEnabled())
                 log.debug("Objects to be " + (clone ? "cloned" : "mass-updated") + ": " + Arrays.toString(graphs));
-
             // Loop through each graph and clone/mass-update it
+            H handler = createHandler(uow);
+            List<ITransformationHandler> handlers = null;
             if (graphs != null && graphs.length > 0) {
                 addContext();
                 GraphMapping graphMapping = MappingFactory.getInstance(graphDataClass);
                 boolean error = false;
+
+                handlers = handler.getTransformationHandlers();
+
                 for (int i = 0; i < graphs.length; i++) {
                     String path = graphMapping.getDomainClassShortName() + '[' + i + ']';
                     try {
+
+                        serviceRulesInterceptor = createServiceRules(uow, handler);
+
+                        if (handlers != null) {
+                            for (ITransformationHandler transformationHandler : handlers) {
+                                transformationHandler.startUpdateService();
+                            }
+                        }
+
                         if (clone) {
-                            H handler = createHandler(uow);
                             handler.setCloning(true);
                             G output = (G) DataTransformer.cloneGraph(path, graphs[i], uow, handler, newGraph);
                             if (output != null)
                                 responseCol.add(createGraphUpdateResponse(output, null));
                         } else
-                            DataTransformer.massUpdateGraph(path, graphs[i], uow, createHandler(uow), newGraph);
+                            DataTransformer.massUpdateGraph(path, graphs[i], uow, handler, newGraph);
+
+                        if (handlers != null) {
+                            for (ITransformationHandler transformationHandler : handlers) {
+                                transformationHandler.beforeRulesFired();
+                            }
+                        }
+
+                        fireServiceRules(serviceRulesInterceptor);
+
+                        if (handlers != null) {
+                            for (ITransformationHandler transformationHandler : handlers) {
+                                transformationHandler.endService();
+                            }
+                        }
                     } catch (Exception e) {
                         if (e instanceof ApplicationExceptions) {
                             if (log.isDebugEnabled())
@@ -397,8 +452,15 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
                         responseCol.add(createGraphUpdateResponse(graphs[i], e));
                         error = true;
                         break;
+                    } finally {
+                        try {
+                            clearServiceRules(uow, serviceRulesInterceptor);
+                        } catch (Exception e) {
+                            log.error("Error in Clearing Service Rules Interceptor", e);
+                        }
                     }
                 }
+
                 if (!error)
                     uow.commit();
             }
@@ -407,13 +469,14 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
             responseCol.clear();
             responseCol.add(createGraphUpdateResponse(newGraph, e));
         } finally {
-            unsetContext();
             if (uow != null && uow.isActive()) {
                 try {
                     uow.rollback();
                 } catch (Exception e) {
+                    log.error("Error in Rolling back UOW", e);
                 }
             }
+            unsetContext();
         }
         U[] response = responseCol.size() > 0 ? responseCol.toArray((U[]) Array.newInstance(graphUpdateResponseClass, responseCol.size())) : null;
         if (log.isDebugEnabled())
@@ -423,7 +486,7 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
 
     /**
      * Provides the ability to clone using a calling service UOW
-     *
+     * <p>
      * Refer to Clone/Mass-Update domain objects that match the input criteria.
      * The newGraph is used to supply new values.
      * When an error occurs, one or more instances of ServiceError, indicating
@@ -431,8 +494,8 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
      * or listing the business logic errors will be returned in the response.
      *
      * @param graphCriteria the graph criteria.
-     * @param newGraph supplies new values.
-     * @param clone if true, cloning will be performed. Else a mass-update will be performed.
+     * @param newGraph      supplies new values.
+     * @param clone         if true, cloning will be performed. Else a mass-update will be performed.
      * @return An array of response objects, each response contains a copy of the Graph
      * @throws FrameworkException
      * @throws ApplicationExceptions
@@ -441,6 +504,7 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
 
         Collection<U> responseCol = new LinkedList<U>();
         U[] response = null;
+        ServiceRulesInterceptor serviceRulesInterceptor = null;
         if (log.isDebugEnabled())
             log.debug("Input to " + (clone ? "clone" : "mass-update") + ": criteria=" + graphCriteria + ", newGraph=" + newGraph);
         try {
@@ -454,26 +518,61 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
             if (log.isDebugEnabled())
                 log.debug("Objects to be " + (clone ? "cloned" : "mass-updated") + ": " + Arrays.toString(graphs));
             // Loop through each graph and clone/mass-update it
+            H handler = createHandler(uow);
+            List<ITransformationHandler> handlers = null;
             if (graphs != null && graphs.length > 0) {
                 addContext();
                 GraphMapping graphMapping = MappingFactory.getInstance(graphDataClass);
-                boolean error = false;
+
+                handlers = handler.getTransformationHandlers();
+
                 for (int i = 0; i < graphs.length; i++) {
                     String path = graphMapping.getDomainClassShortName() + '[' + i + ']';
+                    try {
 
-                    if (clone) {
-                        H handler = createHandler(uow);
-                        handler.setCloning(true);
-                        G output = (G) DataTransformer.cloneGraph(path, graphs[i], uow, handler, newGraph);
-                        if (output != null)
-                            responseCol.add(createGraphUpdateResponse(output, null));
-                    } else
-                        DataTransformer.massUpdateGraph(path, graphs[i], uow, createHandler(uow), newGraph);
+                        serviceRulesInterceptor = createServiceRules(uow, handler);
+
+                        if (handlers != null) {
+                            for (ITransformationHandler transformationHandler : handlers) {
+                                transformationHandler.startUpdateService();
+                            }
+                        }
+                        if (clone) {
+                            handler.setCloning(true);
+                            G output = (G) DataTransformer.cloneGraph(path, graphs[i], uow, handler, newGraph);
+                            if (output != null)
+                                responseCol.add(createGraphUpdateResponse(output, null));
+                        } else
+                            DataTransformer.massUpdateGraph(path, graphs[i], uow, createHandler(uow), newGraph);
+
+                        if (handlers != null) {
+                            for (ITransformationHandler transformationHandler : handlers) {
+                                transformationHandler.beforeRulesFired();
+                            }
+                        }
+
+                        fireServiceRules(serviceRulesInterceptor);
+
+                        if (handlers != null) {
+                            for (ITransformationHandler transformationHandler : handlers) {
+                                transformationHandler.endService();
+                            }
+                        }
+
+                    } finally {
+                        try {
+                            clearServiceRules(uow, serviceRulesInterceptor);
+                        } catch (Exception e) {
+                            log.error("Error in Clearing Service Rules Interceptor", e);
+                        }
+                    }
                 }
             }
             response = responseCol.size() > 0 ? responseCol.toArray((U[]) Array.newInstance(graphUpdateResponseClass, responseCol.size())) : null;
 
-        }finally {
+        } catch (Exception e) {
+            throw ExceptionHelper.throwAFR(e);
+        } finally {
             unsetContext();
         }
         if (log.isDebugEnabled())
@@ -488,13 +587,14 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
      * Only difference is this requires you to pass in a UOW so that you can scope this
      * methods execution within as existing transaction. For this reason it is not expected
      * that this service will be exposed as an external service.
+     *
      * @param graphCriteria the graph criteria.
-     * @param uow <b>MANDATORY</b> Unit of work that this process will use
+     * @param uow           <b>MANDATORY</b> Unit of work that this process will use
      * @return An array of Graphs, the content of this graph is based on the result filter 'rules', as provided in the criteria object.
-     * @throws FrameworkException Thrown if there is some kind of runtime or architecture problem
+     * @throws FrameworkException    Thrown if there is some kind of runtime or architecture problem
      * @throws ApplicationExceptions Thrown if there are any application logic errors
-     * while processing. This exception contains a list of exceptions which detail what the
-     * root cause of the problem is.
+     *                               while processing. This exception contains a list of exceptions which detail what the
+     *                               root cause of the problem is.
      */
     public G[] localQuery(C graphCriteria, UOW uow) throws FrameworkException, ApplicationExceptions {
         if (log.isDebugEnabled())
@@ -523,42 +623,56 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
      * <li>It throws normal exceptions, it does not create the response with
      * the exceptions wrapped inside.
      * </ul>
-     * @param path This is the source path of this graph, used when processing a more complex
-     * tree, where this is the path to get to this root object being processed
+     *
+     * @param path  This is the source path of this graph, used when processing a more complex
+     *              tree, where this is the path to get to this root object being processed
      * @param graph <b>(MANDATORY)</b> The object graph being used to Create/Update the domain objects
-     * @param uow <b>(MANDATORY)</b> Unit of work that this process will use
+     * @param uow   <b>(MANDATORY)</b> Unit of work that this process will use
      * @return A GraphDataObject with just the key-fields of the root object will be returned in CREATE mode. Else a null will be returned.
-     * @throws FrameworkException Thrown if there is some kind of runtime or architecture problem
+     * @throws FrameworkException    Thrown if there is some kind of runtime or architecture problem
      * @throws ApplicationExceptions Thrown if there are any application logic errors
-     * while processing. This exception contains a list of exceptions which detail what the
-     * root cause of the problem is.
+     *                               while processing. This exception contains a list of exceptions which detail what the
+     *                               root cause of the problem is.
      */
     public G localUpdate(String path, G graph, UOW uow) throws FrameworkException, ApplicationExceptions {
         G output = null;
         if (log.isDebugEnabled())
             log.debug("Create/Update Input Graph Object: " + path + '\n' + TransformerUtils.printGraph(graph));
         H handler = null;
+        List<ITransformationHandler> handlers = null;
+        ServiceRulesInterceptor serviceRulesInterceptor = null;
         try {
             addContext();
             handler = createHandler(uow);
-            if (handler != null) {
-                handler.startUpdateService();
+            serviceRulesInterceptor = createServiceRules(uow, handler);
+            handlers = handler.getTransformationHandlers();
+            if (handlers != null) {
+                for (ITransformationHandler transformationHandler : handlers) {
+                    transformationHandler.startUpdateService();
+                }
             }
 
             output = (G) DataTransformer.updateGraph(path, graph, uow, handler);
+
+            if (handlers != null) {
+                for (ITransformationHandler transformationHandler : handlers) {
+                    transformationHandler.endService();
+                }
+            }
+
+            //fire the Drools Rules
+            fireServiceRules(serviceRulesInterceptor);
             if (log.isDebugEnabled())
                 log.debug(output != null ? "Entry created " + output : "Entry updated");
         } catch (Exception e) {
             throw ExceptionHelper.throwAFR(e);
         } finally {
-            unsetContext();
             try {
-                if (handler != null) {
-                    handler.endService();
-                }
+                clearServiceRules(uow, serviceRulesInterceptor);
             } catch (Exception e) {
-                throw ExceptionHelper.throwAFR(e);
+                log.error("Error in Clearing Service Rules Interceptor", e);
             }
+            unsetContext();
         }
         return output;
     }
@@ -574,15 +688,16 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
      * <li>It throws normal exceptions, it does not create the response with
      * the exceptions wrapped inside.
      * </ul>
-     * @param path This is the source path upto the input graphs, used when processing a more complex
-     * tree, where this is the path to get to the root object being processed.
+     *
+     * @param path   This is the source path upto the input graphs, used when processing a more complex
+     *               tree, where this is the path to get to the root object being processed.
      * @param graphs <b>(MANDATORY)</b> The object graphs being used to Create/Update the domain objects
-     * @param uow <b>(MANDATORY)</b> Unit of work that this process will use
+     * @param uow    <b>(MANDATORY)</b> Unit of work that this process will use
      * @return An array of GraphDataObject instances with just the key-fields of the root object will be returned in CREATE mode. Else a null will be returned.
-     * @throws FrameworkException Thrown if there is some kind of runtime or architecture problem
+     * @throws FrameworkException    Thrown if there is some kind of runtime or architecture problem
      * @throws ApplicationExceptions Thrown if there are any application logic errors
-     * while processing. This exception contains a list of exceptions which detail what the
-     * root cause of the problem is.
+     *                               while processing. This exception contains a list of exceptions which detail what the
+     *                               root cause of the problem is.
      */
     public G[] localUpdate(String path, G[] graphs, UOW uow) throws FrameworkException, ApplicationExceptions {
         // Loop through each graph
@@ -590,17 +705,41 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
         GraphMapping graphMapping = MappingFactory.getInstance(graphDataClass);
         H handler = null;
         G[] response = null;
+        List<ITransformationHandler> handlers = null;
+        ServiceRulesInterceptor serviceRulesInterceptor = null;
+        if (graphs == null) {
+            return response;
+        }
         try {
             addContext();
             handler = createHandler(uow);
-            if (handler != null) {
-                handler.startUpdateService();
+            serviceRulesInterceptor = createServiceRules(uow, handler);
+            handlers = handler.getTransformationHandlers();
+            if (handlers != null) {
+                for (ITransformationHandler transformationHandler : handlers) {
+                    transformationHandler.startUpdateService();
+                }
             }
+
             for (int i = 0; i < graphs.length; i++) {
                 String p = (path != null ? path + '.' : "") + graphMapping.getDomainClassShortName() + '[' + i + ']';
                 G output = (G) DataTransformer.updateGraph(p, graphs[i], uow, handler);
                 if (output != null)
                     outputCol.add(output);
+            }
+
+            if (handlers != null && serviceRulesInterceptor != null) {
+                for (ITransformationHandler transformationHandler : handlers) {
+                    transformationHandler.beforeRulesFired();
+                }
+            }
+
+            fireServiceRules(serviceRulesInterceptor);
+
+            if (handlers != null) {
+                for (ITransformationHandler transformationHandler : handlers) {
+                    transformationHandler.endService();
+                }
             }
 
             response = outputCol.size() > 0 ? outputCol.toArray((G[]) Array.newInstance(graphDataClass, outputCol.size())) : null;
@@ -609,20 +748,58 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
         } catch (Exception e) {
             throw ExceptionHelper.throwAFR(e);
         } finally {
-            unsetContext();
             try {
-                if (handler != null) {
-                    handler.endService();
-                }
+                clearServiceRules(uow, serviceRulesInterceptor);
             } catch (Exception e) {
-                throw ExceptionHelper.throwAFR(e);
+                log.error("Error in Clearing Service Rules Interceptor", e);
             }
+            unsetContext();
         }
         return response;
     }
 
+    private ServiceRulesInterceptor createServiceRules(UOW uow, H handler) throws ApplicationExceptions, FrameworkException {
+        ServiceRulesInterceptor serviceRulesInterceptor = null;
+        try {
+            if (ruleBaseName != null) {
+                if (serviceRulesInterceptorClass != null) {
+                    serviceRulesInterceptor = serviceRulesInterceptorClass.newInstance();
+                } else {
+                    serviceRulesInterceptor = new ServiceRulesInterceptor(ruleBaseName);
+                }
+                uow.addPersistenceLoggingPlugin(0, serviceRulesInterceptor);
+
+                List<ITransformationHandler> handlers = null;
+                handlers = handler.getTransformationHandlers();
+                if (handlers != null) {
+                    for (ITransformationHandler transformationHandler : handlers) {
+                        transformationHandler.setServiceRulesInterceptor(serviceRulesInterceptor);
+                    }
+                }
+
+            }
+        } catch (Exception e) {
+            throw ExceptionHelper.throwAFR(e);
+        }
+        return serviceRulesInterceptor;
+    }
+
+    private void fireServiceRules(ServiceRulesInterceptor serviceRulesInterceptor) throws ApplicationExceptions, FrameworkException {
+        if (ruleBaseName != null && serviceRulesInterceptor != null) {
+            serviceRulesInterceptor.fireRules();
+        }
+    }
+
+    private void clearServiceRules(UOW uow, ServiceRulesInterceptor serviceRulesInterceptor) throws FrameworkException, ApplicationExceptions {
+        if (uow != null && serviceRulesInterceptor != null) {
+            uow.removePersistenceLoggingPlugin(serviceRulesInterceptor);
+            serviceRulesInterceptor.clearLog();
+        }
+    }
+
     /**
      * Builds a Criteria object for use with the persistence engine, based on the input graph criteria.
+     *
      * @param graphCriteria the input graph criteria.
      * @return a Criteria object for use with the persistence engine, based on the input graph criteria.
      */
@@ -642,14 +819,15 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
 
     /**
      * Runs the query based on the inputs.
+     *
      * @param graphCriteria the graph criteria.
-     * @param criteria the criteria to be used for generating the database query.
-     * @param uow <b>MANDATORY</b> Unit of work that this process will use
+     * @param criteria      the criteria to be used for generating the database query.
+     * @param uow           <b>MANDATORY</b> Unit of work that this process will use
      * @return An array of Graphs, the content of this graph is based on the result filter 'rules', as provided in the graph criteria.
-     * @throws FrameworkException Thrown if there is some kind of runtime or architecture problem
+     * @throws FrameworkException    Thrown if there is some kind of runtime or architecture problem
      * @throws ApplicationExceptions Thrown if there are any application logic errors
-     * while processing. This exception contains a list of exceptions which detail what the
-     * root cause of the problem is.
+     *                               while processing. This exception contains a list of exceptions which detail what the
+     *                               root cause of the problem is.
      */
     protected G[] runQuery(C graphCriteria, Criteria criteria, UOW uow) throws FrameworkException, ApplicationExceptions {
         try {
@@ -672,7 +850,7 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
                 graphs.add(graph);
             }
 
-            if(handler != null){
+            if (handler != null) {
                 handler.endService();
             }
             return graphs.toArray((G[]) Array.newInstance(graphDataClass, graphs.size()));
@@ -684,11 +862,12 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
 
     /**
      * Runs a query to find the total number of records returned by the input criteria in the absence of the output-limiting parameters.
+     *
      * @param graphCriteria the graph criteria.
-     * @param criteria the criteria used for generating the database query.
-     * @param uow The UOW.
-     * @param response The response being generated by the query.
-     * @param rowsCount The number of rows retrieved by the query in the presence of output-limiting parameters.
+     * @param criteria      the criteria used for generating the database query.
+     * @param uow           The UOW.
+     * @param response      The response being generated by the query.
+     * @param rowsCount     The number of rows retrieved by the query in the presence of output-limiting parameters.
      * @throws FrameworkException if any system error occurs.
      */
     protected void stampTotalRecords(C graphCriteria, Criteria criteria, UOW uow, Q response, int rowsCount) throws FrameworkException {
@@ -718,8 +897,9 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
 
     /**
      * Creates a GraphQueryResponse instance.
+     *
      * @param graphs the graphs to be added to the response.
-     * @param error error, if any.
+     * @param error  error, if any.
      * @return a GraphQueryResponse instance.
      */
     protected Q createGraphQueryResponse(G[] graphs, Throwable error) {
@@ -739,8 +919,9 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
 
     /**
      * Creates a GraphUpdateResponse instance.
+     *
      * @param source the source Graph.
-     * @param error error, if any.
+     * @param error  error, if any.
      * @return a GraphUpdateResponse instance.
      */
     protected U createGraphUpdateResponse(G source, Throwable error) {
@@ -761,6 +942,7 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
     /**
      * Creates an ITransformationHandler instance.
      * The handler instance is stored internally, so that subsequent invocations reuse the same instance.
+     *
      * @param uow <b>(MANDATORY)</b> Unit of work that this process will use.
      * @return an ITransformationHandler instance.
      */
@@ -777,8 +959,10 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
         }
     }
 
-    /** Returns a text version of the response.
-     * @param graphs The set of Object Graphs to Update/Create.
+    /**
+     * Returns a text version of the response.
+     *
+     * @param graphs   The set of Object Graphs to Update/Create.
      * @param response The response.
      * @return a text version of the response.
      */
@@ -801,8 +985,10 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
         return buf.toString();
     }
 
-    /** Returns a text version of the response.
-     * @param graphs The set of Object Graphs to Update/Create.
+    /**
+     * Returns a text version of the response.
+     *
+     * @param graphs   The set of Object Graphs to Update/Create.
      * @param response The response.
      * @return a text version of the response.
      */
@@ -837,7 +1023,7 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
      * However, if the SubProcessName doesn't exists, then remove ProcessName from MDC
      */
     protected void unsetContext() {
-        if(MDC.get(BusinessEventLogMeta.SUB_PROCESS_NAME)!=null)
+        if (MDC.get(BusinessEventLogMeta.SUB_PROCESS_NAME) != null)
             MDC.remove(BusinessEventLogMeta.SUB_PROCESS_NAME);
         else
             MDC.remove(BusinessEventLogMeta.PROCESS_NAME);

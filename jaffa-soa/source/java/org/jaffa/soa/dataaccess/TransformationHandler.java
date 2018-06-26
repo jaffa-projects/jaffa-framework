@@ -83,8 +83,7 @@ public class TransformationHandler implements ITransformationHandler {
     private boolean loggingActive = true;
     private ITransformationHandler targetBean;
     private List<ITransformationHandler> transformationHandlers = new ArrayList<>();
-    protected ServiceRulesInterceptor m_serviceRulesInterceptor = null;
-    protected String m_serviceName = null;
+    private ServiceRulesInterceptor m_serviceRulesInterceptor;
     protected UOW m_uow;
 
     /**
@@ -115,40 +114,32 @@ public class TransformationHandler implements ITransformationHandler {
     }
 
     /**
-     * {@inheritDoc}
+     * returns the UOW
+     * @return UOW
      */
-    @Override
-    public void startUpdateService() throws FrameworkException, ApplicationExceptions{
-        if(m_serviceName != null) {
-            if (log.isDebugEnabled()) {
-                log.debug(" Before Service Rule Interceptor");
-            }
-            m_serviceRulesInterceptor = new ServiceRulesInterceptor(m_serviceName);
-            if (log.isDebugEnabled()) {
-                log.debug(" After Service Rule Interceptor");
-            }
-            m_uow.addPersistenceLoggingPlugin(0, m_serviceRulesInterceptor);
-        }
+    public UOW getUow(){
+        return m_uow;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void endService() throws ApplicationException,FrameworkException, ApplicationExceptions{
-        if (m_uow != null && m_serviceRulesInterceptor != null) {
-            try {
-                if (log.isDebugEnabled()) {
-                    log.debug(" Before Firing of Drools Rules");
-                }
-                m_serviceRulesInterceptor.writeLog();
-                if (log.isDebugEnabled()) {
-                    log.debug(" After Firing of Drools Rules");
-                }
-            } finally {
-                m_uow.removePersistenceLoggingPlugin(m_serviceRulesInterceptor);
-            }
-        }
+    public void startUpdateService() throws FrameworkException, ApplicationExceptions {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void endService() throws ApplicationException, FrameworkException, ApplicationExceptions {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void beforeRulesFired() throws ApplicationException, ApplicationExceptions, FrameworkException {
     }
 
     /**
@@ -156,7 +147,6 @@ public class TransformationHandler implements ITransformationHandler {
      */
     @Override
     public void startQueryService() throws FrameworkException, ApplicationExceptions {
-
     }
 
     /**
@@ -165,8 +155,22 @@ public class TransformationHandler implements ITransformationHandler {
      * @throws ApplicationExceptions
      * @throws FrameworkException
      */
-    public ServiceRulesInterceptor getServiceRulesInterceptor() throws ApplicationExceptions, FrameworkException {
+    public ServiceRulesInterceptor getServiceRulesInterceptor() {
         return m_serviceRulesInterceptor;
+    }
+
+    /**
+     * gets the ServiceRulesInterceptor associate with this service
+     * @return ServiceRulesInterceptor
+     * @throws ApplicationExceptions
+     * @throws FrameworkException
+     */
+    public void setServiceRulesInterceptor(ServiceRulesInterceptor serviceRulesInterceptor) throws ApplicationException {
+        if (m_serviceRulesInterceptor == null) {
+            m_serviceRulesInterceptor = serviceRulesInterceptor;
+        } else {
+            throw new ApplicationException("Service Rules Interceptor set method is called when it is already initialized");
+        }
     }
 
 

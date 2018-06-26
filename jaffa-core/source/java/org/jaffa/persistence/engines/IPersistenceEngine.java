@@ -196,5 +196,5 @@ public interface IPersistenceEngine {
      * @param clazz name of the PersistenceLoggingPlugin class to return.
      * @return the PersistenceLoggingPlugin at the specified position in this list
      */
-    public IPersistenceLoggingPlugin getPersistenceLoggingPluginByClass(Class<?> clazz);
+    <U extends IPersistenceLoggingPlugin> U findFirstPersistenceLoggingPluginByClass(Class<U> clazz);
 }

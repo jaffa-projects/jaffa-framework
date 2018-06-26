@@ -55,6 +55,7 @@ import org.jaffa.exceptions.FrameworkException;
 import org.jaffa.persistence.Criteria;
 import org.jaffa.persistence.UOW;
 import org.jaffa.soa.graph.GraphCriteria;
+import org.jaffa.soa.rules.ServiceRulesInterceptor;
 
 import java.util.List;
 
@@ -356,5 +357,15 @@ public interface ITransformationHandler {
      * Called after Service execution is completed.
      */
     void endService() throws ApplicationException, ApplicationExceptions, FrameworkException;
+
+    /**
+     * Called before the Drools Rules are Fired.
+     */
+    void beforeRulesFired()throws ApplicationException, ApplicationExceptions, FrameworkException;
+
+    /**
+     * Sets the ServiceRulesInterceptor.
+     */
+    void setServiceRulesInterceptor(ServiceRulesInterceptor serviceRulesInterceptor)throws ApplicationException;
 
 }

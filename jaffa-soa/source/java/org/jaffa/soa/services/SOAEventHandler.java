@@ -102,6 +102,9 @@ public class SOAEventHandler {
 
             // Inject domain facts, based on the configuration file
             injectDomainFacts(uow, interceptor, message);
+
+            //fire drools rules here as we are not firing on uow.commit()
+            interceptor.fireRules();
         }
     }
 

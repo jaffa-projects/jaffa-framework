@@ -448,8 +448,8 @@ public class UOW {
      * @param clazz name of the PersistenceLoggingPlugin class to return.
      * @return the PersistenceLoggingPlugin at the specified position in this list
      */
-    public IPersistenceLoggingPlugin getPersistenceLoggingPluginByClass(Class<?> clazz) {
-        return m_engine.getPersistenceLoggingPluginByClass(clazz);
+    public <U extends IPersistenceLoggingPlugin> U findFirstPersistenceLoggingPluginByClass(Class<U> clazz) {
+        return m_engine.findFirstPersistenceLoggingPluginByClass(clazz);
     }
 
     /**
