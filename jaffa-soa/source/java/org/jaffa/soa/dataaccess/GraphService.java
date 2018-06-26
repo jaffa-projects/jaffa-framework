@@ -121,6 +121,7 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
 
     /**
      * Constructs a new instance of the GraphService with ruleBase.
+     * To make the Service to be associated with Drools Session, simply invoke super(serviceName).
      */
     protected GraphService(String ruleBaseName) {
         this();
@@ -413,8 +414,10 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
                     String path = graphMapping.getDomainClassShortName() + '[' + i + ']';
                     try {
 
+                        // Create the ServiceRulesInterceptor for Drools Rules only when RuleBaseName is not null
                         serviceRulesInterceptor = createServiceRules(uow, handler);
 
+                        // invoke the startUpdateService() for all chain of handlers
                         if (handlers != null) {
                             for (ITransformationHandler transformationHandler : handlers) {
                                 transformationHandler.startUpdateService();
@@ -429,14 +432,17 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
                         } else
                             DataTransformer.massUpdateGraph(path, graphs[i], uow, handler, newGraph);
 
+                        // invoke the beforeRulesFired() for all the handlers only when serviceRulesInterceptor is created
                         if (handlers != null) {
                             for (ITransformationHandler transformationHandler : handlers) {
                                 transformationHandler.beforeRulesFired();
                             }
                         }
 
+                        // fire the Drools Rules on serviceRulesInterceptor
                         fireServiceRules(serviceRulesInterceptor);
 
+                        // invoke the endService() for all the handlers only when serviceRulesInterceptor is created
                         if (handlers != null) {
                             for (ITransformationHandler transformationHandler : handlers) {
                                 transformationHandler.endService();
@@ -454,6 +460,7 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
                         break;
                     } finally {
                         try {
+                            // clear the ServiceRulesInterceptor
                             clearServiceRules(uow, serviceRulesInterceptor);
                         } catch (Exception e) {
                             log.error("Error in Clearing Service Rules Interceptor", e);
@@ -530,8 +537,10 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
                     String path = graphMapping.getDomainClassShortName() + '[' + i + ']';
                     try {
 
+                        // Create the ServiceRulesInterceptor for Drools Rules only when RuleBaseName is not null
                         serviceRulesInterceptor = createServiceRules(uow, handler);
 
+                        // invoke the startUpdateService() for all chain of handlers
                         if (handlers != null) {
                             for (ITransformationHandler transformationHandler : handlers) {
                                 transformationHandler.startUpdateService();
@@ -545,14 +554,17 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
                         } else
                             DataTransformer.massUpdateGraph(path, graphs[i], uow, createHandler(uow), newGraph);
 
+                        // invoke the beforeRulesFired() for all the handlers only when serviceRulesInterceptor is created
                         if (handlers != null) {
                             for (ITransformationHandler transformationHandler : handlers) {
                                 transformationHandler.beforeRulesFired();
                             }
                         }
 
+                        // fire the Drools Rules on serviceRulesInterceptor
                         fireServiceRules(serviceRulesInterceptor);
 
+                        // invoke the endService() for all the handlers only when serviceRulesInterceptor is created
                         if (handlers != null) {
                             for (ITransformationHandler transformationHandler : handlers) {
                                 transformationHandler.endService();
@@ -561,6 +573,7 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
 
                     } finally {
                         try {
+                            // clear the ServiceRulesInterceptor
                             clearServiceRules(uow, serviceRulesInterceptor);
                         } catch (Exception e) {
                             log.error("Error in Clearing Service Rules Interceptor", e);
@@ -644,8 +657,12 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
         try {
             addContext();
             handler = createHandler(uow);
+
+            // Create the ServiceRulesInterceptor for Drools Rules only when RuleBaseName is not null
             serviceRulesInterceptor = createServiceRules(uow, handler);
             handlers = handler.getTransformationHandlers();
+
+            // invoke the startUpdateService() for all chain of handlers
             if (handlers != null) {
                 for (ITransformationHandler transformationHandler : handlers) {
                     transformationHandler.startUpdateService();
@@ -654,14 +671,22 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
 
             output = (G) DataTransformer.updateGraph(path, graph, uow, handler);
 
+            // invoke the beforeRulesFired() for all the handlers only when serviceRulesInterceptor is created
+            if (handlers != null && serviceRulesInterceptor != null) {
+                for (ITransformationHandler transformationHandler : handlers) {
+                    transformationHandler.beforeRulesFired();
+                }
+            }
+
+            // fire the Drools Rules on serviceRulesIntecptor
+            fireServiceRules(serviceRulesInterceptor);
+
+            // invoke the endService() for all the handlers
             if (handlers != null) {
                 for (ITransformationHandler transformationHandler : handlers) {
                     transformationHandler.endService();
                 }
             }
-
-            //fire the Drools Rules
-            fireServiceRules(serviceRulesInterceptor);
             if (log.isDebugEnabled())
                 log.debug(output != null ? "Entry created " + output : "Entry updated");
         } catch (Exception e) {
@@ -676,7 +701,7 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
         }
         return output;
     }
-
+    
     /**
      * Update method with same functionality as {@link #_update(G[])}
      * <p>
@@ -713,8 +738,11 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
         try {
             addContext();
             handler = createHandler(uow);
+            // Create the ServiceRulesInterceptor for Drools Rules only when RuleBaseName is not null
             serviceRulesInterceptor = createServiceRules(uow, handler);
             handlers = handler.getTransformationHandlers();
+
+            // invoke the startUpdateService() for all chain of handlers
             if (handlers != null) {
                 for (ITransformationHandler transformationHandler : handlers) {
                     transformationHandler.startUpdateService();
@@ -728,14 +756,17 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
                     outputCol.add(output);
             }
 
+            // invoke beforeRulesFired on all the chain of handlers
             if (handlers != null && serviceRulesInterceptor != null) {
                 for (ITransformationHandler transformationHandler : handlers) {
                     transformationHandler.beforeRulesFired();
                 }
             }
 
+            // invoke firing of drools rules
             fireServiceRules(serviceRulesInterceptor);
 
+            // invoke endService on all the chain of handlers
             if (handlers != null) {
                 for (ITransformationHandler transformationHandler : handlers) {
                     transformationHandler.endService();
@@ -763,7 +794,8 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
         try {
             if (ruleBaseName != null) {
                 if (serviceRulesInterceptorClass != null) {
-                    serviceRulesInterceptor = serviceRulesInterceptorClass.newInstance();
+                    Constructor c = serviceRulesInterceptorClass.getConstructor(String.class);
+                    serviceRulesInterceptor = (ServiceRulesInterceptor) c.newInstance(ruleBaseName);
                 } else {
                     serviceRulesInterceptor = new ServiceRulesInterceptor(ruleBaseName);
                 }
@@ -836,10 +868,20 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
             GraphMapping graphMapping = MappingFactory.getInstance(graphDataClass);
             MappingFilter mappingFilter = null; //create an instance only if a row is found
             H handler = createHandler(uow);
+            List<ITransformationHandler> handlers = handler.getTransformationHandlers();
 
-            if (handler != null) {
-                handler.preQuery(null, criteria, graphCriteria, graphMapping.getDomainClass());
-                handler.startQueryService();
+            // invoke startQueryService on all the chain of handlers
+            if (handlers != null) {
+                for (ITransformationHandler transformationHandler : handlers) {
+                    transformationHandler.startQueryService();
+                }
+            }
+
+            // invoke preQuery on all the chain of handlers
+            if (handlers != null) {
+                for (ITransformationHandler transformationHandler : handlers) {
+                    transformationHandler.preQuery(null, criteria, graphCriteria, graphMapping.getDomainClass());
+                }
             }
 
             for (Object domain : uow.query(criteria)) {
@@ -850,8 +892,11 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
                 graphs.add(graph);
             }
 
-            if (handler != null) {
-                handler.endService();
+            // invoke endService on all the chain of handlers
+            if (handlers != null) {
+                for (ITransformationHandler transformationHandler : handlers) {
+                    transformationHandler.endService();
+                }
             }
             return graphs.toArray((G[]) Array.newInstance(graphDataClass, graphs.size()));
         } catch (Exception e) {
