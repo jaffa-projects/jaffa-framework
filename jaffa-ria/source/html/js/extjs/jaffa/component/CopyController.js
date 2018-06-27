@@ -152,12 +152,12 @@ Jaffa.component.CopyController = Ext.extend(Jaffa.component.PanelController, {
                   warn: (type === "org.jaffa.soa.rules.WarningEventException")
                 };
               } else
-                msg += appExp.localizedMessage + '\n<br>';
+                msg += Ext.util.Format.htmlEncode(appExp.localizedMessage) + '\n<br>';
             }
           } else if (responseEl.runtimeError) {
             // FrameworkException
             ok = false;
-            msg += responseEl.runtimeError.localizedMessage + '\n<br>';
+            msg += Ext.util.Format.htmlEncode(responseEl.runtimeError.localizedMessage) + '\n<br>';
           }
         }
       }
@@ -211,7 +211,7 @@ Jaffa.component.CopyController = Ext.extend(Jaffa.component.PanelController, {
       // Handle is something REAL BAD happens
       console.debug("Internal Errors on Clone",response, ex);
       Ext.get(document.body).unmask();
-      var txt = response;
+      var txt = Ext.util.Format.htmlEncode(response);
       if(ex) {
         if((ex.cause && ex.cause.applicationExceptionArray) ||
           ((response==null||response=="") && ex.cause) ||
@@ -221,7 +221,7 @@ Jaffa.component.CopyController = Ext.extend(Jaffa.component.PanelController, {
         txt="";
           var e = ex.applicationExceptionArray;
           for (var j=0;j<e.length;j++) {
-            txt += e[j].localizedMessage + '\n<br>';
+            txt += Ext.util.Format.htmlEncode(e[j].localizedMessage) + '\n<br>';
             }
         } else {
           // console.error("Internal Error: ", ex);

@@ -67,6 +67,7 @@ import org.jaffa.presentation.portlet.component.componentdomain.IntTypeParam;
 import org.jaffa.presentation.portlet.component.componentdomain.Loader;
 import org.jaffa.presentation.portlet.component.componentdomain.ObjectTypeParam;
 import org.jaffa.presentation.portlet.component.componentdomain.StringTypeParam;
+import org.jaffa.util.StringHelper;
 import org.jaffa.util.URLHelper;
 
 public class JaffaComponentHelper {
@@ -235,7 +236,7 @@ public class JaffaComponentHelper {
     private String validateStringParam(final StringTypeParam stringTypeParam) throws MissingParameterException, InvalidParameterException {
 
         final String name = stringTypeParam.getName();
-        String value = request.getParameter(name);
+        String value = StringHelper.escapeJavascript(request.getParameter(name));
         if ((value == null || 0 == value.length()) && stringTypeParam.getValue() != null) {
             value = stringTypeParam.getValue();
         }
@@ -266,7 +267,7 @@ public class JaffaComponentHelper {
     private String validateIntParam(final IntTypeParam intTypeParam) throws MissingParameterException, InvalidParameterException {
 
         final String name = intTypeParam.getName();
-        String value = request.getParameter(name);
+        String value = StringHelper.escapeJavascript(request.getParameter(name));
         if ((value == null || 0 == value.length()) && intTypeParam.getValue() != null) {
             value = intTypeParam.getValue().toString();
         }
@@ -297,7 +298,7 @@ public class JaffaComponentHelper {
     private String validateBooleanParam(final BooleanTypeParam booleanTypeParam) throws MissingParameterException, InvalidParameterException {
 
         final String name = booleanTypeParam.getName();
-        String value = request.getParameter(name);
+        String value = StringHelper.escapeJavascript(request.getParameter(name));
 
         if (booleanTypeParam.isRequired() != null && booleanTypeParam.isRequired())
             checkRequiredParameterValue(name, value);

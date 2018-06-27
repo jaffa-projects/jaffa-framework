@@ -533,7 +533,7 @@ Jaffa.maintenance.plugins.MultiRowUpdate = Ext.extend(Ext.grid.GridPanel, {
       if(errors.length === 1){
         Ext.MessageBox.show( {
           title : this.saveErrorsTitleText,//FIXME
-          msg : errors[0][0],
+          msg : errors[0][0], // TODO can we escape the return of this for XSS or does this include html styling?
           // width : 400,
           buttons : Ext.MessageBox.OK,
           icon: Ext.MessageBox.ERROR
