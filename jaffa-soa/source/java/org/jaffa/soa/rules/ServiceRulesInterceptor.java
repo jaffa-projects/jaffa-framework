@@ -341,7 +341,9 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
             }
             finally {
                 //Flush any DB updates as a result of the changes
-                m_uow.flush();
+                if(m_uow != null) {
+                    m_uow.flush();
+                }
             }
         }
         else {
