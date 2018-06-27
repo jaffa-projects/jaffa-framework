@@ -125,7 +125,7 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
     /**
      * This is the rules session that may be used by super-classes
      */
-    protected ThreadLocal<StatefulSession> m_session = null;
+    protected StatefulSession m_session = null;
     private final RuleBase ruleBase;
 
     /**
@@ -153,12 +153,13 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
 
         if (ruleBase != null) {
             if (log.isDebugEnabled()) log.debug("Create Rules Session");
-            m_session = new ThreadLocal<StatefulSession>() {
+            /*m_session = new ThreadLocal<StatefulSession>() {
                 @Override
                 public StatefulSession initialValue() {
                     return ruleBase.newStatefulSession();
                 }
-            };
+            };*/
+            m_session = ruleBase.newStatefulSession();
         }
     }
 
@@ -184,8 +185,8 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
             // ContextManagerFactory.instance().setProperty("rulesSession",m_session);
             // setup the debug listeners
             if (log.isDebugEnabled()) {
-                m_session.get().addEventListener(new DebugAgendaEventListener());
-                m_session.get().addEventListener(new DebugWorkingMemoryEventListener());
+                m_session.addEventListener(new DebugAgendaEventListener());
+                m_session.addEventListener(new DebugWorkingMemoryEventListener());
                 // setup the audit logging
                 //WorkingMemoryConsoleLogger logger = new WorkingMemoryConsoleLogger(m_session.get());
             }
@@ -193,7 +194,7 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
             // Add array that can be used to pass back pending events
             //@TODO - check before this is added as it could throw errors
             try {
-                m_session.get().setGlobal("pendingEvents", m_pendingEvents);
+                m_session.setGlobal("pendingEvents", m_pendingEvents);
             } catch (RuntimeException e) {
                 if (e.getMessage().startsWith("Unexpected global [")) {
                     if (log.isDebugEnabled())
@@ -207,7 +208,7 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
             // Add the UOW as a global. This allows a rule to perform database i/o even when working with non-domain objects
             //@TODO - check before this is added as it could throw errors
             try {
-                m_session.get().setGlobal("uow", m_uow);
+                m_session.setGlobal("uow", m_uow);
             } 
             catch (RuntimeException e) {
                 if (e.getMessage().startsWith("Unexpected global [")) {
@@ -229,7 +230,7 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
      * @return Returns the rules session
      */
     public StatefulSession getSession(){
-        return hasRulesSession() ? m_session.get() : null;
+        return hasRulesSession() ? m_session : null;
     }
 
     /**
@@ -239,7 +240,7 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
      */
     public synchronized void addFact(Object fact) {
         if (hasRulesSession())
-            m_session.get().insert(fact);
+            m_session.insert(fact);
     }
 
     /**
@@ -264,23 +265,27 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
      */
     public synchronized void update(IPersistent domainObject) throws ApplicationExceptions, FrameworkException {
         if (hasRulesSession()) {
+            //Check if this is the top of the Plugins then add changes otherwise return
+            if(!m_uow.findFirstPersistenceLoggingPluginByClass(this.getClass()).equals(this))
+                return;
+
             // Add all field changes to the session
             FieldChanged[] fieldChanges = getFieldChanges(domainObject);
             if (fieldChanges != null) {
                 for (FieldChanged fc : fieldChanges)
-                    m_session.get().insert(fc);
+                    m_session.insert(fc);
             }
 
             // See if fact needs to be inserted or modified
-            FactHandle handle = m_session.get().getFactHandle(domainObject);
+            FactHandle handle = m_session.getFactHandle(domainObject);
             if (handle == null) {
                 if (log.isDebugEnabled()) log.debug("DO FACT ADDED - " + domainObject);
-                m_session.get().insert(domainObject);
+                m_session.insert(domainObject);
             } 
             else {
                 if (log.isDebugEnabled()) log.debug("*** DO FACT MODIFIED - " + domainObject);
                 //m_session.modifyInsert(h, domainObject);
-                m_session.get().update(handle, domainObject);
+                m_session.update(handle, domainObject);
             }
         } 
         else {
@@ -311,14 +316,14 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
      * @throws ApplicationExceptions When there is an Application Error
      * @throws FrameworkException When there is a Infrastructure or System Error
      */
-    public synchronized void writeLog() throws ApplicationExceptions, FrameworkException {
+    public synchronized void fireRules() throws ApplicationExceptions, FrameworkException {
         if (hasRulesSession()) {
             try {
                 // Fire Rule Engine
                 if (log.isDebugEnabled()) log.debug("Fire Rules");
-                m_session.get().fireAllRules();
+                m_session.fireAllRules();
                 if (log.isDebugEnabled()) log.debug("All Rules Fired");
-                
+
                 //Check for pending events
                 if (!m_pendingEvents.isEmpty()) {
                     checkForPendingEvents();
@@ -338,11 +343,21 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
                 //Flush any DB updates as a result of the changes
                 m_uow.flush();
             }
-        } 
+        }
         else {
             if (log.isDebugEnabled())
                 log.debug("Session Not Initialized. Rules not fired by writeLog()");
         }
+    }
+
+    /**
+     * Invoked prior to the commit, so this is the correct place to start invoking
+     * the Rules for this transaction
+     * @throws ApplicationExceptions When there is an Application Error
+     * @throws FrameworkException When there is a Infrastructure or System Error
+     */
+    public synchronized void writeLog() throws ApplicationExceptions, FrameworkException {
+        log.error("This ServiceRulesInterceptor writeLog invoked for this service " + m_serviceName);
     }
 
     /**
@@ -388,7 +403,7 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
     /** Get the RuleAgent used to supply the RuleBase
      */
     protected synchronized RuleAgent getAgent() {
-    	return droolsManager.getAgent(m_serviceName, VariationContext.getVariation());
+    	return (droolsManager != null) ? droolsManager.getAgent(m_serviceName, VariationContext.getVariation()) : null;
     }
 
 
@@ -450,7 +465,7 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
         ApplicationExceptions applicationExceptions = new ApplicationExceptions();
         // Build up set of all events that have been executed
         Set<String> events = new HashSet<String>();
-        Iterator<ProcessEventGraph> pegIterator = m_session.get().iterateObjects(PROCESS_EVENT_GRAPH_OBJECT_FILTER);
+        Iterator<ProcessEventGraph> pegIterator = m_session.iterateObjects(PROCESS_EVENT_GRAPH_OBJECT_FILTER);
         while(pegIterator.hasNext()) {
             events.add((pegIterator.next()).getEventName());
         }
@@ -473,15 +488,14 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
     }
 
     private synchronized boolean hasRulesSession() {
-        return (m_session != null && m_session.get() != null);
+        return (m_session != null);
     }
 
     private void destroyRulesSession() {
         if (hasRulesSession()) {
             if (log.isDebugEnabled()) log.debug("Destroy Rules Session");
-            m_session.get().clearAgenda();
-            m_session.get().dispose();
-            m_session.set(null);
+            m_session.clearAgenda();
+            m_session.dispose();
             m_session = null;
         }
     }
@@ -492,5 +506,29 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
 
     public static void setDroolsManager(DroolsManager droolsManager) {
         ServiceRulesInterceptor.droolsManager = droolsManager;
+    }
+
+    /**
+     *
+     * @param o
+     * @return
+     */
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof ServiceRulesInterceptor){
+            ServiceRulesInterceptor newObj = (ServiceRulesInterceptor) o;
+            if(this.m_uow.equals(newObj.m_uow) && this.m_serviceName.equals(newObj.m_serviceName)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * gets ServiceName associated with this Drools Session.
+     * @return serviceName
+     */
+    public String getServiceName(){
+        return m_serviceName;
     }
 }

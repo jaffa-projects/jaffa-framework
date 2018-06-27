@@ -55,6 +55,7 @@ import org.jaffa.exceptions.FrameworkException;
 import org.jaffa.persistence.Criteria;
 import org.jaffa.persistence.UOW;
 import org.jaffa.soa.graph.GraphCriteria;
+import org.jaffa.soa.rules.ServiceRulesInterceptor;
 
 import java.util.List;
 
@@ -341,4 +342,30 @@ public interface ITransformationHandler {
      * @param targetBean the target instance of the transformation handler this instance is operating on.
      */
     void setTargetBean(ITransformationHandler targetBean);
+
+    /**
+     * Called before the query is being executed.
+     */
+    void startQueryService() throws ApplicationException, ApplicationExceptions, FrameworkException;
+
+    /**
+     * Called before the update is being executed.
+     */
+    void startUpdateService() throws ApplicationException, ApplicationExceptions, FrameworkException;
+
+    /**
+     * Called after Service execution is completed.
+     */
+    void endService() throws ApplicationException, ApplicationExceptions, FrameworkException;
+
+    /**
+     * Called before the Drools Rules are Fired.
+     */
+    void beforeRulesFired()throws ApplicationException, ApplicationExceptions, FrameworkException;
+
+    /**
+     * Sets the ServiceRulesInterceptor.
+     */
+    void setServiceRulesInterceptor(ServiceRulesInterceptor serviceRulesInterceptor)throws ApplicationException;
+
 }

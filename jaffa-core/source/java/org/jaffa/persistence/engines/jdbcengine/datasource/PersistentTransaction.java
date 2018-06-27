@@ -547,6 +547,22 @@ public class PersistentTransaction {
         return persistenceLoggingPlugins.remove(persistenceLoggingPlugin);
     }
 
+
+    /** Returns the PersistenceLoggingPlugin at the specified position in this list..
+     * @param class name of the PersistenceLoggingPlugin to return.
+     * @return the PersistenceLoggingPlugin at the specified position in this list
+     */
+    public  <U extends IPersistenceLoggingPlugin> U findFirstPersistenceLoggingPluginByClass(Class<U> clazz){
+        if(persistenceLoggingPlugins != null) {
+            for (IPersistenceLoggingPlugin persistenceLoggingPlugin : persistenceLoggingPlugins) {
+                if (clazz.isInstance(persistenceLoggingPlugin)) {
+                    return clazz.cast(persistenceLoggingPlugin);
+                }
+            }
+        }
+        return null;
+    }
+
     /**
      * Clears the collections that hold the adds, updates, and deletes
      */

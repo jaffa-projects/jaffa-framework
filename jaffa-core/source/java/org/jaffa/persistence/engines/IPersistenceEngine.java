@@ -191,4 +191,10 @@ public interface IPersistenceEngine {
      * @return true if the PersistenceLoggingPlugin was removed.
      */
     public boolean removePersistenceLoggingPlugin(IPersistenceLoggingPlugin persistenceLoggingPlugin);
+
+    /** Returns the PersistenceLoggingPlugin at the specified position in this list..
+     * @param clazz name of the PersistenceLoggingPlugin class to return.
+     * @return the PersistenceLoggingPlugin at the specified position in this list
+     */
+    <U extends IPersistenceLoggingPlugin> U findFirstPersistenceLoggingPluginByClass(Class<U> clazz);
 }
