@@ -77,6 +77,7 @@ import org.jaffa.rules.IPropertyRuleIntrospector;
 import org.jaffa.rules.IRulesEngine;
 import org.jaffa.rules.RulesEngineFactory;
 import org.jaffa.security.SecurityManager;
+import org.owasp.encoder.Encode;
 
 /** Utility Class for Common String Manipulation routines.
  *
@@ -347,7 +348,7 @@ public class StringHelper {
      * @return  converted string.
      */
     public static String escapeJavascript(String s) {
-        return s == null ? "" : s.replace("\\", "\\\\").replace("'", "\\'").replace("\"", "\\\"");
+        return Encode.forJavaScript(s);
     }
 
     /**
