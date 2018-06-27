@@ -66,8 +66,8 @@ private void getJsonString(String jsonStr,String eventName,JspWriter out) throws
 %>
 <%
 
-    String json = (String)request.getParameter("json");
-    String eventName = (String)request.getParameter("eventName");
+    String json = StringHelper.escapeJavascript(request.getParameter("json"));
+    String eventName = StringHelper.escapeJavascript(request.getParameter("eventName"));
 
     getJsonString(json,eventName,out);
 

@@ -16,6 +16,7 @@
 <%@ page import = "org.apache.poi.ss.usermodel.Font" %>
 <%@ page import = "org.apache.poi.ss.util.CellRangeAddress" %>
 <%@ page import = "org.jaffa.session.ContextManagerFactory" %>
+<%@ page import="org.jaffa.util.StringHelper" %>
 
 <%!
     private static final Logger log = Logger.getLogger("jaffa.grid.simpleExportToExcel");
@@ -144,9 +145,9 @@
 
 %>
 <%
-    String jsonStr = request.getParameter("jsonToExport")!= null?request.getParameter("jsonToExport"):"{}";
-    String sheetName = request.getParameter("sheetName")!=null?request.getParameter("sheetName"):"Grid Export";
-    String excelName = request.getParameter("excelName")!=null?request.getParameter("excelName"):"GridExport";
+    String jsonStr = request.getParameter("jsonToExport") != null ? StringHelper.escapeJavascript(request.getParameter("jsonToExport")) : "{}";
+    String sheetName = request.getParameter("sheetName") != null ? StringHelper.escapeJavascript(request.getParameter("sheetName")) : "Grid Export";
+    String excelName = request.getParameter("excelName") != null ? StringHelper.escapeJavascript(request.getParameter("excelName")) : "GridExport";
     rowCount = 1;
 
     Workbook wb;
