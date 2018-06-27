@@ -408,7 +408,7 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
                 GraphMapping graphMapping = MappingFactory.getInstance(graphDataClass);
                 boolean error = false;
 
-                handlers = handler.getTransformationHandlers();
+                handlers = handler != null ? handler.getTransformationHandlers() : null;
 
                 for (int i = 0; i < graphs.length; i++) {
                     String path = graphMapping.getDomainClassShortName() + '[' + i + ']';
@@ -531,7 +531,7 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
                 addContext();
                 GraphMapping graphMapping = MappingFactory.getInstance(graphDataClass);
 
-                handlers = handler.getTransformationHandlers();
+                handlers = handler != null ? handler.getTransformationHandlers() : null;
 
                 for (int i = 0; i < graphs.length; i++) {
                     String path = graphMapping.getDomainClassShortName() + '[' + i + ']';
@@ -660,7 +660,7 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
 
             // Create the ServiceRulesInterceptor for Drools Rules only when RuleBaseName is not null
             serviceRulesInterceptor = createServiceRules(uow, handler);
-            handlers = handler.getTransformationHandlers();
+            handlers = handler != null ? handler.getTransformationHandlers() : null;
 
             // invoke the startUpdateService() for all chain of handlers
             if (handlers != null) {
@@ -740,7 +740,7 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
             handler = createHandler(uow);
             // Create the ServiceRulesInterceptor for Drools Rules only when RuleBaseName is not null
             serviceRulesInterceptor = createServiceRules(uow, handler);
-            handlers = handler.getTransformationHandlers();
+            handlers = handler != null ? handler.getTransformationHandlers() : null;
 
             // invoke the startUpdateService() for all chain of handlers
             if (handlers != null) {
@@ -801,8 +801,7 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
                 }
                 uow.addPersistenceLoggingPlugin(0, serviceRulesInterceptor);
 
-                List<ITransformationHandler> handlers = null;
-                handlers = handler.getTransformationHandlers();
+                List<ITransformationHandler> handlers = handler != null ? handler.getTransformationHandlers() : null;
                 if (handlers != null) {
                     for (ITransformationHandler transformationHandler : handlers) {
                         transformationHandler.setServiceRulesInterceptor(serviceRulesInterceptor);
@@ -868,7 +867,7 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
             GraphMapping graphMapping = MappingFactory.getInstance(graphDataClass);
             MappingFilter mappingFilter = null; //create an instance only if a row is found
             H handler = createHandler(uow);
-            List<ITransformationHandler> handlers = handler.getTransformationHandlers();
+            List<ITransformationHandler> handlers = handler != null ? handler.getTransformationHandlers() : null;
 
             // invoke startQueryService on all the chain of handlers
             if (handlers != null) {
