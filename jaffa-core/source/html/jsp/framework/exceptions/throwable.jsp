@@ -3,6 +3,7 @@
 <%@page import="java.io.*"%>
 <%@page import="javax.servlet.ServletException"%>
 <%@page import="org.jaffa.util.MessageHelper"%>
+<%@ page import="org.jaffa.util.StringHelper" %>
 
 <html>
 <head><title><%= MessageHelper.findMessage("title.Common.Throwable", null) %></title></head>
@@ -20,7 +21,7 @@ if (th == null)
     th = exception;
 th.printStackTrace(new PrintWriter(new BufferedWriter(writer)));
 writer.flush();
-out.println( writer.toString());
+out.println(StringHelper.escapeJavascript(writer.toString()));
 %>
 </PRE>
 </body>

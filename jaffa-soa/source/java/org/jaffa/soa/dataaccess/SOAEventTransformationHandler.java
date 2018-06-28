@@ -60,6 +60,7 @@ import org.jaffa.persistence.Criteria;
 import org.jaffa.persistence.UOW;
 import org.jaffa.rules.meta.RuleMetaData;
 import org.jaffa.soa.graph.GraphCriteria;
+import org.jaffa.soa.rules.ServiceRulesInterceptor;
 
 import java.util.List;
 
@@ -227,6 +228,31 @@ public class SOAEventTransformationHandler extends SOAEventBaseHandler implement
     @Override
     public void setTargetBean(ITransformationHandler targetBean) {
         this.targetBean = targetBean;
+    }
+
+    @Override
+    public void startQueryService() throws FrameworkException, ApplicationExceptions {
+
+    }
+
+    @Override
+    public void startUpdateService() throws FrameworkException, ApplicationExceptions {
+
+    }
+
+    @Override
+    public void endService() throws FrameworkException, ApplicationExceptions {
+
+    }
+
+    @Override
+    public void beforeRulesFired() throws ApplicationException, ApplicationExceptions, FrameworkException {
+
+    }
+
+    @Override
+    public void setServiceRulesInterceptor(ServiceRulesInterceptor serviceRulesInterceptor) throws ApplicationException {
+
     }
 
     @Override

@@ -7,7 +7,9 @@
 
 page import = "org.apache.log4j.Logger"
 
-%><%! // Add properties/methods to the class
+%>
+<%@ page import="org.jaffa.util.StringHelper" %>
+<%! // Add properties/methods to the class
 
 private static Logger log = Logger.getLogger("extjs");
 
@@ -22,8 +24,8 @@ private static Logger log = Logger.getLogger("extjs");
  *        load different copies of WidgetState, in the case where that component may be
  *        used in different "modes" where each "mode" may maintain its own state.
  */
-String pageRef = request.getParameter("_pageRef");
-String identifier = request.getParameter("_identifier");
+String pageRef = StringHelper.escapeJavascript(request.getParameter("_pageRef"));
+String identifier = StringHelper.escapeJavascript(request.getParameter("_identifier"));
 String widgetStateSaver;
 if (identifier == null || identifier.length() == 0 ) {
     widgetStateSaver = pageRef;

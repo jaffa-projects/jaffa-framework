@@ -61,6 +61,7 @@ import org.jaffa.exceptions.FrameworkException;
 import org.jaffa.persistence.Criteria;
 import org.jaffa.persistence.UOW;
 import org.jaffa.soa.graph.GraphCriteria;
+import org.jaffa.soa.rules.ServiceRulesInterceptor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +83,8 @@ public class TransformationHandler implements ITransformationHandler {
     private boolean loggingActive = true;
     private ITransformationHandler targetBean;
     private List<ITransformationHandler> transformationHandlers = new ArrayList<>();
+    private ServiceRulesInterceptor m_serviceRulesInterceptor;
+    protected UOW m_uow;
 
     /**
      * Pass this instance to the StaticContext to be configured.
@@ -107,7 +110,70 @@ public class TransformationHandler implements ITransformationHandler {
      */
     public TransformationHandler(UOW uow) {
         this();
+        m_uow = uow;
     }
+
+    /**
+     * returns the UOW
+     * @return UOW
+     */
+    public UOW getUow(){
+        return m_uow;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void startUpdateService() throws FrameworkException, ApplicationExceptions {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void endService() throws ApplicationException, FrameworkException, ApplicationExceptions {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void beforeRulesFired() throws ApplicationException, ApplicationExceptions, FrameworkException {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void startQueryService() throws FrameworkException, ApplicationExceptions {
+    }
+
+    /**
+     * gets the ServiceRulesInterceptor associate with this service
+     * @return ServiceRulesInterceptor
+     * @throws ApplicationExceptions
+     * @throws FrameworkException
+     */
+    public ServiceRulesInterceptor getServiceRulesInterceptor() {
+        return m_serviceRulesInterceptor;
+    }
+
+    /**
+     * gets the ServiceRulesInterceptor associate with this service
+     * @return ServiceRulesInterceptor
+     * @throws ApplicationExceptions
+     * @throws FrameworkException
+     */
+    public void setServiceRulesInterceptor(ServiceRulesInterceptor serviceRulesInterceptor) throws ApplicationException {
+        if (m_serviceRulesInterceptor == null) {
+            m_serviceRulesInterceptor = serviceRulesInterceptor;
+        } else {
+            throw new ApplicationException("Service Rules Interceptor set method is called when it is already initialized");
+        }
+    }
+
+
 
     /**
      * Adds a new handler to the beginning of the list of all handlers.
@@ -145,6 +211,8 @@ public class TransformationHandler implements ITransformationHandler {
     public void setTargetBean(ITransformationHandler targetBean) {
         this.targetBean = targetBean;
     }
+
+
 
     /**
      * Gets this handler's target handler instance - that would be the instance of the handler that this instance
