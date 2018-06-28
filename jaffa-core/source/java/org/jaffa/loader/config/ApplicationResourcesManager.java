@@ -91,7 +91,7 @@ public class ApplicationResourcesManager implements IManager {
     /**
      * Provides the pattern to search for ApplicationResources
      */
-    private static final String DEFAULT_PROPERTY_FILE_NAME = "ApplicationResources.properties";
+    private static final String DEFAULT_PROPERTY_FILE_NAME = "ApplicationResources*.properties";
 
 
     /**

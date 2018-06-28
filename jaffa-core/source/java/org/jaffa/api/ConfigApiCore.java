@@ -99,18 +99,20 @@ public class ConfigApiCore {
         //Extract compressed contents to temporary directory
         ZipFile zipFile = new ZipFile(file);
         Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
-        while(zipEntries.hasMoreElements()){
+        while (zipEntries.hasMoreElements()){
             ZipEntry zipEntry = zipEntries.nextElement();
-            Path entryPath = Paths.get(tempDirPath + File.separator + zipEntry.getName());
+            String zipPath = tempDirPath + File.separator + zipEntry.getName();
+            Path entryPath = Paths.get(zipPath);
             if(!Files.exists(entryPath.getParent())){
                 Files.createDirectories(entryPath.getParent());
             }
+
             if(!zipEntry.isDirectory()){
-                InputStream is = zipFile.getInputStream(zipEntry);
-                // There could be leftovers from previous writes to the temporary directory.
-                // Just overwrite them.  They are temporary, after all.
-                Files.copy(is, entryPath, StandardCopyOption.REPLACE_EXISTING);
-                is.close();
+                try (InputStream is = zipFile.getInputStream(zipEntry)) {
+                    // There could be leftovers from previous writes to the temporary directory.
+                    // Just overwrite them.  They are temporary, after all.
+                    Files.copy(is, entryPath, StandardCopyOption.REPLACE_EXISTING);
+                }
             }
         }
         zipFile.close();
@@ -128,22 +130,25 @@ public class ConfigApiCore {
         MessageResources messageResources =
                 PropertyMessageResourcesFactory.getDefaultMessageResources();
         ((PropertyMessageResources) messageResources).flushCache();
-        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        for(IManager manager : ManagerRepositoryService.getInstance().getManagerMap().values()) {
-            Resource resource = getMetaInfResource(file, resolver, manager);
+        ManagerRepositoryService repositoryService = ManagerRepositoryService.getInstance();
+        for(IManager manager : repositoryService.getManagerMap().values()) {
+            Resource resource = getMetaInfResource(file, manager);
+            String resourceFilename = resource.getFilename();
             try {
-                if (resource.getFile().exists()) {
+                if (resource.exists()) {
                     if(manager instanceof RoleManager) {
                         PolicyManager.clearCache();
                     }
-                    manager.registerResource(resource, fileContents.getContextSalience(),
-                        fileContents.getVariationSalience());
-                    ManagerRepositoryService.getInstance().add(manager.getClass().getSimpleName(), manager);
-                    log.debug(resource.getFilename() + " was successfully registered to " + manager);
+                    String contextSalience = fileContents.getContextSalience();
+                    String variationSalience = fileContents.getVariationSalience();
+                    manager.registerResource(resource, contextSalience, variationSalience);
+                    String managerName = manager.getClass().getSimpleName();
+                    repositoryService.add(managerName, manager);
+                    log.debug(resourceFilename + " was successfully registered to " + manager);
                 }
             } catch (Exception e) {
                 isSuccess = false;
-                log.error("The resource " + resource.getFilename() + " failed to register", e);
+                log.error("The resource " + resourceFilename + " failed to register", e);
             }
         }
         return isSuccess;
@@ -156,9 +161,8 @@ public class ConfigApiCore {
      */
     public static boolean unregisterResources(File file, FileContents fileContents) {
         boolean isSuccess = true;
-        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         for(IManager manager : ManagerRepositoryService.getInstance().getManagerMap().values()) {
-            Resource resource = getMetaInfResource(file, resolver, manager);
+            Resource resource = getMetaInfResource(file, manager);
             try {
                 if (resource.getFile().exists()) {
                     manager.unregisterResource(resource, fileContents.getContextSalience(),
@@ -205,10 +209,13 @@ public class ConfigApiCore {
         Enumeration<? extends ZipEntry> entries = zipFile.entries();
         while (entries.hasMoreElements()) {
             ZipEntry zipFileEntry = entries.nextElement();
-            fileContents.addContentsItem(new File(zipFileEntry.toString()).getName());
+            String zipPathname = zipFileEntry.toString();
+            fileContents.addContentsItem(new File(zipPathname).getName());
             if (zipFileEntry.getName().toUpperCase().equals(manifestFile)) {
-                fileContents.setContextSalience(findContextSalienceInManifest(zipFile));
-                fileContents.setVariationSalience(findVariationSalienceInManifest(zipFile));
+                String contextSalience = findContextSalienceInManifest(zipFile);
+                fileContents.setContextSalience(contextSalience);
+                String variationSalience = findVariationSalienceInManifest(zipFile);
+                fileContents.setVariationSalience(variationSalience);
             }
         }
         //zipFile.stream().close();
@@ -259,13 +266,30 @@ public class ConfigApiCore {
     /**
      * getMetaInfResource - Retrieves resource files from the META-INF directory within a configuration archive
      * @param file    The configuration archive file
-     * @param resolver    The resource pattern resolver
      * @param manager The current manager containing the repository to inject resources into
      * @return    The resource file retrieved from META-INF
      */
-    private static Resource getMetaInfResource(File file, ResourcePatternResolver resolver, IManager manager) {
-        return resolver.getResource("file:" + file.getAbsolutePath() +
-            "/META-INF/" + manager.getResourceFileName());
+    private static Resource getMetaInfResource(File file, IManager manager) {
+        ClassLoader loader = ConfigApiCore.class.getClassLoader();
+        PathMatchingResourcePatternResolver resolver =
+                new PathMatchingResourcePatternResolver(loader);
+        String absolutePath = file.getAbsolutePath();
+        String resourceFileName = manager.getResourceFileName();
+        String filePath = "file:" + absolutePath + "/META-INF/" + resourceFileName;
+        Resource resource = resolver.getResource(filePath);
+
+        // This is a work-around for problems loading ApplicationResources.properties using an
+        // ApplicationResources*.properties pattern
+        // TODO get the pattern matching to work correctly
+        if (!resource.exists() && filePath.contains("*")) {
+            filePath = filePath.replace("*", "");
+            Resource resource2 = resolver.getResource(filePath);
+
+            if (resource2.exists()) {
+                resource = resource2;
+            }
+        }
+        return resource;
     }
 
 }

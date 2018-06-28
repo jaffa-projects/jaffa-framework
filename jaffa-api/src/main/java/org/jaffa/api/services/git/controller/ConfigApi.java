@@ -339,7 +339,8 @@ public class ConfigApi implements IConfigApi {
     private void registerConfigurations(File filePath, File tempDir) throws IOException {
         FileContents fileContents = ConfigApiCore.getFileContents(filePath);
         ConfigApiCore.registerResources(tempDir, fileContents);
-        AopXmlLoader.getInstance().processAopPath(tempDir.getPath());
+        String tempDirPath = tempDir.getPath();
+        AopXmlLoader.getInstance().processAopPath(tempDirPath);
         ConfigApiCore.removeDirTree(tempDir);
     }
 
