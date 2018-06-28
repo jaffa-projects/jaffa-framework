@@ -67,7 +67,6 @@ import org.apache.log4j.*;
 import org.jaffa.api.FileContents;
 import org.jaffa.api.cluster.NodeInformation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -94,8 +93,8 @@ public class ConfigApi implements IConfigApi {
     private Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
     @Autowired
-    @Qualifier("ClusterMetadataDAO")
-    IClusterMetadataDAO clusterMetadata;
+//    @Qualifier("ClusterMetadataDAO")
+    IClusterMetadataDAO clusterMetadataDAO;
 
     /**
      * If the user accesses the root of the GIT services, redirect them to the CXF Services page to avoid
@@ -241,14 +240,14 @@ public class ConfigApi implements IConfigApi {
     }
 
     /**
-     * Corresponds to the GET endpoint for clusterMetadata. Retrieves cluster node metadata.
+     * Corresponds to the GET endpoint for clusterMetadataDAO. Retrieves cluster node metadata.
      *
      * @return JSON Response with metadata from each node
      */
 //    @Override
     @RequestMapping(value = "/config/clusterMetadata", method = RequestMethod.GET)
     public Response getClusterMetadata() {
-        Map<String, NodeInformation> allNodesMetadata = clusterMetadata.getClusterMetadata();
+        Map<String, NodeInformation> allNodesMetadata = clusterMetadataDAO.getClusterMetadata();
 
         for (Map.Entry<String, NodeInformation> node : allNodesMetadata.entrySet()) {
             NodeInformation currentNodeInformation = node.getValue();
@@ -352,12 +351,12 @@ public class ConfigApi implements IConfigApi {
      */
     private void registerMetadata(File filePath) throws IOException {
         FileContents fileInformation = ConfigApiCore.getFileContents(filePath);
-        Map<String, NodeInformation> allNodesMetadata = clusterMetadata.getClusterMetadata();
+        Map<String, NodeInformation> allNodesMetadata = clusterMetadataDAO.getClusterMetadata();
         NodeInformation node = allNodesMetadata.get(APP_BASE_URL);
 
         node.getConfig().add(fileInformation);
 
-        clusterMetadata.put(APP_BASE_URL, node);
+        clusterMetadataDAO.put(APP_BASE_URL, node);
         log.info("Successfully added file " + filePath + " to node metadata for " + node.getHref());
     }
 
@@ -380,12 +379,12 @@ public class ConfigApi implements IConfigApi {
      * @param fileToDelete The configuration file to delete from the metadata
      */
     private void removeMetadata(String fileToDelete) {
-        Map<String, NodeInformation> allNodesMetadata = clusterMetadata.getClusterMetadata();
+        Map<String, NodeInformation> allNodesMetadata = clusterMetadataDAO.getClusterMetadata();
         NodeInformation node = allNodesMetadata.get(APP_BASE_URL);
         for (FileContents configFile : node.getConfig()) {
             if (configFile.getName().equals(fileToDelete)) {
                 node.getConfig().remove(configFile);
-                clusterMetadata.put(APP_BASE_URL, node);
+                clusterMetadataDAO.put(APP_BASE_URL, node);
                 log.info("Successfully removed file " + fileToDelete + " from node metadata for " + node.getHref());
                 break;
             }

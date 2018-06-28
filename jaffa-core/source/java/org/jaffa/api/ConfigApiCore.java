@@ -49,11 +49,14 @@
 package org.jaffa.api;
 
 import org.apache.log4j.Logger;
+import org.apache.struts.util.MessageResources;
 import org.jaffa.loader.IManager;
 import org.jaffa.loader.ManagerRepositoryService;
 import org.jaffa.loader.policy.RoleManager;
 import org.jaffa.security.PolicyManager;
 import org.jaffa.security.VariationContext;
+import org.jaffa.util.PropertyMessageResources;
+import org.jaffa.util.PropertyMessageResourcesFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -122,6 +125,9 @@ public class ConfigApiCore {
      */
     public static boolean registerResources(File file, FileContents fileContents) {
         boolean isSuccess = true;
+        MessageResources messageResources =
+                PropertyMessageResourcesFactory.getDefaultMessageResources();
+        ((PropertyMessageResources) messageResources).flushCache();
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         for(IManager manager : ManagerRepositoryService.getInstance().getManagerMap().values()) {
             Resource resource = getMetaInfResource(file, resolver, manager);
