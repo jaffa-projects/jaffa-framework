@@ -367,7 +367,7 @@ public class ContextManager implements IContextManager {
      * @return the variation context.
      */
     private Map getVariationContext(String variation) {
-        return applicationRulesManager!=null ? applicationRulesManager.getApplicationRulesVariation(variation) : null;
+        return applicationRulesManager != null ? applicationRulesManager.getApplicationRulesVariation(variation) : null;
     }
 
     /**

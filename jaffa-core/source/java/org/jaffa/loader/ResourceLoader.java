@@ -50,9 +50,8 @@
 package org.jaffa.loader;
 
 import org.apache.log4j.Logger;
-import org.jaffa.util.ConfigApiHelper;
+import org.jaffa.api.ConfigApiCore;
 import org.jaffa.util.ContextHelper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
@@ -127,8 +126,9 @@ public class ResourceLoader<T extends IManager> {
                 loadAllCustomConfigurations();
             }
 
-         } catch (Exception w) {
-            throw new RuntimeException(w.getCause());
+         } catch (Exception exc) {
+            logger.error(exc.getMessage());
+            throw new RuntimeException(exc.getCause());
         }
     }
 
@@ -136,7 +136,7 @@ public class ResourceLoader<T extends IManager> {
      * Loads all custom configurations in the custom config directory.
      * @throws IOException  When a file cannot be accessed or operations cannot be performed on it
      */
-    public void loadAllCustomConfigurations() throws IOException {
+    private void loadAllCustomConfigurations() throws IOException {
         // Load all zip files from the custom config directory.
         File customConfigDirectory = new File(customConfigPath);
         for(File file : customConfigDirectory.listFiles()) {
@@ -151,9 +151,16 @@ public class ResourceLoader<T extends IManager> {
      * @param file  The compressed configuration archive
      * @throws IOException  When a file cannot be accessed or operations cannot be performed on it
      */
-    public void loadCustomConfiguration(File file) throws IOException {
-        File zipRoot = ConfigApiHelper.extractToTemporaryDirectory(file);
-        ConfigApiHelper.registerResources(zipRoot, ConfigApiHelper.getFileContents(file));
-        ConfigApiHelper.removeDirTree(zipRoot);
+    private void loadCustomConfiguration(File file) throws IOException {
+        File zipRoot = ConfigApiCore.extractToTemporaryDirectory(file);
+        if (zipRoot != null) {
+            ConfigApiCore.registerResources(zipRoot, ConfigApiCore.getFileContents(file));
+            ConfigApiCore.removeDirTree(zipRoot);
+        }
+        else {
+            logger.error(manager.toString() + " cannot load " + file.getName() + " from " + dataDirectory + " because " +
+                "the file's directory structure is incorrect. Custom ZIP files must ONLY contain a META-INF directory " +
+                "containing all configuration files and a manifest.");
+        }
     }
 }

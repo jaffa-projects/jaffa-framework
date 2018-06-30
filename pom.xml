@@ -2,8 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-	
-	<parent>
+
+    <parent>
         <groupId>com.tapestrysolutions</groupId>
         <artifactId>tapestry-parent</artifactId>
         <version>2.0.9</version>
@@ -2051,6 +2051,7 @@
                 </property>
             </activation>
             <modules>
+                <module>jaffa-api</module>
                 <module>jaffa-assemblies</module>
                 <module>jaffa-components</module>
                 <module>jaffa-components-admin</module>
@@ -2065,9 +2066,6 @@
                 <module>jaffa-ria</module>
                 <module>jaffa-rules</module>
                 <module>jaffa-soa</module>
-                <module>jaffa-monitoring</module>
-                <module>jaffa-update-config</module>
-                <!--<module>patterns</module>-->
             </modules>
         </profile>
     </profiles>

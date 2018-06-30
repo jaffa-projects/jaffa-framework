@@ -46,35 +46,68 @@
  * SUCH DAMAGE.
  * ====================================================================
  */
+package org.jaffa.api.services.git.controller;
 
-package org.jaffa.security;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
 
-/** This class has a ThreadLocal variable to store the variation for a given Thread. It should be invoked by the controller servlet or the WebServices wrapper.
- *
- * @author  GautamJ
+import java.io.IOException;
+
+
+/**
+ * IConfigApi - Apache CXF RESTful service to provide dynamic repository updates from compressed resource archives
+ * in a specific location on the file system. Uses swagger annotations.
+ * @author Matthew Wayles
+ * @version 1.0
  */
-public class VariationContext {
+@Path("/")
+public interface IConfigApi {
 
-    /** This is the default variation. */
-    public static final String DEFAULT_VARIATION = "DEF";
-
-    public static final String NULL_VARIATION = "NULL";
-
-    private static ThreadLocal variationContext = new ThreadLocal();
-
-    /** This will set the variation for the current thread. This is typically invoked by the controller servlet or the WebServices wrapper.
-     * @param variation The variation for the current thread.
+    /**
+     * Unregister configurations contained in a custom ZIP file from the IRepository
+     * implementations, then remove the ZIP file itself
+     * @param zipFile   The custom ZIP file located in DATA_DIRECTORY/config to be deleted
+     * @return  HTTP Response indicating operation success or failure
+     * @throws IOException  When the endpoint has difficulty accessing or removing the file
      */
-    public static void setVariation(String variation) {
-        variationContext.set(variation);
-    }
+    @DELETE
+    @Path("/config/{zipFile}")
+    @Produces({"application/x-www-form-urlencoded"})
+    Response deleteCustomConfigFile(@PathParam("zipFile") String zipFile) throws IOException;
 
-    /** This will return the variation for the current thread. The default variation will be returned, in case no value was set prior to the invocation of this method.
-     * @return the variation for the current thread.
+    /**
+     * Download a ZIP file contained in the server's DATA_DIRECTORY/config location
+     * @param zipFile   The custom ZIP file to be downloaded
+     * @return  HTTP Response indicating operation success or failure
+     * @throws IOException  When the endpoint has difficulty accessing or downloading the file
      */
-    public static String getVariation() {
-        String variation = ((String) variationContext.get());
-        return variation != null ? variation : DEFAULT_VARIATION;
-    }
+    @GET
+    @Path("/config/{zipFile}")
+    @Produces({"application/zip"})
+    Response getCustomConfigFile(@PathParam("zipFile") String zipFile);
 
+    /**
+     * Retrieve a JSON list of available ZIP configurations in the DATA_DIRECTORY/config location
+     * @return  HTTP Response indicating operation success or failure
+     * @throws IOException  When the endpoint has difficulty accessing or manipulating the file
+     */
+    @GET
+    @Path("/config")
+    @Consumes({"application/x-www-form-urlencoded"})
+    @Produces({"application/json"})
+    Response getCustomConfigFileList() throws IOException;
+
+    /**
+     * Upload a ZIP file to the server's DATA_DIRECTORY/config location and register configurations to the IRepository
+     * implementations
+     * @param zipFile   The custom ZIP file to be downloaded
+     * @return  HTTP Response indicating operation success or failure
+     * @throws IOException  When the endpoint has difficulty accessing or downloading the file
+     */
+    @POST
+    @Path("/config/{zipFile}")
+    @Consumes({"application/octet-stream", "application/zip" })
+    @Produces({"application/json"})
+    Response postCustomConfigFile(@PathParam("zipFile") String zipFile, byte[] payload) throws IOException;
 }
+

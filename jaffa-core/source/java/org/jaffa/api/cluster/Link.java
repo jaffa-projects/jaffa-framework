@@ -46,35 +46,88 @@
  * SUCH DAMAGE.
  * ====================================================================
  */
+package org.jaffa.api.cluster;
 
-package org.jaffa.security;
+import com.google.gson.annotations.Expose;
 
-/** This class has a ThreadLocal variable to store the variation for a given Thread. It should be invoked by the controller servlet or the WebServices wrapper.
+/**
+ * This class creates a HATEOAS URL Link object for use with the Jaffa API
  *
- * @author  GautamJ
+ * @author Matthew Wayles
+ * @version 1.0
  */
-public class VariationContext {
+public class Link {
+    @Expose
+    private String href;
+    @Expose
+    private String rel;
+    @Expose
+    private String type;
 
-    /** This is the default variation. */
-    public static final String DEFAULT_VARIATION = "DEF";
-
-    public static final String NULL_VARIATION = "NULL";
-
-    private static ThreadLocal variationContext = new ThreadLocal();
-
-    /** This will set the variation for the current thread. This is typically invoked by the controller servlet or the WebServices wrapper.
-     * @param variation The variation for the current thread.
+    /**
+     * Create a Link object with provided parameters
+     *
+     * @param myUrl  The URL to be included in the link
+     * @param myRel  The relationship to be included in the link
+     * @param myType The HTTP request type to be included in the link
      */
-    public static void setVariation(String variation) {
-        variationContext.set(variation);
+    public Link(String myUrl, String myRel, String myType) {
+        this.href = myUrl;
+        this.rel = myRel;
+        this.type = myType;
     }
 
-    /** This will return the variation for the current thread. The default variation will be returned, in case no value was set prior to the invocation of this method.
-     * @return the variation for the current thread.
-     */
-    public static String getVariation() {
-        String variation = ((String) variationContext.get());
-        return variation != null ? variation : DEFAULT_VARIATION;
+    /**
+     * Retrieve the value from the URL variable
+     *
+     * @return url  The url retrieved
+     **/
+    public String getUrl() {
+        return href;
     }
 
+    /**
+     * Set the URL value for this link
+     *
+     * @param url The URL to set
+     */
+    public void setUrl(String url) {
+        this.href = url;
+    }
+
+    /**
+     * Retrieve the value from the relationship variable
+     *
+     * @return rel  The relationship retrieved
+     **/
+    public String getRel() {
+        return rel;
+    }
+
+    /**
+     * Set the relationship value for this link
+     *
+     * @param rel The relationship to set
+     */
+    public void setRel(String rel) {
+        this.rel = rel;
+    }
+
+    /**
+     * Retrieve the value from the type variable
+     *
+     * @return type  The type retrieved
+     **/
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * Set the type value for this link
+     *
+     * @param type The type to set
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
 }

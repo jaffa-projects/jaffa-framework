@@ -46,35 +46,68 @@
  * SUCH DAMAGE.
  * ====================================================================
  */
+package org.jaffa.api.services.git;
 
-package org.jaffa.security;
+import org.apache.cxf.message.Message;
+import org.apache.cxf.phase.PhaseInterceptorChain;
+import org.jaffa.api.FileContents;
+import org.jaffa.api.cluster.Link;
+import org.jaffa.api.cluster.NodeInformation;
 
-/** This class has a ThreadLocal variable to store the variation for a given Thread. It should be invoked by the controller servlet or the WebServices wrapper.
+/**
+ * LinkResolver - A class to consolidate the links that will be appended to FileContents and NodeInformation
+ * objects.
  *
- * @author  GautamJ
+ * @author Matthew Wayles
+ * @version 1.0
  */
-public class VariationContext {
+public class LinkResolver {
 
-    /** This is the default variation. */
-    public static final String DEFAULT_VARIATION = "DEF";
-
-    public static final String NULL_VARIATION = "NULL";
-
-    private static ThreadLocal variationContext = new ThreadLocal();
-
-    /** This will set the variation for the current thread. This is typically invoked by the controller servlet or the WebServices wrapper.
-     * @param variation The variation for the current thread.
+    /**
+     * Add links to a FileContents object. Currently, the only operations that can be performed on these resources
+     * are download and delete. The HTTP message base path is used to avoid hard-coding the URI to the service endpoint.
+     *
+     * @param fileContents The FileContents object to add the links to
+     * @return The same FileContents object sent to this method, with its links variable populated.
      */
-    public static void setVariation(String variation) {
-        variationContext.set(variation);
+    public static FileContents addLinks(FileContents fileContents) {
+        String href = "";
+        Message message = PhaseInterceptorChain.getCurrentMessage();
+
+        if (message != null) {
+            href += fileContents.getUrl() + message.get(Message.BASE_PATH) + "/config/" + fileContents.getName();
+        }
+
+        if (fileContents.getLinks() == null) {
+            fileContents.addLink(new Link(href, "download", "GET"));
+            fileContents.addLink(new Link(href, "delete", "DELETE"));
+        }
+
+        return fileContents;
     }
 
-    /** This will return the variation for the current thread. The default variation will be returned, in case no value was set prior to the invocation of this method.
-     * @return the variation for the current thread.
+    /**
+     * Add links to a NodeInformation object. Currently, the only operations that can be performed on these resources
+     * are self, list, and add. The HTTP message base path is used to avoid hard-coding the URI to the service endpoint.
+     *
+     * @param nodeInformation The NodeInformation object to add the links to
+     * @return The same NodeInformation object sent to this method, with its links variable populated.
      */
-    public static String getVariation() {
-        String variation = ((String) variationContext.get());
-        return variation != null ? variation : DEFAULT_VARIATION;
-    }
+    public static NodeInformation addLinks(NodeInformation nodeInformation) {
+        String url = "";
+        Message message = PhaseInterceptorChain.getCurrentMessage();
 
+        if (message != null) {
+            url += nodeInformation.getHref() + message.get(Message.BASE_PATH) + "/config/";
+
+        }
+
+        if (nodeInformation.getLinks() != null && nodeInformation.getLinks().isEmpty()) {
+            nodeInformation.addLink(new Link(url + "clusterMetadata", "self", "GET"));
+            nodeInformation.addLink(new Link(url, "list", "GET"));
+            nodeInformation.addLink(new Link(url + "{fileName}", "add", "POST"));
+        }
+
+        return nodeInformation;
+    }
 }

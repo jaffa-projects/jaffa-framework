@@ -1,0 +1,45 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://cxf.apache.org/jaxrs
+                           http://cxf.apache.org/schemas/jaxrs.xsd">
+
+    <import resource="classpath:META-INF/cxf/cxf.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+
+    <!-- ******************************************************************************************************************* -->
+    <!-- ****************  REST SERVICES (JAX-RS)  ************************************************************************* -->
+    <!-- ******************************************************************************************************************* -->
+
+
+    <!--GoldESP Implementation Toolkit (GIT) - A service to dynamically upload and remove compressed configuration -->
+    <!-- files from application managers -->
+    <bean id="repositoryUpdateServiceBean"
+          class="org.jaffa.api.services.git.controller.ConfigApi"/>
+
+    <jaxrs:server address="/git">
+        <jaxrs:providers>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+        </jaxrs:providers>
+        <jaxrs:serviceBeans>
+            <ref bean="repositoryUpdateServiceBean"/>
+        </jaxrs:serviceBeans>
+    </jaxrs:server>
+
+
+    <!--RepositoryJsonService - Retrieve data from IManager repositories in JSON format -->
+    <bean id="repositoryJsonServiceBean"
+          class="org.jaffa.api.services.monitoring.controller.RepositoryJsonService"/>
+
+    <jaxrs:server address="/repository">
+        <jaxrs:providers>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+        </jaxrs:providers>
+        <jaxrs:serviceBeans>
+            <ref bean="repositoryJsonServiceBean"/>
+        </jaxrs:serviceBeans>
+    </jaxrs:server>
+
+</beans>

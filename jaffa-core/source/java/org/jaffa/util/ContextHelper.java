@@ -87,7 +87,7 @@ public class ContextHelper {
 
         if (!contextPath.startsWith("jar")) {
             // Class not from JAR
-            logger.warn("The Context Path is not frm the JAR");
+            logger.warn("Context Salience is being resolved from an external file, not from a classpath JAR");
         } else {
             try {
                 String manifestPath = contextPath.substring(0, contextPath.lastIndexOf("!") + 1) + "/" + META_INF_MANIFEST_FILE;
@@ -119,7 +119,7 @@ public class ContextHelper {
 
         if (!contextPath.startsWith("jar")) {
             // Class not from JAR
-            logger.warn("The Context Path is not frm the JAR");
+            logger.warn("Variation Salience is being resolved from an external file, not from a classpath JAR");
         } else {
             try {
                 String manifestPath = contextPath.substring(0, contextPath.lastIndexOf("!") + 1) + "/" + META_INF_MANIFEST_FILE;
