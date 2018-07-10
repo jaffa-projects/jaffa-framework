@@ -62,10 +62,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.Enumeration;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -103,15 +100,27 @@ public class ConfigApiCore {
             ZipEntry zipEntry = zipEntries.nextElement();
             String zipPath = tempDirPath + File.separator + zipEntry.getName();
             Path entryPath = Paths.get(zipPath);
-            if(!Files.exists(entryPath.getParent())){
+            if (!Files.exists(entryPath.getParent())){
                 Files.createDirectories(entryPath.getParent());
             }
 
-            if(!zipEntry.isDirectory()){
+            if (!zipEntry.isDirectory()){
                 try (InputStream is = zipFile.getInputStream(zipEntry)) {
                     // There could be leftovers from previous writes to the temporary directory.
                     // Just overwrite them.  They are temporary, after all.
-                    Files.copy(is, entryPath, StandardCopyOption.REPLACE_EXISTING);
+                    try {
+                        Files.copy(is, entryPath, StandardCopyOption.REPLACE_EXISTING);
+                    }
+                    catch (FileSystemException e) {
+                        // Sometimes the file may already exist, but not be over-writable
+                        log.warn("Unable to copy to " + zipPath);
+                        if (Files.exists(entryPath)) {
+                            log.info("Will try to use pre-existing temp file " + zipPath);
+                        }
+                        else {
+                            throw e;
+                        }
+                    }
                 }
             }
         }
@@ -131,24 +140,39 @@ public class ConfigApiCore {
                 PropertyMessageResourcesFactory.getDefaultMessageResources();
         ((PropertyMessageResources) messageResources).flushCache();
         ManagerRepositoryService repositoryService = ManagerRepositoryService.getInstance();
-        for(IManager manager : repositoryService.getManagerMap().values()) {
-            Resource resource = getMetaInfResource(file, manager);
-            String resourceFilename = resource.getFilename();
+        for (IManager manager : repositoryService.getManagerMap().values()) {
             try {
-                if (resource.exists()) {
-                    if(manager instanceof RoleManager) {
-                        PolicyManager.clearCache();
+                Resource[] resources = getMetaInfResources(file, manager);
+
+                for (Resource resource : resources) {
+                    String resourceFilename = resource.getFilename();
+
+                    try {
+                        if (resource.exists()) {
+                            if (manager instanceof RoleManager) {
+                                PolicyManager.clearCache();
+                            }
+                            String contextSalience = fileContents.getContextSalience();
+                            String variationSalience = fileContents.getVariationSalience();
+                            manager.registerResource(resource, contextSalience, variationSalience);
+                            String managerName = manager.getClass().getSimpleName();
+                            repositoryService.add(managerName, manager);
+                            log.debug(resourceFilename + " was successfully registered to " + manager);
+                        }
+                        else {
+                            isSuccess = false;
+                            log.warn("Unable to find " + resourceFilename);
+                        }
                     }
-                    String contextSalience = fileContents.getContextSalience();
-                    String variationSalience = fileContents.getVariationSalience();
-                    manager.registerResource(resource, contextSalience, variationSalience);
-                    String managerName = manager.getClass().getSimpleName();
-                    repositoryService.add(managerName, manager);
-                    log.debug(resourceFilename + " was successfully registered to " + manager);
+                    catch (Exception e) {
+                        isSuccess = false;
+                        log.error("The resource " + resourceFilename + " failed to register", e);
+                    }
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 isSuccess = false;
-                log.error("The resource " + resourceFilename + " failed to register", e);
+                log.error(e.getMessage(), e);
             }
         }
         return isSuccess;
@@ -261,6 +285,23 @@ public class ConfigApiCore {
         jar.close();
 
         return variationSalience!=null && variationSalience.length() > 0 ? variationSalience : VariationContext.NULL_VARIATION;
+    }
+
+    /**
+     * Retrieves resource files from the META-INF directory within a configuration archive
+     * @param file    The configuration archive file
+     * @param manager The current manager containing the repository to inject resources into
+     * @return    The resource files retrieved from META-INF
+     */
+    private static Resource[] getMetaInfResources(File file, IManager manager) throws IOException {
+        ClassLoader loader = ConfigApiCore.class.getClassLoader();
+        PathMatchingResourcePatternResolver resolver =
+                new PathMatchingResourcePatternResolver(loader);
+        String absolutePath = file.getAbsolutePath();
+        String resourceFileName = manager.getResourceFileName();
+        String filePath = "file:" + absolutePath + "/META-INF/" + resourceFileName;
+        Resource[] resources = resolver.getResources(filePath);
+        return resources;
     }
 
     /**

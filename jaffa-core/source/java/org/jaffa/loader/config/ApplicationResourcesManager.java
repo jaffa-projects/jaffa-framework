@@ -65,16 +65,29 @@ import java.util.Properties;
 import java.util.Set;
 
 /**
- * ApplicationResourcesManager - ApplicationResourcesManager is the managing class for all application resources(lables) as defined by the
+ * ApplicationResourcesManager - ApplicationResourcesManager is the
+ * managing class for all application resources(lables) as defined by the
  * ApplicationResource.properties files.
  */
 public class ApplicationResourcesManager implements IManager {
 
+    /** The key to locate the default, non-localized resources. */
+    public static final String DEFAULT_PROPERTIES = "DefaultProperties";
+
+    /** The key to locate the specialized, localized resources. */
+    public static final String LOCALE_PROPERTIES = "LocaleProperties";
+
+    /** The key to locate the combined resources - Default properties,
+     * potentially overwritten by locale properties. */
+    public static final String APPLICATION_RESOURCES_PROPERTIES = "ApplicationResources";
+
     /**
      * Instantiates a new Properties repository
      */
-    private IRepository<String> applicationResourcesRepository = new MapRepository<>("DefaultProperties");
-    private IRepository<Properties> applicationResourcesLocaleRepository = new MapRepository<>("LocaleProperties");
+    private IRepository<String> applicationResourcesRepository =
+            new MapRepository<>(DEFAULT_PROPERTIES);
+    private IRepository<Properties> applicationResourcesLocaleRepository =
+            new MapRepository<>(LOCALE_PROPERTIES);
     private static final Logger log = Logger.getLogger(ApplicationResourcesManager.class);
 
     /**
@@ -84,8 +97,12 @@ public class ApplicationResourcesManager implements IManager {
         {
             put(applicationResourcesRepository.getName(), applicationResourcesRepository);
             put(applicationResourcesLocaleRepository.getName(), applicationResourcesLocaleRepository);
+            // TODO decide whether the two below is a good idea.  This could be confusing.
+            // "ApplicationResources" may need to be the default
+            // resources, perhaps overwritten by some other (locale) resources.  Of course,
+            // the methods can arbitrarily manipulate data from anywhere.
+            put(APPLICATION_RESOURCES_PROPERTIES, applicationResourcesRepository);
         }
-
     };
 
     /**

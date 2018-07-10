@@ -84,7 +84,7 @@ public class RepositoryJsonServiceTest {
     @Test
     public void getRepository() throws Exception {
         assertEquals("{\"testKey\":{\"autoCreateDataBean\":true,\"dataBean\":\"DataBeanTest\",\"type\":\"TestType\"}}",
-                repositoryJsonService.getRepository("Task"));
+                repositoryJsonService.getRepository("Task", null));
     }
 
     /**
