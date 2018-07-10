@@ -7,7 +7,7 @@
     <groupId>org.jaffa</groupId>
     <artifactId>jaffa-api</artifactId>
     <packaging>jar</packaging>
-    <name>jaffa-api</name>
+    <name>Jaffa API</name>
     <!--<version>6.0.16-SNAPSHOT</version>-->
 
     <!--////////////////////////////////////////////////////-->
