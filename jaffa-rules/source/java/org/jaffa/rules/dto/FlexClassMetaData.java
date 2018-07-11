@@ -1,14 +1,31 @@
 package org.jaffa.rules.dto;
 
+import com.google.gson.annotations.Expose;
+
 public class FlexClassMetaData {
 
+	@Expose()
 	private String domainClass;
+
+	@Expose()
 	private String domainName;
+
+	@Expose()
 	private String domainLabel;
+
+	@Expose()
 	private String domainLabelToken;
+
+	@Expose()
 	private String flexClass;
+
+	@Expose()
 	private String flexName;
+
+	@Expose()
 	private String flexLabel;
+
+	@Expose()
 	private String flexLabelToken;
 	private String flexSourceFile;
 	private String condition;

@@ -49,14 +49,12 @@
 package org.jaffa.api.services.gct.metadata;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.jaffa.rules.dto.FlexClassMetaData;
 import org.jaffa.rules.util.MetaDataReader;
 
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MetadataService implements IMetadataService {
 
@@ -79,38 +77,9 @@ public class MetadataService implements IMetadataService {
     @Override
     public String getFlexObjects() {
         List<FlexClassMetaData> flexClasses = MetaDataReader.getFlexClass();
-        List<Map<String, String>> results = simplifyMetadataResults(flexClasses);
-        Gson gson = new Gson();
-        String json = gson.toJson(results);
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        String json = gson.toJson(flexClasses);
         return json;
     }
-
-    private List<Map<String,String>> simplifyMetadataResults(List<FlexClassMetaData> flexClasses) {
-        List<Map<String,String>> results = new ArrayList<>();
-        for (FlexClassMetaData flexClass : flexClasses) {
-            Map<String,String> classResult = simplifyMetadataResult(flexClass);
-            results.add(classResult);
-        }
-        return results;
-    }
-
-    /**
-     * Return a subset of the FlexClassMetaData object's fields as a Map.
-     * @param flexClass the object whose data we're extracting
-     * @return a Map where the key is the field name and the value is its value
-     */
-    private Map<String,String> simplifyMetadataResult(FlexClassMetaData flexClass) {
-        HashMap<String,String> result = new HashMap<>();
-        result.put("domainClass", flexClass.getDomainClass());
-        result.put("domainName", flexClass.getDomainName());
-        result.put("domainLabel", flexClass.getDomainLabel());
-        result.put("domainLabelToken", flexClass.getDomainLabelToken());
-        result.put("flexClass", flexClass.getFlexClass());
-        result.put("flexName", flexClass.getFlexName());
-        result.put("flexLabel", flexClass.getFlexLabel());
-        result.put("flexLabelToken", flexClass.getFlexLabelToken());
-        return result;
-    }
-
 
 }
