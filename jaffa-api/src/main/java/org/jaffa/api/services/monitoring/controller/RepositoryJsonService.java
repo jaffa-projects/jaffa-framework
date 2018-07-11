@@ -50,10 +50,13 @@ package org.jaffa.api.services.monitoring.controller;
 
 import com.google.gson.Gson;
 import org.jaffa.loader.*;
+import org.jaffa.loader.config.ApplicationResourcesManager;
+import org.jaffa.util.MessageHelper;
 
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * RepositoryJsonService - This class will call the Queue service and serializes the response.
@@ -63,8 +66,8 @@ import java.util.*;
 public class RepositoryJsonService implements IRepositoryJsonService {
 
     /**
-     * If the user accesses the root of the GIT services, redirect them to the CXF Services page to avoid
-     * sending a 404 error
+     * If the user accesses the root of the GIT services, redirect them
+     * to the CXF Services page to avoid sending a 404 error
      * @return  A redirect HTTP response to CXF Services
      */
     public Response rootRedirectToServices() {
@@ -78,11 +81,12 @@ public class RepositoryJsonService implements IRepositoryJsonService {
      * Retrieve the ManagerRepositoryService singleton instance
      */
     private Gson gson = new Gson();
-    private ManagerRepositoryService managerRepositoryService = ManagerRepositoryService.getInstance();
+    private ManagerRepositoryService managerRepositoryService =
+            ManagerRepositoryService.getInstance();
 
     /**
-     * getRepositoryNames() - Returns a JSON list of all currently registered repositories that have been loaded
-     * from the ResourceLoader.
+     * getRepositoryNames() - Returns a JSON list of all currently registered
+     * repositories that have been loaded from the ResourceLoader.
      * @return String JSON value of the repository list
      */
     @Override
@@ -98,20 +102,23 @@ public class RepositoryJsonService implements IRepositoryJsonService {
     }
 
     /**
-     * getRepository() - Returns the serialized repository in JSON objects representing the named repository.
-     * @param name  The name of the repository to retrieve data from
+     * getRepository() - Returns the serialized repository in JSON objects
+     * representing the named repository.
+     * @param repoName  The repoName of the repository to retrieve data from
      * @return String repository data in JSON format
      */
     @Override
-    public String getRepository(String name) {
+    public String getRepository(String repoName, String keyBeginsWith) {
         Map repository = new HashMap<>();
         Map<String, IManager> managerMap = managerRepositoryService.getManagerMap();
+
         for (Map.Entry<String, IManager> managerEntry : managerMap.entrySet()) {
             IManager manager = managerEntry.getValue();
-            if (manager.getRepositoryNames().contains(name)) {
-               repository = createRepositoryMap(name, repository, manager);
+            if (manager.getRepositoryNames().contains(repoName)) {
+                repository = createRepositoryMap(repoName, repository, manager, keyBeginsWith);
             }
         }
+
         if (repository.isEmpty()) {
             throw new NotFoundException();
         }
@@ -123,20 +130,86 @@ public class RepositoryJsonService implements IRepositoryJsonService {
      * @param name  The repositoryMap name
      * @param repositoryMap    The local repositoryMap to be populated
      * @param manager   The manager hosting the requested repositoryMap
+     * @param keyBeginsWith if present, only keys that begin with this will have their
+     *                      values retrieved; otherwise, all keys and values
      */
-    private Map createRepositoryMap(String name, Map repositoryMap, IManager manager) {
-        IRepository repository = manager.getRepositoryByName(name);
-        for (Object repositoryKey : repository.getAllKeys()) {
-            ContextKey contextKey = (ContextKey) repositoryKey;
-            String contextKeyId = contextKey.getId();
-            Object value = repository.query(contextKeyId);
-            repositoryMap.put(contextKeyId, value);
+    private Map createRepositoryMap(String name,
+                                    Map repositoryMap,
+                                    IManager manager,
+                                    String keyBeginsWith) {
+        if (ApplicationResourcesManager.APPLICATION_RESOURCES_PROPERTIES.equalsIgnoreCase(name)) {
+            Map allResourcesMap = new HashMap(); // to be used for inserting embedded values
+            createApplicationResourcesMap(allResourcesMap, manager, null);
+            createApplicationResourcesMap(repositoryMap, manager, keyBeginsWith);
+
+            Set repoKeys = repositoryMap.keySet();
+            for (Object key : repoKeys) {
+                Object value = repositoryMap.get(key);
+
+                if (value != null) {
+                    String label = value.toString();
+                    label = MessageHelper.replaceTokens(label);
+                    repositoryMap.put(key, label);
+                }
+            }
+        }
+        else {
+            IRepository repository = manager.getRepositoryByName(name);
+            populateMapFromRepository(repositoryMap, repository, keyBeginsWith);
         }
         return repositoryMap;
     }
 
     /**
-     * getRepositoryValue() - Returns the serialized value of the provided query key from the named repository.
+     * Populates a map with the combined values from the default properties
+     * and locale properties repositories
+     * @param repositoryMap the map to populate
+     * @param manager the repository manager
+     * @param keyBeginsWith if present, only keys that begin with this will have their
+     *                      values retrieved; otherwise, all keys and values
+     */
+    private void createApplicationResourcesMap(Map repositoryMap, IManager manager, String keyBeginsWith) {
+        IRepository dRepo = manager.getRepositoryByName(ApplicationResourcesManager.DEFAULT_PROPERTIES);
+        populateMapFromRepository(repositoryMap, dRepo, keyBeginsWith);
+        // Potentially overwrite generic resources with locale-specific resources
+        IRepository lRepo = manager.getRepositoryByName(ApplicationResourcesManager.LOCALE_PROPERTIES);
+        populateMapFromRepository(repositoryMap, lRepo, keyBeginsWith);
+    }
+
+    /**
+     * Populates a map with values from a repository
+     * @param repositoryMap the map to populate
+     * @param repository the repository whose values will be added to the map
+     * @param keyBeginsWith if present, only keys that begin with this will have their
+     *                      values retrieved; otherwise, all keys and values
+     */
+    private void populateMapFromRepository(Map repositoryMap,
+                                           IRepository repository,
+                                           String keyBeginsWith) {
+        if (keyBeginsWith != null && !keyBeginsWith.isEmpty()) {
+            // Only return key-value pairs whose key starts with the designated string
+            Set<String> keyIds = repository.getAllKeyIds();
+            Set<String> idSet = keyIds.stream()
+                    .filter(id -> id.startsWith(keyBeginsWith))
+                    .collect(Collectors.toSet());
+            for (String contextKeyId : idSet) {
+                Object value = repository.query(contextKeyId);
+                repositoryMap.put(contextKeyId, value);
+            }
+        }
+        else { // default case - return all key-value pairs
+            for (Object repositoryKey : repository.getAllKeys()) {
+                ContextKey contextKey = (ContextKey) repositoryKey;
+                String contextKeyId = contextKey.getId();
+                Object value = repository.query(contextKeyId);
+                repositoryMap.put(contextKeyId, value);
+            }
+        }
+    }
+
+    /**
+     * getRepositoryValue() - Returns the serialized value of the provided query
+     * key from the named repository.
      * @param name  The name of the repository to retrieve the data from
      * @param id    The ID of the key whose value is to be retrieved
      * @return  The corresponding map value
@@ -148,10 +221,7 @@ public class RepositoryJsonService implements IRepositoryJsonService {
         for (Map.Entry<String, IManager> managerEntry : managerMap.entrySet()) {
             IManager manager = managerEntry.getValue();
             if (manager.getRepositoryNames().contains(name)) {
-                ContextKey key = manager.getRepositoryByName(name).findKey(id);
-                if (key != null) {
-                    queryResponse = manager.getRepositoryByName(name).query(id);
-                }
+                queryResponse = getQueryResponse(name, id, manager);
                 break;
             }
         }
@@ -160,4 +230,53 @@ public class RepositoryJsonService implements IRepositoryJsonService {
         }
         return gson.toJson(queryResponse);
     }
+
+    /**
+     * Returns the serialized value of the provided query
+     * key from the named repository.
+     * @param name  The name of the repository to retrieve the data from
+     * @param id    The ID of the key whose value is to be retrieved
+     * @param manager The manager to use to find the value
+     * @return  The corresponding map value
+     */
+    private Object getQueryResponse(String name, String id, IManager manager) {
+        Object queryResponse = null;
+
+        // Application resources may come from multiple repositories
+        if (ApplicationResourcesManager.APPLICATION_RESOURCES_PROPERTIES.equalsIgnoreCase(name)) {
+            // Locale-specific resources take precedence over generic resources
+            queryResponse = getResponseFromRepository(ApplicationResourcesManager.LOCALE_PROPERTIES, id, manager);
+            // If there is no locale-specific resource, get the default resource
+            if (queryResponse == null) {
+                queryResponse = getResponseFromRepository(ApplicationResourcesManager.DEFAULT_PROPERTIES, id, manager);
+            }
+            if (queryResponse != null) {
+                queryResponse = MessageHelper.replaceTokens(queryResponse.toString());
+            }
+        }
+        else { // normal case - one repository to search
+            queryResponse = getResponseFromRepository(name, id, manager);
+        }
+        return queryResponse;
+    }
+
+    /**
+     * Returns the serialized value of the provided query
+     * key from the named repository.
+     * @param name  The name of the repository to retrieve the data from
+     * @param id    The ID of the key whose value is to be retrieved
+     * @param manager The manager to use to find the value
+     * @return  The corresponding map value
+     */
+    private Object getResponseFromRepository(String name, String id, IManager manager) {
+        Object queryResponse = null;
+        IRepository repository = manager.getRepositoryByName(name);
+        ContextKey key = repository.findKey(id);
+        if (key != null) {
+            queryResponse = repository.query(id);
+        }
+        return queryResponse;
+    }
+
+
 }

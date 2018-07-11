@@ -1626,7 +1626,7 @@ Ext.override(Ext.Panel, {
  */
 Ext.override(Ext.Component, {
     config: {
-        allowMarkup: true
+        allowMarkup: false
     }
 });
 

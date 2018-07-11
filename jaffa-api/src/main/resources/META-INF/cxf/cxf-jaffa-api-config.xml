@@ -42,4 +42,18 @@
         </jaxrs:serviceBeans>
     </jaxrs:server>
 
+    <!-- MetadataJsonService - give the list of domain objects that allow
+         flex fields to be defined in JSON format -->
+    <bean id="metadataServiceBean"
+          class="org.jaffa.api.services.gct.metadata.MetadataService"/>
+
+    <jaxrs:server address="/gct/metadata">
+        <jaxrs:providers>
+            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
+        </jaxrs:providers>
+        <jaxrs:serviceBeans>
+            <ref bean="metadataServiceBean"/>
+        </jaxrs:serviceBeans>
+    </jaxrs:server>
+
 </beans>

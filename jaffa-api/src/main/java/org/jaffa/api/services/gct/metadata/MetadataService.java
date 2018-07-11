@@ -2,7 +2,7 @@
  * ====================================================================
  * JAFFA - Java Application Framework For All
  *
- * Copyright (C) 2002 JAFFA Development Group
+ * Copyright (C) 2018 JAFFA Development Group
  *
  *     This library is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU Lesser General Public
@@ -46,35 +46,71 @@
  * SUCH DAMAGE.
  * ====================================================================
  */
+package org.jaffa.api.services.gct.metadata;
 
-package org.jaffa.security;
+import com.google.gson.Gson;
+import org.jaffa.rules.dto.FlexClassMetaData;
+import org.jaffa.rules.util.MetaDataReader;
 
-/** This class has a ThreadLocal variable to store the variation for a given Thread. It should be invoked by the controller servlet or the WebServices wrapper.
- *
- * @author  GautamJ
- */
-public class VariationContext {
+import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-    /** This is the default variation. */
-    public static final String DEFAULT_VARIATION = "DEF";
+public class MetadataService implements IMetadataService {
 
-    public static final String NULL_VARIATION = "NULL";
-
-    private static ThreadLocal variationContext = new ThreadLocal();
-
-    /** This will set the variation for the current thread. This is typically invoked by the controller servlet or the WebServices wrapper.
-     * @param variation The variation for the current thread.
+    /**
+     * If the user accesses the root of the GCT services, redirect them
+     * to the CXF Services page to avoid sending a 404 error
+     * @return  A redirect HTTP response to CXF Services
      */
-    public static void setVariation(String variation) {
-        variationContext.set(variation);
+    public Response rootRedirectToServices() {
+        return Response
+                .status(Response.Status.FOUND)
+                .header("Location", "/api/services")
+                .build();
     }
 
-    /** This will return the variation for the current thread. The default variation will be returned, in case no value was set prior to the invocation of this method.
-     * @return the variation for the current thread.
+    /**
+     * Gives the list of domain objects that allow flex fields to be defined
+     * @return the list of domain objects that allow flex fields to be defined
      */
-    public static String getVariation() {
-        String variation = ((String) variationContext.get());
-        return variation != null ? variation : DEFAULT_VARIATION;
+    @Override
+    public String getFlexObjects() {
+        List<FlexClassMetaData> flexClasses = MetaDataReader.getFlexClass();
+        List<Map<String, String>> results = simplifyMetadataResults(flexClasses);
+        Gson gson = new Gson();
+        String json = gson.toJson(results);
+        return json;
     }
+
+    private List<Map<String,String>> simplifyMetadataResults(List<FlexClassMetaData> flexClasses) {
+        List<Map<String,String>> results = new ArrayList<>();
+        for (FlexClassMetaData flexClass : flexClasses) {
+            Map<String,String> classResult = simplifyMetadataResult(flexClass);
+            results.add(classResult);
+        }
+        return results;
+    }
+
+    /**
+     * Return a subset of the FlexClassMetaData object's fields as a Map.
+     * @param flexClass the object whose data we're extracting
+     * @return a Map where the key is the field name and the value is its value
+     */
+    private Map<String,String> simplifyMetadataResult(FlexClassMetaData flexClass) {
+        HashMap<String,String> result = new HashMap<>();
+        result.put("domainClass", flexClass.getDomainClass());
+        result.put("domainName", flexClass.getDomainName());
+        result.put("domainLabel", flexClass.getDomainLabel());
+        result.put("domainLabelToken", flexClass.getDomainLabelToken());
+        result.put("flexClass", flexClass.getFlexClass());
+        result.put("flexName", flexClass.getFlexName());
+        result.put("flexLabel", flexClass.getFlexLabel());
+        result.put("flexLabelToken", flexClass.getFlexLabelToken());
+        return result;
+    }
+
 
 }

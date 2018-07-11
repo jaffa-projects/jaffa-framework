@@ -346,7 +346,7 @@ SoaEventSummaryPanel = Ext.extend(Ext.Panel, {
                 xtype: 'button',
                 iconCls:'icon-consume',
                 autoWidth : true,
-                disabled : Rules.get("com.systemconfigdesktop.eventSummary") === 'false' ? true : false,
+                disabled : Rules.get("com.systemconfigdesktop.eventSummary") !== 'true' ? true : false,
                 handler:function(){
                             
                     
