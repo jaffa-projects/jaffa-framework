@@ -27,77 +27,76 @@ Note: The implementation is generic that applies to a master object class aggreg
 <%@ page import = "org.apache.poi.ss.usermodel.Workbook" %>
 <%@ page import = "org.apache.poi.xssf.streaming.SXSSFWorkbook" %>
 <%@ page import = "org.jaffa.session.ContextManagerFactory" %>
-<%@ page import="org.jaffa.util.StringHelper" %>
 
 <%@ taglib uri='/WEB-INF/jaffa-portlet.tld' prefix='j' %>
 
 <%
-final Logger log = Logger.getLogger("js.extjs.jaffa.exportToExcel");
+    final Logger log = Logger.getLogger("js.extjs.jaffa.exportToExcel");
 
-QueryServiceConfig master = new QueryServiceConfig();
-QueryServiceConfig child = null;
+    QueryServiceConfig master = new QueryServiceConfig();
+    QueryServiceConfig child = null;
 
-master.setCriteriaClassName(StringHelper.escapeJavascript(request.getParameter("criteriaClassName")));
-master.setCriteriaObject(StringHelper.escapeJavascript(request.getParameter("criteriaObject")));
-master.setServiceClassName(StringHelper.escapeJavascript(request.getParameter("serviceClassName")));
-master.setServiceClassMethodName(StringHelper.escapeJavascript(request.getParameter("serviceClassMethodName")));
-master.setColumnModel(ExcelExportService.jsonArrayToBeanArray(StringHelper.escapeJavascript(request.getParameter("columnModel")), null));
+    master.setCriteriaClassName(request.getParameter("criteriaClassName"));
+    master.setCriteriaObject(request.getParameter("criteriaObject"));
+    master.setServiceClassName(request.getParameter("serviceClassName"));
+    master.setServiceClassMethodName(request.getParameter("serviceClassMethodName"));
+    master.setColumnModel(ExcelExportService.jsonArrayToBeanArray(request.getParameter("columnModel"), null));
 
-String mkfns = StringHelper.escapeJavascript(request.getParameter("masterKeyFieldNames"));
-if (mkfns != null) {
-    child = new QueryServiceConfig();
-    child.setMasterKeyFieldNames(ExcelExportService.jsonArrayToBeanArray(mkfns, null));
-    child.setCriteriaClassName(StringHelper.escapeJavascript(request.getParameter("detailCriteriaClassName")));
-    child.setCriteriaObject(StringHelper.escapeJavascript(request.getParameter("detailCriteria")));
-    child.setServiceClassName(StringHelper.escapeJavascript(request.getParameter("detailServiceClassName")));
-    child.setColumnModel(ExcelExportService.jsonArrayToBeanArray(StringHelper.escapeJavascript(request.getParameter("detailColumnModel")), null));
-}
-if(log.isDebugEnabled()) {
-    log.debug("criteriaClassName = " + master.getCriteriaClassName());
-    log.debug("serviceClassName = " + master.getServiceClassName());
-    log.debug("criteriaObject = " + master.getCriteriaObject());
-    log.debug("columnModel = " + master.getColumnModel().toString());
-    if (child != null) {
-        log.debug("masterKeyFieldNames = " + child.getMasterKeyFieldNames().toString());
-        log.debug("detailCriteriaClassName = " + child.getCriteriaClassName());
-        log.debug("detailServiceClassName = " + child.getServiceClassName());
-        log.debug("detailCriteriaObject = " + child.getCriteriaObject());
-        log.debug("detailColumnModel = " + child.getColumnModel().toString());
+    String mkfns = request.getParameter("masterKeyFieldNames");
+    if (mkfns != null) {
+        child = new QueryServiceConfig();
+        child.setMasterKeyFieldNames(ExcelExportService.jsonArrayToBeanArray(mkfns, null));
+        child.setCriteriaClassName(request.getParameter("detailCriteriaClassName"));
+        child.setCriteriaObject(request.getParameter("detailCriteria"));
+        child.setServiceClassName(request.getParameter("detailServiceClassName"));
+        child.setColumnModel(ExcelExportService.jsonArrayToBeanArray(request.getParameter("detailColumnModel"), null));
     }
-}
+    if(log.isDebugEnabled()) {
+        log.debug("criteriaClassName = " + master.getCriteriaClassName());
+        log.debug("serviceClassName = " + master.getServiceClassName());
+        log.debug("criteriaObject = " + master.getCriteriaObject());
+        log.debug("columnModel = " + master.getColumnModel().toString());
+        if (child != null) {
+            log.debug("masterKeyFieldNames = " + child.getMasterKeyFieldNames().toString());
+            log.debug("detailCriteriaClassName = " + child.getCriteriaClassName());
+            log.debug("detailServiceClassName = " + child.getServiceClassName());
+            log.debug("detailCriteriaObject = " + child.getCriteriaObject());
+            log.debug("detailColumnModel = " + child.getColumnModel().toString());
+        }
+    }
 
-Workbook wb;
-String sheetName = StringHelper.escapeJavascript(request.getParameter("sheetName"));
+    Workbook wb;
+    String sheetName = request.getParameter("sheetName");
 
-String legacyExport = (String) ContextManagerFactory.instance().getProperty("jaffa.widgets.exportToExcel.legacy");
-if (legacyExport!=null && legacyExport.equals("T")){
-  if (sheetName==null){
-    wb = ExcelExportService.generateExcel(master, child);
-    sheetName = "exportToExcel.xls";
-  }else {
-    wb = ExcelExportService.generateExcel(master, child, sheetName);
-    sheetName += ".xls";
-  }
-  response.setContentType("application/vnd.ms-excel");
-}else{
-  if (sheetName==null){
-    wb = ExcelExportService.generateExcel(master, child);
-    sheetName = "exportToExcel.xlsx";
-  }else {
-    wb = ExcelExportService.generateExcel(master, child, sheetName);
-    sheetName += ".xlsx";
-  }
-  response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-}
-response.setHeader("Content-Disposition", "attachment; filename=\""+sheetName+"\"");
-ServletOutputStream os = response.getOutputStream();
+    String legacyExport = (String) ContextManagerFactory.instance().getProperty("jaffa.widgets.exportToExcel.legacy");
+    if (legacyExport!=null && legacyExport.equals("T")){
+        if (sheetName==null){
+            wb = ExcelExportService.generateExcel(master, child);
+            sheetName = "exportToExcel.xls";
+        }else {
+            wb = ExcelExportService.generateExcel(master, child, sheetName);
+            sheetName += ".xls";
+        }
+        response.setContentType("application/vnd.ms-excel");
+    }else{
+        if (sheetName==null){
+            wb = ExcelExportService.generateExcel(master, child);
+            sheetName = "exportToExcel.xlsx";
+        }else {
+            wb = ExcelExportService.generateExcel(master, child, sheetName);
+            sheetName += ".xlsx";
+        }
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    }
+    response.setHeader("Content-Disposition", "attachment; filename=\""+sheetName+"\"");
+    ServletOutputStream os = response.getOutputStream();
 
-wb.write(os);
-out.clear();
-out = pageContext.pushBody();
+    wb.write(os);
+    out.clear();
+    out = pageContext.pushBody();
 
-if (legacyExport!=null && !legacyExport.equals("T")){
-  ((SXSSFWorkbook) wb).dispose();
-}
+    if (legacyExport!=null && !legacyExport.equals("T")){
+        ((SXSSFWorkbook) wb).dispose();
+    }
 
 %>
