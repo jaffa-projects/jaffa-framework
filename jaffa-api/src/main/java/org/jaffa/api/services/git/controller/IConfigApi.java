@@ -109,5 +109,15 @@ public interface IConfigApi {
     @Consumes({"application/octet-stream", "application/zip" })
     @Produces({"application/json"})
     Response postCustomConfigFile(@PathParam("zipFile") String zipFile, byte[] payload) throws IOException;
+
+    /**
+     * Retrieve a JSON list of cluster meta data information
+     * @return  HTTP Response indicating operation success or failure
+     */
+    @GET
+    @Path("/config/clusterMetadata")
+    @Consumes({"application/x-www-form-urlencoded"})
+    @Produces({"application/json"})
+    Response getClusterMetadata();
 }
 
