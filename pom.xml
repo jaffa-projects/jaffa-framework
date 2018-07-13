@@ -28,7 +28,7 @@
     <inceptionYear>2003</inceptionYear>
 
     <properties>
-        <hibernate.version>3.6.10.Final</hibernate.version>
+        <hibernate.version>4.3.11.Final</hibernate.version>
         <ignite.version>1.4.0</ignite.version>
 
         <!-- ******************************************************************* -->
@@ -1855,16 +1855,6 @@
                 <groupId>org.drools</groupId>
                 <artifactId>drools-core</artifactId>
                 <version>${version.org.drools.drools-core}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.drools</groupId>
-                <artifactId>knowledge-api</artifactId>
-                <version>${version.org.drools.knowledge-api}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.drools</groupId>
-                <artifactId>knowledge-internal-api</artifactId>
-                <version>${version.org.drools.knowledge-internal-api}</version>
             </dependency>
             <dependency>
                 <groupId>org.fusesource.hawtbuf</groupId>
