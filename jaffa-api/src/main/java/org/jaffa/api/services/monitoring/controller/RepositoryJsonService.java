@@ -49,12 +49,15 @@
 package org.jaffa.api.services.monitoring.controller;
 
 import com.google.gson.Gson;
+import org.apache.log4j.Logger;
 import org.jaffa.loader.*;
 import org.jaffa.loader.config.ApplicationResourcesManager;
 import org.jaffa.util.MessageHelper;
 
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -64,6 +67,13 @@ import java.util.stream.Collectors;
  * @version 1.0
  */
 public class RepositoryJsonService implements IRepositoryJsonService {
+
+    public static final String KEY_BEGINS_WITH = "keyBeginsWith";
+    public static final String KEY_BEGIN_WITH = "keyBeginWith";
+    public static final String KEY_MATCHES = "keyMatches";
+
+    private static Logger logger = Logger.getLogger(RepositoryJsonService.class);
+
 
     /**
      * If the user accesses the root of the GIT services, redirect them
@@ -105,17 +115,18 @@ public class RepositoryJsonService implements IRepositoryJsonService {
      * getRepository() - Returns the serialized repository in JSON objects
      * representing the named repository.
      * @param repoName  The repoName of the repository to retrieve data from
+     * @param uriInfo includes potential query strings
      * @return String repository data in JSON format
      */
     @Override
-    public String getRepository(String repoName, String keyBeginsWith) {
+    public String getRepository(String repoName, UriInfo uriInfo) {
         Map repository = new HashMap<>();
         Map<String, IManager> managerMap = managerRepositoryService.getManagerMap();
 
         for (Map.Entry<String, IManager> managerEntry : managerMap.entrySet()) {
             IManager manager = managerEntry.getValue();
             if (manager.getRepositoryNames().contains(repoName)) {
-                repository = createRepositoryMap(repoName, repository, manager, keyBeginsWith);
+                repository = createRepositoryMap(repoName, repository, manager, uriInfo);
             }
         }
 
@@ -130,17 +141,17 @@ public class RepositoryJsonService implements IRepositoryJsonService {
      * @param name  The repositoryMap name
      * @param repositoryMap    The local repositoryMap to be populated
      * @param manager   The manager hosting the requested repositoryMap
-     * @param keyBeginsWith if present, only keys that begin with this will have their
+     * @param uriInfo if present, only keys that begin with this will have their
      *                      values retrieved; otherwise, all keys and values
      */
     private Map createRepositoryMap(String name,
                                     Map repositoryMap,
                                     IManager manager,
-                                    String keyBeginsWith) {
+                                    UriInfo uriInfo) {
         if (ApplicationResourcesManager.APPLICATION_RESOURCES_PROPERTIES.equalsIgnoreCase(name)) {
             Map allResourcesMap = new HashMap(); // to be used for inserting embedded values
             createApplicationResourcesMap(allResourcesMap, manager, null);
-            createApplicationResourcesMap(repositoryMap, manager, keyBeginsWith);
+            createApplicationResourcesMap(repositoryMap, manager, uriInfo);
 
             Set repoKeys = repositoryMap.keySet();
             for (Object key : repoKeys) {
@@ -155,7 +166,7 @@ public class RepositoryJsonService implements IRepositoryJsonService {
         }
         else {
             IRepository repository = manager.getRepositoryByName(name);
-            populateMapFromRepository(repositoryMap, repository, keyBeginsWith);
+            populateMapFromRepository(repositoryMap, repository, uriInfo);
         }
         return repositoryMap;
     }
@@ -165,27 +176,108 @@ public class RepositoryJsonService implements IRepositoryJsonService {
      * and locale properties repositories
      * @param repositoryMap the map to populate
      * @param manager the repository manager
-     * @param keyBeginsWith if present, only keys that begin with this will have their
+     * @param uriInfo if present, only keys that begin with this will have their
      *                      values retrieved; otherwise, all keys and values
      */
-    private void createApplicationResourcesMap(Map repositoryMap, IManager manager, String keyBeginsWith) {
+    private void createApplicationResourcesMap(Map repositoryMap, IManager manager, UriInfo uriInfo) {
         IRepository dRepo = manager.getRepositoryByName(ApplicationResourcesManager.DEFAULT_PROPERTIES);
-        populateMapFromRepository(repositoryMap, dRepo, keyBeginsWith);
+        populateMapFromRepository(repositoryMap, dRepo, uriInfo);
         // Potentially overwrite generic resources with locale-specific resources
         IRepository lRepo = manager.getRepositoryByName(ApplicationResourcesManager.LOCALE_PROPERTIES);
-        populateMapFromRepository(repositoryMap, lRepo, keyBeginsWith);
+        populateMapFromRepository(repositoryMap, lRepo, uriInfo);
     }
 
     /**
      * Populates a map with values from a repository
      * @param repositoryMap the map to populate
      * @param repository the repository whose values will be added to the map
-     * @param keyBeginsWith if present, only keys that begin with this will have their
+     * @param uriInfo if present, only keys that begin with this will have their
      *                      values retrieved; otherwise, all keys and values
      */
     private void populateMapFromRepository(Map repositoryMap,
                                            IRepository repository,
-                                           String keyBeginsWith) {
+                                           UriInfo uriInfo) {
+        MultivaluedMap<String, String> queryParameters = null;
+        Set<String> keySet = null;
+
+        if (uriInfo != null) {
+            queryParameters = uriInfo.getQueryParameters();
+            keySet = queryParameters.keySet();
+        }
+
+        if (validQueryParameters(keySet)) {
+
+            if (keySet != null && !keySet.isEmpty()) {
+
+                if (keySet.contains(KEY_BEGINS_WITH) || keySet.contains(KEY_BEGIN_WITH)) {
+                    List<String> keyBeginsWithList = queryParameters.get(KEY_BEGINS_WITH);
+
+                    if (keyBeginsWithList == null || keyBeginsWithList.isEmpty()) {
+                        keyBeginsWithList = queryParameters.get(KEY_BEGIN_WITH);
+                    }
+                    // For now, we only handle "keyBeginsWith"/"keyBeginWith"
+                    String beginsWith = keyBeginsWithList.get(0);
+                    populateMapKeyBeginsWith(repositoryMap, repository, beginsWith);
+                }
+                else if (keySet.contains(KEY_MATCHES)) {
+                    List<String> keyMatchesWithList = queryParameters.get(KEY_MATCHES);
+                    String matchesWith = keyMatchesWithList.get(0);
+                    populateMapKeyMatchesWith(repositoryMap, repository, matchesWith);
+                }
+            }
+            else { // default case - return all key-value pairs
+                populateMapWithAll(repositoryMap, repository);
+            }
+        }
+        else { // TODO determine requirement
+        }
+    }
+
+    /**
+     * Determine whether the supplied query keys can be handled by our code
+     * @param keySet the query keys provided in the URL
+     * @return true if the keys are recognized; false otherwise
+     */
+    private boolean validQueryParameters(Set<String> keySet) {
+        boolean isValid = true;
+
+        if (keySet != null) {
+            for (String key : keySet) {
+                // For now, we only handle "keyBeginsWith"/"keyBeginWith"
+                if (!KEY_BEGINS_WITH.equals(key)
+                        && !KEY_BEGIN_WITH.equals(key)
+                        && !KEY_MATCHES.equals(key)) {
+                    logger.warn("Unknown query key: " + key);
+                    isValid = false;
+                }
+            }
+        }
+        return isValid;
+    }
+
+    /**
+     * Populates a map with all values from a repository
+     * @param repositoryMap the map to populate
+     * @param repository the repository whose values will be added to the map
+     */
+    private void populateMapWithAll(Map repositoryMap, IRepository repository) {
+        for (Object repositoryKey : repository.getAllKeys()) {
+            ContextKey contextKey = (ContextKey) repositoryKey;
+            String contextKeyId = contextKey.getId();
+            Object value = repository.query(contextKeyId);
+            repositoryMap.put(contextKeyId, value);
+        }
+    }
+
+    /**
+     * Populates a map with values from a repository whose key starts with the
+     * provided string
+     * @param repositoryMap the map to populate
+     * @param repository the repository whose values will be added to the map
+     * @param keyBeginsWith only keys that begin with this will have their
+     *                      values retrieved
+     */
+    private void populateMapKeyBeginsWith(Map repositoryMap, IRepository repository, String keyBeginsWith) {
         if (keyBeginsWith != null && !keyBeginsWith.isEmpty()) {
             // Only return key-value pairs whose key starts with the designated string
             Set<String> keyIds = repository.getAllKeyIds();
@@ -197,10 +289,24 @@ public class RepositoryJsonService implements IRepositoryJsonService {
                 repositoryMap.put(contextKeyId, value);
             }
         }
-        else { // default case - return all key-value pairs
-            for (Object repositoryKey : repository.getAllKeys()) {
-                ContextKey contextKey = (ContextKey) repositoryKey;
-                String contextKeyId = contextKey.getId();
+    }
+
+    /**
+     * Populates a map with values from a repository whose key starts with the
+     * provided string
+     * @param repositoryMap the map to populate
+     * @param repository the repository whose values will be added to the map
+     * @param keyPattern only keys that match with this pattern will have their
+     *                      values retrieved
+     */
+    private void populateMapKeyMatchesWith(Map repositoryMap, IRepository repository, String keyPattern) {
+        if (keyPattern != null && !keyPattern.isEmpty()) {
+            // Only return key-value pairs whose key starts with the designated string
+            Set<String> keyIds = repository.getAllKeyIds();
+            Set<String> idSet = keyIds.stream()
+                    .filter(id -> id.matches(keyPattern))
+                    .collect(Collectors.toSet());
+            for (String contextKeyId : idSet) {
                 Object value = repository.query(contextKeyId);
                 repositoryMap.put(contextKeyId, value);
             }
