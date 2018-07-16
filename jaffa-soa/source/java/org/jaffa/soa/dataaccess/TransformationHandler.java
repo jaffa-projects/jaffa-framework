@@ -94,15 +94,17 @@ public class TransformationHandler implements ITransformationHandler {
     }
 
     /**
-     * Pass this instance to the StaticContext to be configured.
+     * Pass this instance to the StaticContext to be configured only when multiple handlers are not in chain.
      *
      * @param loggingActive true if this instance of the handler should log on all lifecycle methods.
      *                      In cases where multiple handlers are in a chain, we only want the main handler to log.
      *                      This defaults to true so must be manually set to false for custom handlers.
      */
     public TransformationHandler(boolean loggingActive) {
-        this();
         this.loggingActive = loggingActive;
+        if(loggingActive){
+            StaticContext.configure(this);
+        }
     }
 
     /**
