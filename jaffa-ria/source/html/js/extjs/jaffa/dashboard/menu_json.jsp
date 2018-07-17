@@ -72,7 +72,7 @@ Following  Changes done to get GOLDesp button in PUC
   
    boolean scriptTag = false;
  String cb = StringHelper.escapeJavascript(request.getParameter("callback"));
- if (cb != null) {
+ if (cb != null && cb.trim().length() > 0) {
      scriptTag = true;
      response.setContentType("text/javascript");
  } else {
