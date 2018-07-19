@@ -668,7 +668,6 @@ Jaffa.maintenance.GridDetailContainer = Ext.extend(Ext.Panel, {
   //Ok button handler
   onDetailOk: function(){
     if (this.detailPanel.validate()) {
-      this.detailPanel.setDirty(true);
       this.detailPanel.updateRecord();
       if (this.layout.type == 'card' || this.layout.type == 'slide') {
         this.layout.setActiveItem(0);
@@ -760,3 +759,4 @@ Jaffa.maintenance.GridDetailContainer = Ext.extend(Ext.Panel, {
 });
 
 Ext.reg('griddetailcontainer', Jaffa.maintenance.GridDetailContainer)
+
