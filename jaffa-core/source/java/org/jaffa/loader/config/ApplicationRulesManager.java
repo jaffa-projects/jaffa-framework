@@ -75,6 +75,10 @@ import java.util.regex.Pattern;
  */
 public class ApplicationRulesManager implements IManager {
 
+    /** The key to locate the resources. */
+    public static final String APPLICATION_RULES_PROPERTIES = "Properties";
+
+
     /**
      * Instantiates a new Properties repository
      */
