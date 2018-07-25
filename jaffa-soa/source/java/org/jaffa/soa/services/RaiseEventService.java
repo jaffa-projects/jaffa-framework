@@ -102,6 +102,11 @@ public class RaiseEventService {
             if (category != null) {
                 message.setCategory(category);
             }
+
+            //Invoke the custom logic if the handler injected.
+            if (raiseEventServiceHandler != null) {
+                raiseEventServiceHandler.raiseSoaEvent(uow, eventName, description, category, headerParams);
+            }
             
             if (headerParams != null && headerParams.size() > 0) {
                 message.setHeaderParams(headerParams.toArray(new HeaderParam[0]));
@@ -109,11 +114,6 @@ public class RaiseEventService {
 
             if (log.isDebugEnabled()) {
                 log.debug("Creating SoaEvent Message" + message);
-            }
-
-            //Invoke the custom logic if the handler injected.
-            if (raiseEventServiceHandler != null) {
-                raiseEventServiceHandler.raiseSoaEvent(uow, eventName, description, category, headerParams);
             }
 
             if (localUow != null) {
