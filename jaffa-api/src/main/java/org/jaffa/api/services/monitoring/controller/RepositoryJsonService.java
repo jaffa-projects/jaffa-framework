@@ -52,6 +52,9 @@ import com.google.gson.Gson;
 import org.apache.log4j.Logger;
 import org.jaffa.loader.*;
 import org.jaffa.loader.config.ApplicationResourcesManager;
+import org.jaffa.loader.config.ApplicationRulesManager;
+import org.jaffa.api.services.repository.ApplicationRulesUtilities;
+import org.jaffa.rules.meta.MetaDataRepository;
 import org.jaffa.util.MessageHelper;
 
 import javax.ws.rs.NotFoundException;
@@ -71,7 +74,9 @@ public class RepositoryJsonService implements IRepositoryJsonService {
     public static final String KEY_BEGINS_WITH = "keyBeginsWith";
     public static final String KEY_BEGIN_WITH = "keyBeginWith";
     public static final String KEY_MATCHES = "keyMatches";
+    public static final String BUSINESS_RULES = "org.jaffa.session.BusinessRules";
 
+    /** The object used to save interesting run-time information. */
     private static Logger logger = Logger.getLogger(RepositoryJsonService.class);
 
 
@@ -126,7 +131,7 @@ public class RepositoryJsonService implements IRepositoryJsonService {
         for (Map.Entry<String, IManager> managerEntry : managerMap.entrySet()) {
             IManager manager = managerEntry.getValue();
             if (manager.getRepositoryNames().contains(repoName)) {
-                repository = createRepositoryMap(repoName, repository, manager, uriInfo);
+                repository = createRepositoryMap(repoName, manager, uriInfo);
             }
         }
 
@@ -137,31 +142,34 @@ public class RepositoryJsonService implements IRepositoryJsonService {
     }
 
     /**
-     * createRepositoryMap() - Add values to local repositoryMap map for access by web services
+     * createRepositoryMap() - Add values to a repositoryMap for access by web services
      * @param name  The repositoryMap name
-     * @param repositoryMap    The local repositoryMap to be populated
      * @param manager   The manager hosting the requested repositoryMap
      * @param uriInfo if present, only keys that begin with this will have their
      *                      values retrieved; otherwise, all keys and values
      */
     private Map createRepositoryMap(String name,
-                                    Map repositoryMap,
                                     IManager manager,
                                     UriInfo uriInfo) {
+        Map repositoryMap = new HashMap<>();
+
         if (ApplicationResourcesManager.APPLICATION_RESOURCES_PROPERTIES.equalsIgnoreCase(name)) {
             Map allResourcesMap = new HashMap(); // to be used for inserting embedded values
             createApplicationResourcesMap(allResourcesMap, manager, null);
             createApplicationResourcesMap(repositoryMap, manager, uriInfo);
-
-            Set repoKeys = repositoryMap.keySet();
-            for (Object key : repoKeys) {
-                Object value = repositoryMap.get(key);
-
-                if (value != null) {
-                    String label = value.toString();
-                    label = MessageHelper.replaceTokens(label);
-                    repositoryMap.put(key, label);
-                }
+            replaceLabelKeysWithValues(repositoryMap);
+        }
+        else if (ApplicationRulesManager.APPLICATION_RULES_PROPERTIES.equalsIgnoreCase(name)) {
+//            IRepository repository = manager.getRepositoryByName(name);
+//            populateMapFromRepository(repositoryMap, repository, uriInfo);
+            ApplicationRulesUtilities rulesUtilities = new ApplicationRulesUtilities();
+            try {
+                repositoryMap =
+                        rulesUtilities.getRuleMetaData(BUSINESS_RULES,
+                                MetaDataRepository.instance());
+            } catch (Exception e) {
+                logger.error("Unable to collect application rules - " + e.getMessage());
+                // TODO something better
             }
         }
         else {
@@ -169,6 +177,24 @@ public class RepositoryJsonService implements IRepositoryJsonService {
             populateMapFromRepository(repositoryMap, repository, uriInfo);
         }
         return repositoryMap;
+    }
+
+    /**
+     * Create a label string by replacing embedded label keys
+     * with the corresponding label values.
+     * @param repositoryMap the map whose labels are being updated
+     */
+    private void replaceLabelKeysWithValues(Map repositoryMap) {
+        Set repoKeys = repositoryMap.keySet();
+        for (Object key : repoKeys) {
+            Object value = repositoryMap.get(key);
+
+            if (value != null) {
+                String label = value.toString();
+                label = MessageHelper.replaceTokens(label);
+                repositoryMap.put(key, label);
+            }
+        }
     }
 
     /**
@@ -358,6 +384,16 @@ public class RepositoryJsonService implements IRepositoryJsonService {
             }
             if (queryResponse != null) {
                 queryResponse = MessageHelper.replaceTokens(queryResponse.toString());
+            }
+        }
+        else if (ApplicationRulesManager.APPLICATION_RULES_PROPERTIES.equalsIgnoreCase(name)) {
+            ApplicationRulesUtilities rulesUtilities = new ApplicationRulesUtilities();
+            Map<String, Object> propertyMetaData = new HashMap<>();
+            try {
+                queryResponse =
+                        rulesUtilities.addPropertyMetaData(BUSINESS_RULES, id,null, propertyMetaData);
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);  // TODO something better?
             }
         }
         else { // normal case - one repository to search
