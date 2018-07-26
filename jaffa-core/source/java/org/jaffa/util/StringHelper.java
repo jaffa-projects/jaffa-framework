@@ -348,12 +348,7 @@ public class StringHelper {
      * @return  converted string.
      */
     public static String escapeJavascript(String s) {
-        return s == null ? "" : s.replace("\\", "\\\\").replace("'", "\\'").replace("\"", "\\\"");
-        // TODO the following is the OWASP library for escaping, the line of code above does not cover all XSS cases.
-        // TODO the code base is written with the assumption that the escaping done above is in place, switching to
-        // TODO use a more robust library breaks some functionality of the system.  Those problems should be fixed
-        // TODO so the code below can be used instead.
-        // return Encode.forJavaScript(s);
+        return s!=null ? Encode.forJavaScript(s) : "";
     }
 
     /**
