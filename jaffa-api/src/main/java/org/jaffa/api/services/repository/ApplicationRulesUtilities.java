@@ -256,9 +256,8 @@ public class ApplicationRulesUtilities {
         String type = toJsType(pri.getPropertyType());
 
         if (domainClass != null && type.equals("object")) {
-            IPropertyRuleIntrospector propertyRuleIntrospector =
-                    rulesEngine.getPropertyRuleIntrospector(domainClass, propertyName);
-            type = toJsType(propertyRuleIntrospector.getPropertyType());
+            pri = rulesEngine.getPropertyRuleIntrospector(domainClass, propertyName);
+            type = toJsType(pri.getPropertyType());
         }
         map.put(ANNOTATION, pri.getAnnotation());
         map.put(CASE_TYPE, pri.getCaseType());
@@ -307,14 +306,17 @@ public class ApplicationRulesUtilities {
      * @return the default value
      */
     private List<List<String>> getInListValues(IPropertyRuleIntrospector introspector) {
-        List<List<String>> result = new ArrayList<>();
+        List<List<String>> result = null;
         Map<String, String> inListValues = introspector.getInListValues();
+
         if (inListValues != null && inListValues.size() > 0) {
+            result = new ArrayList<>();
+
             for (Map.Entry<String, String> mapEntry : inListValues.entrySet()) {
                 List<String> oneEntry = new ArrayList<>();
                 String value = toHtml(mapEntry.getKey());
                 String label = mapEntry.getValue();
-                label = label != null ? toHtml(MessageHelper.replaceTokens(label)) : value;
+                label = (label != null) ? MessageHelper.replaceTokens(label) : value;
                 oneEntry.add(value);
                 oneEntry.add(label);
                 result.add(oneEntry);
