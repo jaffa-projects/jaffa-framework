@@ -69,6 +69,9 @@ private void getJsonString(String jsonStr,String eventName,JspWriter out) throws
     String json = StringHelper.escapeJavascript(request.getParameter("json"));
     String eventName = StringHelper.escapeJavascript(request.getParameter("eventName"));
 
+    //Removing the escaping character.
+    json = json.replace("\\", "");
+
     getJsonString(json,eventName,out);
 
 %>
