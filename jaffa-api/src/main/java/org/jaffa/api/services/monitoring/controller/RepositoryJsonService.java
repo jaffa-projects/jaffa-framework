@@ -52,6 +52,9 @@ import com.google.gson.Gson;
 import org.apache.log4j.Logger;
 import org.jaffa.loader.*;
 import org.jaffa.loader.config.ApplicationResourcesManager;
+import org.jaffa.loader.config.ApplicationRulesManager;
+import org.jaffa.api.services.repository.ApplicationRulesUtilities;
+import org.jaffa.rules.meta.MetaDataRepository;
 import org.jaffa.util.MessageHelper;
 
 import javax.ws.rs.NotFoundException;
@@ -71,7 +74,11 @@ public class RepositoryJsonService implements IRepositoryJsonService {
     public static final String KEY_BEGINS_WITH = "keyBeginsWith";
     public static final String KEY_BEGIN_WITH = "keyBeginWith";
     public static final String KEY_MATCHES = "keyMatches";
+    public static final String BUSINESS_RULES = "org.jaffa.session.BusinessRules";
+    public static final String VALUE_KEY = "value";
+    public static final String CLASS_META_DATA_KEY = "classMetaData";
 
+    /** The object used to save interesting run-time information. */
     private static Logger logger = Logger.getLogger(RepositoryJsonService.class);
 
 
@@ -126,7 +133,7 @@ public class RepositoryJsonService implements IRepositoryJsonService {
         for (Map.Entry<String, IManager> managerEntry : managerMap.entrySet()) {
             IManager manager = managerEntry.getValue();
             if (manager.getRepositoryNames().contains(repoName)) {
-                repository = createRepositoryMap(repoName, repository, manager, uriInfo);
+                repository = createRepositoryMap(repoName, manager, uriInfo);
             }
         }
 
@@ -137,38 +144,88 @@ public class RepositoryJsonService implements IRepositoryJsonService {
     }
 
     /**
-     * createRepositoryMap() - Add values to local repositoryMap map for access by web services
+     * createRepositoryMap() - Add values to a repositoryMap for access by web services
      * @param name  The repositoryMap name
-     * @param repositoryMap    The local repositoryMap to be populated
      * @param manager   The manager hosting the requested repositoryMap
      * @param uriInfo if present, only keys that begin with this will have their
      *                      values retrieved; otherwise, all keys and values
      */
     private Map createRepositoryMap(String name,
-                                    Map repositoryMap,
                                     IManager manager,
                                     UriInfo uriInfo) {
+        Map repositoryMap = new HashMap<>();
+
         if (ApplicationResourcesManager.APPLICATION_RESOURCES_PROPERTIES.equalsIgnoreCase(name)) {
             Map allResourcesMap = new HashMap(); // to be used for inserting embedded values
             createApplicationResourcesMap(allResourcesMap, manager, null);
             createApplicationResourcesMap(repositoryMap, manager, uriInfo);
+            replaceLabelKeysWithValues(repositoryMap);
+        }
+        else if (ApplicationRulesManager.APPLICATION_RULES_PROPERTIES.equalsIgnoreCase(name)) {
+            // collect the rule values
+            IRepository repository = manager.getRepositoryByName(name);
+            populateMapFromRepository(repositoryMap, repository, uriInfo);
 
-            Set repoKeys = repositoryMap.keySet();
-            for (Object key : repoKeys) {
-                Object value = repositoryMap.get(key);
-
-                if (value != null) {
-                    String label = value.toString();
-                    label = MessageHelper.replaceTokens(label);
-                    repositoryMap.put(key, label);
-                }
+            // Collect the metadata
+            HashMap<String, Object> metaDataMap = new HashMap<>();
+            ApplicationRulesUtilities rulesUtilities = new ApplicationRulesUtilities();
+            try {
+                metaDataMap = rulesUtilities.getRuleMetaData(BUSINESS_RULES,
+                                                            MetaDataRepository.instance());
+            } catch (Exception e) {
+                logger.error("Unable to collect application rules - " + e.getMessage());
+                // TODO something better
             }
+            mergeRuleValuesAndMetaData(repositoryMap, metaDataMap);
         }
         else {
             IRepository repository = manager.getRepositoryByName(name);
             populateMapFromRepository(repositoryMap, repository, uriInfo);
         }
         return repositoryMap;
+    }
+
+    /**
+     * Merge each rule's value and metadata
+     * @param repositoryMap a map with keys that are rule IDs, and values that are rule values
+     * @param businessRulesMetaDataMap a map with keys that are rule IDs, and values that are metadata
+     */
+    private void mergeRuleValuesAndMetaData(Map repositoryMap,
+                                            HashMap<String, Object> businessRulesMetaDataMap) {
+        Map<String, Object> metaDataMap = businessRulesMetaDataMap;
+        // All "real" rules are accumulated under the pseudo-rule "BusinessRules"
+        Object businessRulesMapValue = businessRulesMetaDataMap.get("BusinessRules");
+
+        // Replace the simple values with combined values and metadata
+        if (businessRulesMapValue instanceof Map) {
+            Map rulesMetadataMap = (Map)businessRulesMapValue;
+            for (Object id : repositoryMap.keySet()) {
+                Object ruleValue = repositoryMap.get(id);
+                Object metaData = rulesMetadataMap.get(id);
+                Map<String, Object> mergedRule =
+                        mergeRuleValueAndMetaData(ruleValue, metaData);
+                // overwrite existing value with merged value and metadata
+                repositoryMap.put(id.toString(), mergedRule);
+            }
+        }
+    }
+
+    /**
+     * Create a label string by replacing embedded label keys
+     * with the corresponding label values.
+     * @param repositoryMap the map whose labels are being updated
+     */
+    private void replaceLabelKeysWithValues(Map repositoryMap) {
+        Set repoKeys = repositoryMap.keySet();
+        for (Object key : repoKeys) {
+            Object value = repositoryMap.get(key);
+
+            if (value != null) {
+                String label = value.toString();
+                label = MessageHelper.replaceTokens(label);
+                repositoryMap.put(key, label);
+            }
+        }
     }
 
     /**
@@ -360,10 +417,37 @@ public class RepositoryJsonService implements IRepositoryJsonService {
                 queryResponse = MessageHelper.replaceTokens(queryResponse.toString());
             }
         }
+        else if (ApplicationRulesManager.APPLICATION_RULES_PROPERTIES.equalsIgnoreCase(name)) {
+            Object value = getResponseFromRepository(name, id, manager);
+            ApplicationRulesUtilities rulesUtilities = new ApplicationRulesUtilities();
+            Map<String, Object> propertyMetaData = new HashMap<>();
+            try {
+                propertyMetaData =
+                        rulesUtilities.addPropertyMetaData(BUSINESS_RULES, id,null, propertyMetaData);
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);  // TODO something better?
+            }
+            queryResponse = mergeRuleValueAndMetaData(value, propertyMetaData.get(id));
+        }
         else { // normal case - one repository to search
             queryResponse = getResponseFromRepository(name, id, manager);
         }
         return queryResponse;
+    }
+
+    /**
+     * Combines a rule's value and metadata into a single map
+     * @param value the value for the rule
+     * @param metaData the metadata associated with the rule, if any
+     * @return a map with two keys - "value" and "metaData".
+     */
+    private Map<String, Object> mergeRuleValueAndMetaData(Object value, Object metaData) {
+        Map<String, Object> oneRule = new HashMap<>();
+        oneRule.put(VALUE_KEY, value);
+        if (metaData != null) {
+            oneRule.put(CLASS_META_DATA_KEY, metaData);
+        }
+        return oneRule;
     }
 
     /**

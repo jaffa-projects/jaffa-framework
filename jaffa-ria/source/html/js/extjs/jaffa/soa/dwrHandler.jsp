@@ -36,6 +36,19 @@ dwr.engine.setTextHtmlHandler(function() {
 });
 
 /**
+ * GOLD-65642: substitute _handleWarning call with .textHtmlHandler call in case of CAS redirect causing empty response to dwr ajax call.
+ */
+dwr.engine._handleWarning_orig = dwr.engine._handleWarning;
+dwr.engine._handleWarning = function(batch, ex) {
+  if (batch && typeof batch.textHtmlHandler == 'function' && batch.req && batch.req.readyState==4 && !Boolean(batch.req.responseText) && ex && ex.name=="dwr.engine.missingData") {
+    batch.textHtmlHandler({
+      status: batch.req.status,
+      contentType: batch.req.getResponseHeader("Content-Type")
+    });
+  } else dwr.engine._handleWarning_orig(batch, ex);
+};
+
+/**
 * redirect the user to the login screen
 */
 redirect = function () {

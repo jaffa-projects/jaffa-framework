@@ -161,7 +161,9 @@ public class ConfigApiCore {
                         }
                         else {
                             isSuccess = false;
-                            log.warn("Unable to find " + resourceFilename);
+                            if(log.isDebugEnabled()) {
+                                log.debug("Unable to find " + resourceFilename);
+                            }
                         }
                     }
                     catch (Exception e) {
