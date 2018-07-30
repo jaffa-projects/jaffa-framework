@@ -199,7 +199,7 @@ public class PropertyMessageResources extends org.apache.struts.util.PropertyMes
         
 		// If the props not loaded from File I/O, then load it from
 		// ApplicationResourceLoader.
-		if (props == null) {
+		if (props == null && ApplicationResourceLoader.getInstance()!=null) {
 			props = ApplicationResourceLoader.getInstance().getLocaleProperties(localeKey);
 		}
         

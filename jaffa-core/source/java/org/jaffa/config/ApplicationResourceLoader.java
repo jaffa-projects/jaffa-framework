@@ -129,7 +129,7 @@ public class ApplicationResourceLoader {
             //locale resources
             properties = getApplicationResourcesLocale(localeKey);
             overrideProperties = getApplicationResourcesOverride(localeKey);
-        } else {
+        } else if (getApplicationResourcesManager()!=null){
             //default resources
             properties = getApplicationResourcesDefault();
             overrideProperties = getApplicationResourcesOverride(null);
