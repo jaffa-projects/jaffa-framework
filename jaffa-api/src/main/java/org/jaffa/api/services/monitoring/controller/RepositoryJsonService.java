@@ -75,6 +75,8 @@ public class RepositoryJsonService implements IRepositoryJsonService {
     public static final String KEY_BEGIN_WITH = "keyBeginWith";
     public static final String KEY_MATCHES = "keyMatches";
     public static final String BUSINESS_RULES = "org.jaffa.session.BusinessRules";
+    public static final String VALUE_KEY = "value";
+    public static final String CLASS_META_DATA_KEY = "classMetaData";
 
     /** The object used to save interesting run-time information. */
     private static Logger logger = Logger.getLogger(RepositoryJsonService.class);
@@ -160,23 +162,52 @@ public class RepositoryJsonService implements IRepositoryJsonService {
             replaceLabelKeysWithValues(repositoryMap);
         }
         else if (ApplicationRulesManager.APPLICATION_RULES_PROPERTIES.equalsIgnoreCase(name)) {
-//            IRepository repository = manager.getRepositoryByName(name);
-//            populateMapFromRepository(repositoryMap, repository, uriInfo);
+            // collect the rule values
+            IRepository repository = manager.getRepositoryByName(name);
+            populateMapFromRepository(repositoryMap, repository, uriInfo);
+
+            // Collect the metadata
+            HashMap<String, Object> metaDataMap = new HashMap<>();
             ApplicationRulesUtilities rulesUtilities = new ApplicationRulesUtilities();
             try {
-                repositoryMap =
-                        rulesUtilities.getRuleMetaData(BUSINESS_RULES,
-                                MetaDataRepository.instance());
+                metaDataMap = rulesUtilities.getRuleMetaData(BUSINESS_RULES,
+                                                            MetaDataRepository.instance());
             } catch (Exception e) {
                 logger.error("Unable to collect application rules - " + e.getMessage());
                 // TODO something better
             }
+            mergeRuleValuesAndMetaData(repositoryMap, metaDataMap);
         }
         else {
             IRepository repository = manager.getRepositoryByName(name);
             populateMapFromRepository(repositoryMap, repository, uriInfo);
         }
         return repositoryMap;
+    }
+
+    /**
+     * Merge each rule's value and metadata
+     * @param repositoryMap a map with keys that are rule IDs, and values that are rule values
+     * @param businessRulesMetaDataMap a map with keys that are rule IDs, and values that are metadata
+     */
+    private void mergeRuleValuesAndMetaData(Map repositoryMap,
+                                            HashMap<String, Object> businessRulesMetaDataMap) {
+        Map<String, Object> metaDataMap = businessRulesMetaDataMap;
+        // All "real" rules are accumulated under the pseudo-rule "BusinessRules"
+        Object businessRulesMapValue = businessRulesMetaDataMap.get("BusinessRules");
+
+        // Replace the simple values with combined values and metadata
+        if (businessRulesMapValue instanceof Map) {
+            Map rulesMetadataMap = (Map)businessRulesMapValue;
+            for (Object id : repositoryMap.keySet()) {
+                Object ruleValue = repositoryMap.get(id);
+                Object metaData = rulesMetadataMap.get(id);
+                Map<String, Object> mergedRule =
+                        mergeRuleValueAndMetaData(ruleValue, metaData);
+                // overwrite existing value with merged value and metadata
+                repositoryMap.put(id.toString(), mergedRule);
+            }
+        }
     }
 
     /**
@@ -387,19 +418,36 @@ public class RepositoryJsonService implements IRepositoryJsonService {
             }
         }
         else if (ApplicationRulesManager.APPLICATION_RULES_PROPERTIES.equalsIgnoreCase(name)) {
+            Object value = getResponseFromRepository(name, id, manager);
             ApplicationRulesUtilities rulesUtilities = new ApplicationRulesUtilities();
             Map<String, Object> propertyMetaData = new HashMap<>();
             try {
-                queryResponse =
+                propertyMetaData =
                         rulesUtilities.addPropertyMetaData(BUSINESS_RULES, id,null, propertyMetaData);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);  // TODO something better?
             }
+            queryResponse = mergeRuleValueAndMetaData(value, propertyMetaData.get(id));
         }
         else { // normal case - one repository to search
             queryResponse = getResponseFromRepository(name, id, manager);
         }
         return queryResponse;
+    }
+
+    /**
+     * Combines a rule's value and metadata into a single map
+     * @param value the value for the rule
+     * @param metaData the metadata associated with the rule, if any
+     * @return a map with two keys - "value" and "metaData".
+     */
+    private Map<String, Object> mergeRuleValueAndMetaData(Object value, Object metaData) {
+        Map<String, Object> oneRule = new HashMap<>();
+        oneRule.put(VALUE_KEY, value);
+        if (metaData != null) {
+            oneRule.put(CLASS_META_DATA_KEY, metaData);
+        }
+        return oneRule;
     }
 
     /**
