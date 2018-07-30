@@ -212,6 +212,8 @@
 
             // Subscribe to a Topic
             Destination destination = (Destination) context.lookup("topic/OutboundEvents");
+            
+            selector = selector.replace("\\", "");
 
             consumer = session.createDurableSubscriber((Topic)destination, subscriptionName, selector, false);
           
