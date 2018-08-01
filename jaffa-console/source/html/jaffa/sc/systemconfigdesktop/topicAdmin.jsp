@@ -212,8 +212,6 @@
 
             // Subscribe to a Topic
             Destination destination = (Destination) context.lookup("topic/OutboundEvents");
-            
-            selector = selector.replace("\\", "");
 
             consumer = session.createDurableSubscriber((Topic)destination, subscriptionName, selector, false);
           
@@ -481,12 +479,12 @@
 
     JmsConfig jmsConfig = ConfigurationService.getInstance().getJmsConfig();
 
-    String action = request.getParameter("action");
-    String topicName = StringHelper.escapeJavascript(request.getParameter("topicName"));
-    String subscriptionName = StringHelper.escapeJavascript(request.getParameter("subscriptionName"));
-    String clientID = StringHelper.escapeJavascript(request.getParameter("clientID"));
-    String selector = StringHelper.escapeJavascript(request.getParameter("messageSelector"));
-    String pendingMessageSize = request.getParameter("pendingMessageSize");
+    String action = (String)request.getParameter("action");
+    String topicName = (String)request.getParameter("topicName");
+    String subscriptionName = (String)request.getParameter("subscriptionName");
+    String clientID = (String)request.getParameter("clientID");
+    String selector = (String)request.getParameter("messageSelector");
+    String pendingMessageSize = (String)request.getParameter("pendingMessageSize");
     String userName = jmsConfig.getUser();    
     String password = jmsConfig.getPassword();   
     String providerURL = null;
