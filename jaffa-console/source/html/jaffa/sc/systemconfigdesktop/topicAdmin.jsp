@@ -339,7 +339,7 @@
         File[] files = file.listFiles();
         for (File droolFile : files) {
             if(droolFile.isFile()){
-                droolsList.add(droolFile.getPath().substring(droolFile.getPath().lastIndexOf(File.separator), droolFile.getPath().length()));
+                droolsList.add(droolFile.getPath().substring(droolFile.getPath().lastIndexOf(File.separator)+1, droolFile.getPath().length()));
             }else {
                 findDrools(droolFile, droolsList);
             }
