@@ -1,13 +1,6 @@
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%@ page import = "org.jaffa.util.URLHelper" %>
-<%@page import="java.util.Properties"%>
-<%@page import="java.util.List"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="java.util.Set"%>
-<%@page import="java.util.HashSet"%>
-<%@page import="java.util.Arrays"%>
-<%@page import="java.util.PropertyResourceBundle"%>
 <%@page import="javax.management.MBeanServer"%>
 <%@page import="javax.management.ObjectName"%>
 <%@page import="javax.jms.Connection"%>
@@ -22,12 +15,8 @@
 <%@page import="javax.naming.InitialContext"%>
 <%@page import="java.net.*"%>
 <%@page import="java.io.*"%>
-<%@page import="java.util.UUID"%>
 <%@page import="org.jaffa.modules.messaging.services.configdomain.JmsConfig"%>
 <%@page import="org.jaffa.modules.messaging.services.ConfigurationService"%>
-<%@page import="java.util.Map"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.Iterator"%>
 <%@page import="org.jaffa.modules.scheduler.services.ScheduledTask"%>
 <%@page import="org.jaffa.modules.scheduler.services.SchedulerBrowser"%>
 <%@page import="org.jaffa.modules.scheduler.services.SchedulerHelper"%>
@@ -61,6 +50,8 @@
 <%@ page import="org.apache.activemq.broker.jmx.DurableSubscriptionViewMBean" %>
 <%@ page import="javax.jms.TopicSubscriber" %>
 <%@ page import="org.jaffa.util.StringHelper" %>
+<%@ page import="org.jaffa.loader.drools.DroolsManager" %>
+<%@ page import="java.util.*" %>
 
 <%!
 
@@ -343,27 +334,28 @@
              }
          }        
     }
-    
+
+    private void findDrools(File file, Set<String> droolsList) {
+        File[] files = file.listFiles();
+        for (File droolFile : files) {
+            if(droolFile.isFile()){
+                droolsList.add(droolFile.getPath().substring(droolFile.getPath().lastIndexOf(File.separator), droolFile.getPath().length()));
+            }else {
+                findDrools(droolFile, droolsList);
+            }
+        }
+    }
+
     private String getSOAEventHandlerDroolRules() throws Exception{
 
-        String files = (String) ContextManagerFactory.instance().getProperty("jaffa.soa.droolsAgentConfig.SOAEventService.file");
-        String userDefDroolsDir = (String) ContextManagerFactory.instance().getProperty("jaffa.soa.droolsAgentConfig.SOAEventService.dir");
+        String droolsFileDirectory = DroolsManager.DROOLS_FILE_DIRECTORY;
         
-        Set<String> droolsList = new HashSet<String>();
-        if(files!=null){
-            droolsList.addAll(Arrays.asList(files.split(" ")));
-        }
+        Set<String> droolsList = new TreeSet<>();
 
-        if (userDefDroolsDir!=null){
-            File droolsDir = new File(userDefDroolsDir);
+        if (droolsFileDirectory!=null){
+            File droolsDir = new File(droolsFileDirectory);
             if (droolsDir.exists() && droolsDir.isDirectory()) {
-
-                 File[] drools = droolsDir.listFiles();
-
-                 for (File drool : drools) {
-                     droolsList.add(drool.getPath());
-                 }
-
+                findDrools(droolsDir, droolsList);
             }
         }
 
