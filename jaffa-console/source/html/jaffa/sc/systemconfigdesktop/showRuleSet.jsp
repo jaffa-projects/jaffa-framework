@@ -8,12 +8,14 @@
 <%!
     private static Map<String, File> cachedDroolsMap = new HashMap<>();
     private void findDrools(File file, Map<String, File> droolsMap) {
-        File[] files = file.listFiles();
-        for (File droolFile : files) {
-            if(droolFile.isFile()){
-                droolsMap.put(droolFile.getName(), droolFile);
-            }else {
-                findDrools(droolFile, droolsMap);
+        if(file!=null) {
+            File[] files = file.listFiles();
+            for (File droolFile : files) {
+                if (droolFile.isFile()) {
+                    droolsMap.put(droolFile.getName(), droolFile);
+                } else {
+                    findDrools(droolFile, droolsMap);
+                }
             }
         }
     }

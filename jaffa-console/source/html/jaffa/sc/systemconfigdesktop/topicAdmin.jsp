@@ -336,12 +336,14 @@
     }
 
     private void findDrools(File file, Set<String> droolsList) {
-        File[] files = file.listFiles();
-        for (File droolFile : files) {
-            if(droolFile.isFile()){
-                droolsList.add(droolFile.getPath().substring(droolFile.getPath().lastIndexOf(File.separator)+1, droolFile.getPath().length()));
-            }else {
-                findDrools(droolFile, droolsList);
+        if(file!=null) {
+            File[] files = file.listFiles();
+            for (File droolFile : files) {
+                if (droolFile.isFile()) {
+                    droolsList.add(droolFile.getPath().substring(droolFile.getPath().lastIndexOf(File.separator) + 1, droolFile.getPath().length()));
+                } else {
+                    findDrools(droolFile, droolsList);
+                }
             }
         }
     }
