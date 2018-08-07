@@ -258,7 +258,7 @@ Jaffa.form.FinderLovComboGrid = Ext.extend(Jaffa.form.FinderLovComboBox, {
           grid.hide();
           // reset the store
           this.window.gridOfSelected.getStore().removeAll();
-          this.window.gridOfSelected.getStore().add(this.window.grid.selectedRecordMap.getRange());
+          this.window.gridOfSelected.getStore().add(grid.getSelectionModel().getSelections());
           this.window.gridOfSelected.show();
           this.window.gridOfSelected.getView().refresh();
         } else {

@@ -130,7 +130,7 @@ Ext.layout.AdjacentFieldLayout = Ext.extend(Ext.layout.AnchorLayout, {
 
         var t = new Ext.Template(
           '<div class="x-form-item x-form-item-adj {itemCls}" tabIndex="-1">',
-          '<label for="{id}" style="{labelStyle}" class="x-form-item-label">{label}{labelSeparator}</label>',
+          '<label for="{id}" style="{labelStyle}" class="x-form-item-label">{compositeLabel}{labelSeparator}</label>',
           '<div class="x-form-element" id="x-form-el-{id}" style="{elementStyle}">',
           '</div><div class="{clearCls}"></div>',
           '</div>'
@@ -169,29 +169,27 @@ Ext.layout.AdjacentFieldLayout = Ext.extend(Ext.layout.AnchorLayout, {
 
   renderAll : function(ct, target){
     var items = ct.items.items;
-    var label = '',fieldLbl = '';
+    // computing the compositeLabel by rollup all labels.
+    var compositeLabel = '';
     for (var i = 0, len = items.length; i < len; i++) {
       var c = items[i];
       if (c.fieldLabel && !c.hideLabel && !c.hidden){
-        if (fieldLbl) {
-          fieldLbl += this.adjacentSeparator + c.fieldLabel;
-          label += this.adjacentSeparator + (c.label || c.fieldLabel);
+        if (compositeLabel) {
+          compositeLabel += this.adjacentSeparator + (c.label || c.fieldLabel);
         } else {
-          fieldLbl = c.fieldLabel;
-          label = c.label || c.fieldLabel;
+          compositeLabel = c.label || c.fieldLabel;
         }
         
         if (c.allowBlank == false && !c.textOnly)
-          label = label + "<span class='x-mand-flag'>*</span>";
+          compositeLabel += "<span class='x-mand-flag'>*</span>";
       }
-
     }
 
     for (var i = 0, len = items.length, position = -1; i < len; i++) {
       var c = items[i];
-      c.label = label;
       if (position == -1 && !c.hideLabel) {
         position = 0;
+        c.compositeLabel = compositeLabel;
         this.renderItem(c, position, target);
       } else if (position == -1 && c.hideLabel) {
         this.renderItem(c, 1, target);
@@ -218,6 +216,7 @@ Ext.layout.AdjacentFieldLayout = Ext.extend(Ext.layout.AnchorLayout, {
     return {
       id            : field.id,
       label         : field.label || field.fieldLabel,
+      compositeLabel: field.compositeLabel,
       itemCls       : (field.itemCls || this.container.itemCls || '') + ((field.hideLabel && this.hideFieldSeparator) ? ' x-hide-label' : ''),
       clearCls      : field.clearCls || '',
       labelStyle    : field.labelStyle || this.labelStyle || '',
