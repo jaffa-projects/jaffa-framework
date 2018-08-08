@@ -333,7 +333,30 @@ Ext.override(Ext.ux.grid.filter.NumericFilter, {
     gt : 'x-rangemenu-gt',
     lt : 'x-rangemenu-lt',
     eq : 'ux-rangemenu-eq'
-  }
+  },
+  validateRecord : function (record) {
+        var val = record.get(this.dataIndex),
+            values = this.getValue();
+        if (values.eq !== undefined && val != values.eq) {
+            return false;
+        }
+        if (values.lt !== undefined && val > values.lt) {
+            return false;
+        }
+        if (values.gt !== undefined && val < values.gt) {
+            return false;
+        }
+        return true;
+    }  
+});
+
+/**
+ * @class Jaffa.form.CurrencyField
+ * @extends Ext.ux.grid.filter.NumericFilter
+ * Override fieldCls as Jaffa.form.CurrencyField to allow 3 decimal precision on filter
+ */
+Ext.ux.grid.filter.CurrencyFilter=Ext.extend(Ext.ux.grid.filter.NumericFilter, {
+  fieldCls : Jaffa.form.CurrencyField
 });
 
 /** Extended to support new config option 'editorStyle' which will be
