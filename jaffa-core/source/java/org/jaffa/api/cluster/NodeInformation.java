@@ -49,6 +49,7 @@
 package org.jaffa.api.cluster;
 
 import com.google.gson.annotations.Expose;
+import org.apache.log4j.Logger;
 import org.jaffa.api.ConfigApiCore;
 import org.jaffa.api.FileContents;
 
@@ -67,6 +68,18 @@ import java.util.List;
  * @version 1.0
  */
 public class NodeInformation {
+
+    private static final Logger logger = Logger.getLogger(NodeInformation.class);
+
+    /** The name of the environment variable containing the load-balancer cookie name. */
+    private static final String LB_COOKIE_NAME = "LB_COOKIE_NAME";
+
+    /** The name of the environment variable containing the load-balancer cookie value. */
+    private static final String LB_COOKIE_VALUE = "LB_COOKIE_VALUE";
+
+    /** The name of the system property containing the application's base URL. */
+    private static final String APP_BASE_URL = "app.base.url";
+
     @Expose
     private String name;
     @Expose
@@ -76,6 +89,14 @@ public class NodeInformation {
     @Expose
     private List<Link> links;
 
+    @Expose
+    private String loadBalancerCookieName;
+
+    /** A value used to uniquely identify this node.  It should have the form:
+     * "webapp"X, with X denoting the node number. */
+    @Expose
+    private String loadBalancerCookieValue;
+
     /**
      * Creates a NodeInformation with no parameters provided
      *
@@ -83,7 +104,9 @@ public class NodeInformation {
      */
     public NodeInformation() throws UnknownHostException {
         this.name = InetAddress.getLocalHost().getHostName();
-        this.href = System.getProperty("app.base.url");
+        this.href = System.getProperty(APP_BASE_URL);
+        this.loadBalancerCookieName = System.getenv(LB_COOKIE_NAME);
+        this.loadBalancerCookieValue = System.getenv(LB_COOKIE_VALUE);
         this.links = new ArrayList<>();
         this.config = addNodeCustomConfigFiles();
     }
@@ -160,6 +183,22 @@ public class NodeInformation {
         this.links = links;
     }
 
+    public String getLoadBalancerCookieName() {
+        return loadBalancerCookieName;
+    }
+
+    public void setLoadBalancerCookieName(String loadBalancerCookieName) {
+        this.loadBalancerCookieName = loadBalancerCookieName;
+    }
+
+    public String getLoadBalancerCookieValue() {
+        return loadBalancerCookieValue;
+    }
+
+    public void setLoadBalancerCookieValue(String loadBalancerCookieValue) {
+        this.loadBalancerCookieValue = loadBalancerCookieValue;
+    }
+
     /**
      * Add a link to a node information object
      *
@@ -173,24 +212,45 @@ public class NodeInformation {
     }
 
     /**
+     * Returns an identifier that will enable the node to be uniquely identified
+     * in an environment where the node is part of a load-balanced cluster.
+     * @return the node name
+     */
+    public static String getLoadBalancerNodeId() {
+        String id = System.getProperty(APP_BASE_URL);
+        String cookieValue = System.getenv(LB_COOKIE_VALUE);
+
+        if (id != null && cookieValue != null)
+        {
+            id += "," + cookieValue;
+        }
+        return id;
+    }
+
+    /**
      * Retrieve a list of custom configuration files for this node
      *
      * @return A list of custom configuration files for this node
      */
     private List<FileContents> addNodeCustomConfigFiles() {
         List<FileContents> nodeCustomConfigFiles = new ArrayList<>();
-        File dataDirectory = new File(System.getProperty("data.directory") + File.separator + "config");
-        for (File zipFile : dataDirectory.listFiles()) {
-            if (zipFile.getName().endsWith(".zip")) {
-                FileContents fileInformation = null;
-                try {
-                    fileInformation = ConfigApiCore.getFileContents(zipFile);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                nodeCustomConfigFiles.add(fileInformation);
-            }
-        }
+        File dataDirectory = new File(System.getProperty("data.directory")
+                                      + File.separator + "config");
+        File[] files = dataDirectory.listFiles();
+
+        if (files != null) {
+            for (File zipFile : files) {
+                if (zipFile.getName().endsWith(".zip")) {
+                    FileContents fileInformation = null;
+                    try {
+                        fileInformation = ConfigApiCore.getFileContents(zipFile);
+                        nodeCustomConfigFiles.add(fileInformation);
+                    } catch (IOException e) {
+                        logger.warn("Unable to retrieve file contents from " + zipFile, e);
+                    }
+                }   // if endsWith ".zip"
+            }   // for
+        }   // if files != null
         return nodeCustomConfigFiles;
     }
 }
