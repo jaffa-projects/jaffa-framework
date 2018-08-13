@@ -180,15 +180,17 @@ public class NodeInformation {
     private List<FileContents> addNodeCustomConfigFiles() {
         List<FileContents> nodeCustomConfigFiles = new ArrayList<>();
         File dataDirectory = new File(System.getProperty("data.directory") + File.separator + "config");
-        for (File zipFile : dataDirectory.listFiles()) {
-            if (zipFile.getName().endsWith(".zip")) {
-                FileContents fileInformation = null;
-                try {
-                    fileInformation = ConfigApiCore.getFileContents(zipFile);
-                } catch (IOException e) {
-                    e.printStackTrace();
+        if(dataDirectory!=null && dataDirectory.exists()) {
+            for (File zipFile : dataDirectory.listFiles()) {
+                if (zipFile.getName().endsWith(".zip")) {
+                    FileContents fileInformation = null;
+                    try {
+                        fileInformation = ConfigApiCore.getFileContents(zipFile);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    nodeCustomConfigFiles.add(fileInformation);
                 }
-                nodeCustomConfigFiles.add(fileInformation);
             }
         }
         return nodeCustomConfigFiles;
