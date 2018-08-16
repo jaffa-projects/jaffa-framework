@@ -357,9 +357,9 @@ Jaffa.maintenance.plugins.Panel = Ext.extend(Ext.emptyFn, {
     // incase it is used by an MVC controller rather than a panel.
     this.cascade(function (f) {
       if (f.mapping && !f.readOnly && (!f.textOnly || f.useChangeListener)) {
-        // place keyup listener on fields except radio buttons and checkboxes
+        // place keydown listener on fields except radio buttons and checkboxes
         if (f.xtype != 'checkbox' && f.xtype != 'radio' && f.xtype!='htmleditor' && f.xtype!='xhtmleditor' && f.xtype!='comment') {
-          f.on('keyup', function (tField, evt) {
+          f.on('keydown', function (tField, evt) {
             if (evt.getKey) {
               if (!this.isDirty && !evt.isNavKeyPress() && (evt.keyCode==evt.BACKSPACE || evt.keyCode==evt.DELETE || !evt.isSpecialKey()) && !(evt.hasModifier() && evt.keyCode==evt.C)) {
                 onChangeFn.call(this);
@@ -401,7 +401,7 @@ Jaffa.maintenance.plugins.Panel = Ext.extend(Ext.emptyFn, {
                   onChangeFn.call(this);
                 }
               },
-                keyup: function(dft, evt) {
+                keydown: function(dft, evt) {
                 if (evt.getKey) {
                   if (!this.isDirty && !evt.isNavKeyPress() && (!evt.isSpecialKey() || evt.getKey()==evt.BACKSPACE || evt.getKey()==evt.DELETE) && !(evt.hasModifier() && evt.keyCode==evt.C)) {
                     onChangeFn.call(this);
@@ -416,7 +416,7 @@ Jaffa.maintenance.plugins.Panel = Ext.extend(Ext.emptyFn, {
                   onChangeFn.call(this);
                 }
               },
-              keyup: function(tf, evt) {
+              keydown: function(tf, evt) {
                 if (evt.getKey) {
                   if (!this.isDirty && !evt.isNavKeyPress() && (!evt.isSpecialKey() || evt.getKey()==evt.BACKSPACE || evt.getKey()==evt.DELETE) && !(evt.hasModifier() && evt.keyCode==evt.C)) {
                     onChangeFn.call(this);
