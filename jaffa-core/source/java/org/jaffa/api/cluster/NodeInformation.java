@@ -218,7 +218,7 @@ public class NodeInformation {
      */
     public static String getLoadBalancerNodeId() {
         String id = System.getProperty(APP_BASE_URL);
-        String cookieValue = System.getenv(LB_COOKIE_VALUE);
+        String cookieValue = System.getProperty(LB_COOKIE_VALUE);
 
         if (id != null && cookieValue != null)
         {
