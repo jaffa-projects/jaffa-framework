@@ -87,7 +87,7 @@ public final class JaffaConnectionFactory {
    * @return the JMS ConnectionFactory from the JNDI context, as defined in the
    *         configuration file.
    */
-  public static ConnectionFactory obtainConnectionFactory()
+  public synchronized static ConnectionFactory obtainConnectionFactory()
       throws ApplicationExceptions, FrameworkException {
     return INSTANCE.getConnectionFactory();
   }
@@ -101,7 +101,7 @@ public final class JaffaConnectionFactory {
    *           Indicates application error(s).
    * @return a JMS connection.
    */
-  public static Connection obtainConnection() throws FrameworkException,
+  public static synchronized Connection obtainConnection() throws FrameworkException,
       ApplicationExceptions {
     return INSTANCE.getConnection();
   }
