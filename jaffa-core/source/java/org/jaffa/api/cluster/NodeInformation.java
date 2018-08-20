@@ -105,8 +105,8 @@ public class NodeInformation {
     public NodeInformation() throws UnknownHostException {
         this.name = InetAddress.getLocalHost().getHostName();
         this.href = System.getProperty(APP_BASE_URL);
-        this.loadBalancerCookieName = System.getenv(LB_COOKIE_NAME);
-        this.loadBalancerCookieValue = System.getenv(LB_COOKIE_VALUE);
+        this.loadBalancerCookieName = System.getProperty(LB_COOKIE_NAME);
+        this.loadBalancerCookieValue = System.getProperty(LB_COOKIE_VALUE);
         this.links = new ArrayList<>();
         this.config = addNodeCustomConfigFiles();
     }

@@ -286,7 +286,7 @@ public class ConfigApiCore {
         log.debug("ConfigApi received the following Variation-Salience from MANIFEST: " + variationSalience);
         jar.close();
 
-        return variationSalience!=null && variationSalience.length() > 0 ? variationSalience : VariationContext.NULL_VARIATION;
+        return variationSalience;
     }
 
     /**
