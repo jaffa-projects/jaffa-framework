@@ -173,7 +173,7 @@ Ext.layout.AdjacentFieldLayout = Ext.extend(Ext.layout.AnchorLayout, {
     var compositeLabel = '';
     for (var i = 0, len = items.length; i < len; i++) {
       var c = items[i];
-      if (c.fieldLabel && !c.hideLabel && !c.hidden){
+      if (c.fieldLabel && !c.hideLabel ){
         if (compositeLabel) {
           compositeLabel += this.adjacentSeparator + (c.label || c.fieldLabel);
         } else {
