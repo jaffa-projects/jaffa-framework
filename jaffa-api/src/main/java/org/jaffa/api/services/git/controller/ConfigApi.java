@@ -88,7 +88,7 @@ public class ConfigApi implements IConfigApi {
     private static final int BYTE_ARRAY_INIT_LENGTH = 17;
     private static final Logger log = Logger.getLogger(ConfigApi.class);
 
-    private static File gctConfigDirectory = new File(ResourceLoader.customConfigPath);
+    private static File gctConfigDirectory = ResourceLoader.customConfigPath!=null ? new File(ResourceLoader.customConfigPath) : null;
     private Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
     @Autowired
@@ -122,10 +122,10 @@ public class ConfigApi implements IConfigApi {
     @RequestMapping(value = "/config", method = RequestMethod.DELETE)
     public Response deleteCustomConfigFile(String compressedFile) throws IOException {
         String fileNameToDelete = verifyExtension(compressedFile, FILE_EXTENSION);
-        File fileToDelete = new File(gctConfigDirectory + File.separator + fileNameToDelete);
+        File fileToDelete = gctConfigDirectory!=null ? new File(gctConfigDirectory + File.separator + fileNameToDelete) : null;
 
         //Provide HTTP error if compressed file does not exist on server
-        if (!fileToDelete.exists()) {
+        if (fileToDelete==null || !fileToDelete.exists()) {
             log.warn("The requested compressed file " + fileToDelete + " was not found in " + gctConfigDirectory);
             return Response
                     .status(Response.Status.NO_CONTENT)
@@ -158,9 +158,9 @@ public class ConfigApi implements IConfigApi {
     @RequestMapping(value = "/config/{compressedFile}", method = RequestMethod.GET)
     public Response getCustomConfigFile(@PathVariable String compressedFile) {
         compressedFile = verifyExtension(compressedFile, FILE_EXTENSION);
-        File fileToDownload = new File(gctConfigDirectory + File.separator + compressedFile);
+        File fileToDownload = gctConfigDirectory!=null ? new File(gctConfigDirectory + File.separator + compressedFile) : null;
 
-        return (!fileToDownload.exists() ?
+        return (fileToDownload == null || !fileToDownload.exists() ?
                 Response.status(Response.Status.BAD_REQUEST)
                         .entity("The server processed your request, but cannot find a file located at " + fileToDownload)
                         .build()
@@ -181,7 +181,7 @@ public class ConfigApi implements IConfigApi {
      */
     @RequestMapping(value = "/config", method = RequestMethod.GET)
     public Response getCustomConfigFileList() throws IOException {
-        File[] allFilesInDirectory = gctConfigDirectory.listFiles();
+        File[] allFilesInDirectory = gctConfigDirectory!=null ? gctConfigDirectory.listFiles() : null;
         List<File> compressedFilesInDirectory = getCompressedFiles(allFilesInDirectory);
         List<FileContents> compressedFilesContents = convertToFileContents(compressedFilesInDirectory);
 
@@ -202,9 +202,9 @@ public class ConfigApi implements IConfigApi {
     @RequestMapping(value = "/config/{compressedFile}", method = RequestMethod.POST)
     public Response postCustomConfigFile(@PathVariable String compressedFile, byte[] payload) throws IOException {
         String fileNameToPost = verifyExtension(compressedFile, FILE_EXTENSION);
-        File fileToPostPath = new File(gctConfigDirectory + File.separator + fileNameToPost);
+        File fileToPostPath = gctConfigDirectory!=null ? new File(gctConfigDirectory + File.separator + fileNameToPost) : null;
 
-        if (payload.length <= BYTE_ARRAY_INIT_LENGTH || fileToPostPath.exists()) {
+        if (fileToPostPath == null || payload.length <= BYTE_ARRAY_INIT_LENGTH || fileToPostPath.exists()) {
             return postError(payload, fileToPostPath);
         }
 
@@ -314,11 +314,12 @@ public class ConfigApi implements IConfigApi {
      */
     private List<FileContents> convertToFileContents(List<File> compressedFileList) throws IOException {
         List<FileContents> fileContents = new ArrayList<>();
-
-        for (File compressedFile : compressedFileList) {
-            FileContents fileInformation = ConfigApiCore.getFileContents(compressedFile);
-            LinkResolver.addLinks(fileInformation);
-            fileContents.add(fileInformation);
+        if(compressedFileList!=null) {
+            for (File compressedFile : compressedFileList) {
+                FileContents fileInformation = ConfigApiCore.getFileContents(compressedFile);
+                LinkResolver.addLinks(fileInformation);
+                fileContents.add(fileInformation);
+            }
         }
         return fileContents;
     }
