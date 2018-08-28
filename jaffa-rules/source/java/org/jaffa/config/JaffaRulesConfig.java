@@ -342,11 +342,13 @@ public class JaffaRulesConfig {
      */
     public void loadAllCustomConfigurations(AopXmlLoader aopXmlLoader) throws IOException {
         // Load all zip files from the custom config directory.
-        File customConfigDirectory = new File(ResourceLoader.customConfigPath);
-        if(customConfigDirectory.exists()) {
-            for (File file : customConfigDirectory.listFiles()) {
-                if (file.getName().endsWith(ResourceLoader.ARCHIVE_EXTENSION)) {
-                    loadCustomConfiguration(file, aopXmlLoader);
+        if(ResourceLoader.customConfigPath!=null) {
+            File customConfigDirectory = new File(ResourceLoader.customConfigPath);
+            if (customConfigDirectory.exists()) {
+                for (File file : customConfigDirectory.listFiles()) {
+                    if (file.getName().endsWith(ResourceLoader.ARCHIVE_EXTENSION)) {
+                        loadCustomConfiguration(file, aopXmlLoader);
+                    }
                 }
             }
         }

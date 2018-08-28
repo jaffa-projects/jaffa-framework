@@ -64,8 +64,7 @@ import java.io.IOException;
  */
 public class ResourceLoader<T extends IManager> {
     public static final String ARCHIVE_EXTENSION = ".zip";
-    private static String dataDirectory = System.getProperty("data.directory");
-    public static String customConfigPath = dataDirectory + File.separator + "config";
+    public static String customConfigPath = System.getProperty("gct.directory");
 
     /**
      * Create a ContextHelper logger
@@ -122,7 +121,7 @@ public class ResourceLoader<T extends IManager> {
                 }
             }
 
-            if (dataDirectory != null && new File(customConfigPath).exists()) {
+            if (customConfigPath != null && new File(customConfigPath).exists()) {
                 loadAllCustomConfigurations();
             }
 
@@ -158,7 +157,7 @@ public class ResourceLoader<T extends IManager> {
             ConfigApiCore.removeDirTree(zipRoot);
         }
         else {
-            logger.error(manager.toString() + " cannot load " + file.getName() + " from " + dataDirectory + " because " +
+            logger.error(manager.toString() + " cannot load " + file.getName() + " from " + customConfigPath + " because " +
                 "the file's directory structure is incorrect. Custom ZIP files must ONLY contain a META-INF directory " +
                 "containing all configuration files and a manifest.");
         }

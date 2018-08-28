@@ -52,6 +52,7 @@ import com.google.gson.annotations.Expose;
 import org.apache.log4j.Logger;
 import org.jaffa.api.ConfigApiCore;
 import org.jaffa.api.FileContents;
+import org.jaffa.loader.ResourceLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -234,8 +235,7 @@ public class NodeInformation {
      */
     private List<FileContents> addNodeCustomConfigFiles() {
         List<FileContents> nodeCustomConfigFiles = new ArrayList<>();
-        File dataDirectory = new File(System.getProperty("data.directory")
-                                      + File.separator + "config");
+        File dataDirectory = new File(ResourceLoader.customConfigPath);
         File[] files = dataDirectory.listFiles();
 
         if (files != null) {
