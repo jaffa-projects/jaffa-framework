@@ -235,22 +235,24 @@ public class NodeInformation {
      */
     private List<FileContents> addNodeCustomConfigFiles() {
         List<FileContents> nodeCustomConfigFiles = new ArrayList<>();
-        File dataDirectory = new File(ResourceLoader.customConfigPath);
-        File[] files = dataDirectory.listFiles();
+        if(ResourceLoader.customConfigPath!=null) {
+            File dataDirectory = new File(ResourceLoader.customConfigPath);
+            File[] files = dataDirectory.listFiles();
 
-        if (files != null) {
-            for (File zipFile : files) {
-                if (zipFile.getName().endsWith(".zip")) {
-                    FileContents fileInformation = null;
-                    try {
-                        fileInformation = ConfigApiCore.getFileContents(zipFile);
-                        nodeCustomConfigFiles.add(fileInformation);
-                    } catch (IOException e) {
-                        logger.warn("Unable to retrieve file contents from " + zipFile, e);
-                    }
-                }   // if endsWith ".zip"
-            }   // for
-        }   // if files != null
+            if (files != null) {
+                for (File zipFile : files) {
+                    if (zipFile.getName().endsWith(".zip")) {
+                        FileContents fileInformation = null;
+                        try {
+                            fileInformation = ConfigApiCore.getFileContents(zipFile);
+                            nodeCustomConfigFiles.add(fileInformation);
+                        } catch (IOException e) {
+                            logger.warn("Unable to retrieve file contents from " + zipFile, e);
+                        }
+                    }   // if endsWith ".zip"
+                }   // for
+            }   // if files != null
+        }
         return nodeCustomConfigFiles;
     }
 }
