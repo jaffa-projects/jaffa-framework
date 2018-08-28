@@ -66,8 +66,20 @@ public class ResourceLoader<T extends IManager> {
     public static final String ARCHIVE_EXTENSION = ".zip";
     private static final String LB_COOKIE_VALUE = "LB_COOKIE_VALUE";
     private static final String GCT_DIRECTORY = "gct.directory";
+    private static final String DATA_DIRECTORY = "data.directory";
     public static String customConfigPath;
 
+    /** This static block will instantiate the customConfigPath. */
+    static {
+        if(System.getProperty(GCT_DIRECTORY)!=null){
+            customConfigPath = System.getProperty(GCT_DIRECTORY);
+        }else if (System.getProperty(DATA_DIRECTORY)!=null){
+            customConfigPath = System.getProperty(DATA_DIRECTORY);
+        }
+        if(customConfigPath!=null && System.getProperty(LB_COOKIE_VALUE)!=null) {
+            customConfigPath+= File.separator + System.getProperty(LB_COOKIE_VALUE);
+        }
+    }
     /**
      * Create a ContextHelper logger
      */
@@ -105,12 +117,6 @@ public class ResourceLoader<T extends IManager> {
       */
     @PostConstruct
     public void loadXmls() {
-        if(System.getProperty(GCT_DIRECTORY)!=null){
-            customConfigPath = System.getProperty(GCT_DIRECTORY);
-        }
-        if(System.getProperty(LB_COOKIE_VALUE)!=null) {
-            customConfigPath+= File.separator + System.getProperty(LB_COOKIE_VALUE);
-        }
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         try {
             Resource[] resources = resolver.getResources("classpath*:META-INF/" + manager.getResourceFileName());
