@@ -86,7 +86,7 @@ import java.util.Map;
  */
 @Configuration
 @Import({JaffaRulesConfig.class, PersistentConfig.class})
-@DependsOn("aopFolderWatcher")
+@DependsOn({"aopFolderWatcher", "applicationResourceManagerPropertiesLoader"})
 public class LifecycleHandlerConfig {
 
     protected static Logger log = Logger.getLogger(LifecycleHandlerConfig.class);
