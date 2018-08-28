@@ -64,7 +64,9 @@ import java.io.IOException;
  */
 public class ResourceLoader<T extends IManager> {
     public static final String ARCHIVE_EXTENSION = ".zip";
-    public static String customConfigPath = System.getProperty("gct.directory");
+    private static final String LB_COOKIE_VALUE = "LB_COOKIE_VALUE";
+    private static final String GCT_DIRECTORY = "gct.directory";
+    public static String customConfigPath;
 
     /**
      * Create a ContextHelper logger
@@ -103,6 +105,12 @@ public class ResourceLoader<T extends IManager> {
       */
     @PostConstruct
     public void loadXmls() {
+        if(System.getProperty(GCT_DIRECTORY)!=null){
+            customConfigPath = System.getProperty(GCT_DIRECTORY);
+        }
+        if(System.getProperty(LB_COOKIE_VALUE)!=null) {
+            customConfigPath+= File.separator + System.getProperty(LB_COOKIE_VALUE);
+        }
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         try {
             Resource[] resources = resolver.getResources("classpath*:META-INF/" + manager.getResourceFileName());
