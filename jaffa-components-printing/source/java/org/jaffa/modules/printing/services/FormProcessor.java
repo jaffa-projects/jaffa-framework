@@ -310,7 +310,7 @@ public class FormProcessor {
         FormDefinition form = null;
         String var = null;
         String alternate = null;
-        String userLocale = getLocaleProvider().getLocale().toString(); // en_US, ar_OM
+        String userLocale = getLocaleProvider().getLocale()!=null ? getLocaleProvider().getLocale().toString() : null; // en_US, ar_OM
         Boolean rtl = Boolean.FALSE;
         if (formLocalizationHelper != null && userLocale != null) {
             rtl = formLocalizationHelper.isLanguageRightToLeft(userLocale);
