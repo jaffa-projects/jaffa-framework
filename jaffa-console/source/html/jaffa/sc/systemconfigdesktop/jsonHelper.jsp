@@ -1,6 +1,5 @@
 <%@ page import='java.lang.reflect.Method,
          org.apache.log4j.Logger,
-         org.jaffa.util.StringHelper,
          net.sf.json.JSONObject,
          net.sf.json.JSON,
          net.sf.json.JSONSerializer,
@@ -66,11 +65,8 @@ private void getJsonString(String jsonStr,String eventName,JspWriter out) throws
 %>
 <%
 
-    String json = StringHelper.escapeJavascript(request.getParameter("json"));
-    String eventName = StringHelper.escapeJavascript(request.getParameter("eventName"));
-
-    //Removing the escaping character.
-    json = json.replace("\\", "");
+    String json = request.getParameter("json");
+    String eventName = request.getParameter("eventName");
 
     getJsonString(json,eventName,out);
 

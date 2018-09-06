@@ -68,10 +68,7 @@ import org.jaffa.soa.dataaccess.TransformationHandler;
 import org.jaffa.soa.dataaccess.TransformationHandlerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -89,6 +86,7 @@ import java.util.Map;
  */
 @Configuration
 @Import({JaffaRulesConfig.class, PersistentConfig.class})
+@DependsOn({"aopFolderWatcher", "applicationResourceManagerPropertiesLoader"})
 public class LifecycleHandlerConfig {
 
     protected static Logger log = Logger.getLogger(LifecycleHandlerConfig.class);
@@ -115,7 +113,6 @@ public class LifecycleHandlerConfig {
     /**
      * Populate factory with SOA events and scripts defined in the rules repository.
      */
-    @PostConstruct
     public void init() {
         addLifecycleHandlers(SoaEventRuleName);
         addLifecycleHandlers(ScriptRuleName);

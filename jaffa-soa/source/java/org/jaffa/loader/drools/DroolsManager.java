@@ -59,9 +59,7 @@ import org.springframework.core.io.Resource;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.*;
 
 /**
@@ -109,7 +107,7 @@ public class DroolsManager {
         } catch (Exception e) {
             log.debug("File does not exist");
         }
-        Files.copy(resource.getInputStream(), newPath);
+        Files.copy(resource.getInputStream(), newPath, StandardCopyOption.REPLACE_EXISTING);
 
         registerDrool(serviceName, newPath.toString(), variation);
     }

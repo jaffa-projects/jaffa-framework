@@ -62,6 +62,7 @@ import com.google.gson.GsonBuilder;
 import org.jaffa.api.ConfigApiCore;
 import org.jaffa.api.cluster.IClusterMetadataDAO;
 import org.jaffa.api.services.git.LinkResolver;
+import org.jaffa.loader.ResourceLoader;
 import org.jaffa.rules.AopXmlLoader;
 import org.apache.log4j.*;
 import org.jaffa.api.FileContents;
@@ -83,13 +84,11 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 @RestController
 @RequestMapping("/git")
 public class ConfigApi implements IConfigApi {
-    private static final String APP_BASE_URL = System.getProperty("app.base.url");
-    private static final String DATA_DIR_ENV_NAME = "data.directory";
     private static final String FILE_EXTENSION = ".zip";
     private static final int BYTE_ARRAY_INIT_LENGTH = 17;
     private static final Logger log = Logger.getLogger(ConfigApi.class);
 
-    private static File dataDirectory = new File(System.getProperty(DATA_DIR_ENV_NAME) + File.separator + "config");
+    private static File gctConfigDirectory = ResourceLoader.customConfigPath!=null ? new File(ResourceLoader.customConfigPath) : null;
     private Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
     @Autowired
@@ -116,18 +115,18 @@ public class ConfigApi implements IConfigApi {
      * Corresponds to DELETE endpoint. Unregister all configurations within the provided compressed file and delete
      * the file itself
      *
-     * @param compressedFile The custom compressed file located in DATA_DIRECTORY/config to be deleted
+     * @param compressedFile The custom compressed file located in GCT_CONFIG to be deleted
      * @return HTTP Response indicating success or failure
      * @throws IOException When the endpoint has difficulty accessing or removing the file
      */
     @RequestMapping(value = "/config", method = RequestMethod.DELETE)
     public Response deleteCustomConfigFile(String compressedFile) throws IOException {
         String fileNameToDelete = verifyExtension(compressedFile, FILE_EXTENSION);
-        File fileToDelete = new File(dataDirectory + File.separator + fileNameToDelete);
+        File fileToDelete = gctConfigDirectory!=null ? new File(gctConfigDirectory + File.separator + fileNameToDelete) : null;
 
         //Provide HTTP error if compressed file does not exist on server
-        if (!fileToDelete.exists()) {
-            log.warn("The requested compressed file " + fileToDelete + " was not found in " + dataDirectory);
+        if (fileToDelete==null || !fileToDelete.exists()) {
+            log.warn("The requested compressed file " + fileToDelete + " was not found in " + gctConfigDirectory);
             return Response
                     .status(Response.Status.NO_CONTENT)
                     .entity("The requested compressed file could not be found on the server.")
@@ -159,9 +158,9 @@ public class ConfigApi implements IConfigApi {
     @RequestMapping(value = "/config/{compressedFile}", method = RequestMethod.GET)
     public Response getCustomConfigFile(@PathVariable String compressedFile) {
         compressedFile = verifyExtension(compressedFile, FILE_EXTENSION);
-        File fileToDownload = new File(dataDirectory + File.separator + compressedFile);
+        File fileToDownload = gctConfigDirectory!=null ? new File(gctConfigDirectory + File.separator + compressedFile) : null;
 
-        return (!fileToDownload.exists() ?
+        return (fileToDownload == null || !fileToDownload.exists() ?
                 Response.status(Response.Status.BAD_REQUEST)
                         .entity("The server processed your request, but cannot find a file located at " + fileToDownload)
                         .build()
@@ -173,7 +172,7 @@ public class ConfigApi implements IConfigApi {
 
 
     /**
-     * Corresponds to GET endpoint - Retrieve a list of all the compressed files contained in the DATA_DIRECTORY property
+     * Corresponds to GET endpoint - Retrieve a list of all the compressed files contained in the GCT_CONFIG property
      * location that match FILE_EXTENSION. In addition to the file names, the method also returns the Context Salience
      * and file contents.
      *
@@ -182,7 +181,7 @@ public class ConfigApi implements IConfigApi {
      */
     @RequestMapping(value = "/config", method = RequestMethod.GET)
     public Response getCustomConfigFileList() throws IOException {
-        File[] allFilesInDirectory = dataDirectory.listFiles();
+        File[] allFilesInDirectory = gctConfigDirectory!=null ? gctConfigDirectory.listFiles() : null;
         List<File> compressedFilesInDirectory = getCompressedFiles(allFilesInDirectory);
         List<FileContents> compressedFilesContents = convertToFileContents(compressedFilesInDirectory);
 
@@ -203,15 +202,15 @@ public class ConfigApi implements IConfigApi {
     @RequestMapping(value = "/config/{compressedFile}", method = RequestMethod.POST)
     public Response postCustomConfigFile(@PathVariable String compressedFile, byte[] payload) throws IOException {
         String fileNameToPost = verifyExtension(compressedFile, FILE_EXTENSION);
-        File fileToPostPath = new File(dataDirectory + File.separator + fileNameToPost);
+        File fileToPostPath = gctConfigDirectory!=null ? new File(gctConfigDirectory + File.separator + fileNameToPost) : null;
 
-        if (payload.length <= BYTE_ARRAY_INIT_LENGTH || fileToPostPath.exists()) {
+        if (fileToPostPath == null || payload.length <= BYTE_ARRAY_INIT_LENGTH || fileToPostPath.exists()) {
             return postError(payload, fileToPostPath);
         }
 
-        //Avoid NoSuchFileExceptions by double-checking that DATA_DIRECTORY exists
-        if (!dataDirectory.exists()) {
-            dataDirectory.mkdir();
+        //Avoid NoSuchFileExceptions by double-checking that GCT_CONFIG exists
+        if (!gctConfigDirectory.exists()) {
+            gctConfigDirectory.mkdir();
         }
 
         //Copy files to server and register resources
@@ -230,12 +229,7 @@ public class ConfigApi implements IConfigApi {
                     .entity("Upload Failed. The uploaded ZIP file must contain ONLY a META-INF directory containing " +
                             "configuration files and a manifest file.");
         }
-
-        //Add file to node metadata
-        boolean doRegister = true; // TODO remove this debug flag
-        if (doRegister) {
-            registerMetadata(fileToPostPath);
-        }
+        registerMetadata(fileToPostPath);
         return response.build();
     }
 
@@ -289,13 +283,11 @@ public class ConfigApi implements IConfigApi {
     }
 
     /**
-     * Retrieve a list of compressed files in the DATA_DIRECTORY location
-     *
+     * Retrieve a list of compressed files in the GCT_CONFIG location
      * @param directoryFileList The list of all files in the directory
      * @return The list of compressed files in the directory
-     * @throws IOException If the directory cannot be accessed or parsed
      */
-    private List<File> getCompressedFiles(File[] directoryFileList) throws IOException {
+    private List<File> getCompressedFiles(File[] directoryFileList) {
         List<File> compressedFiles = new ArrayList<>();
 
         if (directoryFileList != null) {
@@ -304,9 +296,11 @@ public class ConfigApi implements IConfigApi {
                     compressedFiles.add(file);
                 }
             }
-        } else {
-            log.warn("DATA_DIRECTORY is not set, or is empty. Please check your DATA_DIRECTORY variable. It" +
-                    "is currently returning: " + dataDirectory);
+        }
+        else {
+            log.warn("GCT_CONFIG is not set, or is empty." +
+                    " Please check your GCT_CONFIG variable. It" +
+                    " is currently returning: " + gctConfigDirectory);
         }
         return compressedFiles;
     }
@@ -320,11 +314,12 @@ public class ConfigApi implements IConfigApi {
      */
     private List<FileContents> convertToFileContents(List<File> compressedFileList) throws IOException {
         List<FileContents> fileContents = new ArrayList<>();
-
-        for (File compressedFile : compressedFileList) {
-            FileContents fileInformation = ConfigApiCore.getFileContents(compressedFile);
-            LinkResolver.addLinks(fileInformation);
-            fileContents.add(fileInformation);
+        if(compressedFileList!=null) {
+            for (File compressedFile : compressedFileList) {
+                FileContents fileInformation = ConfigApiCore.getFileContents(compressedFile);
+                LinkResolver.addLinks(fileInformation);
+                fileContents.add(fileInformation);
+            }
         }
         return fileContents;
     }
@@ -346,24 +341,21 @@ public class ConfigApi implements IConfigApi {
 
     /**
      * Add a configuration file to the metadata inside of a NodeInformation object
-     *
      * @param filePath The configuration file to add to the node metadata
      * @throws IOException If the configuration file cannot be accessed
      */
     private void registerMetadata(File filePath) throws IOException {
         FileContents fileInformation = ConfigApiCore.getFileContents(filePath);
         Map<String, NodeInformation> allNodesMetadata = clusterMetadataDAO.getClusterMetadata();
-        NodeInformation node = allNodesMetadata.get(APP_BASE_URL);
-
+        String nodeId = NodeInformation.getLoadBalancerNodeId();
+        NodeInformation node = allNodesMetadata.get(nodeId);
         node.getConfig().add(fileInformation);
-
-        clusterMetadataDAO.put(APP_BASE_URL, node);
-        log.info("Successfully added file " + filePath + " to node metadata for " + node.getHref());
+        clusterMetadataDAO.put(nodeId, node);
+        log.info("Successfully added file " + filePath + " to node metadata for " + nodeId);
     }
 
     /**
      * Unregister configurations from a custom config file in IManager repositories
-     *
      * @param filePath The path of the configuration file
      * @param tempDir  The temporary directory storing the configurations
      * @throws IOException If any directories or files cannot be accessed or parsed
@@ -376,36 +368,39 @@ public class ConfigApi implements IConfigApi {
 
     /**
      * Remove a configuration file from a NodeInformation object's metadata
-     *
      * @param fileToDelete The configuration file to delete from the metadata
      */
     private void removeMetadata(String fileToDelete) {
         Map<String, NodeInformation> allNodesMetadata = clusterMetadataDAO.getClusterMetadata();
-        NodeInformation node = allNodesMetadata.get(APP_BASE_URL);
+        String nodeId = NodeInformation.getLoadBalancerNodeId();
+        NodeInformation node = allNodesMetadata.get(nodeId);
         for (FileContents configFile : node.getConfig()) {
             if (configFile.getName().equals(fileToDelete)) {
                 node.getConfig().remove(configFile);
-                clusterMetadataDAO.put(APP_BASE_URL, node);
-                log.info("Successfully removed file " + fileToDelete + " from node metadata for " + node.getHref());
+                clusterMetadataDAO.put(nodeId, node);
+                log.info("Successfully removed file " + fileToDelete +
+                        " from node metadata for " + nodeId);
                 break;
             }
         }
     }
 
     /**
-     * In certain cases, a configuration archive cannot be immediately removed from the filesystem because
-     * its contents are still undergoing removal operations of their own. This method allows the contents to
-     * complete their processes and release the file handle so that the zip parent can be removed
-     *
+     * In certain cases, a configuration archive cannot be
+     * immediately removed from the filesystem because
+     * its contents are still undergoing removal operations
+     * of their own. This method allows the contents to
+     * complete their processes and release the file handle
+     * so that the zip parent can be removed
      * @param file The configuration archive to remove
-     * @throws IOException When a file cannot be accessed or operations cannot be performed on it
      */
-    private void removeZipFile(File file) throws IOException {
+    private void removeZipFile(File file) {
         try {
             Files.deleteIfExists(file.toPath());
-            log.info("Successfully removed " + file.getName() + "from the filesystem");
+            log.info("Successfully removed " + file.getName() + " from the filesystem");
         } catch (IOException ex) {
-            log.error("Could not Remove the file " + file.getName() + "from the filesystem");
+            log.error("Could not remove the file "
+                    + file.getName() + " from the filesystem", ex);
         }
     }
 
