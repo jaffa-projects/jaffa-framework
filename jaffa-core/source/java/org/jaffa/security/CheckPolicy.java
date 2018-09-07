@@ -62,6 +62,7 @@ import org.jaffa.util.URLHelper;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -76,6 +77,7 @@ import java.util.*;
  * @author paule
  * @version 1.0
  */
+@WebServlet(value="/admin/CheckPolicy", name="CheckPolicy", loadOnStartup=2)
 public class CheckPolicy extends HttpServlet {
 
     /**
