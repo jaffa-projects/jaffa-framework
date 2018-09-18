@@ -108,8 +108,8 @@ public class Engine implements IJdbcPersistenceEngine {
                     int start = Parser.parseInteger(rangeBoundary[0]).intValue();
                     int end = Parser.parseInteger(rangeBoundary[1]).intValue();
                     if (start <= end) {
-                        c_customSqlErrorCodeStart = new Integer(start);
-                        c_customSqlErrorCodeEnd = new Integer(end);
+                        c_customSqlErrorCodeStart = start;
+                        c_customSqlErrorCodeEnd = end;
                         if (log.isInfoEnabled())
                             log.info("The JdbcEngine will perform conversion of SQLException to ApplicationException when it encounters ErrorCodes in the range " + c_customSqlErrorCodeStart + " to " + c_customSqlErrorCodeEnd);
                     } else
@@ -424,7 +424,7 @@ public class Engine implements IJdbcPersistenceEngine {
     }
 
     /** Returns the PersistenceLoggingPlugin at the specified position in this list..
-     * @param class name of the PersistenceLoggingPlugin to return.
+     * @param clazz name of the PersistenceLoggingPlugin to return.
      * @return the PersistenceLoggingPlugin at the specified position in this list
      */
     public <U extends IPersistenceLoggingPlugin> U findFirstPersistenceLoggingPluginByClass(Class<U> clazz){
@@ -496,7 +496,7 @@ public class Engine implements IJdbcPersistenceEngine {
      * @param exception The input exception.
      * @return an instance of ApplicationExceptions if found in the cause stack of the input exception.
      */
-    public static ApplicationExceptions extractApplicationExceptions(Throwable exception) {
+    public static ApplicationExceptions extractApplicationExceptions(Exception exception) {
         ApplicationExceptions appExps = null;
 
         // Check for ApplicationException(s)

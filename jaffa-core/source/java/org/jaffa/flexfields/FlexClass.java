@@ -247,7 +247,7 @@ public class FlexClass implements DynaClass {
                 }
             }
             return flexClass;
-        } catch (Throwable e) {
+        } catch (Exception e) {
             throw ExceptionHelper.throwAFR(e);
         }
     }
