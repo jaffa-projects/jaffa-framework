@@ -49,6 +49,7 @@
 package org.jaffa.soa.services;
 
 import org.apache.log4j.Logger;
+import org.jaffa.loader.soa.SoaEventConfigManager;
 import org.jaffa.security.VariationContext;
 import org.jaffa.session.ContextManagerFactory;
 import org.jaffa.session.IContextManager;
@@ -80,6 +81,8 @@ public class SOAEventEnabledConfigurationImpl implements SOAEventEnabledConfigur
     private final boolean areEventsEnabledByDefault;
 
     private final WeakHashMap<String, Properties> propertiesPerVariation = new WeakHashMap<String, Properties>();
+
+    private static SoaEventConfigManager soaEventConfigManager;
 
     /**
      * Constructs the SOAEventEnabledConfigurationImpl and initializes its state from the ApplicationRules
@@ -237,10 +240,17 @@ public class SOAEventEnabledConfigurationImpl implements SOAEventEnabledConfigur
     private Properties getProperties() {
         Properties properties = propertiesPerVariation.get(VariationContext.getVariation());
         if (properties == null) {
-            properties = loadPropertiesFromFile();
+             properties = new Properties();
+            if(getSoaEventConfigManager() != null ){
+                Properties props = getSoaEventConfigManager().getAllSoaEvents();
+                properties.putAll(props);
+            }
+
+            Properties localeSoaEventProperties = loadPropertiesFromFile();
+            //Apply locale properties over the soa events
+            properties.putAll(localeSoaEventProperties);
             propertiesPerVariation.put(VariationContext.getVariation(), properties);
         }
-
         return properties;
     }
 
@@ -334,5 +344,13 @@ public class SOAEventEnabledConfigurationImpl implements SOAEventEnabledConfigur
         }
 
         return propertiesFile;
+    }
+
+    public static SoaEventConfigManager getSoaEventConfigManager() {
+        return soaEventConfigManager;
+    }
+
+    public static void setSoaEventConfigManager(SoaEventConfigManager soaEventConfigManager) {
+        SOAEventEnabledConfigurationImpl.soaEventConfigManager = soaEventConfigManager;
     }
 }
