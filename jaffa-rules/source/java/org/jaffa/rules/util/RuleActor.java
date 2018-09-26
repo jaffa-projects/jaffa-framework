@@ -53,6 +53,8 @@ import org.jaffa.exceptions.ApplicationException;
 import org.jaffa.exceptions.ApplicationExceptions;
 import org.jaffa.exceptions.FrameworkException;
 import org.jaffa.flexfields.FlexBean;
+import org.jaffa.flexfields.FlexClass;
+import org.jaffa.flexfields.FlexProperty;
 import org.jaffa.flexfields.IFlexFields;
 import org.jaffa.persistence.IPersistent;
 import org.jaffa.persistence.UOW;
@@ -520,9 +522,14 @@ public class RuleActor<T> {
         String targetClassName = getActualClassName(targetObject.getClass());
         try {
             if (targetObject instanceof FlexBean) {
-                if (((FlexBean) targetObject).getDynaClass().getDynaProperty(targetPropertyName) == null && ((FlexBean) targetObject).getPersistentObject() != null) {
+                FlexBean flexBean = (FlexBean) targetObject;
+                FlexClass flexClass = (FlexClass) flexBean.getDynaClass();
+                FlexProperty flexProperty = flexClass.getDynaProperty(targetPropertyName);
+                if (flexProperty == null && ((FlexBean) targetObject).getPersistentObject() != null) {
                     targetObject = ((FlexBean) targetObject).getPersistentObject();
                     targetClassName = targetObject.getClass().getName();
+                } else if (flexProperty != null && ((FlexBean) targetObject).getPersistentObject() == null) {
+                    targetClassName = flexClass.getName();
                 }
             } else if (targetObject instanceof IFlexFields) {
                 if (((IFlexFields) targetObject).getFlexBean() != null && ((IFlexFields) targetObject).getFlexBean().getDynaClass().getDynaProperty(targetPropertyName) != null) {
