@@ -51,6 +51,7 @@ package org.jaffa.flexfields;
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.beanutils.DynaClass;
 import org.apache.log4j.Logger;
+import org.jaffa.beans.factory.InitializerFactory;
 import org.jaffa.beans.factory.config.StaticContext;
 import org.jaffa.datatypes.DataTypeMapper;
 import org.jaffa.exceptions.ApplicationException;
@@ -64,6 +65,7 @@ import org.jaffa.persistence.IPersistent;
 import org.jaffa.persistence.util.PersistentHelper;
 import org.jaffa.rules.fieldvalidators.Validator;
 import org.jaffa.rules.fieldvalidators.ValidatorFactory;
+import org.jaffa.rules.initializers.Initializer;
 import org.jaffa.util.BeanHelper;
 
 import javax.xml.bind.annotation.XmlTransient;
@@ -129,6 +131,22 @@ public class FlexBean implements DynaBean {
         ValidatorFactory validatorFactory = (ValidatorFactory) StaticContext.getBean("ruleValidatorFactory");
         if (validatorFactory != null) {
             flexBeanValidator = validatorFactory.getValidator(this);
+        }
+        /**If the FlexBean object is persistent or graph object then the configureFlexBean method already invoked
+         * from Persistent or GraphDataObject. Here only doing the initialization of flex bean if its not persistent.
+         */
+        if (!(this instanceof IFlexFields)) {
+            InitializerFactory initializerFactory = (InitializerFactory) StaticContext.getBean(InitializerFactory.class);
+            if (initializerFactory != null) {
+                Initializer initializer = initializerFactory.getInitializer(this);
+                if (initializer != null) {
+                    try {
+                        initializer.initialize(this);
+                    } catch (FrameworkException e) {
+                        log.error("Could not initialize object: " + this.getClass().getName() + ". " + e.getMessage());
+                    }
+                }
+            }
         }
     }
 
