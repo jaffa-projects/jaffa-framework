@@ -818,6 +818,7 @@ margin-right:0px!important;
 .x-form-element {
 	float:left !important;
 	padding-left: 0px !important;
+    margin-right: -1px;
 }
 
 /* Form DD250 Maintenance - Grid view rtl changes from right to left */
@@ -889,8 +890,7 @@ padding-left:0px !important;
 /* Have used ID to override direction:rtl condition return in js file ,so it will not effect other patterns*/
 #gridDetailPanelRef .x-panel-bwrap .x-panel-tbar.x-panel-tbar-noheader.x-panel-tbar-noborder .x-toolbar.x-small-editor.x-toolbar-layout-ct 
 .x-toolbar-ct .x-toolbar-right-ct table .x-toolbar-right-row .x-toolbar-cell label {
-	direction:ltr;
-	float:right;
+   float:right;
 }
 /* Form DD250 Pattern- Have used ID to override float:left condition return in js file, so it will not effect other patterns */
 #templateFieldset .x-fieldset-bwrap .x-fieldset-body.x-table-layout-ct .x-table-layout .x-table-layout-cell 
@@ -1129,8 +1129,7 @@ float:left;
 #itemAppDetailTabPanelRef .x-panel-body.x-panel-body-noborder.x-form .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-form-item.x-form-item-adj  .x-form-element .x-form-field-wrap.x-form-field-trigger-wrap{
 float:left;
 } 
-/* LCN-540 Bug fix changes - Supply Discrepancy Maintenance */
-.x-panel-tbar.x-panel-tbar-noborder + .indent.x-panel-body-noborder .x-fieldset .x-fieldset-bwrap .x-fieldset-body .x-form-item  .x-form-element .x-form-field-wrap.x-form-field-trigger-wrap .x-form-text.x-form-field{
+#tabMaster.x-tab-panel.x-border-panel .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-top .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .indent.x-panel-body-noborder .x-fieldset .x-fieldset-bwrap .x-fieldset-body .x-form-item  .x-form-element .x-form-field-wrap.x-form-field-trigger-wrap .x-form-text.x-form-field{
 margin-right:-22px;
 }
 
@@ -1449,9 +1448,14 @@ float:right !important;
 #workorder-maintenance-wizard.x-panel.x-panel-noborder.x-border-panel .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .indent.x-panel-body-noborder.x-form  fieldset.x-fieldset.x-form-label-left .x-fieldset-bwrap .x-fieldset-body div:nth-child(10) .x-form-element input.x-form-text.x-form-field{
 	float:right;
 }
-/*Fix for JIRA LCN-610: Reliability tab text fileds alignment */
-.x-panel.x-panel-noborder.x-border-panel#workorder-maintenance-wizard .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder.x-border-layout-ct .x-tab-panel.x-border-panel .x-tab-panel-bwrap .x-tab-panel-body.x-tab-panel-body-top .x-panel.x-panel-noborder:nth-child(2) .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder div.x-form-item .x-form-element .x-form-text.x-form-field{
-	float:right !important;
+
+/*Realibility tab symptom comment alignment */
+.x-tab-panel-body.x-tab-panel-body-top .x-panel.x-panel-noborder .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder div.x-form-item:nth-child(5) .x-form-element #workOrderSymptomCommentEditor{
+ float: right;
+}
+/*PIN Alignment in Work step performance*/
+#workorder-maintenance-wizard .indent.x-panel-body-noheader.x-panel-body-noborder.x-border-layout-ct .x-panel.x-panel-noborder.x-form-label-left.x-border-panel .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .x-panel-body.x-panel-body-noborder.x-form .x-fieldset.x-form-label-left .x-fieldset-bwrap .x-fieldset-body .x-panel:nth-child(2) .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-column-layout-ct .x-column-inner div:nth-child(2) .x-panel-bwrap .x-panel-body.x-panel-body-noheader .x-form-item{
+  margin-right: 30px;
 }
 /*********************************************************
 ***************WORK RECORDING MODULE ENDS HERE************
