@@ -54,11 +54,13 @@ import org.jaffa.loader.drools.DroolsManager;
 import org.jaffa.loader.messaging.JndiJmsManager;
 import org.jaffa.loader.messaging.MessagingManager;
 import org.jaffa.loader.scheduler.SchedulerManager;
+import org.jaffa.loader.soa.SoaEventConfigManager;
 import org.jaffa.loader.soa.SoaEventManager;
 import org.jaffa.loader.transaction.TransactionManager;
 import org.jaffa.modules.messaging.services.ConfigurationService;
 import org.jaffa.modules.scheduler.services.SchedulerConfiguration;
 import org.jaffa.soa.rules.ServiceRulesInterceptor;
+import org.jaffa.soa.services.SOAEventEnabledConfigurationImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -187,6 +189,23 @@ public class SoaLoaderConfig {
         DroolsManager droolsManager = new DroolsManager();
         ServiceRulesInterceptor.setDroolsManager(droolsManager);
         return droolsManager;
+    }
+
+    @Bean
+    public ResourceLoader<SoaEventConfigManager> soaEventConfigLoader() {
+        ResourceLoader<SoaEventConfigManager> soaEventConfigLoader = new ResourceLoader<>();
+        soaEventConfigLoader.setManager(soaEventConfigManager());
+        return soaEventConfigLoader;
+    }
+
+    /**
+     * @return Returns a ApplicationResourcesManager
+     */
+    @Bean
+    public SoaEventConfigManager soaEventConfigManager() {
+        SoaEventConfigManager soaEventConfigManager = new SoaEventConfigManager();
+        SOAEventEnabledConfigurationImpl.setSoaEventConfigManager(soaEventConfigManager);
+        return soaEventConfigManager;
     }
 }
 

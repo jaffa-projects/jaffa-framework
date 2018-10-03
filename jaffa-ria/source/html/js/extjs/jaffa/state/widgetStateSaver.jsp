@@ -184,7 +184,7 @@
 %>
 <%
     String currentUserId = request.getUserPrincipal().getName();
-    String pageRef = StringHelper.escapeJavascript(request.getParameter("pageRef"));
+    String pageRef = request.getParameter("pageRef");
     String eventId = StringHelper.escapeJavascript(request.getParameter("eventId"));
     String name = StringHelper.escapeJavascript(request.getParameter("name"));
     String data = StringHelper.escapeJavascript(request.getParameter("data"));
