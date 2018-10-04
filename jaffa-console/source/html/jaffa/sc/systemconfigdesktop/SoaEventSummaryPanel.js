@@ -81,8 +81,62 @@ SoaEventSummaryPanel = Ext.extend(Ext.Panel, {
                 autoHeight:true,
                 id:id+"_durableSubscribers",
                 items:[{
+                    xtype:'combo',
+                    fieldLabel:Labels.get('label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.selectTopicName'),
+                    triggerAction: 'all',
+                    name:'topicName',
+                    valueField: 'topicName',
+                    mode: 'local',
+                    displayField:'displayText',
+                    value:'OutboundEvents',
+                    store: new Ext.data.ArrayStore({
+                       fields: [
+                          'topicName',
+                          'displayText'
+                       ],
+                       data: [['OutboundEvents', 'Outbound Events'], ['PublicEvents', 'Public API Events']]
+                    }),
+                    listeners: {
+                        scope: this,
+                        select: function (combo, record) {
+                           if(record.data.topicName === params.topicName){
+                              return;
+                           }
+                           Ext.getCmp('topicHeader').setValue(Labels.get('label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.'+record.data.topicName+'.durableSubscribersDescription'));
+                           params.topicName=record.data.topicName;
+                           Ext.getCmp(id).getEl().mask(Labels.get('label.Jaffa.Mask.Loading'),'x-mask-loading');
+                           Ext.Ajax.request({
+                                url: 'jaffa/sc/systemconfigdesktop/topicAdmin.jsp',
+                                method: 'POST',
+                                params: {
+                                  topicName: record.data.topicName
+                                },
+                                success: function (result, request) {
+                                   var resultMessage;
+                                   var jsonData = Ext.util.JSON.decode(result.responseText);
+                                   if (jsonData.success) {
+                                       resultMessage = JSON.stringify(jsonData.data, null, 8);
+                                       var durableSubStore = Ext.getCmp(id + "_durableSubDetailsGrid").getStore();
+                                       durableSubStore.loadData(eval(resultMessage));
+                                   } else {
+                                       resultMessage = jsonData.data.result;
+                                       fnMessage(resultMessage, Labels.get('label.jaffaRIA.MessageBox.AlertErrorMsg'));
+                                   }
+                                   Ext.getCmp(id).getEl().unmask();
+                                },
+                                failure: function (result, request) {
+                                    var jsonData = Ext.util.JSON.decode(result.responseText);
+                                    var resultMessage = jsonData.data.result;
+                                    fnMessage(resultMessage, Labels.get('label.jaffaRIA.MessageBox.AlertErrorMsg'));
+                                    Ext.getCmp(id).getEl().unmask();
+                                }
+                           });
+                        }
+                    }
+                },{
                     xtype : 'displayfield',
-                    value : Labels.get('label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.durableSubscribersDescription')
+                    id:'topicHeader',
+                    value : Labels.get('label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.OutboundEvents.durableSubscribersDescription')
                 },durableSubGrid
                 ]
             },ruleGrid]

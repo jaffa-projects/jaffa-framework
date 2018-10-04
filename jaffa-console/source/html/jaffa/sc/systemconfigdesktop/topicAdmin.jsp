@@ -202,7 +202,7 @@
             InitialContext context = InitialContextFactrory.obtainInitialContext();
 
             // Subscribe to a Topic
-            Destination destination = (Destination) context.lookup("topic/OutboundEvents");
+			Destination destination = (Destination) context.lookup("topic/"+topicName);
 
             consumer = session.createDurableSubscriber((Topic)destination, subscriptionName, selector, false);
           
@@ -247,7 +247,7 @@
             InitialContext context = InitialContextFactrory.obtainInitialContext();
 
             // Subscribe to a Topic
-            Destination destination = (Destination) context.lookup("topic/OutboundEvents");
+            Destination destination = (Destination) context.lookup("topic/"+topicName);
 
             if(selector == null || "".equals(selector)){
                consumer = session.createDurableSubscriber((Topic)destination,subscriptionName);
