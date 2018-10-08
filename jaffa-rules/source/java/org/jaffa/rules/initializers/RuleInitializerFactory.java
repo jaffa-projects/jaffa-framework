@@ -2,6 +2,8 @@ package org.jaffa.rules.initializers;
 
 import org.apache.log4j.Logger;
 import org.jaffa.beans.factory.InitializerFactory;
+import org.jaffa.flexfields.FlexBean;
+import org.jaffa.flexfields.FlexClass;
 import org.jaffa.rules.RuleActorFactory;
 
 import java.util.ArrayList;
@@ -42,6 +44,19 @@ public class RuleInitializerFactory extends RuleActorFactory<Initializer> implem
      */
     private List<String> getClassNameList(Object object) {
         List<String> classNames = new ArrayList<>();
+        /** If object is FlexBean and there is no persistence object associated with it then use the FlexClass to find
+         *  metadata details.
+         */
+        if (object instanceof FlexBean) {
+            FlexBean flexBean = (FlexBean) object;
+            if (flexBean.getPersistentObject() == null) {
+                FlexClass flexClass = flexBean.getDynaClass() != null ? (FlexClass) flexBean.getDynaClass() : null;
+                if (flexClass != null) {
+                    classNames.add(flexClass.getName());
+                    return classNames;
+                }
+            }
+        }
         classNames.add(object.getClass().getName());
         Class superclass = object.getClass().getSuperclass();
 
