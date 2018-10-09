@@ -53,6 +53,8 @@ label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.DurableSubDetailsGrid.clientID
 label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.DurableSubDetailsGrid.subscriberName
 label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.DurableSubDetailsGrid.messageSelector
 label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.DurableSubDetailsGrid.pendingMessageSize
+label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.OutboundEvents.durableSubscribersDescription
+label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.PublicEvents.durableSubscribersDescription
 label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.RuleSetGrid.ruleSets
 label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.Show.alert
 label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.Subscription.alert
@@ -61,7 +63,6 @@ label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.Unsubscribe.confirm
 label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.clientId
 label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.consume
 label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.durableSubscribers
-label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.durableSubscribersDescription
 label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.eventTransactions
 label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.eventsInDatabase
 label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.jmsQueueJaffaHighVelocityQueueRunning
@@ -71,6 +72,7 @@ label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.messages
 label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.pollerConfig
 label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.refresh
 label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.schedulderRunning
+label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.selectTopicName
 label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.show
 label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.subscribe
 label.Jaffa.SC.SystemConfigDesktop.SoaEventSummay.subscriptionName

@@ -51,6 +51,7 @@ package org.jaffa.presentation.portlet.session;
 
 import java.io.BufferedOutputStream;
 import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import org.apache.log4j.Logger;
 import org.jaffa.presentation.portlet.widgets.taglib.ImageTag;
@@ -58,6 +59,7 @@ import org.jaffa.presentation.portlet.widgets.taglib.ImageTag;
 /**
  * This servlet is used to return an image contents, already stored in the UserSession, in the response stream
  */
+@WebServlet(value="/jaffa/getImage", name="getImage")
 public class GetImageServlet extends HttpServlet {
     
     /** Set up Logging for Log4J */

@@ -113,7 +113,6 @@ public class LifecycleHandlerConfig {
     /**
      * Populate factory with SOA events and scripts defined in the rules repository.
      */
-    @PostConstruct
     public void init() {
         addLifecycleHandlers(SoaEventRuleName);
         addLifecycleHandlers(ScriptRuleName);
