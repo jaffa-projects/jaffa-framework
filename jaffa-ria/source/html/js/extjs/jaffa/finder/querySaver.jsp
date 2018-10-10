@@ -85,11 +85,11 @@
     }
 %>
 <%
-    String pageRef = StringHelper.escapeJavascript(request.getParameter("pageRef"));
-    String eventId = StringHelper.escapeJavascript(request.getParameter("eventId"));
+    String pageRef = request.getParameter("pageRef");
+    String eventId = request.getParameter("eventId");
     Boolean isDefault = Boolean.valueOf(request.getParameter("isDefault"));
-    String queryName = StringHelper.escapeJavascript(request.getParameter("queryName"));
-    String data = StringHelper.escapeJavascript(request.getParameter("jsonData"));
+    String queryName = request.getParameter("queryName");
+    String data = request.getParameter("jsonData");
     boolean hasQueryName = queryName != null && queryName.length()>0;
 
     if ("saveQuery".equals(eventId) && hasQueryName) {
