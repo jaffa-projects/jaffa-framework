@@ -1106,7 +1106,11 @@ Ext.override(Ext.grid.GridView, {
                 meta.css = i === 0 ? 'x-grid3-cell-first ' : (i == last ? 'x-grid3-cell-last ' : '');
                 meta.attr = meta.cellAttr = '';
                 meta.style = column.style;
-                meta.value = Ext.util.Format.htmlEncode(column.renderer.call(column.scope, record.data[column.name], meta, record, rowIndex, i, store));
+                recordData = record.data[column.name];
+                if(typeof recordData == 'string'){
+                    recordData = Ext.util.Format.htmlEncode(record.data[column.name]);
+                }
+                meta.value = column.renderer.call(column.scope, recordData, meta, record, rowIndex, i, store);
                 if (column.editable && this.grid.getColumnModel().isCellEditable(i, rowIndex)) {
                     meta.editable = true;
                     meta.record = column.record;
