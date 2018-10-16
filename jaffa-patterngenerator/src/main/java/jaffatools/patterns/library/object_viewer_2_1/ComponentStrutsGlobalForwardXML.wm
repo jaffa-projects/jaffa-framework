@@ -1,0 +1,1 @@
+    <forward name="$(Application.Lower)_$(Module.Lower)_$(Component.JavaBeanStyle)" path="$(Application.Lower).$(Module.Lower).$(Component.Lower)"/>

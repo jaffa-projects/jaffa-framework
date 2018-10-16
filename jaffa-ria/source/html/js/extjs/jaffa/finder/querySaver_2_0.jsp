@@ -6,6 +6,7 @@
 <%@page import = "java.io.*,java.net.*,java.util.*" %>
 <%@page import = "org.jaffa.util.URLHelper,org.jaffa.util.MessageHelper,org.jaffa.security.SecurityTag, org.jaffa.session.ContextManagerFactory,org.jaffa.persistence.*,org.jaffa.ria.finder.domain.*,org.jaffa.presentation.portlet.component.ComponentDefinition,org.jaffa.presentation.portlet.component.componentdomain.Loader,net.sf.json.*,org.jaffa.util.JAXBHelper,javax.xml.bind.JAXBException,java.nio.charset.Charset" %>
 <%@page import = "org.apache.log4j.Logger" %>
+<%@ page import="org.jaffa.util.StringHelper" %>
 <%!
     private static final Logger log = Logger.getLogger("js.extjs.jaffa.querySaver");
     private static final String PROPERTY_USER_ID = "user.id";

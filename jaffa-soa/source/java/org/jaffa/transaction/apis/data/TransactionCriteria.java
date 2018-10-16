@@ -257,8 +257,8 @@ public class TransactionCriteria extends GraphCriteria {
      */
     @Override
     public Criteria returnQueryClause(Criteria nestedClause) {
-        setTableName(TransactionMeta.getName());
         Criteria c = super.returnQueryClause(nestedClause);
+        c.setTable(TransactionMeta.getName());
         FinderTx.addCriteria(getId(), TransactionMeta.ID, c);
         FinderTx.addCriteria(getDirection(), TransactionMeta.DIRECTION, c);
         

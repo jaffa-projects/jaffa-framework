@@ -1,0 +1,3 @@
+#foreach $screen in $Screens.values() #begin
+    <forward name="$(Module.Lower)_$(Component.Lower1)_$(screen.Name.Lower1)" path="$(Application.Lower).$(Module.Lower).$(Component.Lower).$(screen.Name.Lower1)"/>
+#end

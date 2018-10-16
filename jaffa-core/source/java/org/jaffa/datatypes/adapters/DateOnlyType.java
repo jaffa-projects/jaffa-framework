@@ -1,6 +1,7 @@
 package org.jaffa.datatypes.adapters;
 
 import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.UserType;
 import org.jaffa.datatypes.DateOnly;
 
@@ -32,9 +33,8 @@ public class DateOnlyType implements UserType {
         return o.hashCode();
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public Object nullSafeGet(ResultSet resultSet, String[] names, Object o) throws HibernateException, SQLException {
+    public Object nullSafeGet(ResultSet resultSet, String[] names, SessionImplementor s, Object o) throws HibernateException, SQLException {
         Timestamp timestamp = resultSet.getTimestamp(names[0]);
         if (resultSet.wasNull()) {
             return null;
@@ -42,9 +42,8 @@ public class DateOnlyType implements UserType {
         return new DateOnly(timestamp.getTime());
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public void nullSafeSet(PreparedStatement preparedStatement, Object o, int i) throws HibernateException, SQLException {
+    public void nullSafeSet(PreparedStatement preparedStatement, Object o, int i, SessionImplementor s) throws HibernateException, SQLException {
         if (o == null) {
             preparedStatement.setNull(i, Types.TIMESTAMP);
         }else{

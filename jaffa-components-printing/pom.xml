@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     
   <modelVersion>4.0.0</modelVersion>
   
   <parent>
     <groupId>org.jaffa</groupId>
-    <artifactId>jaffa-parent</artifactId>
-    <version>6.0.0-SNAPSHOT</version>
+    <artifactId>jaffa-framework</artifactId>
+    <version>7.0.13-SNAPSHOT</version>
   </parent>
 
   <groupId>org.jaffa</groupId>
@@ -18,12 +16,16 @@
 
   <dependencies>
     <!-- ******************************************************************* -->
-    <!-- Jaffa Core                                                          -->
+    <!-- Jaffa Core, SOA                                                          -->
     <!-- ******************************************************************* -->
     <dependency>
       <groupId>org.jaffa</groupId>
       <artifactId>jaffa-core</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.jaffa</groupId>
+      <artifactId>jaffa-soa</artifactId>
+    </dependency>	
     <!-- ******************************************************************* -->
     <!-- 3rd Party Libraries                                                 -->
     <!-- ******************************************************************* -->
@@ -41,7 +43,6 @@
     <dependency>
       <groupId>com.lowagie</groupId>
       <artifactId>itext</artifactId>
-	  <scope>provided</scope>
       <exclusions>
         <exclusion>
           <groupId>bouncycastle</groupId>
@@ -159,6 +160,33 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
       </plugin>
+
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.0.1</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <!-- here the phase you need -->
+            <phase>compile</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.outputDirectory}/META-INF/resources/help/datadic</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${project.basedir}/build/patterns/domain_creator_1_1</directory>
+                  <includes>
+                    <include>*</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
     </plugins>
   </build>
 

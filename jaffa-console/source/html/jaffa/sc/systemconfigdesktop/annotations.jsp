@@ -13,7 +13,9 @@ java.util.Enumeration,
 java.util.Iterator,
 java.util.LinkedHashSet,
 java.util.List,
+java.util.ArrayList,
 java.util.Map,
+java.util.HashMap,
 java.util.Properties,
 java.util.Set,
 javax.servlet.jsp.JspWriter,
@@ -44,6 +46,9 @@ org.jaffa.util.StringHelper' %>
 
 <%!
 private static final Logger log = Logger.getLogger("jaffa.sc.systemconfigdesktop.annotations");
+
+// to hold domain Object and its content
+private Map<String, Object> domainRulesMap = new HashMap<String, Object>();
 
 /** Convert the input to HTML compatible String. */
 private String toHtml(Object obj) {
@@ -112,7 +117,6 @@ private void showProperties(String className, JspWriter out, ServletContext serv
     for (String propertyName : propertyNames) {
       addPropertyMetaData(className, propertyName, buf, propertyName, servletContext);
     }
-
     if (buf.length() > 0)
       buf.append('\n');
     out.write(buf.toString());
@@ -237,35 +241,72 @@ private void addPropertyMetaData(String className, String propertyName, StringBu
     domainEnd = title.indexOf("}") + 1;
     String domainPreRule = title.substring(0,domainStart);
     String domainPostRule = title.substring(domainEnd);
-    String[] domainInfo;
-    domainInfo = title.substring(domainStart + 6, domainEnd - 1).split(":");
-    Criteria myCriteria = new Criteria();
-    UOW myUOW = null;
-    try {
-      myCriteria.setTable(domainInfo[1]);
-      myUOW = new UOW();
-      Iterator<Persistent> myCollection = myUOW.query(myCriteria).iterator();
-      while (myCollection.hasNext()){
-        String domainFieldValue = (String)BeanHelper.getField(myCollection.next(), domainInfo[2]);
-        buf.append(buf.length() > 0 ? "," : "  ");
-        buf.append('\'').append(toHtml(domainPreRule + domainFieldValue + domainPostRule)).append("': {\n");
-        buf.append("      type: '").append(type).append("'\n");
-        buf.append(sb);
-        buf.append("    }");
-      }
+    String[] domainInfo = title.substring(domainStart + 6, domainEnd - 1).split(":");
+    if (log.isDebugEnabled()) {
+       for(String s: domainInfo){
+          log.debug("DomainInfo :"+s);
+       }
     }
-    catch (Exception e){
-      log.error("Unable to split " + title + " :"+e);
-    }
-    finally {
-      if (myUOW!=null){
-         try {
-           myUOW.rollback();
-         }
-         catch (Exception e){
-           log.error("Failed to rollback UOW:"+e);
-         }
-      }
+
+	/**
+	*  caching the value in a map to avoid fetch per rule.
+	*/
+	if(!domainRulesMap.containsKey(domainInfo[1])) {
+        List<String> domainRuleList = new ArrayList<String>();
+        Criteria myCriteria = new Criteria();
+        UOW myUOW = null;
+        try {
+
+            myCriteria.setTable(domainInfo[1]);
+            /*
+            * Added group by to avoid fetching everything. Performance optimization.
+            * It will find the unique field value based on the provided field on rule.
+            */
+            myCriteria.addGroupBy(domainInfo[2],domainInfo[2]);
+            myUOW = new UOW();
+            Iterator<Persistent> myCollection = myUOW.query(myCriteria).iterator();
+            while (myCollection.hasNext()){
+                Map row = (Map)myCollection.next();
+                String domainFieldValue = (String)row.get(domainInfo[2]);
+                buf.append(buf.length() > 0 ? "," : "  ");
+                buf.append('\'').append(toHtml(domainPreRule + domainFieldValue + domainPostRule)).append("': {\n");
+                buf.append("      type: '").append(type).append("'\n");
+                buf.append(sb);
+                buf.append("    }");
+
+                // Appending the domainFieldValues to the domainRuleList list
+                domainRuleList.add(domainFieldValue);
+                if (log.isDebugEnabled()) {
+                   log.debug("DomainFieldValue : "+ domainFieldValue);
+                }
+            }
+            // Placing the domainRulename and its content in HashMap
+            domainRulesMap.put(domainInfo[1], domainRuleList);
+
+        } catch (Exception e){
+            log.error("Unable to split " + title + " :"+e);
+        } finally {
+            if (myUOW!=null){
+                try {
+                    myUOW.rollback();
+                }
+                catch (Exception e){
+                    log.error("Failed to rollback UOW:"+e);
+                }
+            }
+        }
+	} else if(domainRulesMap.containsKey(domainInfo[1])) {
+        List<String> domainContent = (List<String>)domainRulesMap.get(domainInfo[1]);
+        for(String domainFieldValue : domainContent){
+            buf.append(buf.length() > 0 ? "," : "  ");
+            buf.append('\'').append(toHtml(domainPreRule + domainFieldValue + domainPostRule)).append("': {\n");
+            buf.append("      type: '").append(type).append("'\n");
+            buf.append(sb);
+            buf.append("    }");
+            if (log.isDebugEnabled()) {
+               log.debug("DomainFieldValue : "+ domainFieldValue);
+            }
+        }
     }
   } else {
     buf.append(buf.length() > 0 ? "," : "  ");

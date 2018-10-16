@@ -71,8 +71,8 @@ Following  Changes done to get GOLDesp button in PUC
   NavAccessor nA = NavAccessor.getNavAccessor(request);
   
    boolean scriptTag = false;
- String cb = request.getParameter("callback");
- if (cb != null) {
+ String cb = StringHelper.escapeJavascript(request.getParameter("callback"));
+ if (cb != null && cb.trim().length() > 0) {
      scriptTag = true;
      response.setContentType("text/javascript");
  } else {

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+<!-- This dtd is DEPRECATED. It has been replaced with data-security-policy_1_1.dtd -->
+
+<!-- This dtd is used for validating the XML file for generating the sql scripts -->
+
+
+<!ELEMENT Domain (PatternTemplate,MappingPackage,SchemaName,BasePackage,Role?,BasePredicate?,Description?,Tables)>
+<!ELEMENT PatternTemplate (#PCDATA)>
+<!ELEMENT MappingPackage (#PCDATA)>
+<!ELEMENT SchemaName (#PCDATA)>
+<!ELEMENT BasePackage (#PCDATA)>
+<!ELEMENT Role (#PCDATA)>
+<!ELEMENT BasePredicate (#PCDATA)>
+<!ELEMENT Description (#PCDATA)>
+
+<!ELEMENT Tables (Table+)>
+
+<!ELEMENT Table (PolicyName,SourceTable,(Direct|Indirect|Custom))>
+<!ELEMENT PolicyName (#PCDATA)>
+<!ELEMENT Direct (SourceField)>
+<!ELEMENT Indirect (SourceField,ForeignTable,ForeignField)>
+<!ELEMENT Custom (Predicate)>
+
+
+<!ELEMENT SourceTable (#PCDATA)>
+<!ELEMENT SourceField (#PCDATA)>
+<!ELEMENT ForeignTable (#PCDATA)>
+<!ELEMENT ForeignField (#PCDATA)>
+<!ELEMENT Predicate (#PCDATA)>

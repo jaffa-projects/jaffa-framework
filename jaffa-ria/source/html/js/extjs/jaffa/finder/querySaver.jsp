@@ -6,6 +6,7 @@
 <%@page import = "java.io.*,java.net.*,java.util.*" %>
 <%@page import = "org.jaffa.util.URLHelper,org.jaffa.util.MessageHelper,org.jaffa.security.SecurityTag, org.jaffa.session.ContextManagerFactory" %>
 <%@page import = "org.apache.log4j.Logger" %>
+<%@ page import="org.jaffa.util.StringHelper" %>
 <%!
     private static final Logger log = Logger.getLogger("js.extjs.jaffa.querySaver");
     private static final String PROPERTY_USER_PREFERENCES_FOLDER = "user.preferences.folder";

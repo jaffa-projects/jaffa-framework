@@ -58,6 +58,7 @@ import java.util.Properties;
 
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNull;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 /**
@@ -75,8 +76,8 @@ public class ApplicationRulesXmlLoadTest {
     public void testXmlLoad() {
         ApplicationRulesManager applicationRulesManager = xmlLoaderConfig.getBean(ApplicationRulesManager.class);
         assertNotNull(applicationRulesManager.getApplicationRulesRepository());
-        Properties properties = applicationRulesManager.getApplicationRulesRepository().getAllValues().get(0);
-        assertFalse(properties.isEmpty());
+        String property = applicationRulesManager.getApplicationRulesRepository().getAllValues().get(0);
+        assertNotNull(property);
     }
 
     /**
@@ -85,16 +86,35 @@ public class ApplicationRulesXmlLoadTest {
      */
     @Test
     public void testApplicationRulesRegistration() {
-        ApplicationRulesManager navigationManager = xmlLoaderConfig.getBean(ApplicationRulesManager.class);
-        ContextKey key = new ContextKey("BNG", "Application_Rules", "DEF", "100-Highest");
-        assertNull(navigationManager.getApplicationRulesRepository().query(key));
-        Properties properties = new Properties();
-        properties.setProperty("test", "testValue");
-        properties.setProperty("test2", "testValue2");
+        ApplicationRulesManager applicationRulesManager = xmlLoaderConfig.getBean(ApplicationRulesManager.class);
+        ContextKey key = new ContextKey("test", "Application_Rules", "DEF", "100-Highest");
+        assertNull(applicationRulesManager.getApplicationRulesRepository().query(key));
 
-        navigationManager.registerProperties(key, properties);
-        assertNotNull(navigationManager.getApplicationRulesRepository().query(key));
-        navigationManager.unregisterProperties(key);
-        assertNull(navigationManager.getApplicationRulesRepository().query(key));
+        applicationRulesManager.registerProperties(key, "test1");
+        assertNotNull(applicationRulesManager.getApplicationRulesRepository().query(key));
+        applicationRulesManager.unregisterProperties(key);
+        assertNull(applicationRulesManager.getApplicationRulesRepository().query(key));
+    }
+
+    /**
+     * Tests the ability of this IManager to retrieve a repository when given its String name
+     */
+    @Test
+    public void testGetRepositoryByName() throws Exception {
+        ApplicationRulesManager applicationRulesManager = xmlLoaderConfig.getBean(ApplicationRulesManager.class);
+
+        String repo = "Properties";
+        assertEquals(repo, applicationRulesManager.getRepositoryByName(repo).getName());
+    }
+
+    /**
+     * Test the retrieval of the list of repositories managed by this class
+     */
+    @Test
+    public void testGetRepositoryNames() {
+        ApplicationRulesManager applicationRulesManager = xmlLoaderConfig.getBean(ApplicationRulesManager.class);
+        for (Object repositoryName : applicationRulesManager.getRepositoryNames()) {
+            assertEquals("Properties", applicationRulesManager.getRepositoryByName((String) repositoryName).getName());
+        }
     }
 }

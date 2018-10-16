@@ -89,7 +89,7 @@ public class CxfFunctionGuardInterceptorTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    //@Test
+    @Test
     public void testInterceptor() throws NoSuchMethodException, FrameworkException, ApplicationExceptions {
         // Mock the security manager
         PowerMockito.mockStatic(SecurityManager.class);

@@ -710,7 +710,7 @@ Jaffa.SC.FlexDetailPanel = Ext.extend(Ext.form.FormPanel,{
     flexObjectService.on("loadexception", function(proxy,response,callback,error){
       Ext.MessageBox.show({
         title: Labels.get('title.jaffaRIA.Error'),
-        msg: error.localizedMessage,
+        msg: Ext.util.Format.htmlEncode(error.localizedMessage),
         buttons: Ext.MessageBox.OK,
         icon: Ext.MessageBox.ERROR
       });

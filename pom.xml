@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-         http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-	
-	<parent>
+
+    <parent>
         <groupId>com.tapestrysolutions</groupId>
         <artifactId>tapestry-parent</artifactId>
-        <version>2.0.8</version>
+        <version>2.0.9</version>
     </parent>
 
     <groupId>org.jaffa</groupId>
-    <artifactId>jaffa-parent</artifactId>
-    <version>6.0.0-SNAPSHOT</version>
+    <artifactId>jaffa-framework</artifactId>
+    <version>7.0.13-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Java Application Framework For All</name>
@@ -31,13 +28,13 @@
     <inceptionYear>2003</inceptionYear>
 
     <properties>
-        <hibernate.version>3.6.10.Final</hibernate.version>
+        <hibernate.version>4.3.11.Final</hibernate.version>
         <ignite.version>1.4.0</ignite.version>
 
         <!-- ******************************************************************* -->
         <!-- Jaffa Maven Tools Version                                                       -->
         <!-- ******************************************************************* -->
-        <jaffa.maven.tools.version>1.0.0-SNAPSHOT</jaffa.maven.tools.version>
+        <jaffa.maven.tools.version>1.0.1</jaffa.maven.tools.version>
 
         <!-- ******************************************************************* -->
         <!-- UI Source Directory                                                 -->
@@ -47,11 +44,11 @@
         <!-- ******************************************************************* -->
         <!-- JAVA Compiler Options                                               -->
         <!-- ******************************************************************* -->
-        <javac.source>1.7</javac.source>
-        <javac.target>1.7</javac.target>
+        <javac.source>1.8</javac.source>
+        <javac.target>1.8</javac.target>
         <javac.compilerId>javac</javac.compilerId>
         <javac.fork>no</javac.fork>
-        <javac.executable></javac.executable>
+        <javac.executable />
         <javac.debug>true</javac.debug>
         <javac.debuglevel>source,lines,vars</javac.debuglevel>
         <javac.verbose>false</javac.verbose>
@@ -72,21 +69,21 @@
         <application.data.directory>${user.home}/${appname}/data</application.data.directory>
         <product.name>JAFFA</product.name>
         <product.instance>JAFFA</product.instance>
-        <product.server.id></product.server.id>
+        <product.server.id />
 
         <!-- ******************************************************************* -->
         <!-- Datasource Options                                                  -->
         <!-- ******************************************************************* -->
         <datasource.name>${appname}Datasource</datasource.name>
         <datasource.tx.name>${appname}TxDatasource</datasource.tx.name>
-        <datasource.connection.url></datasource.connection.url>
+        <datasource.connection.url />
         <datasource.connection.factory>
             org.jaffa.persistence.engines.jdbcengine.datasource.DbcpDataSourceConnectionFactory
         </datasource.connection.factory>
-        <datasource.driver.class></datasource.driver.class>
-        <datasource.user.name></datasource.user.name>
-        <datasource.user.password></datasource.user.password>
-        <datasource.engine></datasource.engine>
+        <datasource.driver.class />
+        <datasource.user.name />
+        <datasource.user.password />
+        <datasource.engine />
         <datasource.engine.hit.list.size>10</datasource.engine.hit.list.size>
         <datasource.pool.min.connections>1</datasource.pool.min.connections>
         <datasource.pool.max.connections>10</datasource.pool.max.connections>
@@ -96,7 +93,7 @@
         <!-- Log4j Options                                                       -->
         <!-- ******************************************************************* -->
         <log4j.url>${datasource.connection.url}</log4j.url>
-        <log4j.dbclass></log4j.dbclass>
+        <log4j.dbclass />
         <log4j.username>${datasource.user.name}</log4j.username>
         <log4j.password>${datasource.user.password}</log4j.password>
         <log4j.configuration>log4j.xml</log4j.configuration>
@@ -151,11 +148,14 @@
         <!-- maven-enforcer-plugin                                               -->
         <!-- ******************************************************************* -->
         <maven.min.version>3.3.9</maven.min.version>
-        <jdk.min.version>1.7</jdk.min.version>
+        <jdk.min.version>1.8</jdk.min.version>
 
         <!-- ******************************************************************* -->
         <!-- 3rd Party Libraries Versions                                        -->
         <!-- ******************************************************************* -->
+        <version.maven.plugin.annotations>3.3</version.maven.plugin.annotations>
+        <version.maven.core>3.0.2</version.maven.core>
+
         <version.com.google.guava>19.0</version.com.google.guava>
         <version.com.joilbox>0.8.0.RELEASE</version.com.joilbox>
         <version.bsf>2.4.0</version.bsf>
@@ -208,7 +208,7 @@
         <version.org.apache.xmlbeans>2.6.0</version.org.apache.xmlbeans>
         <version.org.awake-sql>1.0.5</version.org.awake-sql>
         <version.org.beanshell.bsh>2.0b5</version.org.beanshell.bsh>
-        <version.org.directwebremoting.dwr-osgi>2.0.5</version.org.directwebremoting.dwr-osgi>
+        <version.org.directwebremoting.dwr>2.0.10</version.org.directwebremoting.dwr>
         <version.org.drools.drools-compiler>4.0.7</version.org.drools.drools-compiler>
         <version.org.drools.drools-core>4.0.7</version.org.drools.drools-core>
         <version.org.drools.knowledge-api>5.6.0.Final</version.org.drools.knowledge-api>
@@ -219,6 +219,7 @@
         <version.org.quartz-scheduler.quartz-oracle>2.1.7</version.org.quartz-scheduler.quartz-oracle>
         <version.org.javassist>3.18.1-GA</version.org.javassist>
         <version.org.jrobin>1.5.9</version.org.jrobin>
+        <version.org.owasp.encoder>1.2</version.org.owasp.encoder>
         <version.oro>2.0.8</version.oro>
         <version.struts>1.2.7</version.struts>
         <version.trove>1.0.2</version.trove>
@@ -261,7 +262,7 @@
         <version.javancss.plugin>2.0</version.javancss.plugin>
         <version.jdepend.plugin>2.0-beta-2</version.jdepend.plugin>
         <version.jxr.plugin>2.3</version.jxr.plugin>
-        <version.license.plugin>1.0</version.license.plugin>
+        <version.license.plugin>1.13</version.license.plugin>
         <version.pir.plugin>2.2</version.pir.plugin>
         <!-- maven-project-info-reports-plugins -->
         <version.plugin.plugin>2.9</version.plugin.plugin>
@@ -270,11 +271,11 @@
         <version.maven.project.info.reports.plugin>2.5.1</version.maven.project.info.reports.plugin>
         <version.pmd.plugin>2.7.1</version.pmd.plugin>
         <version.rar.plugin>2.2</version.rar.plugin>
-        <version.release.plugin>2.4.1</version.release.plugin>
+        <version.release.plugin>2.5.2</version.release.plugin>
         <version.resources.plugin>2.5</version.resources.plugin>
         <version.shade.plugin>1.5</version.shade.plugin>
         <version.site.plugin>3.3</version.site.plugin>
-        <version.sonar.plugin>2.0</version.sonar.plugin>
+        <version.sonar.plugin>2.4</version.sonar.plugin>
         <version.source.plugin>2.2.1</version.source.plugin>
         <version.surefire.plugin>2.15</version.surefire.plugin>
         <version.taglist.plugin>2.4</version.taglist.plugin>
@@ -289,15 +290,15 @@
         <!-- ******************************************************************* -->
         <!-- CI Management Parameters                                            -->
         <!-- ******************************************************************* -->
-        <ci.system.name></ci.system.name>
-        <ci.system.url></ci.system.url>
-        <ci.notifiers.address></ci.notifiers.address>
+        <ci.system.name />
+        <ci.system.url />
+        <ci.notifiers.address />
 
         <!-- ******************************************************************* -->
         <!-- Site Parameters                                                     -->
         <!-- ******************************************************************* -->
-        <site.id></site.id>
-        <site.url></site.url>
+        <site.id />
+        <site.url />
     </properties>
 
     <licenses>
@@ -676,7 +677,7 @@
                         <compilerArguments>
                             <source>${javac.source}</source>
                             <target>${javac.target}</target>
-                            <Xlint/>
+                            <Xlint />
                         </compilerArguments>
                         <source>${javac.source}</source>
                         <target>${javac.target}</target>
@@ -1066,7 +1067,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                                 <!-- Configure m2e to execute the manifest goal of the bundle plugin, if present. -->
@@ -1081,7 +1082,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                                 <!-- Configure m2e to ignore the Maven enforcer plugin -->
@@ -1095,7 +1096,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                                 <!-- Configure m2e to ignore the buildnumber-maven-plugin. -->
@@ -1110,7 +1111,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                                 <!-- Configure m2e to ignore the maven-dependency-plugin. -->
@@ -1127,7 +1128,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                                 <!-- Configure m2e to ignore the maven-aop-plugin. -->
@@ -1143,7 +1144,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore></ignore>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
@@ -1403,6 +1404,17 @@
 
     <dependencyManagement>
         <dependencies>
+          <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>${version.maven.core}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+            <version>${version.maven.plugin.annotations}</version>
+            <scope>provided</scope>
+          </dependency>
           <dependency>
             <groupId>com.jolbox</groupId>
             <artifactId>bonecp-spring</artifactId>
@@ -1748,6 +1760,11 @@
                 <version>${version.org.jrobin}</version>
             </dependency>
             <dependency>
+                <groupId>org.owasp.encoder</groupId>
+                <artifactId>encoder</artifactId>
+                <version>${version.org.owasp.encoder}</version>
+            </dependency>
+            <dependency>
                 <groupId>jmock</groupId>
                 <artifactId>jmock</artifactId>
                 <version>1.0.1</version>
@@ -1826,8 +1843,8 @@
             </dependency>
             <dependency>
                 <groupId>org.directwebremoting</groupId>
-                <artifactId>dwr-osgi</artifactId>
-                <version>${version.org.directwebremoting.dwr-osgi}</version>
+                <artifactId>dwr</artifactId>
+                <version>${version.org.directwebremoting.dwr}</version>
             </dependency>
             <dependency>
                 <groupId>org.drools</groupId>
@@ -1838,16 +1855,6 @@
                 <groupId>org.drools</groupId>
                 <artifactId>drools-core</artifactId>
                 <version>${version.org.drools.drools-core}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.drools</groupId>
-                <artifactId>knowledge-api</artifactId>
-                <version>${version.org.drools.knowledge-api}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.drools</groupId>
-                <artifactId>knowledge-internal-api</artifactId>
-                <version>${version.org.drools.knowledge-internal-api}</version>
             </dependency>
             <dependency>
                 <groupId>org.fusesource.hawtbuf</groupId>
@@ -1959,11 +1966,6 @@
                 <artifactId>spring-test</artifactId>
                 <version>${version.springframework}</version>
             </dependency>
-            <dependency>
-                <groupId>org.codehaus.groovy</groupId>
-                <artifactId>groovy-all</artifactId>
-                <version>${version.groovy-all}</version>
-            </dependency>
             <!-- ******************************************************************* -->
             <!-- Jaffa Libraries                                                     -->
             <!-- ******************************************************************* -->
@@ -2039,6 +2041,7 @@
                 </property>
             </activation>
             <modules>
+                <module>jaffa-api</module>
                 <module>jaffa-assemblies</module>
                 <module>jaffa-components</module>
                 <module>jaffa-components-admin</module>
@@ -2049,17 +2052,18 @@
                 <module>jaffa-console</module>
                 <module>jaffa-core</module>
                 <module>jaffa-dwr</module>
+                <module>jaffa-patterngenerator</module>
                 <module>jaffa-ria</module>
                 <module>jaffa-rules</module>
                 <module>jaffa-soa</module>
-                <!--<module>patterns</module>-->
             </modules>
         </profile>
     </profiles>
 
     <scm>
-        <connection>scm:git:https://tapljs482.tapestry.local/jaffa/jaffa-framework</connection>
-        <developerConnection>scm:git:https://tapljs482.tapestry.local/jaffa/jaffa-framework</developerConnection>
-    </scm>
+        <connection>scm:git:https://tapljs482.tapestry.local/jaffa/jaffa-framework.git</connection>
+        <developerConnection>scm:git:https://tapljs482.tapestry.local/jaffa/jaffa-framework.git</developerConnection>
+      <tag>HEAD</tag>
+  </scm>
 
 </project>

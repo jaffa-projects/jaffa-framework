@@ -1,0 +1,286 @@
+<%-- ----------------------------------------------------------------
+  -- Code Generated From JAFFA Framework Default Pattern           --
+  --                                                               --
+  -- The JAFFA Project can be found at http://jaffa.sourceforge.net--
+  -- and is available under the Lesser GNU Public License          --
+  -- ------------------------------------------------------------- --%>
+<%@ page language="java" %>
+<%@ page import="org.jaffa.presentation.portlet.widgets.taglib.TagHelper" %>
+<%@ page import="org.jaffa.util.StringHelper" %>
+<%@ page import="$(BasePackage.Lower).components.$(Component.Lower).ui.$(Component.Upper1)Form" %>
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/WEB-INF/jaffa-portlet.tld" prefix="Portlet" %>
+
+<html:html>
+    <HEAD>
+
+#if ($(Title) != null && $(Title) != "") #begin
+        <TITLE><Portlet:Label key="$(Title)"/></TITLE>
+#end
+	<LINK href="jaffa/css/jaffa.css" type="text/css" rel="StyleSheet">
+        <Portlet:Header/>
+    </HEAD>
+
+    <BODY leftMargin="0" topMargin="0" marginwidth="0" marginheight="0">
+        <Portlet:Form action="/$(Module.Lower)_$(Component.Lower1)">
+<table class="outer" width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+  <!-- this is the outer table that contains the inner screens in each cell -->
+  <tr>
+    <td> <table class="header" width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+        <!-- this table contains the header block-->
+        <tr>
+          <td class="left"></td>
+          <td class="middle"><Portlet:Label key="$(Title)"/></td>
+          <td class="right"></td>
+        </tr>
+      </table></td>
+  </tr>
+  <tr>
+    <td> <table class="window" width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+        <!-- this table contains the main body -->
+        <tr>
+          <td>
+        <table align="center" width="70%">
+              <tr>
+
+#foreach $field in $ResultsFields.values() #begin
+#if ($(field.Display.Lower) == "true") #begin
+#if ($(field.FunctionGuardName) != null) #begin
+            <Portlet:FunctionGuard name="$(field.FunctionGuardName)">
+#end
+            <tr>
+                <td align="right" width="200" class="label">
+
+#if ($field.Label != null && $field.Label.Lower != "") #begin
+                    <Portlet:Label key="$(field.Label)"/>:
+#elseif ($field.SourceChain != null) #begin
+#foreach $source in $field.SourceChain.values() #begin
+#end
+                    <Portlet:Label domain="$(source.Package.Lower).$(source.Object.Upper1)" field="$(field.DomainField)"/>:
+#else
+                    <Portlet:Label domain="$(DomainPackage.Lower).$(DomainObject.Upper1)" field="$(field.DomainField)"/>:
+#end
+                </td>
+                <td align="left">
+
+#if ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") #begin
+                    <Portlet:CheckBox field="$(field.Name.Lower1)" displayOnly="true"/>
+#else
+#set $wm_textAttributes = ""
+#if ($field.Layout != null && $field.Layout.Lower != "") #begin
+#set $wm_textAttributes = "layout=\"$(field.Layout)\""
+#else
+#if ($field.SourceChain != null) #begin
+#foreach $source in $field.SourceChain.values() #begin #end
+#set $wm_domain = "$(source.Package.Lower).$(source.Object.Upper1)"
+#else
+#set $wm_domain = "$(DomainPackage.Lower).$(DomainObject.Upper1)"
+#end
+#set $wm_textAttributes = "domain=\"$(wm_domain)\" domainField=\"$(field.DomainField.Upper1)\""
+#end
+                    <Portlet:Text field="$(field.Name.Lower1)" $(wm_textAttributes)/>
+#end
+
+#if ($(field.AppendField) != null) #begin
+#set $wm_appendBeginMarker = "\"\""
+#set $wm_appendEndMarker = "\"\""
+#if ($field.AppendField.AppendBeginMarker != null) #begin
+#set $wm_appendBeginMarker = "\"$(field.AppendField.AppendBeginMarker)\""
+#end
+#if ($field.AppendField.AppendEndMarker != null) #begin
+#set $wm_appendEndMarker = "\"$(field.AppendField.AppendEndMarker)\""
+#end
+#if ($field.AppendField.AppendBeginMarker == null && $field.AppendField.AppendEndMarker == null) #begin
+#set $wm_appendBeginMarker = "StringHelper.getDefaultDescriptionBeginMarker()"
+#set $wm_appendEndMarker = "StringHelper.getDefaultDescriptionEndMarker()"
+#end
+#foreach $field2 in $ResultsFields.values() #begin
+#if ($field2.Name.Lower1 == $field.AppendField.Name.Lower1) #begin
+#set $wm_appendField = $field2
+#end
+#end
+#if ($(wm_appendField.DataType.Upper) == "BOOLEAN" || $(wm_appendField.DataType.Upper) == "BIT") #begin
+                    <%= $(wm_appendBeginMarker) %><Portlet:CheckBox field="$(field.AppendField.Name.Lower1)" displayOnly="true"/><%= $(wm_appendEndMarker) %>
+#else
+#set $wm_parameters = "(($(Component.Upper1)Form) TagHelper.getFormBase(pageContext)).get$(field.AppendField.Name.Upper1)()"
+#if ($wm_appendField.Layout != null && $wm_appendField.Layout.Lower != "") #begin
+#set $wm_parameters = "$(wm_parameters), \"$(wm_appendField.Layout)\""
+#else
+#set $wm_parameters = "$(wm_parameters), null"
+#end
+#if ($wm_appendField.SourceChain != null) #begin
+#foreach $source in $wm_appendField.SourceChain.values() #begin #end
+#set $wm_domain = "$(source.Package.Lower).$(source.Object.Upper1)"
+#else
+#set $wm_domain = "$(DomainPackage.Lower).$(DomainObject.Upper1)"
+#end
+#set $wm_parameters = "$(wm_parameters), \"$(wm_domain)\", \"$(wm_appendField.DomainField.Upper1)\", true, $(wm_appendBeginMarker), $(wm_appendEndMarker)"
+                    <%= StringHelper.formatDescription($(wm_parameters)) %>
+#end
+#end
+                </td>
+
+#if ($(field.Viewer) != null) #begin
+                <td align="right"><Portlet:ComponentGuard name="$(field.Viewer.ComponentName)">
+                    <Portlet:Button field="$(field.Name.Upper1)Viewer" label="[label.Jaffa.Widgets.Button.View]" type="sized" target="_blank"/>
+                </Portlet:ComponentGuard></td>
+#else
+                <td align="right"></td>
+#end
+            </tr>
+
+#if ($(field.FunctionGuardName) != null) #begin
+            </Portlet:FunctionGuard>
+#end
+#end
+#end
+        </table>
+
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($(object.FunctionGuardName) != null) #begin
+        <Portlet:FunctionGuard name="$(object.FunctionGuardName)">
+#end
+        <BR>
+        <BR>
+
+        <table width="95%" algin="center">
+        <tr>
+        <td>
+#if ($object.RelatedObjectViewer == null) #begin
+        <Portlet:UserGrid field="related$(object.ObjectName.Upper1)" userGridId="$(Module.Lower)_$(Component.Lower1)_$(object.ObjectName.Lower1)">
+#else
+        <Portlet:UserGrid field="related$(object.ObjectName.Upper1)" userGridId="$(Module.Lower)_$(Component.Lower1)_$(object.ObjectName.Lower1)" detail="true" target="_blank">
+#end
+
+#foreach $field in $object.RelatedObjectFields.values() #begin
+#set $wm_dataType = ""
+#if ($(field.DataType.Upper) == "STRING" || $(field.DataType.Upper) == "VARCHAR" || $(field.DataType.Upper) == "LONGSTRING" || $(field.DataType.Upper) == "LONGVARCHAR" || $(field.DataType.Upper) == "CLOB") #begin
+#set $wm_dataType = "CaseInsensitiveString"
+#elseif ($(field.DataType.Upper) == "INTEGER" || $(field.DataType.Upper) == "BIGINT") #begin
+#set $wm_dataType = "Number"
+#elseif ($(field.DataType.Upper) == "DECIMAL" || $(field.DataType.Upper) == "DOUBLE") #begin
+#set $wm_dataType = "Number"
+#elseif ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") #begin
+#set $wm_dataType = "CaseInsensitiveString"
+#elseif ($(field.DataType.Upper) == "DATE_ONLY" || $(field.DataType.Upper) == "DATEONLY") #begin
+#set $wm_dataType = "Date"
+#elseif ($(field.DataType.Upper) == "DATE_TIME" || $(field.DataType.Upper) == "DATETIME") #begin
+#set $wm_dataType = "Date"
+#elseif ($(field.DataType.Upper) == "CURRENCY") #begin
+#set $wm_dataType = "Number"
+#elseif ($(field.DataType.Upper) == "RAW" || $(field.DataType.Upper) == "LONGRAW" || $(field.DataType.Upper) == "BLOB") #begin
+#set $wm_dataType = "CaseInsensitiveString"
+#end
+#set $wm_displayAsKey = ""
+#if ($field.DisplayAsKey != null && $field.DisplayAsKey.Lower == "true") #begin
+#set $wm_displayAsKey = "key=\"true\""
+#end
+#if ($(field.Display.Lower) == "true") #begin
+#if ($(field.FunctionGuardName) != null) #begin
+            <Portlet:FunctionGuard name="$(field.FunctionGuardName)">
+#end
+            <Portlet:UserGridColumn label="$(field.Label)" dataType="$(wm_dataType)" $(wm_displayAsKey)>
+
+#if ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") #begin
+                <Portlet:CheckBox field="$(field.Name.Lower1)" displayOnly="true"/>
+#else
+#set $wm_textAttributes = ""
+#if ($field.Layout != null && $field.Layout.Lower != "") #begin
+#set $wm_textAttributes = "layout=\"$(field.Layout)\""
+#else
+#if ($field.SourceChain != null) #begin
+#foreach $source in $field.SourceChain.values() #begin #end
+#set $wm_domain = "$(source.Package.Lower).$(source.Object.Upper1)"
+#else
+#set $wm_domain = "$(object.Package.Lower).$(object.ObjectName.Upper1)"
+#end
+#set $wm_textAttributes = "domain=\"$(wm_domain)\" domainField=\"$(field.DomainField.Upper1)\""
+#end
+                <Portlet:Text field="$(field.Name.Lower1)" $(wm_textAttributes)/>
+#end
+
+#if ($(field.AppendField) != null) #begin
+#set $wm_appendBeginMarker = "\"\""
+#set $wm_appendEndMarker = "\"\""
+#if ($field.AppendField.AppendBeginMarker != null) #begin
+#set $wm_appendBeginMarker = "\"$(field.AppendField.AppendBeginMarker)\""
+#end
+#if ($field.AppendField.AppendEndMarker != null) #begin
+#set $wm_appendEndMarker = "\"$(field.AppendField.AppendEndMarker)\""
+#end
+#if ($field.AppendField.AppendBeginMarker == null && $field.AppendField.AppendEndMarker == null) #begin
+#set $wm_appendBeginMarker = "StringHelper.getDefaultDescriptionBeginMarker()"
+#set $wm_appendEndMarker = "StringHelper.getDefaultDescriptionEndMarker()"
+#end
+#foreach $field2 in $object.RelatedObjectFields.values() #begin
+#if ($field2.Name.Lower1 == $field.AppendField.Name.Lower1) #begin
+#set $wm_appendField = $field2
+#end
+#end
+#if ($(wm_appendField.DataType.Upper) == "BOOLEAN" || $(wm_appendField.DataType.Upper) == "BIT") #begin
+                    <%= $(wm_appendBeginMarker) %><Portlet:CheckBox field="$(field.AppendField.Name.Lower1)" displayOnly="true"/><%= $(wm_appendEndMarker) %>
+#else
+#set $wm_parameters = "TagHelper.getModelMap(pageContext).get(\"$(field.AppendField.Name.Lower1)\")"
+#if ($wm_appendField.Layout != null && $wm_appendField.Layout.Lower != "") #begin
+#set $wm_parameters = "$(wm_parameters), \"$(wm_appendField.Layout)\""
+#else
+#set $wm_parameters = "$(wm_parameters), null"
+#end
+#if ($wm_appendField.SourceChain != null) #begin
+#foreach $source in $wm_appendField.SourceChain.values() #begin #end
+#set $wm_domain = "$(source.Package.Lower).$(source.Object.Upper1)"
+#else
+#set $wm_domain = "$(object.Package.Lower).$(object.ObjectName.Upper1)"
+#end
+#set $wm_parameters = "$(wm_parameters), \"$(wm_domain)\", \"$(wm_appendField.DomainField.Upper1)\", true, $(wm_appendBeginMarker), $(wm_appendEndMarker)"
+                    <%= StringHelper.formatDescription($(wm_parameters)) %>
+#end
+#end
+            </Portlet:UserGridColumn>
+
+#if ($(field.FunctionGuardName) != null) #begin
+            </Portlet:FunctionGuard>
+#end
+#end
+#end
+
+#if ($object.RelatedObjectViewer != null) #begin
+        <Portlet:ComponentGuard name="$(object.RelatedObjectViewer.ComponentName)">
+            <Portlet:UserGridColumn label="[label.Jaffa.Widgets.Button.View]">
+	        <Portlet:Button field="View" label="[label.Jaffa.Widgets.Button.View]" image="jaffa/imgs/icons/detail.gif" target="_blank"/>
+            </Portlet:UserGridColumn>
+        </Portlet:ComponentGuard>
+#end
+        </Portlet:UserGrid>
+        </td>
+        </tr>
+        </table>
+
+#if ($(object.FunctionGuardName) != null) #begin
+        </Portlet:FunctionGuard>
+#end
+#end
+#end
+
+<BR> <center>
+              <Portlet:Button field="Close" type="sized" label="[label.Jaffa.Widgets.Button.Close]" preprocess="false"/></center></td>
+        </tr>
+      </table>
+  <tr>
+    <td> <table class="footer" cellpadding="0" cellspacing="0" border="0">
+        <!-- this table contains the footer of the first screen -->
+        <tr>
+          <td class="left"></td>
+          <td class="middle"></td>
+          <td class="right"></td>
+        </tr>
+      </table></td>
+  </tr>
+</table>
+        <Portlet:RaiseErrors/>
+        </Portlet:Form>
+        <Portlet:Footer/>
+    </BODY>
+</html:html>

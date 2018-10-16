@@ -77,6 +77,7 @@ import org.jaffa.rules.IPropertyRuleIntrospector;
 import org.jaffa.rules.IRulesEngine;
 import org.jaffa.rules.RulesEngineFactory;
 import org.jaffa.security.SecurityManager;
+import org.owasp.encoder.Encode;
 
 /** Utility Class for Common String Manipulation routines.
  *
@@ -347,7 +348,18 @@ public class StringHelper {
      * @return  converted string.
      */
     public static String escapeJavascript(String s) {
-        return s == null ? "" : s.replace("\\", "\\\\").replace("'", "\\'").replace("\"", "\\\"");
+        return s!=null ? Encode.forJavaScript(s) : "";
+    }
+
+    /**
+     * Convenience method to ensure that a scripting attack is not mounted by escaping the input.
+     * This is intended for use where the target UI is html.
+     *
+     * @param s String to convert.
+     * @return  converted string.
+     */
+    public static String escapeHtml(String s) {
+        return Encode.forHtml(s);
     }
 
     /**

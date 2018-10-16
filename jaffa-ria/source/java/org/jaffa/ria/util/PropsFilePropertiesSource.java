@@ -49,7 +49,9 @@
 package org.jaffa.ria.util;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.jaffa.util.OrderedPathMatchingResourcePatternResolver;
@@ -88,6 +90,7 @@ public class PropsFilePropertiesSource extends net.jawr.web.resource.bundle.fact
 	private static final Logger log = Logger.getLogger(PropsFilePropertiesSource.class);
 	private static final String JAWR_PROPS_NOT_FOUND = "jawr configuration could not be found at JAR!META-INF/jawr.properties";
 	private static final String NO_JAWR_PROPS = "jawr configuration could not be found either in default location or in JAR!META-INF/jawr.properties";
+	private static final String BASE_KEY_DNE = "could not append jawr.property to base key as base key is missing, %s";
 	private String defaultConfigLocation;
 	
 	/**
@@ -120,7 +123,7 @@ public class PropsFilePropertiesSource extends net.jawr.web.resource.bundle.fact
 						log.debug("Properties Resource Location: " + resource.getURL());
 					}
 					if (resource != null && resource.getInputStream() != null) {
-						properties.load(resource.getInputStream());
+						properties.load(resource.getInputStream()); //here
 					}
 				}
 			} else {
@@ -133,7 +136,38 @@ public class PropsFilePropertiesSource extends net.jawr.web.resource.bundle.fact
 		if (properties.size() == 0) {
 			throw new RuntimeException(NO_JAWR_PROPS);
 		}
+
+		//JAFFA-531
+		List<String> appendedProps = properties.keySet().stream()
+				.map(Object::toString)
+				.filter(s -> s.endsWith("+"))
+				.collect(Collectors.toList());
+		for(String key : appendedProps){
+			String originalKey = key.substring(0,key.length()-1);
+			if(!properties.containsKey(originalKey)){
+				log.error(String.format(BASE_KEY_DNE, originalKey));
+			} else {
+				String valueToAppend = getPropertyObjectString(properties.get(key));
+				StringBuilder originalValue = new StringBuilder(getPropertyObjectString(properties.get(originalKey)));
+
+				if (originalValue.length() > 0 && valueToAppend.length() > 0) {
+					originalValue.append(", ");
+				}
+				properties.setProperty(originalKey, originalValue.append(valueToAppend).toString());
+				if(log.isDebugEnabled()){
+					log.debug("Appending " + valueToAppend + " to jawr property " + originalKey );
+				}
+				properties.remove(key);
+			}
+		}
 		return properties;
+	}
+
+	private String getPropertyObjectString(Object o){
+		if(o != null && o.toString() != null){
+			return o.toString();
+		}
+		return "";
 	}
 
 	/**

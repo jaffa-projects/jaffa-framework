@@ -56,6 +56,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -78,6 +79,7 @@ import org.apache.log4j.Logger;
  * @author PaulE
  * @version 1.0
  */
+@WebServlet(value="/jaffa/admin/fileexplorer/download", name="FileExplorerDownload")
 public class FileExplorerDownload extends HttpServlet {
 
     private static Logger log = Logger.getLogger(FileExplorerDownload.class);

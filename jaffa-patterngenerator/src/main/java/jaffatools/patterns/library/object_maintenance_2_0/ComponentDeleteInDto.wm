@@ -1,0 +1,166 @@
+#set $wm_useForDirtyReadCheckField = null
+#foreach $field in $Fields.values() #begin
+#if ($field.UseForDirtyReadCheck != null && $field.UseForDirtyReadCheck.BooleanValue) #begin
+#if ($field.RelatedObjectName == null) #begin
+#set $wm_useForDirtyReadCheckField = $field
+#end
+#end
+#end
+// .//GEN-BEGIN:_1_be
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ * 
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/ 
+package $(BasePackage.Lower).components.$(Component.Lower).dto;
+
+import java.util.*;
+import org.jaffa.components.dto.HeaderDto;
+// .//GEN-END:_1_be
+// Add additional imports//GEN-FIRST:_imports
+
+
+
+
+// .//GEN-LAST:_imports
+// .//GEN-BEGIN:_2_be
+/** The input for the $(Component.Upper1).
+ */
+public class $(Component.Upper1)DeleteInDto {
+
+    /** Holds value of property headerDto. */
+    private HeaderDto headerDto;
+
+    /** Holds value of property performDirtyReadCheck. */
+    private Boolean performDirtyReadCheck;
+
+
+#foreach $field in $KeyFields.values() #begin
+    /** Holds value of property $(field.Name.Lower1). */
+    private $(field.DataType.JavaDataType) $(field.Name.Lower1);
+
+#end
+
+#if ($wm_useForDirtyReadCheckField != null) #begin
+#set $field = $wm_useForDirtyReadCheckField
+    /** Holds value of property $(field.Name.Lower1). */
+    private $(field.DataType.JavaDataType) $(field.Name.Lower1);
+
+#end
+
+    /** Getter for property headerDto.
+     * @return Value of property headerDto.
+     */
+    public HeaderDto getHeaderDto() {
+        return headerDto;
+    }
+    
+    /** Setter for property headerDto.
+     * @param headerDto New value of property headerDto.
+     */
+    public void setHeaderDto(HeaderDto headerDto) {
+        this.headerDto = headerDto;
+    }
+    
+    /** Getter for property performDirtyReadCheck.
+     * @return Value of property performDirtyReadCheck.
+     */
+    public Boolean getPerformDirtyReadCheck() {
+        return performDirtyReadCheck;
+    }
+    
+    /** Setter for property performDirtyReadCheck.
+     * @param performDirtyReadCheck New value of property performDirtyReadCheck.
+     */
+    public void setPerformDirtyReadCheck(Boolean performDirtyReadCheck) {
+        this.performDirtyReadCheck = performDirtyReadCheck;
+    }
+
+
+
+#foreach $field in $KeyFields.values() #begin
+    /** Getter for property $(field.Name.Lower1).
+     * This property is used when performing the dirty read check.
+     * @return Value of property $(field.Name.Lower1).
+     */
+    public $(field.DataType.JavaDataType) get$(field.Name.Upper1)() {
+        return $(field.Name.Lower1);
+    }
+    
+    /** Setter for property $(field.Name.Lower1).
+     * This property is used when performing the dirty read check.
+     * @param $(field.Name.Lower1) New value of property $(field.Name.Lower1).
+     */
+    public void set$(field.Name.Upper1)($(field.DataType.JavaDataType) $(field.Name.Lower1)) {
+
+#if ($(field.DataType.DataTypeString)) #begin
+        if ($(field.Name.Lower1) == null || $(field.Name.Lower1).length() == 0)
+            this.$(field.Name.Lower1) = null;
+        else
+            this.$(field.Name.Lower1) = $(field.Name.Lower1);
+#else
+        this.$(field.Name.Lower1) = $(field.Name.Lower1);
+#end
+    }
+
+#end
+
+#if ($wm_useForDirtyReadCheckField != null) #begin
+#set $field = $wm_useForDirtyReadCheckField
+    /** Getter for property $(field.Name.Lower1).
+     * @return Value of property $(field.Name.Lower1).
+     */
+    public $(field.DataType.JavaDataType) get$(field.Name.Upper1)() {
+        return $(field.Name.Lower1);
+    }
+    
+    /** Setter for property $(field.Name.Lower1).
+     * @param $(field.Name.Lower1) New value of property $(field.Name.Lower1).
+     */
+    public void set$(field.Name.Upper1)($(field.DataType.JavaDataType) $(field.Name.Lower1)) {
+
+#if ($(field.DataType.DataTypeString)) #begin
+        if ($(field.Name.Lower1) == null || $(field.Name.Lower1).length() == 0)
+            this.$(field.Name.Lower1) = null;
+        else
+            this.$(field.Name.Lower1) = $(field.Name.Lower1);
+#else
+        this.$(field.Name.Lower1) = $(field.Name.Lower1);
+#end
+    }
+#end
+
+    /** Returns the debug information
+     * @return The debug information
+     */
+    public String toString() {
+        StringBuffer buf = new StringBuffer();
+        buf.append("<$(Component.Upper1)DeleteInDto>");
+        buf.append("<headerDto>"); if (headerDto != null) buf.append( headerDto.toString() ); buf.append("</headerDto>");
+        buf.append("<performDirtyReadCheck>"); if (performDirtyReadCheck != null) buf.append( performDirtyReadCheck.toString() ); buf.append("</performDirtyReadCheck>");
+
+
+#foreach $field in $KeyFields.values() #begin
+        buf.append("<$(field.Name.Lower1)>"); if ($(field.Name.Lower1) != null) buf.append($(field.Name.Lower1)); buf.append("</$(field.Name.Lower1)>");
+#end
+
+
+#if ($wm_useForDirtyReadCheckField != null) #begin
+#set $field = $wm_useForDirtyReadCheckField
+        buf.append("<$(field.Name.Lower1)>"); if ($(field.Name.Lower1) != null) buf.append($(field.Name.Lower1)); buf.append("</$(field.Name.Lower1)>");
+#end
+        buf.append("</$(Component.Upper1)DeleteInDto>");
+        return buf.toString();
+    }
+    
+    // .//GEN-END:_2_be
+    // All the custom code goes here //GEN-FIRST:_custom
+
+
+
+
+
+
+    // .//GEN-LAST:_custom
+}

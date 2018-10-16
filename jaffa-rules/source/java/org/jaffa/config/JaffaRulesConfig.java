@@ -49,6 +49,7 @@
 package org.jaffa.config;
 
 import org.jaffa.beans.factory.InitializerFactory;
+import org.jaffa.loader.ResourceLoader;
 import org.jaffa.rules.AopXmlLoader;
 import org.jaffa.rules.JaffaRulesFrameworkException;
 import org.jaffa.rules.commons.AopConstants;
@@ -56,6 +57,7 @@ import org.jaffa.rules.initializers.RuleInitializerFactory;
 import org.jaffa.rules.rulemeta.DefaultRuleHelper;
 import org.jaffa.rules.rulemeta.IRuleEvaluator;
 import org.jaffa.rules.validators.*;
+import org.jaffa.api.ConfigApiCore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
@@ -64,6 +66,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.Environment;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -74,7 +78,7 @@ import java.util.List;
 @ComponentScan("org.jaffa.beans.factory.config")
 public class JaffaRulesConfig {
 
-    /**
+     /**
      * Configure the validator factory
      *
      * @return validator factory
@@ -312,7 +316,7 @@ public class JaffaRulesConfig {
     @Bean
     @Scope(BeanDefinition.SCOPE_SINGLETON)
     @Autowired
-    public AopXmlLoader aopFolderWatcher(Environment env) throws JaffaRulesFrameworkException {
+    public AopXmlLoader aopFolderWatcher(Environment env) throws JaffaRulesFrameworkException, IOException {
 
         // Check to see if this is supported. If explicitly disabled, then return early.
         if (env.containsProperty("jaffa.aop.springconfig.disabled") &&
@@ -326,6 +330,38 @@ public class JaffaRulesConfig {
                         AopConstants.DEFAULT_AOP_PATTERN;
 
         List<String> paths = Arrays.asList(aopPath.split(";"));
-        return new AopXmlLoader(paths);
+        AopXmlLoader.getInstance().processAopPaths(paths);
+        loadAllCustomConfigurations(AopXmlLoader.getInstance());
+
+        return AopXmlLoader.getInstance();
+    }
+
+    /**
+     * Loads all custom configurations in the custom config directory.
+     * @throws IOException  When a file cannot be accessed or operations cannot be performed on it
+     */
+    public void loadAllCustomConfigurations(AopXmlLoader aopXmlLoader) throws IOException {
+        // Load all zip files from the custom config directory.
+        if(ResourceLoader.customConfigPath!=null) {
+            File customConfigDirectory = new File(ResourceLoader.customConfigPath);
+            if (customConfigDirectory.exists()) {
+                for (File file : customConfigDirectory.listFiles()) {
+                    if (file.getName().endsWith(ResourceLoader.ARCHIVE_EXTENSION)) {
+                        loadCustomConfiguration(file, aopXmlLoader);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Loads a single custom configuration compressed file.
+     * @param file  The compressed configuration archive
+     * @throws IOException  When a file cannot be accessed or operations cannot be performed on it
+     */
+    public void loadCustomConfiguration(File file, AopXmlLoader aopXmlLoader) throws IOException {
+        File zipRoot = ConfigApiCore.extractToTemporaryDirectory(file);
+        aopXmlLoader.processAopPath(zipRoot.getAbsolutePath());
+        ConfigApiCore.removeDirTree(zipRoot);
     }
 }

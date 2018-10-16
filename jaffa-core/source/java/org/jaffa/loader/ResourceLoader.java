@@ -50,28 +50,53 @@
 package org.jaffa.loader;
 
 import org.apache.log4j.Logger;
+import org.jaffa.api.ConfigApiCore;
 import org.jaffa.util.ContextHelper;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Loads the Xml Config files and registers them to the Repository.
  */
 public class ResourceLoader<T extends IManager> {
+    public static final String ARCHIVE_EXTENSION = ".zip";
+    private static final String LB_COOKIE_VALUE = "LB_COOKIE_VALUE";
+    private static final String GCT_DIRECTORY = "gct.directory";
+    private static final String DATA_DIRECTORY = "data.directory";
+    public static String customConfigPath;
 
+    /** This static block will instantiate the customConfigPath. */
+    static {
+        if(System.getProperty(GCT_DIRECTORY)!=null){
+            customConfigPath = System.getProperty(GCT_DIRECTORY);
+        }else if (System.getProperty(DATA_DIRECTORY)!=null){
+            customConfigPath = System.getProperty(DATA_DIRECTORY);
+        }
+        if(customConfigPath!=null && System.getProperty(LB_COOKIE_VALUE)!=null) {
+            customConfigPath+= File.separator + System.getProperty(LB_COOKIE_VALUE);
+        }
+    }
+    /**
+     * Create a ContextHelper logger
+     */
     private static Logger logger = Logger.getLogger(ContextHelper.class);
 
+    /**
+     * Create a ManagerRepositoryService singleton to store managers
+     */
     private ManagerRepositoryService managerRepositoryService = ManagerRepositoryService.getInstance();
 
-    private static String REPOSITORY_EVENT = "ADD_UPDATE_REPOSITORY";
-
+    /**
+     * Create a generic manager
+     */
     private T manager;
 
     /**
      * gets the Manager from the ResourceLoader
-     *
      * @return Manager Object identified ny T
      */
     public T getManager() {
@@ -80,7 +105,6 @@ public class ResourceLoader<T extends IManager> {
 
     /**
      * sets the manager on the ResourceLoader
-     *
      * @param manager Object identified by T
      */
     public void setManager(T manager) {
@@ -90,13 +114,12 @@ public class ResourceLoader<T extends IManager> {
     /**
      * loads all the Xml files with xml file name in the manager from all the jars
      * where package contains META-INF/*
-     */
+      */
     @PostConstruct
     public void loadXmls() {
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         try {
             Resource[] resources = resolver.getResources("classpath*:META-INF/" + manager.getResourceFileName());
-
             if (resources != null) {
                 for (Resource resource : resources) {
                     if (resource == null) {
@@ -111,9 +134,46 @@ public class ResourceLoader<T extends IManager> {
                     }
                 }
             }
-        } catch (Exception w) {
-            throw new RuntimeException(w.getCause());
+
+            if (customConfigPath != null && new File(customConfigPath).exists()) {
+                loadAllCustomConfigurations();
+            }
+
+         } catch (Exception exc) {
+            logger.error(exc.getMessage());
+            throw new RuntimeException(exc.getCause());
         }
     }
 
+    /**
+     * Loads all custom configurations in the custom config directory.
+     * @throws IOException  When a file cannot be accessed or operations cannot be performed on it
+     */
+    private void loadAllCustomConfigurations() throws IOException {
+        // Load all zip files from the custom config directory.
+        File customConfigDirectory = new File(customConfigPath);
+        for(File file : customConfigDirectory.listFiles()) {
+            if (file.getName().endsWith(ARCHIVE_EXTENSION)) {
+                loadCustomConfiguration(file);
+            }
+        }
+    }
+
+    /**
+     * Loads a single custom configuration compressed file.
+     * @param file  The compressed configuration archive
+     * @throws IOException  When a file cannot be accessed or operations cannot be performed on it
+     */
+    private void loadCustomConfiguration(File file) throws IOException {
+        File zipRoot = ConfigApiCore.extractToTemporaryDirectory(file);
+        if (zipRoot != null) {
+            ConfigApiCore.registerResources(zipRoot, ConfigApiCore.getFileContents(file));
+            ConfigApiCore.removeDirTree(zipRoot);
+        }
+        else {
+            logger.error(manager.toString() + " cannot load " + file.getName() + " from " + customConfigPath + " because " +
+                "the file's directory structure is incorrect. Custom ZIP files must ONLY contain a META-INF directory " +
+                "containing all configuration files and a manifest.");
+        }
+    }
 }

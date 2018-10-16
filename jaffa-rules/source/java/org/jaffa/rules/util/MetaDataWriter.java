@@ -234,7 +234,7 @@ public class MetaDataWriter {
 
         try {
             MetaDataRepository.instance().unload(file.toURI().toString());
-            new AopXmlLoader(Collections.singletonList(file.toString().toString()));
+            AopXmlLoader.getInstance().processAopPaths(Collections.singletonList(file.toString().toString()));
         } catch (JaffaRulesFrameworkException jrfe) {
             log.error("Error loading/unloading class meta data from file.");
             throw new MetaDataWriterException(MetaDataWriterException.FILE_ERROR, null, jrfe);

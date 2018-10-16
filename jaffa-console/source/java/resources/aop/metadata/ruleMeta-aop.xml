@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+  <metadata tag='jaffa.rules' class='org.jaffa.rules.meta.label' execution-realm='business'>
+    <label value='Label'/>
+    <template value='[value]' />
+    <property name='value'>
+      <label value='Label' />
+      <data-type>STRING</data-type>
+      <rule-info is-class='true' is-property='true'/>
+    </property>
+  </metadata>
+
+  <metadata tag='jaffa.rules' class='org.jaffa.rules.meta.case-type' execution-realm='business'>
+    <label value='Case Type'/>
+    <template value='[value]' />
+    <property name='value'>
+      <label value='Case Type' />
+      <data-type>STRING</data-type>
+      <in-list>mixed=Mixed,upper=Upper,lower=Lower</in-list>
+      <rule-info is-class='false' is-property='true'/>
+    </property>
+  </metadata>
+
+  <metadata tag='jaffa.rules' class='org.jaffa.rules.meta.data-type' execution-realm='business'>
+    <label value='Data Type'/>
+    <template value='[value]' />
+    <property name='value'>
+      <label value='Data Type' />
+      <data-type>STRING</data-type>
+      <in-list>STRING,INTEGER,DECIMAL,CURRENCY,BOOLEAN,DATE_TIME,DATE_ONLY</in-list>
+      <rule-info is-class='false' is-property='true'/>
+    </property>
+  </metadata>
+
+  <metadata tag='jaffa.rules' class='org.jaffa.rules.meta.flex-field' execution-realm='business'>
+    <label value='Flex Field'/>
+    <template value='[domain-mapping]' />
+    <property name='domain-mapping'>
+      <label value='Mapping' />
+      <data-type>STRING</data-type>
+      <rule-info is-class='false' is-property='true'/>
+    </property>
+  </metadata>
+
+  <metadata tag='jaffa.rules' class='org.jaffa.rules.meta.mandatory' execution-realm='business'>
+    <label value='Mandatory'/>
+  </metadata>
+
+  <metadata tag='jaffa.rules' class='org.jaffa.rules.meta.hidden' execution-realm='business'>
+    <label value='Hidden'/>
+  </metadata>
+
+  <metadata tag='jaffa.rules' class='org.jaffa.rules.meta.min-length' execution-realm='business'>
+    <label value='Min Length'/>
+    <template value='[value]' />
+    <property name='value'>
+      <label value='Min Length' />
+      <data-type>INTEGER</data-type>
+      <rule-info is-class='false' is-property='true'/>
+    </property>
+  </metadata>
+
+  <metadata tag='jaffa.rules' class='org.jaffa.rules.meta.max-length' execution-realm='business'>
+    <label value='Max Length'/>
+    <template value='[value]' />
+    <property name='value'>
+      <label value='Max Length' />
+      <data-type>INTEGER</data-type>
+      <rule-info is-class='false' is-property='true'/>
+    </property>
+  </metadata>
+
+  <metadata tag='jaffa.rules' class='org.jaffa.rules.meta.min-value' execution-realm='business'>
+    <label value='Min Value'/>
+    <template value='[value]' />
+    <property name='value'>
+      <label value='Min Value' />
+      <data-type>INTEGER</data-type>
+      <rule-info is-class='false' is-property='true'/>
+    </property>
+  </metadata>
+
+  <metadata tag='jaffa.rules' class='org.jaffa.rules.meta.max-value' execution-realm='business'>
+    <label value='Max Value'/>
+    <template value='[value]' />
+    <property name='value'>
+      <label value='Max Value' />
+      <data-type>INTEGER</data-type>
+      <rule-info is-class='false' is-property='true'/>
+    </property>
+  </metadata>
+
+  <metadata tag='jaffa.rules' class='org.jaffa.rules.meta.pattern' execution-realm='business'>
+    <label value='Pattern'/>
+    <template value='[value]' />
+    <property name='value'>
+      <label value='Pattern' />
+      <data-type>STRING</data-type>
+      <rule-info is-class='false' is-property='true'/>
+    </property>
+  </metadata>
+
+  <metadata tag='jaffa.rules' class='org.jaffa.rules.meta.in-list' execution-realm='business'>
+    <label value='In List'/>
+    <template value='[value]' />
+    <property name='value'>
+      <label value='In List' />
+      <data-type>STRING</data-type>
+      <rule-info is-class='false' is-property='true'/>
+    </property>
+  </metadata>
+
+  <metadata tag='jaffa.rules' class='org.jaffa.rules.meta.property-info' execution-realm='business'>
+    <label value='Property Info'/>
+    <template value='[display-sequence]/[display-group]' />
+    <property name='display-sequence'>
+      <label value='Display Sequence' />
+      <data-type>INTEGER</data-type>
+      <rule-info is-class='false' is-property='true'/>
+    </property>
+
+    <property name='display-group'>
+      <label value='Display Group' />
+      <data-type>INTEGER</data-type>
+      <rule-info is-class='false' is-property='true'/>
+    </property>
+  </metadata>
+
+  <metadata tag='jaffa.rules' class='org.jaffa.rules.meta.partial-foreign-key' execution-realm='business'>
+    <label value='Partial Foreign Key'/>
+    <template value='[propertyName]/[domainObject]' />
+    <property name='propertyName'>
+      <label value='Property Name' />
+      <data-type>STRING</data-type>
+      <rule-info is-class='false' is-property='true'/>
+    </property>
+    <property name='domainObject'>
+      <label value='Domain Object' />
+      <data-type>STRING</data-type>
+      <rule-info is-class='false' is-property='true'/>
+    </property>
+  </metadata>
+
+  <metadata tag='jaffa.rules' class='org.jaffa.rules.meta.foreign-key' execution-realm='business'>
+    <label value='Foreign Key'/>
+    <template value='[domainObject]' />
+    <property name='domainObject'>
+      <label value='Domain Object' />
+      <data-type>STRING</data-type>
+      <rule-info is-class='false' is-property='true'/>
+    </property>
+    <template value='[component]' />
+    <property name='component'>
+      <label value='Component' />
+      <data-type>STRING</data-type>
+      <rule-info is-class='false' is-property='true'/>
+    </property>
+  </metadata>
+
+  <metadata tag='jaffa.rules' class='org.jaffa.rules.meta.generic-foreign-key' execution-realm='business'>
+    <label value='Generic Foreign Key'/>
+    <template value='[fieldName]/[tableName]' />
+    <property name='tableName'>
+      <label value='Table Name' />
+      <data-type>STRING</data-type>
+      <rule-info is-class='false' is-property='true'/>
+    </property>
+    <property name='fieldName'>
+      <label value='Field Name' />
+      <data-type>STRING</data-type>
+      <rule-info is-class='false' is-property='true'/>
+    </property>
+  </metadata>
+
+  <metadata tag='jaffa.rules' class='org.jaffa.rules.meta.audit' execution-realm='business'>
+    <label value='Audit'/>
+    <property name='record-always'>
+      <label value='Record Always' />
+      <in-list>true,false</in-list>
+      <data-type>STRING</data-type>
+      <rule-info is-class='false' is-property='true'/>
+    </property>
+    <property name='data-format'>
+      <label value='Data Format' />
+      <in-list>text,html,multiline</in-list>
+      <data-type>STRING</data-type>
+      <rule-info is-class='false' is-property='true'/>
+    </property>
+  </metadata>
+
+</aop>

@@ -22,6 +22,7 @@
 <%@page import = "org.apache.log4j.Logger" %>
 <%@page import = "org.jaffa.session.ContextManagerFactory" %>
 <%@page import = "org.jaffa.util.URLHelper" %>
+<%@ page import="org.jaffa.util.StringHelper" %>
 <%!
     private static final Logger log = Logger.getLogger("js.extjs.jaffa.state.widgetStateSaver");
     private static final String APPLICATION_STATE_URL = "classpath:///resources/presentation";
@@ -29,6 +30,11 @@
     private static final String PROPERTY_DEFAULT_STATE_USER_ID = "jaffa.widgets.defaultState.userId";
     private static final String WIDGET_STATES_FILE_NAME = "widgetStates.xml";
     private static final String CHARACTER_ENCODING = "UTF-8";
+
+    // TODO after trying to submit malicious code as the "perspective" param on the aircraftdata/flightmanagement/flightschedulefinder/main.jsp
+    // TODO page, the malicious code was executed 5 or 6 times and also the state was saved, causing the page to be permanently
+    // TODO broken for that user until the server was bounced.  The actual failure is a NPE, so this either needs to
+    // TODO protect itself from null during processing and/or escape input so it doesn't reload malicious state.
 
     /** Loads the user-specific state for the screen into the input Properties instance. */
     private Properties getState(String currentUserId, String pageRef) throws IOException, UnsupportedEncodingException {
@@ -179,9 +185,9 @@
 <%
     String currentUserId = request.getUserPrincipal().getName();
     String pageRef = request.getParameter("pageRef");
-    String eventId = request.getParameter("eventId");
-    String name = request.getParameter("name");
-    String data = request.getParameter("data");
+    String eventId = StringHelper.escapeJavascript(request.getParameter("eventId"));
+    String name = StringHelper.escapeJavascript(request.getParameter("name"));
+    String data = StringHelper.escapeJavascript(request.getParameter("data"));
 
     if ("save".equals(eventId)) {
         writeProperty(currentUserId, pageRef, name, data);

@@ -231,6 +231,7 @@ Jaffa.attachment.Grid = Ext.extend(Ext.grid.GridPanel, {
             case 'W':
               return '<a target="_blank" href="' + data + '">' + data + '</a>';
             case 'E':
+            case 'D':
               var attachmentId = record.get('attachmentId');
               return '<a target="_blank" href="js/extjs/jaffa/attachment/service.jsp?command=viewAttachmentData&attachmentId=' + attachmentId + '">' + data + '</a>';
             default:
@@ -242,6 +243,7 @@ Jaffa.attachment.Grid = Ext.extend(Ext.grid.GridPanel, {
         renderer: function (data, cell, record, row_index, column_index, store) {
           switch (data) {
             case 'E':
+            case 'D':
               return 'Embedded';
             case 'W':
               return 'Web';
@@ -346,7 +348,7 @@ Jaffa.attachment.Grid = Ext.extend(Ext.grid.GridPanel, {
                   proxy.update(graphs, function (response) {
                     if (response && response.errors && response.errors.length > 0) {
                       Ext.MessageBox.show({
-                        msg: response.errors[0].localizedMessage,
+                        msg: Ext.util.Format.htmlEncode(response.errors[0].localizedMessage),
                         buttons: Ext.MessageBox.OK,
                         icon: Ext.MessageBox.ERROR
                       });

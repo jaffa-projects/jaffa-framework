@@ -1,0 +1,74 @@
+// .//GEN-BEGIN:_1_be
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ * 
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/ 
+package $(BasePackage.Lower).components.$(Component.Lower).dto;
+
+// .//GEN-END:_1_be
+// Add additional imports//GEN-FIRST:_imports
+
+
+
+
+// .//GEN-LAST:_imports
+// .//GEN-BEGIN:_2_be
+/** The output for the $(Component.Upper1) prevalidations.
+ */
+public class $(Component.Upper1)PrevalidateOutDto extends $(Component.Upper1)RetrieveOutDto {
+
+
+
+    /** Returns the debug information
+     * @return The debug information
+     */
+    public String toString() {
+        StringBuffer buf = new StringBuffer();
+        buf.append("<$(Component.Upper1)PrevalidateOutDto>");
+
+#foreach $field in $Fields.values() #begin
+#if ($field.RelatedObjectName == null || $field.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+        buf.append("<$(field.Name.JavaBeanStyle)>"); if (get$(field.Name.Upper1)() != null) buf.append(get$(field.Name.Upper1)()); buf.append("</$(field.Name.JavaBeanStyle)>");
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#if ($foreignObject.RelatedObjectName == null || $foreignObject.RelatedObjectName.getRelationshipTypeOne($(RelatedObjects))) #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+        buf.append("<$(field.Name.JavaBeanStyle)>"); if (get$(field.Name.Upper1)() != null) buf.append(get$(field.Name.Upper1)()); buf.append("</$(field.Name.JavaBeanStyle)>");
+#end
+#end
+#end
+#end
+
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+#if ($object.RelationshipToDomainObject.RelationshipTypeMany && $object.RelatedObjectFields != null) #begin
+        buf.append("<$(object.Name.JavaBeanStyle)s>");
+        $(object.Name.Upper1)Dto[] $(object.Name.JavaBeanStyle)s = get$(object.Name.Upper1)();
+        for (int i = 0; i < $(object.Name.JavaBeanStyle)s.length; i++) {
+            buf.append($(object.Name.JavaBeanStyle)s[i].toString());
+        }
+        buf.append("</$(object.Name.JavaBeanStyle)s>");
+
+#end
+#end
+#end
+        buf.append("</$(Component.Upper1)PrevalidateOutDto>");
+        return buf.toString();
+    }
+    
+    // .//GEN-END:_2_be
+    // All the custom code goes here //GEN-FIRST:_custom
+
+
+
+
+
+
+    // .//GEN-LAST:_custom
+}

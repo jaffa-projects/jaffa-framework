@@ -269,7 +269,19 @@ Jaffa.form.FinderViewport = Ext.extend(Ext.Viewport, {
           view: (viewport.groupTextTpl) ? viewport.groupTextTpl : ((viewport.maintenancePanel) ? new Ext.grid.GroupingView({
             hideGroupedColumn:true,
             displayEmptyFields:true,
-            groupTextTpl:'{text} ' + '({values.rs.length} ' + '{[values.rs.length > 1 ? this.recordsText : this.recordText]})  '
+            groupTextTpl:'{text} ' + '({values.rs.length} ' + '{[values.rs.length > 1 ? this.recordsText : this.recordText]})  ',
+            onLoad: function(grid,data,p){
+               if (p && p.initial==true){
+       	          if (Ext.isGecko) {
+	                 if (!this.scrollToTopTask) {
+	                    this.scrollToTopTask = new Ext.util.DelayedTask(this.scrollToTop, this);
+	                 }
+	                 this.scrollToTopTask.delay(1);
+	              } else {
+	                  this.scrollToTop();
+	              }
+	           }
+	        }
           }) : new Ext.ux.grid.MultiGroupingView({
             hideGroupedColumn:true,
             displayEmptyFields:true,
@@ -484,7 +496,9 @@ Jaffa.form.FinderViewport = Ext.extend(Ext.Viewport, {
   onRowDeSelect:function (sm, rowIndex, rec) {
     if (!this.supressRowDeSelect) {
       if (sm.getCount() != 1) {
+        this.rowDeselect = true;
         this.cancelData(true);
+        this.rowDeselect = false;
       } else {
         this.loadRecord(sm.getSelected());
       }
@@ -588,9 +602,24 @@ Jaffa.form.FinderViewport = Ext.extend(Ext.Viewport, {
     }
   },
   doCancel:function (textOnly) {
-    this.resetMaintenancePanel()
-    this.togglePanelFields(textOnly);
-    this.maintenancePanelRef.setTitle(this.maintenancePanelRef.baseTitle || this.title);
+  // Here Whenever user tries to modify any field on click of Cancel button
+	// Say field name is "Description", from value "testDescp" to "testDescp1"
+	// Then after click on "yes" here, re-intializing to original value
+	// i.e, the Description field value again appears as "testDescp" 
+	// Ex: ScreenName = LocationCodes
+    if(textOnly) {
+      if(this && this.maintenancePanelRef) {
+        if(this.maintenancePanelRef.isDirty && this.maintenancePanelRef.loadData){
+          this.maintenancePanelRef.loadData(true);
+        } else if(!this.rowDeselect) {
+            this.maintenancePanelRef.collapse();
+        }
+      }
+    } else {
+      this.resetMaintenancePanel();
+      this.togglePanelFields(textOnly);
+      this.maintenancePanelRef.setTitle(this.maintenancePanelRef.baseTitle || this.title);
+    }
   },
   togglePanelFields:function (textOnly) {
     this.maintenancePanelRef.cascade(function (item) {

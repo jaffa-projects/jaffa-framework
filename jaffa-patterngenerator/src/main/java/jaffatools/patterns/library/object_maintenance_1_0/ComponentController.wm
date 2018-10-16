@@ -1,0 +1,915 @@
+// .//GEN-BEGIN:_1_be
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ *
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/
+ package $(BasePackage.Lower).components.$(Component.Lower).ui;
+
+import org.apache.log4j.Logger;
+import org.jaffa.components.maint.MaintComponent;
+import org.jaffa.presentation.portlet.FormKey;
+import org.jaffa.middleware.Factory;
+import org.jaffa.components.dto.HeaderDto;
+import org.jaffa.util.BeanHelper;
+import org.jaffa.components.codehelper.ICodeHelper;
+import org.jaffa.components.codehelper.dto.*;
+import org.jaffa.components.finder.*;
+import org.jaffa.exceptions.ApplicationExceptions;
+import org.jaffa.exceptions.FrameworkException;
+
+import $(BasePackage.Lower).components.$(Component.Lower).I$(Component.Upper1);
+import $(BasePackage.Lower).components.$(Component.Lower).dto.*;
+// .//GEN-END:_1_be
+// Add additional imports//GEN-FIRST:_imports
+
+
+
+
+// .//GEN-LAST:_imports
+// .//GEN-BEGIN:_2_be
+/** The controller for the $(Component.Upper1).
+ */
+public class $(Component.Upper1)Component extends MaintComponent {
+
+    private static Logger log = Logger.getLogger($(Component.Upper1)Component.class);
+    private HeaderDto m_headerDto = null;
+    private I$(Component.Upper1) m_tx = null;
+
+
+#foreach $field in $Fields.values() #begin
+#set $wm_dataType = ""
+#if ($(field.DataType.Upper) == "STRING" || $(field.DataType.Upper) == "VARCHAR" || $(field.DataType.Upper) == "LONGSTRING" || $(field.DataType.Upper) == "LONGVARCHAR" || $(field.DataType.Upper) == "CLOB") #begin
+#set $wm_dataType = "String"
+#elseif ($(field.DataType.Upper) == "INTEGER" || $(field.DataType.Upper) == "BIGINT") #begin
+#set $wm_dataType = "Long"
+#elseif ($(field.DataType.Upper) == "DECIMAL" || $(field.DataType.Upper) == "DOUBLE") #begin
+#set $wm_dataType = "Double"
+#elseif ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") #begin
+#set $wm_dataType = "Boolean"
+#elseif ($(field.DataType.Upper) == "DATE_ONLY" || $(field.DataType.Upper) == "DATEONLY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateOnly"
+#elseif ($(field.DataType.Upper) == "DATE_TIME" || $(field.DataType.Upper) == "DATETIME") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateTime"
+#elseif ($(field.DataType.Upper) == "CURRENCY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.Currency"
+#elseif ($(field.DataType.Upper) == "RAW" || $(field.DataType.Upper) == "LONGRAW" || $(field.DataType.Upper) == "BLOB") #begin
+#set $wm_dataType = "byte[]"
+#end
+    private $wm_dataType m_$(field.Name.Lower1) = null;
+
+#if ($field.Breakup != null && $field.Breakup.DynamicValues != null) #begin
+    private CodeHelperOutElementDto m_$(field.Name.Lower1)Codes = null;
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#set $wm_dataType = ""
+#if ($(field.DataType.Upper) == "STRING" || $(field.DataType.Upper) == "VARCHAR" || $(field.DataType.Upper) == "LONGSTRING" || $(field.DataType.Upper) == "LONGVARCHAR" || $(field.DataType.Upper) == "CLOB") #begin
+#set $wm_dataType = "String"
+#elseif ($(field.DataType.Upper) == "INTEGER" || $(field.DataType.Upper) == "BIGINT") #begin
+#set $wm_dataType = "Long"
+#elseif ($(field.DataType.Upper) == "DECIMAL" || $(field.DataType.Upper) == "DOUBLE") #begin
+#set $wm_dataType = "Double"
+#elseif ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") #begin
+#set $wm_dataType = "Boolean"
+#elseif ($(field.DataType.Upper) == "DATE_ONLY" || $(field.DataType.Upper) == "DATEONLY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateOnly"
+#elseif ($(field.DataType.Upper) == "DATE_TIME" || $(field.DataType.Upper) == "DATETIME") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateTime"
+#elseif ($(field.DataType.Upper) == "CURRENCY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.Currency"
+#elseif ($(field.DataType.Upper) == "RAW" || $(field.DataType.Upper) == "LONGRAW" || $(field.DataType.Upper) == "BLOB") #begin
+#set $wm_dataType = "byte[]"
+#end
+    private $wm_dataType m_$(field.Name.Lower1) = null;
+
+#if ($field.Breakup != null && $field.Breakup.DynamicValues != null) #begin
+    private CodeHelperOutElementDto m_$(field.Name.Lower1)Codes = null;
+#end
+#end
+#end
+#end
+
+
+#set $wm_codeHelperAdded = "false"
+#foreach $field in $Fields.values() #begin
+#if ($wm_codeHelperAdded == "false" && $field.Breakup != null && $field.Breakup.DynamicValues != null && $field.Breakup.DynamicValues.CodeHelperInterface == null) #begin
+#set $wm_codeHelperAdded = "true"
+    private ICodeHelper m_codeHelperTx = null;
+#elseif ($field.Breakup != null && $field.Breakup.DynamicValues != null && $field.Breakup.DynamicValues.CodeHelperInterface != null) #begin
+    private ICodeHelper m_$(field.Name.Lower1)CodeHelperTx = null;
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($wm_codeHelperAdded == "false" && $field.Breakup != null && $field.Breakup.DynamicValues != null && $field.Breakup.DynamicValues.CodeHelperInterface == null) #begin
+#set $wm_codeHelperAdded = "true"
+    private ICodeHelper m_codeHelperTx = null;
+#elseif ($field.Breakup != null && $field.Breakup.DynamicValues != null && $field.Breakup.DynamicValues.CodeHelperInterface != null) #begin
+    private ICodeHelper m_$(field.Name.Lower1)CodeHelperTx = null;
+#end
+#end
+#end
+#end
+
+
+    // .//GEN-END:_2_be
+    // .//GEN-BEGIN:_quit_1_be
+    /** This should be invoked when done with the component.
+     */
+    public void quit() {
+        // .//GEN-END:_quit_1_be
+        // Add custom code before processing the method //GEN-FIRST:_quit_1
+
+
+        // .//GEN-LAST:_quit_1
+        // .//GEN-BEGIN:_quit_2_be
+        if (m_tx != null) {
+            m_tx.destroy();
+            m_tx = null;
+        }
+
+#set $wm_codeHelperAdded = "false"
+#foreach $field in $Fields.values() #begin
+#if ($field.Breakup != null && $field.Breakup.DynamicValues != null) #begin
+#if ($wm_codeHelperAdded == "false" && $field.Breakup.DynamicValues.CodeHelperInterface == null) #begin
+#set $wm_codeHelperAdded = "true"
+        if (m_codeHelperTx != null) {
+            m_codeHelperTx.destroy();
+            m_codeHelperTx = null;
+        }
+#elseif ($field.Breakup.DynamicValues.CodeHelperInterface != null) #begin
+        if (m_$(field.Name.Lower1)CodeHelperTx != null) {
+            m_$(field.Name.Lower1)CodeHelperTx.destroy();
+            m_$(field.Name.Lower1)CodeHelperTx = null;
+        }
+#end
+        m_$(field.Name.Lower1)Codes = null;
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($field.Breakup != null && $field.Breakup.DynamicValues != null) #begin
+#if ($wm_codeHelperAdded == "false" && $field.Breakup.DynamicValues.CodeHelperInterface == null) #begin
+#set $wm_codeHelperAdded = "true"
+        if (m_codeHelperTx != null) {
+            m_codeHelperTx.destroy();
+            m_codeHelperTx = null;
+        }
+#elseif ($field.Breakup.DynamicValues.CodeHelperInterface != null) #begin
+        if (m_$(field.Name.Lower1)CodeHelperTx != null) {
+            m_$(field.Name.Lower1)CodeHelperTx.destroy();
+            m_$(field.Name.Lower1)CodeHelperTx = null;
+        }
+#end
+        m_$(field.Name.Lower1)Codes = null;
+#end
+#end
+#end
+#end
+
+        super.quit();
+    }
+    // .//GEN-END:_quit_2_be
+
+#foreach $field in $Fields.values() #begin
+#set $wm_dataType = ""
+#if ($(field.DataType.Upper) == "STRING" || $(field.DataType.Upper) == "VARCHAR" || $(field.DataType.Upper) == "LONGSTRING" || $(field.DataType.Upper) == "LONGVARCHAR" || $(field.DataType.Upper) == "CLOB") #begin
+#set $wm_dataType = "String"
+#elseif ($(field.DataType.Upper) == "INTEGER" || $(field.DataType.Upper) == "BIGINT") #begin
+#set $wm_dataType = "Long"
+#elseif ($(field.DataType.Upper) == "DECIMAL" || $(field.DataType.Upper) == "DOUBLE") #begin
+#set $wm_dataType = "Double"
+#elseif ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") #begin
+#set $wm_dataType = "Boolean"
+#elseif ($(field.DataType.Upper) == "DATE_ONLY" || $(field.DataType.Upper) == "DATEONLY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateOnly"
+#elseif ($(field.DataType.Upper) == "DATE_TIME" || $(field.DataType.Upper) == "DATETIME") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateTime"
+#elseif ($(field.DataType.Upper) == "CURRENCY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.Currency"
+#elseif ($(field.DataType.Upper) == "RAW" || $(field.DataType.Upper) == "LONGRAW" || $(field.DataType.Upper) == "BLOB") #begin
+#set $wm_dataType = "byte[]"
+#end
+    // .//GEN-BEGIN:$(field.Name.Lower1)_1_be
+    /** Getter for property $(field.Name.Lower1).
+     * @return Value of property $(field.Name.Lower1).
+     */
+    public $wm_dataType get$(field.Name.Upper1)() {
+        return m_$(field.Name.Lower1);
+    }
+
+    /** Setter for property $(field.Name.Lower1).
+     * @param $(field.Name.Lower1) New value of property $(field.Name.Lower1).
+     */
+    public void set$(field.Name.Upper1)($wm_dataType $(field.Name.Lower1)) {
+        m_$(field.Name.Lower1) = $(field.Name.Lower1);
+    }
+
+#if ($field.Breakup != null && $field.Breakup.DynamicValues != null) #begin
+    /** Getter for property $(field.Name.Lower1)Codes.
+     * @return Value of property $(field.Name.Lower1)Dd.
+     */
+    public CodeHelperOutElementDto get$(field.Name.Upper1)Codes() {
+        return m_$(field.Name.Lower1)Codes;
+    }
+#end
+    // .//GEN-END:$(field.Name.Lower1)_1_be
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#set $wm_dataType = ""
+#if ($(field.DataType.Upper) == "STRING" || $(field.DataType.Upper) == "VARCHAR" || $(field.DataType.Upper) == "LONGSTRING" || $(field.DataType.Upper) == "LONGVARCHAR" || $(field.DataType.Upper) == "CLOB") #begin
+#set $wm_dataType = "String"
+#elseif ($(field.DataType.Upper) == "INTEGER" || $(field.DataType.Upper) == "BIGINT") #begin
+#set $wm_dataType = "Long"
+#elseif ($(field.DataType.Upper) == "DECIMAL" || $(field.DataType.Upper) == "DOUBLE") #begin
+#set $wm_dataType = "Double"
+#elseif ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") #begin
+#set $wm_dataType = "Boolean"
+#elseif ($(field.DataType.Upper) == "DATE_ONLY" || $(field.DataType.Upper) == "DATEONLY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateOnly"
+#elseif ($(field.DataType.Upper) == "DATE_TIME" || $(field.DataType.Upper) == "DATETIME") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateTime"
+#elseif ($(field.DataType.Upper) == "CURRENCY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.Currency"
+#elseif ($(field.DataType.Upper) == "RAW" || $(field.DataType.Upper) == "LONGRAW" || $(field.DataType.Upper) == "BLOB") #begin
+#set $wm_dataType = "byte[]"
+#end
+    // .//GEN-BEGIN:$(field.Name.Lower1)_1_be
+    /** Getter for property $(field.Name.Lower1).
+     * @return Value of property $(field.Name.Lower1).
+     */
+    public $wm_dataType get$(field.Name.Upper1)() {
+        return m_$(field.Name.Lower1);
+    }
+
+    /** Setter for property $(field.Name.Lower1).
+     * @param $(field.Name.Lower1) New value of property $(field.Name.Lower1).
+     */
+    public void set$(field.Name.Upper1)($wm_dataType $(field.Name.Lower1)) {
+        m_$(field.Name.Lower1) = $(field.Name.Lower1);
+    }
+
+#if ($field.Breakup != null && $field.Breakup.DynamicValues != null) #begin
+    /** Getter for property $(field.Name.Lower1)Codes.
+     * @return Value of property $(field.Name.Lower1)Dd.
+     */
+    public CodeHelperOutElementDto get$(field.Name.Upper1)Codes() {
+        return m_$(field.Name.Lower1)Codes;
+    }
+#end
+    // .//GEN-END:$(field.Name.Lower1)_1_be
+#end
+#end
+#end
+    // .//GEN-BEGIN:_display_1_be
+    /** Based on the mode and input parameters, this will either delete the domain object, or initialize the screen for updates, or bring up a blank screen.
+     * @throws ApplicationExceptions Indicates some functional error.
+     * @throws FrameworkException Indicates some system error.
+     * @return The FormKey.
+     */
+    public FormKey display() throws ApplicationExceptions, FrameworkException {
+        // .//GEN-END:_display_1_be
+        // Add custom code //GEN-FIRST:_display_1
+
+
+        // .//GEN-LAST:_display_1
+        // .//GEN-BEGIN:_display_2_be
+        if(isDeleteMode()) {
+            delete();
+        } else if(isUpdateMode()) {
+            initDropDownCodes();
+            retrieve();
+        } else {
+            initDropDownCodes();
+            initializeData();
+        }
+        // .//GEN-END:_display_2_be
+        // Add custom code //GEN-FIRST:_display_2
+
+
+        // .//GEN-LAST:_display_2
+        // .//GEN-BEGIN:_display_3_be
+        if(isDeleteMode())
+            return getReturnToFormKey();
+        else
+            return new FormKey($(Component.Upper1)Form.NAME, getComponentId());
+    }
+    // .//GEN-END:_display_3_be
+    // .//GEN-BEGIN:_create_1_be
+    /** This will invoke the create method on the transaction to create a new domain object.
+     * @throws ApplicationExceptions Indicates some functional error.
+     * @throws FrameworkException Indicates some system error.
+     */
+    public void create() throws ApplicationExceptions, FrameworkException {
+        $(Component.Upper1)CreateInDto input = new $(Component.Upper1)CreateInDto();
+        // .//GEN-END:_create_1_be
+        // Add custom code //GEN-FIRST:_create_1
+
+
+        // .//GEN-LAST:_create_1
+        // .//GEN-BEGIN:_create_2_be
+        input.setHeaderDto(createHeaderDto());
+
+#foreach $field in $Fields.values() #begin
+        input.set$(field.Name.Upper1)(get$(field.Name.Upper1)());
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.KeyType.Upper) == "PRIMARY" || $(field.KeyType.Upper) == "CANDIDATE") #begin
+        input.set$(field.Name.Upper1)(get$(field.Name.Upper1)());
+#end
+#end
+#end
+#end
+        createTx().create(input);
+        // .//GEN-END:_create_2_be
+        // Add custom code //GEN-FIRST:_create_2
+
+
+        // .//GEN-LAST:_create_2
+        // .//GEN-BEGIN:_create_3_be
+        invokeCreateListeners();
+    }
+    // .//GEN-END:_create_3_be
+    // .//GEN-BEGIN:_update_1_be
+    /** This will invoke the update method on the transaction to update an existing domain object.
+     * @throws ApplicationExceptions Indicates some functional error.
+     * @throws FrameworkException Indicates some system error.
+     */
+    public void update() throws ApplicationExceptions, FrameworkException {
+        $(Component.Upper1)UpdateInDto input = new $(Component.Upper1)UpdateInDto();
+        // .//GEN-END:_update_1_be
+        // Add custom code //GEN-FIRST:_update_1
+
+
+        // .//GEN-LAST:_update_1
+        // .//GEN-BEGIN:_update_2_be
+        input.setHeaderDto(createHeaderDto());
+
+#foreach $field in $Fields.values() #begin
+        input.set$(field.Name.Upper1)(get$(field.Name.Upper1)());
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($(field.KeyType.Upper) == "PRIMARY" || $(field.KeyType.Upper) == "CANDIDATE") #begin
+        input.set$(field.Name.Upper1)(get$(field.Name.Upper1)());
+#end
+#end
+#end
+#end
+        createTx().update(input);
+        // .//GEN-END:_update_2_be
+        // Add custom code //GEN-FIRST:_update_2
+
+
+        // .//GEN-LAST:_update_2
+        // .//GEN-BEGIN:_update_3_be
+        invokeUpdateListeners();
+    }
+    // .//GEN-END:_update_3_be
+    // .//GEN-BEGIN:_delete_1_be
+    /** This will invoke the delete method on the transaction to delete an existing domain object.
+     * @throws ApplicationExceptions Indicates some functional error.
+     * @throws FrameworkException Indicates some system error.
+     */
+    public void delete() throws ApplicationExceptions, FrameworkException {
+        $(Component.Upper1)DeleteInDto input = new $(Component.Upper1)DeleteInDto();
+        // .//GEN-END:_delete_1_be
+        // Add custom code //GEN-FIRST:_delete_1
+
+
+        // .//GEN-LAST:_delete_1
+        // .//GEN-BEGIN:_delete_2_be
+        input.setHeaderDto(createHeaderDto());
+
+#foreach $field in $KeyFields.values() #begin
+        input.set$(field.Name.Upper1)(get$(field.Name.Upper1)());
+#end
+        createTx().delete(input);
+        // .//GEN-END:_delete_2_be
+        // Add custom code //GEN-FIRST:_delete_2
+
+
+        // .//GEN-LAST:_delete_2
+        // .//GEN-BEGIN:_delete_3_be
+        invokeDeleteListeners();
+    }
+    // .//GEN-END:_delete_3_be
+    // .//GEN-BEGIN:_retrieve_1_be
+    /** This will invoke the retrieve method on the transaction to retrieve an existing domain object.
+     * @throws ApplicationExceptions Indicates some functional error.
+     * @throws FrameworkException Indicates some system error.
+     */
+    public void retrieve() throws ApplicationExceptions, FrameworkException {
+        // clear the widget cache
+        getUserSession().getWidgetCache(getComponentId()).clear();
+
+        $(Component.Upper1)RetrieveInDto input = new $(Component.Upper1)RetrieveInDto();
+        // .//GEN-END:_retrieve_1_be
+        // Add custom code //GEN-FIRST:_retrieve_1
+
+        // .//GEN-LAST:_retrieve_1
+        // .//GEN-BEGIN:_retrieve_2_be
+        input.setHeaderDto(createHeaderDto());
+
+#foreach $field in $KeyFields.values() #begin
+        input.set$(field.Name.Upper1)(get$(field.Name.Upper1)());
+#end
+        $(Component.Upper1)RetrieveOutDto output = createTx().retrieve(input);
+        // .//GEN-END:_retrieve_2_be
+        // Add custom code //GEN-FIRST:_retrieve_2
+
+        // .//GEN-LAST:_retrieve_2
+        // .//GEN-BEGIN:_retrieve_3_be
+        if (output != null) {
+
+#foreach $field in $Fields.values() #begin
+            set$(field.Name.Upper1)(output.get$(field.Name.Upper1)());
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+            set$(field.Name.Upper1)(output.get$(field.Name.Upper1)());
+#end
+#end
+#end
+            // .//GEN-END:_retrieve_3_be
+            // Add custom code //GEN-FIRST:_retrieve_3
+
+            // .//GEN-LAST:_retrieve_3
+            // .//GEN-BEGIN:_retrieve_4_be
+        }
+    }
+    // .//GEN-END:_retrieve_4_be
+    // .//GEN-BEGIN:_initializeData_1_be
+    public void initializeData() {
+
+#foreach $field in $Fields.values() #begin
+#if ($field.InitialValue != null && $field.InitialValue.Upper != "") #begin
+        try {
+            BeanHelper.setField(this, "$(field.Name.Lower1)", "$(field.InitialValue)");
+        } catch (Exception e) {
+            // just log the error and do nothing
+            log.warn("Exception thrown while trying to initialize the field '$(field.Name.Lower1)' to '$(field.InitialValue)'", e);
+        }
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($field.InitialValue != null && $field.InitialValue.Upper != "") #begin
+        try {
+            BeanHelper.setField(this, "$(field.Name.Lower1)", "$(field.InitialValue)");
+        } catch (Exception e) {
+            // just log the error and do nothing
+            log.warn("Exception thrown while trying to initialize the field '$(field.Name.Lower1)' to '$(field.InitialValue)'", e);
+        }
+#end
+#end
+#end
+#end
+        // .//GEN-END:_initializeData_1_be
+        // Add custom code //GEN-FIRST:_initializeData_1
+
+
+        // .//GEN-LAST:_initializeData_1
+        // .//GEN-BEGIN:_initializeData_2_be
+    }
+    // .//GEN-END:_initializeData_2_be
+    // .//GEN-BEGIN:_createTx_1_be
+    private I$(Component.Upper1) createTx() throws FrameworkException {
+        if (m_tx == null)
+            m_tx = (I$(Component.Upper1)) Factory.createObject(I$(Component.Upper1).class);
+        return m_tx;
+    }
+    // .//GEN-END:_createTx_1_be
+    // .//GEN-BEGIN:_createHeaderDto_1_be
+    private HeaderDto createHeaderDto() {
+        if (m_headerDto == null) {
+            m_headerDto = new HeaderDto();
+            m_headerDto.setUserId( getUserSession().getUserId() );
+            m_headerDto.setVariation( getUserSession().getVariation() );
+            // .//GEN-END:_createHeaderDto_1_be
+            // Add custom code before processing the action //GEN-FIRST:_createHeaderDto_1
+
+
+            // .//GEN-LAST:_createHeaderDto_1
+            // .//GEN-BEGIN:_createHeaderDto_2_be
+        }
+        return m_headerDto;
+    }
+    // .//GEN-END:_createHeaderDto_2_be
+    // .//GEN-BEGIN:_initDropDownCodes_1_be
+    /** This will retrieve the set of codes for dropdowns, if any are required
+     */
+    private void initDropDownCodes() throws ApplicationExceptions, FrameworkException {
+        ApplicationExceptions appExps = null;
+        CodeHelperInDto input = null;
+
+#set $wm_codeHelperAdded = "false"
+#foreach $field in $Fields.values() #begin
+#if ($field.Breakup != null && $field.Breakup.DynamicValues != null && $field.Breakup.DynamicValues.CodeHelperInterface == null) #begin
+#if ($wm_codeHelperAdded == "false") #begin
+#set $wm_codeHelperAdded = "true"
+        if (m_codeHelperTx == null)
+            m_codeHelperTx = (ICodeHelper) Factory.createObject(ICodeHelper.class);
+#end
+        if (m_$(field.Name.Lower1)Codes == null) {
+            if (input == null)
+                input = new CodeHelperInDto();
+            CodeHelperInElementDto codeHelperInElementDto = new CodeHelperInElementDto();
+            codeHelperInElementDto.setDomainClassName("$(field.Breakup.DynamicValues.DomainClassName)");
+            codeHelperInElementDto.setCodeFieldName("$(field.Breakup.DynamicValues.CodeFieldName)");
+            codeHelperInElementDto.setDescriptionFieldName("$(field.Breakup.DynamicValues.DescriptionFieldName)");
+
+#if ($field.Breakup.DynamicValues.BreakupCriteriaFields != null) #begin
+#foreach $bfield in $field.Breakup.DynamicValues.BreakupCriteriaFields.values() #begin
+#set $wm_dataType = ""
+#if ($(bfield.DataType.Upper) == "STRING" || $(bfield.DataType.Upper) == "VARCHAR" || $(bfield.DataType.Upper) == "LONGSTRING" || $(bfield.DataType.Upper) == "LONGVARCHAR" || $(bfield.DataType.Upper) == "CLOB") #begin
+#set $wm_dataType = "StringCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "INTEGER" || $(bfield.DataType.Upper) == "BIGINT") #begin
+#set $wm_dataType = "IntegerCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "DECIMAL" || $(bfield.DataType.Upper) == "DOUBLE") #begin
+#set $wm_dataType = "DecimalCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "BOOLEAN" || $(bfield.DataType.Upper) == "BIT") #begin
+#set $wm_dataType = "BooleanCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "DATE_ONLY" || $(bfield.DataType.Upper) == "DATEONLY") #begin
+#set $wm_dataType = "DateOnlyCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "DATE_TIME" || $(bfield.DataType.Upper) == "DATETIME") #begin
+#set $wm_dataType = "DateTimeCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "CURRENCY") #begin
+#set $wm_dataType = "CurrencyCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "RAW" || $(bfield.DataType.Upper) == "LONGRAW" || $(bfield.DataType.Upper) == "BLOB") #begin
+#set $wm_dataType = "RawCriteriaField"
+#end
+#set $wm_domainObject = "$(field.Breakup.DynamicValues.DomainClassName)"
+#if ($(bfield.DataType.Upper) == "CURRENCY" || $(bfield.DataType.Upper) == "DECIMAL" || $(bfield.DataType.Upper) == "DOUBLE" || $(bfield.DataType.Upper) == "INTEGER" || $(bfield.DataType.Upper) == "BIGINT" || $(bfield.DataType.Upper) == "DATE_ONLY" || $(bfield.DataType.Upper) == "DATEONLY" || $(bfield.DataType.Upper) == "DATE_TIME" || $(bfield.DataType.Upper) == "DATETIME") #begin
+            try {
+                CriteriaElementDto criteriaElementDto = new CriteriaElementDto();
+                criteriaElementDto.setFieldName("$(bfield.DomainField.Upper1)");
+                criteriaElementDto.setCriteria($(wm_dataType).get$(wm_dataType)(CriteriaField.$(bfield.Operator), "$(bfield.Values)", null));
+                codeHelperInElementDto.addCriteriaField(criteriaElementDto);
+            } catch (ValidationException e) {
+                if (appExps == null)
+                    appExps = new ApplicationExceptions();
+                e.setField( $(wm_domainObject)Meta.META_$(bfield.DomainField.Static).getLabelToken() );
+                appExps.add(e);
+            }
+#else
+##  this comment should prevent the following brace to be treated as a webmacro block marker
+            {
+                CriteriaElementDto criteriaElementDto = new CriteriaElementDto();
+                criteriaElementDto.setFieldName("$(bfield.DomainField.Upper1)");
+                criteriaElementDto.setCriteria($(wm_dataType).get$(wm_dataType)(CriteriaField.$(bfield.Operator), "$(bfield.Values)", null));
+                codeHelperInElementDto.addCriteriaField(criteriaElementDto);
+            }
+#end
+#end
+#end
+
+#if ($field.Breakup.DynamicValues.AppendCodeAndDescription != null && $field.Breakup.DynamicValues.AppendCodeAndDescription.Lower == "true") #begin
+            codeHelperInElementDto.setAppendCodeAndDescription(true);
+
+#if ($field.Breakup.DynamicValues.AppendBeginMarker != null) #begin
+            codeHelperInElementDto.setAppendBeginMarker("$(field.Breakup.DynamicValues.AppendBeginMarker)");
+#end
+
+#if ($field.Breakup.DynamicValues.AppendEndMarker != null) #begin
+            codeHelperInElementDto.setAppendEndMarker("$(field.Breakup.DynamicValues.AppendEndMarker)");
+#end
+#end
+            input.addCodeHelperInElementDto(codeHelperInElementDto);
+        }
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($field.Breakup != null && $field.Breakup.DynamicValues != null && $field.Breakup.DynamicValues.CodeHelperInterface == null) #begin
+#if ($wm_codeHelperAdded == "false") #begin
+#set $wm_codeHelperAdded = "true"
+        if (m_codeHelperTx == null)
+            m_codeHelperTx = (ICodeHelper) Factory.createObject(ICodeHelper.class);
+#end
+        if (m_$(field.Name.Lower1)Codes == null) {
+            if (input == null)
+                input = new CodeHelperInDto();
+            CodeHelperInElementDto codeHelperInElementDto = new CodeHelperInElementDto();
+            codeHelperInElementDto.setDomainClassName("$(field.Breakup.DynamicValues.DomainClassName)");
+            codeHelperInElementDto.setCodeFieldName("$(field.Breakup.DynamicValues.CodeFieldName)");
+            codeHelperInElementDto.setDescriptionFieldName("$(field.Breakup.DynamicValues.DescriptionFieldName)");
+
+#if ($field.Breakup.DynamicValues.BreakupCriteriaFields != null) #begin
+#foreach $bfield in $field.Breakup.DynamicValues.BreakupCriteriaFields.values() #begin
+#set $wm_dataType = ""
+#if ($(bfield.DataType.Upper) == "STRING" || $(bfield.DataType.Upper) == "VARCHAR" || $(bfield.DataType.Upper) == "LONGSTRING" || $(bfield.DataType.Upper) == "LONGVARCHAR" || $(bfield.DataType.Upper) == "CLOB") #begin
+#set $wm_dataType = "StringCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "INTEGER" || $(bfield.DataType.Upper) == "BIGINT") #begin
+#set $wm_dataType = "IntegerCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "DECIMAL" || $(bfield.DataType.Upper) == "DOUBLE") #begin
+#set $wm_dataType = "DecimalCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "BOOLEAN" || $(bfield.DataType.Upper) == "BIT") #begin
+#set $wm_dataType = "BooleanCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "DATE_ONLY" || $(bfield.DataType.Upper) == "DATEONLY") #begin
+#set $wm_dataType = "DateOnlyCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "DATE_TIME" || $(bfield.DataType.Upper) == "DATETIME") #begin
+#set $wm_dataType = "DateTimeCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "CURRENCY") #begin
+#set $wm_dataType = "CurrencyCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "RAW" || $(bfield.DataType.Upper) == "LONGRAW" || $(bfield.DataType.Upper) == "BLOB") #begin
+#set $wm_dataType = "RawCriteriaField"
+#end
+#set $wm_domainObject = "$(field.Breakup.DynamicValues.DomainClassName)"
+#if ($(bfield.DataType.Upper) == "CURRENCY" || $(bfield.DataType.Upper) == "DECIMAL" || $(bfield.DataType.Upper) == "DOUBLE" || $(bfield.DataType.Upper) == "INTEGER" || $(bfield.DataType.Upper) == "BIGINT" || $(bfield.DataType.Upper) == "DATE_ONLY" || $(bfield.DataType.Upper) == "DATEONLY" || $(bfield.DataType.Upper) == "DATE_TIME" || $(bfield.DataType.Upper) == "DATETIME") #begin
+            try {
+                CriteriaElementDto criteriaElementDto = new CriteriaElementDto();
+                criteriaElementDto.setFieldName("$(bfield.DomainField.Upper1)");
+                criteriaElementDto.setCriteria($(wm_dataType).get$(wm_dataType)(CriteriaField.$(bfield.Operator), "$(bfield.Values)", null));
+                codeHelperInElementDto.addCriteriaField(criteriaElementDto);
+            } catch (ValidationException e) {
+                if (appExps == null)
+                    appExps = new ApplicationExceptions();
+                e.setField( $(wm_domainObject)Meta.META_$(bfield.DomainField.Static).getLabelToken() );
+                appExps.add(e);
+            }
+#else
+##  this comment should prevent the following brace to be treated as a webmacro block marker
+            {
+                CriteriaElementDto criteriaElementDto = new CriteriaElementDto();
+                criteriaElementDto.setFieldName("$(bfield.DomainField.Upper1)");
+                criteriaElementDto.setCriteria($(wm_dataType).get$(wm_dataType)(CriteriaField.$(bfield.Operator), "$(bfield.Values)", null));
+                codeHelperInElementDto.addCriteriaField(criteriaElementDto);
+            }
+#end
+#end
+#end
+
+#if ($field.Breakup.DynamicValues.AppendCodeAndDescription != null && $field.Breakup.DynamicValues.AppendCodeAndDescription.Lower == "true") #begin
+            codeHelperInElementDto.setAppendCodeAndDescription(true);
+
+#if ($field.Breakup.DynamicValues.AppendBeginMarker != null) #begin
+            codeHelperInElementDto.setAppendBeginMarker("$(field.Breakup.DynamicValues.AppendBeginMarker)");
+#end
+
+#if ($field.Breakup.DynamicValues.AppendEndMarker != null) #begin
+            codeHelperInElementDto.setAppendEndMarker("$(field.Breakup.DynamicValues.AppendEndMarker)");
+#end
+#end
+            input.addCodeHelperInElementDto(codeHelperInElementDto);
+        }
+#end
+#end
+#end
+#end
+
+
+#if ($wm_codeHelperAdded != "false") #begin
+        // throw ApplicationExceptions, if any parsing errors occured
+        if (appExps != null && appExps.size() > 0)
+            throw appExps;
+
+        // Get the Codes and populate the respective fields
+        if (input != null) {
+            input.setHeaderDto(createHeaderDto());
+            CodeHelperOutDto output = m_codeHelperTx.getCodes(input);
+            if (output != null && output.getCodeHelperOutElementDtoCount() > 0) {
+                CodeHelperOutElementDto[] codeHelperOutElementDtos = output.getCodeHelperOutElementDtos();
+                for (int i = 0; i < codeHelperOutElementDtos.length; i++) {
+                    CodeHelperOutElementDto codeHelperOutElementDto = codeHelperOutElementDtos[i];
+                    String domainClassName = codeHelperOutElementDto.getDomainClassName();
+
+#set $wm_firstPass = "true"
+#foreach $field in $Fields.values() #begin
+#if ($field.Breakup != null && $field.Breakup.DynamicValues != null && $field.Breakup.DynamicValues.CodeHelperInterface == null) #begin
+#if ($wm_firstPass == "true") #begin
+#set $wm_firstPass = "false"
+                    if (domainClassName.equals("$(field.Breakup.DynamicValues.DomainClassName)"))
+#else
+                    else if (domainClassName.equals("$(field.Breakup.DynamicValues.DomainClassName)"))
+#end
+                        m_$(field.Name.Lower1)Codes = codeHelperOutElementDto;
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($field.Breakup != null && $field.Breakup.DynamicValues != null && $field.Breakup.DynamicValues.CodeHelperInterface == null) #begin
+#if ($wm_firstPass == "true") #begin
+#set $wm_firstPass = "false"
+                    if (domainClassName.equals("$(field.Breakup.DynamicValues.DomainClassName)"))
+#else
+                    else if (domainClassName.equals("$(field.Breakup.DynamicValues.DomainClassName)"))
+#end
+                        m_$(field.Name.Lower1)Codes = codeHelperOutElementDto;
+#end
+#end
+#end
+#end
+                }
+            }
+        }
+#end
+
+
+
+#foreach $field in $Fields.values() #begin
+#if ($field.Breakup != null && $field.Breakup.DynamicValues != null && $field.Breakup.DynamicValues.CodeHelperInterface != null) #begin
+        if (m_$(field.Name.Lower1)CodeHelperTx == null)
+            m_$(field.Name.Lower1)CodeHelperTx = (ICodeHelper) Factory.createObject($(field.Breakup.DynamicValues.CodeHelperInterface).class);
+        if (m_$(field.Name.Lower1)Codes == null) {
+            input = new CodeHelperInDto();
+            CodeHelperInElementDto codeHelperInElementDto = new CodeHelperInElementDto();
+            codeHelperInElementDto.setDomainClassName("$(field.Breakup.DynamicValues.DomainClassName)");
+            codeHelperInElementDto.setCodeFieldName("$(field.Breakup.DynamicValues.CodeFieldName)");
+            codeHelperInElementDto.setDescriptionFieldName("$(field.Breakup.DynamicValues.DescriptionFieldName)");
+
+#if ($field.Breakup.DynamicValues.BreakupCriteriaFields != null) #begin
+#foreach $bfield in $field.Breakup.DynamicValues.BreakupCriteriaFields.values() #begin
+#set $wm_dataType = ""
+#if ($(bfield.DataType.Upper) == "STRING" || $(bfield.DataType.Upper) == "VARCHAR" || $(bfield.DataType.Upper) == "LONGSTRING" || $(bfield.DataType.Upper) == "LONGVARCHAR" || $(bfield.DataType.Upper) == "CLOB") #begin
+#set $wm_dataType = "StringCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "INTEGER" || $(bfield.DataType.Upper) == "BIGINT") #begin
+#set $wm_dataType = "IntegerCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "DECIMAL" || $(bfield.DataType.Upper) == "DOUBLE") #begin
+#set $wm_dataType = "DecimalCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "BOOLEAN" || $(bfield.DataType.Upper) == "BIT") #begin
+#set $wm_dataType = "BooleanCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "DATE_ONLY" || $(bfield.DataType.Upper) == "DATEONLY") #begin
+#set $wm_dataType = "DateOnlyCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "DATE_TIME" || $(bfield.DataType.Upper) == "DATETIME") #begin
+#set $wm_dataType = "DateTimeCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "CURRENCY") #begin
+#set $wm_dataType = "CurrencyCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "RAW" || $(bfield.DataType.Upper) == "LONGRAW" || $(bfield.DataType.Upper) == "BLOB") #begin
+#set $wm_dataType = "RawCriteriaField"
+#end
+#set $wm_domainObject = "$(field.Breakup.DynamicValues.DomainClassName)"
+#if ($(bfield.DataType.Upper) == "CURRENCY" || $(bfield.DataType.Upper) == "DECIMAL" || $(bfield.DataType.Upper) == "DOUBLE" || $(bfield.DataType.Upper) == "INTEGER" || $(bfield.DataType.Upper) == "BIGINT" || $(bfield.DataType.Upper) == "DATE_ONLY" || $(bfield.DataType.Upper) == "DATEONLY" || $(bfield.DataType.Upper) == "DATE_TIME" || $(bfield.DataType.Upper) == "DATETIME") #begin
+            try {
+                CriteriaElementDto criteriaElementDto = new CriteriaElementDto();
+                criteriaElementDto.setFieldName("$(bfield.DomainField.Upper1)");
+                criteriaElementDto.setCriteria($(wm_dataType).get$(wm_dataType)(CriteriaField.$(bfield.Operator), "$(bfield.Values)", null));
+                codeHelperInElementDto.addCriteriaField(criteriaElementDto);
+            } catch (ValidationException e) {
+                if (appExps == null)
+                    appExps = new ApplicationExceptions();
+                e.setField( $(wm_domainObject)Meta.META_$(bfield.DomainField.Static).getLabelToken() );
+                appExps.add(e);
+            }
+#else
+##  this comment should prevent the following brace to be treated as a webmacro block marker
+            {
+                CriteriaElementDto criteriaElementDto = new CriteriaElementDto();
+                criteriaElementDto.setFieldName("$(bfield.DomainField.Upper1)");
+                criteriaElementDto.setCriteria($(wm_dataType).get$(wm_dataType)(CriteriaField.$(bfield.Operator), "$(bfield.Values)", null));
+                codeHelperInElementDto.addCriteriaField(criteriaElementDto);
+            }
+#end
+#end
+#end
+
+#if ($field.Breakup.DynamicValues.AppendCodeAndDescription != null && $field.Breakup.DynamicValues.AppendCodeAndDescription.Lower == "true") #begin
+            codeHelperInElementDto.setAppendCodeAndDescription(true);
+
+#if ($field.Breakup.DynamicValues.AppendBeginMarker != null) #begin
+            codeHelperInElementDto.setAppendBeginMarker("$(field.Breakup.DynamicValues.AppendBeginMarker)");
+#end
+
+#if ($field.Breakup.DynamicValues.AppendEndMarker != null) #begin
+            codeHelperInElementDto.setAppendEndMarker("$(field.Breakup.DynamicValues.AppendEndMarker)");
+#end
+#end
+            input.addCodeHelperInElementDto(codeHelperInElementDto);
+
+            // throw ApplicationExceptions, if any parsing errors occured
+            if (appExps != null && appExps.size() > 0)
+                throw appExps;
+
+            // Get the Codes
+            input.setHeaderDto(createHeaderDto());
+            CodeHelperOutDto output = m_$(field.Name.Lower1)CodeHelperTx.getCodes(input);
+            if (output != null && output.getCodeHelperOutElementDtoCount() > 0)
+                m_$(field.Name.Lower1)Codes = output.getCodeHelperOutElementDto(0);
+        }
+
+#end
+#end
+
+#if ($ForeignObjects != null) #begin
+#foreach $foreignObject in $ForeignObjects.values() #begin
+#foreach $field in $foreignObject.ForeignFields.values() #begin
+#if ($field.Breakup != null && $field.Breakup.DynamicValues != null && $field.Breakup.DynamicValues.CodeHelperInterface != null) #begin
+        if (m_$(field.Name.Lower1)CodeHelperTx == null)
+            m_$(field.Name.Lower1)CodeHelperTx = (ICodeHelper) Factory.createObject($(field.Breakup.DynamicValues.CodeHelperInterface).class);
+        if (m_$(field.Name.Lower1)Codes == null) {
+            input = new CodeHelperInDto();
+            CodeHelperInElementDto codeHelperInElementDto = new CodeHelperInElementDto();
+            codeHelperInElementDto.setDomainClassName("$(field.Breakup.DynamicValues.DomainClassName)");
+            codeHelperInElementDto.setCodeFieldName("$(field.Breakup.DynamicValues.CodeFieldName)");
+            codeHelperInElementDto.setDescriptionFieldName("$(field.Breakup.DynamicValues.DescriptionFieldName)");
+
+#if ($field.Breakup.DynamicValues.BreakupCriteriaFields != null) #begin
+#foreach $bfield in $field.Breakup.DynamicValues.BreakupCriteriaFields.values() #begin
+#set $wm_dataType = ""
+#if ($(bfield.DataType.Upper) == "STRING" || $(bfield.DataType.Upper) == "VARCHAR" || $(bfield.DataType.Upper) == "LONGSTRING" || $(bfield.DataType.Upper) == "LONGVARCHAR" || $(bfield.DataType.Upper) == "CLOB") #begin
+#set $wm_dataType = "StringCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "INTEGER" || $(bfield.DataType.Upper) == "BIGINT") #begin
+#set $wm_dataType = "IntegerCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "DECIMAL" || $(bfield.DataType.Upper) == "DOUBLE") #begin
+#set $wm_dataType = "DecimalCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "BOOLEAN" || $(bfield.DataType.Upper) == "BIT") #begin
+#set $wm_dataType = "BooleanCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "DATE_ONLY" || $(bfield.DataType.Upper) == "DATEONLY") #begin
+#set $wm_dataType = "DateOnlyCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "DATE_TIME" || $(bfield.DataType.Upper) == "DATETIME") #begin
+#set $wm_dataType = "DateTimeCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "CURRENCY") #begin
+#set $wm_dataType = "CurrencyCriteriaField"
+#elseif ($(bfield.DataType.Upper) == "RAW" || $(bfield.DataType.Upper) == "LONGRAW" || $(bfield.DataType.Upper) == "BLOB") #begin
+#set $wm_dataType = "RawCriteriaField"
+#end
+#set $wm_domainObject = "$(field.Breakup.DynamicValues.DomainClassName)"
+#if ($(bfield.DataType.Upper) == "CURRENCY" || $(bfield.DataType.Upper) == "DECIMAL" || $(bfield.DataType.Upper) == "DOUBLE" || $(bfield.DataType.Upper) == "INTEGER" || $(bfield.DataType.Upper) == "BIGINT" || $(bfield.DataType.Upper) == "DATE_ONLY" || $(bfield.DataType.Upper) == "DATEONLY" || $(bfield.DataType.Upper) == "DATE_TIME" || $(bfield.DataType.Upper) == "DATETIME") #begin
+            try {
+                CriteriaElementDto criteriaElementDto = new CriteriaElementDto();
+                criteriaElementDto.setFieldName("$(bfield.DomainField.Upper1)");
+                criteriaElementDto.setCriteria($(wm_dataType).get$(wm_dataType)(CriteriaField.$(bfield.Operator), "$(bfield.Values)", null));
+                codeHelperInElementDto.addCriteriaField(criteriaElementDto);
+            } catch (ValidationException e) {
+                if (appExps == null)
+                    appExps = new ApplicationExceptions();
+                e.setField( $(wm_domainObject)Meta.META_$(bfield.DomainField.Static).getLabelToken() );
+                appExps.add(e);
+            }
+#else
+##  this comment should prevent the following brace to be treated as a webmacro block marker
+            {
+                CriteriaElementDto criteriaElementDto = new CriteriaElementDto();
+                criteriaElementDto.setFieldName("$(bfield.DomainField.Upper1)");
+                criteriaElementDto.setCriteria($(wm_dataType).get$(wm_dataType)(CriteriaField.$(bfield.Operator), "$(bfield.Values)", null));
+                codeHelperInElementDto.addCriteriaField(criteriaElementDto);
+            }
+#end
+#end
+#end
+
+#if ($field.Breakup.DynamicValues.AppendCodeAndDescription != null && $field.Breakup.DynamicValues.AppendCodeAndDescription.Lower == "true") #begin
+            codeHelperInElementDto.setAppendCodeAndDescription(true);
+
+#if ($field.Breakup.DynamicValues.AppendBeginMarker != null) #begin
+            codeHelperInElementDto.setAppendBeginMarker("$(field.Breakup.DynamicValues.AppendBeginMarker)");
+#end
+
+#if ($field.Breakup.DynamicValues.AppendEndMarker != null) #begin
+            codeHelperInElementDto.setAppendEndMarker("$(field.Breakup.DynamicValues.AppendEndMarker)");
+#end
+#end
+            input.addCodeHelperInElementDto(codeHelperInElementDto);
+
+            // throw ApplicationExceptions, if any parsing errors occured
+            if (appExps != null && appExps.size() > 0)
+                throw appExps;
+
+            // Get the Codes
+            input.setHeaderDto(createHeaderDto());
+            CodeHelperOutDto output = m_$(field.Name.Lower1)CodeHelperTx.getCodes(input);
+            if (output != null && output.getCodeHelperOutElementDtoCount() > 0)
+                m_$(field.Name.Lower1)Codes = output.getCodeHelperOutElementDto(0);
+        }
+
+#end
+#end
+#end
+#end
+
+    }
+    // .//GEN-END:_initDropDownCodes_1_be
+    // All the custom code goes here //GEN-FIRST:_custom
+
+
+
+
+
+
+    // .//GEN-LAST:_custom
+}

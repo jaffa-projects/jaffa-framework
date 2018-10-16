@@ -1,8 +1,9 @@
 package org.jaffa.loader.soa;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.JAXBException;
 
@@ -20,140 +21,154 @@ import org.xml.sax.SAXException;
  * This class is responsible for managing the "soa-events.xml". This class has
  * all the interface methods where consumer can invoke register /unregister the
  * soaEventInfo objects.
- * 
+ *
  */
 public class SoaEventManager implements IManager {
 
-	/**
-	 * The name of the configuration file which this class handles.
-	 */
-	private static final String DEFAULT_CONFIGURATION_FILE = "soa-events.xml";
+  /**
+   * The name of the configuration file which this class handles.
+   */
+  private static final String DEFAULT_CONFIGURATION_FILE = "soa-events.xml";
 
-	/**
-	 * This holds the SoaEventInfo with key of SoaEventName
-	 */
-    private IRepository<SoaEventInfo> soaEventRepository;
+  /**
+   * This holds the SoaEventInfo with key of SoaEventName
+   */
+  private IRepository<SoaEventInfo> soaEventRepository = new MapRepository<>("SoaEventInfo");
 
-	/** The list of repositories managed by this class */
-	private IRepository<?>[] managedRepositories = new IRepository<?>[] {soaEventRepository};
-
-	/**
-	 * The location of the schema for the configuration file.
-	 */
-	private static final String CONFIGURATION_SCHEMA_FILE = "org/jaffa/soa/services/configdomain/soa-events_1_0.xsd";
-
-
-    /**
-	 * @return the soaEventRepository
-	 */
-	public IRepository<SoaEventInfo> getSoaEventRepository() {
-		return soaEventRepository;
-	}
-
-	/**
-	 * @param soaEventRepository the soaEventRepository to set
-	 */
-	public void setSoaEventRepository(IRepository<SoaEventInfo> soaEventRepository) {
-		this.soaEventRepository = soaEventRepository;
-	}
-
-	/**
-     * register SoaEventInfo to the repository
-     * @param soaEventInfo registers to the repository
-     * @param contextKey with which repository to be associated with
-     */
-    public void registerSoaEventInfo(ContextKey contextKey, SoaEventInfo soaEventInfo) {
-    	soaEventRepository.register(contextKey, soaEventInfo);
-
-    }
-    
-    /**
-     * unregister SoaEventInfo from the repository
-     * @param contextKey with which repository to be associated with
-     */
-    public void unregisterSoaEventInfo(ContextKey contextKey) {
-    	soaEventRepository.unregister(contextKey);
+  /**
+   * The list of repositories managed by this class
+   */
+  private HashMap managedRepositories = new HashMap<String, IRepository>() {
+    {
+      put(soaEventRepository.getName(), soaEventRepository);
     }
 
-    /**
-     * retrieves the SoaEventInfo from the repository
-     * @param soaEventName key used for the repository
-     * @return SoaEventInfo
-     */
-	public SoaEventInfo getSoaEventInfo(String soaEventName) {
-		return soaEventRepository.query(soaEventName);
-	}
-    
-    /**
-     * retrieves all the SoaEventInfo from the repository based on the contextOrder provided
-     * assumes defaultContextOrder from the configuration when contextOrder is not provided
-     * @param contextOrderParam order of the contexts to be searched
-     * @return List of all values
-     */
-	public SoaEventInfo[] getAllSoaEventInfo(List<String> contextOrderParam) {
-		return soaEventRepository.getValues().toArray(new SoaEventInfo[0]);
-	}
-	
-    /**
-     * retrieves all the SoaEventNames in the repository
-     * @return Array of all SoaEventNames
-     */
-    public String[] getSoaEventNames() {
-        return soaEventRepository.getAllKeys().toArray(new String[0]);
-    }	
-    
-    /**
-     * {@inheritDoc}
-     */
-	@Override
-	public void registerResource(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
-		SoaEvents soaEvents = JAXBHelper.unmarshalConfigFile(SoaEvents.class, resource, CONFIGURATION_SCHEMA_FILE);
+  };
 
-		if (soaEvents != null) {
-			for (SoaEventInfo soaEventInfo : soaEvents.getSoaEvent()) {
-			    ContextKey contextKey = new ContextKey(soaEventInfo.getName(), resource.getURI().toString(), variation, context);
-				registerSoaEventInfo(contextKey, soaEventInfo);
-			}
-		}
-	}
+  /**
+   * The location of the schema for the configuration file.
+   */
+  private static final String CONFIGURATION_SCHEMA_FILE = "org/jaffa/soa/services/configdomain/soa-events_1_0.xsd";
 
-    /**
-     * {@inheritDoc}
-     */
-	@Override
-	public String getResourceFileName() {
-		return DEFAULT_CONFIGURATION_FILE;
-	}
 
-	/**
-	 * getRepositoryNames - Retrieve a String list of all the IRepositories managed by this IManager
-	 * @return A list of repository names managed by this manager
-	 */
-	@Override
-	public List<String> getRepositoryNames() {
-		List<String> repositoryNames = new ArrayList<>();
-		for (IRepository<?> repository : managedRepositories) {
-			repositoryNames.add(repository.getName());
-		}
-		return repositoryNames;
-	}
+  /**
+   * @return the soaEventRepository
+   */
+  public IRepository<SoaEventInfo> getSoaEventRepository() {
+    return soaEventRepository;
+  }
 
-	/**
-	 * Retrieve an IRepository managed by this IManager via its String name
-	 * @param name The name of the repository to be retrieved
-	 * @return The retrieved repository, or null if no matching repository was found.
-	 */
-	@Override
-	public IRepository<?> getRepositoryByName(String name) {
-		IRepository<?> matchingRepository = null;
-		for (IRepository<?> repository : managedRepositories) {
-			if (name.equals(repository.getName())) {
-				matchingRepository = repository;
-			}
-		}
-		if (matchingRepository == null) {
-			matchingRepository = new MapRepository<>();
-		}
-		return matchingRepository;
-	}
+  /**
+   * @param soaEventRepository the soaEventRepository to set
+   */
+  public void setSoaEventRepository(IRepository<SoaEventInfo> soaEventRepository) {
+    this.soaEventRepository = soaEventRepository;
+  }
+
+  /**
+   * register SoaEventInfo to the repository
+   * @param soaEventInfo registers to the repository
+   * @param contextKey with which repository to be associated with
+   */
+  public void registerSoaEventInfo(ContextKey contextKey, SoaEventInfo soaEventInfo) {
+    soaEventRepository.register(contextKey, soaEventInfo);
+
+  }
+
+  /**
+   * unregister SoaEventInfo from the repository
+   * @param contextKey with which repository to be associated with
+   */
+  public void unregisterSoaEventInfo(ContextKey contextKey) {
+    soaEventRepository.unregister(contextKey);
+  }
+
+  /**
+   * retrieves the SoaEventInfo from the repository
+   * @param soaEventName key used for the repository
+   * @return SoaEventInfo
+   */
+  public SoaEventInfo getSoaEventInfo(String soaEventName) {
+    return soaEventRepository.query(soaEventName);
+  }
+
+  /**
+   * retrieves all the SoaEventInfo from the repository based on the contextOrder provided
+   * assumes defaultContextOrder from the configuration when contextOrder is not provided
+   * @param contextOrderParam order of the contexts to be searched
+   * @return List of all values
+   */
+  public SoaEventInfo[] getAllSoaEventInfo(List<String> contextOrderParam) {
+    return soaEventRepository.getValues().toArray(new SoaEventInfo[0]);
+  }
+
+  /**
+   * retrieves all the SoaEventNames in the repository
+   * @return Array of all SoaEventNames
+   */
+  public String[] getSoaEventNames() {
+    return soaEventRepository.getAllKeys().toArray(new String[0]);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void registerResource(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
+    SoaEvents soaEvents = JAXBHelper.unmarshalConfigFile(SoaEvents.class, resource, CONFIGURATION_SCHEMA_FILE);
+
+    if (soaEvents != null) {
+      for (SoaEventInfo soaEventInfo : soaEvents.getSoaEvent()) {
+        ContextKey contextKey = new ContextKey(soaEventInfo.getName(), resource.getURI().toString(), variation, context);
+        registerSoaEventInfo(contextKey, soaEventInfo);
+      }
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void unregisterResource(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
+    SoaEvents soaEvents = JAXBHelper.unmarshalConfigFile(SoaEvents.class, resource, CONFIGURATION_SCHEMA_FILE);
+
+    if (soaEvents != null) {
+      for (SoaEventInfo soaEventInfo : soaEvents.getSoaEvent()) {
+        ContextKey contextKey = new ContextKey(soaEventInfo.getName(), resource.getURI().toString(), variation, context);
+        unregisterSoaEventInfo(contextKey);
+      }
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getResourceFileName() {
+    return DEFAULT_CONFIGURATION_FILE;
+  }
+
+  /**
+   * getRepositoryNames - Retrieve a String list of all the IRepositories managed by this IManager
+   * @return A list of repository names managed by this manager
+   */
+  @Override
+  public Set getRepositoryNames() {
+    return managedRepositories.keySet();
+  }
+
+  /**
+   * Retrieve an IRepository managed by this IManager via its String name
+   * @param name The name of the repository to be retrieved
+   * @return The retrieved repository, or empty if no matching repository was found.
+   */
+  @Override
+  public IRepository<?> getRepositoryByName(String name) {
+    return (IRepository<?>) managedRepositories.get(name);
+  }
+
+
+  public void setSoaEventRepository(MapRepository<SoaEventInfo> soaEventRepository) {
+    this.soaEventRepository = soaEventRepository;
+  }
 }

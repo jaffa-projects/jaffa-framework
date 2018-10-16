@@ -89,31 +89,22 @@ public class NavCache {
      * @return An instance of the NavCache.
      */
     public static NavCache getInstance() {
-        String variation = VariationContext.getVariation();
-        NavCache navCache = c_navCacheByVariation.get(variation);
-        if (navCache == null) {
-            NavCache generatedNavCache = createNavCacheInstance();
-            navCache = c_navCacheByVariation.putIfAbsent(variation, generatedNavCache);
-            if (navCache == null)
-                navCache = generatedNavCache;
-        }
-        return navCache;
+        return new NavCache();
     }
 
     /**
-     *
      * @return NavCache
      */
+    @Deprecated
     private static NavCache createNavCacheInstance() {
-        String fileLocation = getFileLocation();
-        String defaultFileLocation = getDefaultFileLocation();
-        return fileLocation.equals(defaultFileLocation) ? getDefaultInstance() : new NavCache();
+        return new NavCache();
     }
 
     /**
      *
      * @return NavCache
      */
+    @Deprecated
     private static NavCache getDefaultInstance() {
         String variation = DEFAULT_KEY;
         NavCache navCache = c_navCacheByVariation.get(variation);

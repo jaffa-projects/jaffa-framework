@@ -235,6 +235,13 @@ Jaffa.finder.CriteriaPanel = Ext.extend(Ext.Panel, {
    */
   ,
   search: function(criteria) {
+	// disabling the comment panel when we click on the Search button
+	// ex: Default Comments screen - below comments section
+	if(this && this.grid && this.grid.refOwner && this.grid.refOwner.ownerCt 
+		&& this.grid.refOwner.ownerCt.maintenancePanelRef){	
+		this.grid.refOwner.ownerCt.maintenancePanelRef.setDisabled(true);
+		this.grid.refOwner.ownerCt.maintenancePanelRef.collapse();
+	}
     criteria = criteria || this.getCriteriaFromPanel();
     if(criteria == false){
       return false;
@@ -1448,7 +1455,12 @@ Jaffa.finder.FlexCriteria = function() {
           config.items.push(Jaffa.finder.CriteriaPanelFactory.createPanel(fieldConfig));
         }
       }
-      
+
+      //If there is no flex fields then return null and which will not show the empty flex field section in criteria screen.
+      if(config && config.items && config.items==0){
+         return null;
+      }
+
       // create the FieldSet
       return new Ext.form.FieldSet(config);
     }

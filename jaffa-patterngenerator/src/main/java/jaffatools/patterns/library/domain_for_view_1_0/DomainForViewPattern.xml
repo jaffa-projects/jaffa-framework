@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE BuildPattern PUBLIC "-//JAFFA//DTD Pattern 1.0//EN" "http://jaffa.sourceforge.net/DTD/pattern_1_0.dtd">
+
+<BuildPattern>
+    <Name>DomainForViewPattern</Name>
+
+    <PreRequesites>
+    </PreRequesites>
+
+    <Components>
+        <Build>
+            <Template>patterns/library/domain_for_view_1_0/DomainObjectWithJpa.wm</Template>
+            <Package>java.$(DomainPackage.Lower)</Package>
+            <FileName>$(DomainObject.Upper1).java</FileName>
+            <Override>Merge</Override>
+        </Build>
+
+        <Build>
+            <Template>patterns/library/domain_for_view_1_0/MetaObject.wm</Template>
+            <Package>java.$(DomainPackage.Lower)</Package>
+            <FileName>$(DomainObject.Upper1)Meta.java</FileName>
+            <Override>Merge</Override>
+        </Build>
+
+        <Build>
+            <Template>patterns/library/domain_for_view_1_0/Resources.wm</Template>
+            <Package>java.$(DomainPackage.Lower)</Package>
+            <FileName>$(DomainObject.Upper1)Resources.properties</FileName>
+            <Override>Merge</Override>
+        </Build>
+        
+        <Build>
+            <Template>patterns/library/domain_for_view_1_0/Mapping.wm</Template>
+            <Package>java.$(MappingPackage.Lower)</Package>
+            <FileName>$(DomainObject.Upper1).xml</FileName>
+            <Override>True</Override>
+        </Build>
+
+    </Components>
+</BuildPattern>

@@ -1,0 +1,204 @@
+// .//GEN-BEGIN:_1_be
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ * 
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/
+package $(BasePackage.Lower).components.$(Component.Lower).ui;
+
+import org.apache.log4j.Logger;
+import org.jaffa.presentation.portlet.FormBase;
+import org.jaffa.presentation.portlet.widgets.model.CheckBoxModel;
+import $(BasePackage.Lower).components.$(Component.Lower).dto.$(Component.Upper1)OutDto;
+
+
+#if ($RelatedObjects != null) #begin
+import java.util.*;
+import org.jaffa.presentation.portlet.widgets.model.GridModel;
+import org.jaffa.presentation.portlet.widgets.model.GridModelRow;
+import org.jaffa.presentation.portlet.widgets.controller.UserGridController;
+
+#foreach $object in $RelatedObjects.values() #begin
+import $(BasePackage.Lower).components.$(Component.Lower).dto.$(object.ObjectName.Upper1)Dto;
+#end
+#end
+// .//GEN-END:_1_be
+// Add additional imports//GEN-FIRST:_imports
+
+
+
+
+// .//GEN-LAST:_imports
+// .//GEN-BEGIN:_2_be
+/** The FormBean class to support the View jsp of the $(Component.Upper1).
+ */
+public class $(Component.Upper1)Form extends FormBase {
+    /** The name constant used for determining the corresponding jsp through the struts-config file.
+     */    
+    public static final String NAME = "$(Module.Lower)_$(Component.Lower1)";
+
+    private static Logger log = Logger.getLogger($(Component.Upper1)Form.class);
+
+
+#foreach $field in $ResultsFields.values() #begin
+#set $wm_dataType = ""
+#if ($(field.DataType.Upper) == "STRING" || $(field.DataType.Upper) == "VARCHAR" || $(field.DataType.Upper) == "LONGSTRING" || $(field.DataType.Upper) == "LONGVARCHAR" || $(field.DataType.Upper) == "CLOB") #begin
+#set $wm_dataType = "String"
+#elseif ($(field.DataType.Upper) == "INTEGER" || $(field.DataType.Upper) == "BIGINT") #begin
+#set $wm_dataType = "Long"
+#elseif ($(field.DataType.Upper) == "DECIMAL" || $(field.DataType.Upper) == "DOUBLE") #begin
+#set $wm_dataType = "Double"
+#elseif ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") #begin
+#set $wm_dataType = "Boolean"
+#elseif ($(field.DataType.Upper) == "DATE_ONLY" || $(field.DataType.Upper) == "DATEONLY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateOnly"
+#elseif ($(field.DataType.Upper) == "DATE_TIME" || $(field.DataType.Upper) == "DATETIME") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateTime"
+#elseif ($(field.DataType.Upper) == "CURRENCY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.Currency"
+#elseif ($(field.DataType.Upper) == "RAW" || $(field.DataType.Upper) == "LONGRAW" || $(field.DataType.Upper) == "BLOB") #begin
+#set $wm_dataType = "byte[]"
+#end
+#if ($wm_dataType != "Boolean") #begin
+    private $wm_dataType m_$(field.Name.Lower1);
+#else
+    private CheckBoxModel w_$(field.Name.Lower1);
+#end
+#end
+
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+    private GridModel w_related$(object.ObjectName.Upper1) = null;
+#end
+#end
+
+
+#foreach $field in $ResultsFields.values() #begin
+#set $wm_dataType = ""
+#if ($(field.DataType.Upper) == "STRING" || $(field.DataType.Upper) == "VARCHAR" || $(field.DataType.Upper) == "LONGSTRING" || $(field.DataType.Upper) == "LONGVARCHAR" || $(field.DataType.Upper) == "CLOB") #begin
+#set $wm_dataType = "String"
+#elseif ($(field.DataType.Upper) == "INTEGER" || $(field.DataType.Upper) == "BIGINT") #begin
+#set $wm_dataType = "Long"
+#elseif ($(field.DataType.Upper) == "DECIMAL" || $(field.DataType.Upper) == "DOUBLE") #begin
+#set $wm_dataType = "Double"
+#elseif ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") #begin
+#set $wm_dataType = "Boolean"
+#elseif ($(field.DataType.Upper) == "DATE_ONLY" || $(field.DataType.Upper) == "DATEONLY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateOnly"
+#elseif ($(field.DataType.Upper) == "DATE_TIME" || $(field.DataType.Upper) == "DATETIME") #begin
+#set $wm_dataType = "org.jaffa.datatypes.DateTime"
+#elseif ($(field.DataType.Upper) == "CURRENCY") #begin
+#set $wm_dataType = "org.jaffa.datatypes.Currency"
+#elseif ($(field.DataType.Upper) == "RAW" || $(field.DataType.Upper) == "LONGRAW" || $(field.DataType.Upper) == "BLOB") #begin
+#set $wm_dataType = "byte[]"
+#end
+#if ($wm_dataType != "Boolean") #begin
+    /** Getter for property $(field.Name.Lower1).
+     * @return Value of property $(field.Name.Lower1).
+     */
+    public $wm_dataType get$(field.Name.Upper1)() {
+        return m_$(field.Name.Lower1);
+    }
+#else
+    /** Getter for property $(field.Name.Lower1). This is invoked by the custom tag, when the jsp is rendered, to get the current value.
+     * @return Value of property $(field.Name.Lower1).
+     */
+    public CheckBoxModel get$(field.Name.Upper1)WM() {
+        return w_$(field.Name.Lower1);
+    }
+#end
+
+#end
+    // .//GEN-END:_2_be
+
+#if ($RelatedObjects != null) #begin
+#foreach $object in $RelatedObjects.values() #begin
+    // .//GEN-BEGIN:Related$(object.ObjectName.Upper1)_1_be
+    /** Getter for property $(object.ObjectName.Upper1). This is invoked by the custom tag, when the jsp is rendered, to get the current value.
+     * This gets the current data from the component.
+     * @return Value of property $(object.ObjectName.Lower1).
+     */
+    public GridModel getRelated$(object.ObjectName.Upper1)WM() {
+        if (w_related$(object.ObjectName.Upper1) == null) {
+            w_related$(object.ObjectName.Upper1) = (GridModel) getWidgetCache().getModel("related$(object.ObjectName.Upper1)");
+            if (w_related$(object.ObjectName.Upper1) == null) {
+                w_related$(object.ObjectName.Upper1) = new GridModel();
+                populateRelated$(object.ObjectName.Upper1)();
+                getWidgetCache().addModel("related$(object.ObjectName.Upper1)", w_related$(object.ObjectName.Upper1));
+            }
+        }
+        return w_related$(object.ObjectName.Upper1);
+    }
+    
+    /** Setter for property $(object.ObjectName.Lower1). This is invoked by the servlet, when a post is done on the View screen.
+     * It sets the selected rows on the model.
+     * @param value New value of property $(object.ObjectName.Lower1).
+     */
+    public void setRelated$(object.ObjectName.Upper1)WV(String value) {
+        UserGridController.updateModel(value, getRelated$(object.ObjectName.Upper1)WM(), this);
+    }
+    
+    private void populateRelated$(object.ObjectName.Upper1)() {
+        GridModel rows = getRelated$(object.ObjectName.Upper1)WM();
+        rows.clearRows();
+        $(Component.Upper1)OutDto outputDto = (($(Component.Upper1)Component) getComponent()).get$(Component.Upper1)OutDto();
+        if (outputDto != null) {
+            GridModelRow row = null;
+            $(object.ObjectName.Upper1)Dto[] $(object.ObjectName.Lower1) = outputDto.get$(object.ObjectName.Upper1)();
+            for (int i = 0; i < $(object.ObjectName.Lower1).length; i++) {
+                $(object.ObjectName.Upper1)Dto rowDto = $(object.ObjectName.Lower1)[i];
+                row = rows.newRow();
+
+#foreach $field in $object.RelatedObjectFields.values() #begin
+#if ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") #begin
+                row.addElement("$(field.Name.Lower1)", new CheckBoxModel( (rowDto.get$(field.Name.Upper1)() != null ? rowDto.get$(field.Name.Upper1)() : Boolean.FALSE) ));
+#else
+                row.addElement("$(field.Name.Lower1)", rowDto.get$(field.Name.Upper1)());
+#end
+#end
+                // .//GEN-END:Related$(object.ObjectName.Upper1)_1_be
+                // Add custom code for the row //GEN-FIRST:Related$(object.ObjectName.Upper1)_1
+
+
+                // .//GEN-LAST:Related$(object.ObjectName.Upper1)_1
+                // .//GEN-BEGIN:Related$(object.ObjectName.Upper1)_2_be
+            }
+        }
+    }
+    // .//GEN-END:Related$(object.ObjectName.Upper1)_2_be
+#end
+#end
+    // .//GEN-BEGIN:_initForm_1_be
+    /** This method is invoked by the FormTag. It gets the data from the component.
+     */
+    public void initForm() {
+        $(Component.Upper1)OutDto outputDto = (($(Component.Upper1)Component) getComponent()).get$(Component.Upper1)OutDto();
+        if (outputDto != null) {
+
+#foreach $field in $ResultsFields.values() #begin
+#if ($(field.DataType.Upper) == "BOOLEAN" || $(field.DataType.Upper) == "BIT") #begin
+            w_$(field.Name.Lower1) = new CheckBoxModel( (outputDto.get$(field.Name.Upper1)() != null ? outputDto.get$(field.Name.Upper1)() : Boolean.FALSE) );
+#else
+            m_$(field.Name.Lower1) = outputDto.get$(field.Name.Upper1)();
+#end
+#end
+            // .//GEN-END:_initForm_1_be
+            // Add custom code //GEN-FIRST:_initForm_1
+
+
+            // .//GEN-LAST:_initForm_1
+            // .//GEN-BEGIN:_initForm_2_be
+        }
+    }
+    // .//GEN-END:_initForm_2_be
+    // All the custom code goes here //GEN-FIRST:_custom
+
+
+
+
+
+
+    // .//GEN-LAST:_custom
+}

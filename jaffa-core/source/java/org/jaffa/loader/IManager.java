@@ -54,7 +54,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Interface for xml managers to registerXml and getResourceFileName.
@@ -62,7 +62,7 @@ import java.util.List;
 public interface IManager {
 
     /**
-     * registers the XML config file to repository.
+     * Registers the XML config file to repository.
      * @param resource the object that contains the xml config file.
      * @param precedence associated with the module based on its definition in manifest
      * @param variation associated with the module based on its definition in manifest
@@ -73,12 +73,32 @@ public interface IManager {
     void registerResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException;
 
     /**
-     * gets the name of xml config file.
+     * Unregisters the XML config file to repository.
+     * @param resource the object that contains the xml config file.
+     * @param precedence associated with the module based on its definition in manifest
+     * @param variation associated with the module based on its definition in manifest
+     * @throws JAXBException if xml file is not valid.
+     * @throws SAXException if xml file is not valid.
+     * @throws IOException if resource does not found.
+     */
+    void unregisterResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException;
+
+    /**
+     * Gets the name of xml config file.
      * @return xml config file name
      */
     String getResourceFileName();
 
-    List<String> getRepositoryNames();
+    /**
+     * Gets a list of all of the repository names managed by the application
+     * @return  A list of managed repositories
+     */
+    Set getRepositoryNames();
 
+    /**
+     * Gets the data within a specified repository
+     * @param name The repository to retrieve data from
+     * @return The repository data, or null if the repository does not exist
+     */
     IRepository getRepositoryByName(String name);
 }

@@ -86,7 +86,6 @@ public abstract class GraphCriteria implements IFlexCriteriaFields {
     private String[] resultGraphRules;
     private FlexCriteriaBean flexCriteriaBean;
     private Boolean shouldLookupFlexbean = true;
-    private String tableName;
 
     /**
      * Getter for property orderByFields.
@@ -245,6 +244,42 @@ public abstract class GraphCriteria implements IFlexCriteriaFields {
     }
 
     /**
+     * Builds a Criteria object that represents both the concrete class result combined with optional flexCriteria
+     * when available for the current user.
+     * <p>
+     * This method should be the only method used to build the criteria for a concrete instance. It works around an
+     * order of events issue that was created when removing the flex field aop interceptor which would evaluate the
+     * flex criteria post-concrete class invocation. Since the flexcriteria bean expects the tableName to already
+     * be set on the criteria object during the time that it is calculated, it would ignore any fields that were
+     * NOT domain-info mapped.
+     * <p>
+     * If you are seeing issues where flex criteria is not being include as part of a search, make sure the caller
+     * is calling this method as opposed to invoking the returnQueryClause method directly.
+     *
+     * @return
+     */
+    public Criteria buildQueryCriteria() {
+        Criteria result = returnQueryClause(null);
+
+        // FlexField Support:
+        // if a flexCriteria bean exists, then allow the flexCritieraBean to participate in the query
+        if (flexCriteriaBean != null) {
+            if (log.isDebugEnabled()) {
+                log.debug("Invoking returnQueryClause() method on the FlexCriteriaBean");
+            }
+            try {
+                result = flexCriteriaBean.returnQueryClause(result);
+            } catch (FrameworkException e) {
+                // For right now, we can just log this. Changing the method will cause build issues when upstream
+                // integrations don't handle the exception.
+                log.error("An error occurred while attempting to append to the returnQueryClause by a flexCriteria bean", e);
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Return the real retrieve clause that will be executed for this query.
      * <p>
      * When this is used for a sub-query, a nestedClause will be passed in that
@@ -255,13 +290,16 @@ public abstract class GraphCriteria implements IFlexCriteriaFields {
      * <p>
      * The abstract implementation can be used to initially create a Criteria object
      * populated with the default fields on the base class (start, limit, orderBy)
+     * <p>
+     * If you are having issues with flexCriteriaBean results missing from the generated criteria,
+     * then you may need redirect the caller to invoke buildQueryCriteria as opposed to this method.
+     * See the notes for buildQueryCriteria for more information!
      *
      * @param nestedClause Minimal criteria used to retrieve the nested object. Will be null for the root query.
      * @return return the generated clause
      */
     public Criteria returnQueryClause(Criteria nestedClause) {
         Criteria c = new Criteria();
-        c.setTable(tableName);
         // append an orderBy clause to the criteria
         if (getOrderByFields() != null) {
             for (OrderByField orderByField : getOrderByFields()) {
@@ -273,21 +311,6 @@ public abstract class GraphCriteria implements IFlexCriteriaFields {
         }
         c.setFirstResult(getObjectStart());
         c.setMaxResults(getObjectLimit());
-
-        // FlexField Support:
-        // if a flexCriteria bean exists, then allow the flexCritieraBean to participate in the query
-        if (flexCriteriaBean != null) {
-            if (log.isDebugEnabled()) {
-                log.debug("Invoking returnQueryClause() method on the FlexCriteriaBean");
-            }
-            try {
-                c = flexCriteriaBean.returnQueryClause(c);
-            } catch (FrameworkException e) {
-                // For right now, we can just log this. Changing the method will cause build issues when upstream
-                // integrations don't handle the exception.
-                log.error("An error occurred while attempting to append to the returnQueryClause by a flexCriteria bean", e);
-            }
-        }
 
         return c;
     }
@@ -351,22 +374,5 @@ public abstract class GraphCriteria implements IFlexCriteriaFields {
             currentInstance.setFlexCriteriaParams(flexCriteriaBean.getFlexCriteriaParams());
         else
             this.flexCriteriaBean = flexCriteriaBean;
-    }
-
-    /**
-     * Internal method of specifying the table name that will be set on the query criteria when its created. This
-     * allows the flexCriteriaBean to properly generate a criteria clause for non-domain flex field.
-     * <p>
-     * Note: This is required because the invocation order for the flex field returnQueryClause method changed from
-     * being post-invocation via the interceptor to now being called during super.returnQueryClause. All concrete
-     * instances call the super.returnQueryClause method first, then set the tablename as this method will ignore
-     * any passed criteria (see comments on the method above reqarding subqueries). We work around this by having the
-     * concrete implementation make the base class aware of the table name instead of setting the value on the
-     * criteria directly.
-     *
-     * @param tableName
-     */
-    protected void setTableName(String tableName) {
-        this.tableName = tableName;
     }
 }

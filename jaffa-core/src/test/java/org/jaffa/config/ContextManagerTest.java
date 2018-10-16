@@ -128,7 +128,7 @@ public class ContextManagerTest {
 
         assertEquals("http://pentaho_host.mypentaho.com:80967/pentaho", iContextManager.getProperty("pentaho.url"));
 
-        assertEquals("C:\\apache-tomcat-8.5.16/server/Goldesp/conf/report-security.txt", iContextManager.getProperty("usersecurity.reportsecurity.securityFilterKeyFile"));
+        assertEquals("C:/apache-tomcat-8.5.16/server/Goldesp/conf/report-security.txt", iContextManager.getProperty("usersecurity.reportsecurity.securityFilterKeyFile"));
 
 
 

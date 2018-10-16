@@ -52,6 +52,7 @@ import org.apache.log4j.Logger;
 import org.jaffa.components.audit.apis.data.AuditTransactionCriteria;
 import org.jaffa.components.audit.apis.data.AuditTransactionViewGraph;
 import org.jaffa.components.audit.apis.data.AuditTransactionViewQueryResponse;
+import org.jaffa.components.audit.apis.helper.AuditTransactionHelper;
 import org.jaffa.datatypes.DateTime;
 import org.jaffa.datatypes.DateOnly;
 import org.jaffa.soa.dataaccess.GraphService;
@@ -92,13 +93,14 @@ public class AuditTransactionViewService extends GraphService<AuditTransactionCr
         criteria.queryView(true);
         AuditTransactionViewQueryResponse response = super._query(criteria);
         try {
-            super.handler.removeHiddenFields(response);
+            new AuditTransactionHelper().removeHiddenFields(response);
         } catch (FrameworkException e) {
             log.error("Exception thrown while removing hidden fields from the response", e);
             response = super.createGraphQueryResponse(null, e);
         }
         return response;
     }
+
 
     public Map<String, Properties> getAuditableClasses() throws FrameworkException {
         Map<String, Properties> output = null;

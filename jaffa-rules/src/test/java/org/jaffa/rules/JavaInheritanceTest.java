@@ -274,4 +274,10 @@ public class JavaInheritanceTest extends TestCase {
             fail();
         }
     }
+
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        TestHelper.shutdownRepos();
+    }
 }

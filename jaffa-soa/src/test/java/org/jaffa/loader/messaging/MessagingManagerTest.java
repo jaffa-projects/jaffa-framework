@@ -2,6 +2,7 @@ package org.jaffa.loader.messaging;
 
 import org.jaffa.loader.ContextKey;
 import org.jaffa.modules.messaging.services.configdomain.*;
+import org.jaffa.security.VariationContext;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -112,7 +113,7 @@ public class MessagingManagerTest {
         QueueInfo qInfo = new QueueInfo();
         String queueName = "q1";
         qInfo.setName(queueName);
-        ContextKey contextKey = new ContextKey(queueName, "jaffa-messaging-config.xml", "DEF", "0-PLATFORM");
+        ContextKey contextKey = new ContextKey(queueName, "jaffa-messaging-config.xml", VariationContext.NULL_VARIATION, "0-PLATFORM");
         messagingManager.registerQueueInfo(contextKey, qInfo);
         queueNames = messagingManager.getQueueNames();
         assertEquals(1, queueNames.length);
@@ -123,7 +124,7 @@ public class MessagingManagerTest {
         TopicInfo topicInfo = new TopicInfo();
         String topicName = "t1";
         topicInfo.setName(topicName);
-        contextKey = new ContextKey(topicName, "jaffa-messaging-config.xml", "DEF", "0-PLATFORM");
+        contextKey = new ContextKey(topicName, "jaffa-messaging-config.xml", VariationContext.NULL_VARIATION, "0-PLATFORM");
         messagingManager.registerTopicInfo(contextKey, topicInfo);
         topicNames = messagingManager.getTopicNames();
         assertEquals(1, topicNames.length);
@@ -145,7 +146,7 @@ public class MessagingManagerTest {
         QueueInfo qInfo = new QueueInfo();
         String commonName = "q1";
         qInfo.setName(commonName);
-        ContextKey contextKey = new ContextKey(commonName, "jaffa-messaging-config.xml", "DEF", "0-PLATFORM");
+        ContextKey contextKey = new ContextKey(commonName, "jaffa-messaging-config.xml", VariationContext.NULL_VARIATION, "0-PLATFORM");
         messagingManager.registerQueueInfo(contextKey, qInfo);
         queueNames = messagingManager.getQueueNames();
         assertEquals(1, queueNames.length);
@@ -195,7 +196,7 @@ public class MessagingManagerTest {
         QueueInfo info = new QueueInfo();
         String queueName = "q1";
         info.setName(queueName);
-        ContextKey contextKey1 = new ContextKey(queueName, "jaffa-messaging-config.xml", "DEF", "0-PLATFORM");
+        ContextKey contextKey1 = new ContextKey(queueName, "jaffa-messaging-config.xml", VariationContext.NULL_VARIATION, "0-PLATFORM");
         messagingManager.registerQueueInfo(contextKey1, info);
         queueNames = messagingManager.getQueueNames();
         assertEquals(1, queueNames.length);
@@ -203,7 +204,7 @@ public class MessagingManagerTest {
         QueueInfo info2 = new QueueInfo();
         String queueName2 = "q2";
         info2.setName(queueName2);
-        ContextKey contextKey2 = new ContextKey(queueName2, "jaffa-messaging-config.xml", "DEF", "0-PLATFORM");
+        ContextKey contextKey2 = new ContextKey(queueName2, "jaffa-messaging-config.xml", VariationContext.NULL_VARIATION, "0-PLATFORM");
         messagingManager.registerQueueInfo(contextKey2, info2);
         queueNames = messagingManager.getQueueNames();
         assertEquals(2, queueNames.length);
@@ -226,7 +227,7 @@ public class MessagingManagerTest {
         TopicInfo info = new TopicInfo();
         String topicName = "q1";
         info.setName(topicName);
-        ContextKey contextKey1 = new ContextKey(topicName, "jaffa-messaging-config.xml", "DEF", "0-PLATFORM");
+        ContextKey contextKey1 = new ContextKey(topicName, "jaffa-messaging-config.xml", VariationContext.NULL_VARIATION, "0-PLATFORM");
         messagingManager.registerTopicInfo(contextKey1, info);
         topicNames = messagingManager.getTopicNames();
         assertEquals(1, topicNames.length);
@@ -234,7 +235,7 @@ public class MessagingManagerTest {
         TopicInfo info2 = new TopicInfo();
         String topicName2 = "q2";
         info2.setName(topicName2);
-        ContextKey contextKey2 = new ContextKey(topicName2, "jaffa-messaging-config.xml", "DEF", "0-PLATFORM");
+        ContextKey contextKey2 = new ContextKey(topicName2, "jaffa-messaging-config.xml", VariationContext.NULL_VARIATION, "0-PLATFORM");
         messagingManager.registerTopicInfo(contextKey2, info2);
         topicNames = messagingManager.getTopicNames();
         assertEquals(2, topicNames.length);
@@ -256,7 +257,7 @@ public class MessagingManagerTest {
         MessageFilter info = new MessageFilter();
         String filterName = "q1";
         info.setFilterName(filterName);
-        ContextKey contextKey1 = new ContextKey(filterName, "jaffa-messaging-config.xml", "DEF", "0-PLATFORM");
+        ContextKey contextKey1 = new ContextKey(filterName, "jaffa-messaging-config.xml", VariationContext.NULL_VARIATION, "0-PLATFORM");
         messagingManager.registerMessageFilter(contextKey1, info);
         filterNames = messagingManager.getMessageFilters();
         assertEquals(1, filterNames.size());
@@ -264,7 +265,7 @@ public class MessagingManagerTest {
         MessageFilter info2 = new MessageFilter();
         String filterName2 = "q2";
         info2.setFilterName(filterName2);
-        ContextKey contextKey2 = new ContextKey(filterName2, "jaffa-messaging-config.xml", "DEF", "0-PLATFORM");
+        ContextKey contextKey2 = new ContextKey(filterName2, "jaffa-messaging-config.xml", VariationContext.NULL_VARIATION, "0-PLATFORM");
         messagingManager.registerMessageFilter(contextKey2, info2);
         filterNames = messagingManager.getMessageFilters();
         assertEquals(2, filterNames.size());
@@ -283,7 +284,7 @@ public class MessagingManagerTest {
         MessageFilter info = new MessageFilter();
         String name = "q1";
         info.setFilterName(name);
-        ContextKey contextKey = new ContextKey(name, "jaffa-messaging-config.xml", "DEF", "0-PLATFORM");
+        ContextKey contextKey = new ContextKey(name, "jaffa-messaging-config.xml", VariationContext.NULL_VARIATION, "0-PLATFORM");
         messagingManager.registerMessageFilter(contextKey, info);
         List<MessageFilter> filters = messagingManager.getMessageFilters();
         assertEquals(1, filters.size());
@@ -300,7 +301,7 @@ public class MessagingManagerTest {
         MessageInfo info = new MessageInfo();
         String queueName = "q1";
         info.setQueueName(queueName);
-        ContextKey contextKey = new ContextKey(queueName, "jaffa-messaging-config.xml", "DEF", "0-PLATFORM");
+        ContextKey contextKey = new ContextKey(queueName, "jaffa-messaging-config.xml", VariationContext.NULL_VARIATION, "0-PLATFORM");
         messagingManager.registerMessageInfo(contextKey, info);
         MessageInfo retrievedInfo =
                 messagingManager.getMessageInfo(queueName);
@@ -355,7 +356,7 @@ public class MessagingManagerTest {
         info.setQueueName(queueName);
         ContextKey contextKey = new ContextKey(queueName, "jaffa-messaging-config.xml", "DEF", "0-PLATFORM");
         messagingManager.registerMessageInfo(contextKey, info);
-        assertEquals("MessageInfo", messagingManager.getMessageInfoRepository().getName());
+        assertEquals("MessageInfo", messagingManager.getRepositoryByName("MessageInfo").getName());
 
         //MessageFilterRepository
         MessageFilter filter = new MessageFilter();
@@ -363,7 +364,7 @@ public class MessagingManagerTest {
         filter.setFilterName(name);
         contextKey = new ContextKey(name, "jaffa-messaging-config.xml", "DEF", "0-PLATFORM");
         messagingManager.registerMessageFilter(contextKey, filter);
-        assertEquals("MessageFilter", messagingManager.getMessageFilterRepository().getName());
+        assertEquals("MessageFilter", messagingManager.getRepositoryByName("MessageFilter").getName());
 
         //TopicInfoRepository
         TopicInfo topicInfo = new TopicInfo();
@@ -371,7 +372,7 @@ public class MessagingManagerTest {
         topicInfo.setName(topicName);
         contextKey = new ContextKey(topicName, "jaffa-messaging-config.xml", "DEF", "0-PLATFORM");
         messagingManager.registerTopicInfo(contextKey, topicInfo);
-        assertEquals("TopicInfo", messagingManager.getTopicInfoRepository().getName());
+        assertEquals("TopicInfo", messagingManager.getRepositoryByName("TopicInfo").getName());
 
         //QueueInfoRepository
         QueueInfo qInfo = new QueueInfo();
@@ -379,7 +380,7 @@ public class MessagingManagerTest {
         qInfo.setName(commonName);
         contextKey = new ContextKey(commonName, "jaffa-messaging-config.xml", "DEF", "0-PLATFORM");
         messagingManager.registerQueueInfo(contextKey, qInfo);
-        assertEquals("QueueInfo", messagingManager.getQueueInfoRepository().getName());
+        assertEquals("QueueInfo", messagingManager.getRepositoryByName("QueueInfo").getName());
 
     }
 

@@ -1,0 +1,1064 @@
+// .//GEN-BEGIN:1_be
+/******************************************************
+ * Code Generated From JAFFA Framework Default Pattern
+ * 
+ * The JAFFA Project can be found at http://jaffa.sourceforge.net
+ * and is available under the Lesser GNU Public License
+ ******************************************************/ 
+package $(DomainPackage.Lower);
+
+import org.apache.log4j.Logger;
+import java.util.*;
+import javax.xml.bind.annotation.*;
+import org.jaffa.datatypes.*;
+import org.jaffa.metadata.*;
+import org.jaffa.rules.RulesEngine;
+import org.jaffa.persistence.*;
+import org.jaffa.persistence.exceptions.*;
+import org.jaffa.security.SecurityManager;
+import org.jaffa.util.*;
+import org.jaffa.exceptions.FrameworkException;
+import org.jaffa.exceptions.RelatedDomainObjectFoundException;
+import org.jaffa.exceptions.DuplicateKeyException;
+import org.jaffa.datatypes.exceptions.InvalidForeignKeyException;
+import org.jaffa.exceptions.ApplicationExceptions;
+
+#set $wm_preAddRequired="false"
+#set $wm_preUpdateRequired="false"
+#if ($(Relationships) != null) #begin
+$ScratchPad.clear()
+#foreach $relationship in $Relationships.values() #begin
+#if ("$(relationship.ToDomainPackage.Lower).$(relationship.ToDomainObject.Upper1)" != "$(DomainPackage.Lower).$(DomainObject.Upper1)") #begin
+#set $wm_ignoreRelationship="false"
+#foreach $fromField in $relationship.FromFields.values() #begin
+#foreach $field in $Fields.values() #begin
+#if ($(fromField.Name.Upper1) == $(field.Name.Upper1) && $(field.Ignore) != null && $(field.Ignore.BooleanValue)) #begin
+#set $wm_ignoreRelationship="true"
+#end
+#end
+#end
+#if ($wm_ignoreRelationship == "false") #begin
+#set $wm_package = "$(relationship.ToDomainPackage.Lower).$(relationship.ToDomainObject.Upper1)"
+#if ($ScratchPad.get($wm_package) == null) #begin
+## the following 'if' statement is used to invoke the 'put' method
+#if ($ScratchPad.put($wm_package,$wm_package) != null) #begin #end
+import $(wm_package);
+import $(wm_package)Meta;
+#end
+#end
+#end
+#end
+#end
+// .//GEN-END:1_be
+// Add additional imports//GEN-FIRST:imports
+
+
+
+
+// .//GEN-LAST:imports
+// .//GEN-BEGIN:2_be
+/**
+ * Auto Generated Persistent class for the $(DatabaseTable) table.
+ * @author  Auto-Generated
+ */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+public class $(DomainObject.Upper1) extends Persistent {
+
+    private static final Logger log = Logger.getLogger($(DomainObject.Upper1).class);
+
+
+#foreach $field in $Fields.values() #begin
+#if ($(field.Ignore) == null || !$(field.Ignore.BooleanValue)) #begin
+    @XmlElement(name="$(field.Name.JavaBeanStyle)")
+    private $(field.DataType) m_$(field.Name.Lower1);
+
+#end
+#end
+
+#if ($(Relationships) != null) #begin
+#foreach $relationship in $Relationships.values() #begin
+#set $wm_ignoreRelationship="false"
+#foreach $fromField in $relationship.FromFields.values() #begin
+#foreach $field in $Fields.values() #begin
+#if ($(fromField.Name.Upper1) == $(field.Name.Upper1) && $(field.Ignore) != null && $(field.Ignore.BooleanValue)) #begin
+#set $wm_ignoreRelationship="true"
+#end
+#end
+#end
+#if ($wm_ignoreRelationship == "false") #begin
+#if ($(relationship.Name) != null) #begin
+#set $wm_relationshipName = $relationship.Name
+#else
+#set $wm_relationshipName = $relationship.ToDomainObject
+#end
+#if ($(relationship.FromCardinality.RelationshipTypeOne) && $(relationship.ToCardinality.RelationshipTypeMany)) #begin
+    private transient Collection m_$(wm_relationshipName.Lower1)Collection;
+#elseif ($(relationship.FromCardinality.RelationshipTypeMany) && $(relationship.ToCardinality.RelationshipTypeOne)) #begin
+    private transient $(relationship.ToDomainObject.Upper1) m_$(wm_relationshipName.Lower1)Object;
+#elseif ($(relationship.FromCardinality.RelationshipTypeOne) && $(relationship.ToCardinality.RelationshipTypeOne)) #begin
+    private transient $(relationship.ToDomainObject.Upper1) m_$(wm_relationshipName.Lower1)Object;
+#end
+#end
+#end
+
+#end
+
+#set $wm_primaryKeySignature=""
+#set $wm_primaryKeyArguments=""
+#foreach $field in $Fields.values() #begin
+#if ($(field.PrimaryKey) != null && $(field.PrimaryKey.BooleanValue)) #begin
+#if ($(wm_primaryKeySignature) != "") #begin
+#set $wm_primaryKeySignature="$(wm_primaryKeySignature), "
+#set $wm_primaryKeyArguments="$(wm_primaryKeyArguments), "
+#end
+#set $wm_primaryKeySignature="$(wm_primaryKeySignature)$(field.DataType) $(field.Name.Lower1)"
+#set $wm_primaryKeyArguments="$(wm_primaryKeyArguments)$(field.Name.Lower1)"
+#end
+#end
+#if ($(wm_primaryKeySignature) != "") #begin
+    /**
+     * Check if the domain object exists for the input Primary Key.
+     *
+     * @return true if the domain object exists for the input Primary Key.
+     * @throws FrameworkException Indicates some system error
+     */
+    public static boolean exists(UOW uow, $(wm_primaryKeySignature)) throws FrameworkException {
+        boolean localUow = false;
+        try {
+            if (uow == null || !uow.isActive()) {
+                uow = new UOW();
+                localUow = true;
+            }
+            boolean exists = false;
+            Criteria criteria = findByPKCriteria($(wm_primaryKeyArguments));
+            criteria.addFunction(Criteria.FUNCTION_COUNT, null, Criteria.ID_FUNCTION_COUNT);
+            Iterator itr = uow.query(criteria).iterator();
+            if (itr.hasNext()) {
+                Number count = (Number) ((Map) itr.next()).get(Criteria.ID_FUNCTION_COUNT);
+                exists = count != null && count.intValue() > 0;
+            }
+            return exists;
+        } finally {
+            if (localUow && uow != null)
+                uow.rollback();
+        }
+    }
+
+    /**
+     * Returns the domain object for the input Primary Key.
+     *
+     * @return the domain object for the input Primary Key. A null is returned if the domain object is not found.
+     * @throws FrameworkException Indicates some system error
+     */
+    public static $(DomainObject.Upper1) findByPK(UOW uow, $(wm_primaryKeySignature)) throws FrameworkException {
+        boolean localUow = false;
+        try {
+            if (uow == null || !uow.isActive()) {
+                uow = new UOW();
+                localUow = true;
+            }
+            Criteria criteria = findByPKCriteria($(wm_primaryKeyArguments));
+            Iterator itr = uow.query(criteria).iterator();
+            if (itr.hasNext())
+                return ($(DomainObject.Upper1)) itr.next();
+            else
+                return null;
+        } finally {
+            if (localUow && uow != null)
+                uow.rollback();
+        }
+    }
+
+    /**
+     *  Returns a Criteria object for retrieving the domain object based on the input Primary Key.
+     *
+     * @return a Criteria object for retrieving the domain object based on the input Primary Key.
+     */
+    public static Criteria findByPKCriteria($(wm_primaryKeySignature)) {
+        Criteria criteria = new Criteria();
+        criteria.setTable($(DomainObject.Upper1)Meta.getName());
+
+#foreach $field in $Fields.values() #begin
+#if ($(field.PrimaryKey) != null && $(field.PrimaryKey.BooleanValue)) #begin
+        criteria.addCriteria($(DomainObject.Upper1)Meta.$(field.Name.Static), $(field.Name.Lower1));
+#end
+#end
+        return criteria;
+    }
+#end
+    /**
+     * Check for existence prior to adding to the database.
+     *
+     * @throws PreAddFailedException
+     */
+    protected void performPreAddExistenceCheck() {
+        // Empty override
+    }
+    // .//GEN-END:2_be
+
+#foreach $field in $Fields.values() #begin
+#if ($(field.Ignore) == null || !$(field.Ignore.BooleanValue)) #begin
+#if ($(field.StampType) != null && ($(field.StampType.Upper1) == "CreatedUserId" || $(field.StampType.Upper1) == "CreatedDateTime" || $(field.StampType.Upper1) == "LastUpdatedUserId" || $(field.StampType.Upper1) == "LastUpdatedDateTime")) #begin
+#set $wm_preAddRequired="true"
+#end
+#if ($(field.StampType) != null && ($(field.StampType.Upper1) == "LastUpdatedUserId" || $(field.StampType.Upper1) == "LastUpdatedDateTime")) #begin
+#set $wm_preUpdateRequired="true"
+#end
+    // .//GEN-BEGIN:$(field.Name.Lower1)_be
+    /**
+     * Getter for property $(field.Name.Lower1).
+     *
+     * @return Value of property $(field.Name.Lower1).
+     */
+    public $(field.DataType) get$(field.Name.Upper1)() {
+        return m_$(field.Name.Lower1);
+    }
+    
+    /**
+     * Use this method to update the property $(field.Name.Lower1).
+     * This method will do nothing and simply return if the input value is the same as the current value.
+     * Validation will be performed on the input value.
+     * This will try to lock the underlying database row, in case CAUTIOUS locking is specified at the time of query.
+     *
+     * @param $(field.Name.Lower1) New value of property $(field.Name.Lower1).
+     * @throws ValidationException if an invalid value is passed.
+
+#set $wm_throws = "ValidationException"
+#if ($(field.PrimaryKey) != null && $(field.PrimaryKey.BooleanValue)) #begin
+#set $wm_throws = "$(wm_throws), UpdatePrimaryKeyException"
+     * @throws UpdatePrimaryKeyException if this domain object was loaded from the database.
+#end
+#set $wm_throws = "$(wm_throws), ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException"
+     * @throws ReadOnlyObjectException if a Read-Only object is updated.
+     * @throws AlreadyLockedObjectException if the underlying database row is already locked by another process.
+     * @throws FrameworkException Indicates some system error
+     */
+    public void set$(field.Name.Upper1)($(field.DataType) $(field.Name.Lower1))
+    throws $(wm_throws) {
+        // ignore, if the current value and new value are the same
+        if (m_$(field.Name.Lower1) == null ? $(field.Name.Lower1) == null : m_$(field.Name.Lower1).equals($(field.Name.Lower1)))
+            return;
+
+
+#if ($(field.PrimaryKey) != null && $(field.PrimaryKey.BooleanValue)) #begin
+        // this is part of the primary key.. do not update if its a database occurence.
+        if (isDatabaseOccurence())
+            throw new UpdatePrimaryKeyException();
+#end
+
+        $(field.Name.Lower1) = validate$(field.Name.Upper1)($(field.Name.Lower1));
+        // .//GEN-END:$(field.Name.Lower1)_be
+        // Add custom code before setting the value//GEN-FIRST:$(field.Name.Lower1)
+
+
+        // .//GEN-LAST:$(field.Name.Lower1)
+        // .//GEN-BEGIN:$(field.Name.Lower1)_1_be
+        super.update();
+        super.addInitialValue($(DomainObject.Upper1)Meta.$(field.Name.Static), m_$(field.Name.Lower1));
+        m_$(field.Name.Lower1) = $(field.Name.Lower1);
+
+#if ($(Relationships) != null) #begin
+#foreach $relationship in $Relationships.values() #begin
+#if (($(relationship.FromCardinality.RelationshipTypeMany) && $(relationship.ToCardinality.RelationshipTypeOne)) || ($(relationship.FromCardinality.RelationshipTypeOne) && $(relationship.ToCardinality.RelationshipTypeOne))) #begin
+#set $wm_ignoreRelationship="false"
+#foreach $fromField in $relationship.FromFields.values() #begin
+#foreach $afield in $Fields.values() #begin
+#if ($(fromField.Name.Upper1) == $(afield.Name.Upper1) && $(afield.Ignore) != null && $(afield.Ignore.BooleanValue)) #begin
+#set $wm_ignoreRelationship="true"
+#end
+#end
+#end
+#if ($wm_ignoreRelationship == "false") #begin
+#if ($(relationship.Name) != null) #begin
+#set $wm_relationshipName = $relationship.Name
+#else
+#set $wm_relationshipName = $relationship.ToDomainObject
+#end
+#foreach $fromField in $relationship.FromFields.values() #begin
+#if ($(fromField.Name.Upper1) == $(field.Name.Upper1)) #begin
+        m_$(wm_relationshipName.Lower1)Object = null;
+#end
+#end
+#end
+#end
+#end
+#end
+        // .//GEN-END:$(field.Name.Lower1)_1_be
+        // Add custom code after setting the value//GEN-FIRST:$(field.Name.Lower1)_3
+
+
+        // .//GEN-LAST:$(field.Name.Lower1)_3
+        // .//GEN-BEGIN:$(field.Name.Lower1)_2_be
+    }
+    
+    /**
+     * This method is present for backwards compatibility only.
+     * It merely invokes the set$(field.Name.Upper1)() method.
+     *
+     * @param $(field.Name.Lower1) New value of property $(field.Name.Lower1).
+     * @throws ValidationException if an invalid value is passed.
+
+#set $wm_throws = "ValidationException"
+#if ($(field.PrimaryKey) != null && $(field.PrimaryKey.BooleanValue)) #begin
+#set $wm_throws = "$(wm_throws), UpdatePrimaryKeyException"
+     * @throws UpdatePrimaryKeyException if this domain object was loaded from the database.
+#end
+#set $wm_throws = "$(wm_throws), ReadOnlyObjectException, AlreadyLockedObjectException, FrameworkException"
+     * @throws ReadOnlyObjectException if a Read-Only object is updated.
+     * @throws AlreadyLockedObjectException if the underlying database row is already locked by another process.
+     * @throws FrameworkException Indicates some system error
+     */
+    public void update$(field.Name.Upper1)($(field.DataType) $(field.Name.Lower1))
+    throws $(wm_throws) {
+        set$(field.Name.Upper1)($(field.Name.Lower1));
+    }
+
+    /**
+     * Use this method to validate a value for the property $(field.Name.Lower1).
+     *
+     * @param $(field.Name.Lower1) Value to be validated for the property $(field.Name.Lower1).
+     * @throws ValidationException if an invalid value is passed
+     * @throws FrameworkException Indicates some system error
+     */
+    public $(field.DataType) validate$(field.Name.Upper1)($(field.DataType) $(field.Name.Lower1))
+    throws ValidationException, FrameworkException {
+        // .//GEN-END:$(field.Name.Lower1)_2_be
+        // Add custom code before validation//GEN-FIRST:$(field.Name.Lower1)_1
+
+
+        // .//GEN-LAST:$(field.Name.Lower1)_1
+        // .//GEN-BEGIN:$(field.Name.Lower1)_3_be
+
+#if ($(field.DatabaseDataType.Upper) == "STRING" || $(field.DatabaseDataType.Upper) == "VARCHAR" || $(field.DatabaseDataType.Upper) == "LONGSTRING" || $(field.DatabaseDataType.Upper) == "LONGVARCHAR" || $(field.DatabaseDataType.Upper) == "CLOB") #begin
+        $(field.Name.Lower1) = FieldValidator.validate($(field.Name.Lower1), (StringFieldMetaData) $(DomainObject.Upper1)Meta.META_$(field.Name.Static), true);
+#elseif ($(field.DatabaseDataType.Upper) == "INTEGER" || $(field.DatabaseDataType.Upper) == "BIGINT") #begin
+        $(field.Name.Lower1) = FieldValidator.validate($(field.Name.Lower1), (IntegerFieldMetaData) $(DomainObject.Upper1)Meta.META_$(field.Name.Static), true);
+#elseif ($(field.DatabaseDataType.Upper) == "DECIMAL" || $(field.DatabaseDataType.Upper) == "DOUBLE") #begin
+        $(field.Name.Lower1) = FieldValidator.validate($(field.Name.Lower1), (DecimalFieldMetaData) $(DomainObject.Upper1)Meta.META_$(field.Name.Static), true);
+#elseif ($(field.DatabaseDataType.Upper) == "BOOLEAN" || $(field.DatabaseDataType.Upper) == "BOOLEAN_BIT" || $(field.DatabaseDataType.Upper) == "BOOLEAN_TF" || $(field.DatabaseDataType.Upper) == "BOOLEAN_YN" || $(field.DatabaseDataType.Upper) == "BOOLEAN_10") #begin
+        $(field.Name.Lower1) = FieldValidator.validate($(field.Name.Lower1), (BooleanFieldMetaData) $(DomainObject.Upper1)Meta.META_$(field.Name.Static), true);
+#elseif ($(field.DatabaseDataType.Upper) == "DATE_ONLY") #begin
+        $(field.Name.Lower1) = FieldValidator.validate($(field.Name.Lower1), (DateOnlyFieldMetaData) $(DomainObject.Upper1)Meta.META_$(field.Name.Static), true);
+#elseif ($(field.DatabaseDataType.Upper) == "DATE_TIME") #begin
+        $(field.Name.Lower1) = FieldValidator.validate($(field.Name.Lower1), (DateTimeFieldMetaData) $(DomainObject.Upper1)Meta.META_$(field.Name.Static), true);
+#elseif ($(field.DatabaseDataType.Upper) == "CURRENCY") #begin
+        $(field.Name.Lower1) = FieldValidator.validate($(field.Name.Lower1), (CurrencyFieldMetaData) $(DomainObject.Upper1)Meta.META_$(field.Name.Static), true);
+#elseif ($(field.DatabaseDataType.Upper) == "RAW" || $(field.DatabaseDataType.Upper) == "LONGRAW" || $(field.DatabaseDataType.Upper) == "BLOB") #begin
+        $(field.Name.Lower1) = FieldValidator.validate($(field.Name.Lower1), (RawFieldMetaData) $(DomainObject.Upper1)Meta.META_$(field.Name.Static), true);
+#else
+        // do nothing
+#end
+
+        // Invoke the Dynamic Rules Engine
+        RulesEngine.doAllValidationsForDomainField($(DomainObject.Upper1)Meta.getName(), $(DomainObject.Upper1)Meta.$(field.Name.Static), $(field.Name.Lower1), this.getUOW());
+
+        // .//GEN-END:$(field.Name.Lower1)_3_be
+        // Add custom code after a successful validation//GEN-FIRST:$(field.Name.Lower1)_2
+
+
+        // .//GEN-LAST:$(field.Name.Lower1)_2
+        // .//GEN-BEGIN:$(field.Name.Lower1)_4_be
+        return $(field.Name.Lower1);
+    }
+    // .//GEN-END:$(field.Name.Lower1)_4_be
+#end
+#end
+
+#if ($(Relationships) != null) #begin
+#foreach $relationship in $Relationships.values() #begin
+#set $wm_ignoreRelationship="false"
+#foreach $fromField in $relationship.FromFields.values() #begin
+#foreach $field in $Fields.values() #begin
+#if ($(fromField.Name.Upper1) == $(field.Name.Upper1) && $(field.Ignore) != null && $(field.Ignore.BooleanValue)) #begin
+#set $wm_ignoreRelationship="true"
+#end
+#end
+#end
+#if ($wm_ignoreRelationship == "false") #begin
+#if ($(relationship.Name) != null) #begin
+#set $wm_relationshipName = $relationship.Name
+#else
+#set $wm_relationshipName = $relationship.ToDomainObject
+#end
+#if ($(relationship.FromCardinality.RelationshipTypeOne) && $(relationship.ToCardinality.RelationshipTypeMany)) #begin
+    // .//GEN-BEGIN:$(wm_relationshipName.Lower1)Array_1_be
+    /**
+     * Returns an array of related $(relationship.ToDomainObject.Upper1) objects.
+     *
+     * @return an array of related $(relationship.ToDomainObject.Upper1) objects.
+     * @throws FrameworkException Indicates some system error
+     */
+    public $(relationship.ToDomainObject.Upper1)[] get$(wm_relationshipName.Upper1)Array() throws FrameworkException {
+        UOW uow = getUOW();
+        boolean localUow = false;
+        try {
+            $(relationship.ToDomainObject.Upper1)[] output = null;
+            if (m_$(wm_relationshipName.Lower1)Collection == null && isDatabaseOccurence()) {
+                Criteria criteria = find$(wm_relationshipName.Upper1)Criteria();
+                if (uow == null || !uow.isActive()) {
+                    uow = new UOW();
+                    localUow = true;
+                }
+                Collection col = uow.query(criteria);
+                m_$(wm_relationshipName.Lower1)Collection = new ArrayList();
+                for (Iterator itr = col.iterator(); itr.hasNext(); )
+                    m_$(wm_relationshipName.Lower1)Collection.add(itr.next());
+            }
+
+            if (m_$(wm_relationshipName.Lower1)Collection != null)
+                output = ($(relationship.ToDomainObject.Upper1)[]) m_$(wm_relationshipName.Lower1)Collection.toArray(new $(relationship.ToDomainObject.Upper1)[0]);
+            return output;
+        } finally {
+            if (localUow && uow != null)
+                uow.rollback();
+        }
+    }
+    /**
+     * Returns a Criteria object for retrieving the related $(relationship.ToDomainObject.Upper1) objects.
+     *
+     * @return a Criteria object for retrieving the related $(relationship.ToDomainObject.Upper1) objects.
+     */
+    public Criteria find$(wm_relationshipName.Upper1)Criteria() {
+        Criteria criteria = new Criteria();
+        criteria.setTable($(relationship.ToDomainObject.Upper1)Meta.getName());
+
+#set $wm_fromIndex = -1
+#foreach $fromField in $relationship.FromFields.values() #begin
+#set $wm_fromIndex = $wm_fromIndex + 1
+#set $wm_toIndex = -1
+#foreach $toField in $relationship.ToFields.values() #begin
+#set $wm_toIndex = $wm_toIndex + 1
+#if ($(wm_fromIndex) == $(wm_toIndex)) #begin
+        criteria.addCriteria($(relationship.ToDomainObject.Upper1)Meta.$(toField.Name.Static), get$(fromField.Name.Upper1)());
+#end
+#end
+#end
+
+#if ("$(relationship.ToDomainPackage.Lower).$(relationship.ToDomainObject.Upper1)" == "$(DomainPackage.Lower).$(DomainObject.Upper1)") #begin
+        AtomicCriteria ac = new AtomicCriteria();
+
+#set $wm_addedCriteria = "false"
+#foreach $fromField in $relationship.FromFields.values() #begin
+#if ($wm_addedCriteria == "false") #begin
+#set $wm_addedCriteria = "true"
+        ac.addCriteria($(DomainObject.Upper1)Meta.$(fromField.Name.Static), Criteria.RELATIONAL_NOT_EQUALS, get$(fromField.Name.Upper1)());
+#else
+        ac.addOrCriteria($(DomainObject.Upper1)Meta.$(fromField.Name.Static), Criteria.RELATIONAL_NOT_EQUALS, get$(fromField.Name.Upper1)());
+#end
+#end
+        criteria.addAtomic(ac);
+#end
+        // .//GEN-END:$(wm_relationshipName.Lower1)Array_1_be
+        // Add custom criteria//GEN-FIRST:$(wm_relationshipName.Lower1)Array_1
+
+
+        // .//GEN-LAST:$(wm_relationshipName.Lower1)Array_1
+        // .//GEN-BEGIN:$(wm_relationshipName.Lower1)Array_2_be
+        return criteria;
+    }
+    /**
+     * Creates a new $(relationship.ToDomainObject.Upper1) object and initializes the related fields.
+     * This will uncache the related $(relationship.ToDomainObject.Upper1) objects.
+     *
+     * @throws ValidationException if an invalid value is passed.
+     * @throws FrameworkException Indicates some system error
+     * @return the related $(relationship.ToDomainObject.Upper1) object with the initialized related fields.
+     */
+    public $(relationship.ToDomainObject.Upper1) new$(wm_relationshipName.Upper1)Object()
+    throws ValidationException, FrameworkException {
+        m_$(wm_relationshipName.Lower1)Collection = null;
+        $(relationship.ToDomainObject.Upper1) $(wm_relationshipName.Lower1) = new $(relationship.ToDomainObject.Upper1)();
+
+#set $wm_fromIndex = -1
+#foreach $fromField in $relationship.FromFields.values() #begin
+#set $wm_fromIndex = $wm_fromIndex + 1
+#set $wm_toIndex = -1
+#foreach $toField in $relationship.ToFields.values() #begin
+#set $wm_toIndex = $wm_toIndex + 1
+#if ($(wm_fromIndex) == $(wm_toIndex)) #begin
+        $(wm_relationshipName.Lower1).set$(toField.Name.Upper1)(get$(fromField.Name.Upper1)());
+#end
+#end
+#end
+        // .//GEN-END:$(wm_relationshipName.Lower1)Array_2_be
+        // Add custom code//GEN-FIRST:$(wm_relationshipName.Lower1)Array_2
+
+
+        // .//GEN-LAST:$(wm_relationshipName.Lower1)Array_2
+        // .//GEN-BEGIN:$(wm_relationshipName.Lower1)Array_3_be
+        return $(wm_relationshipName.Lower1);
+    }
+    // .//GEN-END:$(wm_relationshipName.Lower1)Array_3_be
+#elseif ($(relationship.FromCardinality.RelationshipTypeMany) && $(relationship.ToCardinality.RelationshipTypeOne)) #begin
+    // .//GEN-BEGIN:$(wm_relationshipName.Lower1)Object_1_be
+    /**
+     * Returns the related foreign $(relationship.ToDomainObject.Upper1) object.
+     * The object is lazy-loaded.
+     *
+     * @return the related foreign $(relationship.ToDomainObject.Upper1) object.
+     * @throws ValidationException if an invalid foreign key is set.
+     * @throws FrameworkException Indicates some system error
+     */
+    public $(relationship.ToDomainObject.Upper1) get$(wm_relationshipName.Upper1)Object() throws ValidationException, FrameworkException  {
+        find$(wm_relationshipName.Upper1)Object(false);
+        return m_$(wm_relationshipName.Lower1)Object;
+    }
+    
+    /**
+     * Finds the related foreign $(relationship.ToDomainObject.Upper1) object.
+     * If checkExistenceOnly is false, then the foreign object will be fetched and assigned to the corresponding member variable of this class.
+     * If checkExistenceOnly is true, then a mere existence check is performed for the foreign object, as oppposed to fetching all the values for that object.
+     */
+    private void find$(wm_relationshipName.Upper1)Object(boolean checkExistenceOnly) throws ValidationException, FrameworkException {
+
+#if ($(relationship.Type.Upper1) == "NonValidatingAssociation") #begin
+        // Relationship type is NonValidatingAssociation. Existence check is redundant
+        if (checkExistenceOnly)
+            return;
+#end
+        UOW uow = getUOW();
+        boolean localUow = false;
+        try {
+
+#set $wm_ifCondition="m_$(wm_relationshipName.Lower1)Object == null"
+#set $wm_fromFieldLabelToken=""
+#foreach $fromField in $relationship.FromFields.values() #begin
+#if ($wm_fromFieldLabelToken != "") #begin
+#set $wm_fromFieldLabelToken="$(wm_fromFieldLabelToken) + ',' + "
+#end
+#set $wm_ifCondition="$(wm_ifCondition) && get$(fromField.Name.Upper1)() != null"
+#set $wm_fromFieldLabelToken="$(wm_fromFieldLabelToken)$(DomainObject.Upper1)Meta.META_$(fromField.Name.Static).getLabelToken()"
+#end
+#set $wm_toFieldLabelToken=""
+#foreach $toField in $relationship.ToFields.values() #begin
+#if ($wm_toFieldLabelToken != "") #begin
+#set $wm_toFieldLabelToken="$(wm_toFieldLabelToken) + ',' + "
+#end
+#set $wm_toFieldLabelToken="$(wm_toFieldLabelToken)$(relationship.ToDomainObject.Upper1)Meta.META_$(toField.Name.Static).getLabelToken()"
+#end
+#if ("$(relationship.ToDomainPackage.Lower).$(relationship.ToDomainObject.Upper1)" == "$(DomainPackage.Lower).$(DomainObject.Upper1)") #begin
+#set $wm_selfRelationshipCheck=$wm_ifCondition
+#set $wm_fromIndex = -1
+#foreach $fromField in $relationship.FromFields.values() #begin
+#set $wm_selfRelationshipCheck="$(wm_selfRelationshipCheck) && get$(fromField.Name.Upper1)().equals"
+#set $wm_fromIndex = $wm_fromIndex + 1
+#set $wm_toIndex = -1
+#foreach $toField in $relationship.ToFields.values() #begin
+#set $wm_toIndex = $wm_toIndex + 1
+#if ($(wm_fromIndex) == $(wm_toIndex)) #begin
+#set $wm_selfRelationshipCheck="$(wm_selfRelationshipCheck)(get$(toField.Name.Upper1)())"
+#end
+#end
+#end
+            if ($(wm_selfRelationshipCheck))
+                m_$(wm_relationshipName.Lower1)Object = this;
+#end
+            if ($(wm_ifCondition)) {
+                Criteria criteria = new Criteria();
+                criteria.setTable($(relationship.ToDomainObject.Upper1)Meta.getName());
+
+#set $wm_fromIndex = -1
+#foreach $fromField in $relationship.FromFields.values() #begin
+#set $wm_fromIndex = $wm_fromIndex + 1
+#set $wm_toIndex = -1
+#foreach $toField in $relationship.ToFields.values() #begin
+#set $wm_toIndex = $wm_toIndex + 1
+#if ($(wm_fromIndex) == $(wm_toIndex)) #begin
+                criteria.addCriteria($(relationship.ToDomainObject.Upper1)Meta.$(toField.Name.Static), get$(fromField.Name.Upper1)());
+#end
+#end
+#end
+                if (checkExistenceOnly)
+                    criteria.addFunction(Criteria.FUNCTION_COUNT, null, Criteria.ID_FUNCTION_COUNT);
+                Number count = null;
+                if (uow == null || !uow.isActive()) {
+                    uow = new UOW();
+                    localUow = true;
+                }
+                Iterator itr = uow.query(criteria).iterator();
+                if (itr.hasNext()) {
+                    if (checkExistenceOnly)
+                        count = (Number) ((Map) itr.next()).get(Criteria.ID_FUNCTION_COUNT);
+                    else
+                        m_$(wm_relationshipName.Lower1)Object = ($(relationship.ToDomainObject.Upper1)) itr.next();
+                }
+
+#if ($(relationship.Type.Upper1) == "NonValidatingAssociation") #begin
+                // Relationship type is NonValidatingAssociation. No need to throw InvalidForeignKeyException
+#else
+                if (m_$(wm_relationshipName.Lower1)Object == null && (count == null || count.intValue() <= 0))
+                    throw new InvalidForeignKeyException($(wm_fromFieldLabelToken), new Object[] {$(relationship.ToDomainObject.Upper1)Meta.getLabelToken(), $(wm_toFieldLabelToken)});
+#end
+            }
+        } finally {
+            if (localUow && uow != null)
+                uow.rollback();
+        }
+    }
+    // .//GEN-END:$(wm_relationshipName.Lower1)Object_1_be
+#elseif ($(relationship.FromCardinality.RelationshipTypeOne) && $(relationship.ToCardinality.RelationshipTypeOne)) #begin
+    // .//GEN-BEGIN:$(wm_relationshipName.Lower1)Object_1_be
+    /**
+     * Returns a related $(relationship.ToDomainObject.Upper1) object.
+     *
+     * @return a related $(relationship.ToDomainObject.Upper1) object.
+
+#set $wm_throws="FrameworkException"
+#if (!$(relationship.ToCardinality.RelationshipTypeOptional)) #begin
+#set $wm_throws="ValidationException, $(wm_throws)"
+     * @throws ValidationException if an invalid foreign key is set.
+#end
+     * @throws FrameworkException Indicates some system error
+     */
+    public $(relationship.ToDomainObject.Upper1) get$(wm_relationshipName.Upper1)Object() throws $(wm_throws) {
+        find$(wm_relationshipName.Upper1)Object(false);
+        return m_$(wm_relationshipName.Lower1)Object;
+    }
+    
+    /**
+     * Finds the related $(relationship.ToDomainObject.Upper1) object.
+     * If checkExistenceOnly is false, then the related object will be fetched and assigned to the corresponding member variable of this class.
+     * If checkExistenceOnly is true, then a mere existence check is performed for the related object, as oppposed to fetching all the values for that object.
+     */
+    private void find$(wm_relationshipName.Upper1)Object(boolean checkExistenceOnly) throws $(wm_throws) {
+        UOW uow = getUOW();
+        boolean localUow = false;
+        try {
+
+#set $wm_ifCondition="m_$(wm_relationshipName.Lower1)Object == null"
+#set $wm_fromFieldLabelToken=""
+#foreach $fromField in $relationship.FromFields.values() #begin
+#if ($wm_fromFieldLabelToken != "") #begin
+#set $wm_fromFieldLabelToken="$(wm_fromFieldLabelToken) + ',' + "
+#end
+#set $wm_ifCondition="$(wm_ifCondition) && get$(fromField.Name.Upper1)() != null"
+#set $wm_fromFieldLabelToken="$(wm_fromFieldLabelToken)$(DomainObject.Upper1)Meta.META_$(fromField.Name.Static).getLabelToken()"
+#end
+#set $wm_toFieldLabelToken=""
+#foreach $toField in $relationship.ToFields.values() #begin
+#if ($wm_toFieldLabelToken != "") #begin
+#set $wm_toFieldLabelToken="$(wm_toFieldLabelToken) + ',' + "
+#end
+#set $wm_toFieldLabelToken="$(wm_toFieldLabelToken)$(relationship.ToDomainObject.Upper1)Meta.META_$(toField.Name.Static).getLabelToken()"
+#end
+            if ($(wm_ifCondition)) {
+                Criteria criteria = new Criteria();
+                criteria.setTable($(relationship.ToDomainObject.Upper1)Meta.getName());
+
+#set $wm_fromIndex = -1
+#foreach $fromField in $relationship.FromFields.values() #begin
+#set $wm_fromIndex = $wm_fromIndex + 1
+#set $wm_toIndex = -1
+#foreach $toField in $relationship.ToFields.values() #begin
+#set $wm_toIndex = $wm_toIndex + 1
+#if ($(wm_fromIndex) == $(wm_toIndex)) #begin
+                criteria.addCriteria($(relationship.ToDomainObject.Upper1)Meta.$(toField.Name.Static), get$(fromField.Name.Upper1)());
+#end
+#end
+#end
+                if (checkExistenceOnly)
+                    criteria.addFunction(Criteria.FUNCTION_COUNT, null, Criteria.ID_FUNCTION_COUNT);
+                Number count = null;
+                if (uow == null || !uow.isActive()) {
+                    uow = new UOW();
+                    localUow = true;
+                }
+                Iterator itr = uow.query(criteria).iterator();
+                if (itr.hasNext()) {
+                    if (checkExistenceOnly)
+                        count = (Number) ((Map) itr.next()).get(Criteria.ID_FUNCTION_COUNT);
+                    else
+                        m_$(wm_relationshipName.Lower1)Object = ($(relationship.ToDomainObject.Upper1)) itr.next();
+                }
+
+#if (!$(relationship.ToCardinality.RelationshipTypeOptional)) #begin
+                if (m_$(wm_relationshipName.Lower1)Object == null && (count == null || count.intValue() <= 0))
+                    throw new InvalidForeignKeyException($(wm_fromFieldLabelToken), new Object[] {$(relationship.ToDomainObject.Upper1)Meta.getLabelToken(), $(wm_toFieldLabelToken)});
+#end
+            }
+        } finally {
+            if (localUow && uow != null)
+                uow.rollback();
+        }
+    }
+
+#if (!$(relationship.ToCardinality.RelationshipTypeOptional)) #begin
+    // .//GEN-END:$(wm_relationshipName.Lower1)Object_1_be
+#else
+    /**
+     * Creates a new $(relationship.ToDomainObject.Upper1) object and initializes the related fields.
+     *
+     * @throws ValidationException if an invalid value is passed.
+     * @throws FrameworkException Indicates some system error
+     * @return the related $(relationship.ToDomainObject.Upper1) object with the initialized related fields.
+     */
+    public $(relationship.ToDomainObject.Upper1) new$(wm_relationshipName.Upper1)Object()
+    throws ValidationException, FrameworkException {
+        $(relationship.ToDomainObject.Upper1) $(wm_relationshipName.Lower1) = new $(relationship.ToDomainObject.Upper1)();
+
+#set $wm_fromIndex = -1
+#foreach $fromField in $relationship.FromFields.values() #begin
+#set $wm_fromIndex = $wm_fromIndex + 1
+#set $wm_toIndex = -1
+#foreach $toField in $relationship.ToFields.values() #begin
+#set $wm_toIndex = $wm_toIndex + 1
+#if ($(wm_fromIndex) == $(wm_toIndex)) #begin
+        $(wm_relationshipName.Lower1).set$(toField.Name.Upper1)(get$(fromField.Name.Upper1)());
+#end
+#end
+#end
+        // .//GEN-END:$(wm_relationshipName.Lower1)Object_1_be
+        // Add custom code//GEN-FIRST:$(wm_relationshipName.Lower1)Object_1
+
+
+        // .//GEN-LAST:$(wm_relationshipName.Lower1)Object_1
+        // .//GEN-BEGIN:$(wm_relationshipName.Lower1)Object_2_be
+        return $(wm_relationshipName.Lower1);
+    }
+    // .//GEN-END:$(wm_relationshipName.Lower1)Object_2_be
+#end
+#end
+#end
+#end
+#end
+    // .//GEN-BEGIN:toString_1_be
+    /**
+    * This returns the diagnostic information.
+    *
+    * @return the diagnostic information.
+    */
+    public String toString() {
+        StringBuffer buf = new StringBuffer();
+        buf.append("<$(DomainObject.Upper1)>");
+
+#foreach $field in $Fields.values() #begin
+#if ($(field.Ignore) == null || !$(field.Ignore.BooleanValue)) #begin
+        buf.append("<$(field.Name.Lower1)>"); if (m_$(field.Name.Lower1) != null) buf.append(m_$(field.Name.Lower1)); buf.append("</$(field.Name.Lower1)>");
+#end
+#end
+        // .//GEN-END:toString_1_be
+        // Add custom debug information//GEN-FIRST:toString_1
+
+
+        // .//GEN-LAST:toString_1
+        // .//GEN-BEGIN:toString_2_be
+        buf.append(super.toString());
+        buf.append("</$(DomainObject.Upper1)>");
+        return buf.toString();
+    }
+    // .//GEN-END:toString_2_be
+    // .//GEN-BEGIN:clone_1_be
+    /**
+     * Returns a clone of the object.
+     *
+     * @throws CloneNotSupportedException if cloning is not supported. This should never happen.
+     * @return a clone of the object.
+     */
+    public Object clone() throws CloneNotSupportedException {
+        $(DomainObject.Upper1) obj = ($(DomainObject.Upper1)) super.clone();
+
+#if ($(Relationships) != null) #begin
+#foreach $relationship in $Relationships.values() #begin
+#set $wm_ignoreRelationship="false"
+#foreach $fromField in $relationship.FromFields.values() #begin
+#foreach $field in $Fields.values() #begin
+#if ($(fromField.Name.Upper1) == $(field.Name.Upper1) && $(field.Ignore) != null && $(field.Ignore.BooleanValue)) #begin
+#set $wm_ignoreRelationship="true"
+#end
+#end
+#end
+#if ($wm_ignoreRelationship == "false") #begin
+#if ($(relationship.Name) != null) #begin
+#set $wm_relationshipName = $relationship.Name
+#else
+#set $wm_relationshipName = $relationship.ToDomainObject
+#end
+#if ($(relationship.FromCardinality.RelationshipTypeOne) && $(relationship.ToCardinality.RelationshipTypeMany)) #begin
+        obj.m_$(wm_relationshipName.Lower1)Collection = null;
+#elseif ($(relationship.FromCardinality.RelationshipTypeMany) && $(relationship.ToCardinality.RelationshipTypeOne)) #begin
+        obj.m_$(wm_relationshipName.Lower1)Object = null;
+#elseif ($(relationship.FromCardinality.RelationshipTypeOne) && $(relationship.ToCardinality.RelationshipTypeOne)) #begin
+        obj.m_$(wm_relationshipName.Lower1)Object = null;
+#end
+#end
+#end
+#end
+        return obj;
+    }
+    // .//GEN-END:clone_1_be
+    // .//GEN-BEGIN:performForeignKeyValidations_1_be
+    /**
+     * This method ensures that the modified foreign-keys are valid.
+     *
+     * @throws ApplicationExceptions if an invalid foreign key is set.
+     * @throws FrameworkException Indicates some system error
+     */
+    public void performForeignKeyValidations() throws ApplicationExceptions, FrameworkException {
+
+    }
+    // .//GEN-END:performForeignKeyValidations_1_be
+    // .//GEN-BEGIN:performPreDeleteReferentialIntegrity_1_be
+    /**
+     * This method is triggered by the UOW, before adding this object to the Delete-Store.
+     *
+     * This will raise an exception if any associated/aggregated objects exist.
+     * This will cascade delete all composite objects.
+     * @throws PreDeleteFailedException if any error occurs during the process.
+     */
+    public void performPreDeleteReferentialIntegrity() throws PreDeleteFailedException {
+
+#if ($(Relationships) != null) #begin
+#foreach $relationship in $Relationships.values() #begin
+#set $wm_ignoreRelationship="false"
+#foreach $fromField in $relationship.FromFields.values() #begin
+#foreach $field in $Fields.values() #begin
+#if ($(fromField.Name.Upper1) == $(field.Name.Upper1) && $(field.Ignore) != null && $(field.Ignore.BooleanValue)) #begin
+#set $wm_ignoreRelationship="true"
+#end
+#end
+#end
+#if ($wm_ignoreRelationship == "false") #begin
+#if ($(relationship.Name) != null) #begin
+#set $wm_relationshipName = $(relationship.Name)
+#else
+#set $wm_relationshipName = $(relationship.ToDomainObject)
+#end
+#if ($(relationship.FromCardinality.RelationshipTypeOne) && $(relationship.ToCardinality.RelationshipTypeMany) && $(relationship.Type.Lower) != "") #begin
+#if ($(relationship.Type.Lower) == "composition") #begin
+        $(relationship.ToDomainObject.Upper1)[] $(wm_relationshipName.Lower1)Array = null;
+        try {
+            $(wm_relationshipName.Lower1)Array = get$(wm_relationshipName.Upper1)Array();
+        } catch (FrameworkException e) {
+            throw new PreDeleteFailedException(null, e);
+        }
+        if ($(wm_relationshipName.Lower1)Array != null && $(wm_relationshipName.Lower1)Array.length > 0) {
+            try {
+                // Perform cascade deletes
+                for (int i = 0; i < $(wm_relationshipName.Lower1)Array.length; i++)
+                    getUOW().delete($(wm_relationshipName.Lower1)Array[i]);
+            } catch (Exception e) {
+                throw new PreDeleteFailedException(null, e);
+            }
+        }
+#end
+#elseif ($(relationship.FromCardinality.RelationshipTypeOne) && $(relationship.ToCardinality.RelationshipTypeOne) && !$(relationship.FromCardinality.RelationshipTypeOptional) && $(relationship.Type.Lower) != "") #begin
+        $(relationship.ToDomainObject.Upper1) $(wm_relationshipName.Lower1)Object = null;
+        try {
+            $(wm_relationshipName.Lower1)Object = get$(wm_relationshipName.Upper1)Object();
+        } catch (FrameworkException e) {
+            throw new PreDeleteFailedException(null, e);
+        }
+        if ($(wm_relationshipName.Lower1)Object != null) {
+
+#if ($(relationship.Type.Lower) == "composition") #begin
+            try {
+                // Perform cascade delete
+                getUOW().delete($(wm_relationshipName.Lower1)Object);
+            } catch (Exception e) {
+                throw new PreDeleteFailedException(null, e);
+            }
+#end
+        }
+#end
+#end
+#end
+#end
+    }
+    // .//GEN-END:performPreDeleteReferentialIntegrity_1_be
+
+#if ($(Relationships) != null) #begin
+    // .//GEN-BEGIN:3_be
+
+#foreach $relationship in $Relationships.values() #begin
+#set $wm_ignoreRelationship="false"
+#foreach $fromField in $relationship.FromFields.values() #begin
+#foreach $field in $Fields.values() #begin
+#if ($(fromField.Name.Upper1) == $(field.Name.Upper1) && $(field.Ignore) != null && $(field.Ignore.BooleanValue)) #begin
+#set $wm_ignoreRelationship="true"
+#end
+#end
+#end
+#if ($wm_ignoreRelationship == "false") #begin
+#set $wm_fromFields = ""
+#set $wm_firstPass = "true"
+#foreach $field in $relationship.FromFields.values() #begin
+#if ($(wm_firstPass) == "true") #begin
+#set $wm_firstPass = "false"
+#else
+#set $wm_fromFields = "$(wm_fromFields),"
+#end
+#set $wm_fromFields = "$(wm_fromFields)$(field.Name.Lower1)"
+#end
+#set $wm_toFields = ""
+#set $wm_firstPass = "true"
+#foreach $field in $relationship.ToFields.values() #begin
+#if ($(wm_firstPass) == "true") #begin
+#set $wm_firstPass = "false"
+#else
+#set $wm_toFields = "$(wm_toFields),"
+#end
+#set $wm_toFields = "$(wm_toFields)$(field.Name.Lower1)"
+#end
+    /**
+     * @clientCardinality $(relationship.FromCardinality)
+     * @supplierCardinality $(relationship.ToCardinality)
+     * @clientQualifier $(wm_fromFields)
+     * @supplierQualifier $(wm_toFields)
+     * @link $(relationship.Type)
+     */
+    /*#$(relationship.ToDomainObject.Upper1) lnk$(relationship.ToDomainObject.Upper1);*/
+
+#end
+#end
+    // .//GEN-END:3_be
+#end
+
+#if ($(wm_preAddRequired) == "true") #begin
+    // .//GEN-BEGIN:preAdd_1_be
+    /**
+     * This method is triggered by the UOW, before adding this object to the Add-Store, but after a UOW has been associated to the object.
+     * It ensures that the primary-key is unique and that the foreign-keys are valid.
+     *
+     * @throws PreAddFailedException if any error occurs during the process.
+     */
+    public void preAdd() throws PreAddFailedException {
+
+#set $wm_stampTypeCreatedUserIdFieldName = ""
+#set $wm_stampTypeCreatedDateTimeFieldName = ""
+#foreach $field in $Fields.values() #begin
+#if ($(field.Ignore) == null || !$(field.Ignore.BooleanValue)) #begin
+#if ($(field.StampType) != null && $(field.StampType.Upper1) == "CreatedUserId") #begin
+#set $wm_stampTypeCreatedUserIdFieldName = $(field.Name.Upper1)
+        try {
+            if (get$(field.Name.Upper1)() == null && SecurityManager.getPrincipal() != null && SecurityManager.getPrincipal().getName() != null)
+                set$(field.Name.Upper1)(SecurityManager.getPrincipal().getName());
+        } catch (ValidationException e) {
+            throw new PreAddFailedException(new String[] {"StampType:CreatedUserId Error"}, e);
+        } catch (FrameworkException e) {
+            throw new PreAddFailedException(new String[] {"StampType:CreatedUserId Error"}, e);
+        }
+#end
+#end
+#end
+
+#foreach $field in $Fields.values() #begin
+#if ($(field.Ignore) == null || !$(field.Ignore.BooleanValue)) #begin
+#if ($(field.StampType) != null && $(field.StampType.Upper1) == "CreatedDateTime") #begin
+#set $wm_stampTypeCreatedDateTimeFieldName = $(field.Name.Upper1)
+        try {
+            if (get$(field.Name.Upper1)() == null)
+                set$(field.Name.Upper1)(new DateTime());
+        } catch (ValidationException e) {
+            throw new PreAddFailedException(new String[] {"StampType:CreatedDateTime Error"}, e);
+        } catch (FrameworkException e) {
+            throw new PreAddFailedException(new String[] {"StampType:CreatedDateTime Error"}, e);
+        }
+#end
+#end
+#end
+
+#foreach $field in $Fields.values() #begin
+#if ($(field.Ignore) == null || !$(field.Ignore.BooleanValue)) #begin
+#if ($(field.StampType) != null && $(field.StampType.Upper1) == "LastUpdatedUserId") #begin
+        try {
+
+#if ($wm_stampTypeCreatedUserIdFieldName != "") #begin
+            if (get$(field.Name.Upper1)() == null)
+                set$(field.Name.Upper1)(get$(wm_stampTypeCreatedUserIdFieldName)());
+#else
+            if (get$(field.Name.Upper1)() == null && SecurityManager.getPrincipal() != null && SecurityManager.getPrincipal().getName() != null)
+                set$(field.Name.Upper1)(SecurityManager.getPrincipal().getName());
+#end
+        } catch (ValidationException e) {
+            throw new PreAddFailedException(new String[] {"StampType:LastUpdatedUserId Error"}, e);
+        } catch (FrameworkException e) {
+            throw new PreAddFailedException(new String[] {"StampType:LastUpdatedUserId Error"}, e);
+        }
+#end
+#end
+#end
+
+#foreach $field in $Fields.values() #begin
+#if ($(field.Ignore) == null || !$(field.Ignore.BooleanValue)) #begin
+#if ($(field.StampType) != null && $(field.StampType.Upper1) == "LastUpdatedDateTime") #begin
+        try {
+
+#if ($wm_stampTypeCreatedDateTimeFieldName != "") #begin
+            if (get$(field.Name.Upper1)() == null)
+                set$(field.Name.Upper1)(get$(wm_stampTypeCreatedDateTimeFieldName)());
+#else
+            if (get$(field.Name.Upper1)() == null)
+                set$(field.Name.Upper1)(new DateTime());
+#end
+        } catch (ValidationException e) {
+            throw new PreAddFailedException(new String[] {"StampType:LastUpdatedDateTime Error"}, e);
+        } catch (FrameworkException e) {
+            throw new PreAddFailedException(new String[] {"StampType:LastUpdatedDateTime Error"}, e);
+        }
+#end
+#end
+#end
+        // .//GEN-END:preAdd_1_be
+        // Add custom code//GEN-FIRST:preAdd_1
+
+
+        // .//GEN-LAST:preAdd_1
+        // .//GEN-BEGIN:preAdd_2_be
+        super.doPreAdd();
+    }
+    // .//GEN-END:preAdd_2_be
+#end
+
+#if ($(wm_preUpdateRequired) == "true") #begin
+    // .//GEN-BEGIN:preUpdate_1_be
+    /**
+     * This method is triggered by the UOW, before adding this object to the Update-Store, but after a UOW has been associated to the object.
+     * It ensures that the foreign-keys are valid.
+     *
+     * @throws PreUpdateFailedException if any error occurs during the process.
+     */
+    public void preUpdate() throws PreUpdateFailedException {
+
+#foreach $field in $Fields.values() #begin
+#if ($(field.Ignore) == null || !$(field.Ignore.BooleanValue)) #begin
+#if ($(field.StampType) != null && $(field.StampType.Upper1) == "LastUpdatedUserId") #begin
+        try {
+            if ((get$(field.Name.Upper1)() == null || !isModified($(DomainObject.Upper1)Meta.$(field.Name.Static))) && SecurityManager.getPrincipal() != null && SecurityManager.getPrincipal().getName() != null)
+                set$(field.Name.Upper1)(SecurityManager.getPrincipal().getName());
+        } catch (ValidationException e) {
+            throw new PreUpdateFailedException(new String[] {"StampType:LastUpdatedUserId Error"}, e);
+        } catch (FrameworkException e) {
+            throw new PreUpdateFailedException(new String[] {"StampType:LastUpdatedUserId Error"}, e);
+        }
+#elseif ($(field.StampType) != null && $(field.StampType.Upper1) == "LastUpdatedDateTime") #begin
+        try {
+            if (get$(field.Name.Upper1)() == null || !isModified($(DomainObject.Upper1)Meta.$(field.Name.Static)))
+                set$(field.Name.Upper1)(new DateTime());
+        } catch (ValidationException e) {
+            throw new PreUpdateFailedException(new String[] {"StampType:LastUpdatedDateTime Error"}, e);
+        } catch (FrameworkException e) {
+            throw new PreUpdateFailedException(new String[] {"StampType:LastUpdatedDateTime Error"}, e);
+        }
+#end
+#end
+#end
+        // .//GEN-END:preUpdate_1_be
+        // Update custom code//GEN-FIRST:preUpdate_1
+
+
+        // .//GEN-LAST:preUpdate_1
+        // .//GEN-BEGIN:preUpdate_2_be
+        super.preUpdate();
+    }
+    // .//GEN-END:preUpdate_2_be
+#end
+    // All the custom code goes here//GEN-FIRST:custom
+
+
+
+
+
+
+    // .//GEN-LAST:custom
+}

@@ -63,8 +63,8 @@ import org.springframework.core.io.Resource;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Set;
 
 /**
  * This class is responsible for managing the "jaffa-transaction-config.xml".
@@ -82,11 +82,20 @@ public class TransactionManager implements IManager {
      */
     private static final String CONFIGURATION_SCHEMA_FILE = "org/jaffa/transaction/services/configdomain/jaffa-transaction-config_1_0.xsd";
 
-    private IRepository<TransactionInfo> transactionRepository;
-    private IRepository<TypeInfo> typeInfoRepository;
+    /** Create the TransactionInfo and TypeInfo repositories */
+    private IRepository<TransactionInfo> transactionRepository = new MapRepository<>("TransactionInfo");
+    private IRepository<TypeInfo> typeInfoRepository = new MapRepository<>("TypeInfo");
 
-    /** The list of repositories managed by this class */
-    private IRepository<?>[] managedRepositories = new IRepository<?>[] {transactionRepository, typeInfoRepository};
+    /**
+     * The list of repositories managed by this class
+     */
+    private HashMap managedRepositories = new HashMap<String, IRepository>() {
+        {
+            put(transactionRepository.getName(), transactionRepository);
+            put(typeInfoRepository.getName(), typeInfoRepository);
+        }
+
+    };
 
     /**
      * register TransactionInfo to the repository
@@ -134,6 +143,29 @@ public class TransactionManager implements IManager {
      * {@inheritDoc}
      */
     @Override
+    public void unregisterResource(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
+
+        Config config = JAXBHelper.unmarshalConfigFile(Config.class, resource, CONFIGURATION_SCHEMA_FILE);
+
+        if (config.getTransactionOrType() != null) {
+            for (final Object o : config.getTransactionOrType()) {
+                if (o.getClass() == TransactionInfo.class) {
+                    final TransactionInfo transactionInfo = (TransactionInfo) o;
+                    ContextKey contextKey = new ContextKey(transactionInfo.getDataBean(), resource.getURI().toString(), variation, context);
+                    unregisterTransactionInfo(contextKey);
+                } else if (o.getClass() == TypeInfo.class) {
+                    final TypeInfo typeInfo = (TypeInfo) o;
+                    ContextKey contextKey = new ContextKey(typeInfo.getName(), resource.getURI().toString(), variation, context);
+                    unregisterTypeInfo(contextKey);
+                }
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String getResourceFileName() {
         return DEFAULT_CONFIGURATION_FILE;
     }
@@ -143,31 +175,18 @@ public class TransactionManager implements IManager {
      * @return A list of repository names managed by this manager
      */
     @Override
-    public List<String> getRepositoryNames() {
-        List<String> repositoryNames = new ArrayList<>();
-        for (IRepository<?> repository : managedRepositories) {
-            repositoryNames.add(repository.getName());
-        }
-        return repositoryNames;
+    public Set getRepositoryNames() {
+        return managedRepositories.keySet();
     }
 
     /**
      * Retrieve an IRepository managed by this IManager via its String name
      * @param name The name of the repository to be retrieved
-     * @return The retrieved repository, or null if no matching repository was found.
+     * @return The retrieved repository, or empty if no matching repository was found.
      */
     @Override
     public IRepository<?> getRepositoryByName(String name) {
-        IRepository<?> matchingRepository = null;
-        for (IRepository<?> repository : managedRepositories) {
-            if (name.equals(repository.getName())) {
-                matchingRepository = repository;
-            }
-        }
-        if (matchingRepository == null) {
-            matchingRepository = new MapRepository<>();
-        }
-        return matchingRepository;
+        return (IRepository<?>) managedRepositories.get(name);
     }
 
     /**

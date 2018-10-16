@@ -19,10 +19,7 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
       name: 'description',
       type: 'string'
     },{
-      name: 'varRule',
-      type: 'string'
-    },{
-      name: 'globalRule',
+      name: 'currentValue',
       type: 'string'
     },{
       name: 'defaultValue',
@@ -57,47 +54,35 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         value = renderedList.join(', ');
       }
 
-      if (!meta.readOnly && security.hasRuleMaintenance)
-        metadata.css = 'editable';
+      metadata.css = 'editable';
 
       return value;
     };
     
-
-    var tbar = [
-      {
-        iconCls:'save',
-        text:Labels.get('label.Jaffa.SC.SystemConfigDesktop.save'),
-        itemId: 'save',
-        disabled: !this.controller.isDirty(),
-        handler:function(){
-          Jaffa.SC.DesktopController.save();
-        }
-      }
-    ];
+    var tbar;
     if (this.enableSearch)
-      tbar = tbar.concat([
-        '-',
-        {xtype:'textfield', emptyText:Labels.get('label.Jaffa.SC.SystemConfigDesktop.searchValue'),ref:'searchField',
-          listeners : {
+      tbar = [
+          '-',
+          {xtype:'textfield', emptyText:Labels.get('label.Jaffa.SC.SystemConfigDesktop.searchValue'),ref:'searchField',
+            listeners : {
             "specialkey": function(field, ev){
-              if(ev.getKey() == ev.ENTER){
-                ev.preventDefault();
-                this.ownerCt.ownerCt.search(this.getValue());
-              }
-            },
-            keydown: {
-              fn: function(){
-                this.ownerCt.ownerCt.search(this.getValue());
+                if(ev.getKey() == ev.ENTER){
+                    ev.preventDefault();
+                    this.ownerCt.ownerCt.search(this.getValue());
+                  }
               },
-              buffer: 350
-            }
+            keydown: {
+                fn: function(){
+                    this.ownerCt.ownerCt.search(this.getValue());
+                  },
+                buffer: 350
+              }
           }
-        },{
+      },{
           itemId:'searchCount',
-          text: Labels.get('label.Jaffa.Widgets.Button.Search') + ': 0 '+Labels.get('label.Common.of')+' 0'
+              text: Labels.get('label.Jaffa.Widgets.Button.Search') + ': 0 '+Labels.get('label.Common.of')+' 0'
         }
-      ]);
+    ];
 
     Ext.apply(this, {
       title: this.path?this.path:Labels.get('label.Jaffa.SC.SystemConfigDesktop.mainTabTitle'),
@@ -131,16 +116,11 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         header: Labels.get('label.Jaffa.SC.SystemConfigDesktop.defaultValue'),
         dataIndex: 'defaultValue',
         width : 200,
-        sortable: true
-      },{
-        header: Labels.get('label.Jaffa.SC.SystemConfigDesktop.variation'),
-        dataIndex: 'varRule',
-        width : 200,
         sortable: true,
         renderer: this.ruleRenderer
       },{
-        header: Labels.get('label.Jaffa.SC.SystemConfigDesktop.global'),
-        dataIndex: 'globalRule',
+        header: Labels.get('label.Jaffa.SC.SystemConfigDesktop.current'),
+        dataIndex: 'currentValue',
         width : 200,
         sortable: true,
         renderer: this.ruleRenderer
@@ -158,46 +138,20 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
       listeners:{
         'cellclick': {
           fn: function (grid, rowIndex, columnIndex, e){
-            if (grid.activeEditor || !security.hasRuleMaintenance) return false;
-            if (grid.getColumnModel().getColumnAt(columnIndex).dataIndex!='varRule'&&grid.getColumnModel().getColumnAt(columnIndex).dataIndex != 'globalRule') return;
+            if (grid.activeEditor){ 
+                return false;
+            }
+            if (grid.getColumnModel().getColumnAt(columnIndex).dataIndex!=='defaultValue' && grid.getColumnModel().getColumnAt(columnIndex).dataIndex !== 'currentValue'){
+                return;
+            }
             var record = grid.getStore().getAt(rowIndex);
             var _editor = "";
-            if (record.get('metaData')&&record.get('metaData').readOnly===true) return false;
+            if (record.get('metaData') && record.get('metaData').readOnly === true){
+                return false;
+            }
             var fieldConfig = this.buildEditor(record);
             _editor = new Ext.grid.GridEditor(Ext.ComponentMgr.create(fieldConfig));
-			if(!Ext.isEmpty(fieldConfig.foreignKeyInfo)){
-			  _editor.on('beforestartedit', function(editor, el, v){
-			    this.field.setGridFilters = function(){};
-			    this.startValue = v;
-			    this.field.setValue(v);
-			    this.field.setRawValue(v);
-			    this.field.initialized = true;
-			    this.realign(true);
-			    this.editing = true;
-			    this.show();
-			    return false;
-		      });	
-			}
             grid.getColumnModel().setEditor(columnIndex,_editor);
-          }
-        },
-        beforeClose: function(){
-          if (this._dirty){
-            Ext.MessageBox.show({
-              title : Labels.get('label.Jaffa.SC.SystemConfigDesktop.SaveWarning'),
-              msg : Labels.get('label.Jaffa.SC.SystemConfigDesktop.SaveWarningMessage'),
-              width : 400,
-              buttons : Ext.MessageBox.YESNO,
-              icon : Ext.MessageBox.QUESTION,
-              scope: this,
-              fn : function(btn) {
-                if (btn == 'yes') {
-                  this.setDirty(false);
-                  this.ownerCt.remove(this);
-                }
-              }
-            });
-            return false;
           }
         }
       }
@@ -208,10 +162,10 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     if (this.path) this.loadFromPath(this.path);
 
     this.store.on('update', function(store, record, operation){
-      this.controller.setDirty(true);
-      this.setDirty(true);
+      //this.controller.setDirty(true);
+      //this.setDirty(true);
       if (operation=='edit'){
-        this.controller.updateRule(this.id, record.get('rule'),record.get('varRule'),record.get('globalRule'));
+        this.controller.updateRule(this.id, record.get('rule'),record.get('varRule'),record.get('currentValue'));
       }
     }, this);
 
@@ -252,7 +206,7 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
           var foundItem = false;
           for (var j = 0; (j<propMeta.inList.length) && !foundItem; j++){
             if (propMeta.inList[j][0]==splitDefaults[i]){
-              splitDefaults[i] = propMeta.inList[j][1];
+              splitDefaults[i] = propMeta.inList[j][0];
               foundItem = true;
             }
           }
@@ -262,7 +216,7 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         var foundItem = false;
         for (var i = 0; (i<propMeta.inList.length) && !foundItem; i++){
           if (propMeta.inList[i][0]==defaultValue){
-            defaultValue = propMeta.inList[i][1];
+            defaultValue = propMeta.inList[i][0];
             foundItem = true;
           }
         }
@@ -274,8 +228,8 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
       classPath:propArray.slice(0,(propArray.length>1?propArray.length-1:0)).join('.'),
       ruleName:(propArray.length>1?propArray[propArray.length-1]:property),
       label:(propMeta&&propMeta.label)?propMeta.label:(propArray.length>1?propArray[propArray.length-1]:property),
-      varRule:Jaffa.SC.BusinessRules.varRules[property],
-      globalRule:Jaffa.SC.BusinessRules.globalRules[property],
+      //varRule:Jaffa.SC.BusinessRules.varRules[property],
+      currentValue: Jaffa.SC.BusinessRules.varRules[property]? Jaffa.SC.BusinessRules.varRules[property] : Jaffa.SC.BusinessRules.globalRules[property],
       defaultValue: defaultValue,
       description: (propMeta&&propMeta.annotation)?propMeta.annotation:'',
       metaData: propMeta}));
@@ -293,7 +247,7 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         scope: this,
         fn : function(btn) {
           if (btn == 'yes') {
-            this.setDirty(false);
+            //this.setDirty(false);
             this.search(searchString);
           }
         }
@@ -358,98 +312,43 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         return ClassMetaData.BusinessRules.fields['**.' + p];
     }
     return null;
-  },
-  buildEditor: function(record){
-	var meta = record.get('metaData'),
-	  config = {};	
-	  config.xtype = 'textfield';
-	
-    if (meta){
-      switch (meta.type) {
-        case 'string':
-          if (meta.inList){
+   },
+   buildEditor: function (record) {
+        var meta = record.get('metaData'),config = {};
+        config.xtype = 'textfield';
+
+        if (meta && meta.inList) {
             config.xtype = 'combo';
-            config.forceSelection = true;
-		  } else if(meta.foreignKeyInfo){
-		    config.xtype = 'finderLovComboGrid';
-	  		config.foreignKeyInfo = meta.foreignKeyInfo;
-		    config.popupAlways = true;
-          } else {
-            config.xtype = 'textfield';
-            if (meta.maxLength) config.maxLength=meta.maxLength;
-            if (meta.minLength) config.minLength=meta.minLength;
-            if (meta.caseType) config.style = 'text-transform: uppercase;';
-          }
-          break;
-        case 'number':
-          config.xtype = 'numberfield';
-          if (meta.maxValue) config.maxValue=meta.maxValue;
-          if (meta.minValue) config.minValue=meta.minValue;
-          break;
-        case 'dateonly':
-          config.xtype = 'datefield';
-          break;
-        case 'datetime':
-          config.xtype = 'xdatetime';
-          break;
-        case 'boolean':
-          config.xtype = 'combo';
-          config.mode='local';
-          config.triggerAction='all';
-          config.forceSelection=true;
-          config.store = new Ext.data.ArrayStore({
-            id: 0,
-            fields: ['valueText'],
-            data: [['""'], ['true'], ['false']]
-          });
-          config.valueField='valueText';
-          config.displayField='valueText';
-          break;
-        case 'object':
-          if (meta.inList){
-            config.xtype = 'lovcombo';
-            config.displayField = 'field2';
-            config.valueField = 'field1';
-          }else
-            config.xtype = 'textfield';
-          break;
-        default:
-          config.xtype = 'textfield';
-      }
-    }
-    if (meta && meta.inList){
-      config.store = meta.inList;
-      config.minChars= 0;
-      config.triggerAction= 'all';
-      config.initialized= 'all';
-      config.maxHeight= 150;
-      config.resizable= true;
-    }
-
-    return config;
-  },
-  _dirty: false,
-  setDirty: function(dirty) {
-    if (dirty && !this._dirty){
-      this.setTitle(this.baseTitle + '*');
-      this._dirty = true;
-    }
-    if (!dirty) {
-      this.store.commitChanges();
-      this._dirty = false;
-      this.setTitle(this.baseTitle);
-    }
-  },
-  refresh: function(){
-    this.setDirty(false);
-    if (this.path){
-      this.loadFromPath(this.path);
-    }else if (this.searchString){
-      this.search(this.searchString);
-    }
-    if (this.store.sortInfo && this.store.sortInfo.field && this.store.sortInfo.direction){
-      this.store.sort(this.store.sortInfo.field,this.store.sortInfo.direction);
-    }
-  }
-
+            config.store = meta.inList;
+            config.minChars = 0;
+            config.triggerAction = 'all';
+            config.initialized = 'all';
+            config.maxHeight = 150;
+            config.resizable = true;
+        }
+        return config;
+   },
+   _dirty: false,
+   setDirty: function(dirty) {
+     if (dirty && !this._dirty){
+       this.setTitle(this.baseTitle + '*');
+       this._dirty = true;
+     }
+     if (!dirty) {
+       this.store.commitChanges();
+       this._dirty = false;
+       this.setTitle(this.baseTitle);
+     }
+   },
+   refresh: function(){
+     this.setDirty(false);
+     if (this.path){
+       this.loadFromPath(this.path);
+     }else if (this.searchString){
+       this.search(this.searchString);
+     }
+     if (this.store.sortInfo && this.store.sortInfo.field && this.store.sortInfo.direction){
+       this.store.sort(this.store.sortInfo.field,this.store.sortInfo.direction);
+     }
+   }
 });

@@ -49,6 +49,7 @@
 package org.jaffa.rules.interceptors;
 
 import org.apache.cxf.interceptor.Fault;
+import org.apache.cxf.jaxrs.model.OperationResourceInfo;
 import org.apache.cxf.message.Exchange;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
@@ -200,9 +201,22 @@ public class CxfFunctionGuardInterceptor extends AbstractPhaseInterceptor<Messag
     private Method getServiceMethod(Message message) {
         Exchange exchange = message.getExchange();
         BindingOperationInfo bindingOperationInfo = exchange.get(BindingOperationInfo.class);
-        MethodDispatcher methodDispatcher = (MethodDispatcher)
-                exchange.get(Service.class).get(MethodDispatcher.class.getName());
-        return methodDispatcher.getMethod(bindingOperationInfo);
+        Service service = exchange.get(Service.class);
+        String dispatcherName = MethodDispatcher.class.getName();
+        MethodDispatcher methodDispatcher = (MethodDispatcher)service.get(dispatcherName);
+
+        Method method = null;
+        if (methodDispatcher != null) {
+            method = methodDispatcher.getMethod(bindingOperationInfo);
+        }
+
+        if (method == null) {
+            OperationResourceInfo resourceInfo = exchange.get(OperationResourceInfo.class);
+            if (resourceInfo != null) {
+                method = resourceInfo.getMethodToInvoke();
+            }
+        }
+        return method;
     }
 
     /**

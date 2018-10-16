@@ -51,6 +51,7 @@ package org.jaffa.loader.policy;
 
 import org.jaffa.loader.ContextKey;
 import org.jaffa.loader.CoreLoaderConfig;
+import org.jaffa.security.VariationContext;
 import org.jaffa.security.securityrolesdomain.GrantFunctionAccess;
 import org.jaffa.security.securityrolesdomain.Role;
 import org.junit.Test;
@@ -104,10 +105,32 @@ public class RoleXmlLoadTest {
         GrantFunctionAccess grantFunctionAccess = new GrantFunctionAccess();
         grantFunctionAccess.setName("Function 1");
         contractorRole.getGrantFunctionAccess().add(grantFunctionAccess);
-        ContextKey key = new ContextKey("CONTRACTOR", "roles.xml", "DEF", "100-Highest");
+        ContextKey key = new ContextKey("CONTRACTOR", "roles.xml", VariationContext.NULL_VARIATION, "100-Highest");
         roleManager.registerRole(key, contractorRole);
         assertNotNull(roleManager.getRole("CONTRACTOR"));
         roleManager.unregisterRole(key);
         assertNull(roleManager.getRole("CONTRACTOR"));
+    }
+
+    /**
+     * Tests the ability of this IManager to retrieve a repository when given its String name
+     */
+    @Test
+    public void testGetRepositoryByName() throws Exception {
+        RoleManager roleManager = xmlLoaderConfig.getBean(RoleManager.class);
+
+        String repo = "Role";
+        assertEquals(repo, roleManager.getRepositoryByName(repo).getName());
+    }
+
+    /**
+     * Test the retrieval of the list of repositories managed by this class
+     */
+    @Test
+    public void testGetRepositoryNames() {
+        RoleManager roleManager = xmlLoaderConfig.getBean(RoleManager.class);
+        for (Object repositoryName : roleManager.getRepositoryNames()) {
+            assertEquals("Role", roleManager.getRepositoryByName((String)repositoryName).getName());
+        }
     }
 }

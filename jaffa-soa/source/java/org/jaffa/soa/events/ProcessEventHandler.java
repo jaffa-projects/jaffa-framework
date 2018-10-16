@@ -58,7 +58,9 @@ import org.jaffa.exceptions.FrameworkException;
 import org.jaffa.persistence.UOW;
 import org.jaffa.util.BeanHelper;
 import org.jaffa.util.ExceptionHelper;
+import org.jaffa.util.OrderedPathMatchingResourcePatternResolver;
 import org.jaffa.util.URLHelper;
+import org.springframework.core.io.Resource;
 
 /** ProcessEventHandler
  *
@@ -68,7 +70,7 @@ import org.jaffa.util.URLHelper;
 public class ProcessEventHandler {
 
     private static Logger log = Logger.getLogger(ProcessEventHandler.class);
-    private static final String SOA_EVENT_LOCATION = "resources/soa-event.properties";
+    private static final String SOA_EVENT_LOCATION = "META-INF/soa-event.properties";
     public static String EXCEPTION_NO_EVENT_LOCATION_FILE = "exception." + ProcessEventHandler.class.getName() + ".noEventLocationFile";
     public static String EXCEPTION_CANNOT_FIND_PROPERTY = "exception." + ProcessEventHandler.class.getName() + ".cannotFindProperty";
 
@@ -111,12 +113,18 @@ public class ProcessEventHandler {
             Properties props = new Properties();
             InputStream input = null;
             try {
-                input = URLHelper.getInputStream(SOA_EVENT_LOCATION);
-                if (input != null) {
-                    props.load(input);
-                    if (log.isDebugEnabled())
-                        log.debug("Loaded " + props.size() + " rule(s) from " + SOA_EVENT_LOCATION);
-                } else {
+                OrderedPathMatchingResourcePatternResolver resolver = OrderedPathMatchingResourcePatternResolver.getInstance();
+                Resource[] resources = resolver.getResources("classpath*:"+SOA_EVENT_LOCATION);
+                if(resources!=null && resources.length > 0) {
+                    for (Resource resource : resources) {
+                        input = resource.getInputStream();
+                        if (input != null) {
+                            props.load(input);
+                            if (log.isDebugEnabled())
+                                log.debug("Loaded " + props.size() + " rule(s) from " + SOA_EVENT_LOCATION);
+                        }
+                    }
+                }else{
                     throw new ApplicationExceptions(new ApplicationException(EXCEPTION_NO_EVENT_LOCATION_FILE, new String[]{SOA_EVENT_LOCATION}));
                 }
             } catch (IOException e) {

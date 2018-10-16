@@ -102,7 +102,7 @@ public class QuartzSchedulerHelper implements SchedulerHelper {
         scheduler.startDelayed(600 /*seconds to delay the start = 10 min*/);
         LOGGER.info("GOLDesp Scheduler has been started.");
       } else if (scheduler.isInStandbyMode()) {
-        scheduler.startDelayed(600 /*seconds to delay the start = 10 min*/);
+        scheduler.start();
         LOGGER.info("GOLDesp Scheduler has been started.");
       }
     } catch (SchedulerException e) {

@@ -24,7 +24,7 @@ public class ContextHelperTest {
         contextSalience = ContextHelper.getContextSalience("jar:file:/ydf.jar!/META-INF/jaffa-transaction-config.xml");
         assertNotNull(contextSalience);
 
-        assertEquals(3,ContextHelper.contextSalienceMap.entrySet().size());
+        assertEquals(3,ContextHelper.getContextSalienceMap().entrySet().size());
     }
 
     @Test

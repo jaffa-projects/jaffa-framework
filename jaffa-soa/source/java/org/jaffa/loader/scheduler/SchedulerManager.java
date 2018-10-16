@@ -62,8 +62,9 @@ import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * SchedulerManager will read the scheduler configuration file and provide those configurations to client classes.
@@ -81,12 +82,20 @@ public class SchedulerManager implements IManager {
      */
     private static final String CONFIGURATION_SCHEMA_FILE = "org/jaffa/modules/scheduler/services/configdomain/jaffa-scheduler-config_1_0.xsd";
 
-    private IRepository<Task> schedulerTaskRepository = new MapRepository<>();
+    /**
+     * Create the Task repository
+     */
+    private IRepository<Task> schedulerTaskRepository = new MapRepository<>("Task");
 
     /**
      * The list of repositories managed by this class
      */
-    private IRepository<?>[] managedRepositories = new IRepository<?>[] {schedulerTaskRepository};
+    private HashMap managedRepositories = new HashMap<String, IRepository>() {
+        {
+            put(schedulerTaskRepository.getName(), schedulerTaskRepository);
+        }
+
+    };
 
     /**
      * Register the scheduler task to the repository.
@@ -117,6 +126,21 @@ public class SchedulerManager implements IManager {
      * {@inheritDoc}
      */
     @Override
+    public void unregisterResource(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
+
+        Config config = JAXBHelper.unmarshalConfigFile(Config.class, resource, CONFIGURATION_SCHEMA_FILE);
+        if (config.getTask() != null) {
+            for (final Task schedulerTask : config.getTask()) {
+                ContextKey contextKey = new ContextKey(schedulerTask.getDataBean(), resource.getURI().toString(), variation, context);
+                unregisterSchedulerTask(contextKey);
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String getResourceFileName() {
         return DEFAULT_CONFIGURATION_FILE;
     }
@@ -126,31 +150,18 @@ public class SchedulerManager implements IManager {
      * @return A list of repository names managed by this manager
      */
     @Override
-    public List<String> getRepositoryNames() {
-        List<String> repositoryNames = new ArrayList<>();
-        for (IRepository<?> repository : managedRepositories) {
-            repositoryNames.add(repository.getName());
-        }
-        return repositoryNames;
+    public Set getRepositoryNames() {
+        return managedRepositories.keySet();
     }
 
     /**
      * Retrieve an IRepository managed by this IManager via its String name
      * @param name The name of the repository to be retrieved
-     * @return The retrieved repository, or null if no matching repository was found.
+     * @return The retrieved repository, or empty if no matching repository was found.
      */
     @Override
     public IRepository<?> getRepositoryByName(String name) {
-        IRepository<?> matchingRepository = null;
-        for (IRepository<?> repository : managedRepositories) {
-            if (name.equals(repository.getName())) {
-                matchingRepository = repository;
-            }
-        }
-        if (matchingRepository == null) {
-            matchingRepository = new MapRepository<>();
-        }
-        return matchingRepository;
+        return (IRepository<?>) managedRepositories.get(name);
     }
 
     /**

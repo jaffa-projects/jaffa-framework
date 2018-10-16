@@ -44,7 +44,7 @@ import org.jaffa.session.ContextManager;
 import org.jaffa.modules.printing.services.FormPrintingHelper;
 import org.jaffa.modules.printing.domain.PrinterDefinition;
 import org.jaffa.security.VariationContext;
-
+import org.jaffa.beans.factory.config.StaticContext;
 // .//GEN-LAST:_imports
 // .//GEN-BEGIN:_2_be
 /** Finder for FormUsage objects.
@@ -439,6 +439,9 @@ public class FormSelectionMaintenanceTx implements IFormSelectionMaintenance {
     public void setUserEmail(String email) {
         userEmail = email;
     }
-    
+
+    public FormSelectionMaintenanceTx() {
+        StaticContext.initialize(this);
+    }
     // .//GEN-LAST:_custom
 }

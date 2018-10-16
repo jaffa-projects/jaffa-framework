@@ -64,7 +64,11 @@ import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *   RoleManager - The RoleManager is used to handle security role creates, removes, updates, and deletes from the
@@ -82,15 +86,18 @@ public class RoleManager implements IManager {
      */
     private static final String CONFIGURATION_SCHEMA_FILE = "org/jaffa/security/securityrolesdomain/security-roles_1_0.xsd";
 
-    /**
-     * The repository of the role names as keys and Roles as values.
-     */
-    private IRepository<Role> roleRepository = new MapRepository<>();
+    /** Create a Role Repository */
+    private IRepository<Role> roleRepository = new MapRepository<>("Role");
 
     /**
      * The list of repositories managed by this class
      */
-    private IRepository<?>[] managedRepositories = new IRepository<?>[] {roleRepository};
+    private HashMap managedRepositories = new HashMap<String, IRepository>() {
+        {
+            put(roleRepository.getName(), roleRepository);
+        }
+
+    };
 
     private static Logger log = Logger.getLogger(PolicyCache.class);
 
@@ -116,6 +123,28 @@ public class RoleManager implements IManager {
     }
 
     /**
+     * unregisterResource - Unregisters the roles from the role repository using the roles.xml files found in META-INF/roles.xml
+     * that exist in the classpath. This is used to return the repository to its original state before a custom
+     * configuration was added.
+     * @param resource the object that contains the xml config file.
+     * @param context  key with which config file to be registered.
+     * @throws JAXBException
+     * @throws SAXException
+     * @throws IOException
+     */
+    @Override
+    public void unregisterResource(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
+
+        Roles roles = JAXBHelper.unmarshalConfigFile(Roles.class, resource, CONFIGURATION_SCHEMA_FILE);
+        if (roles.getRole() != null) {
+            for (final Role role : roles.getRole()) {
+                ContextKey key = new ContextKey(role.getName(), resource.getURI().toString(), variation, context);
+                unregisterRole(key);
+            }
+        }
+    }
+
+    /**
      * getResourceFileName - Returns the default XML file name of the security roles XSD.
      * @return return the name of the roles XSD file
      */
@@ -129,31 +158,18 @@ public class RoleManager implements IManager {
      * @return A list of repository names managed by this manager
      */
     @Override
-    public List<String> getRepositoryNames() {
-        List<String> repositoryNames = new ArrayList<>();
-        for (IRepository<?> repository : managedRepositories) {
-            repositoryNames.add(repository.getName());
-        }
-        return repositoryNames;
+    public Set getRepositoryNames() {
+        return managedRepositories.keySet();
     }
 
     /**
      * Retrieve an IRepository managed by this IManager via its String name
      * @param name The name of the repository to be retrieved
-     * @return The retrieved repository, or null if no matching repository was found.
+     * @return The retrieved repository, or empty if no matching repository was found.
      */
     @Override
     public IRepository<?> getRepositoryByName(String name) {
-        IRepository<?> matchingRepository = null;
-        for (IRepository<?> repository : managedRepositories) {
-            if (name.equals(repository.getName())) {
-                matchingRepository = repository;
-            }
-        }
-        if (matchingRepository == null) {
-            matchingRepository = new MapRepository<>();
-        }
-        return matchingRepository;
+        return (IRepository<?>) managedRepositories.get(name);
     }
 
     /**

@@ -50,9 +50,11 @@
 package org.jaffa.rules.meta;
 
 import org.apache.log4j.Logger;
+import org.jaffa.api.rules.IMetaDataRepository;
 import org.jaffa.rules.JaffaRulesFrameworkException;
 import org.jaffa.rules.commons.AbstractLoader;
 import org.jaffa.rules.realm.RealmRepository;
+import org.jaffa.util.ListSet;
 import org.jaffa.util.StringHelper;
 import org.w3c.dom.Element;
 
@@ -62,7 +64,8 @@ import java.util.*;
 /**
  * This class is used to import metadata and index them by class, property and source.
  */
-public class MetaDataRepository extends AbstractLoader {
+public class MetaDataRepository extends AbstractLoader
+        implements IMetaDataRepository {
 
     private static final String ELEMENT_PROPERTY = "property";
     private static final String ATTR_CLASS = "class";
@@ -467,6 +470,16 @@ public class MetaDataRepository extends AbstractLoader {
         }
         list.add(rule);
         return map;
+    }
+
+    @Override
+    public Set<String> getPropertyNames(String className, String ruleName) {
+        Set<String> names = new ListSet();
+        Map propertyRuleMap = getPropertyRuleMap(className, ruleName);
+        if (propertyRuleMap != null) {
+            names = propertyRuleMap.keySet();
+        }
+        return names;
     }
 
     //---------------------------------------------------------------------------------

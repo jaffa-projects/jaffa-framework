@@ -52,71 +52,86 @@ package org.jaffa.presentation.portlet.widgets.taglib;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import java.io.IOException;
+
 import org.apache.log4j.Logger;
 import org.jaffa.presentation.portlet.widgets.taglib.exceptions.OuterFormTagMissingRuntimeException;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionMessage;
+
 import java.util.Iterator;
+
 import org.jaffa.presentation.portlet.widgets.taglib.exceptions.JspWriteRuntimeException;
 import org.jaffa.presentation.portlet.FormBase;
 import org.jaffa.util.MessageHelper;
-import javax.servlet.http.HttpServletRequest;
-import org.jaffa.util.StringHelper;
 
-/** Tag Handler for the RaiseErrors tag.*/
+import javax.servlet.http.HttpServletRequest;
+
+import org.jaffa.util.StringHelper;
+import org.owasp.encoder.Encode;
+
+/**
+ * Tag Handler for the RaiseErrors tag.
+ */
 public class RaiseErrorsTag extends CustomTag implements IFormTag {
 
     private static Logger log = Logger.getLogger(RaiseErrorsTag.class);
     private static final String TAG_NAME = "RaiseErrorsTag";
 
-    /** Default constructor.
+    /**
+     * Default constructor.
      */
     public RaiseErrorsTag() {
         super();
     }
 
-
     /**
      * This generates the HTML for the tag.
+     * Writes a script tag containing error message details to be added to the current jsp.
+     *
      * @throws JspException if any error occurs.
      */
     public void otherDoEndTagOperations() throws JspException {
 
         // Get the form bean from the page.
         FormBase form = TagHelper.getFormBase(pageContext);
-        if(form == null) {
+        if (form == null) {
             String str = "The " + TAG_NAME + " should be inside a FormTag";
             log.error(str);
             throw new OuterFormTagMissingRuntimeException(str);
         }
 
         // get the errors from the form
-        if ( form.hasErrors((HttpServletRequest) pageContext.getRequest()) ) {
-            ActionMessages errors = form.getErrors((HttpServletRequest) pageContext.getRequest());
-            StringBuffer buf = new StringBuffer();
-            buf.append("<SCRIPT type=\"text/javascript\">");
-            for (Iterator itr = errors.get(); itr.hasNext();) {
-                ActionMessage error = (ActionMessage) itr.next();
-                buf.append("addMessage(\"");
-                //buf.append( RequestUtils.message(pageContext, null, null, error.getKey(), error.getValues() ) );
-                String message = StringHelper.convertToHTML(MessageHelper.findMessage(pageContext, error.getKey(), error.getValues())) + 
-                        TagHelper.getLabelEditorLink(pageContext, error.getKey());
-                buf.append((message != null ? message : error.getKey()));
-                buf.append("\");");
-            }
-            // delete the error so that it doesnt get re-displayed
-            form.clearErrors((HttpServletRequest) pageContext.getRequest());
-            buf.append("</SCRIPT>");
+        if (!FormBase.hasErrors((HttpServletRequest) pageContext.getRequest())) {
+            return;
+        }
 
-            try {
-                JspWriter w = pageContext.getOut();
-                w.print( buf.toString() );
-            } catch (IOException e) {
-                String str = "Exception in writing the " + TAG_NAME;
-                log.error(str, e);
-                throw new JspWriteRuntimeException(str, e);
-            }
+        ActionMessages errors = FormBase.getErrors((HttpServletRequest) pageContext.getRequest());
+        StringBuilder buf = new StringBuilder();
+        buf.append("<SCRIPT type=\"text/javascript\">");
+        for (Iterator itr = errors.get(); itr.hasNext(); ) {
+            ActionMessage error = (ActionMessage) itr.next();
+            buf.append("addMessage(\"");
+            String messageHtml = StringHelper.convertToHTML(MessageHelper.findMessage(pageContext, error.getKey(), error.getValues()));
+            String labelEditorLink = TagHelper.getLabelEditorLink(pageContext, error.getKey());
+            // escape the message for html to prevent XSS
+            String message = Encode.forHtml(messageHtml) + labelEditorLink;
+            
+            buf.append(message);
+            buf.append("\");");
+        }
+
+        // delete the error so that it doesn't get re-displayed
+        form.clearErrors((HttpServletRequest) pageContext.getRequest());
+        buf.append("</SCRIPT>");
+
+        // add the script tag containing the error message to the current jsp
+        try {
+            JspWriter w = pageContext.getOut();
+            w.print(buf.toString());
+        } catch (IOException e) {
+            String str = "Exception in writing the " + TAG_NAME;
+            log.error(str, e);
+            throw new JspWriteRuntimeException(str, e);
         }
     }
-
 }

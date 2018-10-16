@@ -1,0 +1,64 @@
+CREATE OR REPLACE PACKAGE $(BasePackage) AS
+
+#foreach $table in $Tables.values() #begin
+FUNCTION $(table.PolicyName) (D1 VARCHAR2, D2 VARCHAR2) RETURN VARCHAR2;
+
+#end
+
+END;
+
+/
+
+CREATE OR REPLACE PACKAGE BODY $(BasePackage) AS
+
+#foreach $field in $Tables.values() {
+
+FUNCTION $(field.PolicyName) (D1 VARCHAR2, D2 VARCHAR2) RETURN VARCHAR2
+IS D_predicate VARCHAR2(2000);
+	BEGIN
+	IF sys_context('$(SqlPrefix)_sec_ctx', 'userid') IS NULL THEN
+		D_predicate := ' ''1'' = ''2'' ';
+#if ($(Roles) != null){	
+
+ELSIF 
+#set $firstPass = "true"
+#foreach $roleField in $Roles.values()
+#begin
+#if ($firstPass == "true") {
+#set $firstPass = "false"
+ sys_context('$(SqlPrefix)_sec_ctx', 'is_$roleField') = 'TRUE'  
+}
+#else { OR sys_context('$(SqlPrefix)_sec_ctx', 'is_$roleField') = 'TRUE'  }
+#end THEN
+}
+#else{
+        ELSE
+}
+#if ($(field.Direct) != null){
+            D_predicate := '$(field.Direct.SourceField) IN $(BasePredicate)';
+}
+#elseif ($(field.Indirect) != null){
+
+		D_predicate := '$(field.Indirect.SourceField) IN (select $(field.Indirect.ForeignField) from $(field.Indirect.ForeignTable))';
+
+}
+#elseif ($(field.Custom) != null){
+
+		D_predicate := '$(field.Custom.Predicate)';
+
+}
+#if ($(Roles) != null){	
+
+        ELSE
+		D_predicate := '';            
+}
+	END IF; 
+                RETURN D_predicate;    
+        
+                
+END;
+}
+
+END $(BasePackage);
+/
+

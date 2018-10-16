@@ -74,7 +74,7 @@ public class SOAEventHandler {
 
     private static final Logger log = Logger.getLogger(SOAEventHandler.class);
     private static final String PREFIX_PARAMS = "params.";
-    private static final String SOA_EVENT_SERVICE = "SOAEventService";
+    private static final String SOA_EVENT_SERVICE = "soaeventservice";
     private static final String UOW_KEY = "UOW";
     private static final String FIND_BY_PK = "findByPK";
 
@@ -102,6 +102,9 @@ public class SOAEventHandler {
 
             // Inject domain facts, based on the configuration file
             injectDomainFacts(uow, interceptor, message);
+
+            //fire drools rules here as we are not firing on uow.commit()
+            interceptor.fireRules();
         }
     }
 

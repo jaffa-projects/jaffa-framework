@@ -51,6 +51,7 @@ package org.jaffa.soa.services;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.log4j.Logger;
+import org.jaffa.beans.factory.config.StaticContext;
 import org.jaffa.datatypes.DateTime;
 import org.jaffa.exceptions.ApplicationExceptions;
 import org.jaffa.exceptions.FrameworkException;
@@ -62,7 +63,19 @@ public class RaiseEventService {
 
     private static final Logger log = Logger.getLogger(RaiseEventService.class);
 
+    private IRaiseEventServiceHandler raiseEventServiceHandler;
+
+    /**
+     * Default Constructor
+     * <p>
+     * Calls the Static Context Factory to allow Spring to initialize this object
+     */
+    public RaiseEventService(){
+        StaticContext.configure(this);
+    }
+
     // TODO-SWAT add script events here
+
 
     public void raiseSoaEvent(UOW uow, String eventName, String description, String category, List<HeaderParam> headerParams) throws FrameworkException, ApplicationExceptions {
         // TODO-SWAT fire custom handler here
@@ -88,6 +101,11 @@ public class RaiseEventService {
             
             if (category != null) {
                 message.setCategory(category);
+            }
+
+            //Invoke the custom logic if the handler injected.
+            if (raiseEventServiceHandler != null) {
+                raiseEventServiceHandler.raiseSoaEvent(uow, eventName, description, category, headerParams);
             }
             
             if (headerParams != null && headerParams.size() > 0) {
@@ -117,5 +135,14 @@ public class RaiseEventService {
 
     public void raiseSoaEvent(UOW uow, String eventName, String description, HeaderParam[] headerParams) throws FrameworkException, ApplicationExceptions {
         raiseSoaEvent(uow, eventName, description, null, headerParams!=null ? Arrays.asList(headerParams) : null);
+    }
+
+    /**
+     * The custom handler will get injected.
+     *
+     * @param raiseEventServiceHandler
+     */
+    public void setRaiseEventServiceHandler(IRaiseEventServiceHandler raiseEventServiceHandler) {
+        this.raiseEventServiceHandler = raiseEventServiceHandler;
     }
 }

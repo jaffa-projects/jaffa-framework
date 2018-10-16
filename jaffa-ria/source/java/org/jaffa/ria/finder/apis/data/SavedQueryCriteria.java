@@ -146,8 +146,8 @@ public class SavedQueryCriteria extends GraphCriteria {
 
   @Override
   public Criteria returnQueryClause(Criteria c) {
-    setTableName(SavedQueryMeta.getName());
     c = super.returnQueryClause(c);
+      c.setTable(SavedQueryMeta.getName());
     FinderTx.addCriteria(getQueryId(), SavedQueryMeta.QUERY_ID, c);
     FinderTx.addCriteria(getUserId(), SavedQueryMeta.USER_ID, c);
     FinderTx.addCriteria(getComponentRef(), SavedQueryMeta.COMPONENT_REF, c);

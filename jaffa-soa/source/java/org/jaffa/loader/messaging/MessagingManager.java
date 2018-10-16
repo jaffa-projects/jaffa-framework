@@ -55,13 +55,17 @@ import org.jaffa.loader.IManager;
 import org.jaffa.loader.IRepository;
 import org.jaffa.loader.MapRepository;
 import org.jaffa.modules.messaging.services.configdomain.*;
+import org.jaffa.modules.messaging.services.configdomain.Config;
 import org.jaffa.util.JAXBHelper;
 import org.springframework.core.io.Resource;
 import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * A class that manages various kinds of messaging object specifications, as
@@ -89,27 +93,36 @@ public class MessagingManager implements IManager {
     /** The MessageInfo repository.  The key is the data bean;
      *  the value in the MessageInfo object. */
     private IRepository<MessageInfo> messageInfoRepository =
-            new MapRepository<>();
+            new MapRepository<>("MessageInfo");
 
     /** The QueueInfo repository.  The key is the name;
      *  the value in the QueueInfo object. */
     private IRepository<QueueInfo> queueInfoRepository =
-            new MapRepository<>();
+            new MapRepository<>("QueueInfo");
 
     /** The TopicInfo repository.  The key is the name;
      *  the value in the TopicInfo object. */
     private IRepository<TopicInfo> topicInfoRepository =
-            new MapRepository<>();
+            new MapRepository<>("TopicInfo");
 
     /** The MessageFilter repository.  The key is the filter name;
      *  the value in the MessageFilter object. */
     private IRepository<MessageFilter> messageFilterRepository =
-            new MapRepository<>();
+            new MapRepository<>("MessageFilter");
 
 
-    /** The list of repositories managed by this class */
-    private IRepository<?>[] managedRepositories = new IRepository<?>[] {
-            messageInfoRepository, queueInfoRepository, topicInfoRepository, messageFilterRepository};
+    /**
+     * The list of repositories managed by this class
+     */
+    private HashMap managedRepositories = new HashMap<String, IRepository>() {
+        {
+            put(messageInfoRepository.getName(), messageInfoRepository);
+            put(queueInfoRepository.getName(), queueInfoRepository);
+            put(topicInfoRepository.getName(), topicInfoRepository);
+            put(messageFilterRepository.getName(), messageFilterRepository);
+        }
+
+    };
 
     /**
      * Unmarshall the contents of the configuration to create and register
@@ -150,6 +163,52 @@ public class MessagingManager implements IManager {
                     final MessageFilter filter = (MessageFilter) o;
                     ContextKey contextKey = new ContextKey(filter.getFilterName(), resource.getURI().toString(), variation, context);
                     registerMessageFilter(contextKey, filter);
+                } else {
+                    log.warn("MessagingObject.registerResource, unexpected object: " + o);
+                }
+            }   // for
+            checkForQueueAndTopicNamingConflicts();
+        }
+    }
+
+    /**
+     * Unregister the message objects defined by a particular resource.
+     * @param resource the object that contains the xml config file.
+     * @param context key with which config file to be registered.
+     * @param variation key with which config file to be registered.
+     * @throws JAXBException
+     * @throws SAXException
+     * @throws IOException
+     */
+    @Override
+    public void unregisterResource(Resource resource, String context, String variation)
+            throws JAXBException, SAXException, IOException {
+
+        Config config = JAXBHelper.unmarshalConfigFile(Config.class, resource,
+                CONFIGURATION_SCHEMA_FILE);
+
+        List<Object> messageObjects = config.getMessageOrQueueOrTopic();
+
+        if (messageObjects != null) {
+            for (final Object o : messageObjects) {
+
+                if (o instanceof MessageInfo) {
+                    final MessageInfo info = (MessageInfo) o;
+                    validateMessageInfo(info);
+                    ContextKey contextKey = new ContextKey(info.getDataBean(), resource.getURI().toString(), variation, context);
+                    unregisterMessageInfo(contextKey);
+                } else if (o instanceof QueueInfo) {
+                    final QueueInfo info = (QueueInfo) o;
+                    ContextKey contextKey = new ContextKey(info.getName(), resource.getURI().toString(), variation, context);
+                    unregisterQueueInfo(contextKey);
+                } else if (o instanceof TopicInfo) {
+                    final TopicInfo info = (TopicInfo) o;
+                    ContextKey contextKey = new ContextKey(info.getName(), resource.getURI().toString(), variation, context);
+                    unregisterTopicInfo(contextKey);
+                } else if (o instanceof MessageFilter) {
+                    final MessageFilter filter = (MessageFilter) o;
+                    ContextKey contextKey = new ContextKey(filter.getFilterName(), resource.getURI().toString(), variation, context);
+                    unregisterMessageFilter(contextKey);
                 } else {
                     log.warn("MessagingObject.registerResource, unexpected object: " + o);
                 }
@@ -365,31 +424,18 @@ public class MessagingManager implements IManager {
      * @return A list of repository names managed by this manager
      */
     @Override
-    public List<String> getRepositoryNames() {
-        List<String> repositoryNames = new ArrayList<>();
-        for (IRepository<?> repository : managedRepositories) {
-            repositoryNames.add(repository.getName());
-        }
-        return repositoryNames;
+    public Set getRepositoryNames() {
+        return managedRepositories.keySet();
     }
 
     /**
      * Retrieve an IRepository managed by this IManager via its String name
      * @param name The name of the repository to be retrieved
-     * @return The retrieved repository, or null if no matching repository was found.
+     * @return The retrieved repository, or empty if no matching repository was found.
      */
     @Override
     public IRepository<?> getRepositoryByName(String name) {
-        IRepository<?> matchingRepository = null;
-        for (IRepository<?> repository : managedRepositories) {
-            if (name.equals(repository.getName())) {
-                matchingRepository = repository;
-            }
-        }
-        if (matchingRepository == null) {
-            matchingRepository = new MapRepository<>();
-        }
-        return matchingRepository;
+        return (IRepository<?>) managedRepositories.get(name);
     }
 
     public IRepository<MessageInfo> getMessageInfoRepository() {

@@ -56,14 +56,16 @@ import org.jaffa.loader.MapRepository;
 import org.jaffa.modules.messaging.services.ConfigurationService;
 import org.jaffa.modules.messaging.services.configdomain.JmsConfig;
 import org.jaffa.modules.messaging.services.configdomain.JndiConfig;
+import org.jaffa.modules.messaging.services.configdomain.JndiContext;
+import org.jaffa.modules.messaging.services.configdomain.Param;
 import org.jaffa.util.JAXBHelper;
 import org.springframework.core.io.Resource;
 import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Set;
 
 
 /**
@@ -77,8 +79,11 @@ public class JndiJmsManager implements IManager {
      * The location of the configuration file.
      */
     private static final String DEFAULT_JMS_JNDI_CONFIGURATION_FILE =
-            "resources/jms-jndi-config.xml";
+            "jms-jndi-config.xml";
 
+    /**
+     * The configuration file
+     */
     private String jmsJndiConfigurationFile =
             System.getProperty(ConfigurationService.class.getName(),
                     DEFAULT_JMS_JNDI_CONFIGURATION_FILE);
@@ -95,12 +100,17 @@ public class JndiJmsManager implements IManager {
      * the value in the JndiConfig object.
      */
     private IRepository<JmsConfig> jmsRepository =
-            new MapRepository<>();
+            new MapRepository<>("JmsConfig");
 
     /**
      * The list of repositories managed by this class
      */
-    private IRepository<?>[] managedRepositories = new IRepository<?>[] {jmsRepository};
+    private HashMap managedRepositories = new HashMap<String, IRepository>() {
+        {
+            put(jmsRepository.getName(), jmsRepository);
+        }
+
+    };
 
     /**
      * Unmarshall the contents of the configuration to create and register
@@ -118,8 +128,28 @@ public class JndiJmsManager implements IManager {
         JndiConfig config = JAXBHelper.unmarshalConfigFile(JndiConfig.class, resource,
                 JMS_JNDI_CONFIGURATION_SCHEMA_FILE);
         JmsConfig jmsConfig = config.getJmsConfig();
+        populateJmsConfig(jmsConfig);
         ContextKey contextKey = new ContextKey(jmsConfig.getUser(), resource.getURI().toString(), variation, context);
         jmsRepository.register(contextKey, jmsConfig);
+    }
+
+    /**
+     * Unregister the JmsConfig objects defined by a particular resource.
+     * @param resource the object that contains the xml config file.
+     * @param context key with which config file to be registered.
+     * @param variation key with which config file to be registered.
+     * @throws JAXBException
+     * @throws SAXException
+     * @throws IOException
+     */
+    @Override
+    public void unregisterResource(Resource resource, String context, String variation)
+            throws JAXBException, SAXException, IOException {
+        JndiConfig config = JAXBHelper.unmarshalConfigFile(JndiConfig.class, resource,
+                JMS_JNDI_CONFIGURATION_SCHEMA_FILE);
+        JmsConfig jmsConfig = config.getJmsConfig();
+        ContextKey contextKey = new ContextKey(jmsConfig.getUser(), resource.getURI().toString(), variation, context);
+        jmsRepository.unregister(contextKey);
     }
 
     @Override
@@ -132,31 +162,18 @@ public class JndiJmsManager implements IManager {
      * @return A list of repository names managed by this manager
      */
     @Override
-    public List<String> getRepositoryNames() {
-        List<String> repositoryNames = new ArrayList<>();
-        for (IRepository<?> repository : managedRepositories) {
-            repositoryNames.add(repository.getName());
-        }
-        return repositoryNames;
+    public Set getRepositoryNames() {
+        return managedRepositories.keySet();
     }
 
     /**
      * Retrieve an IRepository managed by this IManager via its String name
      * @param name The name of the repository to be retrieved
-     * @return The retrieved repository, or null if no matching repository was found.
+     * @return The retrieved repository, or empty if no matching repository was found.
      */
     @Override
     public IRepository<?> getRepositoryByName(String name) {
-        IRepository<?> matchingRepository = null;
-        for (IRepository<?> repository : managedRepositories) {
-            if (name.equals(repository.getName())) {
-                matchingRepository = repository;
-            }
-        }
-        if (matchingRepository == null) {
-            matchingRepository = new MapRepository<>();
-        }
-        return matchingRepository;
+        return (IRepository<?>) managedRepositories.get(name);
     }
 
     public IRepository<JmsConfig> getJmsRepository() {
@@ -174,5 +191,22 @@ public class JndiJmsManager implements IManager {
     public JmsConfig getJmsConfig() {
         //There should be only one entry of jmsJndiConfig
         return jmsRepository.getValues()!=null && jmsRepository.getValues().size() > 0 ? jmsRepository.getValues().get(0) : null;
+    }
+
+    /**
+     * Pre fills the jmsconfig with the environment values
+     * @param jmsConfig
+     */
+    private void populateJmsConfig(JmsConfig jmsConfig) {
+        if(jmsConfig!=null && jmsConfig.getJndiContext()!=null
+                && System.getProperty("java.naming.provider.url")!=null && System.getProperty("java.naming.provider.url").length() > 0) {
+            for (Param param : jmsConfig.getJndiContext().getParam()) {
+                if ("java.naming.provider.url".equals(param.getName())) {
+                    param.setValue(System.getProperty("java.naming.provider.url"));
+                }
+            }
+            jmsConfig.setUser(System.getProperty("activemq.broker.jms.user"));
+            jmsConfig.setPassword(System.getProperty("activemq.broker.jms.password"));
+        }
     }
 }

@@ -54,6 +54,7 @@ import org.jaffa.loader.IRepository;
 import org.jaffa.loader.MapRepository;
 import org.jaffa.presentation.portlet.component.ComponentDefinition;
 import org.jaffa.presentation.portlet.component.componentdomain.Component;
+import org.jaffa.security.VariationContext;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -69,11 +70,13 @@ public class ComponentManagerTest {
     /** The manager being tested. */
     private ComponentManager manager;
 
+    /** Create a new ComponentManager before every test */
     @Before
     public void setUp() throws Exception {
         manager = new ComponentManager();
     }
 
+    /** Remove the ComponentManager after every test */
     @After
     public void tearDown() throws Exception {
         manager = null;
@@ -89,7 +92,7 @@ public class ComponentManagerTest {
         String name = "q1";
         component.setId(name);
         ComponentDefinition definition = new ComponentDefinition(component);
-        ContextKey key = new ContextKey(name, "components.xml", "DEF", "0-PLATFORM");
+        ContextKey key = new ContextKey(name, "components.xml", VariationContext.NULL_VARIATION, "0-PLATFORM");
         manager.registerComponentDefinition(key, definition);
         ComponentDefinition retrievedDefinition = manager.getComponentDefinition(name);
         assertEquals(definition, retrievedDefinition);
@@ -114,7 +117,7 @@ public class ComponentManagerTest {
                 manager.getComponentRepository();
         assertNotNull(origRepository);
         IRepository<ComponentDefinition> componentRepository1 =
-                new MapRepository<>();
+                new MapRepository<>("ComponentDefinition");
         manager.setComponentRepository(componentRepository1);
         IRepository<ComponentDefinition> retrievedRepository =
                 manager.getComponentRepository();
@@ -162,12 +165,7 @@ public class ComponentManagerTest {
          ContextKey key = new ContextKey(name, "components.xml", "DEF", "0-PLATFORM");
          manager.registerComponentDefinition(key, definition);
 
-         //Negative test
-         String repo = "ThieWillBeAnEmptyRepository";
-         assertEquals("Empty Repository", manager.getRepositoryByName(repo).getName());
-
-         //Positive test
-         repo = "ComponentDefinition";
+         String repo = "ComponentDefinition";
          assertEquals(repo, manager.getRepositoryByName(repo).getName());
      }
 
@@ -176,8 +174,8 @@ public class ComponentManagerTest {
     */
     @Test
      public void testGetRepositoryNames() {
-        for (String repositoryName : manager.getRepositoryNames()) {
-            assertNotNull(manager.getRepositoryByName(repositoryName).getName());
+        for (Object repositoryName : manager.getRepositoryNames()) {
+            assertEquals("ComponentDefinition", manager.getRepositoryByName((String)repositoryName).getName());
         }
     }
 }

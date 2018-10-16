@@ -53,6 +53,8 @@ import org.jaffa.exceptions.ApplicationException;
 import org.jaffa.exceptions.ApplicationExceptions;
 import org.jaffa.exceptions.FrameworkException;
 import org.jaffa.flexfields.FlexBean;
+import org.jaffa.flexfields.FlexClass;
+import org.jaffa.flexfields.FlexProperty;
 import org.jaffa.flexfields.IFlexFields;
 import org.jaffa.persistence.IPersistent;
 import org.jaffa.persistence.UOW;
@@ -112,10 +114,15 @@ public class RuleActor<T> {
      * Sets the actor's rule map from meta-data. This is the same as calling
      * setRuleMap(getPropertyMap(className, getName()))
      *
-     * @param className the name of the class this rule actor is for.
+     * @param classNames the names of the class hierarchy this rule actor is for.
      */
-    public void initializeRuleMapFromMetaData(String className) throws FrameworkException, ApplicationExceptions {
-        this.ruleMap = getPropertyRuleMap(className,name);
+    public void initializeRuleMapFromMetaData(List<String> classNames) throws FrameworkException, ApplicationExceptions {
+        for (String className : classNames) {
+            Map<String, List<RuleMetaData>> classRuleMap = getPropertyRuleMap(className, name);
+            if (classRuleMap != null) {
+                this.ruleMap.putAll(classRuleMap);
+            }
+        }
     }
 
     /**
@@ -515,9 +522,14 @@ public class RuleActor<T> {
         String targetClassName = getActualClassName(targetObject.getClass());
         try {
             if (targetObject instanceof FlexBean) {
-                if (((FlexBean) targetObject).getDynaClass().getDynaProperty(targetPropertyName) == null && ((FlexBean) targetObject).getPersistentObject() != null) {
+                FlexBean flexBean = (FlexBean) targetObject;
+                FlexClass flexClass = (FlexClass) flexBean.getDynaClass();
+                FlexProperty flexProperty = flexClass.getDynaProperty(targetPropertyName);
+                if (flexProperty == null && ((FlexBean) targetObject).getPersistentObject() != null) {
                     targetObject = ((FlexBean) targetObject).getPersistentObject();
                     targetClassName = targetObject.getClass().getName();
+                } else if (flexProperty != null && ((FlexBean) targetObject).getPersistentObject() == null) {
+                    targetClassName = flexClass.getName();
                 }
             } else if (targetObject instanceof IFlexFields) {
                 if (((IFlexFields) targetObject).getFlexBean() != null && ((IFlexFields) targetObject).getFlexBean().getDynaClass().getDynaProperty(targetPropertyName) != null) {
@@ -623,7 +635,8 @@ public class RuleActor<T> {
 
         S newException = null;
         String errorCode = rule.getParameter("errorCode");
-        Object[] arguments = getErrorArgumentArray(targetObject, rule);
+        Object[] baseArguments = getErrorArgumentArray(targetObject, rule);
+		Object[] arguments = new Object[]{ rule.getParameter(RuleMetaData.PARAMETER_VALUE) };
         String propertyLabel = getPropertyLabel(targetObject, targetPropertyName);
 
         try {
@@ -635,7 +648,7 @@ public class RuleActor<T> {
         }
 
         if (errorCode != null) {
-            return new ApplicationException(errorCode, arguments, newException);
+            return new ApplicationException(errorCode, baseArguments, newException);
         }
 
         return newException;

@@ -54,15 +54,20 @@ import org.jaffa.loader.IManager;
 import org.jaffa.loader.IRepository;
 import org.jaffa.loader.MapRepository;
 import org.jaffa.security.VariationContext;
+import org.jaffa.util.StringHelper;
 import org.springframework.core.io.Resource;
 import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * ApplicationRulesManager - ApplicationManager is the managing class for all application rules as defined by the
@@ -70,16 +75,25 @@ import java.util.Properties;
  */
 public class ApplicationRulesManager implements IManager {
 
+    /** The key to locate the resources. */
+    public static final String APPLICATION_RULES_PROPERTIES = "Properties";
+
+
     /**
      * Instantiates a new Properties repository
      */
-    private IRepository<Properties> applicationRulesRepository = new MapRepository<>();
+    private IRepository<String> applicationRulesRepository = new MapRepository<>("Properties");
 
 
     /**
      * The list of repositories managed by this class
      */
-    private IRepository<?>[] managedRepositories = new IRepository<?>[] {applicationRulesRepository};
+    private HashMap managedRepositories = new HashMap<String, IRepository>() {
+        {
+            put(applicationRulesRepository.getName(), applicationRulesRepository);
+        }
+
+    };
 
     /**
      * Provides the pattern to search for ApplicationRules
@@ -91,10 +105,10 @@ public class ApplicationRulesManager implements IManager {
      * registerProperties - Registers an individual Properties object into the IRepository
      *
      * @param contextKey
-     * @param properties
+     * @param property
      */
-    public void registerProperties(ContextKey contextKey, Properties properties) {
-        getApplicationRulesRepository().register(contextKey, properties);
+    public void registerProperties(ContextKey contextKey, String property) {
+        getApplicationRulesRepository().register(contextKey, property);
     }
 
     /**
@@ -111,7 +125,7 @@ public class ApplicationRulesManager implements IManager {
      *
      * @return A repository of properties
      */
-    public IRepository<Properties> getApplicationRulesRepository() {
+    public IRepository<String> getApplicationRulesRepository() {
         return applicationRulesRepository;
     }
 
@@ -120,31 +134,35 @@ public class ApplicationRulesManager implements IManager {
      * @return A list of repository names managed by this manager
      */
     @Override
-    public List<String> getRepositoryNames() {
-        List<String> repositoryNames = new ArrayList<>();
-        for (IRepository<?> repository : managedRepositories) {
-            repositoryNames.add(repository.getName());
-        }
-        return repositoryNames;
+    public Set getRepositoryNames() {
+        return managedRepositories.keySet();
     }
 
     /**
      * Retrieve an IRepository managed by this IManager via its String name
      * @param name The name of the repository to be retrieved
-     * @return The retrieved repository, or null if no matching repository was found.
+     * @return The retrieved repository, or empty if no matching repository was found.
      */
     @Override
     public IRepository<?> getRepositoryByName(String name) {
-        IRepository<?> matchingRepository = null;
-        for (IRepository<?> repository : managedRepositories) {
-            if (name.equals(repository.getName())) {
-                matchingRepository = repository;
-            }
+        return (IRepository<?>) managedRepositories.get(name);
+    }
+
+    /**
+     * registerProperties() - Registers each property from a provided ContextKey for repository access
+     * @param mapRepository The repository to register the properties to
+     * @param key   The ContextKey corresponding to the property values
+     * @param properties    The Properties object containing property key/value pairs
+     */
+
+    private void registerProperties(MapRepository<String> mapRepository, ContextKey key, Properties properties) {
+        Iterator<String> contextKeyPropertiesIterator = properties.stringPropertyNames().iterator();
+        while (contextKeyPropertiesIterator.hasNext()) {
+            String propertyKey = contextKeyPropertiesIterator.next();
+            String propertyValue = properties.getProperty(propertyKey);
+            mapRepository.register(
+                    new ContextKey(propertyKey, key.getFileName(), key.getVariation(), key.getPrecedence()), propertyValue);
         }
-        if (matchingRepository == null) {
-            matchingRepository = new MapRepository<>();
-        }
-        return matchingRepository;
     }
 
     /**
@@ -152,7 +170,7 @@ public class ApplicationRulesManager implements IManager {
      *
      * @param applicationRulesRepository
      */
-    public void setApplicationRulesRepository(IRepository<Properties> applicationRulesRepository) {
+    public void setApplicationRulesRepository(IRepository<String> applicationRulesRepository) {
         this.applicationRulesRepository = applicationRulesRepository;
     }
 
@@ -174,16 +192,14 @@ public class ApplicationRulesManager implements IManager {
      * @return ApplicationRules_{variation} properties
      */
     public Properties getApplicationRulesVariation(String variation) {
-        IRepository<Properties> propertyRepository = getApplicationRulesRepository();
+        IRepository<String> propertyRepository = getApplicationRulesRepository();
         Properties properties = new Properties();
         if (null != propertyRepository) {
-            Map<String, Properties> variationRepo = propertyRepository.getRepositoryByVariation(variation);
-            properties = variationRepo.get(variation);
+            Map<String, String> variationRepo = propertyRepository.getRepositoryByVariation(variation);
+            properties.putAll(variationRepo);
         }
         return properties;
     }
-
-
 
     /**
      * registerResource - Provides a method which submits the contents of the resource file to the application rules
@@ -199,28 +215,100 @@ public class ApplicationRulesManager implements IManager {
     @Override
     public void registerResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException {
         Properties properties = new Properties();
-        if (resource != null && resource.getInputStream() != null) {
-            properties.load(resource.getInputStream());
-            for (Object property : properties.keySet()) {
-                String systemPropertyValue = System.getProperty((String) property);
-                if (systemPropertyValue != null && !"".equals(systemPropertyValue)) {
-                    properties.setProperty((String) property, systemPropertyValue);
+        InputStream resourceInputStream = resource.getInputStream();
+        if (resource != null && resourceInputStream != null) {
+            loadPropertiesResource(resourceInputStream, properties);
+            if (!properties.isEmpty()) {
+                for(Object property : properties.keySet()){
+                    ContextKey key = new ContextKey((String)property, resource.getURI().toString(), variation, precedence);
+                    registerProperties(key, properties.getProperty((String)property));
                 }
             }
+            resourceInputStream.close();
+        }
+    }
+
+
+    /**
+     * unregisterResource - Provides a method which unregisters a given properties resource.
+     *
+     * @param resource   the object that contains the xml config file.
+     * @param precedence associated with the module based on its definition in manifest
+     * @param variation  associated with the module based on its definition in manifest
+     * @throws JAXBException
+     * @throws SAXException
+     * @throws IOException
+     */
+    @Override
+    public void unregisterResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException {
+        Properties properties = new Properties();
+        InputStream resourceInputStream = resource.getInputStream();
+        if (resource != null && resourceInputStream != null) {
+            loadPropertiesResource(resourceInputStream, properties);
             if (!properties.isEmpty()) {
-                ContextKey key = new ContextKey(variation, resource.getURI().toString(), variation, precedence);
-                registerProperties(key, properties);
+                for(Object property : properties.keySet()){
+                    ContextKey key = new ContextKey((String)property, resource.getURI().toString(), variation, precedence);
+                    unregisterProperties(key);
+                }
             }
+            resourceInputStream.close();
+        }
+    }
+
+  /**
+   * loadPropertiesResouce - Load the properties from provided resource file
+   * @param resourceInputStream The input data from the provided resource file
+   * @param properties  The properties object to inject properties into
+   * @throws IOException    When a file cannot be accessed or operations cannot be performed on it
+   */
+    private void loadPropertiesResource(InputStream resourceInputStream, Properties properties) throws IOException {
+        properties.load(resourceInputStream);
+        for (Object property : properties.keySet()) {
+            String systemPropertyValue = System.getProperty((String) property);
+            if (systemPropertyValue == null || "".equals(systemPropertyValue)) {
+                systemPropertyValue = replaceTokens(properties, properties.getProperty((String) property));
+            }
+            properties.setProperty((String) property, systemPropertyValue);
         }
     }
 
     /**
      * getResourceFileName - Provides the file name of the resource file.
      *
-     * @return
+     * @return  The resource file name
      */
     @Override
     public String getResourceFileName() {
         return DEFAULT_PROPERTY_FILE_NAME;
+    }
+
+    private String replaceTokens(Properties properties, String appRuleValue) {
+        //Regular expression to find ${word} tokens in the application rule value
+        Pattern pt = Pattern.compile("\\$\\{([^}]*)\\}");
+        Matcher matcher = pt.matcher(appRuleValue);
+
+        while (matcher.find()) {
+          String tokenValue = getPropertyValue(properties,  matcher.group(1));
+            if (tokenValue != null) {
+                appRuleValue = StringHelper.replace(appRuleValue, matcher.group(0), tokenValue);
+                appRuleValue = replaceTokens(properties, appRuleValue);
+            }
+        }
+        return appRuleValue;
+    }
+
+  /**
+   * getPropertyValue - The value of a property in a Properties object
+   * @param properties  The Properties object to search
+   * @param key The key corresponding to the queried value
+   * @return    The system property value found in a properties object, or null if the
+   * property does not exist.
+   */
+    private String getPropertyValue(Properties properties, String key){
+        String systemPropertyValue = System.getProperty(key);
+        if (systemPropertyValue == null || "".equals(systemPropertyValue)) {
+            systemPropertyValue = properties.getProperty(key);
+        }
+        return systemPropertyValue;
     }
 }

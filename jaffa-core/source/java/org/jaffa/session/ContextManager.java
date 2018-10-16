@@ -56,17 +56,14 @@
 package org.jaffa.session;
 
 import org.apache.log4j.Logger;
+import org.jaffa.loader.ManagerRepositoryService;
 import org.jaffa.loader.config.ApplicationRulesManager;
 import org.jaffa.presentation.portlet.session.UserSession;
-import org.jaffa.util.NestedMap;
-import org.jaffa.util.StringHelper;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Base implementation of the IContextManager. It reads Global Context,
@@ -76,7 +73,7 @@ import java.util.regex.Pattern;
  * It assumes that a UserSession has been created and initialized prior to
  * invoking setThreadContext().
  * <p>
- * Contexts are built based on the org.jaffa.util.NestedMap, such that Thread
+ * Contexts are built based on ApplicationRulesManager logic, such that Thread
  * settings override Session settings which override User Preferences which override Variation settings which
  * override Global settings.
  *
@@ -89,12 +86,13 @@ public class ContextManager implements IContextManager {
 
 
     private static ThreadLocal threadContext = new ThreadLocal();
-    private static ThreadLocal userPreferencesInThread = new ThreadLocal();
+    private static ThreadLocal<Properties> userPreferencesInThread = new ThreadLocal<>();
 
     private Map m_global = null; // Contains global properties
     private Map m_variation = new WeakHashMap(); // Contains variation/properties pairs
 
-    private static ApplicationRulesManager applicationRulesManager;
+    private static ApplicationRulesManager applicationRulesManager = (ApplicationRulesManager) ManagerRepositoryService.getInstance().
+        getManagerMap().get("ApplicationRulesManager");
 
     /**
      * Used to set the context on the thread. This uses all the other methods in the class to build
@@ -119,32 +117,32 @@ public class ContextManager implements IContextManager {
      * @param request the request being processed.
      */
     public void setThreadContext(HttpServletRequest request) {
-        Map m = (Map) threadContext.get();
+        Map<Object, Object> m = (Map<Object, Object>) threadContext.get();
         if (m == null || m.size() == 0 || m.get("hasSession") == null) {
             if (log.isDebugEnabled()) log.debug("Setting Thread Context.");
-            m = getGlobalContext();
+            m = new HashMap<>();
+            m.putAll(getGlobalContext());
             Map sessionContext = getSessionContext(request);
             String userPreferencesFileName = null;
             if (sessionContext != null) {
                 // global + variation
                 String variation = (String) sessionContext.get(PROPERTY_USER_VARIATION);
                 if (variation != null) {
-                    m = new NestedMap(m, getVariationContext(variation));
+                    m.putAll(getVariationContext(variation));
                 }
                 // global + variation + user-preferences
                 String userId = (String) sessionContext.get(PROPERTY_USER_ID);
                 if (userId != null) {
                     // Get the location for the folder containing the user preferences from the global + variant settings
                     userPreferencesFileName = getUserPreferencesFileName(userId, (String) m.get(PROPERTY_USER_PREFERENCES_FOLDER));
-                    m = new NestedMap(m, getUserPreferences(userPreferencesFileName));
+                    m.putAll(getUserPreferences(userPreferencesFileName));
                 }
 
                 // global + variation + user-preferences + session
-                m = new NestedMap(m, sessionContext);
+                m.putAll(sessionContext);
             }
 
             // global {+ variation + user-preferences + session} + thread
-            m = new NestedMap(m);
             // Put the request in the thread, as this may be useful later
             m.put("request", request);
             if (sessionContext != null) m.put("hasSession", true);
@@ -202,29 +200,7 @@ public class ContextManager implements IContextManager {
      */
     public Object getProperty(Object key) {
         Map m = getThreadContext();
-        Object contextValue = m != null ? m.get(key) : null;
-        if (contextValue != null && contextValue instanceof String) {
-            contextValue = replaceTokens((String)contextValue);
-        }
-        return contextValue;
-    }
-
-    private String replaceTokens(String appRuleValue) {
-        //Regular expression to find ${word} tokens in the application rule value
-        Pattern pt = Pattern.compile("\\$\\{([^}]*)\\}");
-        Matcher matcher = pt.matcher(appRuleValue);
-
-        while (matcher.find()) {
-            String tokenName = matcher.group(1);
-            String tokenValue = (String) getProperty(tokenName);
-            if (log.isDebugEnabled()) {
-                log.debug("Token Name Used " + tokenName + " and its value " + tokenValue);
-            }
-            if (tokenValue != null) {
-                appRuleValue = StringHelper.replace(appRuleValue, matcher.group(0), tokenValue);
-            }
-        }
-        return appRuleValue;
+        return m != null ? m.get(key) : null;
     }
 
     /**
@@ -238,6 +214,18 @@ public class ContextManager implements IContextManager {
     public Object setProperty(Object key, Object value) {
         Map m = getThreadContext();
         return m != null ? m.put(key, value) : null;
+    }
+
+    /**
+     * Removes the property in the thread context.
+     * This property will be available only for the duration of the thread and will not be persisted.
+     *
+     * @param key   the key for a property.
+     * @return the previous value of the specified key in this property list, or null if it did not have one.
+     */
+    public Object removeProperty(Object key) {
+        Map m = getThreadContext();
+        return m != null ? m.remove(key) : null;
     }
 
     /**
@@ -259,7 +247,7 @@ public class ContextManager implements IContextManager {
     public Set getPropertyNames(String filter) {
         Set s = getPropertyNames();
         if (s != null && filter != null) {
-            Set filteredSet = new HashSet();
+            Set<String> filteredSet = new HashSet<>();
             for (Iterator i = s.iterator(); i.hasNext(); ) {
                 String key = i.next().toString();
                 if (key.matches(filter)) {
@@ -282,8 +270,9 @@ public class ContextManager implements IContextManager {
     public void setUserPreference(String name, String value) throws IOException {
         String userPreferencesFileName = (String) getProperty(PROPERTY_USER_PREFERENCES_FILE);
         if (userPreferencesFileName != null) {
-            Map m = getUserPreferences(userPreferencesFileName);
+            Map<Object, Object> m = getUserPreferences(userPreferencesFileName);
             m.put(name, value);
+            setProperty(name, value);
 
             // Save the property to file
             storePropertiesToFile((Properties) m, userPreferencesFileName);
@@ -300,8 +289,9 @@ public class ContextManager implements IContextManager {
     public void unSetUserPreference(String name) throws IOException {
         String userPreferencesFileName = (String) getProperty(PROPERTY_USER_PREFERENCES_FILE);
         if (userPreferencesFileName != null) {
-            Map m = getUserPreferences(userPreferencesFileName);
+            Map<Object, Object> m = getUserPreferences(userPreferencesFileName);
             m.remove(name);
+            removeProperty(name);
 
             // Save the property to file
             storePropertiesToFile((Properties) m, userPreferencesFileName);
@@ -318,7 +308,7 @@ public class ContextManager implements IContextManager {
     public void setUserPreferences(Properties userPreferences) throws IOException {
         String userPreferencesFileName = (String) getProperty(PROPERTY_USER_PREFERENCES_FILE);
         if (userPreferencesFileName != null) {
-            Map m = getUserPreferences(userPreferencesFileName);
+            Map<Object, Object> m = getUserPreferences(userPreferencesFileName);
 
             // enumerate over the properties and write them to the map
             Enumeration enumeration = userPreferences.keys();
@@ -326,6 +316,7 @@ public class ContextManager implements IContextManager {
                 String name = (String) enumeration.nextElement();
                 String value = userPreferences.getProperty(name);
                 m.put(name, value);
+                setProperty(name, value);
             }
 
             // Save the property to file
@@ -342,13 +333,14 @@ public class ContextManager implements IContextManager {
     public void unSetUserPreferences(Set userPreferences) throws IOException {
         String userPreferencesFileName = (String) getProperty(PROPERTY_USER_PREFERENCES_FILE);
         if (userPreferencesFileName != null) {
-            Map m = getUserPreferences(userPreferencesFileName);
+            Map<Object, Object> m = getUserPreferences(userPreferencesFileName);
 
             // enumerate over the properties and write them to the map
             Iterator iterator = userPreferences.iterator();
             while (iterator.hasNext()) {
                 String name = (String) iterator.next();
                 m.remove(name);
+                removeProperty(name);
             }
 
             // Save the property to file
@@ -363,21 +355,8 @@ public class ContextManager implements IContextManager {
      *
      * @return the global context.
      */
-    private Map getGlobalContext() {
-        if (m_global == null) {
-            synchronized (this) {
-                if (m_global == null) {
-                    Properties props = null;
-                    props = (applicationRulesManager != null) ? applicationRulesManager.getApplicationRulesGlobal() : null;
-
-                    // Cache an unmodifiable view
-                    if (props != null) {
-                        m_global = Collections.unmodifiableMap(props);
-                    }
-                }
-            }
-        }
-        return m_global;
+    private Map<Object, Object> getGlobalContext() {
+        return applicationRulesManager != null ? applicationRulesManager.getApplicationRulesGlobal() : null;
     }
 
     /**
@@ -388,22 +367,7 @@ public class ContextManager implements IContextManager {
      * @return the variation context.
      */
     private Map getVariationContext(String variation) {
-        if (!m_variation.containsKey(variation)) {
-            synchronized (m_variation) {
-                if (!m_variation.containsKey(variation)) {
-                    Properties props = null;
-                    if (props == null || props.size() == 0) {
-                        props = applicationRulesManager.getApplicationRulesVariation(variation);
-                    }
-
-                    // Cache an unmodifiable view
-                    if (props != null) {
-                        m_variation.put(variation, Collections.unmodifiableMap(props));
-                    }
-                }
-            }
-        }
-        return (Map) m_variation.get(variation);
+        return applicationRulesManager != null ? applicationRulesManager.getApplicationRulesVariation(variation) : null;
     }
 
     /**
@@ -415,8 +379,8 @@ public class ContextManager implements IContextManager {
      * @param location the file containing the user preferences.
      * @return the preferences for the input userId.
      */
-    private Map getUserPreferences(String location) {
-        Properties props = (Properties) userPreferencesInThread.get();
+    private Map<Object, Object> getUserPreferences(String location) {
+        Properties props = userPreferencesInThread.get();
         if (props == null) {
             // Read the user preferences
             InputStream input = null;

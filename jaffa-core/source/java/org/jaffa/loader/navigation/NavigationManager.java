@@ -61,8 +61,8 @@ import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Set;
 
 /**
  * NavigationManager - Handles the management of the GlobalMenu read from the navigation.xml file
@@ -84,15 +84,18 @@ public class NavigationManager implements IManager {
      */
     private static final String GLOBAL_MENU_ID = "globalMenu";
 
-    /**
-     * Return the navigation map repository.
-     */
-    private IRepository<GlobalMenu> navigationRepository = new MapRepository<>();
+    /** Create a GlobalMenu Repository */
+    private IRepository<GlobalMenu> navigationRepository = new MapRepository<>("GlobalMenu");
 
     /**
      * The list of repositories managed by this class
      */
-    private IRepository<?>[] managedRepositories = new IRepository<?>[] {navigationRepository};
+    private HashMap managedRepositories = new HashMap<String, IRepository>() {
+        {
+            put(navigationRepository.getName(), navigationRepository);
+        }
+
+    };
 
     private static final Logger log = Logger.getLogger(NavigationManager.class);
 
@@ -111,6 +114,24 @@ public class NavigationManager implements IManager {
         if (globalMenu != null) {
             ContextKey key = new ContextKey(GLOBAL_MENU_ID, resource.getURI().toString(), variation, precedence);
             registerGlobalMenu(key, globalMenu);
+        }
+    }
+
+    /**
+     * unregisterXML - Unregisters the navigation global menu from the IRepository
+     * @param resource the object that contains the xml config file.
+     * @param precedence associated with the module based on its definition in manifest
+     * @param variation associated with the module based on its definition in manifest
+     * @throws JAXBException
+     * @throws SAXException
+     * @throws IOException
+     */
+    @Override
+    public void unregisterResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException {
+        GlobalMenu globalMenu = JAXBHelper.unmarshalConfigFile(GlobalMenu.class, resource, CONFIGURATION_SCHEMA_FILE);
+        if (globalMenu != null) {
+            ContextKey key = new ContextKey(GLOBAL_MENU_ID, resource.getURI().toString(), variation, precedence);
+            unregisterGlobalMenu(key);
         }
     }
 
@@ -163,31 +184,18 @@ public class NavigationManager implements IManager {
      * @return A list of repository names managed by this manager
      */
     @Override
-    public List<String> getRepositoryNames() {
-        List<String> repositoryNames = new ArrayList<>();
-        for (IRepository<?> repository : managedRepositories) {
-            repositoryNames.add(repository.getName());
-        }
-        return repositoryNames;
+    public Set getRepositoryNames() {
+        return managedRepositories.keySet();
     }
 
     /**
      * Retrieve an IRepository managed by this IManager via its String name
      * @param name The name of the repository to be retrieved
-     * @return The retrieved repository, or null if no matching repository was found.
+     * @return The retrieved repository, or empty if no matching repository was found.
      */
     @Override
     public IRepository<?> getRepositoryByName(String name) {
-        IRepository<?> matchingRepository = null;
-        for (IRepository<?> repository : managedRepositories) {
-            if (name.equals(repository.getName())) {
-                matchingRepository = repository;
-            }
-        }
-        if (matchingRepository == null) {
-            matchingRepository = new MapRepository<>();
-        }
-        return matchingRepository;
+        return (IRepository<?>) managedRepositories.get(name);
     }
 
     /**

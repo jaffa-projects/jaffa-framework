@@ -59,9 +59,7 @@ import org.springframework.core.io.Resource;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.*;
 
 /**
@@ -73,12 +71,12 @@ public class DroolsManager {
     private static final Logger log = Logger.getLogger(DroolsManager.class);
     private static final String DROOLS_COMPILER_PROPERTY = "drools.dialect.java.compiler";
     private static final String DROOLS_JANINO_COMPILER = "JANINO";
-    private static final String DROOLS_FILE_DIRECTORY = ".." + File.separator + "data" + File.separator + "rules" + File.separator;
+    public static final String DROOLS_FILE_DIRECTORY = System.getProperty("java.io.tmpdir") + File.separator +"rules" + File.separator;
 
     /**
      * Map holding service name with list of RuleAgentKeys, used in refreshAgent method.
      */
-    private Map<String, List<RuleAgentKey>> serviceNameMap = new HashMap<>();
+    private Map<String, Set<RuleAgentKey>> serviceNameMap = new HashMap<>();
 
     /**
      * Map containing RuleAgentKey and StringBuilder, used by registerDrool method.
@@ -109,7 +107,7 @@ public class DroolsManager {
         } catch (Exception e) {
             log.debug("File does not exist");
         }
-        Files.copy(resource.getInputStream(), newPath);
+        Files.copy(resource.getInputStream(), newPath, StandardCopyOption.REPLACE_EXISTING);
 
         registerDrool(serviceName, newPath.toString(), variation);
     }
@@ -133,9 +131,9 @@ public class DroolsManager {
         droolPath.append(" " + path);
 
         droolsFiles.put(ruleAgentKey, droolPath);
-        List<RuleAgentKey> ruleAgentKeys = serviceNameMap.get(serviceName);
+        Set<RuleAgentKey> ruleAgentKeys = serviceNameMap.get(serviceName);
         if (ruleAgentKeys == null) {
-            ruleAgentKeys = new ArrayList<>();
+            ruleAgentKeys = new HashSet<>();
         }
 
         ruleAgentKeys.add(ruleAgentKey);
@@ -157,12 +155,6 @@ public class DroolsManager {
 
         RuleAgentKey ruleAgentKey = new RuleAgentKey(serviceName, variation);
         Path newPath = Paths.get(createDroolDirectoryPath(moduleName, serviceName,variation) + File.separator + resource.getFilename());
-
-        try {
-            Files.delete(newPath);
-        } catch (Exception e) {
-            log.debug("File does not exist");
-        }
 
         StringBuilder droolPath = droolsFiles.get(ruleAgentKey);
         if (droolPath != null) {
@@ -197,7 +189,7 @@ public class DroolsManager {
      * refresh the rules based on its polling period and out-of-date file stamps
      */
     public synchronized void refreshAgent(String serviceName) {
-        if (VariationContext.getVariation().equals(VariationContext.DEFAULT_VARIATION)) {
+        if (VariationContext.getVariation().equals(VariationContext.NULL_VARIATION)) {
             if (serviceNameMap.get(serviceName) != null) {
                 for (RuleAgentKey ruleAgentKey1 : serviceNameMap.get(serviceName)) {
                     synchronized (ruleAgents) {
@@ -223,6 +215,23 @@ public class DroolsManager {
             if (ruleAgentKey.getVariant() != null) {
                 createAgent(ruleAgentKey);
             }
+        }
+    }
+
+    /**
+     *This method is called from DroolsLoader before all the drools files are loaded in Repository
+     * This method clears all the existing drools directory
+     */
+    public void clearDroolsDirectory(){
+        try {
+            Path pathToBeDeleted = Paths.get(DROOLS_FILE_DIRECTORY);
+
+            Files.walk(pathToBeDeleted)
+                    .sorted(Comparator.reverseOrder())
+                    .map(Path::toFile)
+                    .forEach(File::delete);
+        } catch (Exception e) {
+            log.debug("File does not exist");
         }
     }
 
@@ -303,8 +312,8 @@ public class DroolsManager {
         if (droolsVariantPath == null) {
             droolsVariantPath = new StringBuilder();
         }
-        if (!ruleAgentKey.getVariant().equals(VariationContext.DEFAULT_VARIATION)) {
-            StringBuilder droolsDefaultPath = droolsFiles.get(new RuleAgentKey(ruleAgentKey.getServiceName(), VariationContext.DEFAULT_VARIATION));
+        if (!ruleAgentKey.getVariant().equals(VariationContext.NULL_VARIATION)) {
+            StringBuilder droolsDefaultPath = droolsFiles.get(new RuleAgentKey(ruleAgentKey.getServiceName(), VariationContext.NULL_VARIATION));
             if (droolsDefaultPath != null)
                 droolsVariantPath.append(droolsDefaultPath.toString());
         }
@@ -355,7 +364,11 @@ public class DroolsManager {
      * @throws IOException
      */
     private String createDroolDirectoryPath(String moduleName, String serviceName, String variation) throws IOException {
-        return Files.createDirectories(Paths.get(DROOLS_FILE_DIRECTORY + moduleName + File.separator + serviceName + File.separator + variation)).toString();
+        if(variation.equals(VariationContext.NULL_VARIATION)) {
+            return Files.createDirectories(Paths.get(DROOLS_FILE_DIRECTORY + moduleName + File.separator + serviceName)).toString();
+        }else{
+            return Files.createDirectories(Paths.get(DROOLS_FILE_DIRECTORY + moduleName + File.separator + serviceName + File.separator + variation)).toString();
+        }
     }
 
     /**

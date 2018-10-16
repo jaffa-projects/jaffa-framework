@@ -87,8 +87,11 @@ public class ScriptLifecycleHandler implements ILifecycleHandler {
     public void preAdd() throws PreAddFailedException {
         try {
             invokeScript(ILifecycleHandler.LIFECYCLE_PRE_ADD);
-        } catch (ApplicationExceptions | FrameworkException e) {
-            // swallow this exception, we don't want to prevent the handler chain from executing
+        } catch (ApplicationExceptions aes) {
+            ApplicationException ae = aes.getApplicationExceptionArray()[0];
+            throw new PreAddFailedException(ae.getArguments(), ae.getCause());
+        } catch (FrameworkException fe) {
+            throw new PreAddFailedException(fe.getArguments(), fe.getCause());
         }
     }
 
@@ -96,8 +99,11 @@ public class ScriptLifecycleHandler implements ILifecycleHandler {
     public void postAdd() throws PostAddFailedException {
         try {
             invokeScript(ILifecycleHandler.LIFECYCLE_POST_ADD);
-        } catch (ApplicationExceptions | FrameworkException e) {
-            // swallow this exception, we don't want to prevent the handler chain from executing
+        } catch (ApplicationExceptions aes) {
+            ApplicationException ae = aes.getApplicationExceptionArray()[0];
+            throw new PostAddFailedException(ae.getArguments(), ae.getCause());
+        } catch (FrameworkException fe) {
+            throw new PostAddFailedException(fe.getArguments(), fe.getCause());
         }
     }
 
@@ -105,8 +111,11 @@ public class ScriptLifecycleHandler implements ILifecycleHandler {
     public void preUpdate() throws PreUpdateFailedException {
         try {
             invokeScript(ILifecycleHandler.LIFECYCLE_PRE_UPDATE);
-        } catch (ApplicationExceptions | FrameworkException e) {
-            // swallow this exception, we don't want to prevent the handler chain from executing
+        } catch (ApplicationExceptions aes) {
+            ApplicationException ae = aes.getApplicationExceptionArray()[0];
+            throw new PreUpdateFailedException(ae.getArguments(), ae.getCause());
+        } catch (FrameworkException fe) {
+            throw new PreUpdateFailedException(fe.getArguments(), fe.getCause());
         }
     }
 
@@ -114,8 +123,11 @@ public class ScriptLifecycleHandler implements ILifecycleHandler {
     public void postUpdate() throws PostUpdateFailedException {
         try {
             invokeScript(ILifecycleHandler.LIFECYCLE_POST_UPDATE);
-        } catch (ApplicationExceptions | FrameworkException e) {
-            // swallow this exception, we don't want to prevent the handler chain from executing
+        } catch (ApplicationExceptions aes) {
+            ApplicationException ae = aes.getApplicationExceptionArray()[0];
+            throw new PostUpdateFailedException(ae.getArguments(), ae.getCause());
+        } catch (FrameworkException fe) {
+            throw new PostUpdateFailedException(fe.getArguments(), fe.getCause());
         }
     }
 
@@ -123,8 +135,11 @@ public class ScriptLifecycleHandler implements ILifecycleHandler {
     public void preDelete() throws PreDeleteFailedException {
         try {
             invokeScript(ILifecycleHandler.LIFECYCLE_PRE_DELETE);
-        } catch (ApplicationExceptions | FrameworkException e) {
-            // swallow this exception, we don't want to prevent the handler chain from executing
+        } catch (ApplicationExceptions aes) {
+            ApplicationException ae = aes.getApplicationExceptionArray()[0];
+            throw new PreDeleteFailedException(ae.getArguments(), ae.getCause());
+        } catch (FrameworkException fe) {
+            throw new PreDeleteFailedException(fe.getArguments(), fe.getCause());
         }
     }
 
@@ -132,8 +147,11 @@ public class ScriptLifecycleHandler implements ILifecycleHandler {
     public void postDelete() throws PostDeleteFailedException {
         try {
             invokeScript(ILifecycleHandler.LIFECYCLE_POST_DELETE);
-        } catch (ApplicationExceptions | FrameworkException e) {
-            // swallow this exception, we don't want to prevent the handler chain from executing
+        } catch (ApplicationExceptions aes) {
+            ApplicationException ae = aes.getApplicationExceptionArray()[0];
+            throw new PostDeleteFailedException(ae.getArguments(), ae.getCause());
+        } catch (FrameworkException fe) {
+            throw new PostDeleteFailedException(fe.getArguments(), fe.getCause());
         }
     }
 
@@ -141,18 +159,17 @@ public class ScriptLifecycleHandler implements ILifecycleHandler {
     public void postLoad() throws PostLoadFailedException {
         try {
             invokeScript(ILifecycleHandler.LIFECYCLE_POST_LOAD);
-        } catch (ApplicationExceptions | FrameworkException e) {
-            // swallow this exception, we don't want to prevent the handler chain from executing
+        } catch (ApplicationExceptions aes) {
+            ApplicationException ae = aes.getApplicationExceptionArray()[0];
+            throw new PostLoadFailedException(ae.getArguments(), ae.getCause());
+        } catch (FrameworkException fe) {
+            throw new PostLoadFailedException(fe.getArguments(), fe.getCause());
         }
     }
 
     @Override
     public void validate() throws ApplicationExceptions, FrameworkException {
-        try {
-            invokeScript(ILifecycleHandler.LIFECYCLE_VALIDATE);
-        } catch (ApplicationExceptions | FrameworkException e) {
-            // swallow this exception, we don't want to prevent the handler chain from executing
-        }
+        invokeScript(ILifecycleHandler.LIFECYCLE_VALIDATE);
     }
 
     @Override
@@ -196,9 +213,7 @@ public class ScriptLifecycleHandler implements ILifecycleHandler {
         Map beans = new HashMap();
         beans.put(ScriptHelper.CONTEXT_BEAN, targetBean);
         try {
-            ScriptHelper.instance(rule.getParameter(RuleMetaData.PARAMETER_LANGUAGE))
-                    .evaluate(rule.getParameter(RuleMetaData.PARAMETER_FILE), rule.getParameter(RuleMetaData.PARAMETER_VALUE),
-                            beans, rule.getSource(), rule.getLine() != null ? rule.getLine() : 0, 0);
+            ScriptHelper.instance(rule.getParameter(RuleMetaData.PARAMETER_LANGUAGE)).evaluate(rule.getParameter(RuleMetaData.PARAMETER_FILE), rule.getParameter(RuleMetaData.PARAMETER_VALUE), beans, rule.getSource(), rule.getLine() != null ? rule.getLine() : 0, 0);
         } catch (Throwable t) {
             throw new ApplicationExceptions(new ApplicationException(t.getLocalizedMessage(), null, t));
         }

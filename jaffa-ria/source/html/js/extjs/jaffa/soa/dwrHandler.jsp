@@ -18,27 +18,45 @@ Should be included in the main JSP that loads all the java script using the foll
 <%@page import="org.jaffa.datatypes.Parser" %>
 <%@page import="org.jaffa.session.ContextManagerFactory" %>
 <%@ page import="org.jaffa.util.MessageHelper" %>
+<%@ page import="org.jaffa.util.StringHelper" %>
 
 /**
  * The textHtmlHandler is invoked when a DWR request encounters an expired Session.
  * This handler will attempt to reload the current page, which should first bring up the login page.
  */
 dwr.engine.setTextHtmlHandler(function() {
-  Ext.MessageBox.show( {
-    title : '<%= MessageHelper.findMessage("label.Jaffa.DWR.Timeout.Title", null) %>',
-    msg : '<%= MessageHelper.findMessage("label.Jaffa.DWR.Timeout.Message", null) %>',
-    buttons : Ext.MessageBox.OK,
-    fn: redirect,
-    cls: 'ext-timeout-messageBox-toFront',
-    icon: Ext.MessageBox.ERROR
-  });
+<%--Unfortunately, we are unable to access the loading mask element at the time that the session is ended so it can't be manipulated/ removed.--%>
+<%--DWR 3.0 RC2 seems to have support for Cross-Origin Read Blocking, but we are currently on DWR 2.5. More info at http://directwebremoting.org/dwr/documentation/browser/xdomain.html--%>
+  <%--Ext.MessageBox.show( {--%>
+    <%--title : '<%= MessageHelper.findMessage("label.Jaffa.DWR.Timeout.Title", null) %>',--%>
+    <%--msg : '<%= MessageHelper.findMessage("label.Jaffa.DWR.Timeout.Message", null) %>',--%>
+    <%--buttons : Ext.MessageBox.OK,--%>
+    <%--fn: redirect,--%>
+    <%--cls: 'ext-timeout-messageBox-toFront',--%>
+    <%--icon: Ext.MessageBox.ERROR--%>
+  <%--});--%>
+  alert('<%= MessageHelper.findMessage("label.Jaffa.DWR.Timeout.Message", null) %>');
+  redirect();
 });
+
+/**
+ * GOLD-65642: substitute _handleWarning call with .textHtmlHandler call in case of CAS redirect causing empty response to dwr ajax call.
+ */
+dwr.engine._handleWarning_orig = dwr.engine._handleWarning;
+dwr.engine._handleWarning = function(batch, ex) {
+  if (batch && typeof batch.textHtmlHandler == 'function' && batch.req && batch.req.readyState==4 && !Boolean(batch.req.responseText) && ex && ex.name=="dwr.engine.missingData") {
+    batch.textHtmlHandler({
+      status: batch.req.status,
+      contentType: batch.req.getResponseHeader("Content-Type")
+    });
+  } else dwr.engine._handleWarning_orig(batch, ex);
+};
 
 /**
 * redirect the user to the login screen
 */
 redirect = function () {
-    document.location = params.appCtx + '/<%= (String) request.getParameter("ref") %>';
+    document.location = params.appCtx + '/<%= StringHelper.escapeJavascript(request.getParameter("ref")) %>';
 }
 
 <%

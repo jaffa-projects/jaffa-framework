@@ -62,7 +62,9 @@ import org.xml.sax.SAXException;
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  *  BusinessFunctionManager
@@ -79,15 +81,20 @@ public class BusinessFunctionManager implements IManager {
      */
     private static final String CONFIGURATION_SCHEMA_FILE = "org/jaffa/security/businessfunctionsdomain/business-functions_1_0.xsd";
 
-    private IRepository<BusinessFunction> businessFunctionRepository = new MapRepository<>();
+    private IRepository<BusinessFunction> businessFunctionRepository = new MapRepository<>("BusinessFunction");
 
     /**
      * The list of repositories managed by this class
      */
-    private IRepository<?>[] managedRepositories = new IRepository<?>[] {businessFunctionRepository};
+    private HashMap managedRepositories = new HashMap<String, IRepository>() {
+        {
+            put(businessFunctionRepository.getName(), businessFunctionRepository);
+        }
+
+    };
 
     /**
-     * registerResource - Registers the roles into the business function repository from the business-functions.xml files found in META-INF/roles.xml
+     * registerResource - Registers the roles into the business function repository from a business-functions.xml file.
      * @param resource the object that contains the xml config file.
      * @param context  key with which config file to be registered.
      * @throws JAXBException
@@ -106,12 +113,22 @@ public class BusinessFunctionManager implements IManager {
     }
 
     /**
-     * getResourceFileName - Returns the default XML file name of the business functions XSD.
-     * @return the xml file name
+     * unregisterResource - Unregisters the roles from the business function repository using a business-functions.xml file.
+     * @param resource the object that contains the xml config file.
+     * @param context  key with which config file to be registered.
+     * @throws JAXBException
+     * @throws SAXException
+     * @throws IOException
      */
     @Override
-    public String getResourceFileName() {
-        return DEFAULT_CONFIGURATION_FILE;
+    public void unregisterResource(Resource resource, String context, String variation) throws JAXBException, SAXException, IOException {
+        BusinessFunctions businessFunctions = JAXBHelper.unmarshalConfigFile(BusinessFunctions.class, resource, CONFIGURATION_SCHEMA_FILE);
+        if (businessFunctions.getBusinessFunction() != null) {
+            for (final BusinessFunction businessFunction : businessFunctions.getBusinessFunction()) {
+                ContextKey contextKey = new ContextKey(businessFunction.getName(), resource.getURI().toString(), variation, context);
+                unregisterBusinessFunction(contextKey);
+            }
+        }
     }
 
     /**
@@ -119,31 +136,27 @@ public class BusinessFunctionManager implements IManager {
      * @return A list of repository names managed by this manager
      */
     @Override
-    public List<String> getRepositoryNames() {
-        List<String> repositoryNames = new ArrayList<>();
-        for (IRepository<?> repository : managedRepositories) {
-            repositoryNames.add(repository.getName());
-        }
-        return repositoryNames;
+    public Set getRepositoryNames() {
+        return managedRepositories.keySet();
     }
 
     /**
      * Retrieve an IRepository managed by this IManager via its String name
      * @param name The name of the repository to be retrieved
-     * @return The retrieved repository, or null if no matching repository was found.
+     * @return The retrieved repository, or empty if no matching repository was found.
      */
     @Override
     public IRepository<?> getRepositoryByName(String name) {
-        IRepository<?> matchingRepository = null;
-        for (IRepository<?> repository : managedRepositories) {
-            if (name.equals(repository.getName())) {
-                matchingRepository = repository;
-            }
-        }
-        if (matchingRepository == null) {
-            matchingRepository = new MapRepository<>();
-        }
-        return matchingRepository;
+        return (IRepository<?>) managedRepositories.get(name);
+    }
+
+    /**
+     * getResourceFileName - Returns the default XML file name of the business functions XSD.
+     * @return the xml file name
+     */
+    @Override
+    public String getResourceFileName() {
+        return DEFAULT_CONFIGURATION_FILE;
     }
 
     /**
