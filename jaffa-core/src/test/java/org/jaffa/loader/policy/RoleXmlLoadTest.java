@@ -57,9 +57,9 @@ import org.jaffa.security.securityrolesdomain.Role;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import java.util.*;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * RoleXmlLoadTest - Verifies that we can load a roles.xml file into the repository and use those roles to
@@ -80,18 +80,6 @@ public class RoleXmlLoadTest {
         assertNotNull(roleManager.getRole("SUPERVISOR"));
         assertEquals(3,roleManager.getRoles().getRole().size());
         assertNull(roleManager.getRole(new String()));
-    }
-
-    /**
-     * Verifies that we can build a roleMap of roleName and list of functions.
-     */
-    @Test
-    public void testBuildRoleMap() {
-        RoleManager roleManager = xmlLoaderConfig.getBean(RoleManager.class);
-        Map<String, List<String>> roleMap = roleManager.buildRoleMap();
-        assertEquals(1, roleMap.get("CLERK").size());
-        assertEquals(5, roleMap.get("SUPERVISOR").size());
-        assertEquals(7, roleMap.get("MANAGER").size());
     }
 
     /**

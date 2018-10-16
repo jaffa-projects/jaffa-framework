@@ -57,7 +57,7 @@ import org.jaffa.loader.navigation.NavigationManager;
 import org.jaffa.loader.policy.BusinessFunctionManager;
 import org.jaffa.loader.policy.RoleManager;
 import org.jaffa.security.CheckPolicy;
-import org.jaffa.security.PolicyCache;
+import org.jaffa.security.PolicyManager;
 import org.jaffa.session.ContextManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -108,7 +108,7 @@ public class CoreLoaderConfig {
     @Bean
     public RoleManager roleManager() {
         RoleManager roleManager = new RoleManager();
-        PolicyCache.setRoleManager(roleManager);
+        PolicyManager.setRoleManager(roleManager);
         return roleManager;
     }
 
