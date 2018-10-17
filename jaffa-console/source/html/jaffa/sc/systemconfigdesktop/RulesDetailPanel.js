@@ -206,7 +206,7 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
           var foundItem = false;
           for (var j = 0; (j<propMeta.inList.length) && !foundItem; j++){
             if (propMeta.inList[j][0]==splitDefaults[i]){
-              splitDefaults[i] = propMeta.inList[j][1];
+              splitDefaults[i] = propMeta.inList[j][0];
               foundItem = true;
             }
           }
@@ -216,7 +216,7 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         var foundItem = false;
         for (var i = 0; (i<propMeta.inList.length) && !foundItem; i++){
           if (propMeta.inList[i][0]==defaultValue){
-            defaultValue = propMeta.inList[i][1];
+            defaultValue = propMeta.inList[i][0];
             foundItem = true;
           }
         }
@@ -318,6 +318,7 @@ Jaffa.SC.RulesDetailPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         config.xtype = 'textfield';
 
         if (meta && meta.inList) {
+            config.xtype = 'combo';
             config.store = meta.inList;
             config.minChars = 0;
             config.triggerAction = 'all';
