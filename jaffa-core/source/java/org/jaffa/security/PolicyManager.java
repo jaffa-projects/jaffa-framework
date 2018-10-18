@@ -48,21 +48,26 @@
  */
 package org.jaffa.security;
 
+import org.apache.log4j.Logger;
+import org.jaffa.loader.policy.RoleManager;
+import org.jaffa.presentation.portlet.component.ComponentManager;
+import org.jaffa.security.securityrolesdomain.Role;
+
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import org.apache.log4j.Logger;
-import org.jaffa.presentation.portlet.component.ComponentManager;
+import java.util.stream.Collectors;
 
 /** This class in the main interface to the secuity policy.
  * Its pupose its to allow the Security Manager to request specific
- * information about the policy. It uses the PolicyCache to delegate
- * the reading of the ploicy file via the domain objects
+ * information about the policy.
  *
  * @author paule
  * @version 1.0
@@ -80,6 +85,12 @@ public class PolicyManager {
      * Each entry in the hashmap is a list of strings.
      */
     private static ConcurrentMap<String, Map<String, List<String>>> c_componentRoleIndexByVariation = new ConcurrentHashMap<String, Map<String, List<String>>>();
+
+    /**
+     * Provides a role manager to be set and allows the client to view those roles along with
+     * related GrantFunctionAccess.
+     */
+    private static RoleManager roleManager;
 
     /** Get the list of Role names that have access to the specified business function
      * @param functionName The function name to get the roles for
@@ -120,14 +131,26 @@ public class PolicyManager {
      * @return the Set of roles defined for the application.
      */
     public static Set<String> getRoleSet() {
-        Map<String, List<String>> roleMap = PolicyCache.getRoleMap();
-        return roleMap != null ? roleMap.keySet() : null;
+            List<Role> allRoles = getAllRoles();
+            Set<String> roles = allRoles.stream().map(n -> n.getName()).collect(Collectors.toSet());
+            return (roles != null && roles.size() > 0) ? roles : new HashSet<>();
+    }
+
+    /**
+     * Returns the list of roles defined for an application
+     * @return
+     */
+    public static List<Role> getAllRoles() {
+        RoleManager roleManager = getRoleManager();
+        if (null != roleManager) {
+            return roleManager.getAllRoles();
+        }
+        return new ArrayList<>();
     }
 
     /** Clear the cached policy. Will be reloaded on the next access.
      */
     public static void clearCache() {
-        //PolicyCache.clearCache();
         c_functionRoleIndexByVariation.clear();
         c_componentRoleIndexByVariation.clear();
     }
@@ -166,20 +189,15 @@ public class PolicyManager {
         return componentRoleIndex;
     }
 
-    /** Builds the FunctionRoleIndex based on information aquired from the PolicyCache object.
+    /** Builds the FunctionRoleIndex based on information aquired from the RoleManager.
      * This supplies the information as a list of roles with function access. The build process
      * transposes this mapping.
      */
     private static Map<String, List<String>> buildFunctionRoleIndex() {
         Map<String, List<String>> index = new HashMap<String, List<String>>();
 
-        // Get the role mappings
-        Map<String, List<String>> roleMap = PolicyCache.getRoleMap();
-        if (roleMap != null) {
-            // Loop through the role list and build the function list
-            for (Map.Entry<String, List<String>> me : roleMap.entrySet()) {
-                String role = me.getKey();
-                List<String> funcs = me.getValue();
+        for (Role role: PolicyManager.getAllRoles()) {
+                List<String> funcs = role.getGrantFunctionAccess().stream().map(n -> n.getName()).collect(Collectors.toList());
                 for (String func : funcs) {
                     // Get the function list for this function
                     List<String> idxFunc = index.get(func);
@@ -191,15 +209,14 @@ public class PolicyManager {
                     // Add the role to this function list if not already there
                     // the uniquess check should be removed if uniqueness is inforced in
                     // the XML Policy file!.. For now, assume it is not
-                    if (!idxFunc.contains(role))
-                        idxFunc.add(role);
+                    if (!idxFunc.contains(role.getName()))
+                        idxFunc.add(role.getName());
                 }
-            }
         }
         return index;
     }
 
-    /** Builds the ComponentRoleIndex based on information aquired from the PolicyCache object.
+    /** Builds the ComponentRoleIndex based on information aquired from the RoleManager object.
      */
     private static Map<String, List<String>> buildComponentRoleIndex() {
         // For each component, loop through each role and see if it has access to the
@@ -214,9 +231,8 @@ public class PolicyManager {
         Map<String, String[]> compList = ComponentManager.getComponentRequirements();
 
         // Get the role mappings
-        Map<String, List<String>> roleMap = PolicyCache.getRoleMap();
-
-        if (compList != null && roleMap != null) {
+        RoleManager roleManager = getRoleManager();
+        if (compList != null && roleManager != null) {
             // Loop through all the components that have required functions for access
             for (Map.Entry<String, String[]> me1 : compList.entrySet()) {
                 String comp = me1.getKey();
@@ -231,16 +247,15 @@ public class PolicyManager {
 
                 List<String> allowedRoles = new LinkedList<String>();
                 // Now check each role for access
-                for (Map.Entry<String, List<String>> me2 : roleMap.entrySet()) {
-                    String role = me2.getKey();
-                    List<String> roleList = me2.getValue();
+                for (Role role : roleManager.getAllRoles()) {
+                    List<String> roleList = role.getGrantFunctionAccess().stream().map(n -> n.getName()).collect(Collectors.toList());
                     // Now make sure that all functions in funcs() are available in roleList
                     boolean failed = false;
                     for (int i = 0; i < funcs.length && !failed; i++)
                         failed = !roleList.contains(funcs[i]);
                     // If this role has the requirements for this component, save it!
                     if (!failed)
-                        allowedRoles.add(role);
+                        allowedRoles.add(role.getName());
                 }
 
                 // Now add this to the master list for this component
@@ -284,5 +299,13 @@ public class PolicyManager {
                 out.println(".");
             }
         }
+    }
+
+    public static RoleManager getRoleManager() {
+        return roleManager;
+    }
+
+    public static void setRoleManager(RoleManager roleManager) {
+        PolicyManager.roleManager = roleManager;
     }
 }

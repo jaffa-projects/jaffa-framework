@@ -19,7 +19,7 @@ import static org.junit.Assert.assertNull;
 public class CheckPolicyTest {
 
     CheckPolicy checkPolicy;
-    PolicyCache policyCache;
+    PolicyManager policyManager;
 
     private static AnnotationConfigApplicationContext xmlLoaderConfig = new AnnotationConfigApplicationContext(CoreLoaderConfig.class);
 
@@ -34,7 +34,7 @@ public class CheckPolicyTest {
         checkPolicy = new CheckPolicy();
         checkPolicy.setBusinessFunctionManager(businessFunctionManager);
         RoleManager roleManager = xmlLoaderConfig.getBean(RoleManager.class);
-        policyCache.setRoleManager(roleManager);
+        policyManager.setRoleManager(roleManager);
     }
 
 
