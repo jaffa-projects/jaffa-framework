@@ -8,6 +8,7 @@
 <%@ page import = "org.jaffa.util.MessageHelper"%>
 <%@ page import = "org.jaffa.session.*"%>
 <%@ page import = "org.apache.log4j.Logger"%>
+<%@ page import="org.jaffa.presentation.portlet.session.LocaleContext" %>
 
 <%@ taglib prefix="jwr" uri="/WEB-INF/jawr-el.tld"%>
 
@@ -15,7 +16,7 @@
 
 <%!
 private static Logger log = Logger.getLogger("extjs");
-public static final String[] SUPPORTED_LOCALES = new String[] {"af","ar_OM","bg","ca","cs","da","de","el_GR","en_GB","en_US","en","es","fa","fr_CA","fr","gr","he","hr","hu","id","it","ja","ko","lt","lv","mk","nl","no_NB","no_NN","pl","pt_BR","pt","ro","ru","sk","sl","sr_RS","sr","sv_SE","th","tr","ukr","vn","zh_CN","zh_TW"};
+public static final String[] SUPPORTED_LOCALES = new String[] {"af","ar","bg","ca","cs","da","de","el_GR","en_GB","en_US","en","es","fa","fr_CA","fr","gr","he","hr","hu","id","it","ja","ko","lt","lv","mk","nl","no_NB","no_NN","pl","pt_BR","pt","ro","ru","sk","sl","sr_RS","sr","sv_SE","th","tr","ukr","vn","zh_CN","zh_TW"};
 public static final String SYMBOL_RULE = "jaffa.datatypes.defaultCurrencySymbol";
 public static final String DEFAULT_TIME_FORMAT = "jaffa.datatypes.defaultTimeFormat";
 
@@ -56,18 +57,23 @@ public static final String DEFAULT_TIME_FORMAT = "jaffa.datatypes.defaultTimeFor
     Ext.BLANK_IMAGE_URL = "<%=request.getContextPath()%>/js/extjs/resources/images/default/s.gif";
   </script>
 <%
-String currentLocale = request.getSession().getAttribute("jaffa.user.prefLocale")!=null ? (String)request.getSession().getAttribute("jaffa.user.prefLocale") : null;
+if(request.getLocale()!=null) {
+    String currentLocale = LocaleContext.getLocale().toString();;
+    String locale = request.getLocale().toString();
+    // This allows country locales (like en_US) to default to just language
+    // local (like 'en') if there is not a country specific one
+    for(String l : SUPPORTED_LOCALES) {
+        if (locale.startsWith(l)) {
+            currentLocale = l;
+            break;
+        }
+    }
 if(currentLocale != null){
 		log.debug("Request ExtJS Language Resources for " + currentLocale);
 %>
 		<!-- Locale Resources for <%= currentLocale %>] -->
 		<jwr:script src="/js/extjs/locale/ext-lang-<%= currentLocale %>.js"/><%
 }
-if("ar_OM".equals(currentLocale)){
-	%>
-	<jwr:script src="/js/extjs/locale/ext-lang-ar_OM.js"/>
-	<%
-  }
 // Figure out the currency symbol to use.
 String symbol = (String)ContextManagerFactory.instance().getProperty(SYMBOL_RULE);
 if(symbol == null) {

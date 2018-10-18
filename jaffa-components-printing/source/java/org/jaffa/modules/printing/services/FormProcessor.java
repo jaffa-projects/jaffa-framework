@@ -47,6 +47,7 @@
  * =================================================================== */
 package org.jaffa.modules.printing.services;
 
+import org.jaffa.beans.factory.config.StaticContext;
 import org.jaffa.datatypes.ValidationException;
 import org.jaffa.exceptions.DomainObjectNotFoundException;
 import java.io.File;
@@ -56,17 +57,18 @@ import java.util.Locale;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import org.apache.log4j.Logger;
+import org.jaffa.locale.UserLocaleService;
 import org.jaffa.modules.printing.domain.*;
 import org.jaffa.modules.printing.services.exceptions.DataBeanClassNotFoundException;
 import org.jaffa.exceptions.ApplicationException;
 import org.jaffa.exceptions.ApplicationExceptions;
 import org.jaffa.exceptions.FrameworkException;
-import org.jaffa.integrationapi.LocaleProvider;
-import org.jaffa.integrationimpl.ContextManagerLocaleProvider;
 import org.jaffa.persistence.*;
-import org.jaffa.security.SecurityManager;
 import org.jaffa.session.ContextManagerFactory;
 import org.jaffa.presentation.portlet.session.LocaleContext;
+import org.jaffa.locale.LocalizationHelper;
+import org.jaffa.locale.UserLocaleProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * This will produce a form or label based on a request and either mail, print or
@@ -77,15 +79,15 @@ public class FormProcessor {
     /** Logger reference */
     private final static Logger log = Logger.getLogger(FormProcessor.class);
     private final static String RIGHT_TO_LEFT_FORM_ALTERNATE = "RL";
-    private static IFormLocalization formLocalizationHelper;
-    private static LocaleProvider localeProvider = new ContextManagerLocaleProvider();
 
-    public static void setFormLocalization(IFormLocalization formLocalization) {
-        formLocalizationHelper = formLocalization;
-    }
 
-    public static IFormLocalization getFormLocalization() {
-        return formLocalizationHelper;
+    /**
+     * Default Constructor
+     *
+     * Calls the Static Context Factory to allow Spring to initialize this object
+     */
+    public FormProcessor() {
+        StaticContext.configure(this);
     }
 
     /**
@@ -310,11 +312,8 @@ public class FormProcessor {
         FormDefinition form = null;
         String var = null;
         String alternate = null;
-        String userLocale = getLocaleProvider().getLocale()!=null ? getLocaleProvider().getLocale().toString() : null; // en_US, ar_OM
-        Boolean rtl = Boolean.FALSE;
-        if (formLocalizationHelper != null && userLocale != null) {
-            rtl = formLocalizationHelper.isLanguageRightToLeft(userLocale);
-        }
+        String userLocale = UserLocaleService.getUserLocaleProvider().getLocale()!=null ? UserLocaleService.getUserLocaleProvider().getLocale() : null; // en_US, ar_OM
+        Boolean rtl = LocalizationHelper.isRTL(userLocale);
 
         String rtlAlternate = null;
         if (alternateName == null || RIGHT_TO_LEFT_FORM_ALTERNATE.equals(alternateName)) {
@@ -482,13 +481,5 @@ public class FormProcessor {
                 log.error("Error when creating XSD and XML files. " + e.getMessage());
             }
         }
-    }
-
-    public static LocaleProvider getLocaleProvider() {
-        return localeProvider;
-    }
-
-    public static void setLocaleProvider(LocaleProvider localeProvider) {
-        FormProcessor.localeProvider = localeProvider;
     }
 }

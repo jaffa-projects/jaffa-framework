@@ -53,12 +53,17 @@ import org.jaffa.components.navigation.NavCache;
 import org.jaffa.config.ApplicationResourceLoader;
 import org.jaffa.loader.config.ApplicationResourcesManager;
 import org.jaffa.loader.config.ApplicationRulesManager;
+import org.jaffa.loader.config.LocaleResourcesManager;
 import org.jaffa.loader.navigation.NavigationManager;
 import org.jaffa.loader.policy.BusinessFunctionManager;
 import org.jaffa.loader.policy.RoleManager;
+import org.jaffa.locale.UserLocaleProvider;
+import org.jaffa.locale.UserLocaleService;
+import org.jaffa.locale.UserPrefLocaleService;
 import org.jaffa.security.CheckPolicy;
 import org.jaffa.security.PolicyManager;
 import org.jaffa.session.ContextManager;
+import org.jaffa.util.LocaleHelper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -170,6 +175,36 @@ public class CoreLoaderConfig {
         ApplicationRulesManager applicationRulesManager = new ApplicationRulesManager();
         ContextManager.setApplicationRulesManager(applicationRulesManager);
         return applicationRulesManager;
+    }
+
+    /**
+     * @return Returns an Loader for the Locale Resource Manager
+     */
+    @Bean
+    public ResourceLoader<LocaleResourcesManager> localeResourceManagerLoader() {
+        ResourceLoader<LocaleResourcesManager> localeResourceManagerLoader = new ResourceLoader<>();
+        localeResourceManagerLoader.setManager(localeResourceManager());
+        return localeResourceManagerLoader;
+    }
+
+    /**
+     * @return Returns a LocaleResourcesManager
+     */
+    @Bean
+    public LocaleResourcesManager localeResourceManager() {
+        LocaleResourcesManager localeResourcesManager = new LocaleResourcesManager();
+        LocaleHelper.setLocaleResourcesManager(localeResourcesManager);
+        return localeResourcesManager;
+    }
+
+    /**
+     * @return Returns a UserPrefLocaleService
+     */
+    @Bean
+    public UserLocaleProvider userLocaleProvider(){
+        UserLocaleProvider userLocaleProvider = new UserPrefLocaleService();
+        UserLocaleService.setUserLocaleProvider(userLocaleProvider);
+        return userLocaleProvider;
     }
 }
 
