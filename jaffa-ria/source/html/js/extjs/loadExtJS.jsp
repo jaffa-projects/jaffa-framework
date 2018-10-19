@@ -57,22 +57,24 @@ public static final String DEFAULT_TIME_FORMAT = "jaffa.datatypes.defaultTimeFor
     Ext.BLANK_IMAGE_URL = "<%=request.getContextPath()%>/js/extjs/resources/images/default/s.gif";
   </script>
 <%
-if(request.getLocale()!=null) {
-    String currentLocale = LocaleContext.getLocale().toString();;
-    String locale = request.getLocale().toString();
+String currentLocale = null;
+if(LocaleContext.getLocale()!=null) {
+    String locale = LocaleContext.getLocale().toString();
     // This allows country locales (like en_US) to default to just language
     // local (like 'en') if there is not a country specific one
-    for(String l : SUPPORTED_LOCALES) {
+    for (String l : SUPPORTED_LOCALES) {
         if (locale.startsWith(l)) {
             currentLocale = l;
             break;
         }
     }
+}
 if(currentLocale != null){
 		log.debug("Request ExtJS Language Resources for " + currentLocale);
 %>
 		<!-- Locale Resources for <%= currentLocale %>] -->
-		<jwr:script src="/js/extjs/locale/ext-lang-<%= currentLocale %>.js"/><%
+		<jwr:script src="/js/extjs/locale/ext-lang-<%= currentLocale %>.js"/>
+<%
 }
 // Figure out the currency symbol to use.
 String symbol = (String)ContextManagerFactory.instance().getProperty(SYMBOL_RULE);
