@@ -115,8 +115,8 @@ function openDOMBrowser(activeElement) {
     writeln("</script>");
     writeln("</head>");
 	//Added the Localization code for RTL Error pop up 
-	var rtlLangValue = sessionStorage.getItem("RTLlanguage");
-		if(rtlLangValue=="ar_OM"){
+	var isRTL = sessionStorage.getItem("isRTLlanguage");
+		if(Boolean(isRTL)){
     writeln("<body onLoad='init();' dir='rtl'>");
 		}
 		else{
