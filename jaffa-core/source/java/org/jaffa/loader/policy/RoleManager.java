@@ -54,8 +54,6 @@ import org.jaffa.loader.ContextKey;
 import org.jaffa.loader.IManager;
 import org.jaffa.loader.IRepository;
 import org.jaffa.loader.MapRepository;
-import org.jaffa.security.PolicyCache;
-import org.jaffa.security.securityrolesdomain.GrantFunctionAccess;
 import org.jaffa.security.securityrolesdomain.Role;
 import org.jaffa.security.securityrolesdomain.Roles;
 import org.jaffa.util.JAXBHelper;
@@ -65,9 +63,7 @@ import org.xml.sax.SAXException;
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -99,7 +95,7 @@ public class RoleManager implements IManager {
 
     };
 
-    private static Logger log = Logger.getLogger(PolicyCache.class);
+    private static Logger log = Logger.getLogger(RoleManager.class);
 
     /**
      * registerResource - Registers the roles into the role repository from the roles.xml files found in META-INF/roles.xml
@@ -197,35 +193,6 @@ public class RoleManager implements IManager {
      */
     public List<Role> getAllRoles() {
         return roleRepository.getValues();
-    }
-
-    /**
-     * buildRoleMap - Builds a hashmap of name-grantfunctionAccess lists for use in the PolicyCache.
-     *
-     * @return A Map of Role names as keys and values that contain a List of GrantFunctionAccess.
-     */
-    public Map<String, List<String>> buildRoleMap() {
-        Map<String, List<String>> nameGrantFunctionAccessMap = new HashMap<>();
-        List<Role> roleList = getAllRoles();
-        for (Role role : roleList) {
-            if (log.isDebugEnabled())
-                log.debug("Processing Role: " + role.getName());
-            List<GrantFunctionAccess> access = role.getGrantFunctionAccess();
-            List<String> funcs = null;
-            if (access != null) {
-                funcs = new LinkedList<>();
-                // Add all the names in all of the GrantAccess objects to the list.
-                for (GrantFunctionAccess gfa : access) {
-                    funcs.add(gfa.getName());
-                    if (log.isDebugEnabled())
-                        log.debug("Processing Role: " + role.getName() + " has function " + gfa.getName());
-                }
-            }
-            // If there are some functions, add it to the master Map
-            if (funcs != null)
-                nameGrantFunctionAccessMap.put(role.getName(), funcs);
-        }
-        return nameGrantFunctionAccessMap;
     }
 
     /**

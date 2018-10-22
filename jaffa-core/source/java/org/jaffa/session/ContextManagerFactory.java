@@ -117,4 +117,15 @@ public class ContextManagerFactory {
     public static void newInstance() {
        createInstance(true);
     }
+
+
+    /**
+     * Helper routine to return the Application Rule
+     * @param key
+     * @return
+     */
+    public static String getApplicationRule(String key){
+        return instance().getProperty(key)!=null && !((String) instance().getProperty(key)).isEmpty() ?
+                (String)instance().getProperty(key) : null;
+    }
 }

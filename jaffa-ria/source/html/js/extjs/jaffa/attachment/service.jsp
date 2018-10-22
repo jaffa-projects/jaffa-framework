@@ -83,7 +83,7 @@ private void loadParametersAndFiles(HttpServletRequest request, Map<String, Stri
     // For a non-file-upload, a regular request will be passed in.
     // Copy the parameters into the Map.
     for (Object name : request.getParameterMap().keySet())
-        parameterMap.put((String) name, handleParam(StringHelper.escapeJavascript(request.getParameter((String) name))));
+        parameterMap.put((String) name, handleParam(request.getParameter((String) name)));
     
     if (log.isDebugEnabled()) {
         log.debug("Request parameters: " + parameterMap);

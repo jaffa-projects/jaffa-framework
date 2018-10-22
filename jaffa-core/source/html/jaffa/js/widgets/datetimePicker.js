@@ -322,8 +322,8 @@ function RenderCal(el) {
   //end time picker
   //Arabic Localization changes for calendar dropdown
   vCalTime+="\n</table>";
-  var rtlLangValue = sessionStorage.getItem("RTLlanguage");
-  if (rtlLangValue == jaffaMessageRoot.datetimePicker.ArabicLang){
+  var isRTL = sessionStorage.getItem("isRTLlanguage");
+  if (Boolean(isRTL)){
     var newHTML = "<div class='CalendarWidget' width='250px' id='" + el.id + "-calendar' style='position:absolute;top:" + (findPosY(el) + el.offsetHeight)  + "px;right:" + ((findPosXRTL(el) - el.offsetWidth )) + "px;' >" + vCalHeader + vCalData + vCalTime + "</div>";
   }else{
     var newHTML = "<div class='CalendarWidget' width='250px' id='" + el.id + "-calendar' style='position:absolute;top:" + (findPosY(el) + el.offsetHeight)  + "px;left:" + findPosX(el) + "px;' >" + vCalHeader + vCalData + vCalTime + "</div>";

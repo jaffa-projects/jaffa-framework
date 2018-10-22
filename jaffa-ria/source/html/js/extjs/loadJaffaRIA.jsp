@@ -7,8 +7,9 @@
 <%@ page import = "org.apache.log4j.Logger"%>
 <%@ page import = "org.jaffa.session.ContextManagerFactory"%>
 <%@ page import = "org.jaffa.security.SecurityManager"%>
-<%@ page import = "org.jaffa.util.LocalizationRTL"%>
+<%@ page import = "org.jaffa.locale.LocalizationHelper"%>
 <%@ page import = "org.jaffa.presentation.portlet.session.UserSession"%>
+<%@ page import="org.jaffa.presentation.portlet.session.LocaleContext" %>
 
 
 <%@ taglib uri="/WEB-INF/jawr-el.tld" prefix="jwr"%>
@@ -34,7 +35,7 @@ Supported Parameters
 ------------------------------------------------------------- --%>
 
 <%
-	String userLocale = request.getSession().getAttribute("jaffa.user.prefLocale")!=null ? (String)request.getSession().getAttribute("jaffa.user.prefLocale") : "";
+	String userLocale = LocaleContext.getLocale()!=null ? LocaleContext.getLocale().toString() : null;
 	
 	/**
 	*	Passing the userLocale to isRTL() which returns true if it is arabic language
@@ -42,7 +43,7 @@ Supported Parameters
 	*	i.e., 	Arabic (true) = Loading jaffaRiaRTL.js bundle - which refers in jawr.properties file
 	*	   		English (false) = Loading jaffaRia.js bundle - which refers in jawr.properties file
 	*/
-	if(LocalizationRTL.isRtlLanguage(userLocale)){
+	if(LocalizationHelper.isRTL(userLocale)){
 %>
 		<!--
 			Loading Arabic JS bundle

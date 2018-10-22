@@ -13,12 +13,12 @@
     private static final Charset CHARSET = Charset.forName("UTF-8");
 %>
 <%
-    String componentRef = StringHelper.escapeJavascript(request.getParameter("componentRef"));
-    String contextRef = StringHelper.escapeJavascript(request.getParameter("contextRef")) != null ? StringHelper.escapeJavascript(request.getParameter("contextRef")) : "";
-    String eventId = StringHelper.escapeJavascript(request.getParameter("eventId"));
+    String componentRef = request.getParameter("componentRef");
+    String contextRef = request.getParameter("contextRef")!=null?request.getParameter("contextRef"):"";
+    String eventId = request.getParameter("eventId");
     Boolean isDefault = Boolean.valueOf(request.getParameter("isDefault"));
-    String queryName = StringHelper.escapeJavascript(request.getParameter("queryName"));
-    String data = StringHelper.escapeJavascript(request.getParameter("criteria")) != null ? StringHelper.escapeJavascript(request.getParameter("criteria")) : "";
+    String queryName = request.getParameter("queryName");
+    String data = request.getParameter("criteria")!=null?request.getParameter("criteria"):"";
     boolean hasQueryName = queryName != null && queryName.length()>0;
     String queries;
     if ("saveQuery".equals(eventId) && hasQueryName) {
