@@ -18,6 +18,7 @@ import static junit.framework.TestCase.assertNotNull;
 public class LocaleResourcesLoadTest {
     private static AnnotationConfigApplicationContext resourceLoaderConfig = new AnnotationConfigApplicationContext(CoreLoaderConfig.class);
 
+
     @BeforeClass
     public static void setup(){
         LocaleContext.setLocale(new Locale.Builder().setLanguage("en").setRegion("US").build());
@@ -36,6 +37,6 @@ public class LocaleResourcesLoadTest {
 
     @AfterClass
     public static void tearDown(){
-        LocaleContext.setLocale(null);
+        //LocaleContext.setLocale(null);
     }
 }
