@@ -37,6 +37,6 @@ public class LocaleResourcesLoadTest {
 
     @AfterClass
     public static void tearDown(){
-        //LocaleContext.setLocale(null);
+        LocaleContext.setLocale(null);
     }
 }
