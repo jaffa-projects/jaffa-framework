@@ -52,6 +52,7 @@ package org.jaffa.loader;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Interface for storing values in Repository.
@@ -93,6 +94,14 @@ public interface IRepository<T> {
      * @return contextKey
      */
     ContextKey findKey(String id);
+
+    /**
+     * Find all ContextKeys matching an ID, regardless of salience (precedence in the ContextKey).
+     *
+     * @param id  ContextKey ID of interest.
+     * @return  A TreeSet containing ContextKeys for all salience values.
+     */
+    TreeSet<ContextKey> findAllKeys(String id);
 
     /**
      * retrieves all the keys in the repository

@@ -166,8 +166,7 @@ public class MapRepository<T> implements IRepository<T> {
             TreeSet<ContextKey> contextKeysForId = contextKeyCache.get(id);
             if (contextKeysForId!=null) {
                 for (ContextKey contextKey : contextKeysForId) {
-                    if ((contextKey.getVariation() != null && contextKey.getVariation().equals(VariationContext.getVariation()))
-                            || contextKey.getVariation().equals(VariationContext.NULL_VARIATION)) {
+                    if (hasMatchingVariation(contextKey)) {
                         return contextKey;
                     }
 
@@ -176,6 +175,26 @@ public class MapRepository<T> implements IRepository<T> {
         }
         return null;
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public TreeSet<ContextKey> findAllKeys(String id) {
+        TreeSet<ContextKey> allKeys = new TreeSet<>();
+        if(id!=null) {
+            TreeSet<ContextKey> contextKeysForId = contextKeyCache.get(id);
+            if (contextKeysForId!=null) {
+                for (ContextKey contextKey : contextKeysForId) {
+                    if (hasMatchingVariation(contextKey)) {
+                        allKeys.add(contextKey);
+                    }
+
+                }
+            }
+        }
+        return allKeys;
     }
 
     /**
@@ -259,6 +278,12 @@ public class MapRepository<T> implements IRepository<T> {
                 contextKeyCache.remove(repositoryKey.getId());
             }
         }
+    }
+
+    private boolean hasMatchingVariation(ContextKey contextKey) {
+        return contextKey.getVariation().equals(VariationContext.NULL_VARIATION)
+                || (contextKey.getVariation() != null
+                    && contextKey.getVariation().equals(VariationContext.getVariation()));
     }
 
     /**
