@@ -85,8 +85,15 @@ public class RepositoryJsonService implements IRepositoryJsonService {
 
     public static final String BUSINESS_RULES = "org.jaffa.session.BusinessRules";
 
+    // Note that this value should be one higher than the highest salience value desired
+    // as a match. All items that match using the "less-than" compareTo() result will
+    // be returned.
     public static final String MAX_POSSIBLE_SALIENCE = "9999";
-    public static final String BASELINE_SALIENCE = "2";
+
+    // Note that the baseline salience we're currently after is 2 or lower. The reason this
+    // value is "3" is that we're going to match everything that compares lexically as less
+    // than this value. (See the comment for MAX_POSSIBLE_SALIENCE for additional explanation.)
+    public static final String BASELINE_SALIENCE = "3";
 
     /** The object used to save interesting run-time information. */
     private static Logger logger = Logger.getLogger(RepositoryJsonService.class);
@@ -386,54 +393,27 @@ public class RepositoryJsonService implements IRepositoryJsonService {
 //            }
 //        }
 
-        int highestPrecedence = -1;
-        ContextKey winningKey = null;
+        // The "/" character lexigraphically precedes the integers, so "0" salience
+        // will be captured.
+        String highestMatch = "/";
+        ContextKey matchingKey = null;
         for (ContextKey key: allKeys) {
             final String keySalience = key.getPrecedence();
-            if (salienceMatches(maxSalience, keySalience)) {
-                int precedence = getIntegerPrecedence(keySalience);
-                if (precedence > highestPrecedence) {
-                    winningKey = key;
-                    highestPrecedence = precedence;
+            int comparison = keySalience.compareTo(maxSalience);
+            // If keySalience is less than maxSalience (which should be one greater than the desired max match)...
+            if (comparison < 0) {
+                int matchComparison = keySalience.compareTo(highestMatch);
+                if (matchComparison > 0) {
+                    matchingKey = key;
+                    highestMatch = keySalience;
                 }
             }
         }
-        if (winningKey == null) {
+        if (matchingKey == null) {
             return null;
         } else {
-            return repository.query(winningKey);
+            return repository.query(matchingKey);
         }
-    }
-
-    /**
-     * Check if the given item has a salience (precedence) at or lower than the maximum allowed.
-     *
-     * @param maxSalience  Maximum allowed salience for this item.
-     * @param salience  Actual salience of the item.
-     * @return  True if the item's salience is in the allowed range.
-     */
-    private boolean salienceMatches(String maxSalience, String salience) {
-
-        int maxPrecedence = -1;
-        if (maxSalience != null) {
-            maxPrecedence = getIntegerPrecedence(maxSalience);
-        }
-
-        int itemPrecedence = 0;
-        if (salience != null) {
-            itemPrecedence = getIntegerPrecedence(salience);
-        }
-
-        if (itemPrecedence <= maxPrecedence) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private int getIntegerPrecedence(String salience) {
-        String numericSalience = salience.split("-")[0];
-        return Integer.valueOf(numericSalience);
     }
 
     /**
