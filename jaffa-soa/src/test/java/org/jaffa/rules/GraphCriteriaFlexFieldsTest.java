@@ -5,17 +5,19 @@ import org.jaffa.beans.factory.config.StaticContext;
 import org.jaffa.components.finder.StringCriteriaField;
 import org.jaffa.exceptions.ApplicationExceptions;
 import org.jaffa.exceptions.FrameworkException;
+import org.jaffa.loader.CoreLoaderConfig;
 import org.jaffa.persistence.Criteria;
 import org.jaffa.rules.testmodels.UserCriteria;
 import org.jaffa.rules.testmodels.UserCriteriaNoFlex;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GraphCriteriaFlexFieldsTest extends TestCase {
 
-    private ApplicationContext ctx;
+    private static AnnotationConfigApplicationContext resourceLoaderConfig = new AnnotationConfigApplicationContext(CoreLoaderConfig.class);
 
     /**
      * Creates new GraphCriteriaFlexFieldsTest

@@ -61,28 +61,24 @@ import org.xml.sax.SAXException;
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * ApplicationRulesManager - ApplicationManager is the managing class for all application rules as defined by the
- * ApplicationRules.* files.
+ * LocaleResourcesManager - LocaleResourcesManager is the managing class for all locale properties as defined by the
+ * locale*.properties files.
  */
-public class ApplicationRulesManager implements IManager {
+public class LocaleResourcesManager implements IManager {
 
     /** The key to locate the resources. */
-    public static final String APPLICATION_RULES_PROPERTIES = "Properties";
+    public static final String LOCALE_RESOURCES = "LocaleResources";
 
 
     /**
      * Instantiates a new Properties repository
      */
-    private IRepository<String> applicationRulesRepository = new MapRepository<>("Properties");
+    private IRepository<String> localePropertiesRepository = new MapRepository<>(LOCALE_RESOURCES);
 
 
     /**
@@ -90,15 +86,15 @@ public class ApplicationRulesManager implements IManager {
      */
     private HashMap managedRepositories = new HashMap<String, IRepository>() {
         {
-            put(applicationRulesRepository.getName(), applicationRulesRepository);
+            put(localePropertiesRepository.getName(), localePropertiesRepository);
         }
 
     };
 
     /**
-     * Provides the pattern to search for ApplicationRules
+     * Provides the pattern to search for Locale Properties
      */
-    private static final String DEFAULT_PROPERTY_FILE_NAME = "ApplicationRules.properties";
+    private static final String DEFAULT_PROPERTY_FILE_NAME = "locale*.properties";
 
 
     /**
@@ -108,7 +104,7 @@ public class ApplicationRulesManager implements IManager {
      * @param property
      */
     public void registerProperties(ContextKey contextKey, String property) {
-        getApplicationRulesRepository().register(contextKey, property);
+        getLocalePropertiesRepository().register(contextKey, property);
     }
 
     /**
@@ -117,7 +113,7 @@ public class ApplicationRulesManager implements IManager {
      * @param contextKey
      */
     public void unregisterProperties(ContextKey contextKey) {
-        getApplicationRulesRepository().unregister(contextKey);
+        getLocalePropertiesRepository().unregister(contextKey);
     }
 
     /**
@@ -125,8 +121,8 @@ public class ApplicationRulesManager implements IManager {
      *
      * @return A repository of properties
      */
-    public IRepository<String> getApplicationRulesRepository() {
-        return applicationRulesRepository;
+    public IRepository<String> getLocalePropertiesRepository() {
+        return localePropertiesRepository;
     }
 
     /**
@@ -148,58 +144,6 @@ public class ApplicationRulesManager implements IManager {
         return (IRepository<?>) managedRepositories.get(name);
     }
 
-    /**
-     * registerProperties() - Registers each property from a provided ContextKey for repository access
-     * @param mapRepository The repository to register the properties to
-     * @param key   The ContextKey corresponding to the property values
-     * @param properties    The Properties object containing property key/value pairs
-     */
-
-    private void registerProperties(MapRepository<String> mapRepository, ContextKey key, Properties properties) {
-        Iterator<String> contextKeyPropertiesIterator = properties.stringPropertyNames().iterator();
-        while (contextKeyPropertiesIterator.hasNext()) {
-            String propertyKey = contextKeyPropertiesIterator.next();
-            String propertyValue = properties.getProperty(propertyKey);
-            mapRepository.register(
-                    new ContextKey(propertyKey, key.getFileName(), key.getVariation(), key.getPrecedence()), propertyValue);
-        }
-    }
-
-    /**
-     * setLocalePropertiesRepository - Sets the application rules repository
-     *
-     * @param applicationRulesRepository
-     */
-    public void setApplicationRulesRepository(IRepository<String> applicationRulesRepository) {
-        this.applicationRulesRepository = applicationRulesRepository;
-    }
-
-    /**
-     * getApplicationRulesGlobal - Returns the global properties as defined by the ApplicationRules.global properties
-     * file.
-     *
-     * @return ApplicationRules_global properties
-     */
-    public Properties getApplicationRulesGlobal() {
-        return getApplicationRulesVariation(VariationContext.NULL_VARIATION);
-    }
-
-    /**
-     * getApplicationRulesVariation - Returns the properties defined by the variation as defined by the ApplicationRules.*
-     * file.
-     *
-     * @param variation
-     * @return ApplicationRules_{variation} properties
-     */
-    public Properties getApplicationRulesVariation(String variation) {
-        IRepository<String> propertyRepository = getApplicationRulesRepository();
-        Properties properties = new Properties();
-        if (null != propertyRepository) {
-            Map<String, String> variationRepo = propertyRepository.getRepositoryByVariation(variation);
-            properties.putAll(variationRepo);
-        }
-        return properties;
-    }
 
     /**
      * registerResource - Provides a method which submits the contents of the resource file to the application rules
@@ -216,11 +160,12 @@ public class ApplicationRulesManager implements IManager {
     public void registerResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException {
         Properties properties = new Properties();
         InputStream resourceInputStream = resource.getInputStream();
+        String propertyLocale = resource.getFilename().substring(resource.getFilename().indexOf("_") + 1, resource.getFilename().lastIndexOf("."));
         if (resource != null && resourceInputStream != null) {
             loadPropertiesResource(resourceInputStream, properties);
             if (!properties.isEmpty()) {
                 for(Object property : properties.keySet()){
-                    ContextKey key = new ContextKey((String)property, resource.getURI().toString(), variation, precedence);
+                    ContextKey key = new ContextKey(propertyLocale + "." + property, resource.getURI().toString(), variation, precedence);
                     registerProperties(key, properties.getProperty((String)property));
                 }
             }
@@ -263,13 +208,6 @@ public class ApplicationRulesManager implements IManager {
    */
     private void loadPropertiesResource(InputStream resourceInputStream, Properties properties) throws IOException {
         properties.load(resourceInputStream);
-        for (Object property : properties.keySet()) {
-            String systemPropertyValue = System.getProperty((String) property);
-            if (systemPropertyValue == null || "".equals(systemPropertyValue)) {
-                systemPropertyValue = replaceTokens(properties, properties.getProperty((String) property));
-            }
-            properties.setProperty((String) property, systemPropertyValue);
-        }
     }
 
     /**
@@ -282,33 +220,4 @@ public class ApplicationRulesManager implements IManager {
         return DEFAULT_PROPERTY_FILE_NAME;
     }
 
-    private String replaceTokens(Properties properties, String appRuleValue) {
-        //Regular expression to find ${word} tokens in the application rule value
-        Pattern pt = Pattern.compile("\\$\\{([^}]*)\\}");
-        Matcher matcher = pt.matcher(appRuleValue);
-
-        while (matcher.find()) {
-          String tokenValue = getPropertyValue(properties,  matcher.group(1));
-            if (tokenValue != null) {
-                appRuleValue = StringHelper.replace(appRuleValue, matcher.group(0), tokenValue);
-                appRuleValue = replaceTokens(properties, appRuleValue);
-            }
-        }
-        return appRuleValue;
-    }
-
-  /**
-   * getPropertyValue - The value of a property in a Properties object
-   * @param properties  The Properties object to search
-   * @param key The key corresponding to the queried value
-   * @return    The system property value found in a properties object, or null if the
-   * property does not exist.
-   */
-    private String getPropertyValue(Properties properties, String key){
-        String systemPropertyValue = System.getProperty(key);
-        if (systemPropertyValue == null || "".equals(systemPropertyValue)) {
-            systemPropertyValue = properties.getProperty(key);
-        }
-        return systemPropertyValue;
-    }
 }

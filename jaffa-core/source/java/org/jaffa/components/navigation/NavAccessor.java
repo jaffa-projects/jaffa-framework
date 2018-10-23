@@ -48,23 +48,22 @@
  */
 package org.jaffa.components.navigation;
 
+import org.apache.log4j.Logger;
+import org.jaffa.components.navigation.domain.MenuOption;
+import org.jaffa.presentation.portlet.component.ComponentManager;
+import org.jaffa.presentation.portlet.session.LocaleContext;
+import org.jaffa.security.SecurityManager;
+import org.jaffa.util.LoggerHelper;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
-import javax.servlet.http.HttpServletRequest;
-import org.jaffa.components.navigation.domain.GlobalMenu;
-import org.jaffa.components.navigation.domain.MenuOption;
-import org.apache.log4j.Logger;
-import org.jaffa.util.LoggerHelper;
-import org.jaffa.presentation.portlet.component.ComponentDefinition;
-import org.jaffa.presentation.portlet.component.ComponentManager;
-import javax.servlet.http.HttpSession;
-import org.jaffa.security.SecurityManager;
-import org.jaffa.presentation.portlet.session.LocaleContext;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /** This class allows access to a navigation system, based on a users access.
  *  When this object is constructed, it looks at the full navigation system, and
@@ -121,7 +120,7 @@ public class NavAccessor {
             na = (NavAccessor) session.getAttribute(NavAccessor.class.getName());
         }
         if(na == null) {
-            synchronized(session) {
+            synchronized(session.getId().intern()) {
                 na = (NavAccessor) session.getAttribute(NavAccessor.class.getName());
                 if (na == null) {
                     na = new NavAccessor();

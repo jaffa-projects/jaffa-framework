@@ -51,22 +51,28 @@ package org.jaffa.loader;
 
 import org.jaffa.security.VariationContext;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Java Map Implementation of IRepository
  */
 public class MapRepository<T> implements IRepository<T> {
-
     /**
      * Repository Map holds ContextKey and associated Repository Element
      */
-    private Map<ContextKey, T> repositoryMap = new TreeMap<>();
+    private ConcurrentMap<ContextKey, T> repositoryMap = new ConcurrentHashMap<>();
 
     /**
      * ContextKeyCache is the cache of Repository key(id) element and its associated Contexts
      */
-    private Map<String, TreeSet<ContextKey>> contextKeyCache = new HashMap<>();
+    private ConcurrentMap<String, TreeSet<ContextKey>> contextKeyCache = new ConcurrentHashMap<>();
 
     /**
      * The name of the repository
@@ -85,7 +91,7 @@ public class MapRepository<T> implements IRepository<T> {
      * {@inheritDoc}
      */
     @Override
-    public synchronized void register(ContextKey repositoryKey, T repositoryElement) {
+    public void register(ContextKey repositoryKey, T repositoryElement) {
         repositoryMap.put(repositoryKey, repositoryElement);
 
         addToContextKeyCache(repositoryKey);
@@ -95,7 +101,7 @@ public class MapRepository<T> implements IRepository<T> {
      * {@inheritDoc}
      */
     @Override
-    public synchronized void unregister(ContextKey contextKey) {
+    public void unregister(ContextKey contextKey) {
         repositoryMap.remove(contextKey);
 
         removeFromContextKeyCache(contextKey);
@@ -105,7 +111,7 @@ public class MapRepository<T> implements IRepository<T> {
      * {@inheritDoc}
      */
     @Override
-    public synchronized T query(ContextKey contextKey) {
+    public T query(ContextKey contextKey) {
         return repositoryMap.get(contextKey);
     }
 
@@ -290,8 +296,8 @@ public class MapRepository<T> implements IRepository<T> {
      * {@inheritDoc}
      */
     @Override
-    public synchronized Map<String, T> getMyRepository(){
-        Map<String, T> myRepository = new HashMap<>();
+    public ConcurrentMap<String, T> getMyRepository(){
+        ConcurrentMap<String, T> myRepository = new ConcurrentHashMap<>();
         Set<String> repoKeys = contextKeyCache.keySet();
         for(String repoKey : repoKeys){
             T value = query(repoKey);
@@ -307,8 +313,8 @@ public class MapRepository<T> implements IRepository<T> {
      * {@inheritDoc}
      */
     @Override
-    public synchronized Map<String, T> getRepositoryByVariation(String variation){
-        Map<String, T> variationRepository = new HashMap<>();
+    public ConcurrentMap<String, T> getRepositoryByVariation(String variation){
+        ConcurrentMap<String, T> variationRepository = new ConcurrentHashMap<>();
         Set<String> repoKeys = contextKeyCache.keySet();
         for(String repoKey : repoKeys){
             T value = queryByVariation(repoKey, variation);

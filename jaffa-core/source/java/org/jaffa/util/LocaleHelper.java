@@ -58,6 +58,9 @@ import java.util.PropertyResourceBundle;
 import java.util.Locale;
 import java.lang.RuntimeException;
 import java.util.MissingResourceException;
+
+import org.jaffa.loader.ManagerRepositoryService;
+import org.jaffa.loader.config.LocaleResourcesManager;
 import org.jaffa.presentation.portlet.session.LocaleContext;
 
 /** This is a helper routine used for the internationalization of datatypes. It extracts formats from a properties file based on datatype and locale country and language codes.
@@ -65,23 +68,24 @@ import org.jaffa.presentation.portlet.session.LocaleContext;
  */
 public class LocaleHelper {
     private static Logger log = Logger.getLogger(LocaleHelper.class);
-    private static final String LOCALE_RESOURCE_PREFIX = "org.jaffa.config.locale";
-    private static PropertyResourceBundle c_localeResource = null;
-    static {
-        try {
-            c_localeResource = (PropertyResourceBundle) PropertyResourceBundle.getBundle(LOCALE_RESOURCE_PREFIX);
-        } catch (MissingResourceException e) {
-            String str = "Can't load the resource file: " + LOCALE_RESOURCE_PREFIX + ".properties";
-            log.fatal(str, e);
-            throw new RuntimeException(str, e);
-        }
+
+    private static LocaleResourcesManager localeResourcesManager = (LocaleResourcesManager) ManagerRepositoryService.getInstance().
+            getManagerMap().get("LocaleResourcesManager");
+
+    public static LocaleResourcesManager getLocaleResourcesManager() {
+        return localeResourcesManager;
     }
-    /** Returns a format based on country and language from the locale.properties file
+
+    public static void setLocaleResourcesManager(LocaleResourcesManager localeResourcesManager) {
+        LocaleHelper.localeResourcesManager = localeResourcesManager;
+    }
+
+    /** Returns a format based on country and language from the locale*.properties file
      * @param dataType datatype that the format is requested for
      * @return returns a format string for parsing and formatting a datatype
      */
     public static String getProperty(String dataType) {
-        
+
         Locale localeObject = LocaleContext.getLocale();
         String key = null;
         String format = null;
@@ -91,7 +95,7 @@ public class LocaleHelper {
             String variant = localeObject.getVariant();
             key = language + "_" + country + "_" + variant + "." + dataType;
             try {
-                format = c_localeResource.getString(key);
+                format = localeResourcesManager.getLocalePropertiesRepository().query(key);
             } catch (MissingResourceException e1) {
                 String str = "Key '" + key + "' not found in the default resource file";
                 log.debug(str);
@@ -99,7 +103,7 @@ public class LocaleHelper {
             if (format == null) {
                 key = language + "_" + country + "." + dataType;
                 try {
-                    format = c_localeResource.getString(key);
+                    format = localeResourcesManager.getLocalePropertiesRepository().query(key);
                 } catch (MissingResourceException e1) {
                     String str = "Key '" + key + "' not found in the default resource file";
                     log.debug(str);
@@ -110,7 +114,7 @@ public class LocaleHelper {
             if (format == null) {
                 key = language + "." + dataType;
                 try {
-                    format = c_localeResource.getString(key);
+                    format = localeResourcesManager.getLocalePropertiesRepository().query(key);
                 } catch (MissingResourceException e1) {
                     String str = "Key '" + key + "' not found in the default resource file";
                     log.debug(str);
@@ -120,7 +124,7 @@ public class LocaleHelper {
             if (format == null) {
                 key = dataType;
                 try {
-                    format = c_localeResource.getString(key);
+                    format = localeResourcesManager.getLocalePropertiesRepository().query(key);
                 } catch (MissingResourceException e1) {
                     String str = "Key '" + key + "' not found in the default resource file";
                     log.warn(str);
@@ -129,7 +133,7 @@ public class LocaleHelper {
         } else {
             key = dataType;
             try {
-                format = c_localeResource.getString(key);
+                format = localeResourcesManager.getLocalePropertiesRepository().query(key);
             } catch (MissingResourceException e1) {
                 String str = "Key '" + key + "' not found in the default resource file";
                 log.warn(str);

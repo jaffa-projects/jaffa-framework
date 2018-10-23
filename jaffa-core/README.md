@@ -3035,18 +3035,6 @@ public static FieldMetaData[] getMandatoryFields()
 public static String getName()
 ```
 ***
-**org.jaffa.integrationapi.LocaleProvider**
-
-```
-public Locale getLocale()
-```
-***
-**org.jaffa.integrationimpl.ContextManagerLocaleProvider**
-
-```
-public Locale getLocale()
-```
-***
 **org.jaffa.loader.ContextKey**
 
 ```

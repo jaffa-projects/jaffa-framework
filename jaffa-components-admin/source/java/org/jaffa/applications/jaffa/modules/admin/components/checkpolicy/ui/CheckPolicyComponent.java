@@ -48,26 +48,34 @@
  */
 package org.jaffa.applications.jaffa.modules.admin.components.checkpolicy.ui;
 
-import java.io.*;
-import java.util.*;
 import org.apache.log4j.Logger;
-import org.jaffa.presentation.portlet.component.Component;
-import org.jaffa.presentation.portlet.FormKey;
+import org.jaffa.applications.jaffa.modules.admin.components.checkpolicy.ui.exceptions.CheckPolicyException;
 import org.jaffa.exceptions.ApplicationExceptions;
 import org.jaffa.exceptions.FrameworkException;
-import org.jaffa.util.URLHelper;
-import org.jaffa.util.StringHelper;
-import org.jaffa.applications.jaffa.modules.admin.components.checkpolicy.ui.exceptions.CheckPolicyException;
-import org.jaffa.security.businessfunctionsdomain.*;
-import org.jaffa.security.PolicyCache;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
-import org.jaffa.util.XmlHelper;
+import org.jaffa.loader.policy.RoleManager;
+import org.jaffa.presentation.portlet.FormKey;
+import org.jaffa.presentation.portlet.component.Component;
 import org.jaffa.presentation.portlet.component.ComponentManager;
-import org.jaffa.security.securityrolesdomain.Role;
+import org.jaffa.security.PolicyManager;
+import org.jaffa.security.businessfunctionsdomain.BusinessFunction;
+import org.jaffa.security.businessfunctionsdomain.BusinessFunctions;
 import org.jaffa.security.securityrolesdomain.GrantFunctionAccess;
+import org.jaffa.security.securityrolesdomain.Role;
 import org.jaffa.security.securityrolesdomain.Roles;
 import org.jaffa.util.JAXBHelper;
+import org.jaffa.util.StringHelper;
+import org.jaffa.util.URLHelper;
+import org.jaffa.util.XmlHelper;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /** This is the component controller for the Business Function.
  *
@@ -231,7 +239,8 @@ public class CheckPolicyComponent extends Component {
     static HashMap getRoleMap() {
 
         // Get the roles, throws exceptions if there are issues
-        Roles roles = PolicyCache.getRoles();
+        RoleManager roleManager = PolicyManager.getRoleManager();
+        Roles roles = (null != roleManager) ? roleManager.getRoles() : null;
         m_roleBFMap.clear();
         List roleList = roles.getRole();
         // Bail if there are no roles....
