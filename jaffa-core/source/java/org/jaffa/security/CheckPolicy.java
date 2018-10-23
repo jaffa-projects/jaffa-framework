@@ -57,6 +57,8 @@ package org.jaffa.security;
 import org.apache.log4j.Logger;
 import org.jaffa.loader.policy.BusinessFunctionManager;
 import org.jaffa.presentation.portlet.component.ComponentManager;
+import org.jaffa.security.securityrolesdomain.GrantFunctionAccess;
+import org.jaffa.security.securityrolesdomain.Role;
 import org.jaffa.util.StringHelper;
 import org.jaffa.util.URLHelper;
 
@@ -68,7 +70,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This servlet can be used on start-up to make ssure there are no rogue entries
@@ -224,21 +230,17 @@ public class CheckPolicy extends HttpServlet {
             }
         }
 
-        // Get list of functions per role
-        Map roleMap = PolicyCache.getRoleMap();
-
         // For Each role make sure that the business functions are valid
-        for (Iterator it2 = roleMap.keySet().iterator(); it2.hasNext(); ) {
-            String role = (String) it2.next();
-            List roleList = (List) roleMap.get(role);
-            for (Iterator it3 = roleList.iterator(); it3.hasNext(); ) {
-                String func = (String) it3.next();
-                if (!bfuncs.contains(func)) {
-                    m_roleErrors.put(role, func);
-                    log.error("Business Function '" + func + "' in Role '" + role + "' is Not Valid!");
+        List<Role> allRoles = PolicyManager.getAllRoles();
+        for (Role role: allRoles) {
+            for (GrantFunctionAccess grantFunctionAccess: role.getGrantFunctionAccess()) {
+                if (!bfuncs.contains(grantFunctionAccess.getName())) {
+                    m_roleErrors.put(role.getName(), grantFunctionAccess.getName());
+                    log.error("Business Function '" + grantFunctionAccess.getName() + "' in Role '" + role + "' is Not Valid!");
                 }
             }
         }
+
     }
 
     /**

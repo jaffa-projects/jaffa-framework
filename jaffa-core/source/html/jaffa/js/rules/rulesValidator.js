@@ -253,8 +253,8 @@ function rules() {
 		//Based on the language selection the corresponding x value calculated and
 		//display the error message.
 
-		var rtlLangValue = sessionStorage.getItem("RTLlanguage");
-		if(rtlLangValue=="ar_OM"){
+		var isRTL = sessionStorage.getItem("isRTLlanguage");
+		if(Boolean(isRTL)){
 			displayX = findPosXRTL(displayEl);
 			line = "right";
 			singleLeft = "singleRight";

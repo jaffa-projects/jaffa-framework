@@ -58,6 +58,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.MDC;
+import org.jaffa.locale.LocalizationHelper;
+import org.jaffa.locale.UserLocaleService;
+import org.jaffa.locale.UserPrefLocaleService;
 import org.jaffa.rules.RulesEngineFactory;
 import org.jaffa.security.SecurityManager;
 import org.jaffa.security.UserContext;
@@ -75,7 +78,10 @@ import org.jaffa.exceptions.ComponentExpiredException;
 import org.jaffa.presentation.portlet.session.UserSessionSetupException;
 import org.jaffa.session.ContextManagerFactory;
 import org.jaffa.util.LocaleHelper;
+import org.jaffa.locale.UserLocaleProvider;
 import org.owasp.encoder.Encode;
+
+import static org.jaffa.session.ContextManagerFactory.getApplicationRule;
 
 /** This servlet filter is a replacement for the JAFFA PortletServlet and the portlet.security  package.
  * It will invoke the SecurityManager to execute the rest of the request-processing under a SecurityContext. The SecurityContext is stored as a thread variable, which enables a servlet un-aware program (eg. the Persistence Engine) to get a user's authentication information.
@@ -115,7 +121,7 @@ public class PortletFilter implements Filter {
     private static final String MDC_IP = "ip";
     private static final String MDC_COMPONENT_ID = "componentId";
     private static final String MDC_EVENT_ID = "eventId";
-    private static final String PREF_LANGUAGE_ID = "jaffa.user.prefLocale";
+
 
     /** Called by the web container to indicate to a filter that it is being placed into service.
      * This does nothing.
@@ -297,57 +303,12 @@ public class PortletFilter implements Filter {
             VariationContext.setVariation(UserSession.getUserSession(request).getVariation());
         }
 
-        Locale locale = null;
 
-        String sessionLocale = (String) request.getSession().getAttribute(PREF_LANGUAGE_ID);
-        if (sessionLocale!=null && !sessionLocale.equals("")){
-            if (log.isDebugEnabled())
-                log.debug("Setting the locale based on session attribute: " + sessionLocale);
-            locale = LocaleHelper.string2Locale(sessionLocale);
-        }
-        // Determine the locale based on user locale value in user properties file
-        if (locale == null){
-            ContextManagerFactory.instance().setThreadContext(request);
-            String userLocale = (String) ContextManagerFactory.instance().getProperty(PREF_LANGUAGE_ID);
-            if (userLocale!=null && !userLocale.equals("")){
-                  if (log.isDebugEnabled())
-                      log.debug("Setting the locale based on user.locale value: " + userLocale);
-                  locale = new Locale(userLocale);
-            }
-            ContextManagerFactory.instance().unsetThreadContext();
-        }
+        //Save the locale on the UserPrefLocaleService
+        saveUserPrefLocale(request);
 
-        if (locale == null){
-            //Set locale using cookie
-            Cookie[] cookies = request.getCookies();
-            if (cookies != null){
-                for (int i = 0; i < cookies.length; i++) {
-                  String name = cookies[i].getName();
-                    if (log.isDebugEnabled())
-                        log.debug("cookie name: " + name);
-                  String value = cookies[i].getValue();
-                    if (log.isDebugEnabled())
-                        log.debug("cookie value: " + value);
-                  if (name.equals(PREF_LANGUAGE_ID)){
-                      if (log.isDebugEnabled())
-                          log.debug("Setting the locale based on jaffa.user.prefLocale cookie: " + value);
-                      locale = new Locale(value);
-                  }
-                }
-            }
-        }
-
-
-        if (locale == null){
-            // Set the LocaleContext with a Locale instance containing the current variation
-            locale = request.getLocale();
-            if (locale != null && (locale.getVariant() == null || locale.getVariant().length() == 0)) {
-                if (log.isDebugEnabled())
-                    log.debug("Adding the variation to the locale based on request locale: " + locale);
-                locale = new Locale(locale.getLanguage(), locale.getCountry(), VariationContext.getVariation());
-            }
-        }
-
+        // Find locale and set on LocaleContext
+        Locale locale = LocaleHelper.string2Locale(getLocale(request));
         if (log.isDebugEnabled())
             log.debug("Setting the Locale to: " + locale);
         LocaleContext.setLocale(locale);
@@ -552,5 +513,88 @@ public class PortletFilter implements Filter {
     private synchronized void determineMainMethod() throws Exception {
         if (c_method == null)
             c_method = getClass().getMethod("doFilterUnderSecurityContext", new Class[]{HttpServletRequest.class, HttpServletResponse.class, FilterChain.class});
+    }
+
+    /**
+     * Method to return locale by identifying for it in the respective contexts in the following order.
+     * 1. Find from request session attribute "jaffa.user.prefLocale"
+     * 2. UserLocaleProvider implementation
+     * 3. Find from application rule "commons.default.language"
+     * 4. From cookie "jaffa.user.prefLocale"
+     * 5. Browser locale (eg:- en_US_DEF)
+     * 6. Default locale en_US
+     * @param request
+     * @return
+     */
+    public String getLocale(HttpServletRequest request) {
+        String locale = "";
+        if (request != null) {
+            ContextManagerFactory.instance().setThreadContext(request);
+            String sessionlocale = (String) request.getSession().getAttribute(UserLocaleProvider.PREF_LOCALE_ID);
+            if (sessionlocale!=null && !sessionlocale.isEmpty()){
+                locale = sessionlocale;
+                if (log.isDebugEnabled())
+                    log.debug("Found locale based on session attribute: " + locale);
+            }else if(UserLocaleService.getUserLocaleProvider()!=null && UserLocaleService.getUserLocaleProvider().getLocale()!=null
+                    && !UserLocaleService.getUserLocaleProvider().getLocale().isEmpty()) {
+                locale = UserLocaleService.getUserLocaleProvider().getLocale();
+                if (log.isDebugEnabled())
+                    log.debug("Found the Locale from User Locale Provider: " + locale);
+            }else if (getApplicationRule(UserLocaleProvider.DEF_LOCALE_RULE)!=null && !getApplicationRule(UserLocaleProvider.DEF_LOCALE_RULE).isEmpty()){
+                locale = getApplicationRule(UserLocaleProvider.DEF_LOCALE_RULE);
+                if(log.isDebugEnabled()){
+                    log.debug("Locale found from Application Rule: "+ UserLocaleProvider.DEF_LOCALE_RULE +" :"+locale);
+                }
+            }
+            if (locale == null || locale.isEmpty()){
+                //Set locale using cookie
+                Cookie[] cookies = request.getCookies();
+                if (cookies != null){
+                    for (int i = 0; i < cookies.length; i++) {
+                        String name = cookies[i].getName();
+                        if (log.isDebugEnabled())
+                            log.debug("cookie name: " + name);
+                        String value = cookies[i].getValue();
+                        if (log.isDebugEnabled())
+                            log.debug("cookie value: " + value);
+                        if (name.equals(UserLocaleProvider.PREF_LOCALE_ID)){
+                            if (log.isDebugEnabled())
+                                log.debug("Setting the locale based on jaffa.user.prefLocale cookie: " + value);
+                            locale = value;
+                        }
+                    }
+                }
+            }
+
+
+            if (locale == null || locale.isEmpty()){
+                // Set the LocaleContext with a Locale instance containing the current variation
+                Locale browserLocale = request.getLocale();
+                if (browserLocale != null && (browserLocale.getVariant() == null || browserLocale.getVariant().length() == 0)) {
+                    if (log.isDebugEnabled())
+                        log.debug("Adding the variation to the locale based on request locale: " + locale);
+                    locale = browserLocale.getLanguage()+"_"+browserLocale.getCountry()+(VariationContext.getVariation()!=null && !VariationContext.NULL_VARIATION.equals(VariationContext.getVariation()) ? "_"+VariationContext.getVariation() : "");
+                }
+            }
+
+            if(locale == null || locale.isEmpty()){
+                locale = UserLocaleProvider.DEF_LOCALE;
+            }
+        }
+        return locale;
+    }
+
+
+    /**
+     * Saves user selected locale on UserLocaleProvider Implementation if the user selected language is different from what is stored in the implementation
+     * @param request
+     */
+    private void saveUserPrefLocale(HttpServletRequest request){
+        ContextManagerFactory.instance().setThreadContext(request);
+        String userSelectedLanguage = LocalizationHelper.getLanguageFromRequestParam(request);
+        if(userSelectedLanguage!=null && !userSelectedLanguage.isEmpty() && UserLocaleService.getUserLocaleProvider()!=null
+            && UserLocaleService.getUserLocaleProvider().getLocale()!=null && !userSelectedLanguage.equals(UserLocaleService.getUserLocaleProvider().getLocale().toString())){
+            UserLocaleService.getUserLocaleProvider().saveLocale(userSelectedLanguage);
+        }
     }
 }

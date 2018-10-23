@@ -75,7 +75,7 @@ import java.util.List;
  * Java Configuration class for the Jaffa Rules
  */
 @Configuration
-@ComponentScan("org.jaffa.beans.factory.config")
+@ComponentScan({"org.jaffa.beans.factory.config"})
 public class JaffaRulesConfig {
 
      /**

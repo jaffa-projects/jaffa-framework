@@ -255,10 +255,10 @@ if(TagHelper.getModelMap(pageContext)!=null){
 <SCRIPT type="text/javascript">
 function displayPopup(str){   
  //Added the Localization code for RTL Error pop up 
-	var rtlLangValue = sessionStorage.getItem("RTLlanguage");		 
+	var isRTL = sessionStorage.getItem("isRTLlanguage");
   myWindow = window.open('','Warning','scrollbars=no,width=450,height=200;resizable,left=25;top=25;');
   myWindow.document.bgColor="white";
-  if(rtlLangValue=="ar_OM"){
+  if(Boolean(isRTL)){
   myWindow.document.write("<font color='darkred' size=3><h1 dir='rtl'>Error</h1></font>");
   myWindow.document.write("<body dir=rtl>",str);
   }else{
