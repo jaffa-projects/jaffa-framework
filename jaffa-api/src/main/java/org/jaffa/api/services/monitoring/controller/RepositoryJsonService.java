@@ -393,7 +393,7 @@ public class RepositoryJsonService implements IRepositoryJsonService {
 //            }
 //        }
 
-        // The "/" character lexigraphically precedes the integers, so "0" salience
+        // The "/" character lexically precedes the integers, so "0" salience
         // will be captured.
         String highestMatch = "/";
         ContextKey matchingKey = null;

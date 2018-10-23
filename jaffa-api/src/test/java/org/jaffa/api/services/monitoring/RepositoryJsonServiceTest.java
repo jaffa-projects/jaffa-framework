@@ -127,8 +127,8 @@ public class RepositoryJsonServiceTest {
         Map<String, IManager> managers = managerRepositoryService.getManagerMap();
         IManager roleManager = managers.get("RoleManager");
         IRepository<Role> roleRepo = roleManager.getRepositoryByName("Role");
-        addRole(roleRepo, "test.role", "file1.xml", "NULL", "1-PRODUCT", "p1");
-        addRole(roleRepo, "test.role", "file1.xml", "NULL", "2-CUSTOMIZED", "p2");
+        addRole(roleRepo, "test.role", "file1.xml", "NULL", "1-PLATFORM", "p1");
+        addRole(roleRepo, "test.role", "file1.xml", "NULL", "2-PRODUCT", "p2");
         addRole(roleRepo, "test.role", "file1.xml", "NULL", "3-GENERIC", "p3");
         addRole(roleRepo, "test.role", "file1.xml", "NULL", "4-CUSTOMER", "p4");
     }
