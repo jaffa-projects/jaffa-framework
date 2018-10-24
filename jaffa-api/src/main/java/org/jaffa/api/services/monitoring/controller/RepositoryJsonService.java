@@ -72,7 +72,7 @@ import java.util.stream.Collectors;
  */
 public class RepositoryJsonService implements IRepositoryJsonService {
 
-    public static final String KEY_BEGINS_WITH = "ke(So tyBeginsWith";
+    public static final String KEY_BEGINS_WITH = "keyBeginsWith";
     public static final String KEY_BEGIN_WITH = "keyBeginWith";
     public static final String KEY_MATCHES = "keyMatches";
     public static final String VALUE_KEY = "value";
