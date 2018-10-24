@@ -287,9 +287,9 @@ public class MapRepository<T> implements IRepository<T> {
     }
 
     private boolean hasMatchingVariation(ContextKey contextKey) {
-        return contextKey.getVariation().equals(VariationContext.NULL_VARIATION)
-                || (contextKey.getVariation() != null
-                    && contextKey.getVariation().equals(VariationContext.getVariation()));
+        return contextKey.getVariation() != null
+                && (contextKey.getVariation().equals(VariationContext.getVariation()))
+                   || contextKey.getVariation().equals(VariationContext.NULL_VARIATION);
     }
 
     /**
