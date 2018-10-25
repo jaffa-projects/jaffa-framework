@@ -199,8 +199,13 @@ public class RepositoryJsonService implements IRepositoryJsonService {
         // Replace the simple values with combined values and metadata
         if (businessRulesMapValue instanceof Map) {
             Map rulesMetadataMap = (Map)businessRulesMapValue;
-            for (Object id : repositoryMap.keySet()) {
+            Set mergedKeyset = repositoryMap.keySet();
+            mergedKeyset.addAll(rulesMetadataMap.keySet());
+            for (Object id : mergedKeyset) {
                 Object ruleValue = repositoryMap.get(id);
+                if (ruleValue == null) {
+                    ruleValue = rulesMetadataMap.get(id);
+                }
                 Object metaData = rulesMetadataMap.get(id);
                 Map<String, Object> mergedRule =
                         mergeRuleValueAndMetaData(ruleValue, metaData);
