@@ -205,7 +205,7 @@ public class RepositoryJsonService implements IRepositoryJsonService {
             for (Object id : mergedKeySet) {
                 Object ruleValue = repositoryMap.get(id);
                 if (ruleValue == null) {
-                    ruleValue = rulesMetadataMap.get(id);
+                    ruleValue = "";
                 }
                 Object metaData = rulesMetadataMap.get(id);
                 Map<String, Object> mergedRule =
