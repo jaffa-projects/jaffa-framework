@@ -7,45 +7,34 @@
  ******************************************************/
 package org.jaffa.applications.jaffa.modules.admin.components.usermaintenance.ui;
 
-import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionMessage;
-import org.jaffa.applications.jaffa.modules.admin.components.usermaintenance.dto.UserRoleDto;
-import org.jaffa.applications.jaffa.modules.admin.domain.UserMeta;
-import org.jaffa.components.maint.MaintForm;
-import org.jaffa.datatypes.FieldValidator;
-import org.jaffa.datatypes.Parser;
-import org.jaffa.datatypes.ValidationException;
-import org.jaffa.datatypes.exceptions.MandatoryFieldException;
-import org.jaffa.loader.policy.RoleManager;
-import org.jaffa.metadata.DateTimeFieldMetaData;
-import org.jaffa.metadata.IntegerFieldMetaData;
-import org.jaffa.metadata.StringFieldMetaData;
-import org.jaffa.presentation.portlet.widgets.controller.CheckBoxController;
-import org.jaffa.presentation.portlet.widgets.controller.DateTimeController;
-import org.jaffa.presentation.portlet.widgets.controller.DropDownController;
-import org.jaffa.presentation.portlet.widgets.controller.EditBoxController;
-import org.jaffa.presentation.portlet.widgets.controller.GridController;
-import org.jaffa.presentation.portlet.widgets.model.CheckBoxModel;
-import org.jaffa.presentation.portlet.widgets.model.DateTimeModel;
-import org.jaffa.presentation.portlet.widgets.model.DropDownModel;
-import org.jaffa.presentation.portlet.widgets.model.EditBoxModel;
-import org.jaffa.presentation.portlet.widgets.model.GridModel;
-import org.jaffa.presentation.portlet.widgets.model.GridModelRow;
-import org.jaffa.security.PolicyManager;
-import org.jaffa.security.securityrolesdomain.Exclude;
-import org.jaffa.security.securityrolesdomain.Include;
-import org.jaffa.security.securityrolesdomain.Role;
-import org.jaffa.security.securityrolesdomain.Roles;
-
+import java.util.*;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
+import org.apache.log4j.Logger;
+import org.jaffa.components.codehelper.dto.*;
+import org.jaffa.components.finder.*;
+import org.jaffa.components.maint.MaintForm;
+import org.jaffa.datatypes.Formatter;
+import org.jaffa.datatypes.*;
+import org.jaffa.datatypes.exceptions.MandatoryFieldException;
+import org.jaffa.metadata.*;
+import org.jaffa.presentation.portlet.widgets.controller.*;
+import org.jaffa.presentation.portlet.widgets.model.*;
+import org.jaffa.util.StringHelper;
+
+import org.jaffa.applications.jaffa.modules.admin.components.usermaintenance.dto.*;
+import org.jaffa.applications.jaffa.modules.admin.domain.UserMeta;
+
+import org.jaffa.applications.jaffa.modules.admin.domain.UserRoleMeta;
 
 // .//GEN-END:_1_be
 // Add additional imports//GEN-FIRST:_imports
+import org.apache.struts.action.ActionMessage;
+import org.jaffa.security.PolicyManager;
+import org.jaffa.loader.policy.RoleManager;
+import org.jaffa.security.securityrolesdomain.Roles;
+import org.jaffa.security.securityrolesdomain.Role;
+import org.jaffa.security.securityrolesdomain.Include;
+import org.jaffa.security.securityrolesdomain.Exclude;
 
 
 
