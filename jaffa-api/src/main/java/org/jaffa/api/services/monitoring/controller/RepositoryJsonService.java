@@ -72,28 +72,28 @@ import java.util.stream.Collectors;
  */
 public class RepositoryJsonService implements IRepositoryJsonService {
 
-    public static final String KEY_BEGINS_WITH = "keyBeginsWith";
-    public static final String KEY_BEGIN_WITH = "keyBeginWith";
-    public static final String KEY_MATCHES = "keyMatches";
-    public static final String VALUE_KEY = "value";
-    public static final String CLASS_META_DATA_KEY = "classMetaData";
-    public static final String SALIENCE_KEY = "salience";
+    private static final String KEY_BEGINS_WITH = "keyBeginsWith";
+    private static final String KEY_BEGIN_WITH = "keyBeginWith";
+    private static final String KEY_MATCHES = "keyMatches";
+    private static final String VALUE_KEY = "value";
+    private static final String CLASS_META_DATA_KEY = "classMetaData";
+    private static final String SALIENCE_KEY = "salience";
 
     // Should be either "true" or "false", true is intended to only return items
     // that are at the product level salience and below.
-    public static final String BASELINE_KEY = "baseline";
+    private static final String BASELINE_KEY = "baseline";
 
-    public static final String BUSINESS_RULES = "org.jaffa.session.BusinessRules";
+    private static final String BUSINESS_RULES = "org.jaffa.session.BusinessRules";
 
     // Note that this value should be one higher than the highest salience value desired
     // as a match. All items that match using the "less-than" compareTo() result will
     // be returned.
-    public static final String MAX_POSSIBLE_SALIENCE = "9999";
+    private static final String MAX_POSSIBLE_SALIENCE = "9999";
 
     // Note that the baseline salience we're currently after is 2 or lower. The reason this
     // value is "3" is that we're going to match everything that compares lexically as less
     // than this value. (See the comment for MAX_POSSIBLE_SALIENCE for additional explanation.)
-    public static final String BASELINE_SALIENCE = "3";
+    private static final String BASELINE_SALIENCE = "3";
 
     /** The object used to save interesting run-time information. */
     private static Logger logger = Logger.getLogger(RepositoryJsonService.class);
@@ -144,7 +144,7 @@ public class RepositoryJsonService implements IRepositoryJsonService {
      */
     @Override
     public String getRepository(String repoName, UriInfo uriInfo) {
-        Map repository = new HashMap<>();
+        Map<Object, Object> repository = new HashMap<>();
         Map<String, IManager> managerMap = managerRepositoryService.getManagerMap();
 
         MultivaluedMap<String, String> queryParams = null;
@@ -197,10 +197,10 @@ public class RepositoryJsonService implements IRepositoryJsonService {
      * @param queryParams if present, only keys that begin with this will have their
      *                      values retrieved; otherwise, all keys and values
      */
-    private Map createRepositoryMap(String name,
-                                    IManager manager,
-                                    MultivaluedMap<String, String> queryParams) {
-        Map repositoryMap = new HashMap<>();
+    private Map<Object, Object> createRepositoryMap(String name,
+                                                    IManager manager,
+                                                    MultivaluedMap<String, String> queryParams) {
+        Map<Object, Object> repositoryMap = new HashMap<>();
 
         if (ApplicationResourcesManager.APPLICATION_RESOURCES_PROPERTIES.equalsIgnoreCase(name)) {
             createApplicationResourcesMap(repositoryMap, manager, queryParams);
@@ -235,22 +235,21 @@ public class RepositoryJsonService implements IRepositoryJsonService {
      * @param repositoryMap a map with keys that are rule IDs, and values that are rule values
      * @param businessRulesMetaDataMap a map with keys that are rule IDs, and values that are metadata
      */
-    private void mergeRuleValuesAndMetaData(Map repositoryMap,
+    private void mergeRuleValuesAndMetaData(Map<Object, Object> repositoryMap,
                                             HashMap<String, Object> businessRulesMetaDataMap) {
-        Map<String, Object> metaDataMap = businessRulesMetaDataMap;
         // All "real" rules are accumulated under the pseudo-rule "BusinessRules"
         Object businessRulesMapValue = businessRulesMetaDataMap.get("BusinessRules");
 
         // Replace the simple values with combined values and metadata
         if (businessRulesMapValue instanceof Map) {
-            Set<String> mergedKeySet = new HashSet<>();
+            Set<Object> mergedKeySet = new HashSet<>();
             Map rulesMetadataMap = (Map)businessRulesMapValue;
             mergedKeySet.addAll(repositoryMap.keySet());
             mergedKeySet.addAll(rulesMetadataMap.keySet());
             for (Object id : mergedKeySet) {
                 Object ruleValue = repositoryMap.get(id);
                 if (ruleValue == null) {
-                    ruleValue = "";
+                    ruleValue = ""; 
                 }
                 Object metaData = rulesMetadataMap.get(id);
                 Map<String, Object> mergedRule =
@@ -266,8 +265,8 @@ public class RepositoryJsonService implements IRepositoryJsonService {
      * with the corresponding label values.
      * @param repositoryMap the map whose labels are being updated
      */
-    private void replaceLabelKeysWithValues(Map repositoryMap) {
-        Set repoKeys = repositoryMap.keySet();
+    private void replaceLabelKeysWithValues(Map<Object, Object> repositoryMap) {
+        Set<Object> repoKeys = repositoryMap.keySet();
         for (Object key : repoKeys) {
             Object value = repositoryMap.get(key);
 
@@ -287,7 +286,7 @@ public class RepositoryJsonService implements IRepositoryJsonService {
      * @param queryParams if present, only keys that begin with this will have their
      *                      values retrieved; otherwise, all keys and values
      */
-    private void createApplicationResourcesMap(Map repositoryMap, IManager manager, MultivaluedMap<String, String> queryParams) {
+    private void createApplicationResourcesMap(Map<Object, Object> repositoryMap, IManager manager, MultivaluedMap<String, String> queryParams) {
         IRepository dRepo = manager.getRepositoryByName(ApplicationResourcesManager.DEFAULT_PROPERTIES);
         populateMapFromRepository(repositoryMap, dRepo, queryParams);
         // Potentially overwrite generic resources with locale-specific resources
@@ -302,7 +301,7 @@ public class RepositoryJsonService implements IRepositoryJsonService {
      * @param queryParams if present, only keys that begin with this will have their
      *                      values retrieved; otherwise, all keys and values
      */
-    private void populateMapFromRepository(Map repositoryMap,
+    private void populateMapFromRepository(Map<Object, Object> repositoryMap,
                                            IRepository repository,
                                            MultivaluedMap<String, String> queryParams) {
 
@@ -368,7 +367,7 @@ public class RepositoryJsonService implements IRepositoryJsonService {
      * @param repositoryMap the map to populate
      * @param repository the repository whose values will be added to the map
      */
-    private void populateMapWithAll(Map repositoryMap, IRepository repository, String maxSalience) {
+    private void populateMapWithAll(Map<Object, Object> repositoryMap, IRepository repository, String maxSalience) {
         Set<ContextKey> contextKeys = repository.getAllKeys();
         for (ContextKey contextKey : contextKeys) {
             String contextKeyId = contextKey.getId();
@@ -430,7 +429,7 @@ public class RepositoryJsonService implements IRepositoryJsonService {
      * @param keyBeginsWith only keys that begin with this will have their
      *                      values retrieved
      */
-    private void populateMapKeyBeginsWith(Map repositoryMap, IRepository repository, String keyBeginsWith, String maxSalience) {
+    private void populateMapKeyBeginsWith(Map<Object, Object> repositoryMap, IRepository repository, String keyBeginsWith, String maxSalience) {
         if (keyBeginsWith != null && !keyBeginsWith.isEmpty()) {
             // Only return key-value pairs whose key starts with the designated string
             Set<String> keyIds = repository.getAllKeyIds();
@@ -452,7 +451,7 @@ public class RepositoryJsonService implements IRepositoryJsonService {
      * @param keyPattern only keys that match with this pattern will have their
      *                      values retrieved
      */
-    private void populateMapKeyMatchesWith(Map repositoryMap, IRepository repository, String keyPattern, String maxSalience) {
+    private void populateMapKeyMatchesWith(Map<Object, Object> repositoryMap, IRepository repository, String keyPattern, String maxSalience) {
         if (keyPattern != null && !keyPattern.isEmpty()) {
             // Only return key-value pairs whose key starts with the designated string
             Set<String> keyIds = repository.getAllKeyIds();
