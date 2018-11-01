@@ -1025,6 +1025,11 @@ li.x-tab-strip-editable{
 #designatorPanel .x-panel.x-grid-panel{
 	padding-top:0px !important;
 }
+/*Comments tab --> comments sections are not aligned properly.*/
+#vendorDetails .x-panel-bwrap .indent.x-panel-body-noheader.x-panel-body-noborder .x-tab-panel .x-tab-panel-bwrap 
+.x-tab-panel-body.x-tab-panel-body-noborder.x-tab-panel-body-top .x-panel.x-panel-noborder .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .x-panel-body.x-panel-body-noborder .x-form-item.x-hide-label .x-form-element{
+    padding-right: 0px !important;
+}
 /*********************************************************
 ***************ENTERPRISE MODULE ENDS HERE**************
 **********************************************************/
