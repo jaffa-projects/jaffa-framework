@@ -643,7 +643,7 @@ public class ApplicationRulesUtilities {
     }
 
     /** Converts a Java Class to a JavaScript Equivalent */
-    private String toJsType(Class cls) {
+    public static String toJsType(Class cls) {
         // TODO remove this function?
         if (cls == null) return "object";
         if (String.class.isAssignableFrom(cls)) return "string";

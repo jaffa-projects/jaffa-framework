@@ -48,8 +48,6 @@
  */
 package org.jaffa.persistence;
 
-import java.util.Collection;
-
 import org.apache.log4j.Logger;
 import org.jaffa.exceptions.ApplicationExceptions;
 import org.jaffa.exceptions.FrameworkException;
@@ -71,6 +69,12 @@ import org.jaffa.persistence.exceptions.UOWException;
 import org.jaffa.persistence.exceptions.UpdateFailedException;
 import org.jaffa.persistence.logging.IPersistenceLoggingPlugin;
 
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * The UOW (Unit of Work) is the application developers interface to the persistence layer.
  * Through this all writes, updates and deletes are executed.
@@ -83,10 +87,15 @@ public class UOW {
     private IPersistenceEngine m_engine;
     private IMessagingEngine m_messagingEngine;
     private Throwable m_pointOfCreation = new Exception("This exception can be used for pinpointing the code which fails to close an UOW instance");
-    private static ThreadLocal<Integer> connectionsInThreadContext = ThreadLocal.withInitial(()->{return new Integer(0);});
+    private static ThreadLocal<Integer> connectionsInThreadContext = ThreadLocal.withInitial(() -> {
+        return new Integer(0);
+    });
+    private static ThreadLocal<Map<String, StackTraceElement[]>> threadContext = new ThreadLocal<>();
     private boolean counted = false;
+    private static AtomicInteger thresholdStepCount = new AtomicInteger(0) ;
+    private static AtomicInteger dbConnectionThreshold = new AtomicInteger(2) ;
+    private static AtomicInteger globalConnectionCount = new AtomicInteger(0);
 
-    private static Integer globalConnectionCount = 0;
     /**
      * Creates new UOW. A connection is established with the underlying persistence store.
      *
@@ -96,24 +105,61 @@ public class UOW {
         m_engine = PersistenceEngineFactory.newInstance(this);
         m_inactive = false;
 
-        if(log.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
+
             connectionsInThreadContext.set((connectionsInThreadContext.get()) + 1);
             counted = true;
-            globalConnectionCount++;
-            log.debug("Database Connection Count: " + connectionsInThreadContext.get() + ", Global Count: " + globalConnectionCount);
+            int globalConnectionCountInt = globalConnectionCount.incrementAndGet();
+
+            if (threadContext.get() != null) {
+                threadContext.get().put(Integer.toString(this.hashCode()), Thread.currentThread().getStackTrace());
+            } else {
+                Map<String, StackTraceElement[]> map = new LinkedHashMap<>();
+                map.put(Integer.toString(this.hashCode()), Thread.currentThread().getStackTrace());
+                threadContext.set(map);
+            }
+
+            Integer dbConnectionCount = connectionsInThreadContext.get();
+            log.debug("Database Connection Count: " + dbConnectionCount + ", Global Count: " + globalConnectionCountInt);
+            if (dbConnectionCount >= dbConnectionThreshold.get()) {
+                log.debug("*********************** Surpassed connection count threshold of :" + dbConnectionThreshold.get());
+                for (Map.Entry<String, StackTraceElement[]> entry : threadContext.get().entrySet()) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String newLine = System.getProperty("line.separator");
+                    stringBuilder.append("************ Entry:: " + entry.getKey());
+                    stringBuilder.append(newLine);
+                    for (StackTraceElement stackTraceElement : entry.getValue()) {
+                        stringBuilder.append(stackTraceElement.getClassName());
+                        stringBuilder.append(".");
+                        stringBuilder.append(stackTraceElement.getMethodName());
+                        stringBuilder.append(":");
+                        stringBuilder.append(stackTraceElement.getLineNumber());
+                        stringBuilder.append(newLine);
+                    }
+                    stringBuilder.append("************");
+                    stringBuilder.append(newLine);
+                    log.debug(stringBuilder.toString());
+                }
+                if (thresholdStepCount.get() >= 20) {
+                    thresholdStepCount.set(0);
+                    dbConnectionThreshold.set(dbConnectionThreshold.get() + 2);
+                } else {
+                    thresholdStepCount.incrementAndGet();
+                }
+            }
         }
     }
 
     /**
      * Creates new UOW using connection from a parent UOW.
      *
-     * @throws UOWException 
+     * @throws UOWException
      */
     public UOW(UOW parentUow) throws FrameworkException {
         m_inactive = true;
         m_engine = PersistenceEngineFactory.newInstance();
         if ((m_engine instanceof IJdbcPersistenceEngine) && (parentUow.m_engine instanceof IJdbcPersistenceEngine)) {
-            ((IJdbcPersistenceEngine) m_engine).initialize(this,((IJdbcPersistenceEngine)parentUow.m_engine).getExistingDataSource());
+            ((IJdbcPersistenceEngine) m_engine).initialize(this, ((IJdbcPersistenceEngine) parentUow.m_engine).getExistingDataSource());
             m_inactive = false;
         }
     }
@@ -182,7 +228,7 @@ public class UOW {
      * Creates a Jaffa Transaction, as defined in the configuration file for the payload.
      * An implementation may choose to send the message only when the uow is committed.
      *
-     * @param payload      Any serializable object.
+     * @param payload         Any serializable object.
      * @param externalMessage Array of dependency transactions.
      * @return id The created transaction key
      * @throws FrameworkException    Indicates some system error.
@@ -201,7 +247,7 @@ public class UOW {
      * Creates a Jaffa Transaction, as defined in the configuration file for the payload.
      * An implementation may choose to send the message only when the uow is committed.
      *
-     * @param payload      Any serializable object.
+     * @param payload Any serializable object.
      * @return id The created transaction key
      * @throws FrameworkException    Indicates some system error.
      * @throws ApplicationExceptions Indicates application error(s).
@@ -237,7 +283,7 @@ public class UOW {
      * Creates a Jaffa Transaction, as defined in the configuration file for the payload.
      * An implementation may choose to send the message only when the uow is committed.
      *
-     * @param payload      Any serializable object.
+     * @param payload         Any serializable object.
      * @param externalMessage Array of dependency transactions.
      * @return id The created transaction key
      * @throws FrameworkException    Indicates some system error.
@@ -444,7 +490,9 @@ public class UOW {
     }
 
 
-    /** Returns the PersistenceLoggingPlugin at the specified position in this list..
+    /**
+     * Returns the PersistenceLoggingPlugin at the specified position in this list..
+     *
      * @param clazz name of the PersistenceLoggingPlugin class to return.
      * @return the PersistenceLoggingPlugin at the specified position in this list
      */
@@ -465,16 +513,23 @@ public class UOW {
      * Closes the connection and marks the UOW as inactive
      */
     public void close() {
-        if(log.isDebugEnabled()) {
-            if (counted) {
-                connectionsInThreadContext.set(connectionsInThreadContext.get() - 1);
-                globalConnectionCount--;
-                counted = false;
-            }
-        }
+
         if (m_engine != null) {
             m_engine.close();
             m_engine = null;
+            if (counted && log.isDebugEnabled()) {
+                if (null != threadContext.get() && !threadContext.get().isEmpty()) {
+                    Map.Entry<String, StackTraceElement[]> lastEntry = null;
+                    for (Iterator<Map.Entry<String, StackTraceElement[]>> iterator = threadContext.get().entrySet().iterator(); iterator.hasNext();) {
+                        lastEntry = iterator.next();
+                    }
+                    if (!Integer.toString(this.hashCode()).equals(lastEntry.getKey()))
+                        log.debug("WARNING: Current UOW hashcode does not match the last value in the Map: " + Integer.toString(this.hashCode()));
+                }
+                threadContext.get().remove(Integer.toString(this.hashCode()));
+                connectionsInThreadContext.set(connectionsInThreadContext.get() - 1);
+                globalConnectionCount.decrementAndGet();
+            }
         }
         m_inactive = true;
     }

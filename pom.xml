@@ -1971,6 +1971,11 @@
             <!-- ******************************************************************* -->
             <dependency>
                 <groupId>org.jaffa</groupId>
+                <artifactId>jaffa-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jaffa</groupId>
                 <artifactId>jaffa-components-admin</artifactId>
                 <version>${project.version}</version>
             </dependency>

@@ -98,7 +98,27 @@ public class FinderMetaDataHelper {
 
    private static final Logger log = Logger.getLogger(FinderMetaDataHelper.class);
 
-   /** This Pattern is used to obtain the domain-classname from a Tx class. */
+    /** The quotation character used for JSON. */
+    static final String JSON_QUOTE = "\"";
+
+    /** The single quote used for some JavaScript quoting. */
+    static final String SINGLE_QUOTE = "'";
+
+    /** JSON output desired. */
+    public static final String JSON = "JSON";
+
+    /** The names of fields whose corresponding values are not strings. */
+    private static final List<String> NON_STRING_FIELDS =
+            Arrays.asList("alwaysHidden", "hidden", "maxLength", "sortable");
+
+    /** The quote to use to surround property names (possibly none). */
+    String propertyNameQuote = "";
+
+    /** The quote to use to surround property values (possibly none). */
+    String propertyValueQuote = SINGLE_QUOTE;
+
+
+    /** This Pattern is used to obtain the domain-classname from a Tx class. */
       private static final Pattern PATTERN_TO_OBTAIN_DOMAIN_CLASSNAME = Pattern.compile("^(.+)\\.components\\..+\\.(.+)(Lookup|Finder)(Tx)$");
 
       /**
@@ -128,7 +148,8 @@ public class FinderMetaDataHelper {
           }
 
           // Obtain metaData
-          String metaData = c_enableCaching ? obtainMetaData(parameters, servletContext) : generateMetaData(parameters, servletContext);
+          String metaData = c_enableCaching ? obtainMetaData(parameters, servletContext)
+                                            : generateMetaData(parameters, servletContext);
           out.print(metaData);
       }
 
@@ -155,6 +176,11 @@ public class FinderMetaDataHelper {
           String targetFields = StringHelper.escapeJavascript(request.getParameter("targetFields"));
           if (targetFields != null) {
               m.put("targetFields", targetFields);
+          }
+
+          String outputStyle = StringHelper.escapeJavascript(request.getParameter("outputStyle"));
+          if (outputStyle != null) {
+              m.put("outputStyle", outputStyle);
           }
 
           // Use the PropertyRuleIntrospector to determine the parameters which were not passed in the request
@@ -199,8 +225,21 @@ public class FinderMetaDataHelper {
           return metaData;
       }
 
-      /** Generates metaData based on the input parameters. */
-      private static String generateMetaData(Map<String, String> parameters, ServletContext servletContext) throws Exception {
+      /**
+       * Generates metaData based on the input parameters. In many cases, this metaData will be
+       * used to create two executable JavaScript statements:
+       * (1) Ext.apply(ClassMetaData { serviceName : new Jaffa.data.FinderOutDto({some object}) };
+       * (2) ClassMetaData.serviceName;
+       *
+       * Prior to October 2018, the JavaScript would eval() the output from this method to execute
+       * the two statements above, i.e., this method would generate a String including "Ext.apply".
+       * After October 2018, The two JavaScript statements will exist in the JavaScript code, and
+       * this method will provide the "some object" argument to the new Jaffa.data.FinderOutDto call.
+       * In other words, the .js file will contain the "Ext.apply" statement, and this method will
+       * supply the JSON argument on which it operates.
+       */
+      private static String generateMetaData(Map<String, String> parameters, ServletContext servletContext)
+              throws Exception {
           String serviceName = getServiceName(parameters);
           Class serviceClass = getServiceClass(serviceName, servletContext);
           boolean graphBased = isGraphBased(serviceClass);
@@ -208,108 +247,135 @@ public class FinderMetaDataHelper {
           Class outputClass = getOutputClass(serviceClass, serviceMethodName, graphBased);
           Class domainClass = getDomainClass(serviceClass, outputClass, graphBased);
           String[] keys = getKeys(serviceClass, outputClass, domainClass, graphBased);
-          Map<String, Map<String, String>> fieldMap = getFieldMap(serviceClass, outputClass, domainClass, graphBased, keys);
+          Map<String, Map<String, String>> fieldMap =
+                  getFieldMap(serviceClass, outputClass, domainClass, graphBased, keys);
           String valueField = getValueField(parameters, keys);
           Map<String, Map<String, String>> codeDescField = getCodeDescField(serviceClass, valueField, fieldMap);
           String codeDescFieldName = codeDescField != null ? codeDescField.keySet().iterator().next() : null;
           String staticParameters = parseStaticParameters(parameters);
 
-          // Build the metaData
-          StringBuilder buf = new StringBuilder();
-          boolean firstLoop;
-          buf.append("Ext.apply(ClassMetaData, {\n");
-          buf.append("  " + serviceName + ": new Jaffa.data.FinderOutDto({\n");
+          String metaData;
+          if (JSON.equals(parameters.get("outputStyle"))) {
+              FinderMetaDataHelper helper = new FinderMetaDataHelper();
+              helper.propertyNameQuote = JSON_QUOTE;
+              helper.propertyValueQuote = JSON_QUOTE;
+//              metaData = helper.getJSONMetaData(serviceName, graphBased, serviceMethodName, keys, fieldMap, valueField,
+//                                                codeDescField, codeDescFieldName, staticParameters);
+              metaData =  helper.buildFinderOutDtoArgument(serviceName, graphBased, serviceMethodName, keys, fieldMap,
+                                                            valueField, codeDescField, codeDescFieldName,
+                                                            staticParameters);
 
-          buf.append("    key: [");
-          for (int i = 0; i < keys.length; i++) {
-              if (i > 0)
-                  buf.append(", ");
-              buf.append('\'' + keys[i] + '\'');
           }
-          buf.append("],\n");
+          else {
+              // JavaSript code prior to October 2018 expected evaluable JavaScript to be returned by
+              // this method.
+              metaData = getJavaScriptMetaData(serviceName, graphBased, serviceMethodName, keys, fieldMap, valueField,
+                                               codeDescField, codeDescFieldName, staticParameters);
+          }
 
-          buf.append("    finder: {\n");
-          buf.append("      root: '").append(graphBased ? "graphs" : "rows").append("',\n");
-          buf.append("      DWRFunctionName: '").append(serviceName).append('.').append(serviceMethodName).append("',\n");
-          if (staticParameters != null)
-              buf.append("      DWRFunctionInput: '").append(staticParameters).append("',\n");
-          buf.append("      orderByFields: '[");
-          for (int i = 0; i < keys.length; i++) {
-              if (i > 0)
-                  buf.append(", ");
-              buf.append("{fieldName: \"" + StringHelper.getUpper1(keys[i]) + "\"}");
+          if (log.isDebugEnabled()) {
+              log.debug("Generated metaData:\n" + metaData);
           }
-          buf.append("]',\n");
-          buf.append("      combo: {\n");
-          buf.append("        columns: [");
-          firstLoop = true;
+          return metaData;
+      }
+
+    private static String getJavaScriptMetaData(String serviceName, boolean graphBased, String serviceMethodName,
+                                                String[] keys, Map<String, Map<String, String>> fieldMap,
+                                                String valueField, Map<String, Map<String, String>> codeDescField,
+                                                String codeDescFieldName, String staticParameters) {
+          // TODO investigate replacing with getJSONMetaData
+        // Build the metaData
+        StringBuilder buf = new StringBuilder();
+        boolean firstLoop;
+        buf.append("Ext.apply(ClassMetaData, {\n");
+        buf.append("  " + serviceName + ": new Jaffa.data.FinderOutDto({\n");
+
+        buf.append("    key: [");
+        for (int i = 0; i < keys.length; i++) {
+            if (i > 0)
+                buf.append(", ");
+            buf.append('\'' + keys[i] + '\'');
+        }
+        buf.append("],\n");
+
+        buf.append("    finder: {\n");
+        buf.append("      root: '").append(graphBased ? "graphs" : "rows").append("',\n");
+        buf.append("      DWRFunctionName: '").append(serviceName).append('.').append(serviceMethodName).append("',\n");
+        if (staticParameters != null)
+            buf.append("      DWRFunctionInput: '").append(staticParameters).append("',\n");
+        buf.append("      orderByFields: '[");
+        for (int i = 0; i < keys.length; i++) {
+            if (i > 0)
+                buf.append(", ");
+            buf.append("{fieldName: \"" + StringHelper.getUpper1(keys[i]) + "\"}");
+        }
+        buf.append("]',\n");
+        buf.append("      combo: {\n");
+        buf.append("        columns: [");
+        firstLoop = true;
           for (String fieldName : fieldMap.keySet()) {
               if (!firstLoop)
-                  buf.append(", ");
+                buf.append(", ");
               firstLoop = false;
               buf.append('\'' + fieldName + '\'');
-          }
-          if (codeDescFieldName != null)
-              buf.append(", '" + codeDescFieldName + '\'');
-          buf.append("],\n");
-          buf.append("        config: {valueField: '").append(valueField).append("', displayField: '").append(codeDescFieldName != null ? codeDescFieldName : valueField).append("'}\n");
-          buf.append("      },\n");
-          buf.append("      grid: {\n");
-          buf.append("        columns: [");
-          firstLoop = true;
-          for (String fieldName : fieldMap.keySet()) {
+        }
+        if (codeDescFieldName != null)
+            buf.append(", '" + codeDescFieldName + '\'');
+        buf.append("],\n");
+        buf.append("        config: {valueField: '").append(valueField).append("', displayField: '").append(codeDescFieldName != null ? codeDescFieldName : valueField).append("'}\n");
+        buf.append("      },\n");
+        buf.append("      grid: {\n");
+        buf.append("        columns: [");
+        firstLoop = true;
+        for (String fieldName : fieldMap.keySet()) {
               if (!firstLoop)
-                  buf.append(", ");
+                buf.append(", ");
               firstLoop = false;
-              buf.append('\'' + fieldName + '\'');
-          }
-          buf.append("]\n");
-          buf.append("      }\n");
-          buf.append("    },\n");
+            buf.append('\'' + fieldName + '\'');
+        }
+        buf.append("]\n");
+        buf.append("      }\n");
+        buf.append("    },\n");
 
+        buf.append("    fields: {\n");
 
-          buf.append("    fields: {\n");
-
-          for (Iterator<Map.Entry<String, Map<String, String>>> i = fieldMap.entrySet().iterator(); i.hasNext(); ) {
-              Map.Entry<String, Map<String, String>> me = i.next();
-              buf.append("      ").append('\'' + me.getKey() + '\'').append(": {");
-              firstLoop = true;
-              if (me.getValue()!=null){
-                for (Map.Entry<String, String> attribute : me.getValue().entrySet()) {
-                    if (!firstLoop)
-                        buf.append(", ");
-                    firstLoop = false;
-                    buf.append(attribute.getKey()).append(": ").append(attribute.getValue());
-                }
-              }
-              buf.append('}');
-              if (i.hasNext() || codeDescField != null)
-                  buf.append(',');
-              buf.append('\n');
-          }
-          if (codeDescField != null) {
-              buf.append("      ").append('\'' + codeDescFieldName + '\'').append(": {");
-              firstLoop = true;
-              for (Map.Entry<String, String> attribute : codeDescField.get(codeDescFieldName).entrySet()) {
+        for (Iterator<Map.Entry<String, Map<String, String>>> i = fieldMap.entrySet().iterator(); i.hasNext(); ) {
+            Map.Entry<String, Map<String, String>> me = i.next();
+            buf.append("      ").append('\'' + me.getKey() + '\'').append(": {");
+            firstLoop = true;
+            if (me.getValue()!=null){
+              for (Map.Entry<String, String> attribute : me.getValue().entrySet()) {
                   if (!firstLoop)
                       buf.append(", ");
                   firstLoop = false;
                   buf.append(attribute.getKey()).append(": ").append(attribute.getValue());
               }
-              buf.append("}\n");
-          }
-          buf.append("    }\n");
+            }
+            buf.append('}');
+            if (i.hasNext() || codeDescField != null)
+                buf.append(',');
+            buf.append('\n');
+        }
+        if (codeDescField != null) {
+            buf.append("      ").append('\'' + codeDescFieldName + '\'').append(": {");
+            firstLoop = true;
+            for (Map.Entry<String, String> attribute : codeDescField.get(codeDescFieldName).entrySet()) {
+                if (!firstLoop)
+                    buf.append(", ");
+                firstLoop = false;
+                buf.append(attribute.getKey()).append(": ").append(attribute.getValue());
+            }
+            buf.append("}\n");
+        }
+        buf.append("    }\n");
 
-          buf.append("  })\n");
-          buf.append("});\n");
-          buf.append("ClassMetaData." + serviceName + ";\n");
-          String metaData = buf.toString();
-          if (log.isDebugEnabled())
-              log.debug("Generated metaData:\n" + metaData);
-          return metaData;
-      }
+        buf.append("  })\n");
+        buf.append("});\n");
+        buf.append("ClassMetaData." + serviceName + ";\n");
+        return buf.toString();
+    }
 
-      /** Returns the component parameter, after replacing dots with underscores. */
+    /** Returns the component parameter, after replacing dots with underscores. */
       private static String getServiceName(Map<String, String> parameters) {
           return parameters.get("component").replace('.', '_');
       }
@@ -725,7 +791,7 @@ public class FinderMetaDataHelper {
               Map<String, String> descField = fieldMap.get("description");
 
               // Map to hold the various attributes of the new field
-              Map<String, String> m = new LinkedHashMap<String, String>();
+              Map<String, String> m = new LinkedHashMap<>();
               m.put("type", "'string'");
               m.put("label", keyField.get("label"));
               Integer maxLength = keyField.containsKey("maxLength") ? Integer.parseInt(keyField.get("maxLength")) : 0;
@@ -735,7 +801,7 @@ public class FinderMetaDataHelper {
               m.put("tpl", "'{" + valueField + "} - {description}'");
 
               // Create a Map for the new field
-              Map<String, Map<String, String>> codeDescField = new HashMap<String, Map<String, String>>();
+              Map<String, Map<String, String>> codeDescField = new HashMap<>();
               codeDescField.put('_' + valueField + "AndDescription", m);
               if (log.isDebugEnabled())
                   log.debug("CodeDescField for " + serviceClass.getSimpleName() + " is " + codeDescField);
@@ -743,6 +809,280 @@ public class FinderMetaDataHelper {
           }
           return null;
       }
+
+    /**
+     * Retrieve the metadata in JSON format
+     * @return a string represention the metadata in JSON format
+     * @see #getJavaScriptMetaData
+     */
+    private String getJSONMetaData(String serviceName, boolean graphBased, String serviceMethodName, String[] keys,
+                                   Map<String, Map<String, String>> fieldMap, String valueField,
+                                   Map<String, Map<String, String>> codeDescField, String codeDescFieldName,
+                                   String staticParameters) {
+        // Build the metaData
+        StringBuilder buf = new StringBuilder();
+        buf.append("Ext.apply(ClassMetaData, {\n");
+        buf.append("  ").append(serviceName).append(": new Jaffa.data.FinderOutDto(");
+        String arg = buildFinderOutDtoArgument(serviceName, graphBased, serviceMethodName, keys, fieldMap, valueField,
+                                               codeDescField, codeDescFieldName, staticParameters);
+        buf.append(arg);
+        buf.append(")\n");   // end new Jaffa.data.FinderOutDto(
+        buf.append("});\n");
+        buf.append("ClassMetaData.").append(serviceName).append(";\n");
+        return buf.toString();
+    }
+
+    private String buildFinderOutDtoArgument(String serviceName, boolean graphBased, String serviceMethodName,
+                                           String[] keys, Map<String, Map<String, String>> fieldMap, String valueField,
+                                           Map<String, Map<String, String>> codeDescField, String codeDescFieldName,
+                                           String staticParameters) {
+        StringBuilder buf = new StringBuilder();
+        buf.append("{\n");
+        appendKeys(keys, buf);
+        appendFinder(serviceName, graphBased, serviceMethodName, keys, fieldMap, valueField, codeDescFieldName,
+                     staticParameters, buf);
+        appendFields(fieldMap,codeDescFieldName, codeDescField, buf);
+        buf.append("  }");   // end argument to new Jaffa.data.FinderOutDto(
+        return buf.toString();
+    }
+
+    /**
+     * Append the JSON that constitutes the finder
+     * @param buf the builder that adds the finder JSON
+     */
+    private void appendFinder(String serviceName, boolean graphBased, String serviceMethodName, String[] keys,
+                              Map<String, Map<String, String>> fieldMap, String valueField, String codeDescFieldName,
+                              String staticParameters, StringBuilder buf) {
+        buf.append("    ").append(quoteName("finder")).append(": {\n");
+
+        // Root
+        buf.append("      ").append(quoteName("root")).append(": ");
+        String rootValue = graphBased ? "graphs" : "rows";
+        appendValue(buf, rootValue);
+        buf.append(",\n");
+
+        // DWRFunctionName
+        buf.append("      ").append(quoteName("DWRFunctionName")).append(": ");
+        buf.append(quoteValue(serviceName + '.' + serviceMethodName)).append(",\n");
+
+        // DWRFunctionInput
+        if (staticParameters != null) {
+            buf.append("      ").append(quoteName("DWRFunctionInput")).append(": ");
+            buf.append(quoteValue(staticParameters)).append(",\n");
+        }
+
+        appendOrderByFields(keys, buf);
+        appendCombo(fieldMap, valueField, codeDescFieldName, buf);
+        appendGrid(fieldMap, buf);
+        buf.append("    },\n");
+    }
+
+    void appendOrderByFields(String[] keys, StringBuilder buf) {
+        buf.append("      ").append(quoteName("orderByFields")).append(": '[");
+        for (int i = 0; i < keys.length; i++) {
+            if (i > 0) {
+                buf.append(", ");
+            }
+            buf.append("{fieldName: \"" + StringHelper.getUpper1(keys[i]) + "\"}");
+        }
+        buf.append("]',\n");
+    }
+
+    /**
+     * Append the JSON representing the combo field name and object value
+     * @param buf the builder that adds the JSON
+     */
+    void appendCombo(Map<String, Map<String, String>> fieldMap, String valueField, String codeDescFieldName,
+                             StringBuilder buf) {
+        buf.append("      ").append(quoteName("combo")).append(": {\n");
+        appendComboColumns(fieldMap, codeDescFieldName, buf);
+        buf.append("        ").append(quoteName("config")).append(": {");
+        buf.append(quoteName("valueField")).append(": ");
+        appendValue(buf, valueField);
+        String displayFieldValue = codeDescFieldName != null ? codeDescFieldName : valueField;
+        buf.append(", ").append(quoteName("displayField")).append(": ");
+        appendValue(buf, displayFieldValue);
+        buf.append("}\n");
+        buf.append("      },\n");   // end combo
+    }
+
+    /**
+     * Append the JSON representing the combo columns
+     * @param buf the builder that adds the JSON
+     */
+    void appendComboColumns(Map<String, Map<String, String>> fieldMap, String codeDescFieldName,
+                                    StringBuilder buf) {
+        buf.append("        ").append(quoteName("columns")).append(": [");
+        appendSetElementsJSON(fieldMap, buf);
+        if (codeDescFieldName != null) {
+            buf.append(", ");
+            appendValue(buf, codeDescFieldName);
+        }
+        buf.append("],\n");
+    }
+
+    /**
+     * Append the JSON representing the grid
+     * @param buf the builder that adds the JSON
+     */
+    void appendGrid(Map<String, Map<String, String>> fieldMap, StringBuilder buf) {
+        buf.append("      ").append(quoteName("grid")).append(": {\n");
+        buf.append("        ").append(quoteValue("columns")).append(": [");
+        appendSetElementsJSON(fieldMap, buf);
+        buf.append("]\n");  // end columns
+        buf.append("      }\n");    // end grid
+    }
+
+    /**
+     * Append information about each field to the string builder - the field name followed by
+     * an object representation
+     * @param fieldMap collection of field names and values
+     * @param codeDescFieldName the name of the code descriptor field
+     * @param codeDescFieldMap code descriptor attribute names and values
+     * @param buf the buffer being appended to
+     */
+    private void appendFields(Map<String, Map<String, String>> fieldMap,
+                              String codeDescFieldName,
+                              Map<String, Map<String, String>> codeDescFieldMap,
+                              StringBuilder buf) {
+        buf.append("    ").append(quoteName("fields")).append(": {\n");
+        boolean firstLoop;
+        for (Iterator<Map.Entry<String, Map<String, String>>> i = fieldMap.entrySet().iterator(); i.hasNext(); ) {
+            Map.Entry<String, Map<String, String>> me = i.next();
+            buf.append("      ").append(quoteName(me.getKey()));
+            buf.append(": {");  // start of attribute names and values
+
+            // append each attribute name and value
+            firstLoop = true;
+            if (me.getValue() != null) {
+                for (Map.Entry<String, String> attribute : me.getValue().entrySet()) {
+                    if (!firstLoop) {
+                        buf.append(", ");
+                    }
+                    firstLoop = false;
+                    appendAttributeKeyValue(buf, attribute);
+                }
+            }
+            buf.append('}');    // end of attribute names and values
+            if (i.hasNext() || codeDescFieldMap != null) {
+                buf.append(',');
+            }
+            buf.append('\n');
+        }
+
+        if (codeDescFieldMap != null) {
+            buf.append("      ").append(quoteName(codeDescFieldName)).append(": {");
+            firstLoop = true;
+            // Append the codeDesc attribute/value pairs
+            for (Map.Entry<String, String> attribute : codeDescFieldMap.get(codeDescFieldName).entrySet()) {
+                if (!firstLoop) {
+                    buf.append(", ");
+                }
+                firstLoop = false;
+                appendAttributeKeyValue(buf, attribute);
+            }
+            buf.append("}\n");
+        }
+        buf.append("    }\n");  // end fields
+    }
+
+    private void appendAttributeKeyValue(StringBuilder buf, Map.Entry<String, String> attribute) {
+        String key = attribute.getKey();
+        String value = attribute.getValue();
+        appendAttributeKeyValue(buf, key, value);
+    }
+
+    private void appendAttributeKeyValue(StringBuilder buf, String key, String value) {
+        buf.append(quoteName(key)).append(": ");
+        // determinePropertyMetaData causes some numeric or boolean values,
+        // e.g. for key "maxLength", to come in as Strings.  Don't quote these values.
+        if (NON_STRING_FIELDS.contains(key)) {
+            buf.append(value);
+        }
+        else {
+            appendValue(buf, value);
+        }
+    }
+
+    void appendKeys(String[] keys, StringBuilder buf) {
+        buf.append("    ").append(quoteName("key")).append(": [");
+        for (int i = 0; i < keys.length; i++) {
+            if (i > 0) {
+                buf.append(", ");
+            }
+            appendValue(buf, keys[i]);
+        }
+        buf.append("],\n");
+    }
+
+    void appendSetElementsJSON(Map<String, Map<String, String>> fieldMap, StringBuilder buf) {
+        boolean firstLoop = true;
+        for (String fieldName : fieldMap.keySet()) {
+            if (!firstLoop) {
+                buf.append(", ");
+            }
+            firstLoop = false;
+            appendValue(buf, fieldName);
+        }
+    }
+
+    /**
+     * Appends information about the indicated property value to the string builder
+     * @param builder the builder for the string being built
+     * @param value the property's value
+     */
+    void appendValue(StringBuilder builder, Object value) {
+        // Handle cases that don't require quotes
+        if (value instanceof Boolean || value instanceof Number) {
+            builder.append(value);
+        }
+        // Quotes required
+        else {
+            // In some cases, the String values may already be quoted with single-quotes.
+            // To make proper JSON, convert those to double quotes
+            if (value instanceof String) {
+                String valString = (String)value;
+                if (valString.startsWith("'") && valString.endsWith("'")) {
+                    valString = valString.substring(1, valString.length() -1);
+                    builder.append(quoteValue(valString));
+                }
+                else {  // The existing value isn't already surrounded by single quotes
+                    builder.append(quoteValue(value));
+                }
+            }
+            else { // nonString object that needs quotes
+                builder.append(quoteValue(value));
+            }
+        }   // else quotes required
+    }
+
+    /**
+     * Surround the indicated name with quotes, if any are required.
+     * @param name the name
+     * @return the name, possibly surrounded by quotes
+     */
+    private String quoteName(Object name) {
+        return quoteObject(name, propertyNameQuote);
+    }
+
+    /**
+     * Surround the indicated value with quotes, if any are required.
+     * @param value the value
+     * @return the value, possibly surrounded by quotes
+     */
+    private String quoteValue(Object value) {
+        return quoteObject(value, propertyValueQuote);
+    }
+
+    /**
+     * Surround the indicated value with quotes, if any are required.
+     * @param value the value
+     * @return the value, possibly surrounded by quotes
+     */
+    private String quoteObject(Object value, String quote) {
+        return quote + value + quote;
+    }
+
 
 
 }

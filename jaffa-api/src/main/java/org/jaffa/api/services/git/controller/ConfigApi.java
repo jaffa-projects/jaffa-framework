@@ -413,7 +413,14 @@ public class ConfigApi implements IConfigApi {
      */
     private Response postError(byte[] payload, File filePath) {
         Response response = null;
-        if (payload.length <= BYTE_ARRAY_INIT_LENGTH) {
+        if (filePath == null) {
+            log.warn("GCT_DIRECTORY property is not set");
+            response = Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity("Unable to complete this request because the GCT_DIRECTORY property is not set.")
+                    .build();
+        }
+        else if (payload.length <= BYTE_ARRAY_INIT_LENGTH) {
             log.warn("A file was not included in your API POST request");
             response = Response
                     .status(Response.Status.NO_CONTENT)

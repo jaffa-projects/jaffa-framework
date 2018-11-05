@@ -653,16 +653,18 @@ Jaffa.maintenance.plugins.MultiRowUpdate = Ext.extend(Ext.grid.GridPanel, {
         flexClass = flexClass[flexClass.length - 1];
 
         if (!ClassMetaData[flexClass]) {
-          // load metadata for the flex class
-          // @todo: load the metadata asynchronously and build the panel in the response handler
-          var metaSource = Ext.Ajax.synchronousRequest({
-            url: 'js/extjs/jaffa/metadata/classMetaData.jsp',
-            params: {
-              className: flexSource
+            // load metadata for the flex class
+            // @todo: load the metadata asynchronously and build the panel in the response handler
+            var metaSource = Ext.Ajax.synchronousRequest({
+                url: 'js/extjs/jaffa/metadata/classMetaData.jsp',
+                params: {
+                    className: flexSource,
+                    outputStyle: "JSON"
+                }
+            });
+            if (metaSource) {
+                ClassMetaData[flexClass] = Ext.decode(metaSource);
             }
-          });
-          if (metaSource)
-            eval(metaSource);
         }
 
 
