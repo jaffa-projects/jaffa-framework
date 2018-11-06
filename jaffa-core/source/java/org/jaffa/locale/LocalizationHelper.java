@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 import static org.jaffa.session.ContextManagerFactory.getApplicationRule;
+import org.jaffa.presentation.portlet.session.LocaleContext;
+import org.jaffa.util.LocaleHelper;
 
 /**
  * This class is used for Localization for handling.
@@ -40,6 +42,15 @@ public class LocalizationHelper {
 			return language;
 		}else{
 			return "";
+		}
+	}
+
+	/**
+	 * Helper method to override the Right to Left language with default locale
+	 */
+	public static void overrideRTL(){
+		if(LocaleContext.getLocale()!=null && isRTL(LocaleContext.getLocale().toString())) {
+			LocaleContext.setLocale(LocaleHelper.string2Locale(UserLocaleProvider.DEF_LOCALE));
 		}
 	}
 
