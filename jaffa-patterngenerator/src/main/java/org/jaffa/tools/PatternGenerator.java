@@ -489,7 +489,7 @@ public class PatternGenerator {
         writeWm(patternTemplate, context, tempFileName);
 
         // append to the audit.log
-        String log = '\n' + new DateTime().toString() + " - Processing PatternTemplate: " +
+        String log = '\n' + " - Processing PatternTemplate: " +
                 patternTemplate + " using PatternMetaData: " + patternMetaData + '\n' +
                 "Created temporary file: " + tempFileName;
         writeMessage(m_auditFile, log, true);
