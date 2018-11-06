@@ -952,14 +952,12 @@ Jaffa.component.PanelController = Ext.extend(Ext.util.Observable, {
 
       //Evaluate Layout Rule
       if (includeList.indexOf('LAYOUT') >= 0 && meta.layout) {
-        var layoutMap = {
-          '[dateonly.julian5]': 'yJ',
-          '[password]': 'password',
-          'password': 'password'
-        };
-        if(layoutMap[meta.layout]){
-          f.format = layoutMap[meta.layout];
+        if (meta.layout === '[dateonly.julian5]') {
+          f.format = 'yJ';
+        } else if (meta.layout === '[password]' || meta.layout === 'password') {
+          f.format = 'password';
         }
+
         if(f.initialConfig){
           f.initialConfig.format = f.format;
         }
