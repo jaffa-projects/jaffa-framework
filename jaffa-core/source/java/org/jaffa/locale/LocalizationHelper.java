@@ -46,12 +46,10 @@ public class LocalizationHelper {
 	}
 
 	/**
-	 * Helper method to override the Right to Left language with default locale
+	 * Overrides the locale with default locale
 	 */
-	public static void overrideRTL(){
-		if(LocaleContext.getLocale()!=null && isRTL(LocaleContext.getLocale().toString())) {
-			LocaleContext.setLocale(LocaleHelper.string2Locale(UserLocaleProvider.DEF_LOCALE));
-		}
+	public static void forceDefaultLocale(){
+		LocaleContext.setLocale(LocaleHelper.string2Locale(UserLocaleProvider.DEF_LOCALE));
 	}
 
 }
