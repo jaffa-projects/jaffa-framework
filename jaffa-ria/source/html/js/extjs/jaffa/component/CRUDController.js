@@ -642,7 +642,7 @@ Jaffa.component.CRUDController = Ext.extend(Jaffa.component.PanelController, {
           // CallBack to post save method
           Ext.MessageBox.show( {
               title : this.saveErrorTitle,
-              msg : msg,
+              msg : Ext.util.Format.htmlDecode(msg),
               // width : 400,
               buttons : Ext.MessageBox.OK,
               icon: Ext.MessageBox.ERROR
