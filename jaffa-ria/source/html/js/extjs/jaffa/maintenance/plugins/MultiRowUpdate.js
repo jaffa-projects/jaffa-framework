@@ -658,13 +658,11 @@ Jaffa.maintenance.plugins.MultiRowUpdate = Ext.extend(Ext.grid.GridPanel, {
             var metaSource = Ext.Ajax.synchronousRequest({
                 url: 'js/extjs/jaffa/metadata/classMetaData.jsp',
                 params: {
-                    className: flexSource,
-                    outputStyle: "JSON"
+              className: flexSource
                 }
             });
-            if (metaSource) {
-                ClassMetaData[flexClass] = Ext.decode(metaSource);
-            }
+          if (metaSource)
+            eval(metaSource);
         }
 
 
