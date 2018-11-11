@@ -38,14 +38,11 @@ Jaffa.maintenance.FlexFields = {
                     var metaSource = Ext.Ajax.synchronousRequest({
                         url: 'js/extjs/jaffa/metadata/classMetaData.jsp',
                         params: {
-                            className: flexSource,
-                            outputStyle: "JSON"
+              className: flexSource
                         }
                     });
-                    if (metaSource)
-                    {
-                        ClassMetaData[flexClass] = Ext.decode(metaSource);
-                    }
+          if (metaSource)
+            eval(metaSource);
                 }
 
                 for (var fieldName in ClassMetaData[flexClass].fields) {
@@ -101,13 +98,11 @@ Jaffa.maintenance.FlexFields = {
                 var metaSource = Ext.Ajax.synchronousRequest({
                     url: 'js/extjs/jaffa/metadata/classMetaData.jsp',
                     params: {
-                        className: flexSource,
-                        outputStyle: "JSON"
+                        className: flexSource
                     }
                 });
-                if (metaSource) {
-                    ClassMetaData[flexClass] = Ext.decode(metaSource);
-                }
+                if (metaSource)
+                    eval(metaSource);
             }
 
             // Pass the flexClass as the metaClass and dynaClass to each flex field
