@@ -11,7 +11,7 @@
 
     <groupId>org.jaffa</groupId>
     <artifactId>jaffa-framework</artifactId>
-    <version>8.0.2-SNAPSHOT</version>
+    <version>8.0.2</version>
     <packaging>pom</packaging>
 
     <name>Java Application Framework For All</name>
@@ -2068,7 +2068,7 @@
     <scm>
         <connection>scm:git:https://tapljs482.tapestry.local/jaffa/jaffa-framework.git</connection>
         <developerConnection>scm:git:https://tapljs482.tapestry.local/jaffa/jaffa-framework.git</developerConnection>
-      <tag>HEAD</tag>
+      <tag>jaffa-framework-8.0.2</tag>
   </scm>
 
 </project>
