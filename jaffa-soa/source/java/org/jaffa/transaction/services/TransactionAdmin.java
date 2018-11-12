@@ -50,9 +50,11 @@
 package org.jaffa.transaction.services;
 
 import org.apache.log4j.Logger;
+import org.jaffa.components.finder.DateTimeCriteriaField;
 import org.jaffa.components.finder.FinderTx;
 import org.jaffa.components.finder.OrderByField;
 import org.jaffa.components.finder.StringCriteriaField;
+import org.jaffa.datatypes.DateOnly;
 import org.jaffa.datatypes.DateTime;
 import org.jaffa.exceptions.ApplicationException;
 import org.jaffa.exceptions.ApplicationExceptions;
@@ -600,9 +602,22 @@ public class TransactionAdmin implements IQueueAdmin {
         }
 
         DateTime createdOn = getMessageCriteriaCreatedOn(criteria);
-        if ((createdOn != null) && (transaction.getCreatedOn() != null)) {
-            if (!transaction.getCreatedOn().equals(createdOn)) {
+        String operator  = (( null != criteria.getCreatedOn() && criteria.getCreatedOn().getOperator() != null ) ? criteria.getCreatedOn().getOperator() : null);
+        if (createdOn != null && transaction.getCreatedOn() != null) {
+            DateOnly criteriaCreatedDate = DateTime.toDateOnly(createdOn);
+            DateOnly transactionCreatedDate = DateTime.toDateOnly(transaction.getCreatedOn());
+            if (operator == null && !transactionCreatedDate.equals(criteriaCreatedDate)) {
                 return true;
+            } else if (operator != null && DateTimeCriteriaField.RELATIONAL_GREATER_THAN_EQUAL_TO.equals(operator)) {
+                return (!(transactionCreatedDate.isAfter(criteriaCreatedDate) || transactionCreatedDate.equals(criteriaCreatedDate)));
+            } else if (operator != null && DateTimeCriteriaField.RELATIONAL_SMALLER_THAN_EQUAL_TO.equals(operator)) {
+                return (!(transactionCreatedDate.isBefore(criteriaCreatedDate) || transactionCreatedDate.equals(criteriaCreatedDate)));
+            }  else if (operator != null && DateTimeCriteriaField.RELATIONAL_BETWEEN.equals(operator) && criteria.getCreatedOn().getValues().length>1){
+                    DateOnly fromCreatedOn = DateTime.toDateOnly(criteria.getCreatedOn().getValues()[0]);
+                    DateOnly ToCreatedOn = DateTime.toDateOnly(criteria.getCreatedOn().getValues()[1]);
+                    if (transactionCreatedDate.isBefore(fromCreatedOn) || transactionCreatedDate.isAfter(ToCreatedOn)){
+                        return true;
+                    }
             }
         }
 

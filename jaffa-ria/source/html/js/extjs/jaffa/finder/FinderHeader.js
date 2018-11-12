@@ -642,7 +642,11 @@ Jaffa.finder.FinderHeader = Ext.extend(Ext.Panel, {
         if (this.headerTitle) {
             var headerTitleEl = Ext.getCmp('headerTitle');
             if (headerTitleEl) {
-                var text = '<span class="headerTitle-text">' + this.headerTitle + Ext.util.Format.htmlEncode(this.generateHeaderTitleSuffix()) + '</span>';
+                var titleSuffix = this.generateHeaderTitleSuffix();
+                if(this.generateHeaderTitleSuffix() && this.generateHeaderTitleSuffix().indexOf('span') < 0){
+                  titleSuffix = Ext.util.Format.htmlEncode(titleSuffix);
+                }
+                text = '<span class="headerTitle-text">' + this.headerTitle + titleSuffix + '</span>';
                 headerTitleEl.setText(text);
             }
         }
