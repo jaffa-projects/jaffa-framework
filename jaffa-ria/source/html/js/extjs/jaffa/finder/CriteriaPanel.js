@@ -1392,16 +1392,10 @@ Jaffa.finder.FlexCriteria = function() {
         var metaSource = Ext.Ajax.synchronousRequest({
           url: 'js/extjs/jaffa/metadata/classMetaData.jsp',
           params: {
-                  className: flexClass,
-                  outputStyle: "JSON"
+            className: flexClass
           }
         });
-        if (metaSource) {
-            var decoded = Ext.decode(metaSource);
-            let start = flexClass.lastIndexOf(".") + 1;
-            var indexName = flexClass.substring(start, flexClass.length);
-            ClassMetaData[indexName] = decoded;
-        }
+        if (metaSource) eval(metaSource);
         
         // Retain only the simple name from the fully-qualified flex class name
         flexClass = flexClass.split('.');

@@ -773,25 +773,9 @@ Jaffa.form.FinderComboBox = Ext.extend(Ext.form.ComboBox, {
   ,loadMeta: function () {
     // load meta
     if (!this.meta && this.foreignKeyInfo) {
-        var jsonParams = JSON.parse(JSON.stringify(this.foreignKeyInfo));
-        jsonParams["outputStyle"] = "JSON";
-        var metaSourceJ = Ext.Ajax.synchronousRequest(
-            {
-                url: 'js/extjs/jaffa/metadata/finderMetaData.jsp',
-                params: jsonParams
-            });
-      if (metaSourceJ) {
-          var decodedMetaSource = Ext.decode(metaSourceJ);
-          // The DWRFunctionName will be something like "Material_Core_TemporaryOutFinder.find".
-          // The part before the "." is the service name.
-          let dotIndex = decodedMetaSource.finder.DWRFunctionName.indexOf(".");
-          var serviceName = decodedMetaSource.finder.DWRFunctionName.substring(0, dotIndex);
-          var dto = new Jaffa.data.FinderOutDto(decodedMetaSource);
-          var objectToApply = {};
-          objectToApply[serviceName] = dto;
-          Ext.apply(ClassMetaData, objectToApply);
-          this.meta = ClassMetaData[serviceName];
-      }
+      var metaSource = Ext.Ajax.synchronousRequest({url: 'js/extjs/jaffa/metadata/finderMetaData.jsp', params: this.foreignKeyInfo});
+      if (metaSource)
+        this.meta = eval(metaSource);
     }
 
     // load the supporting DWR script
