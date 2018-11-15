@@ -212,7 +212,7 @@ function rules() {
 		var line;
 		var singleLeft;
 		var singleRight;
-	    if(rtlLangValue=="ar_OM"){
+        if(isRTL =='true'){
 			displayX = findPosXRTL(elFoldingSection);
 			line = "right";
 			singleLeft = "singleRight";
@@ -254,7 +254,7 @@ function rules() {
 		//display the error message.
 
 		var isRTL = sessionStorage.getItem("isRTLlanguage");
-		if(Boolean(isRTL)){
+        if(isRTL == 'true'){
 			displayX = findPosXRTL(displayEl);
 			line = "right";
 			singleLeft = "singleRight";
