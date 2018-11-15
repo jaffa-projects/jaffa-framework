@@ -59,9 +59,7 @@ import org.jaffa.loader.IRepository;
 import org.jaffa.loader.components.ComponentManager;
 import org.jaffa.presentation.portlet.component.ComponentDefinition;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 
 /** This class is used to load the domain information from the Domain Objects based
  * on the XML data, into definition objects that can be used by the rest of the architecture
@@ -104,7 +102,7 @@ public class Loader {
      * @return Returns a Map where the key is the component name,
 	 * and the value is a ComponentDefinition object
      */
-	public static synchronized Map<String, ComponentDefinition> getComponentPool() {
+	public static ConcurrentMap<String, ComponentDefinition> getComponentPool() {
         IRepository<ComponentDefinition> repository = componentManager.getComponentRepository();
 		return repository.getMyRepository();
 	}

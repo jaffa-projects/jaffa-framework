@@ -50,9 +50,9 @@
 package org.jaffa.loader;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Interface for storing values in Repository.
@@ -142,14 +142,14 @@ public interface IRepository<T> {
      * Returns the MapRepository for based on the context of User
      * @return Map
      */
-    Map<String, T> getMyRepository();
+    ConcurrentMap<String, T> getMyRepository();
 
     /**
      * Returns the repository associated with the variation
      * @param variation
      * @return
      */
-    public Map<String, T> getRepositoryByVariation(String variation);
+    ConcurrentMap<String, T> getRepositoryByVariation(String variation);
 
 
     /**
@@ -158,10 +158,10 @@ public interface IRepository<T> {
      * @param variation
      * @return
      */
-    public T queryByVariation(String id, String variation);
+    T queryByVariation(String id, String variation);
 
     /**
      * Returns the Name of the repository
      */
-    public String getName();
+    String getName();
 }
