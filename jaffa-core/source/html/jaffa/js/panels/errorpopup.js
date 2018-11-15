@@ -116,12 +116,12 @@ function openDOMBrowser(activeElement) {
     writeln("</head>");
 	//Added the Localization code for RTL Error pop up 
 	var isRTL = sessionStorage.getItem("isRTLlanguage");
-		if(Boolean(isRTL)){
-    writeln("<body onLoad='init();' dir='rtl'>");
-		}
-		else{
-		writeln("<body onLoad='init();'>");	
-		}
+    if(isRTL == 'true'){
+      writeln("<body onLoad='init();' dir='rtl'>");
+    }
+    else{
+      writeln("<body onLoad='init();'>");
+    }
     writeln("<h1>");
 	writeln(jaffaMessageRoot.errorpopup.ErrorTitle);
 	writeln("</h1>");

@@ -70,10 +70,11 @@ if(LocaleContext.getLocale()!=null) {
     }
 }
 if(currentLocale != null){
-		log.debug("Request ExtJS Language Resources for " + currentLocale);
+        log.debug("Request ExtJS Language Resources for " + currentLocale);
+        String langFilePath="/js/extjs/locale/ext-lang-"+ currentLocale +".js";
 %>
-		<!-- Locale Resources for <%= currentLocale %>] -->
-		<jwr:script src="/js/extjs/locale/ext-lang-<%= currentLocale %>.js"/>
+        <!-- Locale Resources for <%= currentLocale %>] -->
+        <jwr:script src="<%= langFilePath %>"/>
 <%
 }
 // Figure out the currency symbol to use.
