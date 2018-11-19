@@ -186,8 +186,8 @@
     String currentUserId = request.getUserPrincipal().getName();
     String pageRef = request.getParameter("pageRef");
     String eventId = StringHelper.escapeJavascript(request.getParameter("eventId"));
-    String name = StringHelper.escapeJavascript(request.getParameter("name"));
-    String data = StringHelper.escapeJavascript(request.getParameter("data"));
+    String name = request.getParameter("name");
+    String data = request.getParameter("data");
 
     if ("save".equals(eventId)) {
         writeProperty(currentUserId, pageRef, name, data);
