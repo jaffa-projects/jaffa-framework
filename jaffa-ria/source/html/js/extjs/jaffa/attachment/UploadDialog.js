@@ -166,7 +166,7 @@ Jaffa.attachment.UploadDialog = Ext.extend(Ext.ux.UploadDialog.Dialog, {
     store.add(
       new Jaffa.attachment.FileRecord({
           state: Ext.ux.UploadDialog.FileRecord.STATE_QUEUE,
-          filename: input_file.dom.value,
+          filename: input_file.dom.value.replace('C:\\fakepath\\', ''),
           note: this.i18n.note_queued_to_upload,
           input_element: input_file
         })
