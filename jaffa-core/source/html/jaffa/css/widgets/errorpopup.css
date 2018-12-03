@@ -82,3 +82,20 @@ span.next {
 	background-repeat: no-repeat;
 	padding-right: 15px;
 }
+/*Added the Localization code for RTL Error pop up next and previous buttons*/
+td.next_rtl{
+	text-align: left !important;
+	width: 100%;
+}
+span.next_rtl {
+	background-image: url(../../imgs/icons/prev.gif);
+	background-position: left;
+	background-repeat: no-repeat;
+	padding-left: 15px;
+}
+span.previous_rtl {
+	background-image: url(../../imgs/icons/next.gif);
+	background-position: right;
+	background-repeat: no-repeat;
+	padding-right: 15px;
+}
