@@ -148,7 +148,7 @@ public class RepositoryJsonService implements IRepositoryJsonService {
         Map<String, IManager> managerMap = managerRepositoryService.getManagerMap();
 
         MultivaluedMap<String, String> queryParams = null;
-        String baseline = "false";
+        String baseline = "true";
         if (uriInfo != null) {
             queryParams = uriInfo.getQueryParameters();
             if (queryParams != null) {
