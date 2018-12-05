@@ -1440,6 +1440,10 @@ public class Transaction extends Persistent {
     /** A convenience method to set the errorMessage based on the input Exception, as well as set the status to E. */
     public void stampError(Exception exception) throws ValidationException, FrameworkException {
         String em = ExceptionHelper.extractErrorMessage(exception);
+        if(log.isDebugEnabled()){
+            String debugInfo = "\nDebug Info: Logged in User: "+System.getProperty("user.name");
+            em+=debugInfo;
+        }
         int maxLength = ((StringFieldMetaData) TransactionMeta.META_ERROR_MESSAGE).getLength();
         if (em.length() > maxLength)
             em = em.substring(0, maxLength);

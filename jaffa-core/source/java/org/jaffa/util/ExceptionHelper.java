@@ -201,12 +201,14 @@ public class ExceptionHelper {
      */
     public static String extractErrorMessage(Throwable exception) {
         String errorMessage = null;
+        int i = 0;
         try {
             throwAF(exception);
-            errorMessage = exception.getLocalizedMessage();
-        } catch (FrameworkException e) {
-            errorMessage = e.getLocalizedMessage();
-        } catch (ApplicationExceptions e) {
+            while(exception instanceof RuntimeException && i++ < 5){// stop going into recursive loop
+                exception = exception.getCause();
+            }
+            errorMessage = exception!=null ? exception.getLocalizedMessage() : null;
+        } catch (ApplicationExceptions | FrameworkException e) {
             errorMessage = e.getLocalizedMessage();
         }
         if (errorMessage == null)
