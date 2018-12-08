@@ -114,33 +114,51 @@ function openDOMBrowser(activeElement) {
       writeln("addMessage(\"" + messageList[pi].replace(/&lt;.*?&gt;/g, '') + "\");");
     writeln("</script>");
     writeln("</head>");
-	//Added the Localization code for RTL Error pop up 
-	var isRTL = sessionStorage.getItem("isRTLlanguage");
+    //Added the Localization code for RTL Error pop up. Added  previous_rtl, next_rtl classes for Next and Previous buttons , these classes are used only when  isRTL  is true and corresponding styles  will be applied in errorpopup.css
+    var isRTL = sessionStorage.getItem("isRTLlanguage");
     if(isRTL == 'true'){
-      writeln("<body onLoad='init();' dir='rtl'>");
+        writeln("<body onLoad='init();' dir='rtl'>");
+        writeln("<h1>");
+        writeln(jaffaMessageRoot.errorpopup.ErrorTitle);
+        writeln("</h1>");
+        writeln("<table width='100%' cellspacing='0' cellpadding='10'>")
+        writeln("<tr><td height='25'></td></tr><tr><td><table><tr><td>");
+        writeln("<p>");
+        writeln(jaffaMessageRoot.errorpopup.Message+":");
+        writeln("</p>");
+        writeln("</td><td><p id='msg'></p></td>");
+        writeln("</tr></table></td></tr><tr><td align='right'><table><tr><td class='previous'>");
+        writeln("<span id='previous' class='previous_rtl'><a href='javascript:previous()'>");
+        writeln(jaffaMessageRoot.errorpopup.PreviousLink);
+        writeln("</a></span></td><td></td>");
+        writeln("<td class='next_rtl'><span id='next' class='next_rtl'><a href='javascript:next()'>");
+        writeln(jaffaMessageRoot.errorpopup.NextLink);
+        writeln("</a></span>");
+        writeln("</td><td></td><td>");
+        writeln("</td></tr></table></td></tr></table>");
+        writeln("<script>window.onload(init())</script>");
+    }else{
+        writeln("<body onLoad='init();'>");	
+        writeln("<h1>");
+        writeln(jaffaMessageRoot.errorpopup.ErrorTitle);
+        writeln("</h1>");
+        writeln("<table width='100%' cellspacing='0' cellpadding='10'>")
+        writeln("<tr><td height='25'></td></tr><tr><td><table><tr><td>");
+        writeln("<p>");
+        writeln(jaffaMessageRoot.errorpopup.Message+":");
+        writeln("</p>");
+        writeln("</td><td><p id='msg'></p></td>");
+        writeln("</tr></table></td></tr><tr><td align='right'><table><tr><td class='previous'>");
+        writeln("<span id='previous' class='previous'><a href='javascript:previous()'>");
+        writeln(jaffaMessageRoot.errorpopup.PreviousLink);
+        writeln("</a></span></td><td></td>");
+        writeln("<td class='next'><span id='next' class='next'><a href='javascript:next()'>");
+        writeln(jaffaMessageRoot.errorpopup.NextLink);
+        writeln("</a></span>");
+        writeln("</td><td></td><td>");
+        writeln("</td></tr></table></td></tr></table>");
+        writeln("<script>window.onload(init())</script>");
     }
-    else{
-      writeln("<body onLoad='init();'>");
-    }
-    writeln("<h1>");
-	writeln(jaffaMessageRoot.errorpopup.ErrorTitle);
-	writeln("</h1>");
-    writeln("<table width='100%' cellspacing='0' cellpadding='10'>")
-    writeln("<tr><td height='25'></td></tr><tr><td><table><tr><td>");
-    writeln("<p>");
-	writeln(jaffaMessageRoot.errorpopup.Message+":");
-	writeln("</p>");
-    writeln("</td><td><p id='msg'></p></td>");
-    writeln("</tr></table></td></tr><tr><td align='right'><table><tr><td class='previous'>");
-    writeln("<span id='previous' class='previous'><a href='javascript:previous()'>");
-	writeln(jaffaMessageRoot.errorpopup.PreviousLink);
-	writeln("</a></span>");
-    writeln("</td><td></td><td class='next'><span id='next' class='next'><a href='javascript:next()'>");
-	writeln(jaffaMessageRoot.errorpopup.NextLink);
-	writeln("</a></span>");
-    writeln("</td><td></td><td>");
-    writeln("</td></tr></table></td></tr></table>");
-    writeln("<script>window.onload(init())</script>");
 
     // If the target for an event is a new window, and the event-handler throws errors, then along with the error-popup, the current-page was being re-rendered in the new window
     // The following code closes the new window. It assumes that the history for such an unnecessary window will be 1. All other windows have history > 1
