@@ -211,7 +211,7 @@ public class ExceptionHelper {
         } catch (ApplicationExceptions | FrameworkException e) {
             errorMessage = e.getLocalizedMessage();
         }
-        if (errorMessage == null)
+        if (errorMessage == null && exception!=null)
             errorMessage = exception.getClass().getName();
         return errorMessage;
     }
