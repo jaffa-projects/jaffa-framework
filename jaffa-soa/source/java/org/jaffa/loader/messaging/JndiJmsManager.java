@@ -75,6 +75,13 @@ import java.util.Set;
  */
 public class JndiJmsManager implements IManager {
 
+    private static final String JP_ACTIVEMQ_BROKER_URL ="java.naming.provider.url";
+    private static final String JP_ACTIVEMQ_BROKER_JMS_USER ="activemq.broker.jms.user";
+    private static final String JP_ACTIVEMQ_BROKER_JMS_PASSWORD ="activemq.broker.jms.password";
+
+    private static final String ACTIVEMQ_BROKER_URL ="ACTIVEMQ_BROKER_URL";
+    private static final String ACTIVEMQ_BROKER_JMS_USER ="ACTIVEMQ_BROKER_JMS_USER";
+    private static final String ACTIVEMQ_BROKER_JMS_PASSWORD ="ACTIVEMQ_BROKER_JMS_PASSWORD";
     /**
      * The location of the configuration file.
      */
@@ -198,15 +205,30 @@ public class JndiJmsManager implements IManager {
      * @param jmsConfig
      */
     private void populateJmsConfig(JmsConfig jmsConfig) {
+        String namingProviderUrl = System.getProperty(JP_ACTIVEMQ_BROKER_URL)!=null && System.getProperty(JP_ACTIVEMQ_BROKER_URL).length() > 0 ? System.getProperty(JP_ACTIVEMQ_BROKER_URL) : null;
+        String user = System.getProperty(JP_ACTIVEMQ_BROKER_JMS_USER)!=null && System.getProperty(JP_ACTIVEMQ_BROKER_JMS_USER).length() > 0 ? System.getProperty(JP_ACTIVEMQ_BROKER_JMS_USER) : null;
+        String password = System.getProperty(JP_ACTIVEMQ_BROKER_JMS_PASSWORD)!=null && System.getProperty(JP_ACTIVEMQ_BROKER_JMS_PASSWORD).length() > 0 ? System.getProperty(JP_ACTIVEMQ_BROKER_JMS_PASSWORD) : null;
+
+        //If environment variables are found, use env variables
+        if(System.getenv(ACTIVEMQ_BROKER_URL)!=null && System.getenv(ACTIVEMQ_BROKER_URL).length() > 0){
+            namingProviderUrl = System.getenv(ACTIVEMQ_BROKER_URL);
+        }
+        if(System.getenv(ACTIVEMQ_BROKER_JMS_USER)!=null && System.getenv(ACTIVEMQ_BROKER_JMS_USER).length() > 0){
+            user = System.getenv(ACTIVEMQ_BROKER_JMS_USER);
+        }
+        if(System.getenv(ACTIVEMQ_BROKER_JMS_PASSWORD)!=null && System.getenv(ACTIVEMQ_BROKER_JMS_PASSWORD).length() > 0){
+            password = System.getenv(ACTIVEMQ_BROKER_JMS_PASSWORD);
+        }
+
         if(jmsConfig!=null && jmsConfig.getJndiContext()!=null
-                && System.getProperty("java.naming.provider.url")!=null && System.getProperty("java.naming.provider.url").length() > 0) {
+                && namingProviderUrl!=null) {
             for (Param param : jmsConfig.getJndiContext().getParam()) {
-                if ("java.naming.provider.url".equals(param.getName())) {
-                    param.setValue(System.getProperty("java.naming.provider.url"));
+                if (JP_ACTIVEMQ_BROKER_URL.equals(param.getName())) {
+                    param.setValue(namingProviderUrl);
                 }
             }
-            jmsConfig.setUser(System.getProperty("activemq.broker.jms.user"));
-            jmsConfig.setPassword(System.getProperty("activemq.broker.jms.password"));
+            jmsConfig.setUser(user);
+            jmsConfig.setPassword(password);
         }
     }
 }

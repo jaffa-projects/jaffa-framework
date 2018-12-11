@@ -288,7 +288,13 @@ public class ApplicationRulesManager implements IManager {
         Matcher matcher = pt.matcher(appRuleValue);
 
         while (matcher.find()) {
-          String tokenValue = getPropertyValue(properties,  matcher.group(1));
+            String tokenValue;
+            if (matcher.group(1)!=null && (matcher.group(1).startsWith("env.") || matcher.group(1).startsWith("ENV."))
+                    && matcher.group(1).length() > 4) {
+                tokenValue = System.getenv(matcher.group(1).substring(4));
+            }else {
+                tokenValue = getPropertyValue(properties, matcher.group(1));
+            }
             if (tokenValue != null) {
                 appRuleValue = StringHelper.replace(appRuleValue, matcher.group(0), tokenValue);
                 appRuleValue = replaceTokens(properties, appRuleValue);
