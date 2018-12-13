@@ -292,6 +292,10 @@ public class ApplicationRulesManager implements IManager {
             if (matcher.group(1)!=null && (matcher.group(1).startsWith("env.") || matcher.group(1).startsWith("ENV."))
                     && matcher.group(1).length() > 4) {
                 tokenValue = System.getenv(matcher.group(1).substring(4));
+                //If no environment variable is defined, remove the apprule value which is ${env.ENV_VAR}
+                if(tokenValue == null){
+                    tokenValue = "";
+                }
             }else {
                 tokenValue = getPropertyValue(properties, matcher.group(1));
             }
