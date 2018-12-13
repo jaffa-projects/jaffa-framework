@@ -265,7 +265,7 @@ public class ApplicationRulesManager implements IManager {
         properties.load(resourceInputStream);
         for (Object property : properties.keySet()) {
             String systemPropertyValue = System.getProperty((String) property);
-            if (systemPropertyValue == null || "".equals(systemPropertyValue)) {
+            if (systemPropertyValue == null) {
                 systemPropertyValue = replaceTokens(properties, properties.getProperty((String) property));
             }
             properties.setProperty((String) property, systemPropertyValue);
@@ -312,7 +312,7 @@ public class ApplicationRulesManager implements IManager {
    */
     private String getPropertyValue(Properties properties, String key){
         String systemPropertyValue = System.getProperty(key);
-        if (systemPropertyValue == null || "".equals(systemPropertyValue)) {
+        if (systemPropertyValue == null) {
             systemPropertyValue = properties.getProperty(key);
         }
         return systemPropertyValue;
