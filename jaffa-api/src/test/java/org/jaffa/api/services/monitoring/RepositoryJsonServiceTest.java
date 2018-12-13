@@ -109,7 +109,7 @@ public class RepositoryJsonServiceTest {
         setupRoleManager();
         UriInfo uriInfo = null;
         String result = repositoryJsonService.getRepository("Role", uriInfo);
-        assertTrue(result.equals("{\"test.role\":{\"description\":\"p4\"}}"));
+        assertTrue(result.equals("{\"test.role\":{\"description\":\"p2\"}}"));
     }
 
     @Test
