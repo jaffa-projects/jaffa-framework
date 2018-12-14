@@ -619,7 +619,8 @@ if(Jaffa && Jaffa.component && Jaffa.component.PanelController)
 	'logoutButtonText':						'<%=getMsg("label.jaffaRIA.Button.Logout")%>',
 	'settingsButtonText':					'<%=getMsg("label.jaffaRIA.Button.Settings")%>',
 	'autoRefreshDelaySeconds':				'<%=getMsg("label.jaffa.jaffaRIA.finder.FinderHeader.autoRefreshDelaySeconds")%>',
-	'allProgramsButtonText':				'<%=getMsg("label.jaffaRIA.DropDownMenu.AllPrograms")%>'
+	'allProgramsButtonText':				'<%=getMsg("label.jaffaRIA.DropDownMenu.AllPrograms")%>',
+	'serverIdText':							'<%=getMsg("label.ContractWarehouse.Core.DataInstance.InstanceId")%>'
   });
 
   Ext.override(Jaffa.component.CopyController, {
