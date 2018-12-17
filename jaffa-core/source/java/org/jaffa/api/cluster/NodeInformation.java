@@ -79,7 +79,10 @@ public class NodeInformation {
     private static final String LB_COOKIE_VALUE = "LB_COOKIE_VALUE";
 
     /** The name of the system property containing the application's base URL. */
-    private static final String APP_BASE_URL = "app.base.url";
+    private static final String JP_APP_BASE_URL = "app.base.url";
+
+    /** The name of the system property containing the application's base URL. */
+    private static final String APP_BASE_URL = "APP_BASE_URL";
 
     @Expose
     private String name;
@@ -105,7 +108,7 @@ public class NodeInformation {
      */
     public NodeInformation() throws UnknownHostException {
         this.name = InetAddress.getLocalHost().getHostName();
-        this.href = System.getProperty(APP_BASE_URL);
+        this.href = System.getenv(APP_BASE_URL)!=null ? System.getenv(APP_BASE_URL) : System.getProperty(JP_APP_BASE_URL);
         this.loadBalancerCookieName = System.getProperty(LB_COOKIE_NAME);
         this.loadBalancerCookieValue = System.getProperty(LB_COOKIE_VALUE);
         this.links = new ArrayList<>();
@@ -218,7 +221,7 @@ public class NodeInformation {
      * @return the node name
      */
     public static String getLoadBalancerNodeId() {
-        String id = System.getProperty(APP_BASE_URL);
+        String id = System.getenv(APP_BASE_URL)!=null ? System.getenv(APP_BASE_URL) : System.getProperty(JP_APP_BASE_URL);
         String cookieValue = System.getProperty(LB_COOKIE_VALUE);
 
         if (id != null && cookieValue != null)
