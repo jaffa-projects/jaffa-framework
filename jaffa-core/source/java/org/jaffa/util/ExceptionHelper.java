@@ -207,7 +207,7 @@ public class ExceptionHelper {
             while(exception instanceof RuntimeException && i++ < 5){// stop going into recursive loop
                 exception = exception.getCause();
             }
-            errorMessage = exception!=null ? exception.getLocalizedMessage() : null;
+            errorMessage = exception!=null ? exception.getLocalizedMessage() : "";
         } catch (ApplicationExceptions | FrameworkException e) {
             errorMessage = e.getLocalizedMessage();
         }
