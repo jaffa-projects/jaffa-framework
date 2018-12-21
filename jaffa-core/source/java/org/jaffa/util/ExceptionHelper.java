@@ -200,7 +200,7 @@ public class ExceptionHelper {
      * @return the message from the input Exception.
      */
     public static String extractErrorMessage(Throwable exception) {
-        String errorMessage = null;
+        String errorMessage = "";
         int i = 0;
         try {
             throwAF(exception);
@@ -211,7 +211,7 @@ public class ExceptionHelper {
         } catch (ApplicationExceptions | FrameworkException e) {
             errorMessage = e.getLocalizedMessage();
         }
-        if (errorMessage == null && exception!=null)
+        if (errorMessage.length() == 0 && exception!=null)
             errorMessage = exception.getClass().getName();
         return errorMessage;
     }
