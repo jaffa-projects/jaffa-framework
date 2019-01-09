@@ -141,6 +141,8 @@ Jaffa.finder.FinderHeader = Ext.extend(Ext.Panel, {
 	
 	autoRefreshDelaySeconds : 's',
 
+	serverIdText: 'Server ID',
+
     /** @cfg {Object} settingsComponent
      * This should be a command object as returned by the menuIndex_json.jsp.
      * Typically this would have parameters like <ul>
@@ -574,8 +576,21 @@ Jaffa.finder.FinderHeader = Ext.extend(Ext.Panel, {
                     },
                     'render': function(){
                         var appVersion;
-                        if (this.ownerCt && this.ownerCt.ownerCt && this.ownerCt.ownerCt.ownerCt)
+                        var serverId;
+                        if (this.ownerCt && this.ownerCt.ownerCt && this.ownerCt.ownerCt.ownerCt){
                             appVersion = this.ownerCt.ownerCt.ownerCt.appVersion;
+                            serverId = this.ownerCt.ownerCt.ownerCt.serverId;
+                        }
+                        if (serverId){
+                          var txt = document.createElement("span");
+                          txt.innerHTML=this.ownerCt.ownerCt.ownerCt.serverIdText + '-' + serverId;
+                          txt.style.fontWeight="bold";
+                          txt.style.color="Gray";
+                          txt.style.position="absolute";
+                          txt.style.bottom="30px";
+                          txt.style.left="2px";
+                          this.toolsPanel.dom.appendChild(txt);
+                        }
                         if (appVersion){
                             var txt = document.createElement("span");
                             txt.innerHTML=appVersion;
