@@ -270,7 +270,17 @@ public class Config {
         Matcher matcher = pt.matcher(configValue);
 
         while (matcher.find()) {
-            String tokenValue = getPropertyValue(matcher.group(1));
+            String tokenValue;
+            if (matcher.group(1)!=null && (matcher.group(1).startsWith("env.") || matcher.group(1).startsWith("ENV."))
+                    && matcher.group(1).length() > 4) {
+                tokenValue = System.getenv(matcher.group(1).substring(4));
+                //If no environment variable is defined, remove the apprule value which is ${env.ENV_VAR}
+                if(tokenValue == null){
+                    tokenValue = "";
+                }
+            }else {
+                tokenValue = getPropertyValue(matcher.group(1));
+            }
             if (tokenValue != null) {
                 configValue = StringHelper.replace(configValue, matcher.group(0), tokenValue);
             }
