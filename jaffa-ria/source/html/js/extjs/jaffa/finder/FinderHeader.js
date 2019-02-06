@@ -581,7 +581,7 @@ Jaffa.finder.FinderHeader = Ext.extend(Ext.Panel, {
                             appVersion = this.ownerCt.ownerCt.ownerCt.appVersion;
                             serverId = this.ownerCt.ownerCt.ownerCt.serverId;
                         }
-                        if (serverId){
+                        if (serverId && serverId != 'null' && serverId != ''){
                           var txt = document.createElement("span");
                           txt.innerHTML=this.ownerCt.ownerCt.ownerCt.serverIdText + '-' + serverId;
                           txt.style.fontWeight="bold";

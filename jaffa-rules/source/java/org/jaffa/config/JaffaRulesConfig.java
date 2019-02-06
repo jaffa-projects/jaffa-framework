@@ -64,6 +64,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.env.Environment;
 
 import java.io.File;
@@ -81,10 +82,12 @@ public class JaffaRulesConfig {
      /**
      * Configure the validator factory
      *
+     * @DependsOn aopFolderWatcher the method that loads all metadata and resources needed by ruleValidatorFactory     *
      * @return validator factory
      */
     @Bean(name = "ruleValidatorFactory")
     @Scope(BeanDefinition.SCOPE_SINGLETON)
+    @DependsOn({"aopFolderWatcher"})
     public RuleValidatorFactory ruleValidatorFactory() {
         RuleValidatorFactory factory = new RuleValidatorFactory();
         factory.addValidatorTypes("mandatory", "max-length", "min-length", "case-type", "max-value", "min-value",
@@ -96,10 +99,12 @@ public class JaffaRulesConfig {
     /**
      * Configure the initializer factory
      *
+     * @DependsOn aopFolderWatcher the method that loads all metadata and resources needed by initializerFactory
      * @return initializer factory
      */
     @Bean
     @Scope(BeanDefinition.SCOPE_SINGLETON)
+    @DependsOn({"aopFolderWatcher"})
     public InitializerFactory initializerFactory() {
         return new RuleInitializerFactory();
     }
