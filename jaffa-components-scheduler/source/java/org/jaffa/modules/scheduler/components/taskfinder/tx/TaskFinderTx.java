@@ -116,27 +116,16 @@ public class TaskFinderTx implements ITaskFinder {
                 if (log.isDebugEnabled())
                     log.debug("The Scheduler has been shutdown. The Task list cannot be obtained");
             } else {
-                ScheduledTask[] tasks = null;
-
-
-                if(SecurityManager.checkFunctionAccess("Jaffa.Scheduler.Task.InquiryAll"))
-                    tasks = sh.getTasks(null ,taskType!=null?taskType:null);
-                else
-                    tasks = sh.getTasks(org.jaffa.security.SecurityManager.getPrincipal().getName() ,taskType!=null?taskType:null);
-
-                if (tasks != null) {
-                    Collection<TaskFinderOutRowDto> rows = new LinkedList<TaskFinderOutRowDto>();
-                    for (ScheduledTask task : tasks) {
-                        if (SchedulerBrowser.hasBrowseTaskAccess(task)) {
-                            TaskFinderOutRowDto row = new TaskFinderOutRowDto(task);
-                            if (row.getFailedTaskCount() != null && row.getFailedTaskCount() > 0)
-                                row.setLastError(findLastError(uow, task.getScheduledTaskId()));
-                            row.setHasAdminTaskAccess(SchedulerBrowser.hasAdminTaskAccess(task.getTaskType()));
-                            rows.add(row);
-                        }
+                Collection<TaskFinderOutRowDto> rows = new LinkedList<TaskFinderOutRowDto>();
+                String[] taskTypes = taskType != null ? taskType.split(",") : null;
+                if(taskTypes != null){
+                    for(String tempTaskType : taskTypes){
+                        populateTaskTypes(uow,tempTaskType,sh,rows);
                     }
-                    output.setRows(rows.toArray(new TaskFinderOutRowDto[rows.size()]));
-                }
+                } else {
+                    populateTaskTypes(uow,taskType,sh,rows);
+                 }
+                output.setRows((TaskFinderOutRowDto[])rows.toArray(new TaskFinderOutRowDto[rows.size()]));
             }
 
             if (log.isDebugEnabled())
@@ -280,4 +269,26 @@ public class TaskFinderTx implements ITaskFinder {
         else
             return null;
     }
+
+
+    private void populateTaskTypes(UOW uow, String taskType, SchedulerHelper sh, Collection<TaskFinderOutRowDto> rows) throws FrameworkException, ApplicationExceptions{
+        ScheduledTask[] tasks = null;
+        if(SecurityManager.checkFunctionAccess("Jaffa.Scheduler.Task.InquiryAll"))
+            tasks = sh.getTasks(null ,taskType!=null?taskType:null);
+        else
+            tasks = sh.getTasks(org.jaffa.security.SecurityManager.getPrincipal().getName() ,taskType!=null?taskType:null);
+        if (tasks != null) {
+            for (ScheduledTask task : tasks) {
+                if (SchedulerBrowser.hasBrowseTaskAccess(task)) {
+                    TaskFinderOutRowDto row = new TaskFinderOutRowDto(task);
+                    if (row.getFailedTaskCount() != null && row.getFailedTaskCount() > 0)
+                        row.setLastError(findLastError(uow, task.getScheduledTaskId()));
+                    row.setHasAdminTaskAccess(SchedulerBrowser.hasAdminTaskAccess(task.getTaskType()));
+                    rows.add(row);
+                }
+            }
+
+        }
+    }
+
 }
