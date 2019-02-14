@@ -116,6 +116,8 @@ public class TransactionAdmin implements IQueueAdmin {
 
     private static final Logger log = Logger.getLogger(TransactionAdmin.class);
     public static final String QUEUE_SYSTEM_ID = "Transaction";
+    public static final String QUEUE_JAFFA ="jaffa_";
+    public static final String QUEUE_JMS ="JMS";
     public static final MessageGraph.Status[] SUPPORTED_MESSAGE_STATUS = MessageGraph.Status.values();
     public static final Boolean SUPPORTS_TECHNICAL_FIELDS = Boolean.FALSE;
     public static final Boolean SUPPORTS_BUSINESS_EVENT_LOGS = Boolean.TRUE;
@@ -859,6 +861,10 @@ public class TransactionAdmin implements IQueueAdmin {
                 if (typeInfo != null && typeInfo.getDisplayParam() != null) {
                     Collection<MessageFieldMetaData> supportedApplicationFields = new LinkedList<MessageFieldMetaData>();
                     for (DisplayParam displayParam : typeInfo.getDisplayParam()) {
+                        //GOLD-87103 : Created By displayed twice in Queue Manager .
+                        //Ignore fields that are included in the main graph or are part of the technical-details
+                        if (displayParam.getName().startsWith(QUEUE_JMS) || displayParam.getName().startsWith(QUEUE_JAFFA))
+                            continue;
                         MessageFieldMetaData supportedApplicationField = new MessageFieldMetaData();
                         if (pf.isFieldIncluded("queueMetaData.supportedApplicationFields.name")) {
                             supportedApplicationField.setName(displayParam.getName());
