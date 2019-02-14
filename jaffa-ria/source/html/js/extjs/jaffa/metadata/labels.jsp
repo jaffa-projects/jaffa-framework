@@ -18,6 +18,7 @@ Should be included in the main JSP that loads all the java script using the foll
 <%@ page import = "java.io.*,java.net.URL,java.util.*,javax.servlet.http.*" %>
 <%@ page import = "org.jaffa.util.URLHelper,org.jaffa.util.MessageHelper,org.jaffa.security.SecurityTag,org.jaffa.util.StringHelper" %>
 <%@ page import = "org.apache.log4j.Logger" %>
+<%@ page import="org.jaffa.security.filter.FileFilter" %>
 <%!
     private static final Logger log = Logger.getLogger("js.extjs.jaffa.labels");
 
@@ -95,6 +96,7 @@ Should be included in the main JSP that loads all the java script using the foll
 <%
 boolean editor = SecurityTag.hasComponentAccess(request, "Jaffa.Admin.LabelEditor");
 String ref = request.getParameter("ref");
+ref = FileFilter.filterUserInputPath(ref);
 String token = request.getParameter("token");
 if(ref!=null&&token==null) {
     // Read the tokens for this page and create and populate the Labels object

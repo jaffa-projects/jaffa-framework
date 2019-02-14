@@ -58,6 +58,7 @@ import org.jaffa.rules.AopXmlLoader;
 import org.jaffa.rules.meta.MetaDataRepository;
 import org.jaffa.rules.rulemeta.Rule;
 import org.jaffa.rules.rulemeta.RuleRepository;
+import org.jaffa.security.filter.FileFilter;
 import org.jaffa.util.LabelHelper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -217,14 +218,20 @@ public class MetaDataWriter {
             transformer.setOutputProperty(OutputKeys.METHOD, "xml");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
             DOMSource source = new DOMSource(document);
-            file = new File(new URI(cmd.getSourceFileName()));
+            String filteredSourceFileName = FileFilter.filterUserInputFileName(cmd.getSourceFileName());
+            if (filteredSourceFileName == null) {
+                log.error("Error resolving source file name.");
+                throw new IllegalArgumentException();
+            }
+            file = new File(new URI(filteredSourceFileName));
             log.debug("Writing aop file to: " + file.getAbsolutePath());
             File parentDir = file.getParentFile();
             if (!parentDir.exists())
                 parentDir.mkdirs();
             StreamResult result = new StreamResult(file);
             transformer.transform(source, result);
-        } catch (javax.xml.transform.TransformerException te) {
+        }
+        catch (javax.xml.transform.TransformerException te) {
             log.error("Error writing xml document into file.");
             throw new MetaDataWriterException(MetaDataWriterException.XML_PARSE_ERROR, null, te);
         } catch (URISyntaxException se) {

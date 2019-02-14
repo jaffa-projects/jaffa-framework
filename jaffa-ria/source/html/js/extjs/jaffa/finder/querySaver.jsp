@@ -7,6 +7,7 @@
 <%@page import = "org.jaffa.util.URLHelper,org.jaffa.util.MessageHelper,org.jaffa.security.SecurityTag, org.jaffa.session.ContextManagerFactory" %>
 <%@page import = "org.apache.log4j.Logger" %>
 <%@ page import="org.jaffa.util.StringHelper" %>
+<%@ page import="org.jaffa.security.filter.FileFilter" %>
 <%!
     private static final Logger log = Logger.getLogger("js.extjs.jaffa.querySaver");
     private static final String PROPERTY_USER_PREFERENCES_FOLDER = "user.preferences.folder";
@@ -86,6 +87,7 @@
 %>
 <%
     String pageRef = request.getParameter("pageRef");
+    pageRef = FileFilter.filterUserInputPath(pageRef);
     String eventId = request.getParameter("eventId");
     Boolean isDefault = Boolean.valueOf(request.getParameter("isDefault"));
     String queryName = request.getParameter("queryName");
