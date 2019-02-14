@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletConfig;
 import org.apache.log4j.Logger;
 import org.jaffa.datatypes.Parser;
+import org.jaffa.security.filter.FileFilter;
 
 /** Servlet needed for FormSelectionMaintenance to open and display pdf
  *  Include the following in web.xml
@@ -69,8 +70,10 @@ public class ShowPdfServlet extends HttpServlet {
 
         if(log.isDebugEnabled())
             log.debug("path===>"+path);
-        //read the file name.
-        File file = new File(tmpDir+File.separator+path);
+
+        //Pass the request pdf parameter through a whitelist
+        String filteredFilename = FileFilter.filterUserInputFileName(path);
+        File file = filteredFilename != null ? new File(tmpDir+File.separator + filteredFilename) : null;
 
         if(file==null || !file.exists()) {
            log.error("Download of file " + (file==null?"NULL":file.getAbsolutePath()) + " failed.");

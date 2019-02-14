@@ -67,6 +67,7 @@ import org.jaffa.rules.AopXmlLoader;
 import org.apache.log4j.*;
 import org.jaffa.api.FileContents;
 import org.jaffa.api.cluster.NodeInformation;
+import org.jaffa.security.filter.FileFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -84,7 +85,7 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 @RestController
 @RequestMapping("/git")
 public class ConfigApi implements IConfigApi {
-    private static final String FILE_EXTENSION = ".zip";
+    private static final String FILE_EXTENSION = "zip";
     private static final int BYTE_ARRAY_INIT_LENGTH = 17;
     private static final Logger log = Logger.getLogger(ConfigApi.class);
 
@@ -121,8 +122,10 @@ public class ConfigApi implements IConfigApi {
      */
     @RequestMapping(value = "/config", method = RequestMethod.DELETE)
     public Response deleteCustomConfigFile(String compressedFile) throws IOException {
-        String fileNameToDelete = verifyExtension(compressedFile, FILE_EXTENSION);
-        File fileToDelete = gctConfigDirectory!=null ? new File(gctConfigDirectory + File.separator + fileNameToDelete) : null;
+        String fileNameToDelete = this.formatUserInput(compressedFile);
+
+        File fileToDelete = (gctConfigDirectory!=null && fileNameToDelete != null) ?
+                new File(gctConfigDirectory + File.separator + fileNameToDelete) : null;
 
         //Provide HTTP error if compressed file does not exist on server
         if (fileToDelete==null || !fileToDelete.exists()) {
@@ -157,8 +160,9 @@ public class ConfigApi implements IConfigApi {
      */
     @RequestMapping(value = "/config/{compressedFile}", method = RequestMethod.GET)
     public Response getCustomConfigFile(@PathVariable String compressedFile) {
-        compressedFile = verifyExtension(compressedFile, FILE_EXTENSION);
-        File fileToDownload = gctConfigDirectory!=null ? new File(gctConfigDirectory + File.separator + compressedFile) : null;
+        String fileNameToDownload = this.formatUserInput(compressedFile);
+        File fileToDownload = gctConfigDirectory!=null && fileNameToDownload != null ?
+                new File(gctConfigDirectory + File.separator + fileNameToDownload) : null;
 
         return (fileToDownload == null || !fileToDownload.exists() ?
                 Response.status(Response.Status.BAD_REQUEST)
@@ -166,7 +170,7 @@ public class ConfigApi implements IConfigApi {
                         .build()
                 : Response.status(Response.Status.OK)
                 .entity(fileToDownload)
-                .header("Content-Disposition", "attachment; filename=" + compressedFile)
+                .header("Content-Disposition", "attachment; filename=" + fileNameToDownload)
                 .build());
     }
 
@@ -201,35 +205,31 @@ public class ConfigApi implements IConfigApi {
      */
     @RequestMapping(value = "/config/{compressedFile}", method = RequestMethod.POST)
     public Response postCustomConfigFile(@PathVariable String compressedFile, byte[] payload) throws IOException {
-        String fileNameToPost = verifyExtension(compressedFile, FILE_EXTENSION);
-        File fileToPostPath = gctConfigDirectory!=null ? new File(gctConfigDirectory + File.separator + fileNameToPost) : null;
+        String fileNameToPost = this.formatUserInput(compressedFile);
+        File fileToPost = gctConfigDirectory!=null && fileNameToPost != null ?
+                new File(gctConfigDirectory + File.separator + fileNameToPost) : null;
 
-        if (fileToPostPath == null || payload.length <= BYTE_ARRAY_INIT_LENGTH || fileToPostPath.exists()) {
-            return postError(payload, fileToPostPath);
-        }
-
-        //Avoid NoSuchFileExceptions by double-checking that GCT_CONFIG exists
-        if (!gctConfigDirectory.exists()) {
-            gctConfigDirectory.mkdir();
+        if (fileToPost == null || payload.length <= BYTE_ARRAY_INIT_LENGTH || fileToPost.exists()) {
+            return postError(payload, fileToPost);
         }
 
         //Copy files to server and register resources
-        Files.copy(new ByteArrayInputStream(payload), fileToPostPath.toPath());
+        Files.copy(new ByteArrayInputStream(payload), fileToPost.toPath());
 
         Response.ResponseBuilder response;
-        File tempDir = ConfigApiCore.extractToTemporaryDirectory(fileToPostPath);
+        File tempDir = ConfigApiCore.extractToTemporaryDirectory(fileToPost);
         if (tempDir != null) {
-            registerConfigurations(fileToPostPath, tempDir);
-            log.info("The resources in " + fileToPostPath + " have finished registering configurations to the repositories");
+            registerConfigurations(fileToPost, tempDir);
+            log.info("The resources in " + fileToPost + " have finished registering configurations to the repositories");
             response = Response.status(Response.Status.OK);
         } else {
-            removeZipFile(fileToPostPath);
+            removeZipFile(fileToPost);
             response = Response
                     .status(Response.Status.BAD_REQUEST)
                     .entity("Upload Failed. The uploaded ZIP file must contain ONLY a META-INF directory containing " +
                             "configuration files and a manifest file.");
         }
-        registerMetadata(fileToPostPath);
+        registerMetadata(fileToPost);
         return response.build();
     }
 
@@ -277,9 +277,19 @@ public class ConfigApi implements IConfigApi {
      */
     private String verifyExtension(String fileName, String extension) {
         if (!fileName.endsWith(extension)) {
-            fileName += extension;
+            fileName += "." + extension;
         }
         return fileName;
+    }
+
+    /**
+     * Scrub user input for malicious int protection, and append '.zip' extensio nif it was omitted
+     * @param fileName  The user input filename
+     * @return  The scrubbed, extended user input filename
+     */
+    private String formatUserInput(String fileName) {
+        fileName = this.verifyExtension(fileName, FILE_EXTENSION);
+        return FileFilter.filterUserInputFileName(fileName);
     }
 
     /**
