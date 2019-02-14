@@ -14,6 +14,7 @@ Jaffa.form.CurrencyField = Ext.extend(Ext.form.NumberField, {
     decimalPrecision: 2,
     emptyText: '',
     constructor: function(config) {
+      config = Ext.apply({}, config);
       Jaffa.form.CurrencyField.superclass.constructor.call(this, Ext.applyIf(config || {}, {
         symbolText: Ext.util.Format.defaultCurrencySymbol,
         stripCharsRe: new RegExp()
