@@ -8139,12 +8139,8 @@ public void testCheckPolicy() throws ServletException
 
 ```
 public static SecretKey createKey()
-public static String encryptObjectForURL(Object source, SecretKey key) throws java.security.NoSuchAlgorithmException, java.security.InvalidKeyException, javax.crypto.NoSuchPaddingException, java.io.UnsupportedEncodingException, javax.crypto.IllegalBlockSizeException, javax.crypto.BadPaddingException, java.io.NotSerializableException
-public static String encryptStringForURL(String source, SecretKey key) throws java.security.NoSuchAlgorithmException, java.security.InvalidKeyException, javax.crypto.NoSuchPaddingException, java.io.UnsupportedEncodingException, javax.crypto.IllegalBlockSizeException, javax.crypto.BadPaddingException
 public static byte fromHex(char c)
 public static byte[] fromHexString(String in)
-public static Object getObjectFromEncryptedURL(String data, SecretKey key) throws java.security.NoSuchAlgorithmException, java.security.InvalidKeyException, javax.crypto.NoSuchPaddingException, javax.crypto.IllegalBlockSizeException, javax.crypto.BadPaddingException
-public static String getStringFromEncryptedURL(String data, SecretKey key) throws java.security.NoSuchAlgorithmException, java.security.InvalidKeyException, javax.crypto.NoSuchPaddingException, javax.crypto.IllegalBlockSizeException, javax.crypto.BadPaddingException
 public static byte[] intoBytes(String in) throws UnsupportedEncodingException
 public static byte[] intoBytes16(String in)
 public static String intoHexString(byte[] in)
