@@ -133,8 +133,11 @@ public class SourceDecomposerUtils {
     public static void listCustomizations(File file, BufferedWriter writer, String customizationFilter)
     throws IOException, SourceDecomposerException {
         System.out.println("Processing file... " + file);
-        SourceDecomposer sd = new SourceDecomposer(new BufferedReader(new FileReader(file)));
-        Collection elements = sd.getCollection();
+        Collection elements;
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            SourceDecomposer sd = new SourceDecomposer(br);
+            elements = sd.getCollection();
+        }
         boolean headerWritten = false;
         if (elements != null) {
             for (Iterator itr = elements.iterator(); itr.hasNext();) {

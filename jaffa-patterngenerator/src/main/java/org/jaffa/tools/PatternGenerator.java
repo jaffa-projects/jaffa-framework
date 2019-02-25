@@ -759,15 +759,16 @@ public class PatternGenerator {
         String newContents = bos.toString();
 
         // merge the contents
-        String mergedContents = SourceMerge.performMerge(
-                new BufferedReader(new StringReader(newContents)),
-                new BufferedReader(new FileReader(fileName)));
+        try (BufferedReader newContentBr = new BufferedReader(new StringReader(newContents));
+                BufferedReader fileNameBr = new BufferedReader(new FileReader(fileName));
+                BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
 
-        // write to the file
-        Writer writer = new BufferedWriter(new FileWriter(fileName));
-        writer.write(mergedContents);
-        writer.flush();
-        writer.close();
+            String mergedContents = SourceMerge.performMerge(newContentBr, fileNameBr);
+
+            // write to the file
+            writer.write(mergedContents);
+            writer.flush();
+        }
 
         fixEOL(fileName);
     }
