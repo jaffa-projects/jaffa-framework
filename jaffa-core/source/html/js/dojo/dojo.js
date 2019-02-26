@@ -1868,7 +1868,7 @@ dojo.string.escapeString=function(str){
 return ("\""+str.replace(/(["\\])/g,"\\$1")+"\"").replace(/[\f]/g,"\\f").replace(/[\b]/g,"\\b").replace(/[\n]/g,"\\n").replace(/[\t]/g,"\\t").replace(/[\r]/g,"\\r");
 };
 dojo.string.escapePath=function(str){
-    return str.replace("/<[/\\w]*>?/g,","");
+return str.replace("/<[/\\w]*>?/g,","");
 };
 dojo.string.summary=function(str,len){
 if(!len||str.length<=len){
