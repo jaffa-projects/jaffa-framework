@@ -75,6 +75,8 @@ public class AuditTransactionCriteria extends GraphCriteria {
     private String objectId;
     private String objectName;
     private AuditTransactionFieldCriteria[] auditTransactionFields;
+    private StringCriteriaField fromValue;
+    private StringCriteriaField toValue;
 
     /**
      * If the input parameter is true, then the query will be against the AuditTransaction view,
@@ -150,7 +152,8 @@ public class AuditTransactionCriteria extends GraphCriteria {
         FinderTx.addCriteria(getChangeType(), AuditTransactionViewMeta.CHANGE_TYPE, c);
         FinderTx.addCriteria(getCreatedBy(), AuditTransactionViewMeta.CREATED_BY, c);
         FinderTx.addCriteria(getCreatedOn(), AuditTransactionViewMeta.CREATED_ON, c);
-
+        FinderTx.addCriteria(getFromValue(), AuditTransactionViewMeta.FROM_VALUE, c);
+        FinderTx.addCriteria(getToValue(), AuditTransactionViewMeta.TO_VALUE, c);
         if (getObjectName() != null || getObjectId() != null) {
             if (getObjectName() != null) {
                 c.addCriteria(AuditTransactionViewMeta.OBJECT_NAME, getObjectName());
@@ -255,5 +258,17 @@ public class AuditTransactionCriteria extends GraphCriteria {
 
     public void setAuditTransactionFields(AuditTransactionFieldCriteria[] auditTransactionFields) {
         this.auditTransactionFields = auditTransactionFields;
+    }
+    public StringCriteriaField getFromValue() {
+        return fromValue;
+    }
+    public void setFromValue(StringCriteriaField fromValue) {
+        this.fromValue = fromValue;
+    }
+    public StringCriteriaField getToValue() {
+        return toValue;
+    }
+    public void setToValue(StringCriteriaField toValue) {
+        this.toValue = toValue;
     }
 }
