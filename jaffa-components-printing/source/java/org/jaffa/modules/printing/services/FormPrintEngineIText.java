@@ -247,10 +247,8 @@ public class FormPrintEngineIText extends FormPrintEngine {
             log.warn("CSV Parse Error: No data file found for field layout");
         } else {
             // Read the file, and populate PageDetailsExtended
-            try {
-                BufferedReader in = new BufferedReader( new FileReader(data) );
-                StringBuffer buf1 = new StringBuffer();
-                String line = null;
+            try (BufferedReader in = new BufferedReader( new FileReader(data) )) {
+                String line;
                 int[] colOrder = null;
                 int row = 0;
                 while ( (line = in.readLine()) != null) {
@@ -777,7 +775,6 @@ public class FormPrintEngineIText extends FormPrintEngine {
 
     /** Set properties from the sytle field
      * @barcode the barcode object to set via introspection
-     * @param params newline or ; seperated list of field=value pairs to set
      */
     private void setBarcodeParams(String fieldname, Object barcode, String props) {
         Properties bcprops = new Properties();

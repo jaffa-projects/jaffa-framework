@@ -270,8 +270,7 @@ public class SOAEventEnabledConfigurationImpl implements SOAEventEnabledConfigur
 
         // Read the file into the Properties object
         Properties properties = new Properties();
-        try {
-            FileReader reader = new FileReader(propertiesFile);
+        try (BufferedReader reader = new BufferedReader(new FileReader(propertiesFile))) {
             properties.load(reader);
         } catch (FileNotFoundException fileNotFoundException) {
             log.error("SOA event config properties file not found", fileNotFoundException);
@@ -296,8 +295,7 @@ public class SOAEventEnabledConfigurationImpl implements SOAEventEnabledConfigur
         }
 
         // Read the file into the Properties object
-        try {
-            FileWriter writer = new FileWriter(propertiesFile);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(propertiesFile))) {
             getProperties().store(writer, "");
         } catch (IOException ioException) {
             log.error("Error writing the SOA event config properties file", ioException);

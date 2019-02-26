@@ -54,6 +54,7 @@ import org.apache.log4j.Logger;
 import org.jaffa.security.VariationContext;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -169,7 +170,11 @@ public class ContextHelper {
      */
     public static String getManifestParameter(Class clazz) throws IOException {
         Manifest mf = new Manifest();
-        mf.read(clazz.getClassLoader().getResourceAsStream(META_INF_MANIFEST_FILE));
+        try (InputStream stream = clazz.getClassLoader().getResourceAsStream(META_INF_MANIFEST_FILE)) {
+            mf.read(stream); 
+        } catch (IOException e) {
+            logger.error("Cannot read from manifest: ", e);
+        }
 
         return getManifestParameter(mf, true);
     }
