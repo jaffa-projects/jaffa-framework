@@ -29,7 +29,7 @@
 		// we can act on. Also allow params to be in a fragment identifier.
 		var query = null;
 		var frag = null;
-		var url = document.location.href;
+		var url = escapePath(document.location.href);
 		var hashIndex = url.indexOf("#");
 		
 		//Extract fragment identifier
