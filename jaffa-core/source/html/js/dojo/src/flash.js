@@ -208,7 +208,7 @@ dojo.flash.Embed.prototype = {width:215, height:138, id:"flashObject", _visible:
 		var swflocEmbed = swfloc;
 		var dojoPath = djConfig.baseRelativePath;
 		if (doExpressInstall) {
-			var redirectURL = escape(window.location);
+			var redirectURL = escapePath(window.location);
 			document.title = document.title.slice(0, 47) + " - Flash Player Installation";
 			var docTitle = escape(document.title);
 			swflocObject += "?MMredirectURL=" + redirectURL + "&MMplayerType=ActiveX" + "&MMdoctitle=" + docTitle + "&baseRelativePath=" + escape(dojoPath);

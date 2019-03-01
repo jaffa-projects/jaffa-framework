@@ -115,7 +115,7 @@ TinyMCE_Engine.prototype = {
 		}
 
 		// Get document base path
-		this.documentBasePath = document.location.href;
+		this.documentBasePath = escapePath(document.location.href);
 		if (this.documentBasePath.indexOf('?') != -1)
 			this.documentBasePath = this.documentBasePath.substring(0, this.documentBasePath.indexOf('?'));
 		this.documentURL = this.documentBasePath;
