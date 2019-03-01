@@ -22,6 +22,7 @@ Jaffa.form.CheckBoxField = Ext.extend(Ext.form.CompositeField, {
     });
     if(this.meta) field.meta = this.meta;
     if(this.gridColumns) field.gridColumns = this.gridColumns;
+    if(this.popupAlways)field.popupAlways = this.popupAlways;
     var checkbox = {
       xtype: 'checkbox',
       listeners : {
