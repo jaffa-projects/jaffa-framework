@@ -72,9 +72,7 @@ import org.jaffa.persistence.engines.jdbcengine.paging.IPagingPlugin;
 import org.jaffa.persistence.util.PersistentHelper;
 import org.jaffa.session.ContextManagerFactory;
 
-/** Encapsulates the connection to a data storage mechanism
- *  @todo Remove the logic to log the time taken to execute SQL. It should be achieved through AOP instead.
- */
+/** Encapsulates the connection to a data storage mechanism */
 public class DataSource {
     private static final Logger log = Logger.getLogger(DataSource.class);
     private static final String DISABLE_OBJECT_CACHE_RULE_NAME = "jaffa.persistence.jdbcengine.disableObjectCache";
@@ -205,13 +203,14 @@ public class DataSource {
             // so just ignore the exception
         }
         ResultSet resultSet = null;
+        long currentTimeMillis = 0;
         if (log.isInfoEnabled()) {
             log.info("Executing the SQL:\n" + sql);
-            long currentTimeMillis = System.currentTimeMillis();
-            resultSet = statement.executeQuery(sql);
+            currentTimeMillis = System.currentTimeMillis();
+        }
+        resultSet = statement.executeQuery(sql);
+        if (log.isInfoEnabled()) {
             log.info("Elapsed:" + (System.currentTimeMillis() - currentTimeMillis));
-        } else {
-            resultSet = statement.executeQuery(sql);
         }
         registerStatement(statement, resultSet);
         return new DataSourceCursor(this, statement, resultSet, classMetaData, criteria, pagingPlugin);
@@ -244,13 +243,15 @@ public class DataSource {
             // so just ignore the exception
         }
         ResultSet resultSet = null;
+
+        long currentTimeMillis = 0;
         if (log.isInfoEnabled()) {
-            log.info("Executing the Prepared Statement\n" + statement);
-            long currentTimeMillis = System.currentTimeMillis();
+            log.info("Executing the Prepared Statement:\n" + statement);
+            currentTimeMillis = System.currentTimeMillis();
+        }
             resultSet = statement.executeQuery();
+        if (log.isInfoEnabled()) {
             log.info("Elapsed:" + (System.currentTimeMillis() - currentTimeMillis));
-        } else {
-            resultSet = statement.executeQuery();
         }
         registerStatement(statement, resultSet);
         return new DataSourceCursor(this, statement, resultSet, classMetaData, criteria, pagingPlugin);
@@ -280,13 +281,14 @@ public class DataSource {
      */
     public void executeUpdate(String sql) throws SQLException {
         Statement stmnt = getStatement();
+        long currentTimeMillis = 0;
         if (log.isInfoEnabled()) {
-            log.info("Executing the SQL\n" + sql);
-            long currentTimeMillis = System.currentTimeMillis();
-            stmnt.executeUpdate(sql);
+            log.info("Executing the SQL:\n" + sql);
+            currentTimeMillis = System.currentTimeMillis();
+        }
+        stmnt.executeUpdate(sql);
+        if (log.isInfoEnabled()) {
             log.info("Elapsed:" + (System.currentTimeMillis() - currentTimeMillis));
-        } else {
-            stmnt.executeUpdate(sql);
         }
         closeStatement(stmnt);
     }
@@ -297,13 +299,14 @@ public class DataSource {
      * @throws SQLException if any database error occurs.
      */
     public void executeUpdate(PreparedStatement stmt) throws SQLException {
-        if (log.isInfoEnabled()) {
-            log.info("Executing the Prepared Statement\n" + stmt);
             long currentTimeMillis = System.currentTimeMillis();
-            stmt.execute();
+        if (log.isInfoEnabled()) {
+            log.info("Executing the Prepared Statement:\n" + stmt);
+            currentTimeMillis = System.currentTimeMillis();
+        }
+        stmt.execute();
+        if (log.isInfoEnabled()) {
             log.info("Elapsed:" + (System.currentTimeMillis() - currentTimeMillis));
-        } else {
-            stmt.execute();
         }
         closeStatement(stmt);
     }
