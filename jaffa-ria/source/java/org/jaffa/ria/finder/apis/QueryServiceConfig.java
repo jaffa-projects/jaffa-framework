@@ -90,13 +90,6 @@ public class QueryServiceConfig {
     /**
      * @param columnModel the columnModel to set
      */
-    public void setColumnModel(String columnModel) {
-        this.setColumnModel(columnModel);
-    }
-
-    /**
-     * @param columnModel the columnModel to set
-     */
     public void setColumnModel(Object[] columnModel) {
         this.columnModel = columnModel;
     }
