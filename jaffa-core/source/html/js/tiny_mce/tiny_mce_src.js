@@ -106,6 +106,7 @@ TinyMCE_Engine.prototype = {
 					// Force it absolute if page has a base href
 					if (baseHREF !== '' && src.indexOf('://') == -1)
 						tinyMCE.baseURL = baseHREF + src;
+						tinyMCE.baseURL = baseHREF + src;
 					else
 						tinyMCE.baseURL = src;
 
