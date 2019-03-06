@@ -103,7 +103,7 @@ if(ref!=null&&token==null) {
     TreeSet<String> t = readLabelTokens(ref, request);
 %>Labels = {
     url: '<%=request.getContextPath()+"/js/extjs/jaffa/metadata/labels.jsp"%>',
-    page: '<%=ref%>',
+    page: '<%=StringHelper.escapeHtml(ref)%>',
     editor: <%= editor %>,
     data : new Ext.util.MixedCollection(),
     conn: new Ext.data.Connection({

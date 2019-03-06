@@ -1,5 +1,3 @@
-
-
 <%@ page language="java" %>
 <%@ page import="org.jaffa.session.ContextManagerFactory" %>
 <%@ page import="org.jaffa.session.IContextManager" %>
@@ -17,10 +15,12 @@
 <%@ page import="org.jaffa.presentation.portlet.widgets.model.DropDownModel" %>
 <%@ page import="org.jaffa.presentation.portlet.session.UserSession" %>
 
- <script>    
-     currentValue = parent.document.getElementById("<%=request.getParameter("Id")%>").value;
-     parent.document.getElementById("<%=request.getParameter("Id")%>").options.length = 0;
-     parent.document.getElementById("<%=request.getParameter("Id")%>").options.add(new Option("Loading ..........","Loading .........."));        
+<% String idParamEscaped = StringHelper.escapeJavascript(request.getParameter("Id")); %>
+
+<script>
+     currentValue = parent.document.getElementById("<%=idParamEscaped%>").value;
+     parent.document.getElementById("<%=idParamEscaped%>").options.length = 0;
+     parent.document.getElementById("<%=idParamEscaped%>").options.add(new Option("Loading ..........","Loading .........."));
  </script>
 
 <%
@@ -61,15 +61,16 @@
 
 
 <script>
-     parent.document.getElementById("<%=request.getParameter("Id")%>").options.length = 0;
+     parent.document.getElementById("<%=idParamEscaped%>").options.length = 0;
      <% for (int i=0; i< m_dropDownCodes.getCodeHelperOutCodeDtoCount(); i++) {
         dropDownModel.addOption("" + m_dropDownCodes.getCodeHelperOutCodeDto(i).getDescription() ,"" +  m_dropDownCodes.getCodeHelperOutCodeDto(i).getCode());          
      %>            
-        parent.document.getElementById("<%=request.getParameter("Id")%>").options.add(new Option("<%=m_dropDownCodes.getCodeHelperOutCodeDto(i).getDescription()%>","<%=m_dropDownCodes.getCodeHelperOutCodeDto(i).getCode()%>"));        
+        parent.document.getElementById("<%=idParamEscaped%>").options.add(new Option("<%=m_dropDownCodes.getCodeHelperOutCodeDto(i).getDescription()%>","<%=m_dropDownCodes.getCodeHelperOutCodeDto(i).getCode()%>"));
      <% }     
      UserSession.getUserSession(request).getWidgetCache(request.getParameter("ComponentId")).addModel(request.getParameter("WidgetFieldName") ,dropDownModel );     
      %>
-     parent.document.getElementById("<%=request.getParameter("Id")%>").value = "<%=request.getParameter("CurrentValue")%>";
+     parent.document.getElementById("<%=idParamEscaped%>").value =
+             "<%=StringHelper.escapeJavascript(request.getParameter("CurrentValue"))%>";
  </script>
   
   

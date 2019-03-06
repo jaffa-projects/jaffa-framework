@@ -505,7 +505,9 @@
        try{
            unsubscribe(clientID,subscriptionName,topicName);
            
-           out.write("{\"success\":true,\"data\":{\"result\": \"Successfully unsubscribed Client ID: "+clientID+" and Subscriber Name: "+subscriptionName+"\"}}");
+           out.write("{\"success\":true,\"data\":{\"result\": \"Successfully unsubscribed Client ID: " +
+                     StringHelper.escapeHtml(clientID) +
+                     " and Subscriber Name: " + StringHelper.escapeHtml(subscriptionName) + "\"}}");
            
        }catch(Exception e){
            out.write("{\"success\":false,\"data\":{\"result\":\"" + e.getMessage().replaceAll("\"", "\'").replaceAll("\\n", "") + "\"}}");

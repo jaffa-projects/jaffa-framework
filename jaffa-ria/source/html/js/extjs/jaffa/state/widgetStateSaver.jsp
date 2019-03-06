@@ -211,7 +211,7 @@
         json.append("]");
 %>
   Ext.state.Manager.setProvider(new Jaffa.state.WidgetStateProvider({
-    pageRef: '<%= pageRef %>',
+    pageRef: '<%= StringHelper.escapeHtml(pageRef) %>',
     url: '<%=URLHelper.getBase(request)%>js/extjs/jaffa/state/widgetStateSaver.jsp',
     states: <%=json.toString()%>
   }));

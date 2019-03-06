@@ -84,8 +84,8 @@ Should be included in the main JSP that loads all the java script using the foll
     }
 %>
 <%
-String ref=(String)request.getParameter("ref");
-String identifier=(String)request.getParameter("identifier");
+String ref=request.getParameter("ref");
+String identifier=request.getParameter("identifier");
 
 //remove everything after the last / (this should be the jsp name
 String rulePath = ref.substring(0,ref.lastIndexOf("/"));
@@ -121,7 +121,7 @@ if(ref!=null&&token==null) {
     TreeSet<String> t = readRuleTokens(ref, request);
 %>Rules = {
     url: '<%=request.getContextPath()+"/js/extjs/jaffa/metadata/rules.jsp"%>',
-    page: '<%=ref%>',
+    page: '<%=StringHelper.escapeHtml(ref)%>',
     data : new Ext.util.MixedCollection(),
     conn: new Ext.data.Connection({
       url: '<%=request.getContextPath()+"/js/extjs/jaffa/metadata/rules.jsp"%>'

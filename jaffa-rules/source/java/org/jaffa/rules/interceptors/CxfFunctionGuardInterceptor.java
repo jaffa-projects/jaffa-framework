@@ -102,6 +102,7 @@ public class CxfFunctionGuardInterceptor extends AbstractPhaseInterceptor<Messag
             // Check if the user has been granted access to checkAccess this service
             checkAccess(serviceMethod);
         } catch (AccessControlException | ApplicationExceptions | FrameworkException exception) {
+            log.error("checkAccess threw exception: " + exception);
             throw new Fault(exception);
         }
     }

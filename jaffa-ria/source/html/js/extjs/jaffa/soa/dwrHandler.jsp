@@ -52,7 +52,7 @@ dwr.engine._handleWarning = function(batch, ex) {
 * redirect the user to the login screen
 */
 redirect = function () {
-    document.location = params.appCtx + '/<%= StringHelper.escapeJavascript(request.getParameter("ref")) %>';
+    document.location = params.appCtx + '/<%= StringHelper.escapeHtml(StringHelper.escapeJavascript(request.getParameter("ref"))) %>';
 }
 
 <%
