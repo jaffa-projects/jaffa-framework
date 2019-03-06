@@ -36,6 +36,6 @@
 <tiles:insert definition='<%=(nOption.getStrutsTileTemplate()==null?"global.desktop":nOption.getStrutsTileTemplate())%>' flush="true" >
   <tiles:put name="title" value="<%=nOption.getLabel()%>"/>
 </tiles:insert>
-<div id="desktopIdField" style="display:none;" value='<%= desktopId %>' />
+<div id="desktopIdField" style="display:none;" value='<%= StringHelper.escapeHtml(desktopId) %>' />
 <%  }
   }%>

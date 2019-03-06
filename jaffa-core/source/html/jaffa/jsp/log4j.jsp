@@ -11,6 +11,7 @@
 <%@ page import = "org.jaffa.config.Config" %>
 <%@ page import = "org.jaffa.util.URLHelper" %>
 <%@ page import = "org.apache.log4j.Logger" %>
+<%@ page import="org.jaffa.util.StringHelper" %>
 <%@ taglib uri="/WEB-INF/jaffa-portlet.tld" prefix="Portlet" %>
 <%! private static final Logger log = Logger.getLogger("jaffa.jsp.log4j"); %>
 <html>
@@ -55,7 +56,7 @@
     <FORM method='POST'>
     <TABLE>
     <TR><TD align='center'><h2><%= absoluteFileName %></h2></TD></TR>
-    <TR><TD><TEXTAREA name="fileContents" rows='32' cols='120'><%= fileContents %></TEXTAREA></TD></TR>
+    <TR><TD><TEXTAREA name="fileContents" rows='32' cols='120'><%= StringHelper.escapeHtml(fileContents) %></TEXTAREA></TD></TR>
     <TR><TD align='center'><INPUT type='submit' value='Update Configuration'/></TD></TR>
     </TABLE>
     </FORM>

@@ -30,8 +30,8 @@
         queries = SavedQuery.getSavedQueries(componentRef, contextRef);
 %>
   SavedQueries = {
-      componentRef: '<%=componentRef%>',
-      contextRef: '<%=contextRef%>',
+      componentRef: '<%=StringHelper.escapeHtml(componentRef)%>',
+      contextRef: '<%=StringHelper.escapeHtml(contextRef)%>',
       url: '<%= request.getRequestURI() %>',
       nameQueryPairs: <%=queries.toString()%>,
       version:'2.0'

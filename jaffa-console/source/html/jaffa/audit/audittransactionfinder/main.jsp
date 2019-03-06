@@ -8,6 +8,7 @@
 <%@
   page import = "org.jaffa.rules.RulesEngineFactory,org.jaffa.rules.IObjectRuleIntrospector,java.util.Properties,java.util.Map,org.jaffa.components.audit.apis.AuditTransactionViewService,org.jaffa.util.JSONHelper,org.jaffa.util.URLHelper,org.jaffa.util.MessageHelper,org.jaffa.security.SecurityManager"
 %>
+<%@ page import="org.jaffa.rules.IRulesEngine" %>
 <%!
   private static final String COMPONENT = "Jaffa.Audit.AuditTransactionFinder";
   private String n(String s) {return s==null?"":s;}
@@ -28,22 +29,24 @@
   String domainObjectLabel = "";
   String domainObjectName = "";
   String auditFieldsList = "{}";
-  if (request.getParameter("domainObject")!=null){
-    IObjectRuleIntrospector introspector = RulesEngineFactory.getRulesEngine().getObjectRuleIntrospector(StringHelper.escapeJavascript(request.getParameter("domainObject")), null);
+  String domainObjectParam = request.getParameter("domainObject");
+  if (domainObjectParam != null){
+    IRulesEngine rulesEngine = RulesEngineFactory.getRulesEngine();
+    IObjectRuleIntrospector introspector = rulesEngine.getObjectRuleIntrospector(StringHelper.escapeJavascript(domainObjectParam), null);
     if (introspector!=null){
       domainObjectLabel =  MessageHelper.replaceTokens(introspector.getLabel());
       if (introspector.getAuditInfo()!=null)
         domainObjectName = introspector.getAuditInfo().getProperty("name","");
       else{
-        String[] nameSegments = StringHelper.escapeJavascript(request.getParameter("domainObject")).split("\\.");
+        String[] nameSegments = domainObjectParam.split("\\.");
         if (nameSegments.length>0)
           domainObjectName = nameSegments[nameSegments.length-1];
         else
-          domainObjectName = StringHelper.escapeJavascript(request.getParameter("domainObject"));
+          domainObjectName = domainObjectParam;
       }
     }
 
-    Map<String, Properties> mapFields = new AuditTransactionViewService().getAuditableProperties(StringHelper.escapeJavascript(request.getParameter("domainObject")));
+    Map<String, Properties> mapFields = new AuditTransactionViewService().getAuditableProperties(StringHelper.escapeJavascript(domainObjectParam));
     if (mapFields!=null) 
       auditFieldsList = JSONHelper.map2json(mapFields);
   }
@@ -71,7 +74,7 @@
 
       params.auditFieldsList = <%= auditFieldsList %>;
       params.objectLabel = '<%= domainObjectLabel %>';
-      params.objectName = '<%= domainObjectName %>';
+      params.objectName = '<%= StringHelper.escapeJavascript(domainObjectName) %>';
   
       var security = {
         hasHelpDataDicDetails:   <%= SecurityManager.checkFunctionAccess("Help.DataDic.Details") %>
