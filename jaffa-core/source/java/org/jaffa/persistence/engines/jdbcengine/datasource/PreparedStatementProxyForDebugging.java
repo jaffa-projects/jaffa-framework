@@ -15,7 +15,16 @@ import org.jaffa.datatypes.Formatter;
  * The values are then used to generate the SQL statement for debug purposes.
  */
 public class PreparedStatementProxyForDebugging implements PreparedStatement {
-    
+
+    /**
+     * The JavaDoc for the Statement interface says that PreparedStatements
+     * should throw SQLExceptions when certain of the methods are called on
+     * a PreparedStatement.  This is the message for those exceptions.
+     */
+    public static final String DISALLOWED_BY_STATEMENT =
+            "The Statement interface mandates an exception when this method"
+            + " is called on a PreparedStatement.";
+
     private PreparedStatement m_ps;
     private String m_sql;
     private Object[] m_bindVariables;
@@ -149,14 +158,11 @@ public class PreparedStatementProxyForDebugging implements PreparedStatement {
      * @return either the row count for <code>INSERT</code>, <code>UPDATE</code>,
      *         or <code>DELETE</code> statements, or 0 for SQL statements
      *         that return nothing
-     * @exception SQLException if a database access error occurs, the SQL
-     *            statement returns a <code>ResultSet</code> object, or the
-     *            second argument supplied to this method is not an <code>int</code> array
-     *            whose elements are valid column indexes
+     * @exception SQLException this method shall not be called on a PreparedStatement
      * @since 1.4
      */
     public int executeUpdate(String sql, int[] columnIndexes) throws SQLException {
-        return m_ps.executeUpdate(sql, columnIndexes);
+        throw new SQLException(DISALLOWED_BY_STATEMENT);
     }
     
     /**
@@ -187,9 +193,7 @@ public class PreparedStatementProxyForDebugging implements PreparedStatement {
      * @return <code>true</code> if the first result is a <code>ResultSet</code>
      *         object; <code>false</code> if it is an update count or there
      *         are no results
-     * @exception SQLException if a database access error occurs or the
-     *            elements in the <code>int</code> array passed to this method
-     *            are not valid column indexes
+     * @exception SQLException this method shall not be called on a PreparedStatement
      * @see #getResultSet
      * @see #getUpdateCount
      * @see #getMoreResults
@@ -197,7 +201,7 @@ public class PreparedStatementProxyForDebugging implements PreparedStatement {
      * @since 1.4
      */
     public boolean execute(String sql, int[] columnIndexes) throws SQLException {
-        return m_ps.execute(sql, columnIndexes);
+        throw new SQLException(DISALLOWED_BY_STATEMENT);
     }
     
     /**
@@ -227,15 +231,11 @@ public class PreparedStatementProxyForDebugging implements PreparedStatement {
      * @return either the row count for <code>INSERT</code>, <code>UPDATE</code>,
      *         or <code>DELETE</code> statements, or 0 for SQL statements
      *         that return nothing
-     * @exception SQLException if a database access error occurs, the SQL
-     *            statement returns a <code>ResultSet</code> object, or the
-     *            second argument supplied to this method is not a <code>String</code> array
-     *            whose elements are valid column names
-     *
+     * @exception SQLException this method shall not be called on a PreparedStatement
      * @since 1.4
      */
     public int executeUpdate(String sql, String[] columnNames) throws SQLException {
-        return m_ps.executeUpdate(sql, columnNames);
+        throw new SQLException(DISALLOWED_BY_STATEMENT);
     }
     
     /**
@@ -266,9 +266,7 @@ public class PreparedStatementProxyForDebugging implements PreparedStatement {
      * @return <code>true</code> if the next result is a <code>ResultSet</code>
      *         object; <code>false</code> if it is an update count or there
      *         are no more results
-     * @exception SQLException if a database access error occurs or the
-     *          elements of the <code>String</code> array passed to this
-     *          method are not valid column names
+     * @exception SQLException this method shall not be called on a PreparedStatement
      * @see #getResultSet
      * @see #getUpdateCount
      * @see #getMoreResults
@@ -277,7 +275,7 @@ public class PreparedStatementProxyForDebugging implements PreparedStatement {
      * @since 1.4
      */
     public boolean execute(String sql, String[] columnNames) throws SQLException {
-        return m_ps.execute(sql, columnNames);
+        throw new SQLException(DISALLOWED_BY_STATEMENT);
     }
     
     /**
@@ -421,11 +419,10 @@ public class PreparedStatementProxyForDebugging implements PreparedStatement {
      * @return either the row count for <code>INSERT</code>, <code>UPDATE</code>
      * or <code>DELETE</code> statements, or <code>0</code> for SQL statements
      * that return nothing
-     * @exception SQLException if a database access error occurs or the given
-     *            SQL statement produces a <code>ResultSet</code> object
+     * @exception SQLException this method shall not be called on a PreparedStatement
      */
     public int executeUpdate(String sql) throws SQLException {
-        return m_ps.executeUpdate(sql);
+        throw new SQLException(DISALLOWED_BY_STATEMENT);
     }
     
     /**
@@ -436,12 +433,10 @@ public class PreparedStatementProxyForDebugging implements PreparedStatement {
      *        static SQL <code>SELECT</code> statement
      * @return a <code>ResultSet</code> object that contains the data produced
      *         by the given query; never <code>null</code>
-     * @exception SQLException if a database access error occurs or the given
-     *            SQL statement produces anything other than a single
-     *            <code>ResultSet</code> object
+     * @exception SQLException this method shall not be called on a PreparedStatement
      */
     public java.sql.ResultSet executeQuery(String sql) throws SQLException {
-        return m_ps.executeQuery(sql);
+        throw new SQLException(DISALLOWED_BY_STATEMENT);
     }
     
     /**
@@ -453,13 +448,12 @@ public class PreparedStatementProxyForDebugging implements PreparedStatement {
      *
      * @param sql typically this is a static SQL <code>INSERT</code> or
      * <code>UPDATE</code> statement
-     * @exception SQLException if a database access error occurs, or the
-     * driver does not support batch updates
+     * @exception SQLException this method shall not be called on a PreparedStatement
      * @see #executeBatch
      * @since 1.2
      */
     public void addBatch(String sql) throws SQLException {
-        m_ps.addBatch(sql);
+        throw new SQLException(DISALLOWED_BY_STATEMENT);
     }
     
     /**
@@ -480,13 +474,13 @@ public class PreparedStatementProxyForDebugging implements PreparedStatement {
      * @return <code>true</code> if the first result is a <code>ResultSet</code>
      *         object; <code>false</code> if it is an update count or there are
      *         no results
-     * @exception SQLException if a database access error occurs
+     * @exception SQLException this method shall not be called on a PreparedStatement
      * @see #getResultSet
      * @see #getUpdateCount
      * @see #getMoreResults
      */
     public boolean execute(String sql) throws SQLException {
-        return m_ps.execute(sql);
+        throw new SQLException(DISALLOWED_BY_STATEMENT);
     }
     
     /**
@@ -798,13 +792,11 @@ public class PreparedStatementProxyForDebugging implements PreparedStatement {
      * @return either the row count for <code>INSERT</code>, <code>UPDATE</code>
      *         or <code>DELETE</code> statements, or <code>0</code> for SQL
      *         statements that return nothing
-     * @exception SQLException if a database access error occurs, the given
-     *            SQL statement returns a <code>ResultSet</code> object, or
-     *            the given constant is not one of those allowed
+     * @exception SQLException this method shall not be called on a PreparedStatement
      * @since 1.4
      */
     public int executeUpdate(String sql, int autoGeneratedKeys) throws SQLException {
-        return m_ps.executeUpdate(sql, autoGeneratedKeys);
+        throw new SQLException(DISALLOWED_BY_STATEMENT);
     }
     
     /**
@@ -835,10 +827,7 @@ public class PreparedStatementProxyForDebugging implements PreparedStatement {
      * @return <code>true</code> if the first result is a <code>ResultSet</code>
      *         object; <code>false</code> if it is an update count or there are
      *         no results
-     * @exception SQLException if a database access error occurs or the second
-     *         parameter supplied to this method is not
-     *         <code>Statement.RETURN_GENERATED_KEYS</code> or
-     *         <code>Statement.NO_GENERATED_KEYS</code>.
+     * @exception SQLException this method shall not be called on a PreparedStatement
      * @see #getResultSet
      * @see #getUpdateCount
      * @see #getMoreResults
@@ -847,7 +836,7 @@ public class PreparedStatementProxyForDebugging implements PreparedStatement {
      * @since 1.4
      */
     public boolean execute(String sql, int autoGeneratedKeys) throws SQLException {
-        return m_ps.execute(sql, autoGeneratedKeys);
+        throw new SQLException(DISALLOWED_BY_STATEMENT);
     }
     
     /**

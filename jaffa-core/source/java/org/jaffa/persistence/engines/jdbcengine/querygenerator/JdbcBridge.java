@@ -92,14 +92,14 @@ public class JdbcBridge {
      * @throws SQLException if any database error occurs.
      * @throws IllegalAccessException if the Persistent class is not accessible for introspection.
      * @throws InvocationTargetException if the accessor method for the Persistent class throws an exception.
-     * @throws IOException if any error occurs while extracting the value for an attribute.
      */
     public static void executeAdd(IPersistent object, DataSource dataSource)
-    throws SQLException, IllegalAccessException, InvocationTargetException, IOException {
+    throws SQLException, IllegalAccessException, InvocationTargetException {
         if (usePreparedStatement(dataSource))
             executeAddWithPreparedStatement(object, dataSource);
-        else
-            executeAddWithStatement(object, dataSource);
+        else {
+            throw new UnsupportedOperationException("No support for adding to the database without PreparedStatements.");
+        }
         updatePersistentFlagsOnAdd(object);
     }
     
@@ -126,28 +126,20 @@ public class JdbcBridge {
         dataSource.executeUpdate(pstmt);
     }
     
-    private static void executeAddWithStatement(IPersistent object, DataSource dataSource)
-    throws SQLException, IllegalAccessException, InvocationTargetException, IOException {
-        String sql = StatementHelper.getInsertStatementString(object, dataSource.getEngineType());
-        dataSource.executeUpdate(sql);
-    }
-    
-    
-    
     /** Updates the Persistent object in the database.
      * @param object The object to be updated.
      * @param dataSource The DataSource in which the object will be updated.
      * @throws SQLException if any database error occurs.
      * @throws IllegalAccessException if the Persistent class is not accessible for introspection.
      * @throws InvocationTargetException if the accessor method for the Persistent class throws an exception.
-     * @throws IOException if any error occurs while extracting the value for an attribute.
      */
     public static void executeUpdate(IPersistent object, DataSource dataSource)
-    throws SQLException, IllegalAccessException, InvocationTargetException, IOException {
+    throws SQLException, IllegalAccessException, InvocationTargetException {
         if (usePreparedStatement(dataSource))
             executeUpdateWithPreparedStatement(object, dataSource);
-        else
-            executeUpdateWithStatement(object, dataSource);
+        else {
+            throw new UnsupportedOperationException("No support for database update without PreparedStatements.");
+        }
         updatePersistentFlagsOnUpdate(object);
     }
     
@@ -174,28 +166,20 @@ public class JdbcBridge {
         dataSource.executeUpdate(pstmt);
     }
     
-    private static void executeUpdateWithStatement(IPersistent object, DataSource dataSource)
-    throws SQLException, IllegalAccessException, InvocationTargetException, IOException {
-        String sql = StatementHelper.getUpdateStatementString(object, dataSource.getEngineType());
-        dataSource.executeUpdate(sql);
-    }
-    
-    
-    
     /** Deletes the Persistent object from the database.
      * @param object The object to be deleted.
      * @param dataSource The DataSource from which the object will be deleted.
      * @throws SQLException if any database error occurs.
      * @throws IllegalAccessException if the Persistent class is not accessible for introspection.
      * @throws InvocationTargetException if the accessor method for the Persistent class throws an exception.
-     * @throws IOException if any error occurs while extracting the value for an attribute.
      */
     public static void executeDelete(IPersistent object, DataSource dataSource)
-    throws SQLException, IllegalAccessException, InvocationTargetException, IOException {
+    throws SQLException, IllegalAccessException, InvocationTargetException {
         if (usePreparedStatement(dataSource))
             executeDeleteWithPreparedStatement(object, dataSource);
-        else
-            executeDeleteWithStatement(object, dataSource);
+        else {
+            throw new UnsupportedOperationException("No support for deletion from database without PreparedStatements.");
+        }
         updatePersistentFlagsOnDelete(object);
     }
     
@@ -215,14 +199,6 @@ public class JdbcBridge {
         
         dataSource.executeUpdate(pstmt);
     }
-    
-    private static void executeDeleteWithStatement(IPersistent object, DataSource dataSource)
-    throws SQLException, IllegalAccessException, InvocationTargetException, IOException {
-        String sql = StatementHelper.getDeleteStatementString(object, dataSource.getEngineType());
-        dataSource.executeUpdate(sql);
-    }
-    
-    
     
     /** Executes the query based on the Criteria object.
      * @param criteria The input Criteria.
@@ -282,9 +258,7 @@ public class JdbcBridge {
             PreparedStatement pstmt = QueryStatementHelper.getPreparedStatement(criteria, dataSource, pagingPlugin);
             return dataSource.executeQuery(pstmt, classMetaData, criteria, (criteria.getLocking() == Criteria.LOCKING_PARANOID ? QUERY_TIMEOUT_FOR_LOCKING : 0), pagingPlugin);
         } else {
-            // Perform a query using a regular Statement
-            String sql = QueryStatementHelper.getSQL(criteria, dataSource, pagingPlugin);
-            return dataSource.executeQuery(sql, classMetaData, criteria, (criteria.getLocking() == Criteria.LOCKING_PARANOID ? QUERY_TIMEOUT_FOR_LOCKING : 0), pagingPlugin);
+            throw new UnsupportedOperationException("No support for database queries without PreparedStatements.");
         }
     }
     
@@ -447,16 +421,16 @@ public class JdbcBridge {
      * @throws SQLException if any database error occurs.
      * @throws IllegalAccessException if the Persistent class is not accessible for introspection.
      * @throws InvocationTargetException if the accessor method for the Persistent class throws an exception.
-     * @throws IOException if any error occurs while extracting the value for an attribute.
      */
     public static void executeLock(IPersistent object, DataSource dataSource)
-    throws SQLException, IllegalAccessException, InvocationTargetException, IOException {
+    throws SQLException, IllegalAccessException, InvocationTargetException {
         ClassMetaData classMetaData = ConfigurationService.getInstance().getMetaData(PersistentInstanceFactory.getActualPersistentClass(object).getName());
         if (classMetaData.isLockable()) {
             if (usePreparedStatement(dataSource))
                 executeLockWithPreparedStatement(object, dataSource);
-            else
-                executeLockWithStatement(object, dataSource);
+            else {
+                throw new UnsupportedOperationException("No support for locking metadata without PreparedStatements.");
+            }
             updatePersistentFlagsOnLock(object);
         } else {
             if (log.isDebugEnabled())
@@ -555,6 +529,10 @@ public class JdbcBridge {
     /** Returns true if the jdbc-engine configuration file has enabled PreparedStatements for the datasource. */
     private static boolean usePreparedStatement(DataSource dataSource) {
         Boolean bool = dataSource.getUsePreparedStatement();
+        // TODO To be security-conscious, the default value should be true, not false.
+        // To be *really* security conscious, this should always return true.
+        // Both alterations could break existing code.
+        // Will leave as is for now.  Maybe it's useful for testing?
         return bool != null ? bool.booleanValue() : false;
     }
     
