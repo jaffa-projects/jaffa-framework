@@ -58,7 +58,6 @@ var AuditTransactionRecord = Jaffa.data.Record.create([
     filter: true,
     sortFieldName: 'CreatedOn',
     sortable: true,
-    type: 'string',
     convert: datetime
   },{
     name: 'objectName',
