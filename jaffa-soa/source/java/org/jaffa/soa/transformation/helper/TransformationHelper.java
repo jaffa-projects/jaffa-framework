@@ -333,7 +333,10 @@ public class TransformationHelper {
      */
     public static String findFunction(String xmlString) throws Exception {
 
-        DocumentBuilder document = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        dbFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        DocumentBuilder document = dbFactory.newDocumentBuilder();
+
         Element node = document.parse(new ByteArrayInputStream(xmlString.getBytes())).getDocumentElement();
 
         //Xpath
