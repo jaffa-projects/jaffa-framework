@@ -106,6 +106,7 @@ public class TransformationHelper {
     private static Logger log = Logger.getLogger(TransformationHelper.class);
     public static final String DIRECTION_IN = "IN";
     public static final String DIRECTION_OUT = "OUT";
+    public static final String DTD_DISALLOW_URL = "http://apache.org/xml/features/disallow-doctype-decl";
 
     /**
      * This Method mashall the input object with given qName
@@ -334,7 +335,7 @@ public class TransformationHelper {
     public static String findFunction(String xmlString) throws Exception {
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        dbFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        dbFactory.setFeature(DTD_DISALLOW_URL, true);
         DocumentBuilder document = dbFactory.newDocumentBuilder();
 
         Element node = document.parse(new ByteArrayInputStream(xmlString.getBytes())).getDocumentElement();
