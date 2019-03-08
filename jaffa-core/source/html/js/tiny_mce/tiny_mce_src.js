@@ -229,7 +229,7 @@ TinyMCE_Engine.prototype = {
 
 		// If not super absolute make it so
 		baseHREF = tinyMCE.settings.document_base_url;
-		h = document.location.href;
+		h = escapePath(document.location.href);
 		p = h.indexOf('://');
 		if (p > 0 && document.location.protocol != "file:") {
 			p = h.indexOf('/', p + 3);
