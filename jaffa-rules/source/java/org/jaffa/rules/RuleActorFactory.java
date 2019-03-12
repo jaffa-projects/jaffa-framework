@@ -35,7 +35,8 @@ public abstract class RuleActorFactory<ActorT> {
         // Flex Field Support:
         // For instances of FlexBeans, the rules apply to the dyanmic class name
         // which generally consists of the classname + "$Flex".  If this is a flexbean, use that instead.
-        if (object instanceof FlexBean && ((FlexBean) object).getDynaClass() != null) {
+        boolean isFlexClass = object instanceof FlexBean && ((FlexBean) object).getDynaClass() != null;
+        if (isFlexClass) {
             clazz = ((FlexBean) object).getDynaClass().getName();
         } else {
             clazz = object.getClass().getName() != null ? object.getClass().getName() : "";
@@ -46,7 +47,7 @@ public abstract class RuleActorFactory<ActorT> {
         KeySet key = new KeySet(clazz, realm, variation);
 
         // look up in cache first, but if not exist then create from repository
-        ActorT actor = cache.get(key);
+        ActorT actor = isFlexClass ? null : cache.get(key);
         if (actor == null) {
             synchronized (syncObject) {
                 actor = createActor(object);
