@@ -49,10 +49,10 @@ public class MessageViewerTx implements IMessageViewer {
     public MessageViewerOutDto read(MessageViewerInDto input)
     throws FrameworkException, ApplicationExceptions {
         if (log.isDebugEnabled())
-            log.debug("Input: " + (input != null ? input.toString() : null));
+            log.debug("Input: " + input);
         MessageViewerOutDto output = buildDto(input);
         if (log.isDebugEnabled())
-            log.debug("Output: " + (output != null ? output.toString() : null));
+            log.debug("Output: " + output);
         return output;
     }
     
