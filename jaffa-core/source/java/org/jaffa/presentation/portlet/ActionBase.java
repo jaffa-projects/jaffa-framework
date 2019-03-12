@@ -82,6 +82,7 @@ public class ActionBase extends Action {
     private static Logger log = Logger.getLogger(ActionBase.class);
     private static final String NAME = "NAME";
     private static final String AJAX_FORWARD = "ajaxForward";
+    private static final Object requestLock = new Object();
 
     /** The ActionMapping used to select this instance
      */
@@ -253,7 +254,7 @@ public class ActionBase extends Action {
      * @return true if there is a transaction token stored in the component, and the value submitted as a request parameter with this action matches it. Else it returns false.
      */
     protected boolean isTokenValid(HttpServletRequest request, boolean reset) {
-        synchronized(request.getSession()) {
+        synchronized(requestLock) {
             if (component != null)
                 request.getSession().setAttribute(Globals.TRANSACTION_TOKEN_KEY, component.getToken());
             boolean valid = super.isTokenValid(request, reset);
