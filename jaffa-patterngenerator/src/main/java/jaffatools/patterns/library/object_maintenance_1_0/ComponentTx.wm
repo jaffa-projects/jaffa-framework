@@ -99,7 +99,7 @@ public class $(Component.Upper1)Tx implements I$(Component.Upper1) {
         try {
             // Print Debug Information for the input
             if (log.isDebugEnabled()) {
-                log.debug("Input: " + (input != null ? input.toString() : null));
+                log.debug("Input: " + input);
             }
 
             // create the UOW
@@ -140,7 +140,7 @@ public class $(Component.Upper1)Tx implements I$(Component.Upper1) {
 
             // Print Debug Information for the output
             if (log.isDebugEnabled()) {
-                log.debug("Output: " + (output != null ? output.toString() : null));
+                log.debug("Output: " + output);
             }
             return output;
         } finally {
@@ -161,7 +161,7 @@ public class $(Component.Upper1)Tx implements I$(Component.Upper1) {
         try {
             // Print Debug Information for the input
             if (log.isDebugEnabled()) {
-                log.debug("Input: " + (input != null ? input.toString() : null));
+                log.debug("Input: " + input);
             }
 
             // create the UOW
@@ -178,7 +178,7 @@ public class $(Component.Upper1)Tx implements I$(Component.Upper1) {
 
             // Print Debug Information for the output
             if (log.isDebugEnabled()) {
-                log.debug("Output: " + (output != null ? output.toString() : null));
+                log.debug("Output: " + output);
             }
             return output;
         } finally {
@@ -199,7 +199,7 @@ public class $(Component.Upper1)Tx implements I$(Component.Upper1) {
         try {
             // Print Debug Information for the input
             if (log.isDebugEnabled()) {
-                log.debug("Input: " + (input != null ? input.toString() : null));
+                log.debug("Input: " + input);
             }
 
             // create the UOW
@@ -257,7 +257,7 @@ public class $(Component.Upper1)Tx implements I$(Component.Upper1) {
         try {
             // Print Debug Information for the input
             if (log.isDebugEnabled()) {
-                log.debug("Input: " + (input != null ? input.toString() : null));
+                log.debug("Input: " + input);
             }
 
             // create the UOW

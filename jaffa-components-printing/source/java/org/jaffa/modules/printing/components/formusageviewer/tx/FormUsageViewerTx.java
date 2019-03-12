@@ -65,7 +65,7 @@ public class FormUsageViewerTx implements IFormUsageViewer {
         try {
             // Print Debug Information for the input
             if (log.isDebugEnabled()) {
-                log.debug("Input: " + (input != null ? input.toString() : null));
+                log.debug("Input: " + input);
             }
             
             // create the UOW
@@ -92,7 +92,7 @@ public class FormUsageViewerTx implements IFormUsageViewer {
             
             // Print Debug Information for the output
             if (log.isDebugEnabled()) {
-                log.debug("Output: " + (output != null ? output.toString() : null));
+                log.debug("Output: " + output);
             }
             
             return output;

@@ -41,10 +41,10 @@ public class QueueViewerTx implements IQueueViewer {
     public QueueViewerOutDto read(QueueViewerInDto input)
     throws FrameworkException, ApplicationExceptions {
         if (log.isDebugEnabled())
-            log.debug("Input: " + (input != null ? input.toString() : null));
+            log.debug("Input: " + input);
         QueueViewerOutDto output = buildDto(input);
         if (log.isDebugEnabled())
-            log.debug("Output: " + (output != null ? output.toString() : null));
+            log.debug("Output: " + output);
         return output;
     }
     

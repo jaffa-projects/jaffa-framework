@@ -78,7 +78,7 @@ public class FormEventMaintenanceTx extends MaintTx implements IFormEventMainten
         try {
             // Print Debug Information for the input
             if (log.isDebugEnabled())
-                log.debug("Input: " + (input != null ? input.toString() : null));
+                log.debug("Input: " + input);
 
             // create the UOW
             uow = new UOW();
@@ -103,7 +103,7 @@ public class FormEventMaintenanceTx extends MaintTx implements IFormEventMainten
 
             // Print Debug Information for the output
             if (log.isDebugEnabled())
-                log.debug("Output: " + (output != null ? output.toString() : null));
+                log.debug("Output: " + output);
             return output;
         } catch (FrameworkException e) {
             // It is possible the FrameworkException is wrapping an ApplicationException.
@@ -134,7 +134,7 @@ public class FormEventMaintenanceTx extends MaintTx implements IFormEventMainten
         try {
             // Print Debug Information for the input
             if (log.isDebugEnabled())
-                log.debug("Input: " + (input != null ? input.toString() : null));
+                log.debug("Input: " + input);
 
             // create the UOW
             uow = new UOW();
@@ -197,7 +197,7 @@ public class FormEventMaintenanceTx extends MaintTx implements IFormEventMainten
         try {
             // Print Debug Information for the input
             if (log.isDebugEnabled())
-                log.debug("Input: " + (input != null ? input.toString() : null));
+                log.debug("Input: " + input);
 
             // create the UOW
             uow = new UOW();
@@ -213,7 +213,7 @@ public class FormEventMaintenanceTx extends MaintTx implements IFormEventMainten
 
             // Print Debug Information for the output
             if (log.isDebugEnabled())
-                log.debug("Output: " + (output != null ? output.toString() : null));
+                log.debug("Output: " + output);
             return output;
         } catch (FrameworkException e) {
             // It is possible the FrameworkException is wrapping an ApplicationException.
@@ -244,7 +244,7 @@ public class FormEventMaintenanceTx extends MaintTx implements IFormEventMainten
         try {
             // Print Debug Information for the input
             if (log.isDebugEnabled())
-                log.debug("Input: " + (input != null ? input.toString() : null));
+                log.debug("Input: " + input);
 
             // create the UOW
             uow = new UOW();
@@ -267,7 +267,7 @@ public class FormEventMaintenanceTx extends MaintTx implements IFormEventMainten
 
             // Print Debug Information for the output
             if (log.isDebugEnabled())
-                log.debug("Output: " + (output != null ? output.toString() : null));
+                log.debug("Output: " + output);
             return output;
         } catch (FrameworkException e) {
             // It is possible the FrameworkException is wrapping an ApplicationException.
@@ -298,7 +298,7 @@ public class FormEventMaintenanceTx extends MaintTx implements IFormEventMainten
         try {
             // Print Debug Information for the input
             if (log.isDebugEnabled())
-                log.debug("Input: " + (input != null ? input.toString() : null));
+                log.debug("Input: " + input);
 
             // create the UOW
             uow = new UOW();
@@ -394,7 +394,7 @@ public class FormEventMaintenanceTx extends MaintTx implements IFormEventMainten
     public void delete(FormEventMaintenanceDeleteInDto input, UOW uow) throws FrameworkException, ApplicationExceptions {
         // Print Debug Information for the input
         if (log.isDebugEnabled())
-            log.debug("Input: " + (input != null ? input.toString() : null));
+            log.debug("Input: " + input);
 
         // Preprocess the input
         preprocess(uow, input);
