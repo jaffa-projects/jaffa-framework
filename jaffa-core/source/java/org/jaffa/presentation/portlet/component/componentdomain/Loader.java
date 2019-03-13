@@ -81,14 +81,11 @@ public class Loader {
 	 * Returns the singleton Loader, creating it if necessary.
 	 * @return the singleton
      */
-	public static Loader getInstance() {
+	public static synchronized Loader getInstance() {
 		if (loaderSingleton == null) {
-			synchronized (Loader.class) {
-				if (loaderSingleton == null) {
-					loaderSingleton = new Loader();
-				}
-			}
+			loaderSingleton = new Loader();
 		}
+
 		return loaderSingleton;
 	}
 
