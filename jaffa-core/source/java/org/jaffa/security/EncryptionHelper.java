@@ -55,23 +55,10 @@
 
 package org.jaffa.security;
 
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
-import java.io.UnsupportedEncodingException;
-import java.io.IOException;
-import javax.crypto.SecretKey;
-import javax.crypto.Cipher;
-import java.io.File;
-import java.io.FileInputStream;
 import javax.crypto.KeyGenerator;
-import java.io.FileOutputStream;
+import javax.crypto.SecretKey;
+import java.io.*;
 import java.security.NoSuchAlgorithmException;
-import java.io.InputStream;
-import java.io.FileNotFoundException;
-import java.io.Serializable;
-import java.io.NotSerializableException;
 
 /** This class has some utility functions for encrypting objects using the
  * JCE Security Package.
@@ -95,41 +82,41 @@ import java.io.NotSerializableException;
 public class EncryptionHelper {
 
     /** This is the encryption policy that will be used */
-    public static final String ENCRYPT_POLICY = "DES/ECB/PKCS5Padding";
+    public static final String ENCRYPT_POLICY = "AES/ECB/PKCS5Padding";
     private static final char[] HEX = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
     private static final String HEX_STR = "0123456789ABCDEF";
+
+    /** The default algorithm to use for encryption/decryption. */
+    public static final String DEFAULT_CRYPTOGRAPHIC_ALGORITHM = "AES";
 
     /** This method can be used from the command line for creating a Secret Key.
      * @param args the command line arguments
      * Requires one mandatory parameter, which is the file name to use to write out the SecretKey
      */
     public static void main(String args[]) {
-        if(args.length != 1) {
+        if (args.length != 1) {
             System.out.println("Missing Parameter. Please supply the filename for writing out the SecretKey");
             return;
         }
-        File f = new File(args[0]);
-        if(f.exists())
+        File file = new File(args[0]);
+        if (file.exists()) {
             System.out.println("Warning: Existing File Will Be Replaced.");
-        try{
-            // Create Key
-            KeyGenerator kg = KeyGenerator.getInstance("DES");
-            SecretKey secretKey = kg.generateKey();
+        }
 
-            // Convert to Raw bytearray for storage
-            byte[] rawsecretKey = secretKey.getEncoded();
+        try {
+            SecretKey secretKey = createKey();
 
-            // Write the newly generated key to a file.
-            FileOutputStream fos = new FileOutputStream(f);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(secretKey);
-            oos.flush();
-            oos.close();
-            fos.close();
-
-        } catch (NoSuchAlgorithmException e) {
-            System.err.println("Invalid Algorithm : " + e.getMessage());
-        } catch (IOException e){
+            if (secretKey != null) {
+                // Write the newly generated key to a file.
+                FileOutputStream fos = new FileOutputStream(file);
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                oos.writeObject(secretKey);
+                oos.flush();
+                oos.close();
+                fos.close();
+            }
+        }
+        catch (IOException e) {
             System.err.println("Error Writing Out Key : " + e.getMessage());
         }
     }
@@ -139,12 +126,11 @@ public class EncryptionHelper {
      */
     public static SecretKey createKey() {
         try {
-            // Create Key
-            KeyGenerator kg = KeyGenerator.getInstance("DES");
+            KeyGenerator kg = KeyGenerator.getInstance(DEFAULT_CRYPTOGRAPHIC_ALGORITHM);
             SecretKey secretKey = kg.generateKey();
             return secretKey;
         } catch (NoSuchAlgorithmException e) {
-            // Shouldn't happen because we've hardcoded the algorithm to use - DES!
+            // Shouldn't happen because we've hardcoded the algorithm to use
             System.err.println("Invalid Algorithm : " + e.getMessage());
             return null;
         }
