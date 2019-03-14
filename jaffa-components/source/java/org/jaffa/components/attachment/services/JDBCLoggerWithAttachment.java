@@ -327,11 +327,7 @@ public class JDBCLoggerWithAttachment extends JDBCLogger {
                     paramIndex = paramIndex + 1;
                 } else if (logtype == JDBCLogType.TIMESTAMP) {
                     parameter = new Timestamp((new java.util.Date()).getTime());
-                    if (parameter == null) {
-                        prepStmt.setNull(paramIndex, sqlType);
-                    } else {
-                        prepStmt.setObject(paramIndex, parameter);
-                    }
+                    prepStmt.setObject(paramIndex, parameter);
                     paramIndex = paramIndex + 1;
                 } else if (logtype == JDBCLogType.INC) {
                     parameter = ((Number) c_inc.get(this));

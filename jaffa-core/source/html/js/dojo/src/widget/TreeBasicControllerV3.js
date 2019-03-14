@@ -274,11 +274,7 @@ dojo.widget.defineWidget("dojo.widget.TreeBasicControllerV3", [dojo.widget.HtmlW
 	if (widgetId) {
 		return dojo.widget.byId(widgetId);
 	} else {
-		if (node == null) {
-			return null;
-		} else {
-			return dojo.widget.manager.byNode(node);
-		}
+		return dojo.widget.manager.byNode(node);
 	}
 }, expand:function (node) {
 	if (node.isFolder) {

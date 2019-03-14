@@ -196,8 +196,7 @@ public class FormKey implements Cloneable, Comparable, Serializable {
      * @return an int which will be the sum of the of the hashcodes of componentId, formName.
      */
     public int hashCode() {
-        return m_componentId != null ? m_componentId.hashCode() : 0
-                + m_formName != null ? m_formName.hashCode() : 0;
+        return (m_componentId != null ? m_componentId.hashCode() : 0) + m_formName.hashCode();
     }
 
     /**

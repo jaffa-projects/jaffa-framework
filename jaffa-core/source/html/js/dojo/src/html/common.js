@@ -43,7 +43,7 @@ dojo.html.getViewport = function () {
 		} else {
 			if (!dojo.render.html.opera && dojo.exists(_document, "documentElement.clientWidth")) {
 				var w2 = _document.documentElement.clientWidth;
-				if (!w || w2 && w2 < w) {
+				if (!w) {
 					w = w2;
 				}
 				h = _document.documentElement.clientHeight;

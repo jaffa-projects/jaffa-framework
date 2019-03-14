@@ -115,7 +115,7 @@ public class CodeHelperTx implements ICodeHelper {
 
             // Print Debug Information for the output
             if (log.isDebugEnabled()) {
-                log.debug("Output: " + (output != null ? output.toString() : null));
+                log.debug("Output: " + output.toString());
             }
             return output;
         } finally {

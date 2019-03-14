@@ -380,7 +380,6 @@ public class PrinterDefinitionLookupComponent extends LookupComponent2 {
      * @return the FinderOutDto object.
      */
     protected FinderOutDto doInquiry() throws ApplicationExceptions, FrameworkException {
-        ApplicationExceptions appExps = null;
         PrinterDefinitionLookupInDto inputDto = new PrinterDefinitionLookupInDto();
         // .//GEN-END:_doInquiry_1_be
         // Add custom code before processing the method //GEN-FIRST:_doInquiry_1
@@ -427,11 +426,6 @@ public class PrinterDefinitionLookupComponent extends LookupComponent2 {
 
         if (getRemote() != null)
             inputDto.setRemote(BooleanCriteriaField.getBooleanCriteriaField(CriteriaField.RELATIONAL_EQUALS, getRemote(), null));
-
-
-        // throw ApplicationExceptions, if any parsing errors occured
-        if (appExps != null && appExps.size() > 0)
-            throw appExps;
 
         inputDto.setHeaderDto(getHeaderDto());
         addSortCriteria(inputDto);
@@ -639,13 +633,11 @@ public class PrinterDefinitionLookupComponent extends LookupComponent2 {
      * @throws FrameworkException Indicates some system error.
      */
     protected void initializeCriteriaScreen() throws ApplicationExceptions, FrameworkException {
-        ApplicationExceptions appExps = null;
         CodeHelperInDto input = null;
         if (m_codeHelperTx == null)
             m_codeHelperTx = (ICodeHelper) Factory.createObject(ICodeHelper.class);
         if (m_outputTypeCodes == null) {
-            if (input == null)
-                input = new CodeHelperInDto();
+            input = new CodeHelperInDto();
             CodeHelperInElementDto codeHelperInElementDto = new CodeHelperInElementDto();
             codeHelperInElementDto.setCode("outputType");
             codeHelperInElementDto.setDomainClassName("org.jaffa.modules.printing.domain.PrinterOutputType");
@@ -654,10 +646,6 @@ public class PrinterDefinitionLookupComponent extends LookupComponent2 {
             codeHelperInElementDto.setAppendCodeAndDescription(true);
             input.addCodeHelperInElementDto(codeHelperInElementDto);
         }
-
-        // throw ApplicationExceptions, if any parsing errors occured
-        if (appExps != null && appExps.size() > 0)
-            throw appExps;
 
         // Get the Codes and populate the respective fields
         if (input != null) {

@@ -150,10 +150,7 @@ dojo.hostenv.getBaseScriptUri = function () {
 		return djConfig.baseScriptUri;
 	}
 	var uri = new String(djConfig.libraryScriptUri || djConfig.baseRelativePath);
-	if (!uri) {
-		dojo.raise("Nothing returned by getLibraryScriptUri(): " + uri);
-	}
-	var lastslash = uri.lastIndexOf("/");
+
 	djConfig.baseScriptUri = djConfig.baseRelativePath;
 	return djConfig.baseScriptUri;
 };

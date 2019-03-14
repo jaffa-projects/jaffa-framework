@@ -3338,19 +3338,7 @@ TinyMCE_Control.prototype = {
 
 				// Try executing command
 				eval('try {this.getDoc().execCommand(command, user_interface, value);} catch (e) {cmdFailed = true;}');
-
-				if (tinyMCE.isOpera && cmdFailed)
-					alert('Currently not supported by your browser, use keyboard shortcuts instead.');
-
-				// Alert error in gecko if command failed
-				if (tinyMCE.isGecko && cmdFailed) {
-					// Confirm more info
-					if (confirm(tinyMCE.entityDecode(tinyMCE.getLang('lang_clipboard_msg'))))
-						window.open('http://www.mozilla.org/editor/midasdemo/securityprefs.html', 'mceExternal');
-
-					return;
-				} else
-					tinyMCE.triggerNodeChange();
+				tinyMCE.triggerNodeChange();
 			break;
 
 			case "mceSetContent":
