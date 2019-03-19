@@ -453,7 +453,7 @@ public class PrinterDefinitionFinderComponent extends FinderComponent2 {
 
         // .//GEN-LAST:_doInquiry_2
         // .//GEN-BEGIN:_doInquiry_3_be
-        return m_tx.find(inputDto);
+        return m_tx.find(inputDto); 
     }
     // .//GEN-END:_doInquiry_3_be
     // .//GEN-BEGIN:_createObject_1_be
