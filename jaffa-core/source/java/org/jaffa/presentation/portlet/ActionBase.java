@@ -79,6 +79,17 @@ import org.jaffa.exceptions.TokenMismatchException;
  */
 public class ActionBase extends Action {
 
+    /**
+     * This pattern specifies which characters are allowable in a simple
+     * forwarding specification - basically letters, numbers, slashes, and underscores,
+     * which suffices to match component specifications and ordinary paths.
+     * From https://www.regular-expressions.info/unicode.html:
+     *  p{L} = Match any kind of letter from any language
+     *  p{M} = Match any character intended to be combined with another character
+     *  p{N} = Match any numeric character in any script
+     */
+    private static final String SIMPLE_FORWARD_PATTERN = "^[\\p{L}\\p{M}\\p{N}_/]+$";
+
     private static Logger log = Logger.getLogger(ActionBase.class);
     private static final String NAME = "NAME";
     private static final String AJAX_FORWARD = "ajaxForward";
@@ -152,14 +163,14 @@ public class ActionBase extends Action {
         if (fk != null) {
             if ( log.isDebugEnabled() )
                 log.debug("Received the Form Key: " + fk);
-            if (ajaxForward!=null && ajaxForward.length()>0) {
+            if (isSafeForward(ajaxForward)) {
                 // This is an ajax request that should forward to a specific place
                 // so it returns just a subset of a specific page
                 if ( log.isDebugEnabled() )
                     log.debug("Set AJAX FormKey to '" + ajaxForward + "' (was originally '" + fk.getFormName() +"')");
                 fk = new FormKey(ajaxForward, fk.getComponentId(), fk.getTitle());
 
-                // Still needed for AJAX, if page forwared to use a <j:Form> to lookup current component
+                // Still needed for AJAX, if page forwarded to use a <j:Form> to lookup current component
                 request.setAttribute(FormKey.class.getName(), fk);
                 // As this is a partial page with no <HEAD> tag the <j:Header/> tag can't be used to prevent
                 // response caching, so do it directly on the response.
@@ -206,6 +217,42 @@ public class ActionBase extends Action {
             // kill the userSession & return to the finalUrl
             return actionInstance.handleNullFormKey();
         }
+    }
+
+    /**
+     * Determines whether the provided ajaxForward is acceptable and won't
+     * be a security risk
+     * @param ajaxForward the proposed place to forward to
+     * @return true if acceptable; false otherwise
+     */
+    boolean isSafeForward(String ajaxForward) {
+        // See if there is anything to evaluate
+        boolean isSafe = (ajaxForward != null) && !ajaxForward.trim().isEmpty();
+
+        /*
+        The only forwards used at the time this code is being written
+          (3/12/2019) are below.
+            /material/core/stockbalancefinder/inventory_tab.jsp
+            /material/core/stockbalancefinder/retail_tab.jsp
+            commons_core_defaultCommentLookupTinyMceResults
+            commons_core_defaultCommentViewerTinyMceResults
+            material_core_tavFinder* (20 variations)
+            workrecording_core_tavFinderWorkOrderItemFinder
+        We allow some additional safe character combinations.
+         */
+        if (isSafe) { // Do additional checking
+            // The only "." we allow is as part of the ".jsp" extension, so check
+            // whatever is before that for legitimacy
+            String preJsp = ajaxForward.endsWith(".jsp")
+                            ? ajaxForward.substring(0, ajaxForward.length() - 4)
+                            : ajaxForward;
+            isSafe = preJsp.matches(SIMPLE_FORWARD_PATTERN);
+
+            if (!isSafe) {
+                log.warn("Invalid forward address rejected: " + ajaxForward);
+            }
+        }
+        return isSafe;
     }
 
     /**

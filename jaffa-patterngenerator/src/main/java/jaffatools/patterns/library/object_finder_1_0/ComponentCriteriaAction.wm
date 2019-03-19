@@ -69,7 +69,7 @@ public class $(Component.Upper1)CriteriaAction extends ActionBase {
                     log.debug("Search Failed");
                 myForm.raiseError(request, ActionErrors.GLOBAL_ERROR, e);
             } catch (FrameworkException e) {
-                System.err.println(null, e);
+                log.error(e.getMessage(), e);
                 myForm.raiseError(request, ActionErrors.GLOBAL_ERROR, "error.framework.general" );
             }
         }
@@ -116,7 +116,7 @@ public class $(Component.Upper1)CriteriaAction extends ActionBase {
                     log.debug("Create Failed");
                 myForm.raiseError(request, ActionErrors.GLOBAL_ERROR, e);
             } catch (FrameworkException e) {
-                System.err.println(null, e);
+                log.error(e.getMessage(), e);
                 myForm.raiseError(request, ActionErrors.GLOBAL_ERROR, "error.framework.general" );
             }
         }

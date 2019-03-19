@@ -765,10 +765,8 @@ $ScratchPad.clear()
                 }
             }
 #end
-            try {
+            if (output != null && $(wm_foreignObject) != null) {
                 output.set$(field.Name.Upper1)($(wm_foreignObject).get$(field.DomainFieldInForeignObject.Upper1)());
-            } catch (NullPointerException e) {
-                // Do nothing
             }
 #else
 #set $wm_relatedObject = "chain$(foreignObject.Object.Upper1)"
@@ -821,10 +819,8 @@ $ScratchPad.clear()
                 }
             }
 #end
-            try {
+            if (output != null && $(wm_relatedObject) != null) {
                 output.set$(field.Name.Upper1)($(wm_relatedObject).get$(field.DomainFieldInForeignObject.Upper1)());
-            } catch (NullPointerException e) {
-                // Do nothing
             }
 #end
 #end

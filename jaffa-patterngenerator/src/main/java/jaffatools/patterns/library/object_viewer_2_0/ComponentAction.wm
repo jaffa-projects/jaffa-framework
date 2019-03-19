@@ -69,7 +69,7 @@ public class $(Component.Upper1)Action extends ActionBase {
                     log.debug("Viewer Failed");
                 myForm.raiseError(request, ActionErrors.GLOBAL_ERROR, e);
             } catch (FrameworkException e) {
-                System.err.println(null, e);
+                log.error(e.getMessage(), e);
                 myForm.raiseError(request, ActionErrors.GLOBAL_ERROR, "error.framework.general" );
             }
         }
@@ -142,7 +142,7 @@ public class $(Component.Upper1)Action extends ActionBase {
                     log.debug("Viewer Failed");
                 myForm.raiseError(request, ActionErrors.GLOBAL_ERROR, e);
             } catch (FrameworkException e) {
-                System.err.println(null, e);
+                log.error(e.getMessage(), e);
                 myForm.raiseError(request, ActionErrors.GLOBAL_ERROR, "error.framework.general" );
             }
         }
@@ -209,7 +209,7 @@ public class $(Component.Upper1)Action extends ActionBase {
                 log.debug("Update Failed");
             myForm.raiseError(request, ActionErrors.GLOBAL_ERROR, e);
         } catch (FrameworkException e) {
-            System.err.println(null, e);
+            log.error(e.getMessage(), e);
             myForm.raiseError(request, ActionErrors.GLOBAL_ERROR, "error.framework.general" );
         }
         // .//GEN-END:_do_Update_Clicked_3_be
