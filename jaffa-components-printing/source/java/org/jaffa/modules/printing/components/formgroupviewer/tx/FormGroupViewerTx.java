@@ -218,10 +218,8 @@ public class FormGroupViewerTx implements IFormGroupViewer {
                 }
                 // .//GEN-END:_addRelatedDtos_FormUsage_Description_2_be
                 // .//GEN-BEGIN:_addRelatedDtos_FormUsage_Description_3_be
-                try {
+                if (dto != null && chainFormEventEventNameEventName != null) {
                     dto.setDescription(chainFormEventEventNameEventName.getDescription());
-                } catch (NullPointerException e) {
-                    // Do nothing
                 }
                 // .//GEN-END:_addRelatedDtos_FormUsage_Description_3_be
                 // Add custom code to pass values to the dto //GEN-FIRST:_addRelatedDtos_FormUsage_3
