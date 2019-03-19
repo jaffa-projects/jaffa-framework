@@ -430,9 +430,6 @@ dojo.requireLocalization = function (moduleName, bundleName, locale, availableFl
 (function () {
 	var extra = djConfig.extraLocale;
 	if (extra) {
-		if (!extra instanceof Array) {
-			extra = [extra];
-		}
 		var req = dojo.requireLocalization;
 		dojo.requireLocalization = function (m, b, locale, availableFlatLocales) {
 			req(m, b, locale, availableFlatLocales);

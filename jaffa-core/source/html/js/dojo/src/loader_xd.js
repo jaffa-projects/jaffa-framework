@@ -219,22 +219,19 @@ dojo.xdRequireLocalization = function (moduleName, bundleName, locale, available
 	}
 };
 (function () {
-	var extra = djConfig.extraLocale;
-	if (extra) {
-		if (!extra instanceof Array) {
-			extra = [extra];
-		}
-		dojo._xdReqLoc = dojo.xdRequireLocalization;
-		dojo.xdRequireLocalization = function (m, b, locale, fLocales) {
-			dojo._xdReqLoc(m, b, locale, fLocales);
-			if (locale) {
-				return;
-			}
-			for (var i = 0; i < extra.length; i++) {
-				dojo._xdReqLoc(m, b, extra[i], fLocales);
-			}
-		};
-	}
+    var extra = djConfig.extraLocale;
+    if (extra) {
+        dojo._xdReqLoc = dojo.xdRequireLocalization;
+        dojo.xdRequireLocalization = function (m, b, locale, fLocales) {
+            dojo._xdReqLoc(m, b, locale, fLocales);
+            if (locale) {
+                return;
+            }
+            for (var i = 0; i < extra.length; i++) {
+                dojo._xdReqLoc(m, b, extra[i], fLocales);
+            }
+        };
+    }
 })();
 dojo.hostenv.unpackXdDependency = function (dep) {
 	var newDeps = null;

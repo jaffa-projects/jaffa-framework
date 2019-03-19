@@ -426,7 +426,6 @@ public class PrinterDefinitionMaintenanceComponent extends MaintComponent2 {
     /** This will retrieve the set of codes for dropdowns, if any are required
      */
     protected void initDropDownCodes() throws ApplicationExceptions, FrameworkException {
-        ApplicationExceptions appExps = null;
         CodeHelperInDto input = null;
         if (m_codeHelperTx == null)
             m_codeHelperTx = (ICodeHelper) Factory.createObject(ICodeHelper.class);
@@ -440,10 +439,6 @@ public class PrinterDefinitionMaintenanceComponent extends MaintComponent2 {
             codeHelperInElementDto.setDescriptionFieldName("OutputType");
             input.addCodeHelperInElementDto(codeHelperInElementDto);
         }
-
-        // throw ApplicationExceptions, if any parsing errors occured
-        if (appExps != null && appExps.size() > 0)
-            throw appExps;
 
         // Get the Codes and populate the respective fields
         if (input != null) {

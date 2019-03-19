@@ -188,13 +188,9 @@ function checkDateTime(fld ,isDateTime, layout) {
           }
         }
       }
-      if ((isUk != null && isUk == true) || (isDotSeparator != null && isDotSeparator === true)) {
+      if ((isUk != null && isUk == true)) {
         month = matchArray[2]; // parse date into variables
         day = matchArray[1];
-        year = matchArray[3];
-      } else {
-        month = matchArray[1]; // parse date into variables
-        day = matchArray[2];
         year = matchArray[3];
       }
       if (year.length == 2) year = "20" + year;

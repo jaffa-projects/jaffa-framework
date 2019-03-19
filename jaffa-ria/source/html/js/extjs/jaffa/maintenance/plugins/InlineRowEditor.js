@@ -763,10 +763,6 @@ Jaffa.maintenance.plugins.InlineRowEditor = Ext.extend(Ext.ux.grid.RowEditor, {
       }
       ed.setWidth(cm.getColumnWidth(i));
       ed.column = c;
-      if(ed.ownerCt !== this && !ed instanceof Ext.ux.form.DateTime) {
-        ed.on('focus', this.ensureVisible, this);
-        ed.on('specialkey', this.onKey, this);
-      }
       this.insert(i, ed);
     }
     this.initialized = true;

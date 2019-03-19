@@ -308,10 +308,7 @@ Ext.ux.plugins.MetaColumns = function(config) {
                 }
               }
               
-              if(!dt) {
-                console.error("Filter on ",this.id || this," field ",column.dataIndex," skipped as datatype was not defined");
-                continue;
-              } else if(dt!='numeric'&&dt!='string'&&dt!='numeric'&&dt!='date'&&dt!='list'&&dt!='boolean') {
+              if(dt!='numeric'&&dt!='string'&&dt!='numeric'&&dt!='date'&&dt!='list'&&dt!='boolean') {
                 console.error("Filter on ",this.id || this," field ",column.dataIndex," not supported for data type ",dt,' / ',column.type);
                 continue;
               } else {
