@@ -159,7 +159,7 @@ public class ActionBase extends Action {
                     log.debug("Set AJAX FormKey to '" + ajaxForward + "' (was originally '" + fk.getFormName() +"')");
                 fk = new FormKey(ajaxForward, fk.getComponentId(), fk.getTitle());
 
-                // Still needed for AJAX, if page forwared to use a <j:Form> to lookup current component
+                // Still needed for AJAX, if page forwarded to use a <j:Form> to lookup current component
                 request.setAttribute(FormKey.class.getName(), fk);
                 // As this is a partial page with no <HEAD> tag the <j:Header/> tag can't be used to prevent
                 // response caching, so do it directly on the response.
