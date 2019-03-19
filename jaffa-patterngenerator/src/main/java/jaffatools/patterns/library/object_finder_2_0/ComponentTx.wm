@@ -326,10 +326,8 @@ $ScratchPad.clear()
             // .//GEN-END:_buildDto_$(field.Name.Upper1)_3_be
 #end
             // .//GEN-BEGIN:_buildDto_$(field.Name.Upper1)_4_be
-            try {
+            if (row != null && $(wm_relatedObject) != null) {
                 row.set$(field.Name.Upper1)($(wm_relatedObject).get$(field.DomainField.Upper1)());
-            } catch (NullPointerException e) {
-                // Do nothing
             }
             // .//GEN-END:_buildDto_$(field.Name.Upper1)_4_be
 #end

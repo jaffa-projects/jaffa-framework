@@ -69,7 +69,7 @@ public class $(Component.Upper1)Action extends ActionBase {
                     log.debug("Viewer Failed");
                 myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, e);
             } catch (FrameworkException e) {
-                System.err.println(null, e);
+                log.error(e.getMessage(), e);
                 myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, "error.framework.general" );
             }
         }
@@ -142,7 +142,7 @@ public class $(Component.Upper1)Action extends ActionBase {
                     log.debug("Viewer Failed");
                 myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, e);
             } catch (FrameworkException e) {
-                System.err.println(null, e);
+                log.error(e.getMessage(), e);
                 myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, "error.framework.general" );
             }
         }
@@ -208,7 +208,7 @@ public class $(Component.Upper1)Action extends ActionBase {
                     log.debug("Updator Failed");
                 myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, e);
             } catch (FrameworkException e) {
-                System.err.println(null, e);
+                log.error(e.getMessage(), e);
                 myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, "error.framework.general" );
             }
         }
@@ -268,7 +268,7 @@ public class $(Component.Upper1)Action extends ActionBase {
                     log.debug("Deletor Failed");
                 myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, e);
             } catch (FrameworkException e) {
-                System.err.println(null, e);
+                log.error(e.getMessage(), e);
                 myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, "error.framework.general" );
             }
         }
@@ -329,7 +329,7 @@ public class $(Component.Upper1)Action extends ActionBase {
                 log.debug("Update Failed");
             myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, e);
         } catch (FrameworkException e) {
-            System.err.println(null, e);
+            log.error(e.getMessage(), e);
             myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, "error.framework.general" );
         }
         // .//GEN-END:_do_Update_Clicked_3_be
@@ -374,7 +374,7 @@ public class $(Component.Upper1)Action extends ActionBase {
                 log.debug("Delete Failed");
             myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, e);
         } catch (FrameworkException e) {
-            System.err.println(null, e);
+            log.error(e.getMessage(), e);
             myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, "error.framework.general" );
         }
         // .//GEN-END:_do_Delete_Clicked_3_be

@@ -25,7 +25,7 @@
         <!-- The root directory for the generated source files
              (java, sql, ...)
              -->
-        <gen.root>C:/GOLDesp/Jaffa/trunk/DomainModel/source</gen.root>
+        <gen.root>C:/Gold/trunk/DomainModel/source</gen.root>
 
         <!-- Directory for the temporary file created when the pattern
              template XML has the template metadata applied to it -->
@@ -37,20 +37,20 @@
         </gen.webmacro>
 
         <!-- The patterns located in DomainModel -->
-        <gen.domainMetadata>C:/GOLDesp/Jaffa/trunk/DomainModel/source/java</gen.domainMetadata>
+        <gen.domainMetadata>${gen.root}/java</gen.domainMetadata>
 
         <!-- The patterns located in JaffaTools -->
         <gen.jaffaToolsMetadata>${build.sourceDirectory}/jaffatools</gen.jaffaToolsMetadata>
 
         <!-- Where generated Java files should get written -->
-        <gen.javaDestination>C:/GOLDesp/Jaffa/trunk/DomainModel/source/java</gen.javaDestination>
+        <gen.javaDestination>${gen.root}/java</gen.javaDestination>
 
         <!-- Where generated SQL files should get written -->
-        <gen.sqlDestination>C:/GOLDesp/Jaffa/trunk/DomainModel/source/sql/install</gen.sqlDestination>
+        <gen.sqlDestination>${gen.root}/sql/install</gen.sqlDestination>
 
         <!-- The default metadata source location when the exec:java target gets called -->
         <gen.defaultMetadataDir>
-            C:/GOLDesp/Jaffa/trunk/DomainModel/build/patterns/domain_creator_1_1/requisitioning/purchase
+            C:/GOLD/trunk/DomainModel/build/patterns/domain_creator_1_1/requisitioning/purchase
         </gen.defaultMetadataDir>
     </properties>
 

@@ -167,7 +167,7 @@ public class $(Component.Upper1)Action extends MaintAction {
                 log.debug("Createer Failed");
             myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, e);
         } catch (FrameworkException e) {
-            System.err.println(null, e);
+            log.error(e.getMessage(), e);
             myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, "error.framework.general" );
         }
         // .//GEN-END:do_Related$(object.Name.Upper1)_Create_Clicked_3_be
@@ -225,7 +225,7 @@ public class $(Component.Upper1)Action extends MaintAction {
                     log.debug("Viewer Failed");
                 myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, e);
             } catch (FrameworkException e) {
-                System.err.println(null, e);
+                log.error(e.getMessage(), e);
                 myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, "error.framework.general" );
             }
         }
@@ -281,7 +281,7 @@ public class $(Component.Upper1)Action extends MaintAction {
                     log.debug("Updateer Failed");
                 myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, e);
             } catch (FrameworkException e) {
-                System.err.println(null, e);
+                log.error(e.getMessage(), e);
                 myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, "error.framework.general" );
             }
         }
@@ -336,7 +336,7 @@ public class $(Component.Upper1)Action extends MaintAction {
                 log.debug("Deleteer Failed");
             myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, e);
         } catch (FrameworkException e) {
-            System.err.println(null, e);
+            log.error(e.getMessage(), e);
             myForm.raiseError(request, ActionMessages.GLOBAL_MESSAGE, "error.framework.general" );
         }
         // .//GEN-END:do_Related$(object.Name.Upper1)_Delete_Clicked_3_be
