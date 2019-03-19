@@ -570,11 +570,9 @@ public class JDBCLogger {
 
 				for (int i = 0; i < num; i++) {
 					logcol = (JDBCLogColumn) logcols.get(i);
-					int indexToUse = 0;
+					int indexToUse = 1;
 					if (usePrepStmts) {
 						indexToUse = paramIndex;
-					} else if (useCallStmts) {
-						indexToUse = i + 1;
 					}
 
 					if (logcol.logtype == JDBCLogType.MSG) {

@@ -2544,14 +2544,6 @@ public int read()
 public int read(byte[] buf, int off, int len)
 ```
 ***
-**org.jaffa.soa.transformation.controller.SoapMessageFilter**
-
-```
-public void destroy()
-public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
-public void init(FilterConfig fc) throws ServletException
-```
-***
 **org.jaffa.soa.transformation.controller.SoapRequestWrapper**
 
 ```

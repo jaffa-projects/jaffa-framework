@@ -98,7 +98,7 @@ public class CodeHelperTx implements ICodeHelper {
         try {
             // Print Debug Information for the input
             if (log.isDebugEnabled()) {
-                log.debug("Input: " + (input != null ? input.toString() : null));
+                log.debug("Input: " + input);
             }
 
             // Create the output
@@ -115,7 +115,7 @@ public class CodeHelperTx implements ICodeHelper {
 
             // Print Debug Information for the output
             if (log.isDebugEnabled()) {
-                log.debug("Output: " + output.toString());
+                log.debug("Output: " + output);
             }
             return output;
         } finally {
