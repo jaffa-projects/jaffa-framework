@@ -818,10 +818,8 @@ public class FormGroupMaintenanceTx extends MaintTx implements IFormGroupMainten
                 }
                 // .//GEN-END:_addRelatedDtosToRetrieveOut_FormUsage_Description_2_be
                 // .//GEN-BEGIN:_addRelatedDtosToRetrieveOut_FormUsage_Description_3_be
-                try {
+                if (dto != null && chainFormEventEventNameEventName != null) {
                     dto.setDescription(chainFormEventEventNameEventName.getDescription());
-                } catch (NullPointerException e) {
-                    // Do nothing
                 }
                 // .//GEN-END:_addRelatedDtosToRetrieveOut_FormUsage_Description_3_be
                 // Add custom code to pass values to the dto//GEN-FIRST:_addRelatedDtosToRetrieveOut_FormUsage_3
