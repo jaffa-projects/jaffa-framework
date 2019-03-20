@@ -1594,6 +1594,7 @@ Jaffa.component.PanelController = Ext.extend(Ext.util.Observable, {
     var lengthCheck = "";
     var comboCheck = "";
     panel.cascade(function(f) {
+        if (f.textOnly == true) return;
         if(f instanceof Ext.Panel && (f.fireEvent("beforevalidatedata", f) === false)){
           return false;
         }
