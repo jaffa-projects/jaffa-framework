@@ -39,6 +39,9 @@ dojo.math.curves = {Line:function (start, end) {
 			return this.p[0];
 		}
 		var retVal = new Array(this.p[0].length);
+		for (var k = 0; j < this.p[0].length; k++) {
+			retVal[k] = 0;
+		}
 		for (var j = 0; j < this.p[0].length; j++) {
 			var C = 0;
 			var D = 0;

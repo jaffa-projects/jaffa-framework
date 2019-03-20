@@ -554,8 +554,11 @@ public class MappingFilter {
 		m_filteredFields = filteredFields;
 
 		if (log.isDebugEnabled())
-			log.debug("Filtered field list for " + graph.getDataClass() +
-                    " Size is " + filteredFields.size() + ",Mem= " + (mem - Runtime.getRuntime().freeMemory() >> 10));
+			log.debug("Filtered field list for " + graph.getDataClass()
+					+ " Size is "
+					+ (filteredFields != null ? filteredFields.size() : 0)
+					+ ",Mem= "
+					+ (mem - Runtime.getRuntime().freeMemory() >> 10));
     }
 
     /** Returns true if the field matches any rule and is not marked for exclusion.

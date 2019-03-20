@@ -541,6 +541,7 @@ Ext.ux.form.DateTime = Ext.extend(Ext.form.Field, {
             this.updateValue();
             return;
         }
+        val = val ? val : new Date(1970, 0 ,1, 0, 0, 0);
         var da, time;
         if(val instanceof Date) {
             this.setDate(val);

@@ -214,7 +214,10 @@ public class Config {
             throw new MissingResourceException("Not Found",CONFIG_RESOURCE,key);
         }
 
-        return obj.toString();
+        if(obj != null)
+            return obj.toString();
+        else
+            return null;
     }
 
     /** Get a property, can be dynamic or static. Allows for a default value to be returned if the property is not found,

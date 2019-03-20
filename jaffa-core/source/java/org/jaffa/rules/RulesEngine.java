@@ -214,6 +214,10 @@ public class RulesEngine {
                     FieldMetaData fieldMetaData = fields[i];
                     if (classMetaData == null || classMetaData.getField(fieldMetaData.getName()) == null) {
                         // create a UOW, if not passed in
+                        if (uow == null) {
+                            uow = new UOW();
+                            localUow = true;
+                        }
                         String labelToken = getLabelToken(domainClassName, fieldMetaData.getName());
                         Object fieldValue = getFieldValue(domainObject, fieldMetaData.getName());
                         doFieldValidaions(fieldValue, uow, doOnlyMandatory, labelToken, fieldMetaData, null);
@@ -222,7 +226,7 @@ public class RulesEngine {
             }
             
         } finally {
-            if (localUow)
+            if (localUow && uow != null)
                 uow.rollback();
         }
     }

@@ -142,21 +142,24 @@ dojo.xml.Parse = function () {
 		}
 		return parsedNodeSet;
 	};
-    this.parseAttributes = function (node) {
-        var parsedAttributeSet = {};
-        var atts = node.attributes;
-        var attnode, i = 0;
-        while ((attnode = atts[i++])) {
-            if (isIE) {
-                if ((typeof attnode == "object") && (typeof attnode.nodeValue == "undefined") || (attnode.nodeValue == null) || (attnode.nodeValue == "")) {
-                    continue;
-                }
-            }
-            var nn = attnode.nodeName.split(":");
-            nn = (nn.length == 2) ? nn[1] : attnode.nodeName;
-            parsedAttributeSet[nn] = {value:attnode.nodeValue};
-        }
-        return parsedAttributeSet;
-    };
+	this.parseAttributes = function (node) {
+		var parsedAttributeSet = {};
+		var atts = node.attributes;
+		var attnode, i = 0;
+		while ((attnode = atts[i++])) {
+			if (isIE) {
+				if (!attnode) {
+					continue;
+				}
+				if ((typeof attnode == "object") && (typeof attnode.nodeValue == "undefined") || (attnode.nodeValue == null) || (attnode.nodeValue == "")) {
+					continue;
+				}
+			}
+			var nn = attnode.nodeName.split(":");
+			nn = (nn.length == 2) ? nn[1] : attnode.nodeName;
+			parsedAttributeSet[nn] = {value:attnode.nodeValue};
+		}
+		return parsedAttributeSet;
+	};
 };
 

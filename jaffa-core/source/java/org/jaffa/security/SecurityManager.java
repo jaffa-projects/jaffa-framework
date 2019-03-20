@@ -282,10 +282,12 @@ public class SecurityManager {
             // Get thread context
             SecurityContext ctx = SecurityManager.getCurrentContext();
             if(ctx!=null) {
-                for (Object aRl : rl) {
-                    String role = (String) aRl;
+                for(Iterator it = rl.iterator(); it.hasNext();) {
+                    String role = (String)it.next();
                     // If user has added add to the array
-                    if (ctx.inRole(role)) {
+                    if(ctx.inRole(role)) {
+                        if(al == null)
+                            al = new ArrayList();
                         al.add(role);
                     }
                 }

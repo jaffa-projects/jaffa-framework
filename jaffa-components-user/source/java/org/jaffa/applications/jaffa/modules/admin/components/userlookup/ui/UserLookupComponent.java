@@ -266,6 +266,7 @@ public class UserLookupComponent extends LookupComponent2 {
      * @return the FinderOutDto object.
      */
     protected FinderOutDto doInquiry() throws ApplicationExceptions, FrameworkException {
+        ApplicationExceptions appExps = null;
         UserLookupInDto inputDto = new UserLookupInDto();
         // .//GEN-END:_doInquiry_1_be
         // Add custom code before processing the method //GEN-FIRST:_doInquiry_1
@@ -301,6 +302,11 @@ public class UserLookupComponent extends LookupComponent2 {
         || CriteriaField.RELATIONAL_IS_NULL.equals( getEMailAddressDd() )
         || CriteriaField.RELATIONAL_IS_NOT_NULL.equals( getEMailAddressDd() ) )
             inputDto.setEMailAddress(StringCriteriaField.getStringCriteriaField(getEMailAddressDd(), getEMailAddress(), null));
+
+
+        // throw ApplicationExceptions, if any parsing errors occured
+        if (appExps != null && appExps.size() > 0)
+            throw appExps;
 
         inputDto.setHeaderDto(getHeaderDto());
         addSortCriteria(inputDto);

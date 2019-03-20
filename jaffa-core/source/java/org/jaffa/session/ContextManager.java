@@ -388,12 +388,18 @@ public class ContextManager implements IContextManager {
             try {
                 // input = URLHelper.getInputStream(location);
                 input = new BufferedInputStream(new FileInputStream(new File(location)));
-                props.load(input);
-                if (log.isDebugEnabled()) {
-                    if (props.size() < 1) {
-                        log.debug("No user preferences defined in file " + location);
-                    } else {
-                        log.debug("Loaded " + props.size() + " rule(s) from " + location);
+                if (input != null) {
+                    props.load(input);
+                    if (log.isDebugEnabled()) {
+                        if (props.size() < 1) {
+                            log.debug("No user preferences defined in file " + location);
+                        } else {
+                            log.debug("Loaded " + props.size() + " rule(s) from " + location);
+                        }
+                    }
+                } else {
+                    if (log.isInfoEnabled()) {
+                        log.info("No user preferences found. Can't find file " + location);
                     }
                 }
             } catch (IOException e) {

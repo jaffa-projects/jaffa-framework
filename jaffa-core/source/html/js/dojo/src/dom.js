@@ -331,6 +331,9 @@ dojo.dom.textContent = function (node, text) {
 			return node.textContent;
 		}
 		var _result = "";
+		if (node == null) {
+			return _result;
+		}
 		for (var i = 0; i < node.childNodes.length; i++) {
 			switch (node.childNodes[i].nodeType) {
 			  case 1:
@@ -363,7 +366,7 @@ dojo.dom.isTag = function (node) {
 	return "";
 };
 dojo.dom.setAttributeNS = function (elem, namespaceURI, attrName, attrValue) {
-	if (elem == null) {
+	if (elem == null || ((elem == undefined) && (typeof elem == "undefined"))) {
 		dojo.raise("No element given to dojo.dom.setAttributeNS");
 	}
 	if (!((elem.setAttributeNS == undefined) && (typeof elem.setAttributeNS == "undefined"))) {
