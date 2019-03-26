@@ -131,7 +131,7 @@ public class DateOnlyFieldMetaData extends FieldMetaData {
         i = super.hashCode();
         if ( m_layout != null ) i += m_layout.hashCode();
         if ( m_minValue != null ) i += m_minValue.hashCode();
-        if ( m_minValue != null ) i += m_maxValue.hashCode();
+        if ( m_maxValue != null ) i += m_maxValue.hashCode();
         return i;
     }
 
