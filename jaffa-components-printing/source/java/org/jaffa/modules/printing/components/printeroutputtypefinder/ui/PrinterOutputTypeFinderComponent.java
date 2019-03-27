@@ -216,6 +216,7 @@ public class PrinterOutputTypeFinderComponent extends FinderComponent2 {
      * @return the FinderOutDto object.
      */
     protected FinderOutDto doInquiry() throws ApplicationExceptions, FrameworkException {
+        ApplicationExceptions appExps = null;
         PrinterOutputTypeFinderInDto inputDto = new PrinterOutputTypeFinderInDto();
         // .//GEN-END:_doInquiry_1_be
         // Add custom code before processing the method //GEN-FIRST:_doInquiry_1
@@ -237,6 +238,11 @@ public class PrinterOutputTypeFinderComponent extends FinderComponent2 {
 
         if (getDirectPrinting() != null)
             inputDto.setDirectPrinting(BooleanCriteriaField.getBooleanCriteriaField(CriteriaField.RELATIONAL_EQUALS, getDirectPrinting(), null));
+
+
+        // throw ApplicationExceptions, if any parsing errors occured
+        if (appExps != null && appExps.size() > 0)
+            throw appExps;
 
         inputDto.setHeaderDto(getHeaderDto());
         addSortCriteria(inputDto);

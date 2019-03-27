@@ -89,5 +89,9 @@ public class ActionBaseTest {
 
         assertFalse("Dots not allowed, except as part of .jsp",
                     base.isSafeForward("www.evil.com/anyold.jsp"));
+        assertFalse("Colons not allowed",
+                    base.isSafeForward("https://someplace"));
+        assertFalse("Question marks not allowed",
+                    base.isSafeForward("something?toSet"));
     }
 }

@@ -68,6 +68,7 @@ Jaffa.finder.MultiResultsFinderContainer = Ext.extend(Ext.Panel, {
         var store = grid.store;
         if (!store) continue;
         this.criteriaPanel.stores.push(store);
+        if (!store) continue;
         // setting resultsGraphRules
         if (typeof grid.getResultGraphRules == 'function' && grid.getResultGraphRules().length>0) {
           store.staticBaseParams = store.staticBaseParams || {};

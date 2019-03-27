@@ -1366,7 +1366,7 @@ Jaffa.finder.FlexCriteria = function() {
       if (!meta || !meta.flexInfo || meta.flexInfo.length == 0) return null;
       
       // config for the FieldSet
-      config = Ext.applyIf(config, {
+      config = Ext.applyIf(config || {}, {
         title: Labels.get('label.common.FlexFields'),
         layout: 'formdescription',
         collapsible: true,
@@ -1454,6 +1454,11 @@ Jaffa.finder.FlexCriteria = function() {
           // Add a panel containing the field and corresponding operator-dropdown
           config.items.push(Jaffa.finder.CriteriaPanelFactory.createPanel(fieldConfig));
         }
+      }
+
+      //If there is no flex fields then return null and which will not show the empty flex field section in criteria screen.
+      if(config && config.items && config.items==0){
+         return null;
       }
 
       // create the FieldSet
