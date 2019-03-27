@@ -328,6 +328,9 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
                 if (!m_pendingEvents.isEmpty()) {
                     checkForPendingEvents();
                 }
+                if(m_uow != null) {
+                    m_uow.flush();
+                }
             }
             catch (ConsequenceException consequenceException) {
                 log.error(consequenceException.getMessage());
@@ -338,12 +341,6 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
                 log.error(ce.getMessage());
                 destroyRulesSession();
                 throw ExceptionHelper.throwAFR(ce);
-            }
-            finally {
-                //Flush any DB updates as a result of the changes
-                if(m_uow != null) {
-                    m_uow.flush();
-                }
             }
         }
         else {
