@@ -213,6 +213,11 @@ public class ConfigApi implements IConfigApi {
             return postError(payload, fileToPost);
         }
 
+        //create directory if not exists
+        if (!fileToPost.getParentFile().exists()) {
+            fileToPost.getParentFile().mkdirs();
+        }
+
         //Copy files to server and register resources
         Files.copy(new ByteArrayInputStream(payload), fileToPost.toPath());
 
