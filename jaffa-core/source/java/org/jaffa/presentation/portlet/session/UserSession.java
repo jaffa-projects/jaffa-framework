@@ -49,20 +49,21 @@
 
 package org.jaffa.presentation.portlet.session;
 
-import org.jaffa.presentation.portlet.FormBase;
-import org.jaffa.presentation.portlet.FormKey;
-import org.jaffa.presentation.portlet.component.Component;
-import java.util.*;
-import java.io.*;
-import javax.servlet.http.*;
 import org.apache.log4j.Logger;
+import org.jaffa.datatypes.DateTime;
+import org.jaffa.presentation.portlet.FormBase;
+import org.jaffa.presentation.portlet.component.Component;
 import org.jaffa.security.JDBCSecurityPlugin;
 import org.jaffa.session.ContextManagerFactory;
 import org.jaffa.util.ListMap;
-import org.jaffa.datatypes.DateTime;
-import javax.servlet.http.HttpSessionBindingListener;
-import javax.servlet.http.HttpSessionBindingEvent;
 import org.jaffa.util.StringHelper;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSessionBindingListener;
+import java.io.PrintStream;
+import java.util.*;
 
 /** This UserSession Object maintains all the state about the a specific user within the context of the Web Server.
  * This object could be adapted to other context stores (apart from HttpSession) if needed.
@@ -96,6 +97,9 @@ public class UserSession implements HttpSessionBindingListener {
 
     // This will maintain all the components for a UserSession
     private Map m_components = null;
+
+    // This will maintain all the GraphServices implementing ServiceCallback
+    private List<ServiceCallback> m_serviceCallbackList = null;
 
     // Maintain a cache of widgets based on componentId
     private Map m_widgetCache = null;
@@ -154,7 +158,7 @@ public class UserSession implements HttpSessionBindingListener {
         // Initialize Variables
         m_components = new ListMap();
         m_widgetCache = new HashMap();
-
+        m_serviceCallbackList = new ArrayList<ServiceCallback>();
 
         // Let the UserSession object keep a reference to the session object so it
         // can flush attributed out of the attribute cache. This was added so that when a
@@ -313,6 +317,12 @@ public class UserSession implements HttpSessionBindingListener {
                         log.debug("Killing Component : " + c.getComponentId() + " - " + c.getComponentDefinition().getComponentName() );
                     c.quit();
                 }
+            }
+        }
+        if(m_serviceCallbackList != null && m_serviceCallbackList.size() > 0){
+            for(ServiceCallback serviceCallBack : m_serviceCallbackList){
+                serviceCallBack.quitService();
+                removeCallbackHandler(serviceCallBack);
             }
         }
         //        Object[] components = m_components.values().toArray();
@@ -562,6 +572,7 @@ public class UserSession implements HttpSessionBindingListener {
         m_widgetCache = null;
         m_imageContents = null;
         m_sessionObject = null;
+        m_serviceCallbackList = null;
     }
 
     /** Getter for property variation.
@@ -576,6 +587,22 @@ public class UserSession implements HttpSessionBindingListener {
      */
     public void setVariation(String variation) {
         m_variation = variation;
+    }
+
+    /**
+     * adds serviceCallback to list
+     * @param serviceCallback
+     */
+    public void addCallbackHandler(ServiceCallback serviceCallback){
+        m_serviceCallbackList.add(serviceCallback);
+    }
+
+    /**
+     * removes the serviceCallback from the list
+     * @param serviceCallback
+     */
+    public void removeCallbackHandler(ServiceCallback serviceCallback){
+        m_serviceCallbackList.remove(serviceCallback);
     }
 
 }
