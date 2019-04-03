@@ -1469,7 +1469,11 @@ public class Attachment extends Persistent {
         buf.append("<createdBy>"); if (m_createdBy != null) buf.append(m_createdBy); buf.append("</createdBy>");
         buf.append("<lastChangedOn>"); if (m_lastChangedOn != null) buf.append(m_lastChangedOn); buf.append("</lastChangedOn>");
         buf.append("<lastChangedBy>"); if (m_lastChangedBy != null) buf.append(m_lastChangedBy); buf.append("</lastChangedBy>");
-        buf.append("<data>"); if (m_data != null) buf.append(m_data); buf.append("</data>");
+        buf.append("<data>");
+        if (m_data != null) {
+            buf.append(Base64.getEncoder().encodeToString(m_data));
+        }
+        buf.append("</data>");
         buf.append("<versionNumber>"); if (m_versionNumber != null) buf.append(m_versionNumber); buf.append("</versionNumber>");
         // .//GEN-END:toString_1_be
         // Add custom debug information//GEN-FIRST:toString_1

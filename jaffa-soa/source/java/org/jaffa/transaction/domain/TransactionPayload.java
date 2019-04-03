@@ -27,6 +27,7 @@ import org.jaffa.exceptions.ApplicationExceptions;
 // .//GEN-END:1_be
 // Add additional imports//GEN-FIRST:imports
 import java.nio.charset.Charset;
+import java.util.Base64;
 import javax.xml.bind.JAXBException;
 import org.jaffa.transaction.daos.TransactionMessageDAO;
 import org.jaffa.transaction.daos.TransactionMessageDAOFactory;
@@ -539,8 +540,16 @@ public class TransactionPayload extends Persistent {
         StringBuffer buf = new StringBuffer();
         buf.append("<TransactionPayload>");
         buf.append("<id>"); if (m_id != null) buf.append(m_id); buf.append("</id>");
-        buf.append("<externalMessage>"); if (m_externalMessage != null) buf.append(m_externalMessage); buf.append("</externalMessage>");
-        buf.append("<internalMessage>"); if (m_internalMessage != null) buf.append(m_internalMessage); buf.append("</internalMessage>");
+        buf.append("<externalMessage>");
+        if (m_externalMessage != null) {
+            buf.append(Base64.getEncoder().encodeToString(m_externalMessage));
+        }
+        buf.append("</externalMessage>");
+        buf.append("<internalMessage>");
+        if (m_internalMessage != null) {
+            buf.append(Base64.getEncoder().encodeToString(m_internalMessage));
+        }
+        buf.append("</internalMessage>");
         buf.append("<internalMessageClass>"); if (m_internalMessageClass != null) buf.append(m_internalMessageClass); buf.append("</internalMessageClass>");
         // .//GEN-END:toString_1_be
         // Add custom debug information//GEN-FIRST:toString_1

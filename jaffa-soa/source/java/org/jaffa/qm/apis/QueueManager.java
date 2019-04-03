@@ -161,8 +161,6 @@ public class QueueManager {
 
     public QueueAdminResponse[] toggleQueueStatus(QueueGraph[] graphs) {
         try {
-            if (log.isDebugEnabled())
-                log.debug("Input to toggleQueueStatus: " + graphs);
             QueueAdminResponse[] aggregateResponse = null;
             IQueueAdmin[] implementations = findImplementations();
             if (implementations != null && implementations.length > 0) {
@@ -172,8 +170,6 @@ public class QueueManager {
                         aggregateResponse = concatenate(aggregateResponse, response);
                 }
             }
-            if (log.isDebugEnabled())
-                log.debug("Response from toggleQueueStatus: " + aggregateResponse);
             return aggregateResponse;
         } catch (Exception e) {
             log.error("Error in obtaining IQueueAdmin implementations", e);
@@ -184,8 +180,6 @@ public class QueueManager {
     public MessageAdminResponse[] deleteMessage(MessageGraph[] graphs) {
         // TODO-SWAT fire custom handler here
         try {
-            if (log.isDebugEnabled())
-                log.debug("Input to deleteMessage: " + graphs);
             MessageAdminResponse[] aggregateResponse = null;
             IQueueAdmin[] implementations = findImplementations();
             if (implementations != null && implementations.length > 0) {
@@ -195,8 +189,6 @@ public class QueueManager {
                         aggregateResponse = concatenate(aggregateResponse, response);
                 }
             }
-            if (log.isDebugEnabled())
-                log.debug("Response from deleteMessage: " + aggregateResponse);
             return aggregateResponse;
         } catch (Exception e) {
             log.error("Error in obtaining IQueueAdmin implementations", e);
@@ -206,8 +198,6 @@ public class QueueManager {
 
     public MessageAdminResponse[] resubmitMessage(MessageGraph[] graphs) {
         try {
-            if (log.isDebugEnabled())
-                log.debug("Input to resubmitMessage: " + graphs);
             MessageAdminResponse[] aggregateResponse = null;
             IQueueAdmin[] implementations = findImplementations();
             if (implementations != null && implementations.length > 0) {
@@ -217,8 +207,6 @@ public class QueueManager {
                         aggregateResponse = concatenate(aggregateResponse, response);
                 }
             }
-            if (log.isDebugEnabled())
-                log.debug("Response from resubmitMessage: " + aggregateResponse);
             return aggregateResponse;
         } catch (Exception e) {
             log.error("Error in obtaining IQueueAdmin implementations", e);

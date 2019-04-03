@@ -129,8 +129,12 @@ public class RawCriteriaField implements CriteriaField {
         buf.append("<operator>"); if (m_operator != null) buf.append(m_operator); buf.append("</operator>");
         if (m_values != null) {
             for (int i = 0; i < m_values.length; i++) {
-                Object value = m_values[i];
-                buf.append("<value>"); if (value != null) buf.append(value); buf.append("</value>");
+                byte[] value = m_values[i];
+                buf.append("<value>");
+                if (value != null) {
+                    buf.append(Base64.getEncoder().encodeToString(value));
+                }
+                buf.append("</value>");
             }
         }
         buf.append("</RawCriteriaField>");

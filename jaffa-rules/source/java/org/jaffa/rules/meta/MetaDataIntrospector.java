@@ -240,7 +240,7 @@ public class MetaDataIntrospector implements IObjectRuleIntrospector, IPropertyR
 
     /** Returns the list of rulemetadata properties for the Class.
      * @return the rulemetadata properties for the Class..
-     * @param  ruleName.
+     * @param  ruleName
      */
     public List<Properties> getMetaDataByRule(String ruleName) {
 
@@ -739,8 +739,10 @@ public class MetaDataIntrospector implements IObjectRuleIntrospector, IPropertyR
         .append("\n    property = ").append(m_propertyName)
         .append("\n    getLabel() = ").append(getLabel());
 
-        if (m_propertyName == null)
-            buf.append("\n    getPrimaryKey() = ").append(getPrimaryKey());
+        if (m_propertyName == null) {
+            buf.append("\n    getPrimaryKey() = ")
+               .append(StringHelper.stringArrayToString(getPrimaryKey()));
+        }
         else
             buf.append("\n    getPropertyType() = ").append(getPropertyType())
             .append("\n    isHidden() = ").append(isHidden())
@@ -754,7 +756,7 @@ public class MetaDataIntrospector implements IObjectRuleIntrospector, IPropertyR
             .append("\n    getMaxValue() = ").append(getMaxValue())
             .append("\n    getCaseType() = ").append(getCaseType())
             .append("\n    getLayout() = ").append(getLayout())
-            .append("\n    getPattern() = ").append(getPattern())
+            .append("\n    getPattern() = ").append(StringHelper.stringArrayToString(getPattern()))
             .append("\n    getClientRule() = ").append(getClientRule())
             .append("\n    getCommentStyle() = ").append(getCommentStyle())
             .append("\n    getInListValues() = ").append(getInListValues());

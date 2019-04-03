@@ -61,6 +61,7 @@ import org.jaffa.rules.rulemeta.IRuleHelper;
 import org.jaffa.rules.rulemeta.RuleMetaHelper;
 import org.jaffa.rules.rulemeta.data.RuleMetaDataCriteria;
 import org.jaffa.util.BeanHelper;
+import org.jaffa.util.StringHelper;
 
 /** MetaDataIntrospector is a helper class to lookup class-level and property-level rules.
  */
@@ -148,8 +149,10 @@ public class MetaDataAuditIntrospector extends MetaDataIntrospector {
         .append("\n    property = ").append(m_propertyName)
         .append("\n    getLabel() = ").append(getLabel());
 
-        if (m_propertyName == null)
-            buf.append("\n    getPrimaryKey() = ").append(getPrimaryKey());
+        if (m_propertyName == null) {
+            buf.append("\n    getPrimaryKey() = ")
+               .append(StringHelper.stringArrayToString(getPrimaryKey()));
+        }
         else
             buf.append("\n    getPropertyType() = ").append(getPropertyType())
             .append("\n    isHidden() = ").append(isHidden())
@@ -163,7 +166,7 @@ public class MetaDataAuditIntrospector extends MetaDataIntrospector {
             .append("\n    getMaxValue() = ").append(getMaxValue())
             .append("\n    getCaseType() = ").append(getCaseType())
             .append("\n    getLayout() = ").append(getLayout())
-            .append("\n    getPattern() = ").append(getPattern())
+            .append("\n    getPattern() = ").append(StringHelper.stringArrayToString(getPattern()))
             .append("\n    getClientRule() = ").append(getClientRule())
             .append("\n    getCommentStyle() = ").append(getCommentStyle())
             .append("\n    getInListValues() = ").append(getInListValues());
@@ -171,7 +174,6 @@ public class MetaDataAuditIntrospector extends MetaDataIntrospector {
         return buf.toString();
     }
 
-    
     /** Returns a Map of propertyName and first applicable rule for the className/ruleName combination. */
     private Map<String, RuleMetaData> findPropertyRuleMap(String className, Object obj, String ruleName) {
         try {

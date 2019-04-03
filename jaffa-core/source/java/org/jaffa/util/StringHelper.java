@@ -1120,6 +1120,29 @@ public class StringHelper {
     }
 
     /**
+     * Converts an array of Strings into a single string, useful for debugging.
+     * @param strings
+     * @return the easy-to-read string
+     */
+    public static String stringArrayToString(String[] strings) {
+        String result = null;
+        if (strings != null) {
+            StringBuilder buf = new StringBuilder();
+            buf.append("[");
+            String separator = ""; // the first element won't have a preceding comma
+            for (String key : strings) { // make a comma-separated list
+                buf.append(separator);
+                separator = ",";
+                buf.append(key);
+            }
+            buf.append("]");
+            result = buf.toString();
+        }
+        return result;
+    }
+
+
+    /**
 	 * Split the input String into lines at each newline character.
 	 * For each split line, word wrap at the maxLength or closest word boundary.
 	 * Return the newly created lines in a String array.

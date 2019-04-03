@@ -74,7 +74,11 @@ public class AttachmentMaintenanceUpdateInDto extends AttachmentMaintenanceCreat
         buf.append("<description>"); if (getDescription() != null) buf.append(getDescription()); buf.append("</description>");
         buf.append("<remarks>"); if (getRemarks() != null) buf.append(getRemarks()); buf.append("</remarks>");
         buf.append("<supercededBy>"); if (getSupercededBy() != null) buf.append(getSupercededBy()); buf.append("</supercededBy>");
-        buf.append("<data>"); if (getData() != null) buf.append(getData()); buf.append("</data>");
+        buf.append("<data>");
+        if (getData() != null) {
+            buf.append(Base64.getEncoder().encodeToString(getData()));
+        }
+        buf.append("</data>");
         buf.append("<lastChangedOn>"); if (lastChangedOn != null) buf.append(lastChangedOn); buf.append("</lastChangedOn>");
 
         buf.append("</AttachmentMaintenanceUpdateInDto>");

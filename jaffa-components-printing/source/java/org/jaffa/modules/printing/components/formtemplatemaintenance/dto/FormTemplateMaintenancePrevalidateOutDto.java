@@ -15,6 +15,9 @@ package org.jaffa.modules.printing.components.formtemplatemaintenance.dto;
 
 // .//GEN-LAST:_imports
 // .//GEN-BEGIN:_2_be
+
+import java.util.Base64;
+
 /** The output for the FormTemplateMaintenance prevalidations.
  */
 public class FormTemplateMaintenancePrevalidateOutDto extends FormTemplateMaintenanceRetrieveOutDto {
@@ -27,9 +30,18 @@ public class FormTemplateMaintenancePrevalidateOutDto extends FormTemplateMainte
     public String toString() {
         StringBuffer buf = new StringBuffer();
         buf.append("<FormTemplateMaintenancePrevalidateOutDto>");
-        buf.append("<templateData>"); if (getTemplateData() != null) buf.append(getTemplateData()); buf.append("</templateData>");
-        buf.append("<layoutData>"); if (getLayoutData() != null) buf.append(getLayoutData()); buf.append("</layoutData>");
-        buf.append("<formId>"); if (getFormId() != null) buf.append(getFormId()); buf.append("</formId>");
+        buf.append("<templateData>");
+        if (getTemplateData() != null) {
+            buf.append(Base64.getEncoder().encodeToString(getTemplateData()));
+        }
+        buf.append("</templateData>");
+        buf.append("<layoutData>");
+        if (getLayoutData() != null) {
+            buf.append(Base64.getEncoder().encodeToString(getLayoutData()));
+        }
+        buf.append("</layoutData>");
+        buf.append("<formId>");
+        if (getFormId() != null) buf.append(getFormId()); buf.append("</formId>");
 
         buf.append("</FormTemplateMaintenancePrevalidateOutDto>");
         return buf.toString();
