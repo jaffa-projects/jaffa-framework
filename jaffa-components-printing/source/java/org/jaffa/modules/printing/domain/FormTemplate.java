@@ -444,8 +444,16 @@ public class FormTemplate extends Persistent {
         StringBuffer buf = new StringBuffer();
         buf.append("<FormTemplate>");
         buf.append("<formId>"); if (m_formId != null) buf.append(m_formId); buf.append("</formId>");
-        buf.append("<templateData>"); if (m_templateData != null) buf.append(m_templateData); buf.append("</templateData>");
-        buf.append("<layoutData>"); if (m_layoutData != null) buf.append(m_layoutData); buf.append("</layoutData>");
+        buf.append("<templateData>");
+        if (m_templateData != null) {
+            buf.append(Base64.getEncoder().encodeToString(m_templateData));
+        }
+        buf.append("</templateData>");
+        buf.append("<layoutData>");
+        if (m_layoutData != null) {
+            buf.append(Base64.getEncoder().encodeToString(m_layoutData));
+        }
+        buf.append("</layoutData>");
         // .//GEN-END:toString_1_be
         // Add custom debug information//GEN-FIRST:toString_1
 

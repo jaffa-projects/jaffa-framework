@@ -379,7 +379,7 @@ public class PropertyRuleIntrospectorUsingWidgetModel implements IPropertyRuleIn
             .append("\n    getCaseType() = ").append(getCaseType())
             .append("\n    getLabel() = ").append(getLabel())
             .append("\n    getLayout() = ").append(getLayout())
-            .append("\n    getPattern() = ").append(getPattern())
+            .append("\n    getPattern() = ").append(StringHelper.stringArrayToString(getPattern()))
             .append("\n    getClientRule() = ").append(getClientRule())
             .append("\n    getCommentStyle() = ").append(getCommentStyle())
             .append("\n    getInListValues() = ").append(getInListValues())

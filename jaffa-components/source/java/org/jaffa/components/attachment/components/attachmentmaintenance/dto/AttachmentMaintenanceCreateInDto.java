@@ -235,7 +235,11 @@ public class AttachmentMaintenanceCreateInDto {
         buf.append("<description>"); if (description != null) buf.append(description); buf.append("</description>");
         buf.append("<remarks>"); if (remarks != null) buf.append(remarks); buf.append("</remarks>");
         buf.append("<supercededBy>"); if (supercededBy != null) buf.append(supercededBy); buf.append("</supercededBy>");
-        buf.append("<data>"); if (data != null) buf.append(data); buf.append("</data>");
+        buf.append("<data>");
+        if (data != null) {
+            buf.append(Base64.getEncoder().encodeToString(data));
+        }
+        buf.append("</data>");
 
         buf.append("</AttachmentMaintenanceCreateInDto>");
         return buf.toString();

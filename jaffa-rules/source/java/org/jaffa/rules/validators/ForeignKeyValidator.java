@@ -57,6 +57,7 @@ import org.jaffa.rules.JaffaRulesFrameworkException;
 import org.jaffa.rules.meta.RuleMetaData;
 import org.jaffa.rules.rulemeta.InvalidRuleParameterException;
 import org.jaffa.util.BeanHelper;
+import org.jaffa.util.StringHelper;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -141,7 +142,8 @@ public class ForeignKeyValidator<T> extends KeyValidator<T> {
     private void validateKey(T targetObject, String[] fkFields, Object[] fkValues, RuleMetaData rule)
             throws ApplicationException, JaffaRulesFrameworkException {
         if (log.isDebugEnabled()) {
-            log.debug("Applying the check " + rule + " for the fields " + fkFields + " on " + targetObject);
+            log.debug("Applying the check " + rule + " for the fields " +
+                      StringHelper.stringArrayToString(fkFields) + " on " + targetObject);
         }
 
         // Find the 'public static boolean exists(UOW uow, Object key...)' method
@@ -206,12 +208,14 @@ public class ForeignKeyValidator<T> extends KeyValidator<T> {
             }
             if (m == null) {
                 log.error("The 'public static boolean exists(UOW uow, Object key)' method not found on the domainObject '" + domainClassName + "'");
-                throw new InvalidRuleParameterException(fkFields.toString(), getName(), "domainObject", domainClassName);
+                throw new InvalidRuleParameterException(StringHelper.stringArrayToString(fkFields),
+                                                        getName(), "domainObject", domainClassName);
             }
             return m;
         } catch (ClassNotFoundException e) {
             log.error("The domainObject '" + domainClassName + "' class not found", e);
-            throw new InvalidRuleParameterException(fkFields.toString(), getName(), "domainObject", domainClassName);
+            throw new InvalidRuleParameterException(StringHelper.stringArrayToString(fkFields),
+                                                    getName(), "domainObject", domainClassName);
         }
     }
 }

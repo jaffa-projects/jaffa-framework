@@ -50,8 +50,16 @@ public class FormTemplateMaintenanceUpdateInDto extends FormTemplateMaintenanceC
         buf.append("<headerDto>"); if (getHeaderDto() != null) buf.append( getHeaderDto().toString() ); buf.append("</headerDto>");
         buf.append("<performDirtyReadCheck>"); if (performDirtyReadCheck != null) buf.append( performDirtyReadCheck.toString() ); buf.append("</performDirtyReadCheck>");
 
-        buf.append("<templateData>"); if (getTemplateData() != null) buf.append(getTemplateData()); buf.append("</templateData>");
-        buf.append("<layoutData>"); if (getLayoutData() != null) buf.append(getLayoutData()); buf.append("</layoutData>");
+        buf.append("<templateData>");
+        if (getTemplateData() != null) {
+            buf.append(Base64.getEncoder().encodeToString(getTemplateData()));
+        }
+        buf.append("</templateData>");
+        buf.append("<layoutData>");
+        if (getLayoutData() != null) {
+            buf.append(Base64.getEncoder().encodeToString(getLayoutData()));
+        }
+        buf.append("</layoutData>");
         buf.append("<formId>"); if (getFormId() != null) buf.append(getFormId()); buf.append("</formId>");
 
         buf.append("</FormTemplateMaintenanceUpdateInDto>");

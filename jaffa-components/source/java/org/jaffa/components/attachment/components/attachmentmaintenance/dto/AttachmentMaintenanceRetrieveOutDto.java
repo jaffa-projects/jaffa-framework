@@ -296,7 +296,11 @@ public class AttachmentMaintenanceRetrieveOutDto {
         buf.append("<createdBy>"); if (createdBy != null) buf.append(createdBy); buf.append("</createdBy>");
         buf.append("<lastChangedOn>"); if (lastChangedOn != null) buf.append(lastChangedOn); buf.append("</lastChangedOn>");
         buf.append("<lastChangedBy>"); if (lastChangedBy != null) buf.append(lastChangedBy); buf.append("</lastChangedBy>");
-        buf.append("<data>"); if (data != null) buf.append(data); buf.append("</data>");
+        buf.append("<data>");
+        if (data != null) {
+            buf.append(Base64.getEncoder().encodeToString(data));
+        }
+        buf.append("</data>");
 
         buf.append("</AttachmentMaintenanceRetrieveOutDto>");
         return buf.toString();

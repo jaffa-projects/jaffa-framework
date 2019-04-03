@@ -101,8 +101,16 @@ public class FormTemplateMaintenanceCreateInDto {
         buf.append("<FormTemplateMaintenanceCreateInDto>");
         buf.append("<headerDto>"); if (headerDto != null) buf.append( headerDto.toString() ); buf.append("</headerDto>");
 
-        buf.append("<templateData>"); if (templateData != null) buf.append(templateData); buf.append("</templateData>");
-        buf.append("<layoutData>"); if (layoutData != null) buf.append(layoutData); buf.append("</layoutData>");
+        buf.append("<templateData>");
+        if (templateData != null) {
+            buf.append(Base64.getEncoder().encodeToString(templateData));
+        }
+        buf.append("</templateData>");
+        buf.append("<layoutData>");
+        if (layoutData != null) {
+            buf.append(Base64.getEncoder().encodeToString(layoutData));
+        }
+        buf.append("</layoutData>");
         buf.append("<formId>"); if (formId != null) buf.append(formId); buf.append("</formId>");
 
         buf.append("</FormTemplateMaintenanceCreateInDto>");

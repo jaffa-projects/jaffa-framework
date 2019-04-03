@@ -15,6 +15,9 @@ package org.jaffa.components.attachment.components.attachmentmaintenance.dto;
 
 // .//GEN-LAST:_imports
 // .//GEN-BEGIN:_2_be
+
+import java.util.Base64;
+
 /** The output for the AttachmentMaintenance prevalidations.
  */
 public class AttachmentMaintenancePrevalidateOutDto extends AttachmentMaintenanceRetrieveOutDto {
@@ -39,7 +42,11 @@ public class AttachmentMaintenancePrevalidateOutDto extends AttachmentMaintenanc
         buf.append("<createdBy>"); if (getCreatedBy() != null) buf.append(getCreatedBy()); buf.append("</createdBy>");
         buf.append("<lastChangedOn>"); if (getLastChangedOn() != null) buf.append(getLastChangedOn()); buf.append("</lastChangedOn>");
         buf.append("<lastChangedBy>"); if (getLastChangedBy() != null) buf.append(getLastChangedBy()); buf.append("</lastChangedBy>");
-        buf.append("<data>"); if (getData() != null) buf.append(getData()); buf.append("</data>");
+        buf.append("<data>");
+        if (getData() != null) {
+            buf.append(Base64.getEncoder().encodeToString(getData()));
+        }
+        buf.append("</data>");
 
         buf.append("</AttachmentMaintenancePrevalidateOutDto>");
         return buf.toString();
