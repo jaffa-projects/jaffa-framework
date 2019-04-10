@@ -49,6 +49,7 @@
 package org.jaffa.api;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import org.jaffa.api.cluster.Link;
 
 import java.util.ArrayList;
@@ -70,6 +71,9 @@ public class FileContents {
     private String contextSalience = null;
     @Expose
     private String variationSalience = null;
+    @Expose
+    @SerializedName("import")
+    private String importProperty = null;
     @Expose
     private List<String> contents = null;
     @Expose
@@ -112,6 +116,24 @@ public class FileContents {
      */
     public void setVariationSalience(String variationSalience) {
         this.variationSalience = variationSalience;
+    }
+
+    /**
+     * Retrieve the value from the import variable
+     *
+     * @return importProperty  The importProperty retrieved
+     */
+    public String getImportProperty() {
+        return importProperty;
+    }
+
+    /**
+     * Set the import property value
+     *
+     * @param importProperty The importProperty to set
+     */
+    public void setImportProperty(String importProperty) {
+        this.importProperty = importProperty;
     }
 
     /**
