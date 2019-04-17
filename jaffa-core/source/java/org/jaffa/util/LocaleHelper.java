@@ -54,14 +54,13 @@
 
 package org.jaffa.util;
 import org.apache.log4j.Logger;
-import java.util.PropertyResourceBundle;
-import java.util.Locale;
-import java.lang.RuntimeException;
-import java.util.MissingResourceException;
-
 import org.jaffa.loader.ManagerRepositoryService;
 import org.jaffa.loader.config.LocaleResourcesManager;
+import org.jaffa.locale.UserLocaleProvider;
 import org.jaffa.presentation.portlet.session.LocaleContext;
+
+import java.util.Locale;
+import java.util.MissingResourceException;
 
 /** This is a helper routine used for the internationalization of datatypes. It extracts formats from a properties file based on datatype and locale country and language codes.
  * @author JonnyR
@@ -128,6 +127,16 @@ public class LocaleHelper {
                 } catch (MissingResourceException e1) {
                     String str = "Key '" + key + "' not found in the default resource file";
                     log.warn(str);
+                }
+            }
+            // if  user cannot find property based on the user's locale,use locale from UserLocaleProvider.DEF_LOCALE.
+            if (format == null) {
+                key = UserLocaleProvider.DEF_LOCALE + "." + dataType;
+                try {
+                    format = localeResourcesManager.getLocalePropertiesRepository().query(key);
+                } catch (MissingResourceException e1) {
+                    String str = "Key '" + key + "' not found in the default resource file";
+                    log.debug(str);
                 }
             }
         } else {
