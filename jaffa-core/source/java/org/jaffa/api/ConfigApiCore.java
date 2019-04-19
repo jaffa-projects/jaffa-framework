@@ -242,8 +242,6 @@ public class ConfigApiCore {
                 fileContents.setContextSalience(contextSalience);
                 String variationSalience = findVariationSalienceInManifest(zipFile);
                 fileContents.setVariationSalience(variationSalience);
-                String importProperty = findImportInManifest(zipFile);
-                fileContents.setImportProperty(importProperty==null?importProperty:importProperty.trim().toLowerCase());
             }
         }
         //zipFile.stream().close();
@@ -289,25 +287,6 @@ public class ConfigApiCore {
         jar.close();
 
         return variationSalience!=null && variationSalience.length() > 0 ? variationSalience : VariationContext.NULL_VARIATION;
-    }
-
-    /**
-     * findImportInManifest() - When given a compressed file, parse its MANIFEST and return the
-     * Import value if it exists
-     * @param zipFile   The compressed file containing the MANIFEST file to parse
-     * @return  The Import value retrieved from the MANIFEST file
-     * @throws IOException  Thrown when the provided compressed file does not exist or cannot be read
-     */
-    private static String findImportInManifest(ZipFile zipFile) throws IOException {
-        String importValue;
-
-        JarFile jar = new JarFile(zipFile.getName());
-        Manifest manigest = jar.getManifest();
-        importValue = manigest.getMainAttributes().getValue("Import");
-        log.debug("ConfigApi received the following Import from MANIFEST: " + importValue);
-        jar.close();
-
-        return importValue;
     }
 
     /**
