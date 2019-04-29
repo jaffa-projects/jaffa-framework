@@ -21,7 +21,6 @@ public class LocaleResourcesLoadTest {
 
     @BeforeClass
     public static void setup(){
-        LocaleContext.setLocale(new Locale.Builder().setLanguage("en").setRegion("US").build());
     }
     /**
      * Verifies that we can load the locale properties from the locale*.properties file into resource repositories.
@@ -33,6 +32,7 @@ public class LocaleResourcesLoadTest {
         assertNotNull(localeRepository);
         assertEquals(31, localeRepository.size());
         assertEquals("yyyyMMdd'T'HHmmssSSS", LocaleHelper.getProperty("ISO.datetime.short.format"));
+        assertEquals("MM/dd/yyyy", LocaleHelper.getProperty("dateonly.format"));
     }
 
     @AfterClass
