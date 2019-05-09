@@ -523,7 +523,7 @@ public class UOW {
                     for (Iterator<Map.Entry<String, StackTraceElement[]>> iterator = threadContext.get().entrySet().iterator(); iterator.hasNext();) {
                         lastEntry = iterator.next();
                     }
-                    if (!Integer.toString(this.hashCode()).equals(lastEntry.getKey()))
+                    if (lastEntry != null && !Integer.toString(this.hashCode()).equals(lastEntry.getKey()))
                         log.debug("WARNING: Current UOW hashcode does not match the last value in the Map: " + Integer.toString(this.hashCode()));
                 }
                 threadContext.get().remove(Integer.toString(this.hashCode()));

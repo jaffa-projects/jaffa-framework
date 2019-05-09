@@ -777,8 +777,10 @@ public class UserMaintenanceTx extends MaintTx implements IUserMaintenance {
             domain = (User) itr.next();
         // .//GEN-END:_loadUpdate_2_be
         // Add custom code //GEN-FIRST:_loadUpdate_2
-        oldPassword = domain.getPassword();
-        oldStatus = domain.getStatus();
+        if (domain != null) {
+            oldPassword = domain.getPassword();
+            oldStatus = domain.getStatus();
+        }
         // .//GEN-LAST:_loadUpdate_2
         // .//GEN-BEGIN:_loadUpdate_3_be
         if (domain == null) {

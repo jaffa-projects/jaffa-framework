@@ -109,16 +109,15 @@ public class DataSecurity {
                     List<RuleMetaData> rules = ruleHelper.getApplicableRules(targetClassName, targetObject, me.getValue(), true);
                     if (rules != null && rules.size() > 0) {
                         if (newMap == null)
-                            newMap = new LinkedHashMap<String, List<RuleMetaData>>();
+                            newMap = new LinkedHashMap<>();
                         newMap.put(me.getKey(), rules);
                     }
                 }
-                map = newMap;
-                return map.get(null);
+                if (newMap != null) {
+                    return newMap.get(null);
+                }
             }
-
         }
-
         return Collections.EMPTY_LIST;
     }
 }

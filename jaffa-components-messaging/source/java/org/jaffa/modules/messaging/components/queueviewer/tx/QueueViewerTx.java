@@ -108,18 +108,14 @@ public class QueueViewerTx implements IQueueViewer {
             }
             
             if (messages != null && messages.length > 0) {
-                List<MessageDto> messageDtos = new LinkedList<MessageDto>();
-                String[] manageableMessages = null;
+                List<MessageDto> messageDtos = new LinkedList<>();
                 for (Message message : messages) {
                     MessageDto messageDto = new MessageDto();
                     messageDto.setMessageId(message.getJMSMessageID());
-                    if (input.getMessageMode() == MessageModeEnum.IN_PROCESS) {
-                        messageDto.setManageable(Arrays.binarySearch(manageableMessages, message.getJMSMessageID()) >= 0 ? Boolean.TRUE : Boolean.FALSE);
-                    } else
-                        messageDto.setManageable(Boolean.FALSE);
+                    messageDto.setManageable(Boolean.FALSE);
                     // Evaluate the header elements for the message
                     if (queueInfo != null && queueInfo.getDisplayParam() != null) {
-                        List<HeaderElementDto> headerElementDtos = new LinkedList<HeaderElementDto>();
+                        List<HeaderElementDto> headerElementDtos = new LinkedList<>();
                         for (DisplayParam displayParam : queueInfo.getDisplayParam()) {
                             HeaderElementDto headerElementDto = new HeaderElementDto();
                             headerElementDto.setName(displayParam.getName());

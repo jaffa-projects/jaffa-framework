@@ -185,29 +185,32 @@ public class ValidationRulesEditorForm extends FormBase {
         value = getFileContentsWM().getValue();
         if (value != null && value.trim().length() == 0)
             value = null;
-        try{
-            // Create a factory object for creating DOM parsers
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            // Specifies that the parser produced by this factory will validate documents as they are parsed.
-            factory.setValidating(true);
-            // Now use the factory to create a DOM parser
-            DocumentBuilder parser = factory.newDocumentBuilder();
-            // Specifies the EntityResolver onceo resolve DTD used in XML documents
-            parser.setEntityResolver(new DefaultEntityResolver());
-            // Specifies the ErrorHandler to handle warning/error/fatalError conditions
-            parser.setErrorHandler(new DefaultErrorHandler());
-            Document document = parser.parse(new InputSource(new StringReader(value)));
-        } catch(ParserConfigurationException e){
-            // Cannot pass e.toString() and pass as parameter as the the meesage contains quotes
-            // which dows not work properly with displaying the messages
-            appExps.add(new ConfigException(ConfigException.PROP_XML_FILE_PARSE_ERROR,StringHelper.convertToHTML(e.getMessage())));
-            throw appExps;
-        } catch(SAXException e){
-            appExps.add(new ConfigException(ConfigException.PROP_XML_FILE_PARSE_ERROR,StringHelper.convertToHTML(e.getMessage())));
-            throw appExps;
-        } catch(IOException e){
-            appExps.add(new ConfigException(ConfigException.PROP_XML_FILE_PARSE_ERROR,StringHelper.convertToHTML(e.getMessage())));
-            throw appExps;
+
+        if (value != null) {
+            try {
+                // Create a factory object for creating DOM parsers
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                // Specifies that the parser produced by this factory will validate documents as they are parsed.
+                factory.setValidating(true);
+                // Now use the factory to create a DOM parser
+                DocumentBuilder parser = factory.newDocumentBuilder();
+                // Specifies the EntityResolver onceo resolve DTD used in XML documents
+                parser.setEntityResolver(new DefaultEntityResolver());
+                // Specifies the ErrorHandler to handle warning/error/fatalError conditions
+                parser.setErrorHandler(new DefaultErrorHandler());
+                parser.parse(new InputSource(new StringReader(value)));
+            } catch(ParserConfigurationException e){
+                // Cannot pass e.toString() and pass as parameter as the the meesage contains quotes
+                // which dows not work properly with displaying the messages
+                appExps.add(new ConfigException(ConfigException.PROP_XML_FILE_PARSE_ERROR,StringHelper.convertToHTML(e.getMessage())));
+                throw appExps;
+            } catch(SAXException e){
+                appExps.add(new ConfigException(ConfigException.PROP_XML_FILE_PARSE_ERROR,StringHelper.convertToHTML(e.getMessage())));
+                throw appExps;
+            } catch(IOException e){
+                appExps.add(new ConfigException(ConfigException.PROP_XML_FILE_PARSE_ERROR,StringHelper.convertToHTML(e.getMessage())));
+                throw appExps;
+            }
         }
         setFileContents(value);
         return true;

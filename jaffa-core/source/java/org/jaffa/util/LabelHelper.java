@@ -94,8 +94,7 @@ public class LabelHelper {
      * - Remove all entries from the ApplicationResources.override file, for which the override value is blank
      * - Migrate all changes to the ApplicationResources.properties file by invoking InitApp.generateApplicationResources()
      * - Flush the struts properties cache by invoking the flushCache() method on the MessageResources, provided its an instance of 'org.jaffa.util.PropertyMessageResources'
-     * @param request The request we are processing.
-     * @param messageResources The MessageResources object, which will be flushed, if its an instance of 'org.jaffa.util.PropertyMessageResources'.
+     * @param labels the labels to process
      * @throws FrameworkException if any error occurs.
      */
     protected static void performSave(Map labels) throws FrameworkException {
@@ -159,22 +158,28 @@ public class LabelHelper {
             properties = new ListProperties();
         else
             properties = new Properties();
-        try {
-            File file = new File(fileName);
-            if (file.exists()) {
-                is = new BufferedInputStream(new FileInputStream(fileName));
-                properties.load(is);
-                if (log.isDebugEnabled())
-                    log.debug("Loaded properties from " + fileName);
-            } else {
-                if (log.isDebugEnabled())
-                    log.debug("No properties loaded, since file does not exist " + fileName);
+
+        if (fileName != null) {
+            try {
+                File file = new File(fileName);
+                if (file.exists()) {
+                    is = new BufferedInputStream(new FileInputStream(fileName));
+                    properties.load(is);
+                    if (log.isDebugEnabled())
+                        log.debug("Loaded properties from " + fileName);
+                } else {
+                    if (log.isDebugEnabled())
+                        log.debug("No properties loaded, since file does not exist " + fileName);
+                }
+            } finally {
+                if (is != null)
+                    is.close();
             }
-            return properties;
-        } finally {
-            if (is != null)
-                is.close();
         }
+        else {
+            log.info("No file name specified to load properties from.");
+        }
+        return properties;
     }
 
     /** Stores the input properties into the given file.
