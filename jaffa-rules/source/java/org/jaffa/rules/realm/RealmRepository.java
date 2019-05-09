@@ -378,7 +378,7 @@ public class RealmRepository extends AbstractLoader {
      * @param source the name of the source file.
      * @return a List of Realm instances defined in the input source file.
      */
-    public List<Realm> getRealmsBySource(String source) {
+    public synchronized List<Realm> getRealmsBySource(String source) {
         return m_realmsBySource.get(source);
     }
 
