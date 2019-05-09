@@ -82,6 +82,11 @@ public class BoneCPDataSourceConnectionFactory implements IConnectionFactory, In
     private Integer retryAttempts;
     private Integer maxCheckoutSeconds;
     private static BoneCP connectionPool;
+
+    /** An object used exclusively for locking purposes during synchronization of
+     * operations on the connection pool. */
+    protected static final Object connectionPoolLock = new Object();
+
     private static Map<Connection, Connection> connectionsLookup = Collections.synchronizedMap(new HashMap<Connection, Connection>());
 
     /**
@@ -117,29 +122,29 @@ public class BoneCPDataSourceConnectionFactory implements IConnectionFactory, In
      * @throws ClassNotFoundException Exception thrown if the driver can not be loaded
      * @throws SQLException  if there is any sql issues with the connection
      */
-    private synchronized void configPool() throws ClassNotFoundException, SQLException {
-        if(connectionPool!=null){
-            return;
+    private void configPool() throws ClassNotFoundException, SQLException {
+        synchronized (connectionPoolLock) {
+            if (connectionPool != null) {
+                return;
+            }
+            // load the driver
+            Class.forName(getDriverClass());
+            // set up the configuration
+            BoneCPConfig config = new BoneCPConfig();
+
+            config.setAcquireRetryDelay(getMaxConnTime() == null ? 1 : getMaxConnTime().longValue(), TimeUnit.SECONDS);
+            config.setDisableConnectionTracking(true);
+            config.setMaxConnectionsPerPartition((getMaximumConnections() == null ? 50 : getMaximumConnections()) / 4);
+            config.setMinConnectionsPerPartition((getMinimumConnections() == null ? 20 : getMinimumConnections()) / 4);
+            config.setMaxConnectionAge(getMaxCheckoutSeconds() == null ? 30 : getMaxCheckoutSeconds(), TimeUnit.SECONDS);
+            config.setJdbcUrl(getUrl());
+            config.setUsername(getUser());
+            config.setPartitionCount(getPartitions() == null || getPartitions() <= 0 ? 1 : getPartitions());
+            config.setAcquireRetryAttempts(getRetryAttempts() == null ? 10 : getRetryAttempts());
+            config.setPassword(getPassword());
+            // create the pool
+            connectionPool = new BoneCP(config);
         }
-        // load the driver
-        Class.forName(getDriverClass());
-        // set up the configuration
-        BoneCPConfig config = new BoneCPConfig();
-
-        config.setAcquireRetryDelay(getMaxConnTime() == null ? 1 : getMaxConnTime().longValue(), TimeUnit.SECONDS);
-        config.setDisableConnectionTracking(true);
-        config.setMaxConnectionsPerPartition((getMaximumConnections() == null ? 50 : getMaximumConnections()) / 4);
-        config.setMinConnectionsPerPartition((getMinimumConnections() == null ? 20 : getMinimumConnections()) / 4);
-        config.setMaxConnectionAge(getMaxCheckoutSeconds() == null ? 30 : getMaxCheckoutSeconds(), TimeUnit.SECONDS);
-        config.setJdbcUrl(getUrl());
-        config.setUsername(getUser());
-        config.setPartitionCount(getPartitions() == null || getPartitions() <= 0? 1 : getPartitions());
-        config.setAcquireRetryAttempts(getRetryAttempts() == null ? 10 : getRetryAttempts());
-        config.setPassword(getPassword());
-        // create the pool
-        connectionPool = new BoneCP(config);
-
-
     }
 
     /**

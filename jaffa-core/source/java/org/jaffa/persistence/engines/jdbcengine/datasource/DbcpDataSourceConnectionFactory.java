@@ -81,8 +81,12 @@ public class DbcpDataSourceConnectionFactory implements IConnectionFactory {
     
     // the DataSource used for pooling connections
     private static DataSource c_dataSource = null;
-    
-    
+
+    /** An object used exclusively for locking purposes during synchronization of
+     * operations on the data source. */
+    protected static final Object dataSourceLock = new Object();
+
+
     // **************************************
     // Properties for this Connection Factory
     // **************************************
@@ -342,50 +346,53 @@ public class DbcpDataSourceConnectionFactory implements IConnectionFactory {
     
     
     
-    private synchronized void createDbcpDataSource()
+    private void createDbcpDataSource()
     throws SQLException {
         try {
-            if (c_dataSource == null) {
-                // First we load the underlying JDBC driver.
-                Class.forName(getDriverClass());
-                
-                // Next, we'll need a ObjectPool that serves as the actual pool of connections.
-                // We'll use a GenericObjectPool instance
-                GenericObjectPool connectionPool = new GenericObjectPool(null);
-                if (getMaximumConnections() != null)
-                    connectionPool.setMaxActive(getMaximumConnections().intValue());
-                if (getMinimumConnections() != null)
-                    connectionPool.setMaxIdle(getMinimumConnections().intValue());
-                if (getMaxWait() != null)
-                    connectionPool.setMaxWait(getMaxWait().longValue());
-                if (getTestOnBorrow() != null)
-                    connectionPool.setTestOnBorrow(getTestOnBorrow().booleanValue());
-                if (getTestOnReturn() != null)
-                    connectionPool.setTestOnReturn(getTestOnReturn().booleanValue());
-                
-                
-                // Next, we'll create a ConnectionFactory that the pool will use to create Connections.
-                // We'll use the DriverManagerConnectionFactory
-                ConnectionFactory connectionFactory = null;
-                if(m_driverProperties == null || m_driverProperties.isEmpty())
-                    connectionFactory = new DriverManagerConnectionFactory(getUrl(), getUser(), getPassword());
-                else
-                    connectionFactory = new DriverManagerConnectionFactory(getUrl(), getDriverProperties());
-                // Now we'll create the PoolableConnectionFactory, which wraps the "real" Connections created by the ConnectionFactory with the classes that implement the pooling functionality.
-                KeyedObjectPoolFactory stmtPoolFactory = new StackKeyedObjectPoolFactory();
-                String validationQuery = getValidationQuery();
-                boolean defaultReadOnly = false;
-                boolean defaultAutoCommit = false;
-                PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, connectionPool, stmtPoolFactory, validationQuery, defaultReadOnly, defaultAutoCommit);
-                
-                // Finally, we create the PoolingDriver itself, passing in the object pool we created.
-                c_dataSource = new PoolingDataSource(connectionPool);
-                
-                // This will allow us to access the underlying Connection objects, required by the JdbcSecurityPlugin
-                ((PoolingDataSource) c_dataSource).setAccessToUnderlyingConnectionAllowed(true);
-                
-                if (log.isDebugEnabled())
-                    log.debug("Created the Dbcp DataSource");
+            synchronized (dataSourceLock) {
+                if (c_dataSource == null) {
+                    // First we load the underlying JDBC driver.
+                    Class.forName(getDriverClass());
+
+                    // Next, we'll need a ObjectPool that serves as the actual pool of connections.
+                    // We'll use a GenericObjectPool instance
+                    GenericObjectPool connectionPool = new GenericObjectPool(null);
+                    if (getMaximumConnections() != null)
+                        connectionPool.setMaxActive(getMaximumConnections());
+                    if (getMinimumConnections() != null)
+                        connectionPool.setMaxIdle(getMinimumConnections());
+                    if (getMaxWait() != null)
+                        connectionPool.setMaxWait(getMaxWait());
+                    if (getTestOnBorrow() != null)
+                        connectionPool.setTestOnBorrow(getTestOnBorrow());
+                    if (getTestOnReturn() != null)
+                        connectionPool.setTestOnReturn(getTestOnReturn());
+
+                    // Next, we'll create a ConnectionFactory that the pool will use to create Connections.
+                    // We'll use the DriverManagerConnectionFactory
+                    ConnectionFactory connectionFactory = null;
+                    if (m_driverProperties == null || m_driverProperties.isEmpty())
+                        connectionFactory = new DriverManagerConnectionFactory(getUrl(), getUser(), getPassword());
+                    else
+                        connectionFactory = new DriverManagerConnectionFactory(getUrl(), getDriverProperties());
+                    // Now we'll create the PoolableConnectionFactory, which wraps the "real" Connections created by the ConnectionFactory with the classes that implement the pooling functionality.
+                    KeyedObjectPoolFactory stmtPoolFactory = new StackKeyedObjectPoolFactory();
+                    String validationQuery = getValidationQuery();
+                    boolean defaultReadOnly = false;
+                    boolean defaultAutoCommit = false;
+                    PoolableConnectionFactory poolableConnectionFactory =
+                            new PoolableConnectionFactory(connectionFactory, connectionPool, stmtPoolFactory,
+                                                          validationQuery, defaultReadOnly, defaultAutoCommit);
+
+                    // Finally, we create the PoolingDriver itself, passing in the object pool we created.
+                    c_dataSource = new PoolingDataSource(connectionPool);
+
+                    // This will allow us to access the underlying Connection objects, required by the JdbcSecurityPlugin
+                    ((PoolingDataSource) c_dataSource).setAccessToUnderlyingConnectionAllowed(true);
+
+                    if (log.isDebugEnabled())
+                        log.debug("Created the Dbcp DataSource");
+                }
             }
         } catch (Exception e) {
             String str = "Error in creating the Dbcp DataSource";
