@@ -116,6 +116,10 @@ public class PortletFilter implements Filter {
     /** Cache the main method used to execute this filter under security */
     private static Method c_method = null;
 
+    /** An object used exclusively for locking purposes during synchronization of
+     * operations on the method. */
+    protected static final Object methodLock = new Object();
+
     // The following constants are used for setting up the MDC in Log4J
     private static final String MDC_USER_ID = "userId";
     private static final String MDC_IP = "ip";
@@ -510,9 +514,14 @@ public class PortletFilter implements Filter {
 
     /** Uses reflection to create a Method object for the doFilterUnderSecurityContext() method.
      */
-    private synchronized void determineMainMethod() throws Exception {
-        if (c_method == null)
-            c_method = getClass().getMethod("doFilterUnderSecurityContext", new Class[]{HttpServletRequest.class, HttpServletResponse.class, FilterChain.class});
+    private void determineMainMethod() throws Exception {
+        synchronized (methodLock) {
+            if (c_method == null) {
+                c_method = getClass().getMethod("doFilterUnderSecurityContext",
+                                                new Class[] { HttpServletRequest.class, HttpServletResponse.class,
+                                                              FilterChain.class });
+            }
+        }
     }
 
     /**

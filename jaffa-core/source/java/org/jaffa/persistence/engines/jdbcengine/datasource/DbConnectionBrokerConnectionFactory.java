@@ -71,6 +71,9 @@ public class DbConnectionBrokerConnectionFactory implements IConnectionFactory {
     // the DbConnectionBroker, used for pooling connections
     private static DbConnectionBroker c_dbConnectionBroker = null;
 
+    /** An object used exclusively for locking purposes during synchronization of
+     * operations on the DB connection broker. */
+    protected static final Object connectionBrokerLock = new Object();
 
     // **************************************
     // Properties for this Connection Factory
@@ -357,21 +360,28 @@ public class DbConnectionBrokerConnectionFactory implements IConnectionFactory {
         c_dbConnectionBroker.freeConnection(connection);
     }
 
-
-    private synchronized void createDbConnectionBroker()
+    /**
+     * Creates the singleton connection broker.
+     * @throws IOException when DbConnectionBroker constructor has problems
+     */
+    private void createDbConnectionBroker()
             throws IOException {
-        if (c_dbConnectionBroker == null) {
-            double maxConnTime = getMaxConnTime() != null ? getMaxConnTime().doubleValue() : 1; // the connections will be reset every day
-            boolean logAppend = getLogAppend() != null ? getLogAppend().booleanValue() : true;
-            int maxCheckoutSeconds = getMaxCheckoutSeconds() != null ? getMaxCheckoutSeconds().intValue() : 0; // this will turn off the option of recycling the Connection after x seconds (default is 60 seconds)
-            int debugLevel = getDebugLevel() != null ? getDebugLevel().intValue() : 2;
+        synchronized (connectionBrokerLock) {
+            if (c_dbConnectionBroker == null) {
+                double maxConnTime = getMaxConnTime() != null ? getMaxConnTime() : 1;
+                // the connections will be reset every day
+                boolean logAppend = getLogAppend() != null ? getLogAppend() : true;
+                int maxCheckoutSeconds = getMaxCheckoutSeconds() != null ? getMaxCheckoutSeconds() : 0;
+                // this will turn off the option of recycling the Connection after x seconds (default is 60 seconds)
+                int debugLevel = getDebugLevel() != null ? getDebugLevel() : 2;
 
-            c_dbConnectionBroker = new DbConnectionBroker(getDriverClass(), getUrl()
-                    , getUser(), getPassword()
-                    , getMinimumConnections().intValue(), getMaximumConnections().intValue()
-                    , getLogFileName(), maxConnTime, logAppend, maxCheckoutSeconds, debugLevel);
-            if (log.isDebugEnabled())
-                log.debug("Created the DbConnectionBroker");
+                c_dbConnectionBroker = new DbConnectionBroker(getDriverClass(), getUrl(), getUser(), getPassword(),
+                                                              getMinimumConnections(),
+                                                              getMaximumConnections(), getLogFileName(),
+                                                              maxConnTime, logAppend, maxCheckoutSeconds, debugLevel);
+                if (log.isDebugEnabled())
+                    log.debug("Created the DbConnectionBroker");
+            }
         }
     }
 
