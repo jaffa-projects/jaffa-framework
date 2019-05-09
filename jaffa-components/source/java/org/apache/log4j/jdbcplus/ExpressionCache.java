@@ -30,7 +30,7 @@ public final class ExpressionCache {
 			expCache.put(key, value);
 	}
 
-	public ExpressionEvaluator get(final String key) {
+	public synchronized ExpressionEvaluator get(final String key) {
 		return expCache.get(key);
 	}
 }

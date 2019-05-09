@@ -219,7 +219,7 @@ public class RuleRepository extends AbstractLoader {
      * @param source the name of the source file.
      * @return a List of Rule instances defined in the input source file.
      */
-    public List<Rule> getRulesBySource(String source) {
+    public synchronized List<Rule> getRulesBySource(String source) {
         return prepareRules(m_rulesBySource.get(source));
     }
 

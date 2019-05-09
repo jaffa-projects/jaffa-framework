@@ -277,7 +277,7 @@ public class FormPrintEngineIText extends FormPrintEngine {
                         FormPrintEngineIText.FieldProperties props = new FormPrintEngineIText.FieldProperties();
                         for(int i=0; i< cols.length; i++) {
                             try {
-                                if(cols[i]!=null && cols[i].trim().length()>0) {
+                                if (cols[i] != null && cols[i].trim().length() > 0 && colOrder != null) {
                                     String value = cols[i].trim();
                                     switch(colOrder[i]) {
                                         case COLUMN_PAGE:

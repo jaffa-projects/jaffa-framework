@@ -242,6 +242,10 @@ public class CheckPolicyComponent extends Component {
         RoleManager roleManager = PolicyManager.getRoleManager();
         Roles roles = (null != roleManager) ? roleManager.getRoles() : null;
         m_roleBFMap.clear();
+        if (roles == null) {
+            return m_roleBFMap;
+        }
+
         List roleList = roles.getRole();
         // Bail if there are no roles....
         if (roleList == null) {

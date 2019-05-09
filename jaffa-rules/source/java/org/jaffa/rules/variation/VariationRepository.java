@@ -174,7 +174,7 @@ public class VariationRepository extends AbstractLoader {
      * @param uri The URI of a MetaData file.
      * @return The matching variation.
      */
-    public String find(String uri) {
+    public synchronized String find(String uri) {
         if (uri != null) {
             for (UriMetaData uriMetaData : m_uris) {
                 Pattern pattern = uriMetaData.getPattern();

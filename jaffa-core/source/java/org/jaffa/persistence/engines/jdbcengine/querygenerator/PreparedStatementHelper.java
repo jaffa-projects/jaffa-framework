@@ -89,7 +89,10 @@ public class PreparedStatementHelper {
      * @return a SQL String for use in PreparedStatements for inserting records.
      */
     public static String getInsertPreparedStatementString(ClassMetaData classMetaData, String engineType) {
-        String sql = (String) c_insertStatementCache.get(classMetaData.getClassName());
+        String sql;
+        synchronized (c_insertStatementCache) {
+            sql = (String)c_insertStatementCache.get(classMetaData.getClassName());
+        }
         if (sql == null) {
             StringBuffer buf1 = new StringBuffer(); buf1.append('('); // the fieldlist buffer
             StringBuffer buf2 = new StringBuffer(); buf2.append('('); // the Values buffer
@@ -142,7 +145,10 @@ public class PreparedStatementHelper {
      * @return a SQL String for use in PreparedStatements for updating records.
      */
     public static String getUpdatePreparedStatementString(ClassMetaData classMetaData, String engineType) {
-        String sql = (String) c_updateStatementCache.get(classMetaData.getClassName());
+        String sql;
+        synchronized (c_updateStatementCache) {
+            sql = (String)c_updateStatementCache.get(classMetaData.getClassName());
+        }
         if (sql == null) {
             StringBuffer buf = new StringBuffer(UPDATE);
             buf.append(' ');
@@ -198,7 +204,10 @@ public class PreparedStatementHelper {
      * @return a SQL String for use in PreparedStatements for deleting records.
      */
     public static String getDeletePreparedStatementString(ClassMetaData classMetaData, String engineType) {
-        String sql = (String) c_deleteStatementCache.get(classMetaData.getClassName());
+        String sql;
+        synchronized (c_deleteStatementCache) {
+            sql = (String)c_deleteStatementCache.get(classMetaData.getClassName());
+        }
         if (sql == null) {
             StringBuffer buf = new StringBuffer(DELETE_FROM);
             buf.append(' ');
@@ -239,7 +248,10 @@ public class PreparedStatementHelper {
      * @return a SQL String for use in PreparedStatements for locking records.
      */
     public static String getLockPreparedStatementString(ClassMetaData classMetaData, String engineType) {
-        String sql = (String) c_lockStatementCache.get(classMetaData.getClassName());
+        String sql;
+        synchronized(c_lockStatementCache) {
+            sql = (String)c_lockStatementCache.get(classMetaData.getClassName());
+        }
         if (sql == null) {
             StringBuffer buf = new StringBuffer(SELECT_1_FROM);
             buf.append(' ');
@@ -286,11 +298,17 @@ public class PreparedStatementHelper {
      */
     public static String getFindByPKPreparedStatementString(int locking, ClassMetaData classMetaData, String engineType) {
         String sql = null;
-        if (locking == Criteria.LOCKING_PARANOID && classMetaData.isLockable())
-            sql = (String) c_findByPKForUpdateStatementCache.get(classMetaData.getClassName());
-        else
-            sql = (String) c_findByPKStatementCache.get(classMetaData.getClassName());
-        
+        if (locking == Criteria.LOCKING_PARANOID && classMetaData.isLockable()) {
+            synchronized (c_findByPKForUpdateStatementCache) {
+                sql = (String)c_findByPKForUpdateStatementCache.get(classMetaData.getClassName());
+            }
+        }
+        else {
+            synchronized (c_findByPKStatementCache) {
+                sql = (String)c_findByPKStatementCache.get(classMetaData.getClassName());
+            }
+        }
+
         if (sql == null) {
             StringBuffer whereBuf = new StringBuffer();
             for (Iterator i = classMetaData.getAllKeyFieldNames().iterator(); i.hasNext();) {
@@ -347,7 +365,10 @@ public class PreparedStatementHelper {
      * @return a SQL String for use in PreparedStatements for existence checks.
      */
     public static String getExistsPreparedStatementString(ClassMetaData classMetaData, String engineType) {
-        String sql = (String) c_existsStatementCache.get(classMetaData.getClassName());
+        String sql;
+        synchronized (c_existsStatementCache) {
+            sql = (String)c_existsStatementCache.get(classMetaData.getClassName());
+        }
         if (sql == null) {
             StringBuffer buf = new StringBuffer(SELECT_COUNT_STAR_FROM)
             .append(' ')

@@ -527,7 +527,7 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
      * gets ServiceName associated with this Drools Session.
      * @return serviceName
      */
-    public String getServiceName(){
+    public synchronized String getServiceName(){
         return m_serviceName;
     }
 }

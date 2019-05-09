@@ -211,7 +211,7 @@ public class ValidationRulesEditorAction extends ActionBase {
         FormKey fk = null;
         try {
             String fileName = (String) Config.getProperty(Config.PROP_RULES_ENGINE_CORE_RULES_URL, null);
-            if (!fileName.equals(myComp.getValidationRulesFile())) {
+            if (fileName != null && !fileName.equals(myComp.getValidationRulesFile())) {
                 myComp.setFileContents(null);
                 myComp.setValidationRulesFile(fileName);
                 myComp.loadFileContents();

@@ -324,14 +324,23 @@ public class QueryStatementHelper {
         doWhere(criteria, meta, tableName, parentMeta, parentTableName, tableCounter, fromBuf, whereBuf, engineType, psArguments, indexArguments);
 
         // Check for aggregates
-        Collection aggregates = criteria.getAggregates();
+        if (criteria != null) {
+            Collection aggregates = criteria.getAggregates();
+            aggregate(criteria, meta, tableCounter, fromBuf, whereBuf, engineType, psArguments, indexArguments,
+                      tableName, aggregates);
+        }
+    }
+
+    private static void aggregate(Criteria criteria, ClassMetaData meta, Counter tableCounter, StringBuffer fromBuf,
+                                  StringBuffer whereBuf, String engineType, List<PreparedStatementArgument> psArguments,
+                                  boolean indexArguments, String tableName, Collection aggregates) throws IOException {
         if (aggregates != null) {
             for (Iterator itr = aggregates.iterator(); itr.hasNext();) {
                 tableCounter.increment();
                 Criteria aggregate = (Criteria) itr.next();
                 doFromAndWhere(aggregate, ConfigurationService.getInstance().getMetaData(aggregate.getTable()),
-                        criteria, meta, tableName,
-                        tableCounter, fromBuf, whereBuf, engineType, psArguments, indexArguments);
+                               criteria, meta, tableName,
+                               tableCounter, fromBuf, whereBuf, engineType, psArguments, indexArguments);
             }
         }
     }
@@ -341,7 +350,7 @@ public class QueryStatementHelper {
             throws IOException {
         // Here we handle the join fields
         Collection inners = criteria.getInners();
-        if (inners != null) {
+        if (inners != null && parentMeta != null) {
             for (Iterator i = inners.iterator(); i.hasNext();) {
                 Criteria.CriteriaEntry innerCriteriaEntry = (Criteria.CriteriaEntry) i.next();
                 String tfield = formatSqlName(meta.getSqlName(innerCriteriaEntry.getName()), engineType);
@@ -402,15 +411,8 @@ public class QueryStatementHelper {
         if (criteriaEntry instanceof Criteria.AtomicCriteriaEntry) {
             // Check for aggregates
             Collection atomicAggregates = ((Criteria.AtomicCriteriaEntry) criteriaEntry).getEntry().getAggregates();
-            if (atomicAggregates != null) {
-                for (Iterator itr = atomicAggregates.iterator(); itr.hasNext();) {
-                    tableCounter.increment();
-                    Criteria aggregate = (Criteria) itr.next();
-                    doFromAndWhere(aggregate, ConfigurationService.getInstance().getMetaData(aggregate.getTable()),
-                            criteria, meta, tableName,
-                            tableCounter, fromBuf, clause, engineType, psArguments, indexArguments);
-                }
-            }
+            aggregate(criteria, meta, tableCounter, fromBuf, clause, engineType, psArguments, indexArguments, tableName,
+                      atomicAggregates);
         }
     }
 
@@ -727,7 +729,12 @@ public class QueryStatementHelper {
     }
 
     private static String getFieldList(ClassMetaData classMetaData) {
-        return classMetaData.getTable() + ".*";
+        String fieldList = null;
+
+        if (classMetaData != null) {
+            fieldList = classMetaData.getTable() + ".*";
+        }
+        return fieldList;
     }
 
     private static String getFunctionList(Criteria criteria, ClassMetaData classMetaData, String engineType) {

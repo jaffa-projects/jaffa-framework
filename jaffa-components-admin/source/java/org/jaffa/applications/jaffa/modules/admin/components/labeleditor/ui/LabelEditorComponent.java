@@ -469,15 +469,17 @@ public class LabelEditorComponent extends Component {
         else
             properties = new Properties();
         try {
-            final File file = new File(fileName);
-            if (file.exists()) {
-                is = new InputStreamReader(new FileInputStream(fileName), "UTF-8");
-                properties.load(is);
-                if (log.isDebugEnabled())
-                    log.debug("Loaded properties from " + fileName);
-            } else {
-                if (log.isDebugEnabled())
-                    log.debug("No properties loaded, since file does not exist " + fileName);
+            if (fileName != null) {
+                final File file = new File(fileName);
+                if (file.exists()) {
+                    is = new InputStreamReader(new FileInputStream(fileName), "UTF-8");
+                    properties.load(is);
+                    if (log.isDebugEnabled())
+                        log.debug("Loaded properties from " + fileName);
+                } else {
+                    if (log.isDebugEnabled())
+                        log.debug("No properties loaded, since file does not exist " + fileName);
+                }
             }
             return properties;
         } finally {
@@ -493,27 +495,36 @@ public class LabelEditorComponent extends Component {
      * @throws IOException if any error occurs.
      */
     protected static void storePropertiesToFile(Properties properties, String fileName) throws IOException {
-        OutputStream os = null;
-        try {
-            // Create the directory for the input fileName, if it doesn't already exist.
-            File f = new File(fileName);
-            if (!f.exists()) {
-                if (log.isDebugEnabled())
-                    log.debug("File " + fileName + " does not exist. Check the existence of its directory");
-                File dir = f.getParentFile();
-                if (dir != null && !dir.exists()) {
+        if (fileName == null) {
+            log.info("Unable to store properties - no file name provided.");
+        }
+        else if (properties == null) {
+            log.info("No properties to store.");
+        }
+        else {
+            OutputStream os = null;
+            try {
+                // Create the directory for the input fileName, if it doesn't already exist.
+                File f = new File(fileName);
+                if (!f.exists()) {
                     if (log.isDebugEnabled())
-                        log.debug("Directory " + dir.getPath() + " does not exist. Creating it..");
-                    dir.mkdirs();
+                        log.debug("File " + fileName + " does not exist. Check the existence of its directory");
+                    File dir = f.getParentFile();
+                    if (dir != null && !dir.exists()) {
+                        if (log.isDebugEnabled())
+                            log.debug("Directory " + dir.getPath() + " does not exist. Creating it..");
+                        dir.mkdirs();
+                    }
                 }
+                os = new BufferedOutputStream(new FileOutputStream(f, false));
+                properties.store(os, null);
+                if (log.isDebugEnabled())
+                    log.debug("Saved properties to " + fileName);
             }
-            os = new BufferedOutputStream(new FileOutputStream(f, false));
-            properties.store(os, null);
-            if (log.isDebugEnabled())
-                log.debug("Saved properties to " + fileName);
-        } finally {
-            if (os != null)
-                os.close();
+            finally {
+                if (os != null)
+                    os.close();
+            }
         }
     }
     

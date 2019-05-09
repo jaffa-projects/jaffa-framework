@@ -70,7 +70,7 @@ public class OracleJDBCDelegate extends StdJDBCDelegate {
      * @param instanceId the instance id
      */
     public OracleJDBCDelegate(Log logger, String tablePrefix, String instanceId) {
-        this(LoggerFactory.getLogger(logger.getClass()), tablePrefix, instanceId, null);
+        this(LoggerFactory.getLogger(logger.getClass()), tablePrefix, instanceId, Boolean.FALSE);
     }
 
     /** Creates an instance. The arguments are simply passed to the base class

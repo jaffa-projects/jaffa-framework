@@ -191,7 +191,10 @@ public class DomainModelDocService {
                         child2.setClassName(className);
                         child2.setServiceName(serviceName);
                         child2.setDbTableName(dbTable);
-                        child1.addChild(child2);
+
+                        if (child1 != null) {
+                            child1.addChild(child2);
+                        }
                     }
                 }
 

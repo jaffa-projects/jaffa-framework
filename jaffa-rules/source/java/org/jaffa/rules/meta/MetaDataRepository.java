@@ -323,7 +323,7 @@ public class MetaDataRepository extends AbstractLoader
      * @param source the name of the source file.
      * @return a List of ClassMetaData instances defined in the input source file.
      */
-    public List<ClassMetaData> getClassMetaDataListBySource(String source) {
+    public synchronized List<ClassMetaData> getClassMetaDataListBySource(String source) {
         return m_classMetaDataListBySource.get(source);
     }
 

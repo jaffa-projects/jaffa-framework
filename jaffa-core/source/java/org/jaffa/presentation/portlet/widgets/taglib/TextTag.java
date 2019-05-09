@@ -437,7 +437,12 @@ public class TextTag extends CustomModelTag implements IWidgetTag,IFormTag {
                         hyperlinkInfo.getProperty("inputs"), hyperlinkInfo.getProperty("values"));
             } else if (getDomain() != null && getDomainField() != null) {
                 String componentName = c_domainFieldViewerComponentMappingProperties.getProperty(getDomain() + '.' + getDomainField());
-                String keyField = componentName != null ? c_keyFieldPerViewerComponentProperties.getProperty(componentName) : null;
+                String keyField = null;
+                synchronized (c_keyFieldPerViewerComponentProperties) {
+                    if (componentName != null) {
+                        keyField = c_keyFieldPerViewerComponentProperties.getProperty(componentName);
+                    }
+                }
                 if (componentName != null && keyField != null)
                     output = TagHelper.generateHyperlink(pageContext, input, componentName, keyField, getField());
             }
