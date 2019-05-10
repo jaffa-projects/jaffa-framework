@@ -74,7 +74,7 @@ import org.jaffa.util.StringHelper;
 import org.jaffa.exceptions.FrameworkException;
 import org.jaffa.exceptions.ApplicationExceptions;
 import org.jaffa.applications.jaffa.modules.admin.components.log4jconfig.ui.exceptions.Log4jConfigException;
-import org.apache.log4j.xml.Log4jEntityResolver;
+//import org.apache.log4j.xml.Log4jEntityResolver;
 /** This is the FormBean for the Log4jConfig.
  *
  * @author  Maheshd
@@ -144,7 +144,7 @@ public class Log4jConfigForm extends FormBase {
             // Now use the factory to create a DOM parser
             DocumentBuilder parser = factory.newDocumentBuilder();
             // Specifies the EntityResolver onceto resolve DTD used in XML documents
-            parser.setEntityResolver(new Log4jEntityResolver());
+            //parser.setEntityResolver(new Log4jEntityResolver());
             // Specifies the ErrorHandler to handle warning/error/fatalError conditions
             parser.setErrorHandler(new DefaultErrorHandler());
             Document document = parser.parse(new InputSource(new StringReader(value)));
