@@ -508,13 +508,16 @@ public class QuerySaver {
     // get all the component names
     Set propertyNames = contextManager.getPropertyNames(S_USERPREF+".*");
     Set componentNames = new HashSet();
-    for (Iterator it=propertyNames.iterator(); it.hasNext(); ) {
-      String pn = (String) it.next();
-      pn = pn.replaceFirst(S_USERPREF+".","");
-      if (pn.indexOf("."+S_QUERY)>0) {
-        pn = pn.substring(0, pn.indexOf("."+S_QUERY));
-        if (pn!=null && pn.length()>0) {
-          componentNames.add(pn);
+
+    if (propertyNames != null) {
+      for (Object propertyName : propertyNames) {
+        String pn = (String) propertyName;
+        pn = pn.replaceFirst(S_USERPREF + ".", "");
+        if (pn.indexOf("." + S_QUERY) > 0) {
+          pn = pn.substring(0, pn.indexOf("." + S_QUERY));
+          if (pn.length() > 0) {
+            componentNames.add(pn);
+          }
         }
       }
     }

@@ -130,7 +130,9 @@ public class LabelHelper {
                 ((ListProperties) applicationResourcesOverrideProperties).sort();
 
             // Now save the ApplicationResources.override file
-            storePropertiesToFile(applicationResourcesOverrideProperties, applicationResourcesOverrideLocation);
+            if (applicationResourcesOverrideLocation != null) {
+                storePropertiesToFile(applicationResourcesOverrideProperties, applicationResourcesOverrideLocation);
+            }
 
             // Migrate all changes to the ApplicationResources.properties file by invoking InitApp.generateApplicationResources()
             //InitApp.generateApplicationResources();

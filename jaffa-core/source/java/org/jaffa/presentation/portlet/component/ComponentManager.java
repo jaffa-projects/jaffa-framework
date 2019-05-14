@@ -75,6 +75,7 @@ public class ComponentManager {
      * @return An instance of the Component
      */
     public static Component run(String comp, UserSession us) {
+        Component compInst = null;
         if (log.isDebugEnabled())
             log.debug("Create Component " + comp + " for user " + (us == null ? "null" : us.getUserId()));
         try {
@@ -98,22 +99,26 @@ public class ComponentManager {
             if (cd.isRia()) clazz = RiaWrapperComponent.class;
             else clazz = Class.forName(cd.getComponentClass());
 
-            // Create an instance of the component
-            Component compInst = (Component) clazz.newInstance();
-            compInst.setComponentId(us.getNextComponentId());
-            compInst.setComponentDefinition(cd);
-            compInst.setUserSession(us);
+            if (us != null) {
+                // Create an instance of the component
+                compInst = (Component) clazz.newInstance();
+                compInst.setComponentId(us.getNextComponentId());
+                compInst.setComponentDefinition(cd);
+                compInst.setUserSession(us);
 
-            // Add the component to the UserSession
-            us.addComponent(compInst);
-            if (log.isInfoEnabled())
-                log.info("Created component " + comp + " having id " + compInst.getComponentId() + " for user " + (us == null ? "null" : us.getUserId()));
-            return compInst;
+                // Add the component to the UserSession
+                us.addComponent(compInst);
+                if (log.isInfoEnabled()) {
+                    log.info("Created component " + comp + " having id " + compInst.getComponentId() +
+                             " for user " + us.getUserId());
+                }
+            }
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             String str = "Error in running the Component " + Encode.forHtml(comp);
             log.error(str, e);
             throw new ComponentCreationRuntimeException(str, e);
         }
+        return compInst;
     }
 
     /**

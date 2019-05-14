@@ -308,7 +308,6 @@ public class QueryStatementHelper {
             tableName = TABLE_NAME_PREFIX + tableCounter.getCount();
         }
 
-
         // Append table name
         if (fromBuf.length() > 0)
             fromBuf.append(',');
@@ -318,13 +317,11 @@ public class QueryStatementHelper {
             fromBuf.append(tableName);
         }
 
-
-
-        // Now do the where clause
-        doWhere(criteria, meta, tableName, parentMeta, parentTableName, tableCounter, fromBuf, whereBuf, engineType, psArguments, indexArguments);
-
-        // Check for aggregates
         if (criteria != null) {
+            // Now do the where clause
+            doWhere(criteria, meta, tableName, parentMeta, parentTableName, tableCounter, fromBuf, whereBuf, engineType, psArguments, indexArguments);
+
+            // Check for aggregates
             Collection aggregates = criteria.getAggregates();
             aggregate(criteria, meta, tableCounter, fromBuf, whereBuf, engineType, psArguments, indexArguments,
                       tableName, aggregates);
@@ -443,7 +440,7 @@ public class QueryStatementHelper {
             	if(meta!=null)
                     name = formatSqlName(meta.getSqlName(criteriaEntry.getName()), engineType);
             }
-            if (name != null) {
+            if (name != null && meta != null) {
                 int operator = criteriaEntry.getOperator();
                 if (criteriaEntry.getDual()) {
                     String name2 = formatSqlName(meta.getSqlName((String) criteriaEntry.getValue()), engineType);
@@ -456,15 +453,17 @@ public class QueryStatementHelper {
                     String typeName = meta.getSqlType(criteriaEntry.getName());
                     Integer rpad = meta.getRpad(criteriaEntry.getName());
                     operator = checkForOperatorOverride(operator, typeName, value);
-                    if(meta!=null && criteriaEntry.getTableName()!=null)
-                    	buf.append(parseOperator(meta.getTable() + '.' + name, operator, value, typeName, engineType, rpad, psArguments, indexArguments));
-                    else
-                    	buf.append(parseOperator(tableName + '.' + name, operator, value, typeName, engineType, rpad, psArguments, indexArguments));
+                    if (criteriaEntry.getTableName() != null) {
+                        buf.append(parseOperator(meta.getTable() + '.' + name, operator, value, typeName, engineType, rpad, psArguments, indexArguments));
+                    }
+                    else {
+                        buf.append(parseOperator(tableName + '.' + name, operator, value, typeName, engineType, rpad, psArguments, indexArguments));
+                    }
                 }
-            } else if (log.isDebugEnabled())
+            } else if (log.isDebugEnabled()  && (meta != null)) {
                 log.debug("Will ignore the unmapped criteria entry " + meta.getTable() + '.' + criteriaEntry.getName());
+            }
         }
-
         return buf.toString();
     }
 

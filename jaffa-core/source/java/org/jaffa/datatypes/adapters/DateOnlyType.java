@@ -34,12 +34,14 @@ public class DateOnlyType implements UserType {
     }
 
     @Override
-    public Object nullSafeGet(ResultSet resultSet, String[] names, SessionImplementor s, Object o) throws HibernateException, SQLException {
+    public Object nullSafeGet(ResultSet resultSet, String[] names, SessionImplementor s, Object o)
+            throws HibernateException, SQLException {
+        DateOnly result = null;
         Timestamp timestamp = resultSet.getTimestamp(names[0]);
-        if (resultSet.wasNull()) {
-            return null;
+        if (timestamp != null && !resultSet.wasNull()) {
+            result = new DateOnly(timestamp.getTime());
         }
-        return new DateOnly(timestamp.getTime());
+        return result;
     }
 
     @Override

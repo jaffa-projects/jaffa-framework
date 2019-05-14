@@ -57,6 +57,7 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.*;
 
 import org.apache.log4j.Logger;
+import org.jaffa.components.codehelper.dto.CodeHelperOutCodeDto;
 import org.jaffa.components.codehelper.dto.CodeHelperOutElementDto;
 import org.jaffa.components.codehelper.dto.CriteriaElementDto;
 import org.jaffa.components.finder.CriteriaField;
@@ -398,12 +399,19 @@ public class DropDownTag extends CustomModelTag implements IWidgetTag,IFormTag,I
             criteriaElementDto.setCriteria(StringCriteriaField.getStringCriteriaField(CriteriaField.RELATIONAL_EQUALS, widgetValue , null));
             criteriaElementDtos[0] = criteriaElementDto;
             try {
-                CodeHelperOutElementDto m_dropDownCodes = cbddHelper.getOptions((HttpServletRequest) pageContext.getRequest(), this.getDropdownValueField(), this.getDropdownDescField(), this.getDomain() ,criteriaElementDtos);
-                for (int i=0; i< m_dropDownCodes.getCodeHelperOutCodeDtoCount(); i++) {
-                    m_model.addOption("" + m_dropDownCodes.getCodeHelperOutCodeDto(i).getDescription() ,"" +  m_dropDownCodes.getCodeHelperOutCodeDto(i).getCode());
+                CodeHelperOutElementDto m_dropDownCodes =
+                        cbddHelper.getOptions((HttpServletRequest) pageContext.getRequest(),
+                                              this.getDropdownValueField(),
+                                              this.getDropdownDescField(),
+                                              this.getDomain() ,criteriaElementDtos);
+                if (m_dropDownCodes != null) {
+                    for (int i = 0; i < m_dropDownCodes.getCodeHelperOutCodeDtoCount(); i++) {
+                        CodeHelperOutCodeDto codeDto = m_dropDownCodes.getCodeHelperOutCodeDto(i);
+                        m_model.addOption("" + codeDto.getDescription(),"" + codeDto.getCode());
+                    }
                 }
-            } catch (ApplicationExceptions e) {
-            } catch (FrameworkException e) {
+            } catch (ApplicationExceptions | FrameworkException e) {
+                log.warn("Exception getting HTML", e);
             }
         }
         

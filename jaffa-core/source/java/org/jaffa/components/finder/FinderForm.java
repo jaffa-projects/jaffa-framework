@@ -240,29 +240,31 @@ public abstract class FinderForm extends FormBase {
     }
 
 
-    /** This method should be invoked to ensure a valid state of the FormBean. It will validate the data in the models and set the corresponding properties.
+    /** This method should be invoked to ensure a valid state of the FormBean.
+     * It will validate the data in the models and set the corresponding properties.
      * Errors will be raised in the FormBean, if any validation fails.
      * @param request The request stream
      * @return A true indicates validations went through successfully. */
     public boolean doValidate(HttpServletRequest request) {
-        String value = null;
-
-        value = getSortDropDownWM().getValue();
-        if (value != null && value.trim().length() == 0)
+        String value = getSortDropDownWM().getValue();
+        if (value != null && value.trim().length() == 0) {
             value = null;
+        }
         setSortDropDown(value);
 
         value = getExportTypeWM().getValue();
-        if (value != null && value.trim().length() == 0)
+        if (value != null && value.trim().length() == 0) {
             value = null;
+        }
         setExportType(value);
 
         value = getMaxRecordsWM().getValue();
-        if (value != null && value.trim().length() == 0)
+        if (value == null || value.trim().length() == 0) {
             setMaxRecords(null);
-        else
+        }
+        else {
             setMaxRecords(Integer.valueOf(value));
-
+        }
         return true;
     }
 
@@ -460,11 +462,12 @@ public abstract class FinderForm extends FormBase {
 
         //Set the selectedQuery
         value = getSavedQueryIdWM().getValue();
-        if (value != null && value.trim().length() == 0)
+        if (value == null || value.trim().length() == 0) {
             setSavedQueryId(null);
-        else
+        }
+        else {
             setSavedQueryId(Long.valueOf(value));
-
+        }
         return true;
     }
 

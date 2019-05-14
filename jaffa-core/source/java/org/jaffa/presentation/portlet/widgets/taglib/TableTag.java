@@ -499,32 +499,35 @@ public class TableTag extends CustomModelTag implements IWidgetTag,IFormTag,IBod
         StringBuffer b = new StringBuffer();
         b.append("<THEAD class=\"sort\">\n");
         b.append("  <TR class=\"sort\">\n");
-        
-        for(Iterator itr = m_columns.iterator(); itr.hasNext(); ) {
-            Column c = (Column) itr.next();
-            
+
+        for (Object m_column : m_columns) {
+            Column c = (Column) m_column;
+
             // Work out the type
             String type;
             try {
                 type = model.getColumnDataType(c.getName());
                 String dataType = null;
-                if(type.equals(Defaults.CURRENCY) ||
-                        type.equals(Defaults.DECIMAL) ||
-                        type.equals(Defaults.INTEGER) )
-                    dataType = "Number";
-                else if(type.equals(Defaults.DATEONLY) ||
-                        type.equals(Defaults.DATETIME) )
-                    dataType = "Date";
-                else
-                    dataType = "CaseInsensitiveString";
-                
+                if (type != null) {
+                    if (type.equals(Defaults.CURRENCY) || type.equals(Defaults.DECIMAL) || type.equals(Defaults.INTEGER)) {
+                        dataType = "Number";
+                    }
+                    else if (type.equals(Defaults.DATEONLY) || type.equals(Defaults.DATETIME)) {
+                        dataType = "Date";
+                    }
+                    else {
+                        dataType = "CaseInsensitiveString";
+                    }
+                }
                 // <TD style="width: 60px;" type="String">String</TD>
-                b.append("    <TD nowrap id=\"" + idPrefix + c.getTitle() + "\" class=\"sort\" "
-                        +  (c.getWidth() == null ? "" : " width=\"" + c.getWidth()) + "\"" +
-                        (dataType == null ? "" : " type=\"" + dataType + "\"" ) +
-                        ">" + c.getTitle() + c.getLabelEditorLink() + "</TD>\n");
-                
-            } catch (Exception e) {
+                b.append("    <TD nowrap id=\"" + idPrefix + c.getTitle() + "\" class=\"sort\" " + (
+                        c.getWidth() == null ? "" : " width=\"" + c.getWidth()) + "\"" + (dataType == null ?
+                                                                                          "" :
+                                                                                          " type=\"" + dataType + "\"")
+                         + ">" + c.getTitle() + c.getLabelEditorLink() + "</TD>\n");
+
+            }
+            catch (Exception e) {
                 // Field Is Not Valid
                 b.append("    <TD nowrap class=\"sort\" >???</TD>\n");
             }

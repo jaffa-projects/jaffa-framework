@@ -212,14 +212,15 @@ public class ApplicationResourceLoader {
             if (applicationResourcesOverrideLocation != null && !"".equals(applicationResourcesOverrideLocation)) {
                 //added file prefix for ant style search pattern to search the file from I/O File
                 Resource resource = resolver.getResource(FILE_PREFIX + applicationResourcesOverrideLocation);
-                if (resource != null && !resource.exists()) {
-                    Path resourcePath = Paths.get(resource.getURI());
-                    Files.createDirectories(resourcePath.getParent());
-                    Files.createFile(resourcePath);
+                if (resource != null) {
+                    if (!resource.exists()) {
+                        Path resourcePath = Paths.get(resource.getURI());
+                        Files.createDirectories(resourcePath.getParent());
+                        Files.createFile(resourcePath);
+                    }
+                    properties.load(resource.getInputStream());
                 }
-                properties.load(resource.getInputStream());
             }
-
         } catch (IOException e) {
             log.error(ERROR_READING_APP_RESOURCES_OVERRIDE + applicationResourcesOverrideLocation, e);
             throw new RuntimeException(ERROR_READING_APP_RESOURCES_OVERRIDE + applicationResourcesOverrideLocation, e);

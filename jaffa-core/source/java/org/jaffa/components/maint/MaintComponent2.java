@@ -590,6 +590,13 @@ public abstract class MaintComponent2 extends Component implements IMaintCompone
             // Load the file containing the default values for the component
             try {
                 URL defaultValuesUrl = determineDefaultValuesUrl(getClass());
+
+                if (defaultValuesUrl == null) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("Default values URL was not found");
+                    }
+                    return;
+                }
                 inStream = defaultValuesUrl.openStream();
             } catch (Exception e) {
                 if (log.isDebugEnabled())

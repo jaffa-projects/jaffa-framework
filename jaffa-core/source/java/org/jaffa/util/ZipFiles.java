@@ -50,12 +50,16 @@ public class ZipFiles {
 
     static private void addFolderToZip(String path, String srcFolder, ZipOutputStream zip) throws Exception {
         File folder = new File(srcFolder);
+        String[] folderList = folder.list();
 
-        for (String fileName : folder.list()) {
-            if (path.equals("")) {
-                addFileToZip("", srcFolder + File.separator + fileName, zip);
-            } else {
-                addFileToZip(path + File.separator + folder.getName(), srcFolder + File.separator + fileName, zip);
+        if (folderList != null) {
+            for (String fileName : folderList) {
+                if (path.equals("")) {
+                    addFileToZip("", srcFolder + File.separator + fileName, zip);
+                }
+                else {
+                    addFileToZip(path + File.separator + folder.getName(), srcFolder + File.separator + fileName, zip);
+                }
             }
         }
     }

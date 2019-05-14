@@ -57,7 +57,6 @@ package org.jaffa.util;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.io.File;
 import java.io.FilenameFilter;
@@ -138,17 +137,22 @@ public class FindFiles {
                 DirList structure = new DirList(path);
 
                 // For each sub directory, search it for any of the required file names
-                for(Iterator it = structure.getList().iterator(); it.hasNext();) {
-                    File dir = (File) it.next();
-                    File[] list = dir.listFiles( filter );
+                for (Object o : structure.getList()) {
+                    File dir = (File) o;
+                    File[] list = dir.listFiles(filter);
 
-                    // For any matching files, add it to the search results (assming it not in there already!)
-                    for(int i = 0; i<list.length; i++)
-                        if(!m_filesFound.contains(list[i]))
-                            m_filesFound.add(list[i]);
-                }
-            }
-        }
+                    if (list != null) {
+                        // For any matching files, add it to the search results
+                        // (assuming it is not in there already!)
+                        for (File file : list) {
+                            if (!m_filesFound.contains(file)) {
+                                m_filesFound.add(file);
+                            }
+                        }   // for
+                    }   // list != null
+                }   // for each subdirectory
+            }   // if is a directory
+        }   // while
     }
 
     /** Inner class used to filter the search results */

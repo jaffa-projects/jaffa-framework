@@ -99,8 +99,6 @@ public class BoneCPDataSourceConnectionFactory implements IConnectionFactory, In
     public Connection createConnection() throws SQLException, IOException {
         if (connectionPool == null) {
             try {
-
-
                 configPool();
             } catch (ClassNotFoundException ex) {
                 throw new IOException("Can not load Driver", ex);
@@ -108,13 +106,10 @@ public class BoneCPDataSourceConnectionFactory implements IConnectionFactory, In
         }
 
         Connection connection = connectionPool.getConnection();
-        if (connection.isClosed()) {
+        if (connection != null && connection.isClosed()) {
             log.error("Failed to get connection in open state");
         }
-
         return connection;
-
-
     }
 
     /**

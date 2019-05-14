@@ -35,7 +35,7 @@ public class DateTimeType implements UserType {
     @Override
     public Object nullSafeGet(ResultSet resultSet, String[] names, SessionImplementor s, Object o) throws HibernateException, SQLException {
         Timestamp timestamp = resultSet.getTimestamp(names[0]);
-        if (resultSet.wasNull()) {
+        if (resultSet.wasNull() || timestamp == null) {
             return null;
         }
         return new DateTime(timestamp.getTime());

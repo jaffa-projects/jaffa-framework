@@ -104,9 +104,16 @@ public class MoldingService {
      */
     public static Object getInstanceValue(IPersistent object, ClassMetaData classMetaData, String attributeName)
     throws IllegalAccessException, InvocationTargetException {
+        Object value = null;
         AccessibleObject getter = classMetaData.getAccessor(attributeName);
-        Object instanceValue = getter instanceof Field ? ((Field) getter).get(object) : ((Method) getter).invoke(object, new Object[0]);
-        return rpad(classMetaData, attributeName, instanceValue);
+
+        if (getter != null) {
+            Object instanceValue = getter instanceof Field
+                                   ? ((Field)getter).get(object)
+                                   : ((Method)getter).invoke(object);
+            value = rpad(classMetaData, attributeName, instanceValue);
+        }
+        return value;
     }
     
     /** This sets the value of the attribute from the Persistent object, using the mutator method cached in the ClassMetaData defintion.
@@ -139,7 +146,9 @@ public class MoldingService {
                         layout = '[' + classMetaData.getSqlType(attributeName).toLowerCase() + ']';
                     value = DataTypeMapper.instance().map(value, method.getParameterTypes()[0], layout);
                 }
-                method.invoke(object, new Object[]{value});
+                if (method != null) {
+                    method.invoke(object, value);
+                }
             }
         } else {
             // The input object is a Proxy

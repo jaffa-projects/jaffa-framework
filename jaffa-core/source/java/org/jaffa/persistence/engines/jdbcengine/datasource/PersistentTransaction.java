@@ -129,60 +129,60 @@ public class PersistentTransaction {
      *                            this RuntimeException will be thrown if the domain object has been submitted to the UOW for an Add/Update/Delete and commit hasnt yet been performed.
      */
     public void addObject(IPersistent object, boolean invokeLifecycleEvents) throws AddFailedException, IllegalPersistentStateRuntimeException {
-        if (object.isQueued()) {
-            String str = "The domain object has already been submitted to the UOW for an Add/Update/Delete. No more updates can be performed until after a commit";
-            log.error(str);
-            throw new IllegalPersistentStateRuntimeException(str);
-        }
-
-        List<ILifecycleHandler> handlers = null;
         if (object != null) {
-            handlers = object.getLifecycleHandlers();
-        }
-
-        if (invokeLifecycleEvents) {
-            if (log.isDebugEnabled())
-                log.debug("Invoking the PreAdd trigger on the Persistent object");
-            for (ILifecycleHandler lifeCycleHandler : handlers) {
-                lifeCycleHandler.preAdd();
+            if (object.isQueued()) {
+                String str =
+                        "The domain object has already been submitted to the UOW for an Add/Update/Delete. No more updates can be performed until after a commit";
+                log.error(str);
+                throw new IllegalPersistentStateRuntimeException(str);
             }
-        }
+            List<ILifecycleHandler> handlers = object.getLifecycleHandlers();
 
-        if (adds == null) {
-            adds = new ArrayList<IPersistent>();
-        }
-        adds.add(object);
-
-        if (log.isDebugEnabled()) {
-            log.debug("Added the Persistent object to the ADD collection");
-        }
-
-        object.setQueued(true);
-
-        if (invokeLifecycleEvents) {
-            // If there is a persistence logging plugin add the object to it
-            if (persistenceLoggingPlugins != null) {
-                try {
-                    if (log.isDebugEnabled()) {
-                        log.debug("Invoking the add method on the IPersistenceLoggingPlugin instances");
-                    }
-
-                    for (IPersistenceLoggingPlugin persistenceLoggingPlugin : persistenceLoggingPlugins) {
-                        persistenceLoggingPlugin.add(object);
-                    }
-                } catch (Exception e) {
-                    log.error("Error in logging the ADD event", e);
-                    throw new AddFailedException(null, e);
+            if (invokeLifecycleEvents) {
+                if (log.isDebugEnabled())
+                    log.debug("Invoking the PreAdd trigger on the Persistent object");
+                for (ILifecycleHandler lifeCycleHandler : handlers) {
+                    lifeCycleHandler.preAdd();
                 }
             }
 
+            if (adds == null) {
+                adds = new ArrayList<>();
+            }
+            adds.add(object);
+
             if (log.isDebugEnabled()) {
-                log.debug("Invoking the PostAdd trigger on the Persistent object");
+                log.debug("Added the Persistent object to the ADD collection");
             }
 
-            // Invoke the post add behaviors
-            for (ILifecycleHandler lifecycleHandler : handlers) {
-                lifecycleHandler.postAdd();
+            object.setQueued(true);
+
+            if (invokeLifecycleEvents) {
+                // If there is a persistence logging plugin add the object to it
+                if (persistenceLoggingPlugins != null) {
+                    try {
+                        if (log.isDebugEnabled()) {
+                            log.debug("Invoking the add method on the IPersistenceLoggingPlugin instances");
+                        }
+
+                        for (IPersistenceLoggingPlugin persistenceLoggingPlugin : persistenceLoggingPlugins) {
+                            persistenceLoggingPlugin.add(object);
+                        }
+                    }
+                    catch (Exception e) {
+                        log.error("Error in logging the ADD event", e);
+                        throw new AddFailedException(null, e);
+                    }
+                }
+
+                if (log.isDebugEnabled()) {
+                    log.debug("Invoking the PostAdd trigger on the Persistent object");
+                }
+
+                // Invoke the post add behaviors
+                for (ILifecycleHandler lifecycleHandler : handlers) {
+                    lifecycleHandler.postAdd();
+                }
             }
         }
     }
@@ -198,66 +198,67 @@ public class PersistentTransaction {
      *                               this RuntimeException will be thrown if the domain object has been submitted to the UOW for an Add/Update/Delete and commit hasnt yet been performed.
      */
     public void updateObject(IPersistent object, boolean invokeLifecycleEvents) throws UpdateFailedException, IllegalPersistentStateRuntimeException {
-        if (object.isQueued()) {
-            String str = "The domain object has already been submitted to the UOW for an Add/Update/Delete. No more updates can be performed until after a commit";
-            log.error(str);
-            throw new IllegalPersistentStateRuntimeException(str);
-        }
-
-        if (!object.isModified()) {
-            if (log.isDebugEnabled())
-                log.debug("The Persistent object has not been modified. So it will not be added to the Interceptor queue for an Add");
-            return;
-        }
-
-        List<ILifecycleHandler> handlers = null;
         if (object != null) {
-            handlers = object.getLifecycleHandlers();
-        }
-
-        if (invokeLifecycleEvents) {
-            if (log.isDebugEnabled())
-                log.debug("Invoking the PreUpdate trigger on the Persistent object");
-            for (ILifecycleHandler lifecycleHandler : handlers) {
-                lifecycleHandler.preUpdate();
+            if (object.isQueued()) {
+                String str =
+                        "The domain object has already been submitted to the UOW for an Add/Update/Delete. No more updates can be performed until after a commit";
+                log.error(str);
+                throw new IllegalPersistentStateRuntimeException(str);
             }
-        }
 
-        if (updates == null) {
-            updates = new ArrayList<IPersistent>();
-        }
-        updates.add(object);
+            if (!object.isModified()) {
+                if (log.isDebugEnabled())
+                    log.debug(
+                            "The Persistent object has not been modified. So it will not be added to the Interceptor queue for an Add");
+                return;
+            }
+            List<ILifecycleHandler> handlers = object.getLifecycleHandlers();
 
-        if (log.isDebugEnabled()) {
-            log.debug("Added the Persistent object to the UPDATE collection");
-        }
-
-        object.setQueued(true);
-
-        if (invokeLifecycleEvents) {
-            // If there is a persistence logging plugin update the object
-            if (persistenceLoggingPlugins != null) {
-                try {
-                    if (log.isDebugEnabled()) {
-                        log.debug("Invoking the update method on the IPersistenceLoggingPlugin instances");
-                    }
-
-                    for (IPersistenceLoggingPlugin persistenceLoggingPlugin : persistenceLoggingPlugins) {
-                        persistenceLoggingPlugin.update(object);
-                    }
-                } catch (Exception e) {
-                    log.error("Error in logging the UPDATE event", e);
-                    throw new UpdateFailedException(null, e);
+            if (invokeLifecycleEvents) {
+                if (log.isDebugEnabled())
+                    log.debug("Invoking the PreUpdate trigger on the Persistent object");
+                for (ILifecycleHandler lifecycleHandler : handlers) {
+                    lifecycleHandler.preUpdate();
                 }
             }
 
+            if (updates == null) {
+                updates = new ArrayList<>();
+            }
+            updates.add(object);
+
             if (log.isDebugEnabled()) {
-                log.debug("Invoking the PostUpdate trigger on the Persistent object");
+                log.debug("Added the Persistent object to the UPDATE collection");
             }
 
-            // Invoke the post update behaviors
-            for (ILifecycleHandler lifecycleHandler : handlers) {
-                lifecycleHandler.postUpdate();
+            object.setQueued(true);
+
+            if (invokeLifecycleEvents) {
+                // If there is a persistence logging plugin update the object
+                if (persistenceLoggingPlugins != null) {
+                    try {
+                        if (log.isDebugEnabled()) {
+                            log.debug("Invoking the update method on the IPersistenceLoggingPlugin instances");
+                        }
+
+                        for (IPersistenceLoggingPlugin persistenceLoggingPlugin : persistenceLoggingPlugins) {
+                            persistenceLoggingPlugin.update(object);
+                        }
+                    }
+                    catch (Exception e) {
+                        log.error("Error in logging the UPDATE event", e);
+                        throw new UpdateFailedException(null, e);
+                    }
+                }
+
+                if (log.isDebugEnabled()) {
+                    log.debug("Invoking the PostUpdate trigger on the Persistent object");
+                }
+
+                // Invoke the post update behaviors
+                for (ILifecycleHandler lifecycleHandler : handlers) {
+                    lifecycleHandler.postUpdate();
+                }
             }
         }
     }
@@ -279,10 +280,7 @@ public class PersistentTransaction {
             throw new IllegalPersistentStateRuntimeException(str);
         }
 
-        List<ILifecycleHandler> handlers = null;
-        if (object != null) {
-            handlers = object.getLifecycleHandlers();
-        }
+        List<ILifecycleHandler> handlers = object.getLifecycleHandlers();
 
         if (invokeLifecycleEvents) {
             if (log.isDebugEnabled())
@@ -293,7 +291,7 @@ public class PersistentTransaction {
         }
 
         if (deletes == null) {
-            deletes = new ArrayList<IPersistent>();
+            deletes = new ArrayList<>();
         }
         deletes.add(object);
 
@@ -549,7 +547,7 @@ public class PersistentTransaction {
 
 
     /** Returns the PersistenceLoggingPlugin at the specified position in this list..
-     * @param class name of the PersistenceLoggingPlugin to return.
+     * @param clazz name of the PersistenceLoggingPlugin to return.
      * @return the PersistenceLoggingPlugin at the specified position in this list
      */
     public  <U extends IPersistenceLoggingPlugin> U findFirstPersistenceLoggingPluginByClass(Class<U> clazz){
