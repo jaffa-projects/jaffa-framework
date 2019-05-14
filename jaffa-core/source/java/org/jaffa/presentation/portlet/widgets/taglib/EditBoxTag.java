@@ -986,30 +986,36 @@ public class EditBoxTag extends CustomModelTag implements IWidgetTag,IFormTag {
     }
     
     private int determineMaxLen(IPropertyRuleIntrospector propertyRuleIntrospector) {
-        Class propertyType = propertyRuleIntrospector.getPropertyType();
-        if (propertyType != null &&
-           (Number.class.isAssignableFrom(propertyType) || Currency.class.isAssignableFrom(propertyType) ||
-           (propertyType.isPrimitive() && propertyType != Boolean.TYPE))) {
-            if (propertyRuleIntrospector != null && propertyRuleIntrospector.getMaxLength() != null) {
-                boolean suppressNegative = false;
-                Object minValueObj = propertyRuleIntrospector.getMinValue();
-                if (minValueObj != null) {
-                    try {
-                        Double minValue = Parser.parseDecimal(minValueObj.toString());
-                        suppressNegative = minValue != null && minValue >= 0;
-                    } catch (Exception e) {
-                        if (log.isDebugEnabled())
-                            log.debug("Exception in trying to parse the minValue '" + minValueObj + "', while deciding if the maxLength should allow the minus sign", e);
+        int max = 50;
+        if (propertyRuleIntrospector != null) {
+            Class propertyType = propertyRuleIntrospector.getPropertyType();
+            if (propertyType != null &&
+                (Number.class.isAssignableFrom(propertyType) || Currency.class.isAssignableFrom(propertyType) ||
+                 (propertyType.isPrimitive() && propertyType != Boolean.TYPE))) {
+                if (propertyRuleIntrospector.getMaxLength() != null) {
+                    boolean suppressNegative = false;
+                    Object minValueObj = propertyRuleIntrospector.getMinValue();
+                    if (minValueObj != null) {
+                        try {
+                            Double minValue = Parser.parseDecimal(minValueObj.toString());
+                            suppressNegative = minValue != null && minValue >= 0;
+                        } catch (Exception e) {
+                            if (log.isDebugEnabled())
+                                log.debug("Exception in trying to parse the minValue '" + minValueObj +
+                                          "', while deciding if the maxLength should allow the minus sign", e);
+                        }
                     }
+                    if (log.isDebugEnabled()) {
+                        log.debug("Compute maxlength allowing for the minus sign? " + !suppressNegative);
+                    }
+                    max = getMetaWidth(propertyRuleIntrospector.getMaxLength(),
+                                       propertyRuleIntrospector.getMaxFracLength(), suppressNegative);
                 }
-                if (log.isDebugEnabled())
-                    log.debug("Compute maxlength allowing for the minus sign? " + !suppressNegative);
-                return getMetaWidth(propertyRuleIntrospector.getMaxLength() , propertyRuleIntrospector.getMaxFracLength(), suppressNegative);
-            } else
-                return 50;
-        } else {
-            return propertyRuleIntrospector.getMaxLength().intValue();
+            } else {
+                max = propertyRuleIntrospector.getMaxLength();
+            }
         }
+        return max;
     }
     
     /** Checks for the nearest outer PropertyTag.

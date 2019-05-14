@@ -240,6 +240,10 @@ class PersistentInstanceInvocationHandler implements InvocationHandler {
             // Determine the datatype for the fieldName from the ClassMetaData
             ClassMetaData classMetaData = ConfigurationService.getInstance().getMetaData(domainClass.getName());
             String type = classMetaData.getType(fieldName);
+
+            if (type == null) { // MetaClass doesn't exist. Do nothing
+                return;
+            }
             Class clazz = type.equals("byte[]") ? byte[].class : Class.forName(type);
 
             // Determine the FieldMetaData class

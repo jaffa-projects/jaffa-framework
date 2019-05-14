@@ -288,164 +288,189 @@ public class BeanMoulder {
                         PropertyDescriptor sDesc = graph.getDomainFieldDescriptor(tName);
                         // Based on validation in GraphMapping, that there is a
                         // DAO descriptor with a setter, and a DO descriptor with a getter
-                        if(sDesc==null)
+                        if (sDesc == null) {
                             log.error("No Getter for " + tName + " in path " + fullName);
+                        }
+                        else {
+                            // in case getter is not public, make it available
+                            Method sm = sDesc.getReadMethod();
+                            if (!sm.isAccessible())
+                                sm.setAccessible(true);
 
-                        // incase getter is not public, make it available
-                        Method sm = sDesc.getReadMethod();
-                        if(!sm.isAccessible())
-                            sm.setAccessible(true);
+                            // get the setter, and make is available if needed
+                            Method tm = tDesc.getWriteMethod();
+                            if (!tm.isAccessible())
+                                tm.setAccessible(true);
 
-                        // get the setter, and make is available if needed
-                        Method tm = tDesc.getWriteMethod();
-                        if(!tm.isAccessible())
-                            tm.setAccessible(true);
+                            // Set the value if the source and target are the same datatype
+                            Class tClass = tDesc.getPropertyType();
+                            Class sClass = sDesc.getPropertyType();
+                            if (tClass.isAssignableFrom(sClass)) {
+                                // Get the value being copied
+                                Object sValue = sm.invoke(source, (Object[]) null);
+                                if (sValue != null) {
+                                    tm.invoke(target, new Object[] { sValue });
+                                    log.debug("Set " + tName + " = " + sValue);
+                                }
+                                else
+                                    log.debug(tName + " no set, NULL value");
 
-                        // Set the value if the source and target are the same datatype
-                        Class tClass = tDesc.getPropertyType();
-                        Class sClass = sDesc.getPropertyType();
-                        if(tClass.isAssignableFrom(sClass)) {
-                            // Get the value being copied
-                            Object sValue = sm.invoke(source, (Object[]) null);
-                            if(sValue!=null) {
-                              tm.invoke(target, new Object[] {sValue});
-                              log.debug("Set " + tName + " = " + sValue);
-                            } else
-                                log.debug(tName + " no set, NULL value");
+                                // See if there is a datatype mapper for these classes
+                            }
+                            else if (DataTypeMapper.instance().isMappable(sClass, tClass)) {
+                                // Get the value being copied
+                                Object sValue = sm.invoke(source, (Object[]) null);
+                                if (sValue != null) {
+                                    sValue = DataTypeMapper.instance().map(sValue, tClass);
+                                    tm.invoke(target, new Object[] { sValue });
+                                    log.debug("Set " + tName + " = " + sValue);
+                                }
+                                else
+                                    log.debug(tName + " no set, NULL value");
 
-                        // See if there is a datatype mapper for these classes
-                        } else if(DataTypeMapper.instance().isMappable(sClass,tClass)) {
-                            // Get the value being copied
-                            Object sValue = sm.invoke(source, (Object[]) null);
-                            if(sValue!=null) {
-                                sValue = DataTypeMapper.instance().map(sValue, tClass);
-                                tm.invoke(target, new Object[] {sValue});
-                                log.debug("Set " + tName + " = " + sValue);
-                            } else
-                                log.debug(tName + " no set, NULL value");
-
-                        // See if target is a DAO, this could be a foreign object or one-to-one relationship...
-                        } else if(DomainDAO.class.isAssignableFrom(tClass) && IPersistent.class.isAssignableFrom(sClass) ) {
-                            // Get the mapper for the related DAO, if it has keys, it must be a foriegn object
-                            if( graph.isForeignField(tName) ) {
-                                // look at foreign key fields, and make sure they are not null
-                                List foreignKeys = graph.getForeignKeys(tName);
-                                List foreignKeyValues = new ArrayList();
-                                boolean nullKey=false;
-                                for(Iterator k = foreignKeys.iterator();k.hasNext();) {
-                                    String doProp = (String) k.next();
-                                    Object value = null;
-                                    PropertyDescriptor doPd = graph.getRealDomainFieldDescriptor(doProp);
-                                    if(doPd!=null && doPd.getReadMethod()!=null) {
-                                        Method m = doPd.getReadMethod();
-                                        if(!m.isAccessible()) m.setAccessible(true);
-                                        value = m.invoke(source,new Object[] {});
-                                        if(value==null) nullKey = true;
-                                        foreignKeyValues.add(value);
-                                    } else {
-                                        throw new MouldException(MouldException.INVALID_FK_MAPPING, objectPath, doProp, graph.getDomainClassShortName());
+                                // See if target is a DAO, this could be a foreign object or one-to-one relationship...
+                            }
+                            else if (DomainDAO.class.isAssignableFrom(tClass) && IPersistent.class.isAssignableFrom(sClass)) {
+                                // Get the mapper for the related DAO, if it has keys, it must be a foriegn object
+                                if (graph.isForeignField(tName)) {
+                                    // look at foreign key fields, and make sure they are not null
+                                    List foreignKeys = graph.getForeignKeys(tName);
+                                    List foreignKeyValues = new ArrayList();
+                                    boolean nullKey = false;
+                                    for (Iterator k = foreignKeys.iterator(); k.hasNext(); ) {
+                                        String doProp = (String) k.next();
+                                        Object value = null;
+                                        PropertyDescriptor doPd = graph.getRealDomainFieldDescriptor(doProp);
+                                        if (doPd != null && doPd.getReadMethod() != null) {
+                                            Method m = doPd.getReadMethod();
+                                            if (!m.isAccessible())
+                                                m.setAccessible(true);
+                                            value = m.invoke(source, new Object[] {});
+                                            if (value == null)
+                                                nullKey = true;
+                                            foreignKeyValues.add(value);
+                                        }
+                                        else {
+                                            throw new MouldException(MouldException.INVALID_FK_MAPPING, objectPath,
+                                                                     doProp, graph.getDomainClassShortName());
+                                        }
+                                    }
+                                    if (nullKey) {
+                                        log.debug("Did not create skeleton object '" + tClass.getName()
+                                                  + "': one or more foreign key values missing.");
+                                    }
+                                    else {
+                                        // Create the foreign object
+                                        log.debug("Creating foreign object - " + tClass.getName());
+                                        Object newDAO = newDAO(tClass);
+                                        boolean createSkeleton = true;
+                                        // Only retrieve related domain object and introspect if need
+                                        if (filter.areSubFieldsIncluded(fullName)) {
+                                            // read object and introspect all
+                                            log.debug("Read foreign object '" + fullName + "' and mold");
+                                            try {
+                                                Object sValue = sm.invoke(source, (Object[]) null);
+                                                if (sValue != null) {
+                                                    BeanMoulder.moldFromDomain(sValue, newDAO, null, filter, fullName,
+                                                                               true);
+                                                    createSkeleton = false;
+                                                }
+                                            }
+                                            catch (InvocationTargetException e) {
+                                                // If the foreign object is not found, warn and create the skeleton
+                                                if (e.getCause() != null && e.getCause() instanceof InvalidForeignKeyException)
+                                                    log.warn(
+                                                            "All foreign keys present, but foreign object does not exist");
+                                                else
+                                                    throw e;
+                                            }
+                                        }
+                                        if (createSkeleton) {
+                                            // just set foreign keys from current object
+                                            log.debug("Set keys on skeleton foreign object only");
+                                            GraphMapping graph2 = MappingFactory.getInstance(newDAO);
+                                            Set keys = graph2.getKeyFields();
+                                            if (keys == null || keys.size() != foreignKeyValues.size()) {
+                                                throw new MouldException(MouldException.MISMATCH_FK_MAPPING, objectPath,
+                                                                         target.getClass().getName(), newDAO.getClass().getName());
+                                            }
+                                            int k2 = 0;
+                                            // Look through all the foreign keys on the skeleton object
+                                            for (Iterator k = keys.iterator(); k.hasNext(); k2++) {
+                                                String keyField = (String) k.next();
+                                                Object keyValue = foreignKeyValues.get(k2);
+                                                PropertyDescriptor pd = graph2.getDataFieldDescriptor(keyField);
+                                                if (pd != null && pd.getWriteMethod() != null) {
+                                                    Method m = pd.getWriteMethod();
+                                                    if (!m.isAccessible())
+                                                        m.setAccessible(true);
+                                                    m.invoke(newDAO, new Object[] { keyValue });
+                                                }
+                                                else {
+                                                    throw new MouldException(MouldException.CANT_SET_KEY_FIELD,
+                                                                             objectPath, keyField, newDAO.getClass().getName());
+                                                }
+                                            }
+                                        }
+                                        tm.invoke(target, new Object[] { newDAO });
+                                        log.debug("Set " + tName + " = " + newDAO);
                                     }
                                 }
-                                if(nullKey) {
-                                    log.debug("Did not create skeleton object '"+tClass.getName()+"': one or more foreign key values missing.");
-                                } else {
-                                    // Create the foreign object
-                                    log.debug("Creating foreign object - " + tClass.getName());
-                                    Object newDAO = newDAO(tClass);
-                                    boolean createSkeleton = true;
-                                    // Only retrieve related domain object and introspect if need
-                                    if( filter.areSubFieldsIncluded(fullName) ) {
+                                else {
+                                    // This is not a foreign object, must be a related object
+                                    if (filter.areSubFieldsIncluded(fullName)) {
+                                        // Create the related object
+                                        log.debug("Creating One-To-One object - " + tClass.getName());
+                                        Object newDAO = newDAO(tClass);
                                         // read object and introspect all
-                                        log.debug("Read foreign object '"+fullName+"' and mold");
-                                        try {
-                                            Object sValue = sm.invoke(source, (Object[]) null);
-                                            if(sValue!=null) {
-                                                BeanMoulder.moldFromDomain(sValue, newDAO, null, filter, fullName, true);
-                                                createSkeleton = false;
-                                            }
-                                        } catch (InvocationTargetException e) {
-                                            // If the foreign object is not found, warn and create the skeleton
-                                            if(e.getCause() !=null && e.getCause() instanceof InvalidForeignKeyException)
-                                                log.warn("All foreign keys present, but foreign object does not exist");
-                                            else
-                                                throw e;
+                                        log.debug("Read related object '" + fullName + "' and mold");
+                                        Object sValue = sm.invoke(source, (Object[]) null);
+                                        if (sValue != null) {
+                                            BeanMoulder.moldFromDomain(sValue, newDAO, null, filter, fullName, true);
                                         }
-                                    }
-                                    if(createSkeleton) {
-                                        // just set foreign keys from current object
-                                        log.debug("Set keys on skeleton foreign object only");
-                                        GraphMapping graph2 = MappingFactory.getInstance(newDAO);
-                                        Set keys = graph2.getKeyFields();
-                                        if(keys == null || keys.size() != foreignKeyValues.size()) {
-                                            throw new MouldException(MouldException.MISMATCH_FK_MAPPING, objectPath, target.getClass().getName(), newDAO.getClass().getName() );
+                                        else {
+                                            log.debug("Related object '" + fullName + "' not found. Ignore it!");
                                         }
-                                        int k2 = 0;
-                                        // Look through all the foreign keys on the skeleton object
-                                        for(Iterator k = keys.iterator(); k.hasNext();k2++){
-                                            String keyField = (String)k.next();
-                                            Object keyValue = foreignKeyValues.get(k2);
-                                            PropertyDescriptor pd = graph2.getDataFieldDescriptor(keyField);
-                                            if(pd!=null && pd.getWriteMethod()!=null) {
-                                                Method m = pd.getWriteMethod();
-                                                if(!m.isAccessible()) m.setAccessible(true);
-                                                m.invoke(newDAO,new Object[] {keyValue});
-                                            } else {
-                                                throw new MouldException(MouldException.CANT_SET_KEY_FIELD, objectPath, keyField, newDAO.getClass().getName() );
-                                            }
-                                        }
+                                        tm.invoke(target, new Object[] { newDAO });
+                                        log.debug("Set " + tName + " = " + newDAO);
                                     }
-                                    tm.invoke(target, new Object[] {newDAO});
-                                    log.debug("Set " + tName + " = " + newDAO);
-                                }
-                            } else {
-                                // This is not a foreign object, must be a related object
-                                if( filter.areSubFieldsIncluded(fullName) ) {
-                                    // Create the related object
-                                    log.debug("Creating One-To-One object - " + tClass.getName());
-                                    Object newDAO = newDAO(tClass);
-                                    // read object and introspect all
-                                    log.debug("Read related object '"+fullName+"' and mold");
-                                    Object sValue = sm.invoke(source, (Object[]) null);
-                                    if(sValue!=null) {
-                                        BeanMoulder.moldFromDomain(sValue, newDAO, null, filter, fullName, true);
-                                    } else {
-                                        log.debug("Related object '"+fullName+"' not found. Ignore it!");
-                                    }
-                                    tm.invoke(target, new Object[] {newDAO});
-                                    log.debug("Set " + tName + " = " + newDAO);
-                                } else
-                                    log.debug("No subfields for object " + fullName + " included. Object not retrieved");
-                            }//END-related object
+                                    else
+                                        log.debug("No subfields for object " + fullName + " included. Object not retrieved");
+                                }//END-related object
 
-                        // See if Target may be an array of DAO's
-                        } else if(tClass.isArray() && DomainDAO.class.isAssignableFrom(tClass.getComponentType())
-                                  && filter.areSubFieldsIncluded(fullName) ) {
-                            log.debug("Target is an array of DAO's");
-                            log.debug("Read related objects '"+fullName+"' and mold");
-                            Object sValue = sm.invoke(source, (Object[]) null);
-                            if(sClass.isArray() && IPersistent.class.isAssignableFrom(sClass.getComponentType())) {
-                                log.debug("Source is an array of Persistent Objects");
-                                Object[] sArray = (Object[])sValue;
-                                if(sArray.length > 0) {
-                                    Object[] tArray = (Object[])Array.newInstance(tClass.getComponentType(),sArray.length);
-                                    log.debug("Translate Array of Size " + sArray.length );
-                                    for(int j=0; j< sArray.length; j++) {
-                                       Object newDAO = newDAO(tClass.getComponentType());
-                                       BeanMoulder.moldFromDomain(sArray[j], newDAO, null, filter, fullName, false);
-                                       tArray[j]=newDAO;
-                                       log.debug("Add to array ["+j+"] : " + newDAO);
+                                // See if Target may be an array of DAO's
+                            }
+                            else if (tClass.isArray() && DomainDAO.class.isAssignableFrom(tClass.getComponentType())
+                                     && filter.areSubFieldsIncluded(fullName)) {
+                                log.debug("Target is an array of DAO's");
+                                log.debug("Read related objects '" + fullName + "' and mold");
+                                Object sValue = sm.invoke(source, (Object[]) null);
+                                if (sClass.isArray() && IPersistent.class.isAssignableFrom(sClass.getComponentType())) {
+                                    log.debug("Source is an array of Persistent Objects");
+                                    Object[] sArray = (Object[]) sValue;
+                                    if (sArray.length > 0) {
+                                        Object[] tArray = (Object[]) Array.newInstance(tClass.getComponentType(), sArray.length);
+                                        log.debug("Translate Array of Size " + sArray.length);
+                                        for (int j = 0; j < sArray.length; j++) {
+                                            Object newDAO = newDAO(tClass.getComponentType());
+                                            BeanMoulder.moldFromDomain(sArray[j], newDAO, null, filter, fullName, false);
+                                            tArray[j] = newDAO;
+                                            log.debug("Add to array [" + j + "] : " + newDAO);
+                                        }
+                                        tm.invoke(target, new Object[] { (Object) tArray });
+                                        log.debug("Set Array " + tName);
                                     }
-                                    tm.invoke(target, new Object[] {(Object)tArray});
-                                    log.debug("Set Array " + tName);
-                                } else
-                                    log.debug("Source Array is empty! Do Nothing");
-                            } // source is DO array
+                                    else
+                                        log.debug("Source Array is empty! Do Nothing");
+                                } // source is DO array
 
-                        // Error... No way to map property
-                        } else {
-                            String err = "Can't Mold Property " + fullName + " from " + sClass.getName() + " to " + tClass.getName();
-                            log.error(err);
-                            throw new RuntimeException(err);
+                                // Error... No way to map property
+                            }
+                            else {
+                                String err = "Can't Mold Property " + fullName + " from " + sClass.getName() + " to " + tClass.getName();
+                                log.error(err);
+                                throw new RuntimeException(err);
+                            }
                         }
                     } // is included in filtered fields
                 }

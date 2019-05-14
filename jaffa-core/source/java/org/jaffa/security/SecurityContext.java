@@ -121,10 +121,12 @@ class SecurityContext {
      * @return true if supplied object is an exact match to this one
      */
     public boolean equals(Object obj) {
-        if(obj!=null && (obj instanceof SecurityContext) ) {
-            SecurityContext s = (SecurityContext)obj;
-            return ( ( (request == null && s.request == null) || request.equals(s.request) ) &&
-                    ( (ejb == null && s.ejb == null) || ejb.equals(s.ejb) ) );
+        if (obj instanceof SecurityContext) {
+            SecurityContext s = (SecurityContext) obj;
+            return (((request == null && s.request == null) ||
+                     (request != null && request.equals(s.request))) &&
+                    ((ejb == null && s.ejb == null) ||
+                     (ejb != null) && ejb.equals(s.ejb)));
         }
         return false;
     }

@@ -318,8 +318,9 @@ public class DbConnectionBrokerConnectionFactory implements IConnectionFactory {
      * @throws IOException  if any IO error occurs
      */
     public Connection createConnection() throws SQLException, IOException {
-        if (c_dbConnectionBroker == null)
-            createDbConnectionBroker();
+        if (c_dbConnectionBroker == null) {
+            c_dbConnectionBroker = createDbConnectionBroker();
+        }
 
         Connection connection = c_dbConnectionBroker.getConnection();
 
@@ -362,9 +363,10 @@ public class DbConnectionBrokerConnectionFactory implements IConnectionFactory {
 
     /**
      * Creates the singleton connection broker.
+     * @return the newly created connection broker
      * @throws IOException when DbConnectionBroker constructor has problems
      */
-    private void createDbConnectionBroker()
+    private DbConnectionBroker createDbConnectionBroker()
             throws IOException {
         synchronized (connectionBrokerLock) {
             if (c_dbConnectionBroker == null) {
@@ -383,6 +385,7 @@ public class DbConnectionBrokerConnectionFactory implements IConnectionFactory {
                     log.debug("Created the DbConnectionBroker");
             }
         }
+        return c_dbConnectionBroker;
     }
 
 }

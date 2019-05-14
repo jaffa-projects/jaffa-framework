@@ -306,9 +306,13 @@ public class UserGridManager {
 
         // Create the path structure for the file if not created already
         File f = new File(file.getFile());
-        File path = new File(f.getParent());
-        if (!path.exists()) {
-            path.mkdirs();
+        String parent = f.getParent();
+
+        if (parent != null) {
+            File path = new File(parent);
+            if (!path.exists()) {
+                path.mkdirs();
+            }
         }
 
         // Create output stream

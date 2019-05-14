@@ -259,14 +259,16 @@ public class ConfigApiCore {
      * @throws IOException  Thrown when the provided compressed file does not exist or cannot be read
      */
     private static String findContextSalienceInManifest(ZipFile zipFile) throws IOException {
-        String contextSalience;
+        String contextSalience = null;
 
-        JarFile jar = new JarFile(zipFile.getName());
-        Manifest manifest = jar.getManifest();
-        contextSalience = manifest.getMainAttributes().getValue("Context-Salience");
-        log.debug("ConfigApi received the following Context-Salience from MANIFEST: " + contextSalience);
-        jar.close();
+        try (JarFile jar = new JarFile(zipFile.getName())) {
+            Manifest manifest = jar.getManifest();
 
+            if (manifest != null) {
+                contextSalience = manifest.getMainAttributes().getValue("Context-Salience");
+                log.debug("ConfigApi received the following Context-Salience from MANIFEST: " + contextSalience);
+            }
+        }
         return contextSalience;
     }
 
@@ -278,15 +280,18 @@ public class ConfigApiCore {
      * @throws IOException  Thrown when the provided compressed file does not exist or cannot be read
      */
     private static String findVariationSalienceInManifest(ZipFile zipFile) throws IOException {
-        String variationSalience;
+        String variationSalience = null;
 
-        JarFile jar = new JarFile(zipFile.getName());
-        Manifest manigest = jar.getManifest();
-        variationSalience = manigest.getMainAttributes().getValue("Variation-Salience");
-        log.debug("ConfigApi received the following Variation-Salience from MANIFEST: " + variationSalience);
-        jar.close();
-
-        return variationSalience!=null && variationSalience.length() > 0 ? variationSalience : VariationContext.NULL_VARIATION;
+        try (JarFile jar = new JarFile(zipFile.getName())) {
+            Manifest manifest = jar.getManifest();
+            if (manifest != null) {
+                variationSalience = manifest.getMainAttributes().getValue("Variation-Salience");
+                log.debug("ConfigApi received the following Variation-Salience from MANIFEST: " + variationSalience);
+            }
+        }
+        return (variationSalience != null && variationSalience.length() > 0)
+               ? variationSalience
+               : VariationContext.NULL_VARIATION;
     }
 
     /**

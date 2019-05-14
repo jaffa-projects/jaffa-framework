@@ -471,14 +471,16 @@ public abstract class FinderComponent2 extends Component {
         Map savedQueries = querySaver.getSavedQueryList(getComponentDefinition().getComponentName());
 
         if (savedQueries.size() > 0) {
-            queryTypes = new HashMap<String,String>();
+            queryTypes = new HashMap<>();
 
-            Iterator savedQueriesIterator = savedQueries.keySet().iterator();
-            while (savedQueriesIterator.hasNext()) {
-                String element = (String) savedQueriesIterator.next();
+            for (Object o : savedQueries.keySet()) {
+                String element = (String) o;
                 Map queryFields = querySaver.getSavedQueryFields(getComponentDefinition().getComponentName(), element);
-                String type = (String) queryFields.get("ExportType");
-                queryTypes.put(element, type);
+
+                if (queryFields != null) {
+                    String type = (String) queryFields.get("ExportType");
+                    queryTypes.put(element, type);
+                }
             }
         }
         return queryTypes;

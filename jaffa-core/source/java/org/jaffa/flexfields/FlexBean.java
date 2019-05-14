@@ -592,7 +592,7 @@ public class FlexBean implements DynaBean {
                             return null;
                         oldValue = null;
                         FlexField flexField = new FlexField();
-                        flexField.setObjectName(flexClass.getLogicalName());
+                        flexField.setObjectName(flexClass != null ? flexClass.getLogicalName() : null);
                         flexField.setFieldName(flexProperty != null ? flexProperty.getLogicalName() : null);
                         flexField.setValue(convertToString(value, layout));
                         flexFields.put(name, flexField);

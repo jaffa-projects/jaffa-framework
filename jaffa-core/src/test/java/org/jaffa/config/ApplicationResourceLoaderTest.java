@@ -51,11 +51,9 @@ package org.jaffa.config;
 
 import org.jaffa.loader.CoreLoaderConfig;
 import org.jaffa.loader.config.ApplicationResourcesManager;
-import org.jaffa.loader.config.ApplicationRulesManager;
 import org.jaffa.presentation.portlet.session.LocaleContext;
 import org.jaffa.presentation.portlet.session.UserSession;
 import org.jaffa.session.ContextManagerFactory;
-import org.jaffa.struts.tiles.JaffaI18nFactorySet;
 import org.jaffa.util.MessageHelper;
 import org.junit.Before;
 import org.junit.Test;
@@ -81,10 +79,9 @@ public class ApplicationResourceLoaderTest {
 
     /**
      * setting the up objects/properties before a Test is run
-     * @throws Exception
      */
     @Before
-    public void setup() throws Exception {
+    public void setup() {
         ApplicationResourcesManager applicationResourcesManager = resourceLoaderConfig.getBean(ApplicationResourcesManager.class);
 
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -130,6 +127,8 @@ public class ApplicationResourceLoaderTest {
 
         // Locale Specific Resource
         assertEquals("Locale Resource Load Success", localeResourceLoadResult);
+
+        assertNotNull(defaultProperties);
 
         // Override resource check
         assertEquals("Printer Name", defaultProperties.getProperty("label.Jaffa.Printing.PrinterDefinition.RealPrinterName"));

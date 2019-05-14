@@ -199,13 +199,13 @@ public class GridController {
             }
 
             // Process any state related to the Tree Widget
-            for (Iterator it = root.getChildren(XML_DISPLAY).iterator(); it.hasNext();) {
-                Element data = (Element) it.next();
+            for (Object o : root.getChildren(XML_DISPLAY)) {
+                Element data = (Element) o;
                 int rowId = Integer.parseInt(data.getAttribute(XML_ROW).getValue());
-                Boolean expanded = new Boolean(data.getAttribute(XML_EXPANDED).getValue());
+                Boolean expanded = Boolean.valueOf(data.getAttribute(XML_EXPANDED).getValue());
                 String contents = getContents(data);
                 GridModelRow row = model.getRow(rowId);
-                row.addElement("isDisplayed", new Boolean(contents));
+                row.addElement("isDisplayed", Boolean.valueOf(contents));
                 row.addElement("isExpanded", expanded);
             }
 

@@ -73,7 +73,9 @@ public class SecurityFilterRequestWrapper extends HttpServletRequestWrapper {
 
         HttpSession session = getSession(false);
 
-        principal = (Principal) session.getAttribute("org.jaffa.security.filter.SecurityFilterPrincipal");
+        if (session != null) {
+            principal = (Principal) session.getAttribute("org.jaffa.security.filter.SecurityFilterPrincipal");
+        }
     }
 
     /** Get the principal object

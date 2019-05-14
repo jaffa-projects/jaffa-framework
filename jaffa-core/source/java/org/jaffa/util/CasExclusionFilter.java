@@ -82,8 +82,13 @@ public class CasExclusionFilter implements Filter{
    * @throws ServletException   General exception thrown by a servlet when it encounters difficulty
    */
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        request.getRequestDispatcher(((HttpServletRequest) request).getServletPath() +
-                StringUtils.defaultString(((HttpServletRequest)request).getPathInfo()) ).forward(request, response);
+      HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+      String path = httpServletRequest.getServletPath();
+      String info = StringUtils.defaultString(httpServletRequest.getPathInfo());
+      RequestDispatcher dispatcher = request.getRequestDispatcher(path + info);
+      if (dispatcher != null) {
+        dispatcher.forward(request, response);
+      }
     }
 
   /**

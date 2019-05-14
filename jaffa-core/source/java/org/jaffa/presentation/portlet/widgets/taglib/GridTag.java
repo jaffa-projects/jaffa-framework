@@ -272,7 +272,7 @@ public class GridTag extends CustomModelTag implements IWidgetTag,IFormTag,IBody
 
         if(isUserGrid()) {
             // raise an error, if the error-flag is set on the model
-            if (m_model.getErrorInSavingUserSettings()) {
+            if ((m_model != null) && m_model.getErrorInSavingUserSettings()) {
                 TagHelper.getFormBase(pageContext).raiseError((HttpServletRequest) pageContext.getRequest(), ActionMessages.GLOBAL_MESSAGE, "error.widgets.usergrid.savefailed");
                 m_model.setErrorInSavingUserSettings(false);
             }
@@ -295,7 +295,7 @@ public class GridTag extends CustomModelTag implements IWidgetTag,IFormTag,IBody
             String rule = isUserGrid() ? RULE_USERGRID_POPUP : RULE_GRID_POPUP;
             String popupHints = (String) ContextManagerFactory.instance().getProperty(rule);
             if(popupHints!=null)
-                m_popupHints = Boolean.valueOf(popupHints).booleanValue();
+                m_popupHints = Boolean.valueOf(popupHints);
             log.debug("popupHints (from rule: " + rule+") defaults to " + m_popupHints);
         }
 
@@ -1129,7 +1129,7 @@ public class GridTag extends CustomModelTag implements IWidgetTag,IFormTag,IBody
         sb.append("</tr>\n");
         sb.append("</thead>\n");
         sb.append("<tbody>\n");
-        if (m_availableCols != null) {
+        if ((m_availableCols != null) && (m_columnHeads != null)) {
             for (int j = 0; j < m_availableCols.size(); j++) {
                 ColumnHead colHead = (ColumnHead)m_columnHeads.get(m_availableCols.get(j));
                 if (colHead != null) {

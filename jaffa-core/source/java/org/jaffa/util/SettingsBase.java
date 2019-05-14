@@ -110,7 +110,7 @@ public abstract class SettingsBase {
             return null;
         try{
             Object o = envCtx.lookup(name);
-            if(o != null)
+            if (o == null)
                 return null;
             else if (type.isInstance(o) )
                 return o;

@@ -158,18 +158,23 @@ public class LocaleResourcesManager implements IManager {
      */
     @Override
     public void registerResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException {
-        Properties properties = new Properties();
-        InputStream resourceInputStream = resource.getInputStream();
-        String propertyLocale = resource.getFilename().substring(resource.getFilename().indexOf("_") + 1, resource.getFilename().lastIndexOf("."));
-        if (resource != null && resourceInputStream != null) {
-            loadPropertiesResource(resourceInputStream, properties);
-            if (!properties.isEmpty()) {
-                for(Object property : properties.keySet()){
-                    ContextKey key = new ContextKey(propertyLocale + "." + property, resource.getURI().toString(), variation, precedence);
-                    registerProperties(key, properties.getProperty((String)property));
+        if (resource != null) {
+            InputStream resourceInputStream = resource.getInputStream();
+            String propertyLocale = resource.getFilename().substring(resource.getFilename().indexOf("_") + 1,
+                                                                     resource.getFilename().lastIndexOf("."));
+            if (resourceInputStream != null) {
+                Properties properties = new Properties();
+                loadPropertiesResource(resourceInputStream, properties);
+                if (!properties.isEmpty()) {
+                    for (Object property : properties.keySet()) {
+                        ContextKey key =
+                                new ContextKey(propertyLocale + "." + property, resource.getURI().toString(), variation,
+                                               precedence);
+                        registerProperties(key, properties.getProperty((String) property));
+                    }
                 }
+                resourceInputStream.close();
             }
-            resourceInputStream.close();
         }
     }
 
@@ -180,23 +185,24 @@ public class LocaleResourcesManager implements IManager {
      * @param resource   the object that contains the xml config file.
      * @param precedence associated with the module based on its definition in manifest
      * @param variation  associated with the module based on its definition in manifest
-     * @throws JAXBException
-     * @throws SAXException
-     * @throws IOException
      */
     @Override
-    public void unregisterResource(Resource resource, String precedence, String variation) throws JAXBException, SAXException, IOException {
-        Properties properties = new Properties();
-        InputStream resourceInputStream = resource.getInputStream();
-        if (resource != null && resourceInputStream != null) {
-            loadPropertiesResource(resourceInputStream, properties);
-            if (!properties.isEmpty()) {
-                for(Object property : properties.keySet()){
-                    ContextKey key = new ContextKey((String)property, resource.getURI().toString(), variation, precedence);
-                    unregisterProperties(key);
+    public void unregisterResource(Resource resource, String precedence, String variation)
+            throws JAXBException, SAXException, IOException {
+        if (resource != null) {
+            InputStream resourceInputStream = resource.getInputStream();
+            if (resourceInputStream != null) {
+                Properties properties = new Properties();
+                loadPropertiesResource(resourceInputStream, properties);
+                if (!properties.isEmpty()) {
+                    for (Object property : properties.keySet()) {
+                        ContextKey key =
+                                new ContextKey((String) property, resource.getURI().toString(), variation, precedence);
+                        unregisterProperties(key);
+                    }
                 }
+                resourceInputStream.close();
             }
-            resourceInputStream.close();
         }
     }
 

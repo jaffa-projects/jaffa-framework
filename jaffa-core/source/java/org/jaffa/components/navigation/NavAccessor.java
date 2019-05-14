@@ -233,7 +233,6 @@ public class NavAccessor {
 
         log.info("Display Global Menu...");
         NavAccessor.printMenuOptions(n.getGlobalNavOptions(),"");
-        String compdef = ComponentManager.find("XX").getComponentType();
 
         for(int i = 1; i < n.m_desktopCounter; i++) {
             NavOption o = n.getDesktopNavOptions(""+i);

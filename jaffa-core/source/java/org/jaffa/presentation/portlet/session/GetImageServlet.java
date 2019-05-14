@@ -89,10 +89,13 @@ public class GetImageServlet extends HttpServlet {
         if(log.isDebugEnabled())
             log.debug("Output Image Stream Type:" + mimeType );
         response.setContentType(mimeType);
-        response.setContentLength(imageContents.length);
-        BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
-        bos.write(imageContents);
-        bos.close();
+
+        if (imageContents != null) {
+            response.setContentLength(imageContents.length);
+            BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
+            bos.write(imageContents);
+            bos.close();
+        }
         if(log.isDebugEnabled())
             log.debug("Finished Outputting");
     }

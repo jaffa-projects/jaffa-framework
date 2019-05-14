@@ -133,50 +133,52 @@ public class SecurityFilter implements Filter {
 
         HttpSession session = ((HttpServletRequest) request).getSession(false);
 
-        log.debug("Getting session principal");
-        Principal principal = (Principal) session.getAttribute("org.jaffa.security.filter.SecurityFilterPrincipal");
-        if(principal == null) {
-           // principal was null, not authenticated/new session
+        if (session != null) {
+            log.debug("Getting session principal");
+            Principal principal = (Principal) session.getAttribute("org.jaffa.security.filter.SecurityFilterPrincipal");
+            if (principal == null) {
+                // principal was null, not authenticated/new session
 
-           String user = ((HttpServletRequest) request).getRemoteUser().toUpperCase();
-           if(user == null) {
-              throw new ServletException("Request user not found.");
-           }
+                String remoteUser = ((HttpServletRequest) request).getRemoteUser();
+                if (remoteUser == null) {
+                    throw new ServletException("Request user not found.");
+                }
+                String user = remoteUser.toUpperCase();
+                boolean authenticated = authenticateUser(user);
 
-           boolean authenticated = authenticateUser(user);
+                if (!authenticated) {
+                    log.debug("User [" + user + "] failed authentication");
 
-           if(!authenticated) {
-              log.debug("User ["+user+"] failed authentication");
+                    response.setContentType("text/html");
 
-              response.setContentType("text/html");
+                    PrintWriter out = response.getWriter();
+                    out.println("<html><head><title>Authentication Failed</title></head><body>");
+                    out.println("<h2>Sorry you are not authorized to use this application</h2>");
+                    out.println("</body></html>");
+                    out.close();
 
-              PrintWriter out = response.getWriter();
-              out.println("<html><head><title>Authentication Failed</title></head><body>");
-              out.println("<h2>Sorry you are not authorized to use this application</h2>");
-              out.println("</body></html>");
-              out.close();
+                    log.debug("Invalidating session");
+                    session.invalidate();
 
-              log.debug("Invalidating session");
-              session.invalidate();
+                    log.debug("return");
+                    return;
+                }
 
-              log.debug("return");
-              return;
-           }
+                log.debug("Getting Roles for user [" + user + "]");
+                List roles = getRoles(user);
 
-           log.debug("Getting Roles for user [" + user + "]");
-           List roles = getRoles(user);
+                log.debug("Setting session principal");
+                principal = new SecurityFilterPrincipal(user, roles);
+                session.setAttribute("org.jaffa.security.filter.SecurityFilterPrincipal", principal);
+            }
+            log.debug("Principal [" + principal.getName() + "]");
 
-           log.debug("Setting session principal");
-           principal = new SecurityFilterPrincipal(user, roles);
-           session.setAttribute("org.jaffa.security.filter.SecurityFilterPrincipal", principal);
+            log.debug("Wrapping request through SecurityFilterRequestWrapper");
+            request = new SecurityFilterRequestWrapper((HttpServletRequest) request);
+
+            log.debug("chain.doFilter()");
+            chain.doFilter(request, response);
         }
-        log.debug("Principal [" + principal.getName() + "]");
-
-        log.debug("Wrapping request through SecurityFilterRequestWrapper");
-        request = new SecurityFilterRequestWrapper((HttpServletRequest) request);
-
-        log.debug("chain.doFilter()");
-        chain.doFilter(request, response);
     }
 
     /** destory method
