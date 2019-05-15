@@ -504,9 +504,8 @@ public class TableTag extends CustomModelTag implements IWidgetTag,IFormTag,IBod
             Column c = (Column) m_column;
 
             // Work out the type
-            String type;
             try {
-                type = model.getColumnDataType(c.getName());
+                String type = model.getColumnDataType(c.getName());
                 String dataType = null;
                 if (type != null) {
                     if (type.equals(Defaults.CURRENCY) || type.equals(Defaults.DECIMAL) || type.equals(Defaults.INTEGER)) {

@@ -48,9 +48,6 @@
  */
 package org.jaffa.soa.events;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.jaffa.exceptions.ApplicationException;
 import org.jaffa.exceptions.ApplicationExceptions;
@@ -59,8 +56,11 @@ import org.jaffa.persistence.UOW;
 import org.jaffa.util.BeanHelper;
 import org.jaffa.util.ExceptionHelper;
 import org.jaffa.util.OrderedPathMatchingResourcePatternResolver;
-import org.jaffa.util.URLHelper;
 import org.springframework.core.io.Resource;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 /** ProcessEventHandler
  *
@@ -173,7 +173,7 @@ public class ProcessEventHandler {
                         log.debug("ProcessEventGraph for " + processEventGraph.getEventName() + " executed...");
                 }
             } else {
-                throw new ApplicationExceptions(new ApplicationException(EXCEPTION_CANNOT_FIND_PROPERTY, new String[]{processEventGraph.getEventName()}));
+                throw new ApplicationExceptions(new ApplicationException(EXCEPTION_CANNOT_FIND_PROPERTY));
             }
         } catch (Exception e) {
             throw ExceptionHelper.throwAFR(e);

@@ -98,9 +98,15 @@ public class QuartzSchedulerHelper implements SchedulerHelper {
   public void startScheduler() {
     try {
       if (scheduler == null || scheduler.isShutdown()) {
-        instantiateSchedulerFactory();
-        scheduler.startDelayed(600 /*seconds to delay the start = 10 min*/);
-        LOGGER.info("GOLDesp Scheduler has been started.");
+        instantiateSchedulerFactory(); // This should create a scheduler, but won't always
+
+        if (scheduler != null) {
+          scheduler.startDelayed(600 /*seconds to delay the start = 10 min*/);
+          LOGGER.info("GOLDesp Scheduler has been started.");
+        }
+        else {
+          LOGGER.warn("No GOLDesp Scheduler to start");
+        }
       } else if (scheduler.isInStandbyMode()) {
         scheduler.start();
         LOGGER.info("GOLDesp Scheduler has been started.");
