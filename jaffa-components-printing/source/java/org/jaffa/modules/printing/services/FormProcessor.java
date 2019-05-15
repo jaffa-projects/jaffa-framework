@@ -265,7 +265,10 @@ public class FormProcessor {
                 }
 
                 // Send file to printer and email if required
-                FormDelivery.deliver(request, outFile, firstDom);
+                if (outFile != null) {
+                    FormDelivery.deliver(request, outFile, firstDom);
+                }
+
                 if (log.isDebugEnabled()) {
                     log.debug("Returned from delivering the form.  Print File: " + (outFile == null ? "NULL" : outFile.getAbsolutePath()));
                 }

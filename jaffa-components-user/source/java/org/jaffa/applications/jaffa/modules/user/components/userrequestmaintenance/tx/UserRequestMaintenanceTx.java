@@ -591,13 +591,11 @@ public class UserRequestMaintenanceTx extends MaintTx implements IUserRequestMai
                 url = replaceAll(url , "Jaffa.User" , "Jaffa.Admin");
                 String[] to = new String[] {"jonny.reid@mirotechnologies.com"};
                 email.sendMail(to, "request for user account" , url);
-
             } catch  (MessagingException e) {
-                e.printStackTrace();
+               log.error(e.getMessage(), e);
             }
+            input.setRequestId(domainCreated.getRequestId());
         }
-
-        input.setRequestId(domainCreated.getRequestId());
 
         // .//GEN-LAST:_postCreate_1
         // .//GEN-BEGIN:_postCreate_2_be

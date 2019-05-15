@@ -163,7 +163,7 @@ public class MetaDataReader {
 									fcmd.setCondition(rule.getParameter("condition"));
 									flexClassMetaData.add(fcmd);
 								
-								}else if (hasCustomerDefinition){
+								} else if (hasCustomerDefinition && (cmd != null)){
 									for (ClassMetaData flexMetaData : cmd) {
 										String flexSourcePath = flexMetaData.getSource();
 										if (flexSourcePath.toLowerCase().indexOf(AOP_VARIATION_PATH + variation.toLowerCase() + "/")>0){

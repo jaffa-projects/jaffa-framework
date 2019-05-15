@@ -82,7 +82,7 @@ public class LoggingService {
         Map<String, Object> currentLoggingContext = MDC.getContext() != null ? new HashMap<String, Object>(MDC.getContext()) : new HashMap<String, Object>();
         Stack<Map<String, Object>> stack = t_loggingContext.get();
         if (stack == null) {
-            stack = new Stack<Map<String, Object>>();
+            stack = new Stack<>();
             t_loggingContext.set(stack);
         }
         stack.push(currentLoggingContext);
@@ -128,9 +128,9 @@ public class LoggingService {
         
         try {
             //Add in scheduledTaskId to MDC if it has been passed in as TransactionField
-            if (transaction.getTransactionFieldArray() != null) {
-                for(TransactionField tField: transaction.getTransactionFieldArray()) {
-                    if(TransactionFieldMeta.JAFFA_TRANSACTION_TASK_ID.equals(tField.getFieldName()))
+            if ((transaction != null) && (transaction.getTransactionFieldArray() != null)) {
+                for (TransactionField tField: transaction.getTransactionFieldArray()) {
+                    if (TransactionFieldMeta.JAFFA_TRANSACTION_TASK_ID.equals(tField.getFieldName()))
                         MDC.put(BusinessEventLogMeta.SCHEDULED_TASK_ID, tField.getValue());
                 }
             }

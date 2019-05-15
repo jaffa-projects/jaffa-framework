@@ -283,7 +283,7 @@ public class TransactionManager implements IManager {
                 if (transactionInfo != null)
                     break;
             }
-            if(superClassContextKey!=null) {
+            if ((superClassContextKey != null) && (transactionInfo != null)) {
                 registerTransactionInfo(new ContextKey(transactionInfo.getDataBean(), superClassContextKey.getFileName()
                         ,superClassContextKey.getVariation(), superClassContextKey.getPrecedence()), transactionInfo);
             }

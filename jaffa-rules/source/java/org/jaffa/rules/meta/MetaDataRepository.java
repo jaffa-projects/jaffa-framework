@@ -220,10 +220,12 @@ public class MetaDataRepository extends AbstractLoader
                 if (log.isDebugEnabled())
                     log.debug("Unloading " + cmd);
                 List<ClassMetaData> classesByClassName = m_classMetaDataListByClassName.get(cmd.getName());
-                if (classesByClassName != null)
+                if (classesByClassName != null) {
                     classesByClassName.remove(cmd);
-                if (classesByClassName.size() == 0)
-                    m_classMetaDataListByClassName.remove(cmd.getName());
+                    if (classesByClassName.size() == 0) {
+                        m_classMetaDataListByClassName.remove(cmd.getName());
+                    }
+                }
                 if (cmd.getExecutionRealm() != null) {
                     if (log.isDebugEnabled())
                         log.debug("Remove the execution realm mapping for " + cmd.getName());

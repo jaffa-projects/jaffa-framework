@@ -424,7 +424,7 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
                             }
                         }
 
-                        if (clone) {
+                        if (clone && (handler != null)) {
                             handler.setCloning(true);
                             G output = (G) DataTransformer.cloneGraph(path, graphs[i], uow, handler, newGraph);
                             if (output != null)
@@ -546,7 +546,7 @@ public class GraphService<C extends GraphCriteria, G extends GraphDataObject, Q 
                                 transformationHandler.startUpdateService();
                             }
                         }
-                        if (clone) {
+                        if (clone && (handler != null)) {
                             handler.setCloning(true);
                             G output = (G) DataTransformer.cloneGraph(path, graphs[i], uow, handler, newGraph);
                             if (output != null)

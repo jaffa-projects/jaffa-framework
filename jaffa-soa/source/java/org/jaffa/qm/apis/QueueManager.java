@@ -122,11 +122,16 @@ public class QueueManager {
                     queueCriteria.setType(criteria.getType());
                     queueCriteria.setQueueSystemId(criteria.getQueueSystemId());
                     QueueQueryResponse queueResponse = implementation.queueQuery(queueCriteria);
-                    if (queueResponse != null && queueResponse.getGraphs()!=null && queueResponse.getGraphs().length==1) {
-                        if (queryImplementation!=null) foundMultiple = true;
-                        queryImplementation = implementation;
-                    }else if (queueResponse.getGraphs()!=null && queueResponse.getGraphs().length>1){
-                        foundMultiple = true;
+                    if ((queueResponse != null) && (queueResponse.getGraphs() != null)) {
+                        if (queueResponse.getGraphs().length == 1) {
+                            if (queryImplementation != null) {
+                                foundMultiple = true;
+                            }
+                            queryImplementation = implementation;
+                        }
+                        else if (queueResponse.getGraphs().length > 1) {
+                            foundMultiple = true;
+                        }
                     }
                 }
             }
@@ -138,13 +143,18 @@ public class QueueManager {
             //Use correct queue admin to retrieve messages. Admin class should perform sorting and paging.
             if (queryImplementation != null) {
                 MessageQueryResponse response = queryImplementation.messageQuery(criteria);
-                if (response != null && response.getErrors() != null && response.getErrors().length > 0) {
-                    aggregateResponse.setErrors(response.getErrors());
-                } else if (response != null && response.getGraphs() != null && response.getGraphs().length > 0) {
-                    aggregateResponse.setGraphs(concatenate(aggregateResponse.getGraphs(), response.getGraphs()));
+
+                if (response != null) {
+                    if (response.getErrors() != null && response.getErrors().length > 0) {
+                        aggregateResponse.setErrors(response.getErrors());
+                    }
+                    else if (response.getGraphs() != null && response.getGraphs().length > 0) {
+                        aggregateResponse.setGraphs(concatenate(aggregateResponse.getGraphs(), response.getGraphs()));
+                    }
+                    Integer totalRecords = response.getTotalRecords();
+                    if (totalRecords != null && totalRecords > 0)
+                        aggregateResponse.setTotalRecords(totalRecords);
                 }
-                if (response.getTotalRecords()!=null && response.getTotalRecords() > 0)
-                    aggregateResponse.setTotalRecords(response.getTotalRecords());
             }
 
             if (aggregateResponse.getGraphs() == null)

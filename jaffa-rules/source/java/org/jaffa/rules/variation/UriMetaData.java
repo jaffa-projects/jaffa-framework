@@ -136,6 +136,8 @@ public class UriMetaData extends MetaData {
         if (m_regex == null) {
             m_pattern = null;
         }
-        m_pattern = Pattern.compile(m_regex);
+        else {
+            m_pattern = Pattern.compile(m_regex);
+        }
     }
 }
