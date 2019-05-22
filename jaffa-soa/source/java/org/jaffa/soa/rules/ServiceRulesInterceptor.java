@@ -266,7 +266,8 @@ public class ServiceRulesInterceptor implements IPersistenceLoggingPlugin {
     public synchronized void update(IPersistent domainObject) throws ApplicationExceptions, FrameworkException {
         if (hasRulesSession()) {
             //Check if this is the top of the Plugins then add changes otherwise return
-            if(!m_uow.findFirstPersistenceLoggingPluginByClass(this.getClass()).equals(this))
+            Class<? extends ServiceRulesInterceptor> clazz = this.getClass();
+            if (!this.equals(m_uow.findFirstPersistenceLoggingPluginByClass(clazz)))
                 return;
 
             // Add all field changes to the session

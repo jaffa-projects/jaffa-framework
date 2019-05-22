@@ -426,8 +426,12 @@ public class DataTransformer {
                 if (log.isDebugEnabled()) {
                     log.debug("Invoking the endBeanLoad on the handler");
                 }
-                for (ITransformationHandler transformationHandler : handler.getTransformationHandlers()) {
-                    transformationHandler.endBeanLoad(objectPath, source, target, filter, originalCriteria);
+                List<ITransformationHandler> handlers = handler.getTransformationHandlers();
+
+                if (handlers != null) {
+                    for (ITransformationHandler transformationHandler : handlers) {
+                        transformationHandler.endBeanLoad(objectPath, source, target, filter, originalCriteria);
+                    }
                 }
             }
 
@@ -672,7 +676,10 @@ public class DataTransformer {
                                 m.setAccessible(true);
                             Object value = m.invoke(domainObject, (Object[]) null);
                             AccessibleObject accessibleObject = mapping.getDataMutator(keyField);
-                            setValue(accessibleObject, outputGraph, value);
+
+                            if (accessibleObject != null) {
+                                setValue(accessibleObject, outputGraph, value);
+                            }
                         } else {
                             TransformException me = new TransformException(TransformException.NO_KEY_ON_OBJECT, path, keyField, source.getClass().getName());
                             log.error(me.getLocalizedMessage());
@@ -834,10 +841,15 @@ public class DataTransformer {
                         if (log.isDebugEnabled()) {
                             log.debug("Invoking the preQuery on the handler");
                         }
-                        for (ITransformationHandler transformationHandler : handler.getTransformationHandlers()) {
-                            Criteria handlerCriteria = transformationHandler.preQuery(path, criteria, originalCriteria, relatedObjectClass);
-                            if (handlerCriteria != null) {
-                                criteria = handlerCriteria;
+                        List<ITransformationHandler> transformationHandlers = handler.getTransformationHandlers();
+
+                        if (transformationHandlers != null) {
+                            for (ITransformationHandler transformationHandler : transformationHandlers) {
+                                Criteria handlerCriteria =
+                                        transformationHandler.preQuery(path, criteria, originalCriteria, relatedObjectClass);
+                                if (handlerCriteria != null) {
+                                    criteria = handlerCriteria;
+                                }
                             }
                         }
                     }

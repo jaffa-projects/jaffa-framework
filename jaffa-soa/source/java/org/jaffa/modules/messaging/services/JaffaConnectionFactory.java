@@ -126,19 +126,24 @@ public final class JaffaConnectionFactory {
    */
   private ConnectionFactory getConnectionFactory()
       throws ApplicationExceptions, FrameworkException {
+    ConnectionFactory factory = null;
     try {
-      final InitialContext context = InitialContextFactrory
-          .obtainInitialContext();
-      final JmsConfig jmsConfig = ConfigurationService.getInstance()
-          .getJmsConfig();
-      return (ConnectionFactory) context.lookup(jmsConfig
-          .getConnectionFactory());
+      final InitialContext context =
+              InitialContextFactrory.obtainInitialContext();
+      final JmsConfig jmsConfig =
+              ConfigurationService.getInstance().getJmsConfig();
+
+      if (jmsConfig != null) {
+        factory = (ConnectionFactory)
+                context.lookup(jmsConfig.getConnectionFactory());
+      }
     } catch (NamingException e) {
       LOGGER.error("Error in locating the JMS ConnectionFactory", e);
       throw new JaffaMessagingFrameworkException(
           JaffaMessagingFrameworkException.CONNECTION_FACTORY_NOT_FOUND, null,
           e);
     }
+    return factory;
   }
 
   /**
@@ -175,7 +180,7 @@ public final class JaffaConnectionFactory {
 
         final JmsConfig jmsConfig = ConfigurationService.getInstance()
             .getJmsConfig();
-        if (jmsConfig.getUser() == null)
+        if (jmsConfig == null || jmsConfig.getUser() == null)
           _connection = connectionFactory.createConnection();
         else
           _connection = connectionFactory.createConnection(jmsConfig.getUser(),
