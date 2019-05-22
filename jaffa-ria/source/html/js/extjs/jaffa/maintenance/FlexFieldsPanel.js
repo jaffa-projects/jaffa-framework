@@ -38,11 +38,14 @@ Jaffa.maintenance.FlexFields = {
                     var metaSource = Ext.Ajax.synchronousRequest({
                         url: 'js/extjs/jaffa/metadata/classMetaData.jsp',
                         params: {
-              className: flexSource
+                        className: flexSource,
+                        outputStyle: "JSON"
                         }
                     });
-          if (metaSource)
-            eval(metaSource);
+                    if (metaSource)
+                    {
+                        ClassMetaData[flexClass] = Ext.decode(metaSource);
+                    }
                 }
 
                 for (var fieldName in ClassMetaData[flexClass].fields) {

@@ -267,7 +267,7 @@ public class FinderMetaDataHelper {
 
           }
           else {
-              // JavaSript code prior to October 2018 expected evaluable JavaScript to be returned by
+              // JavaScript code written prior to October 2018 expected evaluable JavaScript to be returned by
               // this method.
               metaData = getJavaScriptMetaData(serviceName, graphBased, serviceMethodName, keys, fieldMap, valueField,
                                                codeDescField, codeDescFieldName, staticParameters);
@@ -763,8 +763,10 @@ public class FinderMetaDataHelper {
           return valueField;
       }
 
-      /** Returns a JSON representation of staticParameters. */
-      private static String parseStaticParameters(Map<String, String> parameters) {
+    /**
+     * @Returns a JSON representation of staticParameters.
+     */
+    static String parseStaticParameters(Map<String, String> parameters) {
           //staticParameters are of the format 'prop1=tprop1;prop2=tprop2;...'
           String staticParameters = parameters.get("staticParameters");
           if (staticParameters != null && staticParameters.length() > 0) {
@@ -865,27 +867,45 @@ public class FinderMetaDataHelper {
         buf.append("      ").append(quoteName("DWRFunctionName")).append(": ");
         buf.append(quoteValue(serviceName + '.' + serviceMethodName)).append(",\n");
 
-        // DWRFunctionInput
-        if (staticParameters != null) {
-            buf.append("      ").append(quoteName("DWRFunctionInput")).append(": ");
-            buf.append(quoteValue(staticParameters)).append(",\n");
-        }
 
+        appendDwrFunctionInput(staticParameters, buf);
         appendOrderByFields(keys, buf);
         appendCombo(fieldMap, valueField, codeDescFieldName, buf);
         appendGrid(fieldMap, buf);
         buf.append("    },\n");
     }
 
+    /** Appends DWRFunctionInput information.  In the JavaScript code, the static parameters
+     * ultimately serve as the string value corresponding to the
+     * "DWRFunctionInput" field name.  This string value may have embedded quotes,
+     * which need to be escaped. (The original code used single quotes to delimit
+     * the JavaScript string, so there was no need to escape the double quotes.  Here,
+     * we want the string to be accepted as JSON, so no single quotes.)
+     */
+    void appendDwrFunctionInput(String staticParameters, StringBuilder buf) {
+        if (staticParameters != null) {
+            buf.append("      ").append(quoteName("DWRFunctionInput")).append(": ");
+            String escapedStaticParameters = staticParameters.replace("\"", "\\\"");
+            buf.append(quoteValue(escapedStaticParameters)).append(",\n");
+        }
+    }
+
+    /**
+     * In the JavaScript code, the orderByFields field has a string value.
+     * This string value may have embedded quotes, which need to be escaped.
+     * (The original code used single quotes to delimit
+     * the JavaScript string, so there was no need to escape the double quotes.  Here,
+     * we want the string to be accepted as JSON, so no single quotes.)
+     */
     void appendOrderByFields(String[] keys, StringBuilder buf) {
-        buf.append("      ").append(quoteName("orderByFields")).append(": '[");
+        buf.append("      ").append(quoteName("orderByFields")).append(": \"[");
         for (int i = 0; i < keys.length; i++) {
             if (i > 0) {
                 buf.append(", ");
             }
-            buf.append("{fieldName: \"" + StringHelper.getUpper1(keys[i]) + "\"}");
+            buf.append("{fieldName: \\\"" + StringHelper.getUpper1(keys[i]) + "\\\"}");
         }
-        buf.append("]',\n");
+        buf.append("]\",\n");
     }
 
     /**
@@ -941,10 +961,10 @@ public class FinderMetaDataHelper {
      * @param codeDescFieldMap code descriptor attribute names and values
      * @param buf the buffer being appended to
      */
-    private void appendFields(Map<String, Map<String, String>> fieldMap,
-                              String codeDescFieldName,
-                              Map<String, Map<String, String>> codeDescFieldMap,
-                              StringBuilder buf) {
+    void appendFields(Map<String, Map<String, String>> fieldMap,
+                      String codeDescFieldName,
+                      Map<String, Map<String, String>> codeDescFieldMap,
+                      StringBuilder buf) {
         buf.append("    ").append(quoteName("fields")).append(": {\n");
         boolean firstLoop;
         for (Iterator<Map.Entry<String, Map<String, String>>> i = fieldMap.entrySet().iterator(); i.hasNext(); ) {
@@ -964,26 +984,35 @@ public class FinderMetaDataHelper {
                 }
             }
             buf.append('}');    // end of attribute names and values
-            if (i.hasNext() || codeDescFieldMap != null) {
+            if (i.hasNext() || (codeDescFieldMap != null && codeDescFieldMap.size() > 0)) {
                 buf.append(',');
             }
             buf.append('\n');
         }
 
-        if (codeDescFieldMap != null) {
-            buf.append("      ").append(quoteName(codeDescFieldName)).append(": {");
-            firstLoop = true;
-            // Append the codeDesc attribute/value pairs
-            for (Map.Entry<String, String> attribute : codeDescFieldMap.get(codeDescFieldName).entrySet()) {
-                if (!firstLoop) {
-                    buf.append(", ");
-                }
-                firstLoop = false;
-                appendAttributeKeyValue(buf, attribute);
-            }
-            buf.append("}\n");
-        }
+        appendCodeDescFields(codeDescFieldName, codeDescFieldMap, buf);
         buf.append("    }\n");  // end fields
+    }
+
+    void appendCodeDescFields(String codeDescFieldName,
+                              Map<String, Map<String, String>> codeDescFieldMap,
+                              StringBuilder buf) {
+        if (codeDescFieldMap != null && (codeDescFieldMap.get(codeDescFieldName) != null)) {
+            Set<Map.Entry<String, String>> entrySet = codeDescFieldMap.get(codeDescFieldName).entrySet();
+            if (entrySet != null) {
+                buf.append("      ").append(quoteName(codeDescFieldName)).append(": {");
+                boolean firstLoop = true;
+                // Append the codeDesc attribute/value pairs
+                for (Map.Entry<String, String> attribute : entrySet) {
+                    if (!firstLoop) {
+                        buf.append(", ");
+                    }
+                    firstLoop = false;
+                    appendAttributeKeyValue(buf, attribute);
+                }
+                buf.append("}\n");
+            }   // entrySet != null
+        }   // codeDescFieldMap != null
     }
 
     private void appendAttributeKeyValue(StringBuilder buf, Map.Entry<String, String> attribute) {
