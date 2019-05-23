@@ -424,10 +424,14 @@ public class TransactionAdmin implements IQueueAdmin {
 
                         uow = new UOW();
                         Transaction transaction = transactionDAO.getTransaction(messageId);
-                        if (!TransactionEngine.getInstance().hasAdminAccess(transaction.getType())) {
-                            throw new ApplicationExceptions(new ApplicationException("error.Jaffa.Transaction.Transaction.noAdminAccess", new Object[]{transaction.getType()}));
-                        }
                         if (transaction != null) {
+                            String transactionType = transaction.getType();
+                            if (!TransactionEngine.getInstance().hasAdminAccess(transactionType)) {
+                                throw new ApplicationExceptions(
+                                        new ApplicationException("error.Jaffa.Transaction.Transaction.noAdminAccess",
+                                                                 new Object[] { transactionType }));
+                            }
+
                             //Invoke Message Handler class to perform onDelete process
                             invokeHandler(uow, transaction, "onDelete");
                             if (log.isDebugEnabled()) {

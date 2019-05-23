@@ -340,28 +340,36 @@ public class TransformerUtils {
 
             //----------------------------------------------------------------
             // Reflect all normal fields
-            for (Iterator it = mapping.getFields().iterator(); it.hasNext(); ) {
-                String field = (String) it.next();
-                // ignore read-only fields
-                if (mapping.isReadOnly(field))
-                    continue;
+            Set fields = mapping.getFields();
 
-                // values from the newGraph take precedence in CLONE/MASS_UPDATE mode
-                if (mode == DataTransformer.Mode.CLONE) {
-                    // ignore dirty-read fields, and no-cloning fields unless a value is passed in the newGraph
-                    if (field.equals(mapping.getDirtyReadDataFieldName()) || (mapping.isNoCloning(field) && (newGraph == null || !newGraph.hasChanged(field))))
+            if (fields != null) {
+                for (Object o : fields) {
+                    String field = (String) o;
+                    // ignore read-only fields
+                    if (mapping.isReadOnly(field))
                         continue;
-                    Object value = getProperty(mapping.getDataFieldDescriptor(field), newGraph != null && newGraph.hasChanged(field) ? newGraph : source);
-                    updateProperty(mapping.getDomainFieldDescriptor(field), value, domainObject);
-                } else if (mode == DataTransformer.Mode.MASS_UPDATE) {
-                    if (newGraph != null && newGraph.hasChanged(field)) {
-                        Object value = getProperty(mapping.getDataFieldDescriptor(field), newGraph);
+
+                    // values from the newGraph take precedence in CLONE/MASS_UPDATE mode
+                    if (mode == DataTransformer.Mode.CLONE) {
+                        // ignore dirty-read fields, and no-cloning fields unless a value is passed in the newGraph
+                        if (field.equals(mapping.getDirtyReadDataFieldName()) || (mapping.isNoCloning(field) && (
+                                newGraph == null || !newGraph.hasChanged(field))))
+                            continue;
+                        Object value = getProperty(mapping.getDataFieldDescriptor(field),
+                                                   newGraph != null && newGraph.hasChanged(field) ? newGraph : source);
                         updateProperty(mapping.getDomainFieldDescriptor(field), value, domainObject);
                     }
-                } else {
-                    Object value = getProperty(mapping.getDataFieldDescriptor(field), source);
-                    if ((!domainObject.isDatabaseOccurence() && value != null) || source.hasChanged(field))
-                        updateProperty(mapping.getDomainFieldDescriptor(field), value, domainObject);
+                    else if (mode == DataTransformer.Mode.MASS_UPDATE) {
+                        if (newGraph != null && newGraph.hasChanged(field)) {
+                            Object value = getProperty(mapping.getDataFieldDescriptor(field), newGraph);
+                            updateProperty(mapping.getDomainFieldDescriptor(field), value, domainObject);
+                        }
+                    }
+                    else {
+                        Object value = getProperty(mapping.getDataFieldDescriptor(field), source);
+                        if ((!domainObject.isDatabaseOccurence() && value != null) || source.hasChanged(field))
+                            updateProperty(mapping.getDomainFieldDescriptor(field), value, domainObject);
+                    }
                 }
             }
 
@@ -404,69 +412,85 @@ public class TransformerUtils {
 
             //----------------------------------------------------------------
             // Reflect any foreign keys
-            for (Iterator it = mapping.getForeignFields().iterator(); it.hasNext(); ) {
-                String field = (String) it.next();
-                // ignore read-only fields
-                if (mapping.isReadOnly(field))
-                    continue;
+            Set foreignFields = mapping.getForeignFields();
 
-                // It is possible that the foreign object may get resused, and only its fields may have been changed.
-                // Hence also invoke the hasChanged() method on the foreign object itself
-                Object value = null;
-                boolean hasChanged = false;
-                if (mode == DataTransformer.Mode.CLONE) {
-                    // ignore dirty-read fields, and no-cloning fields unless a value is passed in the newGraph
-                    if (field.equals(mapping.getDirtyReadDataFieldName()) || (mapping.isNoCloning(field) && (newGraph == null || !newGraph.hasChanged(field))))
+            if (foreignFields != null) {
+                for (Object foreignField : foreignFields) {
+                    String field = (String) foreignField;
+                    // ignore read-only fields
+                    if (mapping.isReadOnly(field))
                         continue;
-                    value = getProperty(mapping.getDataFieldDescriptor(field), newGraph != null && newGraph.hasChanged(field) ? newGraph : source);
-                    hasChanged = value != null;
-                } else if (mode == DataTransformer.Mode.MASS_UPDATE) {
-                    if (newGraph != null && newGraph.hasChanged(field)) {
-                        value = getProperty(mapping.getDataFieldDescriptor(field), newGraph);
-                        hasChanged = true;
-                    }
-                } else {
-                    value = getProperty(mapping.getDataFieldDescriptor(field), source);
-                    hasChanged = (!domainObject.isDatabaseOccurence() && value != null) || source.hasChanged(field);
-                }
-                if (!hasChanged && value != null && value instanceof GraphDataObject)
-                    hasChanged = ((GraphDataObject) value).hasChanged();
-                if (hasChanged) {
-                    // need to map foreign keys back
-                    List targetKeys = mapping.getForeignKeys(field);
-                    GraphMapping fMapping = MappingFactory.getInstance(mapping.getDataFieldDescriptor(field).getPropertyType());
-                    Set sourceKeys = fMapping.getKeyFields();
-                    int i = 0;
-                    for (Iterator i2 = sourceKeys.iterator(); i2.hasNext(); i++) {
-                        String sourceFld = (String) i2.next();
-                        String targetFld = (String) targetKeys.get(i);
-                        if (log.isDebugEnabled())
-                            log.debug("Copy Foreign Key Field from " + sourceFld + " to " + targetFld);
-                        if (value == null) {
-                            // ForeignGraph is null. Null out the foreign-key
-                            updateProperty(mapping.getRealDomainFieldDescriptor(targetFld), null, domainObject);
-                        } else {
-                            // Obtain the key-field from the ForeignGraph
-                            Object value2 = getProperty(fMapping.getDataFieldDescriptor(sourceFld), value);
 
-                            // Set the foreign-key, only if the key-field has been flagged as changed in the ForeignGraph.
-                            // This will allow the UI to pass in just the modified portion of a composite foreign-key, and thus
-                            // ensuring that the un-modified portion doesn't get nulled out
-                            // The check is not required while cloning
-                            if (mode == DataTransformer.Mode.CLONE || !(value instanceof GraphDataObject) || ((GraphDataObject) value).hasChanged(sourceFld))
-                                updateProperty(mapping.getRealDomainFieldDescriptor(targetFld), value2, domainObject);
+                    // It is possible that the foreign object may get resused, and only its fields may have been changed.
+                    // Hence also invoke the hasChanged() method on the foreign object itself
+                    Object value = null;
+                    boolean hasChanged = false;
+                    if (mode == DataTransformer.Mode.CLONE) {
+                        // ignore dirty-read fields, and no-cloning fields unless a value is passed in the newGraph
+                        if (field.equals(mapping.getDirtyReadDataFieldName()) || (mapping.isNoCloning(field) && (
+                                newGraph == null || !newGraph.hasChanged(field))))
+                            continue;
+                        value = getProperty(mapping.getDataFieldDescriptor(field),
+                                            newGraph != null && newGraph.hasChanged(field) ? newGraph : source);
+                        hasChanged = value != null;
+                    }
+                    else if (mode == DataTransformer.Mode.MASS_UPDATE) {
+                        if (newGraph != null && newGraph.hasChanged(field)) {
+                            value = getProperty(mapping.getDataFieldDescriptor(field), newGraph);
+                            hasChanged = true;
                         }
                     }
+                    else {
+                        value = getProperty(mapping.getDataFieldDescriptor(field), source);
+                        hasChanged = (!domainObject.isDatabaseOccurence() && value != null) || source.hasChanged(field);
+                    }
+                    if (!hasChanged && value instanceof GraphDataObject)
+                        hasChanged = ((GraphDataObject) value).hasChanged();
+                    if (hasChanged) {
+                        // need to map foreign keys back
+                        List targetKeys = mapping.getForeignKeys(field);
+                        GraphMapping fMapping =
+                                MappingFactory.getInstance(mapping.getDataFieldDescriptor(field).getPropertyType());
+                        Set sourceKeys = fMapping.getKeyFields();
+                        int i = 0;
 
-                    // Invoke the getter on the domain. An exception will be raised if the foreign-key is invalid
-                    if (log.isDebugEnabled())
-                        log.debug("Performing validation on the domain object for the foreign object " + mapping.getDomainFieldName(field));
-                    PropertyDescriptor pd = mapping.getDomainFieldDescriptor(field);
-                    if (pd != null && pd.getReadMethod() != null) {
-                        Method m = pd.getReadMethod();
-                        if (!m.isAccessible())
-                            m.setAccessible(true);
-                        m.invoke(domainObject, (Object[]) null);
+                        if ((targetKeys != null) && (sourceKeys != null)) {
+                            for (Iterator i2 = sourceKeys.iterator(); i2.hasNext(); i++) {
+                                String sourceFld = (String) i2.next();
+                                String targetFld = (String) targetKeys.get(i);
+                                if (log.isDebugEnabled())
+                                    log.debug("Copy Foreign Key Field from " + sourceFld + " to " + targetFld);
+                                if (value == null) {
+                                    // ForeignGraph is null. Null out the foreign-key
+                                    updateProperty(mapping.getRealDomainFieldDescriptor(targetFld), null, domainObject);
+                                }
+                                else {
+                                    // Obtain the key-field from the ForeignGraph
+                                    Object value2 = getProperty(fMapping.getDataFieldDescriptor(sourceFld), value);
+
+                                    // Set the foreign-key, only if the key-field has been flagged as changed in the ForeignGraph.
+                                    // This will allow the UI to pass in just the modified portion of a composite foreign-key, and thus
+                                    // ensuring that the un-modified portion doesn't get nulled out
+                                    // The check is not required while cloning
+                                    if (mode == DataTransformer.Mode.CLONE || !(value instanceof GraphDataObject)
+                                        || ((GraphDataObject) value).hasChanged(sourceFld))
+                                        updateProperty(mapping.getRealDomainFieldDescriptor(targetFld), value2,
+                                                       domainObject);
+                                }
+                            }
+                        }
+
+                        // Invoke the getter on the domain. An exception will be raised if the foreign-key is invalid
+                        if (log.isDebugEnabled())
+                            log.debug("Performing validation on the domain object for the foreign object " + mapping
+                                    .getDomainFieldName(field));
+                        PropertyDescriptor pd = mapping.getDomainFieldDescriptor(field);
+                        if (pd != null && pd.getReadMethod() != null) {
+                            Method m = pd.getReadMethod();
+                            if (!m.isAccessible())
+                                m.setAccessible(true);
+                            m.invoke(domainObject, (Object[]) null);
+                        }
                     }
                 }
             }
@@ -563,59 +587,84 @@ public class TransformerUtils {
 
             //----------------------------------------------------------------
             // Reflect any related objects
-            for (Iterator it = mapping.getRelatedFields().iterator(); it.hasNext(); ) {
-                String field = (String) it.next();
-                if (mapping.isReadOnly(field))
-                    continue;
-                Object value = null;
-                if (mode == DataTransformer.Mode.CLONE) {
-                    // ignore no-cloning fields unless a value is passed in the newGraph
-                    if (mapping.isNoCloning(field) && (newGraph == null || !newGraph.hasChanged(field)))
+            Set relatedFields = mapping.getRelatedFields();
+
+            if (relatedFields != null) {
+                for (Object relatedField : relatedFields) {
+                    String field = (String) relatedField;
+                    if (mapping.isReadOnly(field))
                         continue;
-                    value = getProperty(mapping.getDataFieldDescriptor(field), newGraph != null && newGraph.hasChanged(field) ? newGraph : source);
-                } else if (mode == DataTransformer.Mode.MASS_UPDATE) {
-                    if (newGraph != null && newGraph.hasChanged(field))
-                        value = getProperty(mapping.getDataFieldDescriptor(field), newGraph);
-                } else
-                    value = getProperty(mapping.getDataFieldDescriptor(field), source);
-                if (value != null) {
-                    if (value.getClass().isArray()) {
-                        // The related field is an array of objects (one-to-many)
-                        Object[] values = (Object[]) value;
-                        for (int i = 0; i < values.length; i++) {
-                            GraphDataObject dao = (GraphDataObject) values[i];  // Assumes its a DAO....what else could it be?
-                            if (dao != null) {
-                                if (dao.getDeleteObject() != null && dao.getDeleteObject()) {
-                                    if (mode == DataTransformer.Mode.VALIDATE_ONLY) {
-                                        if (log.isDebugEnabled())
-                                            log.debug("The 'deleteObject' property is true. No prevalidations will be performed for the childBean.");
-                                    } else {
-                                        if (log.isDebugEnabled())
-                                            log.debug("The 'deleteObject' property is true. Invoking deleteChildBean()");
-                                        deleteChildBean(path + '.' + field + '[' + i + ']', dao, uow, handler, domainObject, mapping, field);
+                    Object value = null;
+                    if (mode == DataTransformer.Mode.CLONE) {
+                        // ignore no-cloning fields unless a value is passed in the newGraph
+                        if (mapping.isNoCloning(field) && (newGraph == null || !newGraph.hasChanged(field)))
+                            continue;
+                        value = getProperty(mapping.getDataFieldDescriptor(field),
+                                            newGraph != null && newGraph.hasChanged(field) ? newGraph : source);
+                    }
+                    else if (mode == DataTransformer.Mode.MASS_UPDATE) {
+                        if (newGraph != null && newGraph.hasChanged(field))
+                            value = getProperty(mapping.getDataFieldDescriptor(field), newGraph);
+                    }
+                    else
+                        value = getProperty(mapping.getDataFieldDescriptor(field), source);
+                    if (value != null) {
+                        if (value.getClass().isArray()) {
+                            // The related field is an array of objects (one-to-many)
+                            Object[] values = (Object[]) value;
+                            for (int i = 0; i < values.length; i++) {
+                                GraphDataObject dao = (GraphDataObject) values[i];  // Assumes its a DAO....what else could it be?
+                                if (dao != null) {
+                                    if (dao.getDeleteObject() != null && dao.getDeleteObject()) {
+                                        if (mode == DataTransformer.Mode.VALIDATE_ONLY) {
+                                            if (log.isDebugEnabled())
+                                                log.debug(
+                                                        "The 'deleteObject' property is true. No prevalidations will be performed for the childBean.");
+                                        }
+                                        else {
+                                            if (log.isDebugEnabled())
+                                                log.debug(
+                                                        "The 'deleteObject' property is true. Invoking deleteChildBean()");
+                                            deleteChildBean(path + '.' + field + '[' + i + ']', dao, uow, handler,
+                                                            domainObject, mapping, field);
+                                        }
                                     }
-                                } else {
-                                    Object newValue = newGraph != null ? getProperty(mapping.getDataFieldDescriptor(field), newGraph) : null;
-                                    GraphDataObject newDao = newValue != null && ((GraphDataObject[]) newValue).length > i ? ((GraphDataObject[]) newValue)[i] : null;
-                                    updateChildBean(path + '.' + field + '[' + i + ']', dao, uow, handler, domainObject, mapping, field, mode, newDao);
+                                    else {
+                                        Object newValue = newGraph != null ?
+                                                          getProperty(mapping.getDataFieldDescriptor(field), newGraph) :
+                                                          null;
+                                        GraphDataObject newDao =
+                                                newValue != null && ((GraphDataObject[]) newValue).length > i ?
+                                                ((GraphDataObject[]) newValue)[i] :
+                                                null;
+                                        updateChildBean(path + '.' + field + '[' + i + ']', dao, uow, handler,
+                                                        domainObject, mapping, field, mode, newDao);
+                                    }
                                 }
                             }
                         }
-                    } else {
-                        // Or a single Object (one-to-one)
-                        GraphDataObject dao = (GraphDataObject) value; // Assumes its a DAO....what else could it be?
-                        if (dao.getDeleteObject() != null && dao.getDeleteObject()) {
-                            if (mode == DataTransformer.Mode.VALIDATE_ONLY) {
-                                if (log.isDebugEnabled())
-                                    log.debug("The 'deleteObject' property is true. No prevalidations will be performed for the childBean.");
-                            } else {
-                                if (log.isDebugEnabled())
-                                    log.debug("The 'deleteObject' property is true. Invoking deleteChildBean()");
-                                deleteChildBean(path + '.' + field, dao, uow, handler, domainObject, mapping, field);
+                        else {
+                            // Or a single Object (one-to-one)
+                            GraphDataObject dao = (GraphDataObject) value; // Assumes its a DAO....what else could it be?
+                            if (dao.getDeleteObject() != null && dao.getDeleteObject()) {
+                                if (mode == DataTransformer.Mode.VALIDATE_ONLY) {
+                                    if (log.isDebugEnabled())
+                                        log.debug(
+                                                "The 'deleteObject' property is true. No prevalidations will be performed for the childBean.");
+                                }
+                                else {
+                                    if (log.isDebugEnabled())
+                                        log.debug("The 'deleteObject' property is true. Invoking deleteChildBean()");
+                                    deleteChildBean(path + '.' + field, dao, uow, handler, domainObject, mapping, field);
+                                }
                             }
-                        } else {
-                            GraphDataObject newDao = newGraph != null ? (GraphDataObject) getProperty(mapping.getDataFieldDescriptor(field), newGraph) : null;
-                            updateChildBean(path + '.' + field, dao, uow, handler, domainObject, mapping, field, mode, newDao);
+                            else {
+                                GraphDataObject newDao = newGraph != null ?
+                                                         (GraphDataObject) getProperty(mapping.getDataFieldDescriptor(field), newGraph) :
+                                                         null;
+                                updateChildBean(path + '.' + field, dao, uow, handler, domainObject, mapping, field,
+                                                mode, newDao);
+                            }
                         }
                     }
                 }
@@ -917,25 +966,31 @@ public class TransformerUtils {
             boolean deleteChild = false;
 
             // Reflect any related objects
-            for (Iterator it = mapping.getRelatedFields().iterator(); it.hasNext(); ) {
-                String field = (String) it.next();
-                Object value = getProperty(mapping.getDataFieldDescriptor(field), source);
-                if (value != null) {
-                    if (value.getClass().isArray()) {
-                        // The related field is an array of objects (one-to-many)
-                        Object[] values = (Object[]) value;
-                        for (int i = 0; i < values.length; i++) {
-                            GraphDataObject dao = (GraphDataObject) values[i];  // Assumes its a DAO....what else could it be?
-                            if (dao != null) {
-                                deleteChild = true;
-                                deleteChildBean(path + '.' + field + '[' + i + ']', dao, uow, handler, domainObject, mapping, field);
+            Set relatedFields = mapping.getRelatedFields();
+
+            if (relatedFields != null) {
+                for (Object relatedField : relatedFields) {
+                    String field = (String) relatedField;
+                    Object value = getProperty(mapping.getDataFieldDescriptor(field), source);
+                    if (value != null) {
+                        if (value.getClass().isArray()) {
+                            // The related field is an array of objects (one-to-many)
+                            Object[] values = (Object[]) value;
+                            for (int i = 0; i < values.length; i++) {
+                                GraphDataObject dao = (GraphDataObject) values[i];  // Assumes its a DAO....what else could it be?
+                                if (dao != null) {
+                                    deleteChild = true;
+                                    deleteChildBean(path + '.' + field + '[' + i + ']', dao, uow, handler, domainObject,
+                                                    mapping, field);
+                                }
                             }
                         }
-                    } else {
-                        // The related field is a single object (one-to-many)
-                        GraphDataObject dao = (GraphDataObject) value; // Assumes its a DAO....what else could it be?
-                        deleteChild = true;
-                        deleteChildBean(path + '.' + field, dao, uow, handler, domainObject, mapping, field);
+                        else {
+                            // The related field is a single object (one-to-many)
+                            GraphDataObject dao = (GraphDataObject) value; // Assumes its a DAO....what else could it be?
+                            deleteChild = true;
+                            deleteChildBean(path + '.' + field, dao, uow, handler, domainObject, mapping, field);
+                        }
                     }
                 }
             }

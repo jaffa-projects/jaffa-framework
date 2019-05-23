@@ -57,6 +57,7 @@ import org.jaffa.session.ContextManagerFactory;
 import org.jaffa.transaction.daos.TransactionMessageDAOFactory;
 import org.jaffa.transaction.domain.Transaction;
 import org.jaffa.transaction.domain.TransactionField;
+import org.jaffa.transaction.domain.TransactionPayload;
 import org.jaffa.transaction.services.configdomain.TransactionInfo;
 import org.jaffa.util.ExceptionHelper;
 import org.jaffa.util.MessageHelper;
@@ -136,12 +137,14 @@ public class TransactionConsumer {
         }
         boolean createdLoggingContext = false;
         try {
-            Transaction transaction = unsavedTransaction != null ? unsavedTransaction : Transaction.findByPK(uow, transactionId);
-            Object dataBean = transaction.getTransactionPayloadObject() != null ? transaction.getTransactionPayloadObject().moldInternalPayload() : null;
-            TransactionInfo transactionInfo = null;
+            Transaction transaction =
+                    (unsavedTransaction != null) ? unsavedTransaction : Transaction.findByPK(uow, transactionId);
+            TransactionPayload payload = (transaction != null) ? transaction.getTransactionPayloadObject() : null;
+            Object dataBean = (payload != null) ? payload.moldInternalPayload() : null;
+
             if (dataBean != null) {
                 //Load transaction configuration
-                transactionInfo = ConfigurationService.getInstance().getTransactionInfo(dataBean);
+                TransactionInfo transactionInfo = ConfigurationService.getInstance().getTransactionInfo(dataBean);
 
                 // Sets Log4J's MDC to enable BusinessEventLogging
                 LoggingService.setLoggingContext(dataBean, transactionInfo, transaction);
@@ -161,7 +164,7 @@ public class TransactionConsumer {
                         break;
                     } catch (Exception e) {
 
-                        if (postImmediate == null || !postImmediate.booleanValue()) {
+                        if (postImmediate == null || !postImmediate) {
                             //Retry only if the exception is listed as a retryable exception
                             String[] exceptions = readRule(RETRY_EXCEPTION_RULE, DEFAULT_RETRY_EXCEPTIONS);
                             Exception ex = null;

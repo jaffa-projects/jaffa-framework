@@ -72,36 +72,30 @@ public class WebServiceController extends HttpServlet {
     private static Logger log = Logger.getLogger(WebServiceController.class);
 
     /**
-     * @param req. The HttpServletRequest.
-     * @param resp. The HttpServletResponse
-     * @throws ServletException
-     * @throws IOException
+     * @param req The HttpServletRequest.
+     * @param resp The HttpServletResponse
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-
         String endPoint = (String) req.getAttribute("realEndPoint");
-
         String uri = "/" + endPoint;
 
         if (log.isDebugEnabled()) {
             log.debug("URI :" + uri);
         }
-
         RequestDispatcher dispatcher = req.getRequestDispatcher(uri);
 
-        if (log.isDebugEnabled()) {
-            log.debug("Dispatching Request");
+        if (dispatcher != null) {
+            if (log.isDebugEnabled()) {
+                log.debug("Dispatching Request");
+            }
+            dispatcher.forward(req, resp);
         }
-
-        dispatcher.forward(req, resp);
-
     }
 
     /**
-     * @param req. The HttpServletRequest.
-     * @param resp. The HttpServletResponse.
+     * @param req The HttpServletRequest.
+     * @param resp The HttpServletResponse.
      * @throws ServletException
      * @throws IOException
      */
