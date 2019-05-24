@@ -662,8 +662,9 @@ Jaffa.maintenance.plugins.MultiRowUpdate = Ext.extend(Ext.grid.GridPanel, {
                 outputStyle: "JSON"
                 }
             });
-          if (metaSource)
-            eval(metaSource);
+            if (metaSource){
+                ClassMetaData[flexClass] = Ext.decode(metaSource);
+            }
         }
 
 
