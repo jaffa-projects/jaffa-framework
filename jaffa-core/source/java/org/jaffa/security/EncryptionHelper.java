@@ -108,12 +108,10 @@ public class EncryptionHelper {
 
             if (secretKey != null) {
                 // Write the newly generated key to a file.
-                FileOutputStream fos = new FileOutputStream(file);
-                ObjectOutputStream oos = new ObjectOutputStream(fos);
-                oos.writeObject(secretKey);
-                oos.flush();
-                oos.close();
-                fos.close();
+                try (FileOutputStream fos = new FileOutputStream(file);
+                        ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+                    oos.writeObject(secretKey);
+                }
             }
         }
         catch (IOException e) {
@@ -145,12 +143,11 @@ public class EncryptionHelper {
      */
     public static SecretKey readKey(File file)
     throws IOException, ClassNotFoundException {
-        FileInputStream fis = new FileInputStream(file);
-        ObjectInputStream ois = new ObjectInputStream(fis);
-        SecretKey secretKey = (SecretKey) ois.readObject();
-        ois.close();
-        fis.close();
-        return secretKey;
+        try (FileInputStream fis = new FileInputStream(file);
+                ObjectInputStream ois = new ObjectInputStream(fis)) {
+            SecretKey secretKey = (SecretKey) ois.readObject();
+            return secretKey;
+        }
     }
 
     /** Read a file that should contain a serialized Secret key, the file
@@ -163,15 +160,28 @@ public class EncryptionHelper {
      */
     public static SecretKey readKeyClassPath(String name)
     throws IOException, ClassNotFoundException {
-        InputStream is = EncryptionHelper.class.getClassLoader().getResourceAsStream(name);
-        if(is == null)
-            is = ClassLoader.getSystemResourceAsStream(name);
-        if(is == null)
-            throw new FileNotFoundException(name);
-        ObjectInputStream ois = new ObjectInputStream(is);
-        SecretKey secretKey = (SecretKey) ois.readObject();
-        ois.close();
-        is.close();
+        SecretKey secretKey = null;
+        try (InputStream is = EncryptionHelper.class.getClassLoader().getResourceAsStream(name)) {
+            if (is == null) {
+                try (InputStream is2 = ClassLoader.getSystemResourceAsStream(name)) {
+                    if (is2 == null) {
+                        throw new FileNotFoundException(name);
+                    }
+                    secretKey = readKeyFromStream(is2);
+                }
+            }
+            else {
+                secretKey = readKeyFromStream(is);
+            }
+        }
+        return secretKey;
+    }
+
+    private static SecretKey readKeyFromStream(InputStream is) throws IOException, ClassNotFoundException {
+        SecretKey secretKey;
+        try (ObjectInputStream ois = new ObjectInputStream(is)) {
+            secretKey = (SecretKey) ois.readObject();
+        }
         return secretKey;
     }
 

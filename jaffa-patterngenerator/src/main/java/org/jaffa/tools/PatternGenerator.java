@@ -773,38 +773,37 @@ public class PatternGenerator {
         fixEOL(fileName);
     }
 
-    private void fixEOL(String fileName) throws FileNotFoundException, IOException {
+    private void fixEOL(String fileName) throws IOException {
         // fix EOL style, br should handle any eol's and then bw will write in the native eol        
         StringWriter sw = new StringWriter();
-        BufferedWriter bw = new BufferedWriter(sw);
-
-        BufferedReader br = new BufferedReader(new FileReader(fileName));
-        String line;
-
         // we want to know if the file is empty
         boolean isFileEmpty = true;
-        while ((line = br.readLine()) != null) {
 
-            // a blank line will not count as content here
-            if (isFileEmpty && !line.isEmpty()) {
-                isFileEmpty = false;
-            }
-            bw.write(line);
-            bw.newLine();
-        }
-        br.close();
-        bw.close();
+        try (BufferedWriter bw = new BufferedWriter(sw);
+                BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+            String line;
 
-        // if the file is empty, delete it
-        if (isFileEmpty) {
-            File file = new File(fileName);
-            if (file.delete()) {
-                writeMessage(m_auditFile, fileName + " is empty, and has been deleted.", true);
+            while ((line = br.readLine()) != null) {
+
+                // a blank line will not count as content here
+                if (isFileEmpty && !line.isEmpty()) {
+                    isFileEmpty = false;
+                }
+                bw.write(line);
+                bw.newLine();
             }
-        } else {
-            bw = new BufferedWriter(new FileWriter(fileName));
-            bw.write(sw.toString());
-            bw.close();
+            // if the file is empty, delete it
+            if (isFileEmpty) {
+                File file = new File(fileName);
+                if (file.delete()) {
+                    writeMessage(m_auditFile, fileName + " is empty, and has been deleted.", true);
+                }
+            }
+            else {
+                try (BufferedWriter bw2 = new BufferedWriter(new FileWriter(fileName))) {
+                    bw2.write(sw.toString());
+                }
+            }
         }
     }
 

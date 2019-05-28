@@ -329,17 +329,17 @@ public class DataSource {
      * @return the PreparedStatement object.
      */
     public PreparedStatement getPreparedStatement(String sql) throws SQLException {
-        PreparedStatement pstmt = null;
-        // Use the regular prepared-statement if the logging is set to warn or higher, else use a proxy
-        if (log.getEffectiveLevel().isGreaterOrEqual(Level.WARN))
-            pstmt = m_connection.prepareStatement(sql);
-        else
-            pstmt = new PreparedStatementProxyForDebugging(m_connection, sql);
-        pstmt.clearBatch();
-        pstmt.clearParameters();
-        pstmt.clearWarnings();
-        registerStatement(pstmt, null);
-        return pstmt;
+        try (PreparedStatement pstmt =
+                // Use the regular prepared-statement if the logging is set to warn or higher, else use a proxy
+                log.getEffectiveLevel().isGreaterOrEqual(Level.WARN)
+                ? m_connection.prepareStatement(sql)
+                : new PreparedStatementProxyForDebugging(m_connection, sql)) {
+            pstmt.clearBatch();
+            pstmt.clearParameters();
+            pstmt.clearWarnings();
+            registerStatement(pstmt, null);
+            return pstmt;
+        }
     }
 
     /** Returns the CallableStatement object for the input sql.
@@ -348,12 +348,13 @@ public class DataSource {
      * @return the CallableStatement object.
      */
     public CallableStatement getCallableStatement(String sql) throws SQLException {
-        final CallableStatement cstmt = m_connection.prepareCall(sql);
-        cstmt.clearBatch();
-        cstmt.clearParameters();
-        cstmt.clearWarnings();
-        registerStatement(cstmt, null);
-        return cstmt;
+        try (final CallableStatement cstmt = m_connection.prepareCall(sql)) {
+            cstmt.clearBatch();
+            cstmt.clearParameters();
+            cstmt.clearWarnings();
+            registerStatement(cstmt, null);
+            return cstmt;
+        }
     }
 
     /** Commits all changes executed against the persistent store.
