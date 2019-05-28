@@ -49,6 +49,9 @@
 package org.jaffa.presentation.portlet.session;
 
 import org.apache.log4j.Logger;
+import org.jaffa.exceptions.ApplicationExceptions;
+import org.jaffa.exceptions.FrameworkException;
+
 import static org.jaffa.session.ContextManagerFactory.getApplicationRule;
 
 /** The listener interface for Callback functions on GraphService.
@@ -60,7 +63,7 @@ import static org.jaffa.session.ContextManagerFactory.getApplicationRule;
 public interface ServiceCallback {
     Logger log = Logger.getLogger(ServiceCallback.class);
 
-    default void createService(){
+    default void createService() throws FrameworkException, ApplicationExceptions {
         if(log.isDebugEnabled()){
             log.debug("Service Created");
         }

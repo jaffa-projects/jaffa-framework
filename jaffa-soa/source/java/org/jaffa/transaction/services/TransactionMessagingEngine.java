@@ -283,7 +283,7 @@ public class TransactionMessagingEngine implements IMessagingEngine {
                 String scheduledId = null;
                 TransactionField[] transactionFields = transaction.getTransactionFieldArray();
                 if (transactionFields != null) {
-                    for (TransactionField field : transaction.getTransactionFieldArray()) {
+                    for (TransactionField field : transactionFields) {
                         if (TransactionFieldMeta.JAFFA_TRANSACTION_TASK_ID.equals(field.getFieldName())) {
                             scheduledId = field.getValue();
                             break;

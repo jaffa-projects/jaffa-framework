@@ -11,10 +11,13 @@ Jaffa.attachment.Util = {
             var metaSource = Ext.Ajax.synchronousRequest({
                 url: 'js/extjs/jaffa/metadata/classMetaData.jsp',
                 params: {
-                    className: 'org.jaffa.components.attachment.apis.data.AttachmentGraph'
+                    className: 'org.jaffa.components.attachment.apis.data.AttachmentGraph',
+                    outputStyle: "JSON"
                 }
             });
-            if (metaSource) eval(metaSource);
+            if (metaSource) {
+                ClassMetaData['AttachmentGraph'] = Ext.decode(metaSource);
+            }
         }
     }
 }

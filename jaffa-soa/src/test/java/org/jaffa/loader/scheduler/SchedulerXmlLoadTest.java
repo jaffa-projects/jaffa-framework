@@ -51,7 +51,9 @@ public class SchedulerXmlLoadTest {
     public void testGetSchedulerTaskByTaskName() {
         SchedulerManager schedulerManager = xmlLoaderConfig.getBean(SchedulerManager.class);
 
-        assertEquals("org.jaffa.soa.services.SOAEventPoller", schedulerManager.getSchedulerTaskByTypeName( "SOAEventPoller").getDataBean());
+        Task poller = schedulerManager.getSchedulerTaskByTypeName("SOAEventPoller");
+        assertNotNull(poller);
+        assertEquals("org.jaffa.soa.services.SOAEventPoller", poller.getDataBean());
         assertEquals("org.jaffa.transaction.services.TransactionDependencySweeper",
                 schedulerManager.getSchedulerTaskByTypeName( "TransactionDependencySweeper").getDataBean());
     }
@@ -60,7 +62,7 @@ public class SchedulerXmlLoadTest {
      * Tests the ability of this IManager to retrieve a repository when given its String name
      */
     @Test
-    public void testGetRepositoryByName() throws Exception {
+    public void testGetRepositoryByName() {
         SchedulerManager schedulerManager = xmlLoaderConfig.getBean(SchedulerManager.class);
 
         String repo = "Task";
