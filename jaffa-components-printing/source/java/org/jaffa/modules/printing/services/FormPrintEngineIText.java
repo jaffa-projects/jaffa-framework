@@ -865,9 +865,9 @@ public class FormPrintEngineIText extends FormPrintEngine {
         try {
             if(fileout == null)
                 fileout = File.createTempFile("form_", ".pdf");
-            OutputStream bos = new FileOutputStream(fileout);
-            bos.write(m_output.toByteArray());
-            bos.close();
+            try (OutputStream bos = new FileOutputStream(fileout)) {
+                bos.write(m_output.toByteArray());
+            }
         } catch (IOException e) {
             log.error("Error Writing out PDF", e);
             return null;

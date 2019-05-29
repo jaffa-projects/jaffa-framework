@@ -188,10 +188,11 @@ public class ImageModel implements IWidgetModel  {
         } else {
             if(m_file != null) {
                 // Read from file
-                InputStream stream = new BufferedInputStream( new FileInputStream(m_file) );
-                image = new byte[stream.available()];
-                stream.read(image);
-                stream.close();
+                try (InputStream stream = new BufferedInputStream(
+                        new FileInputStream(m_file) )) {
+                    image = new byte[stream.available()];
+                    stream.read(image);
+                }
             }
         }
         return image;

@@ -258,9 +258,9 @@ public class MultiFormPrintEngine {
                     extn = ".pdf";
                 fileout = File.createTempFile("form_", extn);
             }
-            OutputStream bos = new FileOutputStream(fileout);
-            bos.write(m_output);
-            bos.close();
+            try (OutputStream bos = new FileOutputStream(fileout)) {
+                bos.write(m_output);
+            }
         } catch (IOException e) {
             log.error("Error Writing out PDF", e);
             return null;

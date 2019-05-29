@@ -154,9 +154,9 @@ public class FormCache {
                        throw new EngineProcessingException(err,e);
                    }
                } else {
-                   FileOutputStream fos = new FileOutputStream(temp);
-                   fos.write(formTemp.getTemplateData());
-                   fos.close();
+                   try (FileOutputStream fos = new FileOutputStream(temp)) {
+                       fos.write(formTemp.getTemplateData());
+                   }
                }
                log.debug("Written Template File " + temp.getAbsolutePath());
            } catch (IOException e) {

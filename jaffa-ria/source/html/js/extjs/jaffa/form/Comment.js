@@ -234,10 +234,15 @@ Ext.ux.form.Comment = Ext.extend(Ext.Container, {
           var space = comment.indexOf(" ");
           var commentName = comment.substr(0,space);
           comment = comment.substr(space+1);
-          if (comment.toUpperCase().indexOf("ON")==0)
+          var commentDate = "";
+          if (comment.toUpperCase().indexOf("ON")==0) {
             comment = comment.substr(3);
-          var commentDate = comment.substr(0,19)
-          comment = comment.substr(28);
+            commentDate = comment.substr(0,19)
+            comment = comment.substr(28);
+          }else{
+            comment = comment.substr(10);
+          }
+
           comment = comment.replace(/&nbsp;/gi, " ");
 
           if(!comment) comment = ' - None -';

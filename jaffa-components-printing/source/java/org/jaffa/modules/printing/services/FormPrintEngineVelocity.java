@@ -210,11 +210,12 @@ public class FormPrintEngineVelocity implements IFormPrintEngine {
         if(!isProcessed())
             throw new IllegalStateException("The form not been processed yet");
         try {
-            if(fileout == null)
+            if (fileout == null) {
                 fileout = File.createTempFile("form_", ".txt");
-            OutputStream bos = new FileOutputStream(fileout);
-            bos.write(m_output.getBuffer().toString().getBytes());
-            bos.close();
+            }
+            try (OutputStream bos = new FileOutputStream(fileout)) {
+                bos.write(m_output.getBuffer().toString().getBytes());
+            }
         } catch (IOException e) {
             log.error("Error Writing out PDF", e);
             return null;

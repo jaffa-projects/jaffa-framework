@@ -190,9 +190,7 @@ public class JDBCSecurityPlugin implements IJdbcSecurityPlugin {
     @Override
     public void freeConnection(Connection pooledConnection)  throws java.sql.SQLException {
         synchronized(clearCtxLock) {
-            CallableStatement cs = null;
-            try {
-                cs = pooledConnection.prepareCall(CALL_JAFFA_SEC_CLEARCTX);
+            try (CallableStatement cs = pooledConnection.prepareCall(CALL_JAFFA_SEC_CLEARCTX)){
                 if(log.isDebugEnabled()) log.debug("Clearing the Security Context");
                 cs.execute();
             }
@@ -200,13 +198,7 @@ public class JDBCSecurityPlugin implements IJdbcSecurityPlugin {
                 log.error(CLEARING_THE_CONTEXT_ERROR_MESSAGE, e);
                 throw new UOWSecurityException(CLEARING_THE_CONTEXT_ERROR_MESSAGE, e);
             }
-            finally {
-                if (cs != null) {
-                    cs.clearParameters();
-                    cs.close();
-                }
-            }
-        }
+         }
     }
 
     /**
