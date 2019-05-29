@@ -138,8 +138,19 @@ public class CommentValidator<T> extends RuleValidator<T> {
         // create the stamp
         String user = (org.jaffa.security.SecurityManager.getPrincipal() != null && SecurityManager.getPrincipal().getName() != null) ? SecurityManager.getPrincipal().getName() : "";
         String messageKey = "label.Jaffa.Rules.Comments.FirstSeparator";
-        if (originalComment != null)
+        if(originalComment != null && !originalComment.startsWith("-------")){
+            // Hack for workDoneText comments
+            // Format the original comment so it appears separate from the additional comments. User is 'Unknown', and the date will be blank.
+            String originalCommentHeader = MessageHelper.findMessage(messageKey, new Object[]{"Unknown", ""});
+            //The comments.js will format this better if 'on' is not present.
+            originalCommentHeader = originalCommentHeader.replaceFirst("on" ,"");
+            originalComment = originalCommentHeader + originalComment;
+            //Please see GOLD-77530 and GOLD-80131.
+        }
+        if (originalComment != null) {
             messageKey = "label.Jaffa.Rules.Comments.AdditionalSeparator";
+        }
+
         String text = MessageHelper.findMessage(messageKey, new Object[]{user, Formatter.format(new DateTime())});
         buffer.append(text).append("\n");
 
