@@ -59,6 +59,8 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import org.jaffa.rules.JaffaRulesFrameworkException;
 import org.jaffa.rules.commons.AbstractLoader;
+import org.jaffa.security.VariationContext;
+import org.jaffa.util.ContextHelper;
 import org.w3c.dom.Element;
 
 /** This class is used to import variations.
@@ -108,12 +110,6 @@ public class VariationRepository extends AbstractLoader {
                 UriMetaData uriMetaData = new UriMetaData();
                 uriMetaData.setSource(source);
                 uriMetaData.setLine(getLine(uriElement));
-                uriMetaData.setRegex(uriElement.hasAttribute(ATTR_REGEX) ? uriElement.getAttribute(ATTR_REGEX) : null);
-                uriMetaData.setVariation(uriElement.hasAttribute(ATTR_VARIATION) ? uriElement.getAttribute(ATTR_VARIATION) : null);
-                if (uriMetaData.getRegex() == null) {
-                    log.warn("Ignoring variation since regex is unspecified: " + uriMetaData);
-                    continue;
-                }
                 if (log.isDebugEnabled())
                     log.debug("Loaded variation: " + uriMetaData);
                 
@@ -175,16 +171,9 @@ public class VariationRepository extends AbstractLoader {
      * @return The matching variation.
      */
     public synchronized String find(String uri) {
-        if (uri != null) {
-            for (UriMetaData uriMetaData : m_uris) {
-                Pattern pattern = uriMetaData.getPattern();
-                Matcher matcher  = pattern.matcher(uri);
-                if (matcher.matches()) {
-                    return uriMetaData.getVariation();
-                }
-            }
-        }
-        return null;
+
+        String variation = ContextHelper.getVariationSalience(uri);
+        return variation!=null && !VariationContext.NULL_VARIATION.equals(variation) ? variation : null;
     }
     
 }
