@@ -184,7 +184,6 @@ public class FormGroupFinderComponent extends FinderComponent2 {
      * @return the FinderOutDto object.
      */
     protected FinderOutDto doInquiry() throws ApplicationExceptions, FrameworkException {
-        ApplicationExceptions appExps = null;
         FormGroupFinderInDto inputDto = new FormGroupFinderInDto();
         // .//GEN-END:_doInquiry_1_be
         // Add custom code before processing the method //GEN-FIRST:_doInquiry_1
@@ -205,11 +204,6 @@ public class FormGroupFinderComponent extends FinderComponent2 {
             else
                 inputDto.setFormType(StringCriteriaField.getStringCriteriaField(CriteriaField.RELATIONAL_EQUALS, getFormType(), null));
         }
-
-
-        // throw ApplicationExceptions, if any parsing errors occured
-        if (appExps != null && appExps.size() > 0)
-            throw appExps;
 
         inputDto.setHeaderDto(getHeaderDto());
         addSortCriteria(inputDto);

@@ -41,49 +41,36 @@ public class CallBackDropdownHelper {
    public CodeHelperOutElementDto getOptions(HttpServletRequest request, String returnField, String descField, String domainName ,  CriteriaElementDto[] criteriaFields) throws ApplicationExceptions, FrameworkException {
        
         
-        CodeHelperOutElementDto m_dropDownCodes = null;  
-        ApplicationExceptions appExps = null;
+        CodeHelperOutElementDto m_dropDownCodes = null;
         CodeHelperInDto input = null;
         System.out.println("Still alive1");
         if (m_codeHelperTx == null)
             m_codeHelperTx = (ICodeHelper) Factory.createObject(ICodeHelper.class);
-        if (m_dropDownCodes == null) {
-            if (input == null)
-                input = new CodeHelperInDto();
-            CodeHelperInElementDto codeHelperInElementDto = new CodeHelperInElementDto();
-            codeHelperInElementDto.setCode("sort");
-            codeHelperInElementDto.setDomainClassName(domainName);
-            codeHelperInElementDto.setCodeFieldName(returnField);
-            codeHelperInElementDto.setDescriptionFieldName(descField);
-            for (int i = 0; i < criteriaFields.length; i++) {
-                CriteriaElementDto criteriaField = criteriaFields[i];                
-                codeHelperInElementDto.addCriteriaField(criteriaField);
+       input = new CodeHelperInDto();
+       CodeHelperInElementDto codeHelperInElementDto = new CodeHelperInElementDto();
+       codeHelperInElementDto.setCode("sort");
+       codeHelperInElementDto.setDomainClassName(domainName);
+       codeHelperInElementDto.setCodeFieldName(returnField);
+       codeHelperInElementDto.setDescriptionFieldName(descField);
+       for (CriteriaElementDto criteriaField : criteriaFields) {
+           codeHelperInElementDto.addCriteriaField(criteriaField);
 
-            }            
-            input.addCodeHelperInElementDto(codeHelperInElementDto);
-        }
-        // throw ApplicationExceptions, if any parsing errors occured
-        if (appExps != null && appExps.size() > 0)
-            throw appExps;
-        // Get the Codes and populate the respective fields
-        if (input != null) {
-                    System.out.println("Still alive2");
-            input.setHeaderDto(getHeaderDto(request));
-                    System.out.println("Still alive3");
-            CodeHelperOutDto output = m_codeHelperTx.getCodes(input);
-            if (output != null && output.getCodeHelperOutElementDtoCount() > 0) {
-                CodeHelperOutElementDto[] codeHelperOutElementDtos = output.getCodeHelperOutElementDtos();
-                for (int i = 0; i < codeHelperOutElementDtos.length; i++) {
-                    CodeHelperOutElementDto codeHelperOutElementDto = codeHelperOutElementDtos[i];
-                    String code = codeHelperOutElementDto.getCode();
-                    if (code.equals("sort"))
-                        m_dropDownCodes = codeHelperOutElementDto;
-                }
-            }
-        }     
-        
-         
-                System.out.println("Still alive4");
+       }
+       input.addCodeHelperInElementDto(codeHelperInElementDto);
+       // Get the Codes and populate the respective fields
+       System.out.println("Still alive2");
+       input.setHeaderDto(getHeaderDto(request));
+       System.out.println("Still alive3");
+       CodeHelperOutDto output = m_codeHelperTx.getCodes(input);
+       if (output != null && output.getCodeHelperOutElementDtoCount() > 0) {
+           CodeHelperOutElementDto[] codeHelperOutElementDtos = output.getCodeHelperOutElementDtos();
+           for (CodeHelperOutElementDto codeHelperOutElementDto : codeHelperOutElementDtos) {
+               String code = codeHelperOutElementDto.getCode();
+               if (code.equals("sort"))
+                   m_dropDownCodes = codeHelperOutElementDto;
+           }
+       }
+
         return m_dropDownCodes;
  }
     
