@@ -103,115 +103,126 @@ public class ConvertPDFLibBlocks {
 
         // open output and write header row...
         File out = new File(output);
-        FileWriter fw = new FileWriter(out);
-        fw.write("Page,Field,x1',y1',x2',y2',Font,Size,Align,Multiline,Fit Method,Rotate,Style,Color,Background,Sample Data,Opacity\n");
 
-        for(int templatePage = 0; templatePage < templatePages; templatePage++) {
+        try (FileWriter fw = new FileWriter(out)) {
+            fw.write("Page,Field,x1',y1',x2',y2',Font,Size,Align,Multiline,Fit Method,Rotate,Style,Color,Background,Sample Data,Opacity\n");
 
-            // Now get the names of all the fields on the form.
-            if(log.isDebugEnabled())
-                log.debug("Read the field names from template page " + (templatePage+1) + " of " + templatePages);
+            for (int templatePage = 0; templatePage < templatePages; templatePage++) {
 
-            // Get total number of Blocks on page
-            int blockCount = (int) pdf.get_pdi_value("vdp/blockcount", pdfTemplate, templatePage, 0);
-            if(log.isDebugEnabled())
-                log.debug("   Field Count = " + blockCount);
+                // Now get the names of all the fields on the form.
+                if (log.isDebugEnabled())
+                    log.debug("Read the field names from template page " + (templatePage + 1) + " of " + templatePages);
 
-            for (int i = 0; i < blockCount; i++) {
+                // Get total number of Blocks on page
+                int blockCount = (int) pdf.get_pdi_value("vdp/blockcount", pdfTemplate, templatePage, 0);
+                if (log.isDebugEnabled())
+                    log.debug("   Field Count = " + blockCount);
 
-                // Page
-                fw.write((templatePage+1)+",");
+                for (int i = 0; i < blockCount; i++) {
 
-                // Field
-                String fieldname = pdf.get_pdi_parameter("vdp/Blocks["+i+"]/Name", pdfTemplate, templatePage, 0);
-                String fieldname2 = fieldname.replace('(','[');
-                fieldname2 = fieldname2.replace(')',']');
-                if(log.isDebugEnabled())
-                    log.debug("    " + i + ") " + fieldname2);
-                fw.write(fieldname2+",");
+                    // Page
+                    fw.write((templatePage + 1) + ",");
 
-                // x1
-                int x = (int) pdf.get_pdi_value("vdp/Blocks/"+fieldname+"/Rect[0]", pdfTemplate, templatePage, 0);
-                fw.write(x+",");
+                    // Field
+                    String fieldname = pdf.get_pdi_parameter("vdp/Blocks[" + i + "]/Name", pdfTemplate, templatePage, 0);
+                    String fieldname2 = fieldname.replace('(', '[');
+                    fieldname2 = fieldname2.replace(')', ']');
+                    if (log.isDebugEnabled())
+                        log.debug("    " + i + ") " + fieldname2);
+                    fw.write(fieldname2 + ",");
 
-                //y1
-                x = (int) pdf.get_pdi_value("vdp/Blocks/"+fieldname+"/Rect[1]", pdfTemplate, templatePage, 0);
-                fw.write(x+",");
+                    // x1
+                    int x = (int) pdf.get_pdi_value("vdp/Blocks/" + fieldname + "/Rect[0]", pdfTemplate, templatePage, 0);
+                    fw.write(x + ",");
 
-                //x2
-                x = (int) pdf.get_pdi_value("vdp/Blocks/"+fieldname+"/Rect[2]", pdfTemplate, templatePage, 0);
-                fw.write(x+",");
+                    //y1
+                    x = (int) pdf.get_pdi_value("vdp/Blocks/" + fieldname + "/Rect[1]", pdfTemplate, templatePage, 0);
+                    fw.write(x + ",");
 
-                // y2
-                x = (int) pdf.get_pdi_value("vdp/Blocks/"+fieldname+"/Rect[3]", pdfTemplate, templatePage, 0);
-                fw.write(x+",");
+                    //x2
+                    x = (int) pdf.get_pdi_value("vdp/Blocks/" + fieldname + "/Rect[2]", pdfTemplate, templatePage, 0);
+                    fw.write(x + ",");
 
-                // Font
-                String fontname = pdf.get_pdi_parameter("vdp/Blocks/"+fieldname+"/fontname", pdfTemplate, templatePage, 0);
-                fw.write(fontname+",");
+                    // y2
+                    x = (int) pdf.get_pdi_value("vdp/Blocks/" + fieldname + "/Rect[3]", pdfTemplate, templatePage, 0);
+                    fw.write(x + ",");
 
-                // Size
-                int fontsize = (int) pdf.get_pdi_value("vdp/Blocks/"+fieldname+"/fontsize", pdfTemplate, templatePage, 0);
-                fw.write(fontsize+",");
+                    // Font
+                    String fontname =
+                            pdf.get_pdi_parameter("vdp/Blocks/" + fieldname + "/fontname", pdfTemplate, templatePage, 0);
+                    fw.write(fontname + ",");
 
-                // Align
-                String align = pdf.get_pdi_parameter("vdp/Blocks/"+fieldname+"/alignment", pdfTemplate, templatePage, 0);
-                if (align.length() > 0){
-                    fw.write(align+",");
-                }else{
-                    fw.write("left,");
-                }
+                    // Size
+                    int fontsize = (int) pdf
+                            .get_pdi_value("vdp/Blocks/" + fieldname + "/fontsize", pdfTemplate, templatePage, 0);
+                    fw.write(fontsize + ",");
 
-                // Multiline
-                fw.write("false");
-                fw.write(',');
+                    // Align
+                    String align =
+                            pdf.get_pdi_parameter("vdp/Blocks/" + fieldname + "/alignment", pdfTemplate, templatePage, 0);
+                    if (align.length() > 0) {
+                        fw.write(align + ",");
+                    }
+                    else {
+                        fw.write("left,");
+                    }
 
-                // Fit Method.  For images, set the default fit method as "scale".
-                String fitmethod;
-                if (fontname.startsWith("Image") || fontname.startsWith("image")) {
-                    fitmethod = "scale";
-                    fw.write(fitmethod + ',');
-                } else {
+                    // Multiline
+                    fw.write("false");
                     fw.write(',');
+
+                    // Fit Method.  For images, set the default fit method as "scale".
+                    String fitmethod;
+                    if (fontname.startsWith("Image") || fontname.startsWith("image")) {
+                        fitmethod = "scale";
+                        fw.write(fitmethod + ',');
+                    }
+                    else {
+                        fw.write(',');
+                    }
+
+                    // Rotate
+                    int rotate = (int) pdf
+                            .get_pdi_value("vdp/Blocks/" + fieldname + "/rotate", pdfTemplate, templatePage, 0);
+                    fw.write(rotate + ",");
+
+                    // Style
+                    String fontstyle;
+                    if (fontname.startsWith("Barcode")) {
+                        fontstyle = pdf.get_pdi_parameter("vdp/Blocks/" + fieldname + "/Custom/style", pdfTemplate,
+                                                          templatePage, 0);
+                    }
+                    else {
+                        fontstyle = pdf.get_pdi_parameter("vdp/Blocks/" + fieldname + "/fontstyle", pdfTemplate,
+                                                          templatePage, 0);
+                    }
+                    fw.write(fontstyle + ",");
+
+                    // Color
+                    fw.write(',');
+
+                    // Background
+                    fw.write(',');
+
+                    // Sample Data
+                    String defaulttext =
+                            pdf.get_pdi_parameter("vdp/Blocks/" + fieldname + "/defaulttext", pdfTemplate, templatePage,
+                                                  0);
+                    fw.write(defaulttext + ",");
+
+                    // Opacity
+                    double opacity = (double) pdf
+                            .get_pdi_value("vdp/Blocks/" + fieldname + "/opacityfill", pdfTemplate, templatePage, 0);
+                    if (opacity != 0.0) {
+                        fw.write(String.valueOf(opacity));
+                    }
+
+                    // END LINE
+                    fw.write('\n');
+
                 }
-
-                // Rotate
-                int rotate = (int) pdf.get_pdi_value("vdp/Blocks/"+fieldname+"/rotate", pdfTemplate, templatePage, 0);
-                fw.write(rotate + ",");               
-
-                // Style
-                String fontstyle;
-                if (fontname.startsWith("Barcode")){
-                    fontstyle = pdf.get_pdi_parameter("vdp/Blocks/"+fieldname+"/Custom/style", pdfTemplate, templatePage, 0);
-                }else{
-                    fontstyle = pdf.get_pdi_parameter("vdp/Blocks/"+fieldname+"/fontstyle", pdfTemplate, templatePage, 0);
-                }
-                fw.write(fontstyle+",");
-
-                // Color
-                fw.write(',');
-
-                // Background
-                fw.write(',');
-
-                // Sample Data
-                String defaulttext = pdf.get_pdi_parameter("vdp/Blocks/"+fieldname+"/defaulttext", pdfTemplate, templatePage, 0);
-                fw.write(defaulttext+ ",");                
-
-                // Opacity
-                double opacity = (double) pdf.get_pdi_value("vdp/Blocks/" + fieldname + "/opacityfill", pdfTemplate, templatePage, 0);
-                if (opacity != 0.0) {
-                    fw.write(String.valueOf(opacity));
-                }
-                                    
-                // END LINE
-                fw.write('\n');
-
             }
         }
-
-        fw.flush();
-        fw.close();
         System.out.println("Written File " + output);
         } catch (Exception e) {
             System.out.println("Conversion Failed!");

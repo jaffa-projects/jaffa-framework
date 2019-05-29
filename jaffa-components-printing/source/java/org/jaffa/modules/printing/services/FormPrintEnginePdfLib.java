@@ -363,10 +363,9 @@ public class FormPrintEnginePdfLib extends FormPrintEngine {
         try {
             if(fileout == null)
                 fileout = File.createTempFile("form_", ".pdf");
-            OutputStream bos = new FileOutputStream(fileout);
-            bos.write(m_pdf.get_buffer());
-            bos.flush();
-            bos.close();
+            try (OutputStream bos = new FileOutputStream(fileout)) {
+                bos.write(m_pdf.get_buffer());
+            }
             if(log.isDebugEnabled())
                 log.debug("PDFLib wrote out form " + fileout.getAbsolutePath());
         } catch (IOException e) {

@@ -35,16 +35,17 @@ public class ZipFiles {
         } else {
             byte[] buf = new byte[1024];
             int len;
-            FileInputStream in = new FileInputStream(srcFile);
-            if (path.equals("")) {
-                zip.putNextEntry(new ZipEntry(folder.getName()));
-            } else {
-                zip.putNextEntry(new ZipEntry(path + File.separator + folder.getName()));
+            try (FileInputStream in = new FileInputStream(srcFile)) {
+                if (path.equals("")) {
+                    zip.putNextEntry(new ZipEntry(folder.getName()));
+                }
+                else {
+                    zip.putNextEntry(new ZipEntry(path + File.separator + folder.getName()));
+                }
+                while ((len = in.read(buf)) > 0) {
+                    zip.write(buf, 0, len);
+                }
             }
-            while ((len = in.read(buf)) > 0) {
-                zip.write(buf, 0, len);
-            }
-            in.close();
         }
     }
 

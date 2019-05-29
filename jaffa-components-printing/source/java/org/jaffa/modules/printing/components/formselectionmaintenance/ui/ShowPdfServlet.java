@@ -99,19 +99,15 @@ public class ShowPdfServlet extends HttpServlet {
             response.setBufferSize(2048);
         } catch (IllegalStateException e) {/*Silent catch*/}
 
-        InputStream in = new FileInputStream(file);
-        ServletOutputStream out = response.getOutputStream();
-
-        try {
+        try (InputStream in = new FileInputStream(file);
+                ServletOutputStream out = response.getOutputStream()) {
             byte[] buffer = new byte[1000];
-            while (in.available()>0)
+            while (in.available()>0) {
                 out.write(buffer, 0, in.read(buffer));
+            }
             out.flush();
         } catch (IOException e) {
             log.error("Problem Serving Resource " + file.getAbsolutePath(), e);
-        } finally {
-            out.close();
-            in.close();
         }
 
         if(log.isDebugEnabled())

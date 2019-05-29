@@ -94,37 +94,37 @@ public class ConfigApiCore {
             Files.createDirectories(tempDirPath);
         }
         //Extract compressed contents to temporary directory
-        ZipFile zipFile = new ZipFile(file);
-        Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
-        while (zipEntries.hasMoreElements()){
-            ZipEntry zipEntry = zipEntries.nextElement();
-            String zipPath = tempDirPath + File.separator + zipEntry.getName();
-            Path entryPath = Paths.get(zipPath);
-            if (!Files.exists(entryPath.getParent())){
-                Files.createDirectories(entryPath.getParent());
-            }
+        try (ZipFile zipFile = new ZipFile(file)) {
+            Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
+            while (zipEntries.hasMoreElements()) {
+                ZipEntry zipEntry = zipEntries.nextElement();
+                String zipPath = tempDirPath + File.separator + zipEntry.getName();
+                Path entryPath = Paths.get(zipPath);
+                if (!Files.exists(entryPath.getParent())) {
+                    Files.createDirectories(entryPath.getParent());
+                }
 
-            if (!zipEntry.isDirectory()){
-                try (InputStream is = zipFile.getInputStream(zipEntry)) {
-                    // There could be leftovers from previous writes to the temporary directory.
-                    // Just overwrite them.  They are temporary, after all.
-                    try {
-                        Files.copy(is, entryPath, StandardCopyOption.REPLACE_EXISTING);
-                    }
-                    catch (FileSystemException e) {
-                        // Sometimes the file may already exist, but not be over-writable
-                        log.warn("Unable to copy to " + zipPath);
-                        if (Files.exists(entryPath)) {
-                            log.info("Will try to use pre-existing temp file " + zipPath);
+                if (!zipEntry.isDirectory()) {
+                    try (InputStream is = zipFile.getInputStream(zipEntry)) {
+                        // There could be leftovers from previous writes to the temporary directory.
+                        // Just overwrite them.  They are temporary, after all.
+                        try {
+                            Files.copy(is, entryPath, StandardCopyOption.REPLACE_EXISTING);
                         }
-                        else {
-                            throw e;
+                        catch (FileSystemException e) {
+                            // Sometimes the file may already exist, but not be over-writable
+                            log.warn("Unable to copy to " + zipPath);
+                            if (Files.exists(entryPath)) {
+                                log.info("Will try to use pre-existing temp file " + zipPath);
+                            }
+                            else {
+                                throw e;
+                            }
                         }
                     }
                 }
             }
         }
-        zipFile.close();
         log.debug("Extracted " + file + "to " + tempDirPath);
         return tempDirPath.toFile();
     }
@@ -227,25 +227,23 @@ public class ConfigApiCore {
         String manifestFile = "META-INF/MANIFEST.MF";
         FileContents fileContents = new FileContents();
 
-        ZipFile zipFile = new ZipFile(file);
+        try (ZipFile zipFile = new ZipFile(file)) {
+            fileContents.setName(file.getName());
+            fileContents.setUrl(System.getProperty("app.base.url"));
 
-        fileContents.setName(file.getName());
-        fileContents.setUrl(System.getProperty("app.base.url"));
-
-        Enumeration<? extends ZipEntry> entries = zipFile.entries();
-        while (entries.hasMoreElements()) {
-            ZipEntry zipFileEntry = entries.nextElement();
-            String zipPathname = zipFileEntry.toString();
-            fileContents.addContentsItem(new File(zipPathname).getName());
-            if (zipFileEntry.getName().toUpperCase().equals(manifestFile)) {
-                String contextSalience = findContextSalienceInManifest(zipFile);
-                fileContents.setContextSalience(contextSalience);
-                String variationSalience = findVariationSalienceInManifest(zipFile);
-                fileContents.setVariationSalience(variationSalience);
+            Enumeration<? extends ZipEntry> entries = zipFile.entries();
+            while (entries.hasMoreElements()) {
+                ZipEntry zipFileEntry = entries.nextElement();
+                String zipPathname = zipFileEntry.toString();
+                fileContents.addContentsItem(new File(zipPathname).getName());
+                if (zipFileEntry.getName().toUpperCase().equals(manifestFile)) {
+                    String contextSalience = findContextSalienceInManifest(zipFile);
+                    fileContents.setContextSalience(contextSalience);
+                    String variationSalience = findVariationSalienceInManifest(zipFile);
+                    fileContents.setVariationSalience(variationSalience);
+                }
             }
         }
-        //zipFile.stream().close();
-        zipFile.close();
 
         return fileContents;
     }
