@@ -669,11 +669,7 @@ public class JDBCLogger {
 					} else if (logcol.logtype == JDBCLogType.TIMESTAMP) {
 						Timestamp parameter = new Timestamp((new java.util.Date()).getTime());
 						if (usePrepStmts || useCallStmts) {
-							if (parameter == null) {
-								prepStmt.setNull(indexToUse, logcol.sqlType);
-							} else {
-								prepStmt.setTimestamp(indexToUse, parameter);
-							}
+							prepStmt.setTimestamp(indexToUse, parameter);
 							paramIndex = paramIndex + 1;
 						} else {
 							rs.updateTimestamp(logcol.name, parameter);
