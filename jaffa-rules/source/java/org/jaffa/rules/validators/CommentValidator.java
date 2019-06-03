@@ -132,7 +132,7 @@ public class CommentValidator<T> extends RuleValidator<T> {
         }
 
         // create a buffer for the generated comment, by estimating an initial capacity
-        int capacity = (originalComment != null ? originalComment.length() : 0) + (additionalComment != null ? additionalComment.length() : 0) + 200;
+        int capacity = (originalComment != null ? originalComment.length() : 0) + additionalComment.length() + 200;
         StringBuilder buffer = new StringBuilder(capacity);
 
         // create the stamp

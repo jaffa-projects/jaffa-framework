@@ -820,16 +820,11 @@ public class StringHelper {
             return originalComment;
 
         // create a buffer for the generated comment, by estimating an initial capacity
-        int capacity = (originalComment != null ? originalComment.length() : 0)
-        + (additionalComment != null ? additionalComment.length() : 0)
-        + 100;
-        StringBuffer buffer = new StringBuffer(capacity);
+        int capacity = originalComment.length() + additionalComment.length() + 100;
+        StringBuilder buffer = new StringBuilder(capacity);
 
         // create the stamp
-        if (originalComment != null)
-            buffer.append("------- Additional ");
-        else
-            buffer.append("------- ");
+        buffer.append("------- Additional ");
         buffer.append("Comments ");
         if (userId == null && SecurityManager.getPrincipal() != null)
             userId = SecurityManager.getPrincipal().getName();
@@ -846,16 +841,14 @@ public class StringHelper {
         buffer.append(additionalComment);
 
         // add the original comments before or after the new comments, based on the 'lifo' flag
-        if (originalComment != null) {
-            if (lifo) {
-                buffer.append('\n');
-                buffer.append('\n');
-                buffer.append(originalComment);
-            } else {
-                buffer.insert(0, '\n');
-                buffer.insert(0, '\n');
-                buffer.insert(0, originalComment);
-            }
+        if (lifo) {
+            buffer.append('\n');
+            buffer.append('\n');
+            buffer.append(originalComment);
+        } else {
+            buffer.insert(0, '\n');
+            buffer.insert(0, '\n');
+            buffer.insert(0, originalComment);
         }
 
         return buffer.toString();
