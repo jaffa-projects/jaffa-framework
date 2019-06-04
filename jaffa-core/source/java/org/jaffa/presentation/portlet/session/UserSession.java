@@ -322,8 +322,8 @@ public class UserSession implements HttpSessionBindingListener {
         if(m_serviceCallbackList != null && m_serviceCallbackList.size() > 0){
             for(ServiceCallback serviceCallBack : m_serviceCallbackList){
                 serviceCallBack.quitService();
-                removeCallbackHandler(serviceCallBack);
             }
+            m_serviceCallbackList.clear();
         }
         //        Object[] components = m_components.values().toArray();
         //        for(int i = 0; i < components.length; i++) {
@@ -595,14 +595,6 @@ public class UserSession implements HttpSessionBindingListener {
      */
     public void addCallbackHandler(ServiceCallback serviceCallback){
         m_serviceCallbackList.add(serviceCallback);
-    }
-
-    /**
-     * removes the serviceCallback from the list
-     * @param serviceCallback
-     */
-    public void removeCallbackHandler(ServiceCallback serviceCallback){
-        m_serviceCallbackList.remove(serviceCallback);
     }
 
 }
