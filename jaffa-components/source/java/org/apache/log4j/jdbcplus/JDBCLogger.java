@@ -1369,50 +1369,51 @@ public class JDBCLogger {
 
 		this.procedure = procedure;
 		// prepare call
-		CallableStatement cStmt = this.createCallableStatement(columns.size());
+		try (CallableStatement cStmt = this.createCallableStatement(columns.size())) {
 
-		JDBCLogColumn logcol;
+			JDBCLogColumn logcol;
 
-		ParameterMetaData pmd;
+			ParameterMetaData pmd;
 
-		// 2.6.2005 jschmied
-		// ParameterMetaData is supported on different levels by Oracle
-		try {
-			// J2SDK 1.4+; limited support by Oracle drivers 10.x and 9.x
-			pmd = cStmt.getParameterMetaData();
-			num = pmd.getParameterCount();
-			if (num >= 1) {
-				// oracle 10.1.0.4 has some stubs in ParameterMetaData, 
-				// try if a function throws a UnsupportedFeature exception
-				pmd.getParameterType(1);
-				pmd.getParameterTypeName(1);
-				pmd.isNullable(1);
+			// 2.6.2005 jschmied
+			// ParameterMetaData is supported on different levels by Oracle
+			try {
+				// J2SDK 1.4+; limited support by Oracle drivers 10.x and 9.x
+				pmd = cStmt.getParameterMetaData();
+				num = pmd.getParameterCount();
+				if (num >= 1) {
+					// oracle 10.1.0.4 has some stubs in ParameterMetaData,
+					// try if a function throws a UnsupportedFeature exception
+					pmd.getParameterType(1);
+					pmd.getParameterTypeName(1);
+					pmd.isNullable(1);
+				}
 			}
-		} catch (Exception e) {
-			pmd = null;
-			num = columns.size();
-		}
-
-		logcols = new ArrayList(num);
-
-		for (int i = 1; i <= num; i++) {
-			logcol = new JDBCLogColumn();
-			JDBCColumnStorage col = (JDBCColumnStorage) columns.get(i - 1);
-			logcol.name = col.column.toUpperCase();
-			if (pmd == null) {
-				logcol.type = col.type;
-				logcol.sqlType = col.sqlType;
-				logcol.nullable = true; // assume true
-			} else {
-				logcol.type = pmd.getParameterTypeName(i);
-				logcol.sqlType = pmd.getParameterType(i);
-				logcol.nullable = (pmd.isNullable(i) == ParameterMetaData.parameterNullable);
+			catch (Exception e) {
+				pmd = null;
+				num = columns.size();
 			}
-			logcol.isWritable = true;
-			logcols.add(logcol);
-		}
 
-		cStmt.close();
+			logcols = new ArrayList(num);
+
+			for (int i = 1; i <= num; i++) {
+				logcol = new JDBCLogColumn();
+				JDBCColumnStorage col = (JDBCColumnStorage) columns.get(i - 1);
+				logcol.name = col.column.toUpperCase();
+				if (pmd == null) {
+					logcol.type = col.type;
+					logcol.sqlType = col.sqlType;
+					logcol.nullable = true; // assume true
+				}
+				else {
+					logcol.type = pmd.getParameterTypeName(i);
+					logcol.sqlType = pmd.getParameterType(i);
+					logcol.nullable = (pmd.isNullable(i) == ParameterMetaData.parameterNullable);
+				}
+				logcol.isWritable = true;
+				logcols.add(logcol);
+			}
+		}
 		freeConnection();
 
 		isconfigured = true;
