@@ -179,10 +179,8 @@ public class FormCache {
            if(tempLayout.exists())
                tempLayout.delete();
            if(formTemp.getLayoutData()!=null) {
-               try {
-                   FileOutputStream fos = new FileOutputStream(tempLayout);
+               try (FileOutputStream fos = new FileOutputStream(tempLayout)) {
                    fos.write(formTemp.getLayoutData());
-                   fos.close();
                    log.debug("Written Template Layout File " + tempLayout.getAbsolutePath());
                } catch (IOException e) {
                    String err = "Failed to write Layout File " + tempLayout.getAbsolutePath();
