@@ -8,16 +8,16 @@
 org.jaffa.ria.metadata.ClassMetaDataHelper' %>
 
 <%
-  String className = request.getParameter("className");
+  ClassMetaDataHelper classMetaDataHelper = new ClassMetaDataHelper();
   String outputStyle = request.getParameter("outputStyle");
   String outputClassName = request.getParameter("outputClassName");
   String objectString = request.getParameter("object");
-  Boolean legacy = Parser.parseBoolean(request.getParameter("legacy"));
-  className = className != null ? className.trim() : null;
   objectString = objectString != null ? objectString.trim() : null;
-  if (className != null && className.length() > 0) {
-    ClassMetaDataHelper classMetaDataHelper = new ClassMetaDataHelper();
+  Boolean legacy = Parser.parseBoolean(request.getParameter("legacy"));
+  String classNameFromRequest = request.getParameter("className");
+  String className = classMetaDataHelper.getSafeClassName(classNameFromRequest);
 
+  if (className != null && className.length() > 0) {
     if (ClassMetaDataHelper.JSON.equalsIgnoreCase(outputStyle)) {
       classMetaDataHelper.showRules(className, objectString,
                                     legacy != null && legacy, out,
@@ -27,5 +27,8 @@ org.jaffa.ria.metadata.ClassMetaDataHelper' %>
       classMetaDataHelper.showRules(className, objectString,
                                     legacy != null && legacy, out, outputClassName);
     }
+  }
+  else { // Either an empty entry or a potentially unsafe class
+    out.write("Unrecognized class name: " + classNameFromRequest);
   }
 %>
