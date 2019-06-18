@@ -174,12 +174,9 @@ public class MetaDataIntrospector implements IObjectRuleIntrospector, IPropertyR
                     String dataType = rule != null ? Defaults.getClassString(rule.getParameter(RuleMetaData.PARAMETER_VALUE)) : null;
                     if (dataType == null) {
                         // Check the actual Class, if the data-type rule is not defined
-                        try {
-                            dataType = BeanHelper.getPropertyType(Class.forName(m_className), m_propertyName).getName();
-                        } catch (Exception e) {
-                            // do nothing
-                            if (log.isDebugEnabled())
-                                log.debug("Error in determining the property type", e);
+                        Class propertyTypeFromClassName = getPropertyTypeFromClassName();
+                        if (propertyTypeFromClassName != null) {
+                            dataType = propertyTypeFromClassName.getName();
                         }
                     }
                     info.setProperty("data-type", dataType != null ? dataType : String.class.getName());
@@ -441,9 +438,24 @@ public class MetaDataIntrospector implements IObjectRuleIntrospector, IPropertyR
 
         // Check the actual Class, if the data-type rule is not defined
         if (propertyType == null) {
+            propertyType = getPropertyTypeFromClassName();
+        }
+        return propertyType;
+    }
+
+    /**
+     * Get the property type class using reflection
+     * @return the property type
+     */
+    private Class getPropertyTypeFromClassName() {
+        Class propertyType = null;
+
+        if (MetaDataRepository.instance().isClassOnWhiteList(m_className)) {
             try {
-                propertyType = BeanHelper.getPropertyType(Class.forName(m_className), m_propertyName);
-            } catch (Exception e) {
+                Class<?> beanClass = Class.forName(m_className);
+                propertyType = BeanHelper.getPropertyType(beanClass, m_propertyName);
+            }
+            catch (Exception e) {
                 // do nothing
                 if (log.isDebugEnabled())
                     log.debug("Error in determining the property type", e);
