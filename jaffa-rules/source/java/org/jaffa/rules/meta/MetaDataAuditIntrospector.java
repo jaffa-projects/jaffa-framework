@@ -88,56 +88,6 @@ public class MetaDataAuditIntrospector extends MetaDataIntrospector {
     }
 
 
-    /** Returns the audit info for all the properties within a Class.
-     * @return the audit info for all the properties within a Class.
-     */
-    public Map<String, Properties> getAuditInfoForProperties() {
-        Map<String, Properties> output = null;
-        Map<String, RuleMetaData> ruleMap = findPropertyRuleMap(m_className, m_obj, "audit");
-        if (ruleMap != null) {
-            for (Map.Entry<String, RuleMetaData> me : ruleMap.entrySet()) {
-                String propertyName = me.getKey();
-                if (propertyName != null) {
-                    Properties info = ruleToProperties(me.getValue());
-
-                    //Copy all the property-info
-                    Properties propertyInfo = findInfo(m_className, propertyName, m_obj, "property-info");
-                    if (propertyInfo != null)
-                        info.putAll(propertyInfo);
-
-                    // Add 'name' to the info
-                    if (info.getProperty("name") == null)
-                        info.setProperty("name", propertyName);
-
-                    // Add the data-type
-                    RuleMetaData rule = findRule(m_className, propertyName, m_obj, "data-type");
-                    String dataType = rule != null ? Defaults.getClassString(rule.getParameter(RuleMetaData.PARAMETER_VALUE)) : null;
-                    if (dataType == null) {
-                        // Check the actual Class, if the data-type rule is not defined
-                        try {
-                            dataType = BeanHelper.getPropertyType(Class.forName(m_className), m_propertyName).getName();
-                        } catch (Exception e) {
-                            // do nothing
-                            if (log.isDebugEnabled())
-                                log.debug("Error in determining the property type", e);
-                        }
-                    }
-                    info.setProperty("data-type", dataType != null ? dataType : String.class.getName());
-
-                    // Add the layout
-                    rule = findRule(m_className, propertyName, m_obj, "layout");
-                    if (rule != null)
-                        info.setProperty("layout", rule.getParameter(RuleMetaData.PARAMETER_VALUE));
-
-                    if (output == null)
-                        output = new LinkedHashMap<String, Properties>();
-                    output.put(propertyName, info);
-                }
-            }
-        }
-        return output;
-    }
-
     /** Returns debug info.
      * @return debug info.
      */

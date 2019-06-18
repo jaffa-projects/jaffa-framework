@@ -607,6 +607,23 @@ public class ClassMetaDataHelper {
     }
 
     /**
+     * Returns a "safe" class name that can be instantiated to a class
+     * via reflection without introducing a security risk.  In most cases,
+     * this will be the same as the input argument
+     * @param classNameIn the proposed class name
+     * @return a "safe" class name; null if the input argument is not
+     * considered safe.
+     */
+    public String getSafeClassName(String classNameIn) {
+        String safeClassName = classNameIn != null ? classNameIn.trim() : null;
+
+        if (!MetaDataRepository.instance().isClassOnWhiteList(safeClassName)) {
+            safeClassName = null;
+        }
+        return safeClassName;
+    }
+
+    /**
      * Write out the left hand side of an executable JavaScript assignment statement, e.g.,
      * "ClassMetaData['YourClassName'] = "
      * @param className the name of the class
