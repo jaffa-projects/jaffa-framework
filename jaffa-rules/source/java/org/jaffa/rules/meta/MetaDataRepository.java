@@ -76,6 +76,26 @@ public class MetaDataRepository extends AbstractLoader
     private static final String ATTR_LANGUAGE = "language";
     private static final String ATTR_VARIATION = "variation";
     private static final String ATTR_EXECUTION_REALM = "execution-realm";
+
+    /** The beginning of a string representing a class in the goldesp package. */
+    private static final String GOLDESP = "com.goldesp.";
+
+    /** The beginning of a string representing a class in the jaffa package. */
+    private static final String JAFFA = "org.jaffa.";
+
+    /** The beginning of a string representing a class in the mirotechnologies package. */
+    private static final String MIROTECHNOLOGIES = "com.mirotechnologies.";
+
+    /** The beginning of a string representing a class in the tapestrysolutions package. */
+    private static final String TAPESTRYSOLUTIONS = "com.tapestrysolutions.";
+
+    /** The name of a class used in testing. */
+    private static final String TEST_DUMMY = "dummy";
+
+    /** The beginning of a string representing a "virtual" class in the UserAlert package. */
+    private static final String USER_ALERT = "UserAlert.";
+
+
     private static Logger log = Logger.getLogger(MetaDataRepository.class);
     // Singleton instance
     private static MetaDataRepository c_instance = new MetaDataRepository();
@@ -483,6 +503,29 @@ public class MetaDataRepository extends AbstractLoader
         }
         return names;
     }
+
+    /**
+     * @param className the proposed class name
+     * @return true when the input is a "safe" class name that can be
+     * instantiated to a class via reflection without introducing a
+     * security risk; false otherwise.
+     */
+    public boolean isClassOnWhiteList(String className) {
+        // TODO - This method uses the private static Strings below
+        // to determine whether classes are "safe" to be instantiated via reflection.
+        // These static hard-coded constants should should be replaced
+        // by something dynamic, i.e., the acceptable class names should be
+        // retrieved from a database or some other source.
+        boolean isSafe = className != null
+                         && (className.startsWith(GOLDESP)
+                             || className.startsWith(JAFFA)
+                             || className.startsWith(MIROTECHNOLOGIES)
+                             || className.startsWith(TAPESTRYSOLUTIONS)
+                             || className.startsWith(USER_ALERT)
+                             || className.equalsIgnoreCase(TEST_DUMMY));
+        return isSafe;
+    }
+
 
     //---------------------------------------------------------------------------------
     //
