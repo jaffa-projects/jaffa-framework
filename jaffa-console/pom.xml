@@ -78,13 +78,6 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.quartz-scheduler</groupId>
-      <artifactId>quartz-oracle</artifactId>
-      <scope>provided</scope>
-    </dependency>
-	
-
-    <dependency>
       <groupId>javax.ejb</groupId>
       <artifactId>javax.ejb-api</artifactId>
       <scope>provided</scope>

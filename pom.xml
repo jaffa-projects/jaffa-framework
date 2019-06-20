@@ -216,7 +216,6 @@
         <version.org.fusesource.hawtbuf>1.9</version.org.fusesource.hawtbuf>
         <version.org.mvel.mvel2>2.1.6.Final</version.org.mvel.mvel2>
         <version.org.quartz-scheduler.quartz>2.3.0</version.org.quartz-scheduler.quartz>
-        <version.org.quartz-scheduler.quartz-oracle>2.1.7</version.org.quartz-scheduler.quartz-oracle>
         <version.org.javassist>3.18.1-GA</version.org.javassist>
         <version.org.jrobin>1.5.9</version.org.jrobin>
         <version.org.owasp.encoder>1.2</version.org.owasp.encoder>
@@ -1890,11 +1889,6 @@
                 <groupId>org.quartz-scheduler</groupId>
                 <artifactId>quartz-jobs</artifactId>
                 <version>${version.org.quartz-scheduler.quartz}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.quartz-scheduler</groupId>
-                <artifactId>quartz-oracle</artifactId>
-                <version>${version.org.quartz-scheduler.quartz-oracle}</version>
             </dependency>
             <dependency>
                 <groupId>org.mvel</groupId>
