@@ -30,7 +30,7 @@ public class LocaleResourcesLoadTest {
         LocaleResourcesManager localeResourcesManager = resourceLoaderConfig.getBean(LocaleResourcesManager.class);
         Map localeRepository = localeResourcesManager.getLocalePropertiesRepository().getMyRepository();
         assertNotNull(localeRepository);
-        assertEquals(31, localeRepository.size());
+        assertEquals(48, localeRepository.size());
         assertEquals("yyyyMMdd'T'HHmmssSSS", LocaleHelper.getProperty("ISO.datetime.short.format"));
         assertEquals("MM/dd/yyyy", LocaleHelper.getProperty("dateonly.format"));
     }
