@@ -344,13 +344,23 @@ var x = new Array(
 */
 "example2_user_playerRolesLookupConsolidatedCriteriaAndResults",
 "example2_user_playerRolesMaintenance_main",
-"example2_user_playerViewer"
+"example2_user_playerViewer",
+    "semicolon_check;SESSION_ID",
+    "equal_check=SESSION_ID",
+    "semicolon_equal_check;SESSION_ID=666",
+    "equal_semicolon_check=666;SESSION_ID"
 );
 
 // Clear cookie
-document.cookie="Sections=";
+document.cookie="Sections=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
 
 document.write("Cookie = <code>" + getCookie("Sections") + "</code><hr>");
+
+document.write("<h2>test0 - Sanitization of inputs</h2><br>");
+for(var i=0; i<x.length; i++) {
+    var name = x[i];
+    document.write(name + " is sanitized to <b>" + sanitizeName(name)  + "</b> <br> " );
+}
 
 document.write("<h2>test1 - read all cookies</h2><br>");
 for(var i=0; i<x.length; i++) {
@@ -360,7 +370,7 @@ for(var i=0; i<x.length; i++) {
 
 document.write("Cookie = <code>" + getCookie("Sections") + "</code><hr>");
 
-document.write("<h2>test 2 - update some, and overrun the bufffer</h2><br>");
+document.write("<h2>test 2 - update some, and overrun the buffer</h2><br>");
 for(var i=0; i<x.length && i<100; i++) {
   var name = x[i];
 //  if(i%2==0) {
