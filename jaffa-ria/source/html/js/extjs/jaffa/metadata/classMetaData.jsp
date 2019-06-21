@@ -5,7 +5,8 @@
 - Automatically pull in findermetadata
 --%>
 <%@ page import='org.jaffa.datatypes.Parser,
-org.jaffa.ria.metadata.ClassMetaDataHelper' %>
+org.jaffa.ria.metadata.ClassMetaDataHelper,
+org.jaffa.util.StringHelper' %>
 
 <%
   ClassMetaDataHelper classMetaDataHelper = new ClassMetaDataHelper();
@@ -29,6 +30,7 @@ org.jaffa.ria.metadata.ClassMetaDataHelper' %>
     }
   }
   else { // Either an empty entry or a potentially unsafe class
-    out.write("Unrecognized class name: " + classNameFromRequest);
+    out.write("Unrecognized class name: " +
+              StringHelper.escapeHtml(classNameFromRequest));
   }
 %>

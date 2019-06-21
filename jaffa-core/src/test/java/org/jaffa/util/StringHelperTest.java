@@ -19,4 +19,16 @@ public class StringHelperTest {
         assertTrue(result.contains("two,"));
         assertTrue(result.contains("three]"));
     }
+
+    @Test public void testEncodeHtml() {
+        String encoded = StringHelper.escapeHtml(null);
+        assertNotNull(encoded);
+        assertTrue(encoded.contains("null"));
+        encoded = StringHelper.escapeHtml("bob");
+        assertEquals("bob", encoded);
+        encoded = StringHelper.escapeHtml("<script>");
+        assertNotEquals("<script>", encoded);
+        assertTrue(encoded.contains("script"));
+        assertFalse(encoded.contains("<"));
+    }
 }

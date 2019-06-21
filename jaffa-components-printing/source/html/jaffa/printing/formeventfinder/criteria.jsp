@@ -25,7 +25,7 @@
         </td>
     </tr>
     </Portlet:Property>
-    <!--
+    <%--
     <Portlet:Property field='description'>
     <tr> 
         <td class='label'>
@@ -39,7 +39,7 @@
         </td>
     </tr>
     </Portlet:Property>
-    -->
+    --%>
     <tr>
         <td class='label'><Portlet:Label key="label.Jaffa.Inquiry.export"/>:</td>
         <td colspan="2">

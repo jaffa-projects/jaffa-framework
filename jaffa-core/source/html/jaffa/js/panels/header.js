@@ -511,8 +511,25 @@ function setDefaultState(spanId,imageName) {
   }
 }
 
+// Ensures that the user input does not contain unexpected semicolon ';' or equals signs '='
+function sanitizeName(name) {
+  var truncationIndex = name.indexOf(";");
+  var equalIndex = name.indexOf("=");
+  // Cut away anything that follows ";" or "=", whichever appears first,
+  // to help avoid potential security risks
+  if ((truncationIndex < 0) ||
+      (equalIndex >= 0 && equalIndex < truncationIndex)) {
+    truncationIndex = equalIndex;
+  }
+  if (truncationIndex >= 0) {
+    name = name.substring(0, truncationIndex);
+  }
+  return name;
+}
+
 // Only store collapsed sections. Expanded should be "O"pen or "C"losed
 function setExpanded(name, expanded) {
+  name = sanitizeName(name);
   var secs = getCookie("Sections");
   if(secs==null||secs=="") secs="|";
   var i=secs.indexOf("|"+name+":");
@@ -524,6 +541,7 @@ function setExpanded(name, expanded) {
 // See if a section is expanded and move cookie to top of the list
 // returns "" if there is no cookie,"O" it it should be open or "C" it it should be closed
 function isExpanded(name) {
+  name = sanitizeName(name);
   var secs = getCookie("Sections");
   if(secs==null||secs=="") secs="|";
   var i=secs.indexOf("|"+name+":");
