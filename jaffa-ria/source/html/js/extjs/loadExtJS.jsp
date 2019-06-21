@@ -73,7 +73,7 @@ if(currentLocale != null){
         log.debug("Request ExtJS Language Resources for " + currentLocale);
         String langFilePath="/js/extjs/locale/ext-lang-"+ currentLocale +".js";
 %>
-        <!-- Locale Resources for <%= currentLocale %>] -->
+        <%-- Locale Resources for <%= currentLocale %>] --%>
         <jwr:script src="<%= langFilePath %>"/>
 <%
 }
