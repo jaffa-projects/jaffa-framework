@@ -7,6 +7,7 @@
 <%@ page import="org.apache.log4j.Logger" %>
 <%@ page import="org.jaffa.ria.metadata.ClassMetaDataHelper" %>
 <%@ page import="org.jaffa.ria.metadata.RuleMetaDataHelper" %>
+<%@ page import="org.jaffa.util.StringHelper" %>
 
 <%!
 private static final Logger log = Logger.getLogger("js.extjs.jaffa.metadata.classMetaData");
@@ -26,6 +27,7 @@ private static final Logger log = Logger.getLogger("js.extjs.jaffa.metadata.clas
     ruleMetaDataHelper.showRules(className, out);
   }
   else { // Either an empty entry or a potentially unsafe class
-    out.write("Unrecognized class name: " + classNameFromRequest);
+    out.write("Unrecognized class name: " +
+              StringHelper.escapeHtml(classNameFromRequest));
   }
 %>
