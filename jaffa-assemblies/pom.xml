@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.jaffa</groupId>
     <artifactId>jaffa-framework</artifactId>
-    <version>8.1.3-SNAPSHOT</version>
+    <version>8.1.3</version>
   </parent>
 
   <groupId>org.jaffa.assemblies</groupId>
