@@ -52,6 +52,7 @@ package org.jaffa.rules.realm;
 import org.apache.log4j.Logger;
 import org.jaffa.rules.JaffaRulesFrameworkException;
 import org.jaffa.rules.commons.AbstractLoader;
+import org.jaffa.rules.meta.MetaDataRepository;
 import org.jaffa.rules.meta.RuleMetaData;
 import org.w3c.dom.Element;
 
@@ -393,7 +394,7 @@ public class RealmRepository extends AbstractLoader {
         if (log.isDebugEnabled())
             log.debug("Finding realm for " + className);
 
-        // Match the input class with the regex expressions in the reposiory
+        // Match the input class with the regex expressions in the repository
         for (Realm realm : m_realms) {
             if (realm.getClassRegexes() != null) {
                 for (String classRegex : realm.getClassRegexes()) {
@@ -409,23 +410,29 @@ public class RealmRepository extends AbstractLoader {
 
         // If no match is found, then invoke findRecursively() for the super class
         String output = null;
-        try {
-            Class clazz = Class.forName(className);
-            if (clazz.getSuperclass() != null)
-                output = findRecursively(clazz.getSuperclass().getName());
+        if (MetaDataRepository.instance().isClassOnWhiteList(className)) {
+            try {
+                Class clazz = Class.forName(className);
+                if (clazz.getSuperclass() != null)
+                    output = findRecursively(clazz.getSuperclass().getName());
 
-            // If no match is found, then invoke findRecursively() for all the implemented interfaces
-            if (output == null && clazz.getInterfaces() != null) {
-                for (int i = 0; i < clazz.getInterfaces().length; i++) {
-                    output = findRecursively(clazz.getInterfaces()[i].getName());
-                    if (output != null)
-                        break;
+                // If no match is found, then invoke findRecursively() for all the implemented interfaces
+                if (output == null && clazz.getInterfaces() != null) {
+                    for (int i = 0; i < clazz.getInterfaces().length; i++) {
+                        output = findRecursively(clazz.getInterfaces()[i].getName());
+                        if (output != null)
+                            break;
+                    }
                 }
             }
-        } catch (ClassNotFoundException e) {
-            // Could be a virtual class
-            if (log.isDebugEnabled())
-                log.debug("Assuming virtual class for " + className);
+            catch (ClassNotFoundException e) {
+                // Could be a virtual class
+                if (log.isDebugEnabled())
+                    log.debug("Assuming virtual class for " + className);
+            }
+        }
+        else  if (className != null) {
+            log.warn(className + " is not on the white list of allowable classes.");
         }
         return output;
     }
