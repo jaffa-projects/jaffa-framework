@@ -598,6 +598,7 @@ Jaffa.form.FinderComboBox = Ext.extend(Ext.form.ComboBox, {
 
     // setup the baseParams
     this.setUpBaseParams();
+    this.triggerClick = true;
     Jaffa.form.FinderComboBox.superclass.onTriggerClick.call(this);
   }
   
@@ -614,6 +615,38 @@ Jaffa.form.FinderComboBox = Ext.extend(Ext.form.ComboBox, {
     this.applyCriteriaFields(this.store.baseParams);
     this.fireEvent('beforeautoselectquery', this, this.store.baseParams, false);
     delete this.store.baseParams[this.valueField];    
+  }
+  ,onLoad : function(){
+    if(!this.hasFocus){
+      return;
+    }
+    if(this.store.getCount() > 0 || this.listEmptyText){
+      this.expand();
+      if(this.lastQuery || (this.triggerClick && this.value)){
+        this.store.filter(this.displayField, this.lastQuery || (this.triggerClick && this.value));
+      } else {
+        this.store.clearFilter();
+      }
+      this.triggerClick = false;
+      this.restrictHeight();
+      if(this.lastQuery == this.allQuery){
+        if(this.editable){
+          this.el.dom.select();
+        }
+        if(this.autoSelect !== false && !this.selectByValue(this.value, true)){
+          this.select(0, true);
+        }
+      } else {
+        if(this.autoSelect !== false){
+          this.selectNext();
+        }
+        if(this.typeAhead && this.lastKey != Ext.EventObject.BACKSPACE && this.lastKey != Ext.EventObject.DELETE){
+          this.taTask.delay(this.typeAheadDelay);
+        }
+      }
+    } else {
+      this.collapse();
+    }
   }
 
   ,applyCriteriaFields: function(baseParams){
