@@ -431,9 +431,6 @@ public class RealmRepository extends AbstractLoader {
                     log.debug("Assuming virtual class for " + className);
             }
         }
-        else  if (className != null) {
-            log.warn(className + " is not on the white list of allowable classes.");
-        }
         return output;
     }
 
