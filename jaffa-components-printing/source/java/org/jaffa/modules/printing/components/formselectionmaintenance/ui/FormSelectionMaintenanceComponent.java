@@ -1420,7 +1420,15 @@ public class FormSelectionMaintenanceComponent extends FinderComponent2 {
                         m_tx.dispatchPrintRequest(createPrintRequestObject(gridModelRow, false));
                     }
                 } catch (Exception ex) {
-                    appExps.add(new ApplicationException(ex.getMessage()));
+                    if(ex instanceof ApplicationExceptions){
+                        for(ApplicationException appExp : ((ApplicationExceptions)ex).getApplicationExceptionArray()){
+                            appExps.add(appExp);
+                        }
+                    }else if(ex instanceof ApplicationException){
+                        appExps.add((ApplicationException)ex);
+                    }else {
+                        appExps.add(new ApplicationException(ex.getMessage()));
+                    }
                 }
             }
         } else {
