@@ -364,21 +364,23 @@ public class JDBCLogger {
 
 		ResultSetMetaData rsmd = rs.getMetaData();
 
-		num = rsmd.getColumnCount();
+		if (rsmd != null) {
+			num = rsmd.getColumnCount();
 
-		logcols = new ArrayList(num);
+			logcols = new ArrayList(num);
 
-		for (int i = 1; i <= num; i++) {
-			logcol = new JDBCLogColumn();
-			logcol.name = rsmd.getColumnName(i).toUpperCase();
-			logcol.sqlType = rsmd.getColumnType(i);
-			logcol.type = rsmd.getColumnTypeName(i);
-			logcol.nullable = (rsmd.isNullable(i) == ResultSetMetaData.columnNullable);
-			logcol.isWritable = rsmd.isWritable(i);
-			if (!logcol.isWritable) {
-				logcol.ignore = true;
+			for (int i = 1; i <= num; i++) {
+				logcol = new JDBCLogColumn();
+				logcol.name = rsmd.getColumnName(i).toUpperCase();
+				logcol.sqlType = rsmd.getColumnType(i);
+				logcol.type = rsmd.getColumnTypeName(i);
+				logcol.nullable = (rsmd.isNullable(i) == ResultSetMetaData.columnNullable);
+				logcol.isWritable = rsmd.isWritable(i);
+				if (!logcol.isWritable) {
+					logcol.ignore = true;
+				}
+				logcols.add(logcol);
 			}
-			logcols.add(logcol);
 		}
 
 		table = _table;

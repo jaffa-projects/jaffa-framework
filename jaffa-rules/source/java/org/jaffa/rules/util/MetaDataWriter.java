@@ -152,7 +152,9 @@ public class MetaDataWriter {
                 if (!customProcess) {
                     if (params != null) {
                         for (Map.Entry<String, String> param : params.entrySet()) {
-                            if (ruleInfo.getTextParameter() != null && ruleInfo.getTextParameter().equals(param.getKey())) {
+                            if (ruleInfo != null && ruleInfo.getTextParameter() != null &&
+                                ruleInfo.getTextParameter().equals(param.getKey()))
+                            {
                                 propertyRule.setTextContent(param.getValue());
                             } else {
                                 propertyRule.setAttribute(param.getKey(), param.getValue());
@@ -193,7 +195,9 @@ public class MetaDataWriter {
                         Map<String, String> params = rule.getParameters();
                         if (params != null) {
                             for (Map.Entry<String, String> param : params.entrySet()) {
-                                if (ruleInfo.getTextParameter() != null && ruleInfo.getTextParameter().equals(param.getKey())) {
+                                if (ruleInfo != null && ruleInfo.getTextParameter() != null &&
+                                    ruleInfo.getTextParameter().equals(param.getKey()))
+                                {
                                     propertyRule.setTextContent(param.getValue());
                                 } else {
                                     propertyRule.setAttribute(param.getKey(), param.getValue());

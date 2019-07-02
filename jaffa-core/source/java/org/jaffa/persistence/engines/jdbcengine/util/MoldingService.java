@@ -140,13 +140,13 @@ public class MoldingService {
                 field.set(object, value);
             } else {
                 Method method = (Method) setter;
-                if (value != null && value.getClass() != method.getParameterTypes()[0]) {
-                    String layout = null;
-                    if (value instanceof Boolean)
-                        layout = '[' + classMetaData.getSqlType(attributeName).toLowerCase() + ']';
-                    value = DataTypeMapper.instance().map(value, method.getParameterTypes()[0], layout);
-                }
                 if (method != null) {
+                    if (value != null && value.getClass() != method.getParameterTypes()[0]) {
+                        String layout = null;
+                        if (value instanceof Boolean)
+                            layout = '[' + classMetaData.getSqlType(attributeName).toLowerCase() + ']';
+                        value = DataTypeMapper.instance().map(value, method.getParameterTypes()[0], layout);
+                    }
                     method.invoke(object, value);
                 }
             }
