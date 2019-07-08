@@ -223,6 +223,10 @@ direction: rtl!important;
 .x-grid-panel{
 	direction:rtl;
 }
+/* Right to left text alignment inside the bracket() */
+.x-form-item .x-form-item-description{
+    float:right;
+}
 
 /*************************************************************************************************************************
 **************************  Common code for all over the application End here  ************************************
