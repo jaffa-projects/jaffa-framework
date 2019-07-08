@@ -69,7 +69,7 @@ public interface ServiceCallback {
         }
         SessionManager.getSession(getApplicationRule("user.sessionId")).addCallbackHandler(this);
     }
-    default void quitService(){
+    default void quitService(String userId){
         if(log.isDebugEnabled()){
             log.debug("Service Destroyed");
         }

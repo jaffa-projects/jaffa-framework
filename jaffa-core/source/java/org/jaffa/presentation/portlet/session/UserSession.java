@@ -321,7 +321,7 @@ public class UserSession implements HttpSessionBindingListener {
         }
         if(m_serviceCallbackList != null && m_serviceCallbackList.size() > 0){
             for(ServiceCallback serviceCallBack : m_serviceCallbackList){
-                serviceCallBack.quitService();
+                serviceCallBack.quitService(this.getUserId());
             }
             m_serviceCallbackList.clear();
         }
