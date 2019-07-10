@@ -225,7 +225,7 @@ public class CheckPolicy extends HttpServlet {
             for (int i = 0; i < funcs.length; i++) {
                 if (!bfuncs.contains(funcs[i])) {
                     m_compErrors.put(comp, funcs[i]);
-                    log.error("Function '" + funcs[i] + "' on Component '" + comp + "' is Not Valid!");
+                    log.warn("Function '" + funcs[i] + "' on Component '" + comp + "' is Not Valid!");
                 }
             }
         }
@@ -236,7 +236,7 @@ public class CheckPolicy extends HttpServlet {
             for (GrantFunctionAccess grantFunctionAccess: role.getGrantFunctionAccess()) {
                 if (!bfuncs.contains(grantFunctionAccess.getName())) {
                     m_roleErrors.put(role.getName(), grantFunctionAccess.getName());
-                    log.error("Business Function '" + grantFunctionAccess.getName() + "' in Role '" + role + "' is Not Valid!");
+                    log.warn("Business Function '" + grantFunctionAccess.getName() + "' in Role '" + role + "' is Not Valid!");
                 }
             }
         }
