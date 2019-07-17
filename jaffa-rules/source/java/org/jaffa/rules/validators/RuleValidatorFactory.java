@@ -258,7 +258,7 @@ public class RuleValidatorFactory extends RuleActorFactory<Validator> implements
                                     } else {
                                         // if a validator of the same type exists in the batch, extract the rule meta
                                         /// data and append to the existing property map
-                                        appendPropertyRule(resultValidator, foundValidator, ruleMap);
+                                        appendPropertyRule(resultValidator, foundValidator, ruleMap,propertyMetaData.getName());
                                     }
                                 }
                             } catch (Exception e) {
@@ -297,14 +297,14 @@ public class RuleValidatorFactory extends RuleActorFactory<Validator> implements
      * @param foundValidator
      * @param ruleMap
      */
-    private void appendPropertyRule(BatchValidator<?> resultValidator, RuleValidator foundValidator, Map<String, List<RuleMetaData>> ruleMap) {
+    private void appendPropertyRule(BatchValidator<?> resultValidator, RuleValidator foundValidator, Map<String, List<RuleMetaData>> ruleMap, String propertyName) {
         for (Validator<?> aValidator : resultValidator.getValidatorSet()) {
             if (aValidator instanceof RuleValidator) {
                 RuleValidator existingValidator = (RuleValidator) aValidator;
                 if (existingValidator.getName().equalsIgnoreCase(foundValidator.getName())) {
-                    for (String propertyName : ruleMap.keySet()) {
-                        List<RuleMetaData> ruleList = (List<RuleMetaData>) existingValidator.getRuleMap().get(propertyName);
-                        if (ruleList != null) {
+                    List<RuleMetaData> ruleList = (List<RuleMetaData>) existingValidator.getRuleMap().get(propertyName);
+                    if (ruleList != null) {
+                        if(!ruleList.containsAll(ruleMap.get(propertyName))) {
                             ruleList.addAll(ruleMap.get(propertyName));
                         }
                     }
