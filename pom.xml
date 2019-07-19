@@ -276,9 +276,12 @@
         <version.site.plugin>3.3</version.site.plugin>
         <version.sonar.plugin>2.4</version.sonar.plugin>
         <version.source.plugin>2.2.1</version.source.plugin>
-        <version.surefire.plugin>2.15</version.surefire.plugin>
+        <version.surefire.plugin>2.20.1</version.surefire.plugin>
         <version.taglist.plugin>2.4</version.taglist.plugin>
         <version.war.plugin>2.1.1</version.war.plugin>
+
+        <version.jacoco-maven-plugin>0.8.2</version.jacoco-maven-plugin>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- ******************************************************************* -->
         <!-- Testing versions                                                    -->
@@ -1002,6 +1005,8 @@
                     <configuration>
                         <forkCount>1</forkCount>
                         <reuseForks>true</reuseForks>
+                        <!-- Additional surefire args go after ${surefireArgLine} below -->
+                        <argLine>${surefireArgLine}</argLine>
                     </configuration>
                     <executions>
                         <execution>
@@ -2049,6 +2054,54 @@
                     <name>!minimalistic</name>
                 </property>
             </activation>
+            <modules>
+                <module>jaffa-api</module>
+                <module>jaffa-assemblies</module>
+                <module>jaffa-components</module>
+                <module>jaffa-components-admin</module>
+                <module>jaffa-components-messaging</module>
+                <module>jaffa-components-printing</module>
+                <module>jaffa-components-scheduler</module>
+                <module>jaffa-components-user</module>
+                <module>jaffa-console</module>
+                <module>jaffa-core</module>
+                <module>jaffa-dwr</module>
+                <module>jaffa-patterngenerator</module>
+                <module>jaffa-ria</module>
+                <module>jaffa-rules</module>
+                <module>jaffa-soa</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>jacoco</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>${version.jacoco-maven-plugin}</version>
+                        <executions>
+                            <execution>
+                                <id>prepare-agent</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                                <configuration>
+                                    <propertyName>surefireArgLine</propertyName>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>report</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
             <modules>
                 <module>jaffa-api</module>
                 <module>jaffa-assemblies</module>
