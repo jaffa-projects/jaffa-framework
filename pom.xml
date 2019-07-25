@@ -1002,21 +1002,6 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${version.surefire.plugin}</version>
-                    <configuration>
-                        <forkCount>1</forkCount>
-                        <reuseForks>true</reuseForks>
-                        <!-- Additional surefire args go after ${surefireArgLine} below -->
-                        <argLine>${surefireArgLine}</argLine>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>package</id>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>test</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -2076,6 +2061,19 @@
         <profile>
             <id>jacoco</id>
             <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-surefire-plugin</artifactId>
+                            <version>${version.surefire.plugin}</version>
+                            <configuration>
+                                <!-- Additional surefire args go after ${surefireArgLine} below -->
+                                <argLine>${surefireArgLine}</argLine>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
                 <plugins>
                     <plugin>
                         <groupId>org.jacoco</groupId>
