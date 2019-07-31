@@ -88,20 +88,6 @@
       <artifactId>log4j-1.2-api</artifactId>
       <scope>provided</scope>
     </dependency>
-    <!-- ******************************************************************* -->
-    <!-- Test Libraries                                                      -->
-    <!-- ******************************************************************* -->
-    <!--<dependency>
-      <groupId>org.jaffa</groupId>
-      <artifactId>jaffa-tools</artifactId>
-      <scope>test</scope>
-    </dependency>-->
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <build>
