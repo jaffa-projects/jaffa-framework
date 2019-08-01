@@ -179,12 +179,10 @@ public class AuditLogger implements IPersistenceLoggingPlugin {
             boolean doAudit = changeType == ChangeType.INSERT || changeType == ChangeType.DELETE;
             if (changeType == ChangeType.UPDATE) {
                 // In update-mode, auditing is required only if one of the audit fields has changed
-                if (auditInfoMap != null) {
-                    for (String propertyName : auditInfoMap.keySet()) {
-                        if (object.isModified(propertyName) || object.isModified(StringHelper.getUpper1(propertyName))) {
-                            doAudit = true;
-                            break;
-                        }
+                for (String propertyName : auditInfoMap.keySet()) {
+                    if (object.isModified(propertyName) || object.isModified(StringHelper.getUpper1(propertyName))) {
+                        doAudit = true;
+                        break;
                     }
                 }
 
@@ -216,9 +214,7 @@ public class AuditLogger implements IPersistenceLoggingPlugin {
                 String objectId = createAuditTransactionObject(auditInfo.getProperty("name"), changeType);
 
                 // Create AuditTransactionField instances
-                if (auditInfoMap != null) {
-                    createAuditTransactionFields(objectId, object, auditInfoMap, flexBean, auditInfoOfFlexFields);
-                }
+                createAuditTransactionFields(objectId, object, auditInfoMap, flexBean, auditInfoOfFlexFields);
             } else {
                 if (log.isDebugEnabled())
                     log.debug("Audit logging not required since none of the auditable fields have changed in " + object);

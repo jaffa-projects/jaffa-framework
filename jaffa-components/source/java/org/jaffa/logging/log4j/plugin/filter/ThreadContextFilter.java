@@ -126,11 +126,7 @@ public class ThreadContextFilter extends ThreadContextMapFilter {
             keyValues.add(this.getStringMap().getKeyAt(i));
             keyTypes.add((Class<String>) this.getStringMap().getKeyAt(i).getClass());
             final Object mdcValue = data.getValue(this.getStringMap().getKeyAt(i));
-            List value = this.getStringMap().getValueAt(i);
-
-            if (value != null && value.size() > 0) {
-                setExpression((String)value.get(0));
-            }
+            setExpression((String) ((List) this.getStringMap().getValueAt(i)).get(0));
             mdcValues.add(mdcValue);
             match = evaluate(getExpressionEvaluator(keyTypes, keyValues.toArray(new String[0])), mdcValues);
             if (!this.isAnd() && match || this.isAnd() && !match) {

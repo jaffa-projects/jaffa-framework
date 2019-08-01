@@ -178,11 +178,6 @@ public final class JaffaConnectionFactory {
         final ConnectionFactory connectionFactory = JaffaConnectionFactory
             .obtainConnectionFactory();
 
-        if (connectionFactory == null) {
-          throw new JaffaMessagingFrameworkException(
-                  JaffaMessagingFrameworkException.CONNECTION_ERROR, null);
-        }
-
         final JmsConfig jmsConfig = ConfigurationService.getInstance()
             .getJmsConfig();
         if (jmsConfig == null || jmsConfig.getUser() == null)

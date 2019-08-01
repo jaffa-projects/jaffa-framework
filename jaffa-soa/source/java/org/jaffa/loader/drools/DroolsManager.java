@@ -330,10 +330,7 @@ public class DroolsManager {
     public String getServiceName(String path) {
         if (path != null && !"".equals(path)) {
             String temp = new File(path).getParent();
-
-            if (temp != null) {
-                return temp.substring(temp.lastIndexOf(File.separator) + 1);
-            }
+            return temp.substring(temp.lastIndexOf(File.separator) + 1);
         }
 
         return null;
@@ -349,10 +346,8 @@ public class DroolsManager {
         try {
             if (path != null && !"".equals(path)) {
                 String temp = new File(path).getParent();
-                if (temp != null) {
-                    temp = temp.substring(0, temp.indexOf("!" + File.separator + "META-INF" + File.separator + "rules"));
-                    return temp.substring(temp.lastIndexOf(File.separator) + 1, temp.length() - 4);
-                }
+                temp = temp.substring(0, temp.indexOf("!" + File.separator + "META-INF" + File.separator + "rules"));
+                return temp.substring(temp.lastIndexOf(File.separator) + 1, temp.length() - 4);
             }
         }catch(Exception e){
             log.error("Error in getting module name from path " + path);

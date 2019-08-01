@@ -54,10 +54,8 @@ public class SchedulerXmlLoadTest {
         Task poller = schedulerManager.getSchedulerTaskByTypeName("SOAEventPoller");
         assertNotNull(poller);
         assertEquals("org.jaffa.soa.services.SOAEventPoller", poller.getDataBean());
-        Task task = schedulerManager.getSchedulerTaskByTypeName("TransactionDependencySweeper");
-        assertNotNull(task);
         assertEquals("org.jaffa.transaction.services.TransactionDependencySweeper",
-                     task.getDataBean());
+                schedulerManager.getSchedulerTaskByTypeName( "TransactionDependencySweeper").getDataBean());
     }
 
     /**

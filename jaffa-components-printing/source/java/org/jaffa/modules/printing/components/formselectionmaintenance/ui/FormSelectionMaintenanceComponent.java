@@ -1006,14 +1006,10 @@ public class FormSelectionMaintenanceComponent extends FinderComponent2 {
         formPrintRequest.setKeys(keys);
 
         if (showForm) {
-            formPrintRequest.setPrintCopies(0);
+            formPrintRequest.setPrintCopies(new Integer(0));
         } else {
             formPrintRequest.setEmailToAddresses(mEmail.getValue());
-            String copiesValue = mCopies.getValue();
-
-            if (copiesValue != null) {
-                formPrintRequest.setPrintCopies(Integer.valueOf(copiesValue));
-            }
+            formPrintRequest.setPrintCopies(new Integer(mCopies.getValue()));
             formPrintRequest.setPrinterId(mPrinter.getValue());
         }
 

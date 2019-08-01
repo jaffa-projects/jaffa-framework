@@ -177,9 +177,8 @@ public class CustomRequestProcessor extends TilesRequestProcessor {
         boolean isMultipart = false;
 
         if ((contentType != null)
-            && (contentType.startsWith("multipart/form-data"))
-            && (method != null)
-            && method.equalsIgnoreCase("POST")) {
+        && (contentType.startsWith("multipart/form-data"))
+        && (method.equalsIgnoreCase("POST"))) {
 
             // Get the ActionServletWrapper from the form bean
             ActionServletWrapper servlet;

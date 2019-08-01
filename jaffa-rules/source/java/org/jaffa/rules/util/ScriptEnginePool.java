@@ -122,9 +122,7 @@ public class ScriptEnginePool {
             scriptEngine = engineManager.getEngineByName(language);
         }
 
-        if (scriptEngine != null) {
-            initEngine(scriptEngine, vars);
-        }
+        initEngine(scriptEngine, vars);
 
         return scriptEngine;
     }

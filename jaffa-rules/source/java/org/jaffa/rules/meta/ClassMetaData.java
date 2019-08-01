@@ -156,7 +156,7 @@ public class ClassMetaData extends MetaData {
                     i.remove();
                 } else {
                     Rule ruleInfo = RuleRepository.instance().getRuleByName(ruleName);
-                    if (ruleInfo != null && !ruleInfo.isInheritable()) {
+                    if (!ruleInfo.isInheritable()) {
                         if (log.isDebugEnabled())
                             log.debug(inheritedRule + " excluded as per the 'inheritable' attribute in the rulemeta " + ruleInfo);
                         i.remove();
