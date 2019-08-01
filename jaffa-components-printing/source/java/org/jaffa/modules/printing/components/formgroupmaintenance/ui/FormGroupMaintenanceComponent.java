@@ -402,15 +402,7 @@ public class FormGroupMaintenanceComponent extends MaintComponent2 {
                 if( m_relatedObjectFormUsageDto[j].getEventName().equals( ((String)row.getElement("eventName")) )){
                     m_relatedObjectFormUsageDto[j].setFormAlternate(((EditBoxModel)row.getElement("formAlternate")).getValue());
                     try{
-                        EditBoxModel copiesElement = (EditBoxModel) row.getElement("copies");
-                        if (copiesElement == null) {
-                            throw new ApplicationExceptions(new ApplicationException("exception.Jaffa.Printing.FormGroupMaintenance.copiesValidation") {});
-                        }
-                        String copies = copiesElement.getValue();
-                        if (copies == null) {
-                            throw new ApplicationExceptions(new ApplicationException("exception.Jaffa.Printing.FormGroupMaintenance.copiesValidation") {});
-                        }
-                        m_relatedObjectFormUsageDto[j].setCopies(Long.valueOf(copies));
+                        m_relatedObjectFormUsageDto[j].setCopies(new Long(((EditBoxModel)row.getElement("copies")).getValue()));
                     }catch(NumberFormatException ne){
                         throw new ApplicationExceptions(new ApplicationException("exception.Jaffa.Printing.FormGroupMaintenance.copiesValidation") {});
                     }

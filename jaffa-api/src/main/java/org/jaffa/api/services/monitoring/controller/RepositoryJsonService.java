@@ -309,7 +309,7 @@ public class RepositoryJsonService implements IRepositoryJsonService {
 
         Set<String> keySet = queryParams.keySet();
 
-        if (maxSalience != null && validQueryParameters(keySet)) {
+        if (validQueryParameters(keySet)) {
 
             if (keySet.contains(KEY_BEGINS_WITH) || keySet.contains(KEY_BEGIN_WITH)) {
                 List<String> keyBeginsWithList = queryParams.get(KEY_BEGINS_WITH);

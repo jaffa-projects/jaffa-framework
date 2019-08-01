@@ -98,14 +98,12 @@ public class CxfFunctionGuardInterceptor extends AbstractPhaseInterceptor<Messag
         // Extract the service method from the message
         Method serviceMethod = getServiceMethod(message);
 
-        if (serviceMethod != null) {
-            try {
-                // Check if the user has been granted access to checkAccess this service
-                checkAccess(serviceMethod);
-            } catch (AccessControlException | ApplicationExceptions | FrameworkException exception) {
-                log.error("checkAccess threw exception: " + exception);
-                throw new Fault(exception);
-            }
+        try {
+            // Check if the user has been granted access to checkAccess this service
+            checkAccess(serviceMethod);
+        } catch (AccessControlException | ApplicationExceptions | FrameworkException exception) {
+            log.error("checkAccess threw exception: " + exception);
+            throw new Fault(exception);
         }
     }
 

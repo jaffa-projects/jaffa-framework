@@ -178,7 +178,7 @@ public class ScriptHelper {
             }
 
             // Evaluate the expression
-            if (scriptEngine != null && expression != null) {
+            if (expression != null) {
                 if (log.isDebugEnabled()) {
                     log.debug("Evaluating the expression '" + expression + '\'');
                 }

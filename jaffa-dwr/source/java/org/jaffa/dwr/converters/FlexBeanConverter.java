@@ -151,28 +151,26 @@ public class FlexBeanConverter extends BeanConverter {
                 inctx.addConverted(iv, paramType, bean);
             }
 
-            if (bean != null) {
-                for (Iterator it = tokens.entrySet().iterator(); it.hasNext();) {
-                    Map.Entry entry = (Map.Entry) it.next();
-                    String key = (String) entry.getKey();
-                    String val = (String) entry.getValue();
-                    Property property = (Property) properties.get(key);
-                    if (property == null) {
-                        // CUSTOM CODE: Instead of logging a warning, assume that the inbound token
-                        // is valid, and create a descriptor for it, such that it invokes the setter
-                        // on the FlexBean
-                        Class propType = bean.getDynaClass() != null && bean.getDynaClass().getDynaProperty(key) != null ? bean.getDynaClass().getDynaProperty(key).getType() : String.class;
-                        property = new FlexDescriptor(key, propType);
-                    }
-                    Class propType = property.getPropertyType();
-                    String[] split = ParseUtil.splitInbound(val);
-                    String splitValue = split[LocalUtil.INBOUND_INDEX_VALUE];
-                    String splitType = split[LocalUtil.INBOUND_INDEX_TYPE];
-                    InboundVariable nested = new InboundVariable(iv.getLookup(), null, splitType, splitValue);
-                    TypeHintContext incc = createTypeHintContext(inctx, property);
-                    Object output = converterManager.convertInbound(propType, nested, inctx, incc);
-                    property.setValue(bean, output);
+            for (Iterator it = tokens.entrySet().iterator(); it.hasNext();) {
+                Map.Entry entry = (Map.Entry) it.next();
+                String key = (String) entry.getKey();
+                String val = (String) entry.getValue();
+                Property property = (Property) properties.get(key);
+                if (property == null) {
+                    // CUSTOM CODE: Instead of logging a warning, assume that the inbound token
+                    // is valid, and create a descriptor for it, such that it invokes the setter
+                    // on the FlexBean
+                    Class propType = bean.getDynaClass() != null && bean.getDynaClass().getDynaProperty(key) != null ? bean.getDynaClass().getDynaProperty(key).getType() : String.class;
+                    property = new FlexDescriptor(key, propType);
                 }
+                Class propType = property.getPropertyType();
+                String[] split = ParseUtil.splitInbound(val);
+                String splitValue = split[LocalUtil.INBOUND_INDEX_VALUE];
+                String splitType = split[LocalUtil.INBOUND_INDEX_TYPE];
+                InboundVariable nested = new InboundVariable(iv.getLookup(), null, splitType, splitValue);
+                TypeHintContext incc = createTypeHintContext(inctx, property);
+                Object output = converterManager.convertInbound(propType, nested, inctx, incc);
+                property.setValue(bean, output);
             }
             return bean;
         } catch (MarshallException ex) {

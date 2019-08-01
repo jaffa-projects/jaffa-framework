@@ -246,8 +246,7 @@ public class FinderMetaDataHelper {
           String serviceMethodName = getServiceMethodName(serviceClass, graphBased);
           Class outputClass = getOutputClass(serviceClass, serviceMethodName, graphBased);
           Class domainClass = getDomainClass(serviceClass, outputClass, graphBased);
-          String[] keys = (domainClass == null) ? null
-                                                : getKeys(serviceClass, outputClass, domainClass, graphBased);
+          String[] keys = getKeys(serviceClass, outputClass, domainClass, graphBased);
           Map<String, Map<String, String>> fieldMap =
                   getFieldMap(serviceClass, outputClass, domainClass, graphBased, keys);
           String valueField = getValueField(parameters, keys);

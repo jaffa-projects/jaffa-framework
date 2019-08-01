@@ -146,67 +146,60 @@ public class TransactionConsumer {
                 //Load transaction configuration
                 TransactionInfo transactionInfo = ConfigurationService.getInstance().getTransactionInfo(dataBean);
 
-                if (transactionInfo != null) {
-                    // Sets Log4J's MDC to enable BusinessEventLogging
-                    LoggingService.setLoggingContext(dataBean, transactionInfo, transaction);
-                    createdLoggingContext = true;
+                // Sets Log4J's MDC to enable BusinessEventLogging
+                LoggingService.setLoggingContext(dataBean, transactionInfo, transaction);
+                createdLoggingContext = true;
 
-                    if (log.isInfoEnabled()) {
-                        log.info(MessageHelper.findMessage("label.Jaffa.Transaction.TransactionConsumer.start", null));
-                    }
+                if (log.isInfoEnabled()) {
+                    log.info(MessageHelper.findMessage("label.Jaffa.Transaction.TransactionConsumer.start", null));
+                }
 
-                    int retryLimit = readRule(RULE_RETRY_LIMIT, DEFAULT_RETRY_LIMIT);
-                    int retrySleepTimeInMillis = readRule(RULE_RETRY_SLEEP_TIME, DEFAULT_RETRY_SLEEP_TIME);
-                    int retryCount = 0;
-                    while (true) {
-                        try {
-                            // Invokes the handler as specified by the 'toClass and toMethod' combination in the transaction configuration
-                            invokeHandler(uow, transactionInfo, dataBean);
-                            break;
-                        } catch (Exception e) {
+                int retryLimit = readRule(RULE_RETRY_LIMIT, DEFAULT_RETRY_LIMIT);
+                int retrySleepTimeInMillis = readRule(RULE_RETRY_SLEEP_TIME, DEFAULT_RETRY_SLEEP_TIME);
+                int retryCount = 0;
+                while (true) {
+                    try {
+                        // Invokes the handler as specified by the 'toClass and toMethod' combination in the transaction configuration
+                        invokeHandler(uow, transactionInfo, dataBean);
+                        break;
+                    } catch (Exception e) {
 
-                            if (postImmediate == null || !postImmediate) {
-                                //Retry only if the exception is listed as a retryable exception
-                                String[] exceptions = readRule(RETRY_EXCEPTION_RULE, DEFAULT_RETRY_EXCEPTIONS);
-                                Exception ex = null;
-                                Class<Exception> clazz = null;
-                                for (String exceptionName : exceptions) {
-                                    if (log.isDebugEnabled()) {
-                                        log.debug("Exception: " + exceptionName + " defined as a retryable exception.");
-                                    }
-                                    clazz = (Class<Exception>) Class.forName(exceptionName);
-                                    ex = clazz.cast(ExceptionHelper.extractException(e, clazz));
-                                    if (ex != null) {
-                                        break;
-                                    }
+                        if (postImmediate == null || !postImmediate) {
+                            //Retry only if the exception is listed as a retryable exception
+                            String[] exceptions = readRule(RETRY_EXCEPTION_RULE, DEFAULT_RETRY_EXCEPTIONS);
+                            Exception ex = null;
+                            Class<Exception> clazz = null;
+                            for (String exceptionName : exceptions) {
+                                if (log.isDebugEnabled()) {
+                                    log.debug("Exception: " + exceptionName + " defined as a retryable exception.");
                                 }
-                                if (ex != null && ++retryCount <= retryLimit) {
-                                    if (log.isDebugEnabled()) {
-                                        log.debug(clazz.getSimpleName() + " encountered. Will sleep for " + retrySleepTimeInMillis + " milliseconds and then retry", e);
-                                    }
-                                    uow.rollback();
-                                    Thread.sleep(retrySleepTimeInMillis);
-                                    uow = new UOW();
-                                    if (log.isDebugEnabled()) {
-                                        log.debug("Retry#" + retryCount);
-                                    }
-                                } else {
-                                    throw e;
+                                clazz = (Class<Exception>) Class.forName(exceptionName);
+                                ex = clazz.cast(ExceptionHelper.extractException(e, clazz));
+                                if (ex != null) {
+                                    break;
+                                }
+                            }
+                            if (ex != null && ++retryCount <= retryLimit) {
+                                if (log.isDebugEnabled()) {
+                                    log.debug(clazz.getSimpleName() + " encountered. Will sleep for " + retrySleepTimeInMillis + " milliseconds and then retry", e);
+                                }
+                                uow.rollback();
+                                Thread.sleep(retrySleepTimeInMillis);
+                                uow = new UOW();
+                                if (log.isDebugEnabled()) {
+                                    log.debug("Retry#" + retryCount);
                                 }
                             } else {
                                 throw e;
                             }
+                        } else {
+                            throw e;
                         }
                     }
-
-                    if (log.isInfoEnabled()) {
-                        log.info(MessageHelper.findMessage("label.Jaffa.Transaction.TransactionConsumer.success", null));
-                    }
                 }
-                else {
-                    if (log.isDebugEnabled()) {
-                        log.debug("There is no transactionInfo for the Transaction. Hence nothing to process.");
-                    }
+
+                if (log.isInfoEnabled()) {
+                    log.info(MessageHelper.findMessage("label.Jaffa.Transaction.TransactionConsumer.success", null));
                 }
             } else {
                 if (log.isDebugEnabled()) {

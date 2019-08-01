@@ -504,46 +504,44 @@ public final class JaffaMessageConsumer implements MessageListener {
       session = JmsClientHelper.obtainSession(connection, false);
       Message newMessage = JmsClientHelper.cloneMessage(session, aMessage);
 
-      if (newMessage != null) {
-        // Sets a header element with the error details
-        String errorMessage = null;
-        FrameworkException fe = ExceptionHelper.extractFrameworkException(e);
-        if (fe != null) {
-          errorMessage = fe.getLocalizedMessage();
+      // Sets a header element with the error details
+      String errorMessage = null;
+      FrameworkException fe = ExceptionHelper.extractFrameworkException(e);
+      if (fe != null) {
+        errorMessage = fe.getLocalizedMessage();
+      } else {
+        ApplicationExceptions aes = ExceptionHelper
+            .extractApplicationExceptions(e);
+        if (aes != null && aes.size() > 0) {
+          StringBuilder buf = new StringBuilder();
+          for (Iterator<ApplicationException> itr = aes.iterator(); itr
+              .hasNext();) {
+            ApplicationException ae = (ApplicationException) itr.next();
+            if (buf.length() > 0)
+              buf.append('\n');
+            buf.append(ae.getLocalizedMessage());
+          }
+          errorMessage = buf.toString();
         } else {
-          ApplicationExceptions aes = ExceptionHelper
-                  .extractApplicationExceptions(e);
-          if (aes != null && aes.size() > 0) {
-            StringBuilder buf = new StringBuilder();
-            for (Iterator<ApplicationException> itr = aes.iterator(); itr
-                    .hasNext();) {
-              ApplicationException ae = (ApplicationException) itr.next();
+          StringBuilder buf = new StringBuilder();
+          Throwable exception = e;
+          while (exception != null) {
+            String str = exception.getLocalizedMessage();
+            if (str != null) {
               if (buf.length() > 0)
                 buf.append('\n');
-              buf.append(ae.getLocalizedMessage());
+              buf.append(str);
             }
-            errorMessage = buf.toString();
-          } else {
-            StringBuilder buf = new StringBuilder();
-            Throwable exception = e;
-            while (exception != null) {
-              String str = exception.getLocalizedMessage();
-              if (str != null) {
-                if (buf.length() > 0)
-                  buf.append('\n');
-                buf.append(str);
-              }
-              exception = exception.getCause();
-            }
-            errorMessage = buf.toString();
+            exception = exception.getCause();
           }
+          errorMessage = buf.toString();
         }
-        newMessage.setObjectProperty(JmsBrowser.HEADER_ERROR_DETAILS,
-                                     errorMessage);
-
-        // send a failure notification, if configured
-        sendFailureNotification(newMessage, payload, e);
       }
+      newMessage.setObjectProperty(JmsBrowser.HEADER_ERROR_DETAILS,
+          errorMessage);
+
+      // send a failure notification, if configured
+      sendFailureNotification(newMessage, payload, e);
     } catch (Exception e1) {
       LOGGER.error(MessageHelper.findMessage(
           "error.Jaffa.Messaging.JaffaMessageBean.redirectError", null), e1);

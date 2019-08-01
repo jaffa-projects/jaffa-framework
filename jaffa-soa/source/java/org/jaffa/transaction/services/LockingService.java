@@ -115,9 +115,7 @@ public class LockingService {
         TransactionInfo transactionInfo = ConfigurationService.getInstance().getTransactionInfo(dataBean);
 
         // Perform the check
-        if (transactionInfo != null) {
-            checkLock(uow, dataBean, transactionInfo);
-        }
+        checkLock(uow, dataBean, transactionInfo);
     }
 
     /**
@@ -190,9 +188,7 @@ public class LockingService {
         TransactionInfo transactionInfo = ConfigurationService.getInstance().getTransactionInfo(dataBean);
 
         // Delete the matching Transactions
-        if (transactionInfo != null) {
-            deleteLockingTransactions(uow, dataBean, transactionInfo);
-        }
+        deleteLockingTransactions(uow, dataBean, transactionInfo);
     }
 
     /**

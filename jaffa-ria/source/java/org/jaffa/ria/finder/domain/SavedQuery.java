@@ -962,16 +962,13 @@ public class SavedQuery extends Persistent {
     private static String getCriteriaClass (String componentRef){
         ComponentDefinition component = Loader.getComponentPool().get(componentRef);
         List<Object> params = component.getParameters();
-
-        if (params != null) {
-            for (final Object param : params) {
-                if (param instanceof ObjectTypeParam) {
-                    if (((ObjectTypeParam) param).getClassName() != null) {
-                        String name = ((ObjectTypeParam) param).getName();
-                        String type = ((ObjectTypeParam) param).getClassName();
-                        if (name.equals("criteria"))
-                            return type;
-                    }
+        for (final Object param : params) {
+            if (param != null && param instanceof ObjectTypeParam) {
+                if (((ObjectTypeParam) param).getClassName() != null) {
+                    String name = ((ObjectTypeParam) param).getName();
+                    String type = ((ObjectTypeParam) param).getClassName();
+                    if (name.equals("criteria"))
+                        return type;
                 }
             }
         }
@@ -986,15 +983,12 @@ public class SavedQuery extends Persistent {
             jsonConfig.setRootClass(clazz);
             Object object = JSONSerializer.toJava(json, jsonConfig);
             String xml = null;
-
-            if (object != null) {
-                try {
-                    xml = JAXBHelper.marshalPayload(object);
-                } catch (JAXBException e) {
-                    String s = "Error in marshalling '" + object + "' to XML via JAXB";
-                    log.error(s, e);
-                    throw new RuntimeException(s, e);
-                }
+            try {
+                xml = JAXBHelper.marshalPayload(object);
+            } catch (JAXBException e) {
+                String s = "Error in marshalling '" + object + "' to XML via JAXB";
+                log.error(s, e);
+                throw new RuntimeException(s, e);
             }
             return xml;
         } catch (Exception ex) {
