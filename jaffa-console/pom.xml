@@ -9,7 +9,6 @@
     <version>8.1.8-SNAPSHOT</version>
   </parent>
   
-  <groupId>org.jaffa</groupId>
   <artifactId>jaffa-console</artifactId>
 
   <name>Jaffa Console</name>

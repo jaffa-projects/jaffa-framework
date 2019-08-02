@@ -227,6 +227,7 @@ Ext.ux.form.Comment = Ext.extend(Ext.Container, {
     if (this.commentStyle == 'plain')
       this.cf.setValue(val);
     else {
+      if(val === null) val = "";
       if (val.toUpperCase().indexOf("------- ADDITIONAL COMMENTS FROM ")>=0 || val.toUpperCase().indexOf("------- COMMENTS FROM ")>=0){
         var allComments = val.split(/-------\sADDITIONAL\sCOMMENTS\sFROM\s|-------\sCOMMENTS\sFROM\s/i);
         for (var i = 0; i< allComments.length && i<50; i++){
