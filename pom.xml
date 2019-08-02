@@ -277,6 +277,8 @@
         <version.sonar.plugin>2.4</version.sonar.plugin>
         <version.source.plugin>2.2.1</version.source.plugin>
         <version.surefire.plugin>2.20.1</version.surefire.plugin>
+        <!-- Specify surefire arguments in surefireArgLine property -->
+        <surefireArgLine></surefireArgLine>
         <version.taglist.plugin>2.4</version.taglist.plugin>
         <version.war.plugin>2.1.1</version.war.plugin>
 
@@ -1002,6 +1004,11 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${version.surefire.plugin}</version>
+                    <configuration>
+                        <!-- Do not modify the argLine below -->
+                        <!-- Update the surefireArgLine property value instead -->
+                        <argLine>@{surefireArgLine}</argLine>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -2061,19 +2068,6 @@
         <profile>
             <id>jacoco</id>
             <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-surefire-plugin</artifactId>
-                            <version>${version.surefire.plugin}</version>
-                            <configuration>
-                                <!-- Additional surefire args go after ${surefireArgLine} below -->
-                                <argLine>${surefireArgLine}</argLine>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
                 <plugins>
                     <plugin>
                         <groupId>org.jacoco</groupId>
