@@ -86,7 +86,7 @@ public class ContextHelper {
     public static String getContextSalience(String contextPath) {
         String contextSalience = "100-Highest";
 
-        if (!contextPath.startsWith("jar")) {
+        if (!contextPath.startsWith("jar") && !contextPath.startsWith("zip")) {
             // Class not from JAR
             logger.info("Context Salience is being resolved from an external file, not from a classpath JAR");
         } else {
@@ -118,9 +118,9 @@ public class ContextHelper {
     public static String getVariationSalience(String contextPath)  {
         String variationSalience = VariationContext.NULL_VARIATION;
 
-        if (!contextPath.startsWith("jar")) {
+        if (!contextPath.startsWith("jar") && !contextPath.startsWith("zip")) {
             // Class not from JAR
-            logger.warn("Variation Salience is being resolved from an external file, not from a classpath JAR");
+            logger.info("Variation Salience is being resolved from an external file, not from a classpath JAR");
         } else {
             try {
                 String manifestPath = contextPath.substring(0, contextPath.lastIndexOf("!") + 1) + "/" + META_INF_MANIFEST_FILE;

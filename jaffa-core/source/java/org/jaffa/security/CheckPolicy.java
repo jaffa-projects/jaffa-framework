@@ -236,7 +236,7 @@ public class CheckPolicy extends HttpServlet {
             for (GrantFunctionAccess grantFunctionAccess: role.getGrantFunctionAccess()) {
                 if (!bfuncs.contains(grantFunctionAccess.getName())) {
                     m_roleErrors.put(role.getName(), grantFunctionAccess.getName());
-                    log.warn("Business Function '" + grantFunctionAccess.getName() + "' in Role '" + role + "' is Not Valid!");
+                    log.warn("Business Function '" + grantFunctionAccess.getName() + "' in Role '" + role.getName() + "' is Not Valid!");
                 }
             }
         }
