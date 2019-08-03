@@ -64,6 +64,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.*;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Base implementation of the IContextManager. It reads Global Context,
@@ -121,15 +122,11 @@ public class ContextManager implements IContextManager {
         if (m == null || m.size() == 0 || m.get("hasSession") == null) {
             if (log.isDebugEnabled()) log.debug("Setting Thread Context.");
             m = new HashMap<>();
-            m.putAll(getGlobalContext());
+            //global + variation
+            m.putAll(getMyApplicationRulesMap());
             Map sessionContext = getSessionContext(request);
             String userPreferencesFileName = null;
             if (sessionContext != null) {
-                // global + variation
-                String variation = (String) sessionContext.get(PROPERTY_USER_VARIATION);
-                if (variation != null) {
-                    m.putAll(getVariationContext(variation));
-                }
                 // global + variation + user-preferences
                 String userId = (String) sessionContext.get(PROPERTY_USER_ID);
                 if (userId != null) {
@@ -181,7 +178,7 @@ public class ContextManager implements IContextManager {
      */
     public Map getThreadContext() {
         Map m = (Map) threadContext.get();
-        return m != null ? m : getGlobalContext();
+        return m != null ? m : getMyApplicationRulesMap();
     }
 
     /**
@@ -355,8 +352,8 @@ public class ContextManager implements IContextManager {
      *
      * @return the global context.
      */
-    private Map<Object, Object> getGlobalContext() {
-        return applicationRulesManager != null ? applicationRulesManager.getApplicationRulesGlobal() : null;
+    private ConcurrentMap<String, String> getMyApplicationRulesMap() {
+        return applicationRulesManager.getMyApplicationRules();
     }
 
     /**

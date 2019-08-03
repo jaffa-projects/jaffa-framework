@@ -19,6 +19,7 @@ org.jaffa.session.ContextManagerFactory,
 org.jaffa.util.StringHelper,
 org.jaffa.util.URLHelper' %>
 <%@ page import="org.jaffa.loader.config.ApplicationRulesManager" %>
+<%@ page import="java.util.concurrent.ConcurrentMap" %>
 
 <%!
 private static final Logger log = Logger.getLogger("jaffa.sc.systemconfigdesktop");
@@ -34,15 +35,11 @@ private static final Logger log = Logger.getLogger("jaffa.sc.systemconfigdesktop
       //Retrieving global rules from the ApplicationRulesManager
       ContextManager contextManager = (ContextManager) ContextManagerFactory.instance();
       ApplicationRulesManager applicationRulesManager = contextManager.getApplicationRulesManager();
-      Properties applicationRules = applicationRulesManager.getApplicationRulesGlobal();
+      ConcurrentMap<String, String> myApplicationRules = applicationRulesManager.getMyApplicationRules();
+      Properties applicationRules = new Properties();
+      applicationRules.putAll(myApplicationRules);
       if (applicationRules != null) {
         globalProps = applicationRules;
-      }
-
-      //Retrieving variation-specific rules from the ApplicationRulesManager
-      applicationRules = applicationRulesManager.getApplicationRulesVariation(VariationContext.getVariation());
-      if (applicationRules != null) {
-        varProps = applicationRules;
       }
 
       //Retrieving user-specific rules from the ApplicationRulesManager

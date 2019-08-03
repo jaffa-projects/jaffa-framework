@@ -66,6 +66,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -326,5 +327,13 @@ public class ApplicationRulesManager implements IManager {
             systemPropertyValue = properties.getProperty(key);
         }
         return systemPropertyValue;
+    }
+
+    /**
+     * Returns ApplicationRules Map for the user's context
+     * @return
+     */
+    public ConcurrentMap<String, String> getMyApplicationRules(){
+        return applicationRulesRepository.getMyRepository();
     }
 }
