@@ -81,9 +81,9 @@ public class ResourceLoader<T extends IManager> {
         }
     }
     /**
-     * Create a ContextHelper logger
+     * Create a ResourceLoader logger
      */
-    private static Logger logger = Logger.getLogger(ContextHelper.class);
+    private static Logger logger = Logger.getLogger(ResourceLoader.class);
 
     /**
      * Create a ManagerRepositoryService singleton to store managers
