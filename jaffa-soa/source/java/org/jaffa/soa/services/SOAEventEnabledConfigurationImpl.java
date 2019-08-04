@@ -49,6 +49,7 @@
 package org.jaffa.soa.services;
 
 import org.apache.log4j.Logger;
+import org.jaffa.loader.ContextKey;
 import org.jaffa.loader.soa.SoaEventConfigManager;
 import org.jaffa.security.VariationContext;
 import org.jaffa.session.ContextManagerFactory;
@@ -80,7 +81,11 @@ public class SOAEventEnabledConfigurationImpl implements SOAEventEnabledConfigur
     // True if events are enabled by default
     private final boolean areEventsEnabledByDefault;
 
-    private final WeakHashMap<String, Properties> propertiesPerVariation = new WeakHashMap<String, Properties>();
+
+    /**Context Salience to be used for override soa-events
+     */
+    public static final String OVERRIDE_SALIENCE = "3-CUSTOMCONFIGURE";
+
 
     private static SoaEventConfigManager soaEventConfigManager;
 
@@ -97,6 +102,9 @@ public class SOAEventEnabledConfigurationImpl implements SOAEventEnabledConfigur
         if(log.isInfoEnabled()){
             log.info("Events are " + (areEventsEnabledByDefault ? enabled : disabled) + " by default");
         }
+
+        //Register override properties
+        registerSoaEventOverrideProperties();
     }
 
     /**
@@ -181,18 +189,6 @@ public class SOAEventEnabledConfigurationImpl implements SOAEventEnabledConfigur
     }
 
     /**
-     * Set multiple event types (by event name) as enabled/disabled
-     *
-     * @param events Map of String/Boolean mapping to eventName/isEnabled
-     */
-    public void setEnabled(Map<String, Boolean> events) {
-        for (Map.Entry<String, Boolean> event : events.entrySet()) {
-            setEnabled(event.getKey(), event.getValue(), false);
-        }
-        savePropertiesToFile();
-    }
-
-    /**
      * Gets a list of all the events which are in the non-default state
      * If areEventsEnabledByDefault returns true, this is the list disabled events
      * If areEventsEnabledByDefault returns false, this is the list enabled events
@@ -221,103 +217,114 @@ public class SOAEventEnabledConfigurationImpl implements SOAEventEnabledConfigur
      *                    set to true or savePropertiesToFile is called
      */
     private void setEnabled(String eventName, boolean isEnabled, boolean saveChanges) {
-        if (isEnabled) {
-            getProperties().setProperty(eventName, enabled);
-        } else {
-            getProperties().setProperty(eventName, disabled);
-        }
-
+        updateSoaEventConfigRepository(eventName, isEnabled);
         if (saveChanges) {
-            savePropertiesToFile();
+            savePropertiesToFile(eventName, isEnabled);
         }
     }
 
+    /**
+     * Updates the underlying map repository
+     * @param eventName
+     * @param isEnabled
+     */
+    private void updateSoaEventConfigRepository(String eventName, boolean isEnabled){
+        if(getSoaEventConfigManager()!=null && getSoaEventConfigManager().getSoaEventConfigRepository()!=null) {
+            ContextKey contextKey = new ContextKey(eventName, getPropertiesFileName(), VariationContext.getVariation(), OVERRIDE_SALIENCE);
+            getSoaEventConfigManager().getSoaEventConfigRepository().register(contextKey, isEnabled ? enabled : disabled);
+        }
+    }
     /**
      * Gets the properties for the current variation of the product
      *
      * @return The properties for the current variation of the product
      */
     private Properties getProperties() {
-        Properties properties = propertiesPerVariation.get(VariationContext.getVariation());
-        if (properties == null) {
-             properties = new Properties();
-            if(getSoaEventConfigManager() != null ){
-                Properties props = getSoaEventConfigManager().getAllSoaEvents();
-                properties.putAll(props);
-            }
-
-            Properties localeSoaEventProperties = loadPropertiesFromFile();
-            //Apply locale properties over the soa events
-            properties.putAll(localeSoaEventProperties);
-            propertiesPerVariation.put(VariationContext.getVariation(), properties);
+        Properties properties = new Properties();
+        if(getSoaEventConfigManager() != null && getSoaEventConfigManager().getMySoaEventDefaultProperties()!=null ){
+            properties.putAll(getSoaEventConfigManager().getMySoaEventDefaultProperties());
         }
         return properties;
     }
 
     /**
-     * Loads the contents of the properties file used to store the enabled/disabled SOA events
-     *
-     * @return Properties containing SOA event name and enabled/disabled state.  If there is an error the an empty
-     *         instance of Properties will be returned
+     * Registers the Soa Event Overrides from soa-events-config.properties in MapRepository
      */
-    private Properties loadPropertiesFromFile() {
-        // Get or create the properties file
-        File propertiesFile = getPropertiesFile();
-        if (propertiesFile == null) {
-            log.error("Error getting the SOA event config properties file");
-            return new Properties();
+    private void registerSoaEventOverrideProperties(){
+        Properties overrideSoaEventProperties = getSoaEventConfigurationOverrides();
+        if(overrideSoaEventProperties!=null && getSoaEventConfigManager()!=null && getSoaEventConfigManager().getSoaEventConfigRepository()!=null) {
+            for (Object overrideSoaEventProperty : overrideSoaEventProperties.keySet()) {
+                ContextKey contextKey = new ContextKey((String) overrideSoaEventProperty, getPropertiesFileName(), VariationContext.getVariation(), OVERRIDE_SALIENCE);
+                getSoaEventConfigManager().getSoaEventConfigRepository().register(contextKey, overrideSoaEventProperties.getProperty((String) overrideSoaEventProperty));
+            }
         }
-
-        // Read the file into the Properties object
-        Properties properties = new Properties();
-        try (BufferedReader reader = new BufferedReader(new FileReader(propertiesFile))) {
-            properties.load(reader);
-        } catch (FileNotFoundException fileNotFoundException) {
-            log.error("SOA event config properties file not found", fileNotFoundException);
-            return new Properties();
-        } catch (IOException ioException) {
-            log.error("Error reading the SOA event config properties file", ioException);
-            return new Properties();
-        }
-
-        return properties;
     }
+
+
 
     /**
      * Saves the event properties to disk
+     * @param eventName
+     * @param isEnabled
      */
-    private void savePropertiesToFile() {
+    private void savePropertiesToFile(String eventName, boolean isEnabled) {
         // Get or create the properties file
         File propertiesFile = getPropertiesFile();
         if (propertiesFile == null) {
             log.error("Error getting the SOA event config properties file");
             return;
         }
-
+        Properties soaEventConfigurationOverrides = getSoaEventConfigurationOverrides();
+        soaEventConfigurationOverrides.put(eventName, isEnabled?enabled:disabled);
         // Read the file into the Properties object
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(propertiesFile))) {
-            getProperties().store(writer, "");
+            soaEventConfigurationOverrides.store(writer, "");
         } catch (IOException ioException) {
             log.error("Error writing the SOA event config properties file", ioException);
-            return;
         }
+
     }
 
+    /**
+     * Returns the SoaEventOverrides on the application level
+     * @return
+     */
+    public Properties getSoaEventConfigurationOverrides(){
+        Properties propertiesFromFile = new Properties();
+        try(InputStream inputStream = new FileInputStream(getPropertiesFile())){
+            propertiesFromFile.load(inputStream);
+        } catch (IOException ioException) {
+            log.error("Error reading the SOA event config properties file", ioException);
+        }
+        return propertiesFromFile;
+    }
+
+    /**
+     * Returns the SoaEventOverride file name
+     * @return
+     */
+    public String getPropertiesFileName(){
+        // Build the file name
+        StringBuilder builder = new StringBuilder(ContextManagerFactory.instance().getProperty(IContextManager.PROPERTY_USER_PREFERENCES_FOLDER).toString());
+        if (builder.length() > 0 && builder.charAt(builder.length() - 1) != File.separatorChar) {
+            builder.append(File.separatorChar);
+        }
+        if(!VariationContext.NULL_VARIATION.equals(VariationContext.getVariation())) {
+            builder.append(fileName.replace(variationPlaceholder, VariationContext.getVariation()));
+        }else{
+            builder.append(fileName.replace("_"+variationPlaceholder, ""));
+        }
+        return builder.toString();
+    }
     /**
      * Gets the handle to the properties file to read and write to
      *
      * @return Gets the handle to the properties file to read and write to
      */
     private File getPropertiesFile() {
-        // Build the file name
-        StringBuilder builder = new StringBuilder(ContextManagerFactory.instance().getProperty(IContextManager.PROPERTY_USER_PREFERENCES_FOLDER).toString());
-        if (builder.length() > 0 && builder.charAt(builder.length() - 1) != File.separatorChar) {
-            builder.append(File.separatorChar);
-        }
-        builder.append(fileName.replace(variationPlaceholder, VariationContext.getVariation()));
 
         // Get the file and create it if needed
-        File propertiesFile = new File(builder.toString());
+        File propertiesFile = new File(getPropertiesFileName());
         if (!propertiesFile.exists()) {
             try {
 

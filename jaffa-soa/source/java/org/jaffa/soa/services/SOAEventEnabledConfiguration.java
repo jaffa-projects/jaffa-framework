@@ -51,7 +51,6 @@ package org.jaffa.soa.services;
 import org.jaffa.soa.domain.SOAEvent;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Tracks if SOA events have been marked as disabled or enabled.  This class will not contain the entire list of events,
@@ -108,12 +107,6 @@ public interface SOAEventEnabledConfiguration {
      */
     public void setEnabled(String eventName, boolean isEnabled);
 
-    /**
-     * Set multiple event types (by event name) as enabled/disabled
-     *
-     * @param events Map of String/Boolean mapping to eventName/isEnabled
-     */
-    public void setEnabled(Map<String, Boolean> events);
 
     /**
      * Gets a list of all the events which are in the non-default state

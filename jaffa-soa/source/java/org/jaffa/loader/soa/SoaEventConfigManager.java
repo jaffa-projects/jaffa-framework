@@ -48,26 +48,24 @@
  */
 
 package org.jaffa.loader.soa;
+
 import org.apache.log4j.Logger;
 import org.jaffa.loader.ContextKey;
 import org.jaffa.loader.IManager;
 import org.jaffa.loader.IRepository;
 import org.jaffa.loader.MapRepository;
 import org.jaffa.security.VariationContext;
-import org.jaffa.util.StringHelper;
+import org.jaffa.soa.services.SOAEventEnabledConfigurationFactory;
 import org.springframework.core.io.Resource;
 import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * SoaEventConfigManager - SoaEventConfigManager is the managing class for all soaevent config properties as defined by the
@@ -283,4 +281,12 @@ public class SoaEventConfigManager implements IManager{
         return DEFAULT_PROPERTY_FILE_NAME;
     }
 
+
+    /**
+     * Returns SoaEvents Configuration from the context of users
+     * @return
+     */
+    public ConcurrentMap<String, String> getMySoaEventDefaultProperties(){
+        return soaEventConfigRepository.getMyRepository();
+    }
 }
