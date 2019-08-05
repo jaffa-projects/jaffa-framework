@@ -353,7 +353,7 @@ public class ContextManager implements IContextManager {
      * @return the global context.
      */
     private ConcurrentMap<String, String> getMyApplicationRulesMap() {
-        return applicationRulesManager.getMyApplicationRules();
+        return applicationRulesManager!=null ? applicationRulesManager.getMyApplicationRules() : null;
     }
 
     /**
