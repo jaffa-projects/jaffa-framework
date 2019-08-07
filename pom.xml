@@ -11,7 +11,7 @@
 
     <groupId>org.jaffa</groupId>
     <artifactId>jaffa-framework</artifactId>
-    <version>8.1.8-SNAPSHOT</version>
+    <version>8.1.8</version>
     <packaging>pom</packaging>
 
     <name>Java Application Framework For All</name>
@@ -278,7 +278,7 @@
         <version.source.plugin>2.2.1</version.source.plugin>
         <version.surefire.plugin>2.20.1</version.surefire.plugin>
         <!-- Specify surefire arguments in surefireArgLine property -->
-        <surefireArgLine></surefireArgLine>
+        <surefireArgLine />
         <version.taglist.plugin>2.4</version.taglist.plugin>
         <version.war.plugin>2.1.1</version.war.plugin>
 
@@ -2117,7 +2117,7 @@
     <scm>
         <connection>scm:git:https://tapljs482.tapestry.local/jaffa/jaffa-framework.git</connection>
         <developerConnection>scm:git:https://tapljs482.tapestry.local/jaffa/jaffa-framework.git</developerConnection>
-      <tag>HEAD</tag>
+      <tag>jaffa-framework-8.1.8</tag>
   </scm>
 
 </project>
