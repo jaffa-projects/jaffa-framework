@@ -9,6 +9,8 @@ package org.jaffa.modules.printing.components.printerdefinitionmaintenance.tx;
 
 import org.apache.log4j.Logger;
 import java.util.*;
+
+import org.jaffa.beans.factory.config.StaticContext;
 import org.jaffa.persistence.UOW;
 import org.jaffa.persistence.Criteria;
 import org.jaffa.exceptions.ApplicationExceptions;
@@ -762,6 +764,8 @@ public class PrinterDefinitionMaintenanceTx extends MaintTx implements IPrinterD
         // .//GEN-END:_preprocessDelete_1_be
         // Add custom code//GEN-FIRST:_preprocessDelete_1
 
+        validate(uow,input);
+
 
         // .//GEN-LAST:_preprocessDelete_1
         // .//GEN-BEGIN:_preprocessDelete_2_be
@@ -882,11 +886,21 @@ public class PrinterDefinitionMaintenanceTx extends MaintTx implements IPrinterD
     }
     // .//GEN-END:_deleteRelatedObjects_2_be
     // All the custom code goes here//GEN-FIRST:_custom
+    IPrinterDefinitionMaintenanceTxHandler printerDefinitionMaintenanceTxHandler = null;
+    public void validate(UOW uow, PrinterDefinitionMaintenanceDeleteInDto printerDefinition) throws FrameworkException, ApplicationExceptions{
+        // TODO-SWAT fire custom handler here
 
+        if(null != this.printerDefinitionMaintenanceTxHandler){
+            this.printerDefinitionMaintenanceTxHandler.validate(uow,printerDefinition);
+        }
+    }
+    public void setPrinterDefinitionMaintenanceTxHandler(IPrinterDefinitionMaintenanceTxHandler printerDefinitionMaintenanceTxHandler) {
+        this.printerDefinitionMaintenanceTxHandler = printerDefinitionMaintenanceTxHandler;
+    }
 
-
-
-
+    public PrinterDefinitionMaintenanceTx(){
+        StaticContext.configure(this);
+    }
 
     // .//GEN-LAST:_custom
 }
