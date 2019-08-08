@@ -49,6 +49,7 @@
 package org.jaffa.persistence;
 
 import org.apache.log4j.Logger;
+import org.jaffa.beans.factory.config.StaticContext;
 import org.jaffa.datatypes.ValidationException;
 import org.jaffa.exceptions.ApplicationException;
 import org.jaffa.exceptions.ApplicationExceptions;
@@ -171,6 +172,7 @@ public abstract class Persistent implements IPersistent, IFlexFields {
         obj.lifecycleHandlers = new ArrayList<>();
         obj.appendedHandlers = new ArrayList<>();
         obj.prependedHandlers = new ArrayList<>();
+        StaticContext.configure(obj);
         //obj.m_modified = false;
         obj.m_databaseOccurence = false;
         obj.m_locking = Criteria.LOCKING_OPTIMISTIC;
