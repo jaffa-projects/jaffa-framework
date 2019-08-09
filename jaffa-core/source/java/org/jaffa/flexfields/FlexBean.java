@@ -237,7 +237,7 @@ public class FlexBean implements DynaBean {
             if (flexBean != null) {
                 // simulate the pointcut for construction(org.jaffa.flexfields.FlexBean->new(..)) which referenced
                 // the initialize interceptor. That logic has been ported to be set up by the static context instead.
-                StaticContext.initialize(flexBean);
+                //StaticContext.initialize(flexBean);
 
                 // assign the flexbean to the graphData object
                 flexInstance.setFlexBean(flexBean);

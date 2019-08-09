@@ -47,7 +47,7 @@ public abstract class RuleActorFactory<ActorT> {
         KeySet key = new KeySet(clazz, realm, variation);
 
         // look up in cache first, but if not exist then create from repository
-        ActorT actor = isFlexClass ? null : cache.get(key);
+        ActorT actor = cache.get(key);
         if (actor == null) {
             synchronized (syncObject) {
                 actor = createActor(object);
