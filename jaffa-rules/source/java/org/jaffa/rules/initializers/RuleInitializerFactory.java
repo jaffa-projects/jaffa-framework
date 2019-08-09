@@ -67,4 +67,11 @@ public class RuleInitializerFactory extends RuleActorFactory<Initializer> implem
         }
         return classNames;
     }
+
+    /**
+     * Clears Initializer Actor Cache
+     */
+    public void flushInitializerCache(){
+        cache.clear();
+    }
 }

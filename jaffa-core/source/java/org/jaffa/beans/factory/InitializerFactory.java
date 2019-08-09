@@ -63,4 +63,9 @@ public interface InitializerFactory {
      * @return an initializer, or null if none is found.
      */
     <T> Initializer<T> getInitializer(T object);
+
+    /**
+     * Clears Initializer Actor Cache
+     */
+    public void flushInitializerCache();
 }

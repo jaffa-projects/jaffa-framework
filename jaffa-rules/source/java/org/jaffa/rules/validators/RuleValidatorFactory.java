@@ -312,4 +312,10 @@ public class RuleValidatorFactory extends RuleActorFactory<Validator> implements
             }
         }
     }
+    /**
+     * Clears Validator Actor Cache
+     */
+    public void flushValidatorCache(){
+        cache.clear();
+    }
 }

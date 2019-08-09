@@ -17,7 +17,7 @@ import java.util.Map;
 public abstract class RuleActorFactory<ActorT> {
     private static final Logger logger = Logger.getLogger(RuleActorFactory.class);
     protected final Object syncObject = new Object();
-    private Map<KeySet, ActorT> cache = Collections.synchronizedMap(new HashMap<KeySet, ActorT>());
+    protected Map<KeySet, ActorT> cache = Collections.synchronizedMap(new HashMap<KeySet, ActorT>());
 
     /**
      * Gets the actor for this object that matches with the object's classname, realm and
@@ -66,4 +66,5 @@ public abstract class RuleActorFactory<ActorT> {
      * @return an actor.
      */
     protected abstract ActorT createActor(Object object);
+
 }

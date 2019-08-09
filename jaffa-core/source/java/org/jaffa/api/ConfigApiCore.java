@@ -50,9 +50,12 @@ package org.jaffa.api;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResources;
+import org.jaffa.beans.factory.InitializerFactory;
+import org.jaffa.beans.factory.config.StaticContext;
 import org.jaffa.loader.IManager;
 import org.jaffa.loader.ManagerRepositoryService;
 import org.jaffa.loader.policy.RoleManager;
+import org.jaffa.rules.fieldvalidators.ValidatorFactory;
 import org.jaffa.security.PolicyManager;
 import org.jaffa.security.VariationContext;
 import org.jaffa.util.PropertyMessageResources;
@@ -139,6 +142,14 @@ public class ConfigApiCore {
         MessageResources messageResources =
                 PropertyMessageResourcesFactory.getDefaultMessageResources();
         ((PropertyMessageResources) messageResources).flushCache();
+        ValidatorFactory validatorFactory = (ValidatorFactory) StaticContext.getBean("ruleValidatorFactory");
+        if (validatorFactory != null) {
+            validatorFactory.flushValidatorCache();
+        }
+        InitializerFactory initializerFactory = (InitializerFactory) StaticContext.getBean("initializerFactory");
+        if (initializerFactory != null) {
+            initializerFactory.flushInitializerCache();
+        }
         ManagerRepositoryService repositoryService = ManagerRepositoryService.getInstance();
         for (IManager manager : repositoryService.getManagerMap().values()) {
             try {

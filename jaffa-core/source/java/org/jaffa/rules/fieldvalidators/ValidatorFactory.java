@@ -61,4 +61,9 @@ public interface ValidatorFactory {
      * @return
      */
     Validator getValidator(Object object);
+
+    /**
+     * Clears Validator Actor Cache
+     */
+    public void flushValidatorCache();
 }
