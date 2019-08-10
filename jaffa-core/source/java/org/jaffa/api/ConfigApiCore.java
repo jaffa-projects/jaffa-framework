@@ -142,14 +142,7 @@ public class ConfigApiCore {
         MessageResources messageResources =
                 PropertyMessageResourcesFactory.getDefaultMessageResources();
         ((PropertyMessageResources) messageResources).flushCache();
-        ValidatorFactory validatorFactory = (ValidatorFactory) StaticContext.getBean("ruleValidatorFactory");
-        if (validatorFactory != null) {
-            validatorFactory.flushValidatorCache();
-        }
-        InitializerFactory initializerFactory = (InitializerFactory) StaticContext.getBean("initializerFactory");
-        if (initializerFactory != null) {
-            initializerFactory.flushInitializerCache();
-        }
+        flushMetaDataRepository();
         ManagerRepositoryService repositoryService = ManagerRepositoryService.getInstance();
         for (IManager manager : repositoryService.getManagerMap().values()) {
             try {
@@ -189,6 +182,24 @@ public class ConfigApiCore {
             }
         }
         return isSuccess;
+    }
+
+    /**
+     * Flushes caches associated with metadata repository
+     */
+    private static void flushMetaDataRepository(){
+        try {
+            ValidatorFactory validatorFactory = (ValidatorFactory) StaticContext.getBean("ruleValidatorFactory");
+            if (validatorFactory != null) {
+                validatorFactory.flushValidatorCache();
+            }
+            InitializerFactory initializerFactory = (InitializerFactory) StaticContext.getBean("initializerFactory");
+            if (initializerFactory != null) {
+                initializerFactory.flushInitializerCache();
+            }
+        }catch (Exception e){
+            log.debug("Failed to load Validator & Initializer Factory Beans while clearing cache");
+        }
     }
 
     /**
