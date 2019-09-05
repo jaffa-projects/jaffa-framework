@@ -85,6 +85,8 @@ import org.jaffa.qm.util.PropertyFilter;
 import org.jaffa.soa.graph.ServiceError;
 import org.jaffa.transaction.daos.TransactionMessageDAO;
 import org.jaffa.transaction.daos.TransactionMessageDAOFactory;
+import org.jaffa.transaction.daos.TransactionWorkDAO;
+import org.jaffa.transaction.daos.TransactionWorkDAOFactory;
 import org.jaffa.transaction.domain.Transaction;
 import org.jaffa.transaction.domain.TransactionDependency;
 import org.jaffa.transaction.domain.TransactionField;
@@ -123,6 +125,7 @@ public class TransactionAdmin implements IQueueAdmin {
     public static final Boolean SUPPORTS_BUSINESS_EVENT_LOGS = Boolean.TRUE;
     public static final Boolean SUPPORTS_DEPENDENCIES = Boolean.TRUE;
     private TransactionMessageDAO transactionDAO = TransactionMessageDAOFactory.getTransactionMessageDAO();
+    private TransactionWorkDAO transactionWorkDAO = TransactionWorkDAOFactory.getTransactionWorkDAO();
 
     public QueueQueryResponse queueQuery(QueueCriteria criteria) {
         if (log.isDebugEnabled()) {
@@ -520,6 +523,15 @@ public class TransactionAdmin implements IQueueAdmin {
                                 transaction.setStatus(Transaction.Status.O.toString());
                                 transaction.setErrorMessage(null);
                                 transactionDAO.save(uow, transaction);
+                                if (null != transactionWorkDAO) {
+                                    boolean isSingletonType = ConfigurationService.getInstance().isTypeSingleton(transaction.getType());
+                                    if (isSingletonType) {
+                                        transactionWorkDAO.addToSingletonQueue(transaction.getType(), transaction.getId());
+                                    } else {
+                                        transactionWorkDAO.addToReadyQueue(transaction.getId());
+                                    }
+                                }
+
                                 uow.commit();
                             } else {
                                 if (log.isDebugEnabled()) {
