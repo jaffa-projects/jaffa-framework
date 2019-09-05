@@ -63,7 +63,8 @@ import org.jaffa.persistence.engines.jdbcengine.SQLApplicationException;
 import org.jaffa.persistence.exceptions.AlreadyLockedObjectException;
 import org.jaffa.session.ContextManagerFactory;
 
-/** This has convenience methods for dealing with Exceptions.
+/**
+ * This has convenience methods for dealing with Exceptions.
  */
 public class ExceptionHelper {
     private static Logger log = Logger.getLogger(ExceptionHelper.class);
@@ -98,32 +99,38 @@ public class ExceptionHelper {
         } else if (log.isInfoEnabled())
             log.info("No value found for the rule '" + CUSTOM_SQL_ERROR_CODE_RULE_NAME + "'. The JdbcEngine will not perform any conversion of SQLException to ApplicationException");
     }
-    
-    /** This method will loop through the input exception and its cause, looking for an instance of ApplicationException or ApplicationExceptions.
+
+    /**
+     * This method will loop through the input exception and its cause, looking for an instance of ApplicationException or ApplicationExceptions.
      * If ApplicationException is found, it'll be returned wrapped inside a new ApplicationExceptions instance.
      * If ApplicationExceptions is found, it'll be returned as is.
      * Else a null will be returned.
+     *
      * @param exception The input.
      * @return an instance of ApplicationExceptions if found in the cause stack of the input exception.
      */
     public static ApplicationExceptions extractApplicationExceptions(Throwable exception) {
         return (ApplicationExceptions) extractException(exception, ApplicationExceptions.class);
     }
-    
-    /** This method will loop through the the input exception and its cause, looking for an instance of FrameworkException.
+
+    /**
+     * This method will loop through the the input exception and its cause, looking for an instance of FrameworkException.
      * If found, the instance of FrameworkException will be returned.
      * Else a null will be returned.
+     *
      * @param exception The input.
      * @return an instance of FrameworkException if found in the cause stack of the input exception.
      */
     public static FrameworkException extractFrameworkException(Throwable exception) {
         return (FrameworkException) extractException(exception, FrameworkException.class);
     }
-    
-    /** This method will loop through the the input exception and its cause, looking for an instance of the input exceptionClass.
+
+    /**
+     * This method will loop through the the input exception and its cause, looking for an instance of the input exceptionClass.
      * If found, that instance will be returned.
      * Else a null will be returned.
-     * @param exception The input.
+     *
+     * @param exception      The input.
      * @param exceptionClass The class whose instance is to be looked for.
      * @return an instance of the input exceptionClass if found in the cause stack of the input exception.
      */
@@ -144,38 +151,42 @@ public class ExceptionHelper {
         }
         return null;
     }
-    
-    /** This method will loop through the input exception and its cause, looking for an instance of ApplicationException or ApplicationExceptions or FrameworkException.
+
+    /**
+     * This method will loop through the input exception and its cause, looking for an instance of ApplicationException or ApplicationExceptions or FrameworkException.
      * If ApplicationException is found, it'll be thrown wrapped inside a new ApplicationExceptions instance.
      * If ApplicationExceptions is found, it'll be thrown as is.
      * If FrameworkException is found, it'll be thrown as is.
      * Else the input exception will be returned.
+     *
      * @param exception The input.
-     * @throws ApplicationExceptions if found in the cause stack of the input exception.
-     * @throws FrameworkException if found in the cause stack of the input exception.
      * @return the input exception if neither ApplicationException nor ApplicationExceptions nor FrameworkException are found in the cause stack of the input exception.
+     * @throws ApplicationExceptions if found in the cause stack of the input exception.
+     * @throws FrameworkException    if found in the cause stack of the input exception.
      */
     public static Throwable throwAF(Throwable exception) throws ApplicationExceptions, FrameworkException {
         ApplicationExceptions appExps = extractApplicationExceptions(exception);
         if (appExps != null)
             throw appExps;
-        
+
         FrameworkException fe = extractFrameworkException(exception);
         if (fe != null)
             throw fe;
-        
+
         return exception;
     }
-    
-    /** This method will loop through the input exception and its cause, looking for an instance of ApplicationException or ApplicationExceptions or FrameworkException.
+
+    /**
+     * This method will loop through the input exception and its cause, looking for an instance of ApplicationException or ApplicationExceptions or FrameworkException.
      * If ApplicationException is found, it'll be thrown wrapped inside a new ApplicationExceptions instance.
      * If ApplicationExceptions is found, it'll be thrown as is.
      * If FrameworkException is found, it'll be thrown as is.
      * Else the input exception will be returned wrapped inside a new RuntimeException instance.
+     *
      * @param exception The input.
-     * @throws ApplicationExceptions if found in the cause stack of the input exception.
-     * @throws FrameworkException if found in the cause stack of the input exception.
      * @return RuntimeException if neither ApplicationException nor ApplicationExceptions nor FrameworkException are found in the cause stack of the input exception.
+     * @throws ApplicationExceptions if found in the cause stack of the input exception.
+     * @throws FrameworkException    if found in the cause stack of the input exception.
      */
     public static RuntimeException throwAFR(Throwable exception) throws ApplicationExceptions, FrameworkException {
         throwAF(exception);
@@ -184,6 +195,7 @@ public class ExceptionHelper {
 
     /**
      * Returns the stacktrace of the input exception as a String.
+     *
      * @param exception an exception.
      * @return the stacktrace of the input exception as a String.
      */
@@ -194,8 +206,9 @@ public class ExceptionHelper {
         return sw.toString();
     }
 
-    /** 
+    /**
      * Extracts the error message from the input Exception.
+     *
      * @param exception an exception.
      * @return the message from the input Exception.
      */
@@ -204,14 +217,14 @@ public class ExceptionHelper {
         int i = 0;
         try {
             throwAF(exception);
-            while(exception instanceof RuntimeException && i++ < 5){// stop going into recursive loop
+            while (exception instanceof RuntimeException && i++ < 5) {// stop going into recursive loop
                 exception = exception.getCause();
             }
-            errorMessage = exception!=null ? exception.getLocalizedMessage() : "";
+            errorMessage = exception != null && exception.getLocalizedMessage() != null ? exception.getLocalizedMessage() : "";
         } catch (ApplicationExceptions | FrameworkException e) {
-            errorMessage = e.getLocalizedMessage();
+            errorMessage = (e != null && e.getLocalizedMessage() != null) ? e.getLocalizedMessage() : "";
         }
-        if (errorMessage.length() == 0 && exception!=null)
+        if (errorMessage.length() == 0 && exception != null)
             errorMessage = exception.getClass().getName();
         return errorMessage;
     }
