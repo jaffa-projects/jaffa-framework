@@ -138,7 +138,7 @@ public final class InitialContextFactrory {
     try {
       if (context == null) {
         JmsConfig jmsConfig = ConfigurationService.getInstance().getJmsConfig();
-        if (jmsConfig.getJndiContext() != null
+        if (jmsConfig != null && jmsConfig.getJndiContext() != null
             && jmsConfig.getJndiContext().getParam() != null) {
           Properties properties = new Properties();
           for (Param param : jmsConfig.getJndiContext().getParam())

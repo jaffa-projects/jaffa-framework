@@ -113,13 +113,14 @@ public class SourceDecomposerUtils {
         } else {
             files = dir.listFiles();
         }
-        
-        for (int i = 0; i < files.length; i++) {
-            File file = files[i];
-            if (file.isFile() && !file.isHidden())
-                listCustomizations(file, writer, customizationFilter);
-            else if (recursive && file.isDirectory() && !file.isHidden())
-                listCustomizations(file, fileFilter, recursive, writer, customizationFilter);
+
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile() && !file.isHidden())
+                    listCustomizations(file, writer, customizationFilter);
+                else if (recursive && file.isDirectory() && !file.isHidden())
+                    listCustomizations(file, fileFilter, recursive, writer, customizationFilter);
+            }
         }
     }
     
