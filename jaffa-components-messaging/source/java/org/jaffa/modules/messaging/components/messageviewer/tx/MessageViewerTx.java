@@ -87,7 +87,13 @@ public class MessageViewerTx implements IMessageViewer {
     public String getMessageIdForBusinessEventLog(MessageViewerInDto input) throws FrameworkException, ApplicationExceptions{
         try{
             Message message = findMessage(input);
-            return message.getStringProperty(JmsBrowser.HEADER_ORIGINAL_MESSAGE_ID) != null ? message.getStringProperty(JmsBrowser.HEADER_ORIGINAL_MESSAGE_ID) : message.getJMSMessageID();
+
+            if (message == null) {
+                throw new JaffaMessagingFrameworkException(JaffaMessagingFrameworkException.MESSAGE_INFO_MISSING, null);
+            }
+            String stringProperty = message.getStringProperty(JmsBrowser.HEADER_ORIGINAL_MESSAGE_ID);
+            String messageId = stringProperty != null ? stringProperty : message.getJMSMessageID();
+            return messageId;
         } catch(JMSException e) {
             throw new JaffaMessagingFrameworkException(JaffaMessagingFrameworkException.MESSAGE_INFO_MISSING, null, e);
         }
@@ -111,73 +117,77 @@ public class MessageViewerTx implements IMessageViewer {
         try{
             Message message = findMessage(input);
             MessageViewerOutDto output = new MessageViewerOutDto();
-            output.setJMSMessageID(input.getJMSMessageID());
-            output.setError(message.getStringProperty(JmsBrowser.HEADER_ERROR_DETAILS));
-            output.setPriority(new Long(message.getJMSPriority()));
-            output.setHasPriorityAccess(JmsBrowser.hasChangePriorityAccess(message.getStringProperty(JmsBrowser.HEADER_ORIGINAL_QUEUE_NAME)));
-            output.setJMSDestination(message.getJMSDestination());
-            output.setJMSDeliveryMode(message.getJMSDeliveryMode());
-            output.setJMSTimestamp(message.getJMSTimestamp() != 0 ? new DateTime(message.getJMSTimestamp()) : null);
-            output.setJMSCorrelationID(message.getJMSCorrelationID());
-            output.setJMSReplyTo(message.getJMSReplyTo());
-            try {
-                output.setJMSRedelivered(message.getJMSRedelivered());
-            } catch (Exception e) {
-                // JBossMessaging throws "java.lang.IllegalStateException: This should never be called directly". Do nothing
-            }
-            output.setJMSType(message.getJMSType());
-            output.setJMSExpiration(message.getJMSExpiration());
-            if(message instanceof TextMessage)
-                output.setPayLoad(((TextMessage)message).getText());
-            
-            // Generate a Map of header elements, keyed by the name of each header element
-            // Ignore Error Details as we are showing it in a separate section
-            Map<String, HeaderElementDto> headerElements = new LinkedHashMap<String, HeaderElementDto>();
-            for (Enumeration e = message.getPropertyNames(); e.hasMoreElements() ;){
-                String name = (String) e.nextElement();
-                if(!JmsBrowser.HEADER_ERROR_DETAILS.equals(name)) {
-                    String value = Formatter.format(message.getObjectProperty(name));
-                    HeaderElementDto headerElement = headerElements.get(name);
-                    if (headerElement == null) {
-                        headerElement = new HeaderElementDto();
-                        headerElement.setName(name);
-                        headerElements.put(name, headerElement);
-                    }
-                    headerElement.setValue(value);
+
+            if (message != null) {
+                output.setJMSMessageID(input.getJMSMessageID());
+                output.setError(message.getStringProperty(JmsBrowser.HEADER_ERROR_DETAILS));
+                output.setPriority((long) message.getJMSPriority());
+                output.setHasPriorityAccess(JmsBrowser.hasChangePriorityAccess(message.getStringProperty(JmsBrowser.HEADER_ORIGINAL_QUEUE_NAME)));
+                output.setJMSDestination(message.getJMSDestination());
+                output.setJMSDeliveryMode(message.getJMSDeliveryMode());
+                output.setJMSTimestamp(message.getJMSTimestamp() != 0 ? new DateTime(message.getJMSTimestamp()) : null);
+                output.setJMSCorrelationID(message.getJMSCorrelationID());
+                output.setJMSReplyTo(message.getJMSReplyTo());
+                try {
+                    output.setJMSRedelivered(message.getJMSRedelivered());
+                } catch (Exception e) {
+                    // JBossMessaging throws "java.lang.IllegalStateException: This should never be called directly". Do nothing
                 }
-            }
-            
-            // Add labels to the header-elements based on the QueueInfo
-            // It is possible that a display-param points to a property on the Message (eg. JMSMessageID, JMSPriority etc.)
-            // Use bean intropsection to extract the value of that property
-            QueueInfo queueInfo = ConfigurationService.getInstance().getQueueInfo(message.getStringProperty(JmsBrowser.HEADER_ORIGINAL_QUEUE_NAME));
-            if (queueInfo != null && queueInfo.getDisplayParam() != null) {
-                for (DisplayParam displayParam : queueInfo.getDisplayParam()) {
-                    HeaderElementDto headerElement = headerElements.get(displayParam.getName());
-                    if (headerElement == null) {
-                        try {
+                output.setJMSType(message.getJMSType());
+                output.setJMSExpiration(message.getJMSExpiration());
+                if(message instanceof TextMessage)
+                    output.setPayLoad(((TextMessage)message).getText());
+
+                // Generate a Map of header elements, keyed by the name of each header element
+                // Ignore Error Details as we are showing it in a separate section
+                Map<String, HeaderElementDto> headerElements = new LinkedHashMap<>();
+                for (Enumeration e = message.getPropertyNames(); e.hasMoreElements() ;){
+                    String name = (String) e.nextElement();
+                    if(!JmsBrowser.HEADER_ERROR_DETAILS.equals(name)) {
+                        String value = Formatter.format(message.getObjectProperty(name));
+                        HeaderElementDto headerElement = headerElements.get(name);
+                        if (headerElement == null) {
                             headerElement = new HeaderElementDto();
-                            headerElement.setName(displayParam.getName());
-                            headerElement.setLabel(displayParam.getLabel());
-                            headerElements.put(displayParam.getName(), headerElement);
-                            if (displayParam.getName().equals("JMSTimestamp")) {
-                                String value = message.getJMSTimestamp() != 0 ? Formatter.format(new DateTime(message.getJMSTimestamp())) : null;
-                                headerElement.setValue(value);
-                            } else {
-                                String value = Formatter.format(BeanHelper.getField(message, displayParam.getName()));
-                                headerElement.setValue(value);
-                            }
-                        } catch (Exception e) {
-                            // do nothing
+                            headerElement.setName(name);
+                            headerElements.put(name, headerElement);
                         }
-                    } else {
-                        headerElement.setLabel(displayParam.getLabel());
+                        headerElement.setValue(value);
                     }
                 }
+
+                // Add labels to the header-elements based on the QueueInfo
+                // It is possible that a display-param points to a property on the Message (eg. JMSMessageID, JMSPriority etc.)
+                // Use bean intropsection to extract the value of that property
+                QueueInfo queueInfo = ConfigurationService.getInstance().getQueueInfo(message.getStringProperty(JmsBrowser.HEADER_ORIGINAL_QUEUE_NAME));
+                if (queueInfo != null && queueInfo.getDisplayParam() != null) {
+                    for (DisplayParam displayParam : queueInfo.getDisplayParam()) {
+                        HeaderElementDto headerElement = headerElements.get(displayParam.getName());
+                        if (headerElement == null) {
+                            try {
+                                headerElement = new HeaderElementDto();
+                                headerElement.setName(displayParam.getName());
+                                headerElement.setLabel(displayParam.getLabel());
+                                headerElements.put(displayParam.getName(), headerElement);
+                                if (displayParam.getName().equals("JMSTimestamp")) {
+                                    String value = message.getJMSTimestamp() != 0 ? Formatter.format(new DateTime(message.getJMSTimestamp())) : null;
+                                    headerElement.setValue(value);
+                                } else {
+                                    String value = Formatter.format(BeanHelper.getField(message, displayParam.getName()));
+                                    headerElement.setValue(value);
+                                }
+                            } catch (Exception e) {
+                                // do nothing
+                            }
+                        } else {
+                            headerElement.setLabel(displayParam.getLabel());
+                        }
+                    }
+                }
+
+                output.setHeaderElements(headerElements.values().toArray(new HeaderElementDto[headerElements.values().size()]));
+                buildBusinessEventLogDto(input, output, message);
+
             }
-            
-            output.setHeaderElements(headerElements.values().toArray(new HeaderElementDto[headerElements.values().size()]));
-            buildBusinessEventLogDto(input, output, message);
             return output;
         } catch(JMSException e) {
             throw new JaffaMessagingFrameworkException(JaffaMessagingFrameworkException.MESSAGE_INFO_MISSING, null, e);

@@ -629,11 +629,12 @@ public class UserMaintenanceTx extends MaintTx implements IUserMaintenance {
 
         if (input.getRequestId() != null && input.getRequestId().length() > 0) {
             try {
-                UserRequest userRequest = UserRequest.findByPK(uow , new Long(input.getRequestId()));
-                userRequest.setStatus("S");
-                uow.update(userRequest);
+                UserRequest userRequest = UserRequest.findByPK(uow, Long.valueOf(input.getRequestId()));
 
-
+                if (userRequest != null) {
+                    userRequest.setStatus("S");
+                    uow.update(userRequest);
+                }
             } catch (ValidationException e) {
                 if (appExps == null)
                     appExps = new ApplicationExceptions();
