@@ -609,7 +609,7 @@ Jaffa.finder.CriteriaPanel = Ext.extend(Ext.Panel, {
               }
             }
             else if (valueField.getValue()) {
-              if (fld.isCriteriaField) {
+              if (fld.isCriteriaField || fld.isSaveField) {
                 addValue = [valueField.getValue()];
                 if (valueField.xtype=='datefield' && opr[0].getValue()=='Between'){
                   if (valueField.ownerCt.toDate)
@@ -649,7 +649,7 @@ Jaffa.finder.CriteriaPanel = Ext.extend(Ext.Panel, {
             Jaffa.data.Util.set(c, mapping, cf);
           }
           //If isCriteriaField add criteria object otherwise just set value
-          if (fld.isCriteriaField) {
+          if (fld.isCriteriaField || fld.isSaveField) {
             if (addOp) cf.operator = addOp;
             if (addValue) cf.values = addValue;
           }
@@ -1256,6 +1256,7 @@ Jaffa.finder.CriteriaFieldPanel = Ext.extend(Ext.Container, {
             metaField: config.metaField || config.mapping,
             isValueField: true,
             isCriteriaField: config.isCriteriaField===false ? false : true,
+            isSaveField: config.isSaveField===false ? false : true,
             value: config.value || null
           }];
         }
