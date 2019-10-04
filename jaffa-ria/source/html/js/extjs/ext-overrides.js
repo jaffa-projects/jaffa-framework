@@ -1666,7 +1666,7 @@ Ext.Panel.override({
 Ext.form.TextField.override({
     setValueOriginal: Ext.form.TextField.prototype.setValue,
     setValue: function (v) {
-        if (!this.config.allowMarkup && !this.textOnly ) {
+        if (!this.config.allowMarkup) {
             v = Ext.util.Format.htmlEncode(v);
         }
         return this.setValueOriginal(v);
