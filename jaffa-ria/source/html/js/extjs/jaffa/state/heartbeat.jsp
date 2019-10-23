@@ -23,11 +23,14 @@ private static final int MARGIN = 60;
 final int timeoutInSeconds = session.getMaxInactiveInterval();
 
 // Get the enforce timeout property value
-final String isEnforceTimeout = (String) ContextManagerFactory.instance().getProperty("jaffa.jaffaRIA.enforceTimeout");
+String isEnforceTimeout = (String) ContextManagerFactory.instance().getProperty("jaffa.jaffaRIA.enforceTimeout");
+
+if (isEnforceTimeout ==  null || isEnforceTimeout.isEmpty()){
+  isEnforceTimeout = "true";
+}
 
 // If the enforce timeout property is true, do not schedule the heartbeat timer
-if (((isEnforceTimeout == null) || isEnforceTimeout.isEmpty() || isEnforceTimeout.equalsIgnoreCase("false"))
-                                && (timeoutInSeconds > MARGIN)) {
+if ("false".equalsIgnoreCase(isEnforceTimeout) && (timeoutInSeconds > MARGIN)) {
 %>
 
   // Send a heartbeat at regular intervals, such that the session never times out
