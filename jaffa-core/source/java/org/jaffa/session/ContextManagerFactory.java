@@ -125,7 +125,7 @@ public class ContextManagerFactory {
      * @return
      */
     public static String getApplicationRule(String key){
-        return instance().getProperty(key)!=null && !((String) instance().getProperty(key)).isEmpty() ?
+        return instance().getProperty(key)!=null && !(((String) instance().getProperty(key)).trim()).isEmpty() ?
                 (String)instance().getProperty(key) : null;
     }
 }
