@@ -197,6 +197,10 @@ public class ContextManager implements IContextManager {
      */
     public Object getProperty(Object key) {
         Map m = getThreadContext();
+        if (null != m  && null != m.get(key) && m.get(key).getClass().equals(String.class)) {
+            String appRuleValue = ((String) m.get(key)).trim();
+            return (null != appRuleValue && !appRuleValue.isEmpty()) ? appRuleValue : null;
+        }
         return m != null ? m.get(key) : null;
     }
 
