@@ -130,6 +130,9 @@ public class ContextManagerTest {
 
         assertEquals("C:/apache-tomcat-8.5.16/server/Goldesp/conf/report-security.txt", iContextManager.getProperty("usersecurity.reportsecurity.securityFilterKeyFile"));
 
+        assertNull(iContextManager.getProperty("workrecording.workorder.WIP.autoDelayAWMEmpty"));
+
+        assertEquals("AWP",iContextManager.getProperty("workrecording.workorder.WIP.autoDelayAWM"));
 
 
     }
