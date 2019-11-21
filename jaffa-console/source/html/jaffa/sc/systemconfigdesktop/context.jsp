@@ -81,7 +81,6 @@ private void writeRules (Properties rules, JspWriter out) throws Exception {
       isFirst = true;
     }
     String value = rules.getProperty(key);
-    if (value.equals(""))value="\"\"";
     out.write("'"+key + "':'" + StringHelper.escapeJavascript(value) + "'");
   }
 }
