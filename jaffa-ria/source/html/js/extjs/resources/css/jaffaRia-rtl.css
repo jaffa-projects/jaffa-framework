@@ -1383,6 +1383,10 @@ padding-right:0px !important;
 .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-form-item.x-form-item-adj .x-form-element {
         float:right;
         padding-left:0px !important;
+        margin-right:2px !important;
+}
+div#x-form-el-ext-comp-1034.x-form-element{
+   padding-right: 165px !important;
 }
 /* Work recording - Work package - Create New record Home Screen Drop down extra text-alignment */
 .x-panel.x-panel-noborder.x-border-panel .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-ml .x-panel-mr .x-panel-mc .indent.x-panel-body-noborder.x-form .x-form-item  + .x-form-label-left .-bwrap .-body.-body-noheader .x-form-label-left .-bwrap .-body.-body-noheader .x-panel.x-panel-noborder.x-form-label-left .x-panel-bwrap .x-panel-body.x-panel-body-noheader.x-panel-body-noborder .x-form-item.x-form-item-adj .x-form-element-adj{
