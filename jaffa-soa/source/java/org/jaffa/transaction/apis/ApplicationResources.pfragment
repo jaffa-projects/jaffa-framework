@@ -12,3 +12,7 @@ label.Jaffa.Transaction.TransactionConsumer.success=Successfully processed Trans
 label.Jaffa.Transaction.TransactionConsumer.error=Error in processing Transaction
 
 exception.exception.org.jaffa.transaction.services.InterruptedException.interrupted=User aborted. {0}
+
+
+email.soaEvent.jaffaTransactionError.subject=[label.Commons.Transaction] Error
+email.soaEvent.jaffaTransactionError.body=<html>There was a failure in processing the [label.Commons.Transaction] record with Type '$!{transaction.type}' #if($!{transaction.subType})and Sub Type '$!{transaction.subType}'#end<br/><br/>Error Message: $!{transaction.errorMessage}<br/><br/>#foreach( $field in $transaction.transactionFieldArray )  $field.fieldName: $!{field.value} <br/>#end<br/><br/><a href='${appUrl}/startComponent.do?component=Jaffa.Transaction.TransactionMaintenance&id=$!{id}'/>Check [label.Commons.Transaction] Details</a></html>
