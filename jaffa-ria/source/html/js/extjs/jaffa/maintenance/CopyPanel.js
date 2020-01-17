@@ -33,7 +33,7 @@ Jaffa.maintenance.CopyPanel = Ext.extend(Ext.ModalWindow, {
       proxy: controller?controller.proxy:config.controller.proxy,
       reader: controller?controller.reader:config.controller.reader,
       criteria: controller?(controller.copyCriteria  || Ext.ux.clone(controller.criteria)):(config.controller.copyCriteria || Ext.ux.clone(config.controller.criteria)),
-      pendingEventConfig : controller ? controller.pendingEventConfig
+      pendingEventConfig : controller && controller.pendingEventConfig ? (controller.pendingEventConfig) : (config && config.controller && config.controller.pendingEventConfig ? config.controller.pendingEventConfig : {})  
     });
     
     // register the key properties to retrieve new copy
