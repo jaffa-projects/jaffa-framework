@@ -59,15 +59,15 @@
     
     private static final String TOPIC_DESTINATION_PREFIX = "topic/";
     private static final String PREFIX_BROKER_NAME = "org.apache.activemq:brokerName=";
-    private static final String BROKER_NAME_SYSTEM_PROPERTY = System.getProperty("activemq.broker.name", "goldesp-jms-broker");
+    private static final String BROKER_NAME_SYSTEM_PROPERTY = System.getenv("ACTIVEMQ_BROKER_NAME")!=null ? System.getenv("ACTIVEMQ_BROKER_NAME") : System.getProperty("activemq.broker.name", "goldesp-jms-broker");
     private static final String BROKER_NAME_SUFFIX = ",type=Broker";
     private static final String BROKER_JMX_REMOTE_ACCESS_FILE = System.getProperty("activemq.jmx.remote.access.file", "");
     private static final String BROKER_JMX_REMOTE_PASSWORD_FILE = System.getProperty("activemq.jmx.remote.password.file", "");
-    private static final String BROKER_JMX_USER = System.getProperty("activemq.jmxuser", "");
-    private static final String BROKER_JMX_PASSWORD = System.getProperty("activemq.jmxpassword", "");
-    private static final String BROKER_IP_ADDRESS_SYSTEM_PROPERTY = System.getProperty("activemq.broker.ip.address", "localhost");
-    private static final String BROKER_JMX_REMOTE_PORT_SYSTEM_PROPERTY = System.getProperty("activemq.jmxremote.port", "11099");
-    private static final String BROKER_JMX_REMOTE_SERVICE_NAME_SYSTEM_PROPERTY = System.getProperty("activemq.jmxremote.service.name", "jmxrmi");
+    private static final String BROKER_JMX_USER = System.getenv("ACTIVEMQ_BROKER_JMX_USER")!=null ? System.getenv("ACTIVEMQ_BROKER_JMX_USER") : System.getProperty("activemq.jmxuser", "");
+    private static final String BROKER_JMX_PASSWORD = System.getenv("ACTIVEMQ_BROKER_JMX_PASSWORD")!=null ? System.getenv("ACTIVEMQ_BROKER_JMX_PASSWORD") : System.getProperty("activemq.jmxpassword", "");
+    private static final String BROKER_IP_ADDRESS_SYSTEM_PROPERTY = System.getenv("ACTIVEMQ_BROKER_IP")!=null ? System.getenv("ACTIVEMQ_BROKER_IP") : System.getProperty("activemq.broker.ip.address", "localhost");
+    private static final String BROKER_JMX_REMOTE_PORT_SYSTEM_PROPERTY = System.getenv("ACTIVEMQ_BROKER_JMX_REMOTE_PORT")!=null ? System.getenv("ACTIVEMQ_BROKER_JMX_REMOTE_PORT") : System.getProperty("activemq.jmxremote.port", "11099");
+    private static final String BROKER_JMX_REMOTE_SERVICE_NAME_SYSTEM_PROPERTY = System.getenv("ACTIVEMQ_BROKER_JMX_REMOTE_SERVICE_NAME")!=null ? System.getenv("ACTIVEMQ_BROKER_JMX_REMOTE_SERVICE_NAME") : System.getProperty("activemq.jmxremote.service.name", "jmxrmi");
     private static final String REMOTE_JMX_URL = "service:jmx:rmi:///jndi/rmi://"+ BROKER_IP_ADDRESS_SYSTEM_PROPERTY + ":"+ BROKER_JMX_REMOTE_PORT_SYSTEM_PROPERTY + "/" + BROKER_JMX_REMOTE_SERVICE_NAME_SYSTEM_PROPERTY;
     private JMXConnector connector;
 
