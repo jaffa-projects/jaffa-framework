@@ -220,7 +220,11 @@ Jaffa.attachment.Grid = Ext.extend(Ext.grid.GridPanel, {
     
     // the column model
     var sm = new Ext.grid.CheckboxSelectionModel();
-    var columns = [
+    var gridColumns = config.gridColumns;
+    if (gridColumns){
+      gridColumns = [sm].concat(config.gridColumns);
+    }
+    var columns = gridColumns ? gridColumns : [
       sm,
       {
         dataIndex: 'originalFileName',
@@ -369,7 +373,7 @@ Jaffa.attachment.Grid = Ext.extend(Ext.grid.GridPanel, {
     
     // Create grid config
     Ext.applyIf(config, {
-      plugins: new Ext.ux.plugins.MetaColumns({columns: columns, record: Jaffa.attachment.Record}),
+      plugins: new Ext.ux.plugins.MetaColumns({columns: gridColumns ? gridColumns : columns, record: Jaffa.attachment.Record}),
       sm: sm,
       ds: store,
       tbar: tbar,
