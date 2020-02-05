@@ -144,7 +144,7 @@ Jaffa.dashboard.MenuIndex.invokeOption = function(opt) {
         if(opt.component)
            u+=params.appCtx+"/startComponent.do?component="+opt.component;
         else if(opt.url)
-           u+=(opt.url.indexOf("http:")==0?"":params.appCtx+"/")+opt.url;
+           u+=(/^https?:/i.test(opt.url)?"": params.appCtx+"/")+opt.url;
         else
            return; // no detail feature
         // add params...
