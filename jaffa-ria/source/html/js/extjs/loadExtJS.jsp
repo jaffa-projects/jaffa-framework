@@ -16,7 +16,7 @@
 
 <%!
 private static Logger log = Logger.getLogger("extjs");
-public static final String[] SUPPORTED_LOCALES = new String[] {"af","ar","bg","ca","cs","da","de","el_GR","en_GB","en_US","en","es","fa","fr_CA","fr","gr","he","hr","hu","id","it","ja","ko","lt","lv","mk","nl","no_NB","no_NN","pl","pt_BR","pt","ro","ru","sk","sl","sr_RS","sr","sv_SE","th","tr","ukr","vn","zh_CN","zh_TW"};
+public static final String[] SUPPORTED_LOCALES = new String[] {"af","ar","bg","ca","cs","da","de","el_GR","en_GB","en_US","en","es","fa","fr_CA","fr","gr","he","hr","hu","id","it","ja","ko","lt","lv","mk","nl","no_NB","no_NN","pl","pt_BR","pt","ro","ru","sk","sl","sr_RS","sr","sv_SE","th","tr","ukr","vn","zh_CN","zh_TW","nb_NO","nn_NO","nb","nn"};
 public static final String SYMBOL_RULE = "jaffa.datatypes.defaultCurrencySymbol";
 public static final String DEFAULT_TIME_FORMAT = "jaffa.datatypes.defaultTimeFormat";
 
@@ -67,6 +67,15 @@ if(LocaleContext.getLocale()!=null) {
             currentLocale = l;
             break;
         }
+    }
+    
+    //The below code required to resolve the locale for norwegian bokmal
+    if("nb_NO".equals(currentLocale) || "nb".equals(currentLocale)){
+       currentLocale = "no_NB";
+    }
+
+    if("nn_NO".equals(currentLocale) || "nn".equals(currentLocale)){
+       currentLocale = "no_NN";
     }
 }
 if(currentLocale != null){
