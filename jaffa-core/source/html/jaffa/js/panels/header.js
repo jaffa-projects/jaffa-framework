@@ -529,30 +529,39 @@ function sanitizeName(name) {
 
 // Only store collapsed sections. Expanded should be "O"pen or "C"losed
 function setExpanded(name, expanded) {
-  name = sanitizeName(name);
+  var secs = sanitizeSection(sanitizeName(name), expanded);
+  saveExpanded(secs);
+}
+
+function sanitizeSection(name, expanded) {
   var secs = getCookie("Sections");
-  if(secs==null||secs=="") secs="|";
+  secs = sanitizeName(secs);
+  if(secs == null || secs == "") secs = "|";
   var i=secs.indexOf("|"+name+":");
   if(i>=0) secs = secs.substring(0,i) + secs.substring(i+name.length+3);
   secs="|"+name+":"+expanded+secs;
-  saveExpanded(secs);
+  return secs;
 }
 
 // See if a section is expanded and move cookie to top of the list
 // returns "" if there is no cookie,"O" it it should be open or "C" it it should be closed
 function isExpanded(name) {
   name = sanitizeName(name);
+  return sanitizeSectionExpanded(name);
+}
+function sanitizeSectionExpanded(name) {
   var secs = getCookie("Sections");
-  if(secs==null||secs=="") secs="|";
-  var i=secs.indexOf("|"+name+":");
-  if(i<0)
-    return "";
-  else {
-    var value=secs.substring(i+name.length+2,i+name.length+3);
-    secs = "|" + name + ":" + value + secs.substring(0,i) + secs.substring(i+name.length+3);
-    saveExpanded(secs);
-    return value;
-  }
+  secs = sanitizeName(secs);
+  if(secs == null||secs == "") secs = "|";
+    var i=secs.indexOf("|"+name+":");
+    if(i<0)
+      return "";
+      else {
+        var value=secs.substring(i+name.length+2,i+name.length+3);
+        secs = "|" + name + ":" + value + secs.substring(0,i) + secs.substring(i+name.length+3);
+        saveExpanded(secs);
+        return value;
+      }
 }
 
 // Save cookie, and truncate if too big
