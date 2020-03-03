@@ -49,26 +49,25 @@
 
 package org.jaffa.presentation.portlet.widgets.taglib;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.text.ParseException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import org.apache.log4j.Logger;
-import java.util.*;
+import org.jaffa.datatypes.Parser;
 import org.jaffa.presentation.portlet.StartComponentAction;
+import org.jaffa.rules.IPropertyRuleIntrospector;
 import org.jaffa.security.SecurityManager;
 import org.jaffa.util.CssParser;
 import org.jaffa.util.URLHelper;
 
-import javax.servlet.jsp.tagext.*;
-
-import org.jaffa.datatypes.Parser;
-import org.jaffa.rules.IPropertyRuleIntrospector;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.tagext.BodyContent;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.text.ParseException;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /** Tag Handler for the Lookup.*/
 public class LookupTag extends CustomTag implements IWidgetTag,IFormTag,IBodyTag {
@@ -396,7 +395,7 @@ public class LookupTag extends CustomTag implements IWidgetTag,IFormTag,IBodyTag
                 buf.append('&')
                 .append(RETURN_STYLE)
                 .append('=')
-                .append(CssParser.toString(m2));
+                .append(URLEncoder.encode(CssParser.toString(m2), "UTF-8"));
             }
         }
         
