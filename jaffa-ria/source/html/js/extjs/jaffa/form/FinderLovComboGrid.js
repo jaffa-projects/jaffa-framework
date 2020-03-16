@@ -258,7 +258,7 @@ Jaffa.form.FinderLovComboGrid = Ext.extend(Jaffa.form.FinderLovComboBox, {
           grid.hide();
           // reset the store
           this.window.gridOfSelected.getStore().removeAll();
-          this.window.gridOfSelected.getStore().add(grid.getSelectionModel().getSelections());
+          this.window.gridOfSelected.getStore().add(this.window.grid.selectedRecordMap.getRange());
           this.window.gridOfSelected.show();
           this.window.gridOfSelected.getView().refresh();
         } else {
@@ -404,25 +404,21 @@ Jaffa.form.FinderLovComboGrid = Ext.extend(Jaffa.form.FinderLovComboBox, {
         var popup = this;
         this.grid.on('rowclick', function(grid, rowIdx, evt) {
           // find the record
-          var rec = grid.getStore().getAt(rowIdx);
-          if (rec) {
-            if (! grid.getSelectionModel().isSelected(rowIdx)) {
-              // perform deselect
-              // remove checked mark in the record
-              rec.set(combo.checkField, false);
-              // remove the record from selected record cache
-              grid.selectedRecordMap.removeKey(rec.get(combo.valueField));
-            } else {
-              // perform select
-              // mark the record as checked
-              rec.set(combo.checkField, true);
-              // add the record to selected record cache
-              // do not add directly to the selected grid store because if user toggle a record quickly
-              // could corrupt the record when add/remove are concurrent.
-              // synch the selected records at the time of grid toggle.
-              grid.selectedRecordMap.setRecords(rec.get(combo.valueField), rec);
+              for(var i=0;i < grid.getStore().data.length;i++) {
+                //Getting selected records
+                  var rec=grid.getStore().data.items[i];
+                //Getting row index of the current record
+                 var rowIdx = grid.getStore().indexOf(rec);
+                //If there is no selected record then removing it from selectedRecordMap otherwise adding the record to selectedRecordMap.
+                if (! grid.getSelectionModel().isSelected(rowIdx)) {
+                    rec.set(combo.checkField, false);
+                    grid.selectedRecordMap.removeKey(rec.get(combo.valueField));
+                } else {
+                      //Adding the record
+                      rec.set(combo.checkField, true);
+                      grid.selectedRecordMap.setRecords(rec.get(combo.valueField), rec);                
+               }
             }
-          }
         }, this);
         if (this.gridOfSelected) {
           this.gridOfSelected.on('rowclick', function(grid, rowIdx, evt) {
