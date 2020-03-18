@@ -351,6 +351,10 @@ public class StringHelper {
         return s!=null ? Encode.forJavaScript(s) : "";
     }
 
+    public static String escapeJavascriptAttribute(String s) {
+        return s != null ? Encode.forJavaScriptAttribute(s) : "";
+    }
+
     /**
      * Convenience method to ensure that a scripting attack is not mounted by escaping the input.
      * This is intended for use where the target UI is html.

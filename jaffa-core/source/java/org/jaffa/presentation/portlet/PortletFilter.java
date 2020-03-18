@@ -576,13 +576,17 @@ public class PortletFilter implements Filter {
             }
 
 
-            if (locale == null || locale.isEmpty()){
+            if (locale == null || locale.isEmpty()) {
                 // Set the LocaleContext with a Locale instance containing the current variation
                 Locale browserLocale = request.getLocale();
                 if (browserLocale != null && (browserLocale.getVariant() == null || browserLocale.getVariant().length() == 0)) {
                     if (log.isDebugEnabled())
                         log.debug("Adding the variation to the locale based on request locale: " + locale);
-                    locale = browserLocale.getLanguage()+"_"+browserLocale.getCountry()+(VariationContext.getVariation()!=null && !VariationContext.NULL_VARIATION.equals(VariationContext.getVariation()) ? "_"+VariationContext.getVariation() : "");
+                    if (browserLocale.getCountry() != null && browserLocale.getCountry().trim().length() > 0) {
+                        locale = browserLocale.getLanguage() + "_" + browserLocale.getCountry() + (VariationContext.getVariation() != null && !VariationContext.NULL_VARIATION.equals(VariationContext.getVariation()) ? "_" + VariationContext.getVariation() : "");
+                    } else {
+                        locale = browserLocale.getLanguage() + (VariationContext.getVariation() != null && !VariationContext.NULL_VARIATION.equals(VariationContext.getVariation()) ? "_" + VariationContext.getVariation() : "");
+                    }
                 }
             }
 
