@@ -54,7 +54,11 @@ public class ClassMetaDataHelper {
 
     /** Convert the input to HTML compatible String. */
     String toHtml(Object obj) {
-        return obj == null ? "" :  StringHelper.escapeJavascript(StringHelper.convertToHTML(obj.toString()));
+        String html = obj == null ? "" : StringHelper.escapeJavascriptAttribute(StringHelper.convertToHTML(obj.toString()));
+        if (log.isDebugEnabled()) {
+            log.debug("html :" + html);
+        }
+        return html;
     }
 
     /** Converts the input String to an appropriate value based on the jsType,
