@@ -817,6 +817,9 @@ Jaffa.maintenance.plugins.InlineRowEditor = Ext.extend(Ext.ux.grid.RowEditor, {
 
   //private when a phantom record is canceled it is removed from the store
   stopEditing: function(saveChanges){
+    if(this.grid.columnMove){
+      return; 
+    }
     this.editing = false;
     this.grid.editing = false;
     if (!this.isVisible()) {
