@@ -32,7 +32,7 @@
   SavedQueries = {
       componentRef: '<%=StringHelper.escapeHtml(componentRef)%>',
       contextRef: '<%=StringHelper.escapeHtml(contextRef)%>',
-      url: '<%= request.getRequestURI() %>',
+      url: '<%= StringHelper.escapeHtml(request.getRequestURI()) %>',
       nameQueryPairs: <%=queries.toString()%>,
       version:'2.0'
   };

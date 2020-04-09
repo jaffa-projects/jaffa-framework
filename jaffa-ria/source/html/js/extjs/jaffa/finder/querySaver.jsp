@@ -125,7 +125,7 @@
 %>
   SavedQueries = {
       pageRef: '<%=StringHelper.escapeHtml(pageRef)%>',
-      url: '<%= request.getRequestURI() %>',
+      url: '<%= StringHelper.escapeHtml(request.getRequestURI()) %>',
       nameQueryPairs: <%=json.toString()%>
   };
 <%        
