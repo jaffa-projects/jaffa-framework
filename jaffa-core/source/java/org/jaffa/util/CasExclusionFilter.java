@@ -53,6 +53,9 @@ import org.apache.commons.lang.StringUtils;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Top-level Central Authentication Service (CAS) web.xml filter that directs the HTTP filter chain to skip
@@ -61,41 +64,43 @@ import java.io.IOException;
  * @author Matthew Wayles
  * @version 1.0
  */
-public class CasExclusionFilter implements Filter{
+public class CasExclusionFilter implements Filter {
 
-  /**
-   * Initialize the filter
-   * @param request The HTTP request for endpoint access
-   * @throws ServletException General exception thrown by a servlet when it encounters difficulty
-   */
+    /**
+     * Initialize the filter
+     * @param request The HTTP request for endpoint access
+     * @throws ServletException General exception thrown by a servlet when it encounters difficulty
+     */
     public void init(FilterConfig request) throws ServletException {
-
     }
 
-  /**
-   * Implementation of filter operations when it is triggered. This filter skips all subseqwuent filters unless they
-   * are configured with the FORWARD dispatcher
-   * @param request The HTTP request for endpoint access
-   * @param response    The HTTP response supplied by the server
-   * @param chain   The linear chain of filters
-   * @throws IOException    When a filter, endpoint, or server component cannot be accesses
-   * @throws ServletException   General exception thrown by a servlet when it encounters difficulty
-   */
+    /**
+     * Implementation of filter operations when it is triggered. This filter skips all subsequent filters unless they
+     * are configured with the FORWARD dispatcher
+     * @param request The HTTP request for endpoint access
+     * @param response    The HTTP response supplied by the server
+     * @param chain   The linear chain of filters
+     * @throws IOException    When a filter, endpoint, or server component cannot be accesses
+     * @throws ServletException   General exception thrown by a servlet when it encounters difficulty
+     */
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-      HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-      String path = httpServletRequest.getServletPath();
-      String info = StringUtils.defaultString(httpServletRequest.getPathInfo());
-      RequestDispatcher dispatcher = request.getRequestDispatcher(path + info);
-      if (dispatcher != null) {
-        dispatcher.forward(request, response);
-      }
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        String path = httpServletRequest.getServletPath();
+        String info = StringUtils.defaultString(httpServletRequest.getPathInfo());
+
+        //security check by URL encoder if the string from the request is harmful
+        //then use the decoded path info
+        String encoded = URLEncoder.encode(path + info, StandardCharsets.UTF_8.toString());
+        RequestDispatcher dispatcher = request.getRequestDispatcher(URLDecoder.decode(encoded, StandardCharsets.UTF_8.toString()));
+        if (dispatcher != null) {
+            dispatcher.forward(request, response);
+        }
     }
 
-  /**
-   * Remove the filter from the filter chain
-   */
-  public void destroy() {
-
+    /**
+     * Remove the filter from the filter chain
+     */
+    public void destroy() {
     }
 
 }
