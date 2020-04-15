@@ -56,7 +56,7 @@
 
     </script>
 
-    <script type="text/javascript" src="js/extjs/jaffa/finder/querySaver.jsp?pageRef=<%=pageRef%>"></script>
+    <script type="text/javascript" src="js/extjs/jaffa/finder/querySaver.jsp?pageRef=<%=StringHelper.escapeHtml(pageRef)%>"></script>
 
     <!-- Edit this bundle definition to include more files into this component -->
     <jwr:script src="/bundles/jaffa/transaction/transactionfinder.js"/>

@@ -542,4 +542,23 @@ Ext.ux.UploadDialog.Dialog.prototype.i18n.progress_waiting_text='Please select f
 Ext.override(Ext.form.TextField, {
   displayRenderer: Jaffa.form.textRenderer
 });
+/**
+ * 
+ */
+/** 
+ * @class Ext.grid.GridView
+ * This override to pass the columnMove to the InlineRowEdtor.
+ */
+Ext.override(Ext.grid.GridView,  {
+    onColumnMove : function(cm, oldIndex, newIndex) {
+        this.indexMap = null;
+        this.grid.columnMove = true;
+        this.refresh(true);
+        this.grid.columnMove = false;
+        this.restoreScroll(this.getScrollState());
+        
+        this.afterMove(newIndex);
+        this.grid.fireEvent('columnmove', oldIndex, newIndex);
+    }
+});
 

@@ -1,4 +1,5 @@
 <%@ page import = "org.jaffa.util.URLHelper" %>
+<%@ page import="org.jaffa.util.StringHelper" %>
 <%
   String pageRef=request.getRequestURI().substring(request.getContextPath().length()+1);
 %>
@@ -25,7 +26,7 @@
   <script type="text/javascript" src="js/extjs/jaffa/metadata/classMetaData.jsp?..."></script>
 
   <!-- ExtJS UI Extentions -->
-  <script type="text/javascript" src="js/extjs/jaffa/metadata/labels.jsp?ref=<%=pageRef%>"></script>
+  <script type="text/javascript" src="js/extjs/jaffa/metadata/labels.jsp?ref=<%=StringHelper.escapeHtml(pageRef)%>"></script>
   <script type="text/javascript" src="js/extjs/grid/RowExpander.js"></script>
   <script type="text/javascript" src="js/extjs/jaffa/finder/FinderComboBox.js"></script>
   <script type="text/javascript" src="js/extjs/jaffa/finder/FinderComboGrid.js"></script>
@@ -50,8 +51,8 @@
 
   <!-- State Management -->
   <script type="text/javascript" src="js/extjs/state/SessionProvider.js"></script>
-  <script type="text/javascript" src="js/extjs/jaffa/state/querySaver.jsp?pageRef=<%=pageRef%>"></script>
-  <script type="text/javascript" src="js/extjs/jaffa/state/widgetStateSaver.jsp?pageRef=<%=pageRef%>"></script>
+  <script type="text/javascript" src="js/extjs/jaffa/state/querySaver.jsp?pageRef=<%=StringHelper.escapeHtml(pageRef)%>"></script>
+  <script type="text/javascript" src="js/extjs/jaffa/state/widgetStateSaver.jsp?pageRef=<%=StringHelper.escapeHtml(pageRef)%>"></script>
   <script type="text/javascript" src="js/extjs/jaffa/state/Criteria.js"></script>
 
 </head>
