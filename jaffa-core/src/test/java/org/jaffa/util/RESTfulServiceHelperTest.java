@@ -1,6 +1,7 @@
 package org.jaffa.util;
 
 import com.google.gson.Gson;
+import org.apache.log4j.Logger;
 import org.jaffa.datatypes.DateTime;
 import org.jaffa.loader.IRepository;
 import org.jaffa.loader.ManagerRepositoryService;
@@ -33,6 +34,8 @@ public class RESTfulServiceHelperTest {
 
     @Test
     public void testJsonParseToObject() throws InstantiationException, IllegalAccessException, IOException {
+        Logger log = Logger.getLogger(RESTfulServiceHelperTest.class);
+
         //prepare test data
         String dateformat = "yyyy-MM-dd'T'HH:mm:ss.SSS";
         LocaleResourcesManager localeResourcesManager = mock(LocaleResourcesManager.class);
@@ -81,6 +84,9 @@ public class RESTfulServiceHelperTest {
 
         //test getValidFieldNames
         Map<String, Class> validFields = RESTfulServiceHelper.getValidFieldNames(RESTfulServiceHelperTest.class);
+        if (log.isInfoEnabled()) {
+            log.info("validFields: " + validFields.keySet());
+        }
         assertEquals(13, validFields.size());
 
         //test parseJsonFields
