@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -82,7 +82,19 @@ public class RESTfulServiceHelperTest {
 
         //test getValidFieldNames
         Map<String, Class> validFields = RESTfulServiceHelper.getValidFieldNames(RESTfulServiceHelperTest.class);
-        assertEquals("validFields: " + validFields.keySet(), 13, validFields.size());
+        assertTrue(validFields.containsKey("listStrField"));
+        assertTrue(validFields.containsKey("longField"));
+        assertTrue(validFields.containsKey("doubleField"));
+        assertTrue(validFields.containsKey("listIntegerField"));
+        assertTrue(validFields.containsKey("booleanField"));
+        assertTrue(validFields.containsKey("strArrField"));
+        assertTrue(validFields.containsKey("dateTimeField"));
+        assertTrue(validFields.containsKey("listDoubleField"));
+        assertTrue(validFields.containsKey("listLongField"));
+        assertTrue(validFields.containsKey("integerField"));
+        assertTrue(validFields.containsKey("listBooleanField"));
+        assertTrue(validFields.containsKey("listMapField"));
+        assertTrue(validFields.containsKey("stringField"));
 
         //test parseJsonFields
         String jsonString = "{\"booleanField\": \"true\", " +
@@ -101,8 +113,8 @@ public class RESTfulServiceHelperTest {
                 "\"unknown\": \"unknown\"}";
 
         Map<String, Object> values = RESTfulServiceHelper.parseJsonFields(jsonString, validFields);
-        assertEquals(13, values.size());
-
+        assertFalse(values.containsKey("unknown"));
+        assertEquals("parsedFields: " + values.keySet(), 13, values.size());
 
         //test setValidFieldValues
         RESTfulServiceHelperTest test = RESTfulServiceHelper.setValidFieldValues(values, RESTfulServiceHelperTest.class);
