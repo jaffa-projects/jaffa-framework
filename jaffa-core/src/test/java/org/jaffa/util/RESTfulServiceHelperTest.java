@@ -34,8 +34,6 @@ public class RESTfulServiceHelperTest {
 
     @Test
     public void testJsonParseToObject() throws InstantiationException, IllegalAccessException, IOException {
-        Logger log = Logger.getLogger(RESTfulServiceHelperTest.class);
-
         //prepare test data
         String dateformat = "yyyy-MM-dd'T'HH:mm:ss.SSS";
         LocaleResourcesManager localeResourcesManager = mock(LocaleResourcesManager.class);
@@ -84,10 +82,7 @@ public class RESTfulServiceHelperTest {
 
         //test getValidFieldNames
         Map<String, Class> validFields = RESTfulServiceHelper.getValidFieldNames(RESTfulServiceHelperTest.class);
-        if (log.isInfoEnabled()) {
-            log.info("validFields: " + validFields.keySet());
-        }
-        assertEquals(13, validFields.size());
+        assertEquals("validFields: " + validFields.keySet(), 13, validFields.size());
 
         //test parseJsonFields
         String jsonString = "{\"booleanField\": \"true\", " +
