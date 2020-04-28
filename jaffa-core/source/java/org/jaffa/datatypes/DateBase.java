@@ -459,7 +459,7 @@ class DateBase implements Cloneable, Comparable, Serializable {
                     // parse based on each layout, unitl successful !!!
                     try {
                         layout = LocaleHelper.determineLayout(layouts[i]);
-                        DateFormat df = obtainDateFormat(layout);
+                        SimpleDateFormat df = obtainDateFormat(layout);
                         df.setLenient(false);
                         utilDate = df.parse(dateString);
                         break;
@@ -487,12 +487,12 @@ class DateBase implements Cloneable, Comparable, Serializable {
     }
 
     /**
-     * Returns a DateFormat instance, which can be used to parse/format dates
+     * Returns a SimpleDateFormat instance, which can be used to parse/format dates
      * as per the input pattern.
      * @param pattern the pattern describing the date and time format.
      * @return a DateFormat instance.
      */
-    static DateFormat obtainDateFormat(String pattern) {
+    static SimpleDateFormat obtainDateFormat(String pattern) {
         // The input pattern may contain additional configuration parameters; for eg. "yyyyMMdd HHmmss?timeZone=UTC"
         // Remove the configuration parameters from the pattern, and apply it on the DateFormat instance.
         Map<String, String> config = null;
@@ -504,7 +504,7 @@ class DateBase implements Cloneable, Comparable, Serializable {
         }
 
         // Create the DateFormat
-        DateFormat df;
+        SimpleDateFormat df;
         if (LocaleContext.getLocale() != null)
             df = new SimpleDateFormat(pattern, LocaleContext.getLocale());
         else
@@ -517,6 +517,10 @@ class DateBase implements Cloneable, Comparable, Serializable {
             if (timeZone != null)
                 df.setTimeZone(TimeZone.getTimeZone(timeZone));
         }
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.set(Calendar.YEAR, 2000);
+        df.set2DigitYearStart(cal.getTime());
         return df;
     }
 
