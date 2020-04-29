@@ -63,7 +63,7 @@ public class NumberHelper {
      */
     public static Double round(Double input, int newScale) {
         if (input != null) {
-            BigDecimal bigDecimal = new BigDecimal(input);
+            BigDecimal bigDecimal = new BigDecimal(input.toString());
             bigDecimal = bigDecimal.setScale(newScale, RoundingMode.HALF_UP);
             return bigDecimal.doubleValue();
         } else
