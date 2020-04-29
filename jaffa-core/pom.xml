@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.jaffa</groupId>
         <artifactId>jaffa-framework</artifactId>
-        <version>8.1.28-SNAPSHOT</version>
+        <version>8.1.29-SNAPSHOT</version>
     </parent>
 
     <groupId>org.jaffa</groupId>
@@ -274,6 +274,21 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${version.com.fasterxml.jackson-annotations}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${version.com.fasterxml.jackson-core}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${version.com.fasterxml.jackson-databind}</version>
         </dependency>
         <!-- ******************************************************************* -->
         <!-- Test Libraries                                                      -->
