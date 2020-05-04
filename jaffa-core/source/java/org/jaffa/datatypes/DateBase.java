@@ -504,7 +504,7 @@ class DateBase implements Cloneable, Comparable, Serializable {
         }
 
         // Create the DateFormat
-        DateFormat df;
+        SimpleDateFormat df;
         if (LocaleContext.getLocale() != null)
             df = new SimpleDateFormat(pattern, LocaleContext.getLocale());
         else
@@ -517,6 +517,10 @@ class DateBase implements Cloneable, Comparable, Serializable {
             if (timeZone != null)
                 df.setTimeZone(TimeZone.getTimeZone(timeZone));
         }
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.set(Calendar.YEAR, 2000);
+        df.set2DigitYearStart(cal.getTime());
         return df;
     }
 
