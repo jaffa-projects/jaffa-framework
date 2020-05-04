@@ -459,7 +459,7 @@ class DateBase implements Cloneable, Comparable, Serializable {
                     // parse based on each layout, unitl successful !!!
                     try {
                         layout = LocaleHelper.determineLayout(layouts[i]);
-                        SimpleDateFormat df = obtainDateFormat(layout);
+                        DateFormat df = obtainDateFormat(layout);
                         df.setLenient(false);
                         utilDate = df.parse(dateString);
                         break;
@@ -487,12 +487,12 @@ class DateBase implements Cloneable, Comparable, Serializable {
     }
 
     /**
-     * Returns a SimpleDateFormat instance, which can be used to parse/format dates
+     * Returns a DateFormat instance, which can be used to parse/format dates
      * as per the input pattern.
      * @param pattern the pattern describing the date and time format.
      * @return a DateFormat instance.
      */
-    static SimpleDateFormat obtainDateFormat(String pattern) {
+    static DateFormat obtainDateFormat(String pattern) {
         // The input pattern may contain additional configuration parameters; for eg. "yyyyMMdd HHmmss?timeZone=UTC"
         // Remove the configuration parameters from the pattern, and apply it on the DateFormat instance.
         Map<String, String> config = null;
