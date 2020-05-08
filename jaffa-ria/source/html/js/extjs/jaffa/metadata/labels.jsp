@@ -40,29 +40,50 @@ Should be included in the main JSP that loads all the java script using the foll
         return s;
     }
 
+    //Get all the label file names including custom labels as well
+    File[] getLabelFileNames(String ref, HttpServletRequest request) {
+        String root = request.getSession().getServletContext().getRealPath("/");
+        String rootRef = root + ref.replace("/", File.separator);
+        File dir = new File(rootRef.substring(0, rootRef.lastIndexOf(File.separator)));
+
+        File[] files = dir.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File directory, String fileName) {
+                if (fileName.endsWith(".labels")) {
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        return files;
+    }
+
     // Read all the tokens in from the file
     TreeSet<String> readLabelTokens(String page, HttpServletRequest request) {
         TreeSet<String> out = new TreeSet<String>();
         BufferedReader br = null;
-        try {
-            File f = new File(getLabelFileName(page, request));
-            if(f.exists()) {
-                br = new BufferedReader(new FileReader(f));
-                String line=null;
-                int count=0;
-                while ( (line = br.readLine()) != null) {
-                    out.add(line);
+        for (File f : getLabelFileNames(page, request)) {
+            if (f.exists()) {
+                try {
+                    br = new BufferedReader(new FileReader(f));
+                    String line = null;
+                    int count = 0;
+                    while ((line = br.readLine()) != null) {
+                        out.add(line);
+                    }
+                } catch (IOException ex) {
+                    log.error("Failed read token file " + request.getRequestURI(), ex);
+                } finally {
+                    try {
+                        if (br != null) br.close();
+                    } catch (IOException ex) {
+                        log.error("Failed read token file " + request.getRequestURI(), ex);
+                    }
                 }
             }
-        } catch (IOException ex) {
-            log.error("Failed read token file " + request.getRequestURI(),ex);
-        } finally {
-            try {
-                if (br != null) br.close();
-            } catch (IOException ex) {
-                log.error("Failed read token file " + request.getRequestURI(),ex);
-            }
         }
+
         return out;
     }
 
@@ -70,25 +91,25 @@ Should be included in the main JSP that loads all the java script using the foll
     synchronized void addLabelToken(String page, HttpServletRequest request, String token) {
         BufferedWriter w = null;
         try {
-            TreeSet<String> t = readLabelTokens(page,request);
+            TreeSet<String> t = readLabelTokens(page, request);
             t.add(token);
             File f = new File(getLabelFileName(page, request));
-            if(!f.getParentFile().exists())
+            if (!f.getParentFile().exists())
                 f.getParentFile().mkdirs();
             // Write out the script
-            w = new BufferedWriter( new FileWriter(f, false) );
+            w = new BufferedWriter(new FileWriter(f, false));
             for (String tk : t) {
-                w.write( tk );
+                w.write(tk);
                 w.newLine();
             }
             log.debug("Saved Token " + token);
         } catch (IOException ex) {
-            log.error("Failed to add token " + token + " to " + request.getRequestURI(),ex);
+            log.error("Failed to add token " + token + " to " + request.getRequestURI(), ex);
         } finally {
             try {
                 if (w != null) w.close();
             } catch (IOException ex) {
-              log.error("Failed to add token " + token + " to " + request.getRequestURI(),ex);
+                log.error("Failed to add token " + token + " to " + request.getRequestURI(), ex);
             }
         }
     }
