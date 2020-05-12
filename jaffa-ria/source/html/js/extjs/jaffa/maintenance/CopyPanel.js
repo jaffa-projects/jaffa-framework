@@ -88,7 +88,7 @@ Jaffa.maintenance.CopyPanel = Ext.extend(Ext.ModalWindow, {
         else {
           reqParams += '?';
         }
-        reqParams += this.keyNames[i] + '=' + Jaffa.data.Util.get(response[0].source, this.keyNames[i]);
+        reqParams += this.keyNames[i] + '=' + encodeURIComponent(Jaffa.data.Util.get(response[0].source, this.keyNames[i]));
       }
       window.open(this.forwardUrl + reqParams, "_self");
     }

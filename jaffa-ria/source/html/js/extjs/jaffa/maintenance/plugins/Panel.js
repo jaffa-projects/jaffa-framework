@@ -375,6 +375,13 @@ Jaffa.maintenance.plugins.Panel = Ext.extend(Ext.emptyFn, {
               onChangeFn.call(this);
             }
           }, this);
+          f.on('push', function(f, oldValue, newValue){
+            // add old value and new value comparison to allow this event also act like change event
+            // make sure that the ''==undefined==null in the test
+            if (!this.isDirty && f.activated === true && f.textOnly !== true) {
+              onChangeFn.call(this);
+            }
+          }, this);
         } else if ((f.xtype && f.xtype.toLowerCase().indexOf('combo')>=0)
             || f instanceof Ext.form.ComboBox || f instanceof Ext.form.DateField
             || f.xtype=='xdatetime' || f.xtype=='datefield'

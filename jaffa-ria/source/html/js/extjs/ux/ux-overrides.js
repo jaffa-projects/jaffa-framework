@@ -21,6 +21,13 @@ Ext.override(Ext.ux.form.DateTime, {
   }
 });
 
+/** This override should not be applied in all cases it is a special extension when user enters 2 digit year in datefield.
+ *
+ */
+Ext.apply(Date, {
+  y2kYear : 99
+});
+
 /** This override should not be applied in all cases it is a special extension when using
  * Jaffa style criteria objects to apply filters.
  *
