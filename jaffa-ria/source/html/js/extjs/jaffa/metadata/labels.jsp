@@ -63,22 +63,25 @@ Should be included in the main JSP that loads all the java script using the foll
     TreeSet<String> readLabelTokens(String page, HttpServletRequest request) {
         TreeSet<String> out = new TreeSet<String>();
         BufferedReader br = null;
-        for (File f : getLabelFileNames(page, request)) {
-            if (f.exists()) {
-                try {
-                    br = new BufferedReader(new FileReader(f));
-                    String line = null;
-                    int count = 0;
-                    while ((line = br.readLine()) != null) {
-                        out.add(line);
-                    }
-                } catch (IOException ex) {
-                    log.error("Failed read token file " + request.getRequestURI(), ex);
-                } finally {
+        File[] labelFileNames = getLabelFileNames(page, request);
+        if (labelFileNames != null) {
+            for (File f : labelFileNames) {
+                if (f.exists()) {
                     try {
-                        if (br != null) br.close();
+                        br = new BufferedReader(new FileReader(f));
+                        String line = null;
+                        int count = 0;
+                        while ((line = br.readLine()) != null) {
+                            out.add(line);
+                        }
                     } catch (IOException ex) {
                         log.error("Failed read token file " + request.getRequestURI(), ex);
+                    } finally {
+                        try {
+                            if (br != null) br.close();
+                        } catch (IOException ex) {
+                            log.error("Failed read token file " + request.getRequestURI(), ex);
+                        }
                     }
                 }
             }
