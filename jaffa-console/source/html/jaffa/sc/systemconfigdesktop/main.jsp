@@ -37,7 +37,7 @@
             <%-- URL Input Parameters --%>
                 var params = {
                     appCtx: '<%=rcp%>',
-                    pageRef: '<%= request.getRequestURI().substring(rcp.length() + 1) %>',
+                    pageRef: '<%= StringHelper.escapeJavascript(request.getRequestURI().substring(rcp.length() + 1)) %>',
                     showRelationShip: true,
                     docType:'DO_DOC',
                     topicName: 'OutboundEvents',

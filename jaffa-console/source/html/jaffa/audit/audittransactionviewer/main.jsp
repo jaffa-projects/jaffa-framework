@@ -41,7 +41,7 @@
       var params = {
         appCtx: '<%=rcp%>',
         transactionId: '<%= StringHelper.escapeJavascript(request.getParameter("transactionId")) %>',
-        pageRef: '<%= request.getRequestURI().substring(rcp.length() + 1) %>'
+        pageRef: '<%= StringHelper.escapeJavascript(request.getRequestURI().substring(rcp.length() + 1)) %>'
       };
 
       var security = {
