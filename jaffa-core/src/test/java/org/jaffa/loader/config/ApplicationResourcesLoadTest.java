@@ -8,6 +8,7 @@ import java.util.Properties;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertNull;
 
 public class ApplicationResourcesLoadTest {
     private static AnnotationConfigApplicationContext resourceLoaderConfig = new AnnotationConfigApplicationContext(CoreLoaderConfig.class);
@@ -19,10 +20,13 @@ public class ApplicationResourcesLoadTest {
     public void testResourceLoad() {
         ApplicationResourcesManager applicationResourcesManager = resourceLoaderConfig.getBean(ApplicationResourcesManager.class);
         Properties defaultProperty = applicationResourcesManager.getApplicationResources();
-        Properties localeProperty = applicationResourcesManager.getApplicationResourcesLocale("ar_OM_NULL");
+        Properties arlocaleProperty = applicationResourcesManager.getApplicationResourcesLocale("ar");
+        Properties arOmlocaleProperty = applicationResourcesManager.getApplicationResourcesLocale("ar_OM");
         assertNotNull(defaultProperty);
-        assertNotNull(localeProperty);
-        assertEquals(localeProperty.size(),6);
+        assertNull(arlocaleProperty);
+        assertNotNull(arOmlocaleProperty);
+        assertEquals(arOmlocaleProperty.size(),6);
     }
+
 
 }

@@ -125,7 +125,8 @@ public class ApplicationResourceLoader {
         Properties overrideProperties = null;
         if (getApplicationResourcesManager()!=null
                 && getApplicationResourcesManager().getApplicationResourcesLocaleRepository()!=null
-                && getApplicationResourcesManager().getApplicationResourcesLocaleRepository().query(localeKey) != null) {
+                && (getApplicationResourcesManager().getApplicationResourcesLocaleRepository().query(localeKey) != null
+                || getApplicationResourcesManager().getApplicationResourcesLocaleRepository().query(localeKeyWithoutVariation(localeKey)) != null)) {
             //locale resources
             properties = getApplicationResourcesLocale(localeKey);
             overrideProperties = getApplicationResourcesOverride(localeKey);
@@ -176,7 +177,10 @@ public class ApplicationResourceLoader {
             log.debug("locale :" + localeKey);
         }
         Properties defaultProperties = getApplicationResourcesManager().getApplicationResourcesLocale(localeKey);
-        if (null != defaultProperties) {
+        if(defaultProperties == null){
+            defaultProperties = getApplicationResourcesManager().getApplicationResourcesLocale(localeKeyWithoutVariation(localeKey));
+        }
+        if (defaultProperties!=null) {
             properties.putAll(defaultProperties);
         }
 
@@ -228,4 +232,13 @@ public class ApplicationResourceLoader {
         return properties;
     }
 
+    /**
+     * Returns locale string with variations stripped
+     * @param localeKey
+     * @return
+     */
+    public static String localeKeyWithoutVariation(String localeKey){
+        String variationCtxString = '_'+VariationContext.getVariation();
+        return localeKey!=null && localeKey.contains(variationCtxString) ? localeKey.replace(variationCtxString, "") : localeKey;
+    }
 }
