@@ -272,7 +272,7 @@ public class ApplicationResourcesManager implements IManager {
             if (!properties.isEmpty()) {
                 if (isLocaleResource) {
                     //locale resources
-                    String id = variation!=null && variation.length() > 0 && !VariationContext.NULL_VARIATION.equals(variation) ? locale+"_"+variation : locale;
+                    String id = variation != null && variation.length() > 0 && !VariationContext.NULL_VARIATION.equals(variation) ? locale+"_"+variation : locale;
                     ContextKey key = new ContextKey(id, resource.getURI().toString(), variation, precedence);
                     registerLocaleProperties(key, properties);
                 } else {

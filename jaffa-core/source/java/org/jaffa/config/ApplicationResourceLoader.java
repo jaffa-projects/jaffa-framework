@@ -126,7 +126,7 @@ public class ApplicationResourceLoader {
         if (getApplicationResourcesManager()!=null
                 && getApplicationResourcesManager().getApplicationResourcesLocaleRepository()!=null
                 && (getApplicationResourcesManager().getApplicationResourcesLocaleRepository().query(localeKey) != null
-                || getApplicationResourcesManager().getApplicationResourcesLocaleRepository().query(localeKeyWithoutVariation(localeKey))!=null)) {
+                || getApplicationResourcesManager().getApplicationResourcesLocaleRepository().query(localeKeyWithoutVariation(localeKey)) != null)) {
             //locale resources
             properties = getApplicationResourcesLocale(localeKey);
             overrideProperties = getApplicationResourcesOverride(localeKey);
