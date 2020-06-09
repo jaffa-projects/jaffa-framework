@@ -272,7 +272,8 @@ public class ApplicationResourcesManager implements IManager {
             if (!properties.isEmpty()) {
                 if (isLocaleResource) {
                     //locale resources
-                    ContextKey key = new ContextKey(locale+"_"+variation, resource.getURI().toString(), variation, precedence);
+                    String id = variation!=null && variation.length() > 0 && !VariationContext.NULL_VARIATION.equals(variation) ? locale+"_"+variation : locale;
+                    ContextKey key = new ContextKey(id, resource.getURI().toString(), variation, precedence);
                     registerLocaleProperties(key, properties);
                 } else {
                     //default resource
@@ -316,7 +317,8 @@ public class ApplicationResourcesManager implements IManager {
             if (!properties.isEmpty()) {
                 if (isLocaleResource) {
                     //locale resources
-                    ContextKey key = new ContextKey(locale+"_"+variation, resource.getURI().toString(), variation, precedence);
+                    String id = variation!=null && variation.length() > 0 && !VariationContext.NULL_VARIATION.equals(variation) ? locale+"_"+variation : locale;
+                    ContextKey key = new ContextKey(id, resource.getURI().toString(), variation, precedence);
                     unregisterLocaleProperties(key);
                 } else {
                     //default resource
