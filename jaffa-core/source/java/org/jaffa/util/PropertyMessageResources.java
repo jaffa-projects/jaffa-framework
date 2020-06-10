@@ -216,6 +216,10 @@ public class PropertyMessageResources extends org.apache.struts.util.PropertyMes
                     log.trace("  Saving message key '" + messageKey(localeKey, key));
                 }
                 messages.put(messageKey(localeKey, key), props.getProperty(key));
+                String localeKeyWithNoVariation = ApplicationResourceLoader.localeKeyWithoutVariation(localeKey);
+                if(!localeKeyWithNoVariation.equals(localeKey)){
+                    messages.put(messageKey(localeKeyWithNoVariation, key), props.getProperty(key));
+                }
             }
         }
         
