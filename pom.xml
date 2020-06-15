@@ -189,7 +189,7 @@
         <version.org.apache.axis>1.4</version.org.apache.axis>
         <version.org.apache.commons.beanutils>1.8.3</version.org.apache.commons.beanutils>
         <version.org.apache.commons.codec>1.8</version.org.apache.commons.codec>
-        <version.org.apache.commons.collections>3.2.1</version.org.apache.commons.collections>
+        <version.org.apache.commons.collections>3.2.2</version.org.apache.commons.collections>
         <version.org.apache.commons.dbcp>1.4</version.org.apache.commons.dbcp>
         <version.org.apache.commons.digester>2.1</version.org.apache.commons.digester>
         <version.org.apache.commons.fileupload>1.2.2</version.org.apache.commons.fileupload>
