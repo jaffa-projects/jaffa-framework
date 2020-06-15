@@ -792,6 +792,9 @@ public class PatternGenerator {
                 bw.write(line);
                 bw.newLine();
             }
+            br.close();
+            bw.close();
+
             // if the file is empty, delete it
             if (isFileEmpty) {
                 File file = new File(fileName);
