@@ -38,14 +38,13 @@ Jaffa.form.hyperlinkRenderer = function(value) {
       var values = this.hyperlink.values?this.hyperlink.values.split(';'):[];
       for (var i = 0; i < inputs.length; i++){
         var dataValue = value;
-        if(dataSource){
-          dataValue = this.dynaClass ? Jaffa.data.Util.get(dataSource.flexBean, ((this.hyperlink.prefix?this.hyperlink.prefix + '.':'') + values[i])) : Jaffa.data.Util.get(dataSource, ((this.hyperlink.prefix?this.hyperlink.prefix + '.':'') + values[i]));
+        if(dataSource && values[i]){
+          var prefixValue = (this.hyperlink.prefix?this.hyperlink.prefix + '.':'') + values[i];
+          dataValue = this.dynaClass && Jaffa.data.Util.get(dataSource.flexBean, prefixValue) ? Jaffa.data.Util.get(dataSource.flexBean, prefixValue) : (Jaffa.data.Util.get(dataSource, prefixValue) ? Jaffa.data.Util.get(dataSource, prefixValue) : values[i]);
         }
         link = link + "&" + inputs[i] + "=" + encodeURIComponent(dataValue);
       }
-      if(this.hyperlink.displayResultsScreen){
-        link = link + "&displayResultsScreen=true";
-      }
+
       link = link + '" target="_blank">'+ Ext.util.Format.htmlEncode(value) +'</a>';
       return link;
     }
