@@ -20,7 +20,7 @@
 
   // Determine the context path and pageRef
   String rcp = request.getContextPath();
-  String pageRef = request.getRequestURI().substring(rcp.length() + 1);
+  String pageRef = StringHelper.escapeHtml(request.getRequestURI().substring(rcp.length() + 1));
   String reqParams = JSONHelper.requestParams2json(request);
 %>
 
@@ -43,7 +43,7 @@
       var params = <%= reqParams %>;
       params = params || {};
       params.appCtx = '<%=rcp%>';
-      params.pageRef = '<%= request.getRequestURI().substring(rcp.length() + 1) %>';
+      params.pageRef = '<%= StringHelper.escapeJavascript(request.getRequestURI().substring(rcp.length() + 1)) %>';
       
       var security = {
         hasHelpDataDicDetails: <%= SecurityManager.checkFunctionAccess("Help.DataDic.Details") %>,
