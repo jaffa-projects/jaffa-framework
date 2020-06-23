@@ -513,16 +513,18 @@ function setDefaultState(spanId,imageName) {
 
 // Ensures that the user input does not contain unexpected semicolon ';' or equals signs '='
 function sanitizeName(name) {
-  var truncationIndex = name.indexOf(";");
-  var equalIndex = name.indexOf("=");
-  // Cut away anything that follows ";" or "=", whichever appears first,
-  // to help avoid potential security risks
-  if ((truncationIndex < 0) ||
+  if(name!= null){
+    var truncationIndex = name.indexOf(";");
+    var equalIndex = name.indexOf("=");
+    // Cut away anything that follows ";" or "=", whichever appears first,
+    // to help avoid potential security risks
+    if ((truncationIndex < 0) ||
       (equalIndex >= 0 && equalIndex < truncationIndex)) {
-    truncationIndex = equalIndex;
-  }
-  if (truncationIndex >= 0) {
-    name = name.substring(0, truncationIndex);
+      truncationIndex = equalIndex;
+    }
+    if (truncationIndex >= 0) {
+      name = name.substring(0, truncationIndex);
+    }
   }
   return name;
 }
