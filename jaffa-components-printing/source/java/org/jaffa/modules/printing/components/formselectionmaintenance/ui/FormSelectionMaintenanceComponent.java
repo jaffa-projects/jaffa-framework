@@ -826,8 +826,9 @@ public class FormSelectionMaintenanceComponent extends FinderComponent2 {
                 EditBoxModel mPrinter = (EditBoxModel) row.get("printer");
                 EditBoxModel mEmail = (EditBoxModel) row.get("email");
                 CheckBoxModel mPublish = (CheckBoxModel) row.get("publish");
-                if ((mPrinter.getValue() == null) && (mEmail.getValue() == null) && (mPublish.getState() != true) && !showForm) {
-                    appExps.add(new FormSelectionException(FormSelectionException.INVALID_OUTPUT_DESTINATION));
+                String formName = row.get("formName") != null ? (String) row.get("formName") : "";
+                if ((mPrinter.getValue() == null) && (mEmail.getValue() == null) && (mPublish.getState() != true)) {
+                     appExps.add(new FormSelectionException(FormSelectionException.INVALID_OUTPUT_DESTINATION, formName));
                 }
             }
             //Validate AdditionalData exist or not
