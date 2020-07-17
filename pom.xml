@@ -289,8 +289,8 @@
         <!-- Testing versions                                                    -->
         <!-- ******************************************************************* -->
         <version.junit>4.11</version.junit>
-        <version.mockito>1.9.5</version.mockito>
-
+        <version.mockito>1.10.19</version.mockito>
+        <version.powermock>1.6.5</version.powermock>
         <!-- ******************************************************************* -->
         <!-- CI Management Parameters                                            -->
         <!-- ******************************************************************* -->

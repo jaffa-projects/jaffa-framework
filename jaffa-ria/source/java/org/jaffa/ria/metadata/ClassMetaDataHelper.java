@@ -1128,7 +1128,7 @@ public class ClassMetaDataHelper {
                 sb.append(quoteName("hyperlink"));
                 sb.append(": {\n"); // begin hyperlink properties
 
-                appendProperty(sb, "component", toHtml(s));
+                sb.append("        component: '").append(toHtml(s)).append("'\n");
 
                 s = hyperlinkInfo.getProperty("inputs");
                 if (s != null) {
