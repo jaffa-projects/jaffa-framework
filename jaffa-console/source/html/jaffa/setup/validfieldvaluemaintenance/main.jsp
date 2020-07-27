@@ -28,7 +28,7 @@
 
 
   String rcp=request.getContextPath();
-  String pageRef=request.getRequestURI().substring(rcp.length()+1);
+  String pageRef = StringHelper.escapeHtml(request.getRequestURI().substring(rcp.length()+1));
   String widgetStateRef = pageRef; // + '-XYZ';
    String reqParams = JSONHelper.requestParams2json(request);
 

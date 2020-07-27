@@ -28,7 +28,7 @@ if (!org.jaffa.security.SecurityManager.checkComponentAccess(COMPONENT)){
 }
 
 String rcp = request.getContextPath();
-String pageRef = request.getRequestURI().substring(rcp.length()+1);
+String pageRef = StringHelper.escapeHtml(request.getRequestURI().substring(rcp.length()+1));
 
 %>
  
