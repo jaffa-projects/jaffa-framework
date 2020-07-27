@@ -1,9 +1,11 @@
 package org.jaffa.ria.metadata;
 
-import org.jaffa.rules.IObjectRuleIntrospector;
-import org.jaffa.rules.meta.MetaDataIntrospector;
+import org.jaffa.security.SecurityManager;
 import org.junit.Test;
-import org.mockito.Mockito;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -13,9 +15,11 @@ import java.util.Properties;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({SecurityManager.class })
 public class ClassMetaDataHelperTest {
 
     @Test public void testWriteLhsOfAssignment() {
@@ -127,8 +131,9 @@ public class ClassMetaDataHelperTest {
                      length1, length2);
     }
 
-//    @Test
+    @Test
     public void testAppendHyperlinkInfo() {
+        // Assert : Preparing Service and objects to invoke ClassMetaDataHelper.
         ClassMetaDataHelper helper = new ClassMetaDataHelper();
         Properties hyperlinkInfo = new Properties();
         hyperlinkInfo.put("component", "comp1");
@@ -139,18 +144,25 @@ public class ClassMetaDataHelperTest {
         foreignKeyMappings.put("v1", "fkm1");
 
         StringBuilder builder = new StringBuilder();
+
+        PowerMockito.mockStatic(SecurityManager.class);
+        when(SecurityManager.checkComponentAccess(anyString())).thenReturn(true);
+
+        //Act : Invoking actual logic
         helper.appendHyperlinkInfo(foreignKeyMappings, builder, hyperlinkInfo);
         String output = builder.toString();
+
+        //Assert : Verify hyperlink,component,input present in the response
         assertTrue("Hyperlink field name should be in output",
-                   output.contains("\"hyperlink\": {"));
+                   output.contains("hyperlink: {"));
         assertTrue("Component field name should be in output",
-                   output.contains("\"component\": "));
+                   output.contains("component: "));
         assertTrue("Component value should be in output",
-                   output.contains("\"comp1\""));
+                   output.contains("comp1"));
         assertTrue("Inputs field name should be in output",
-                   output.contains("\"inputs\": "));
+                   output.contains("inputs:"));
         assertTrue("Inputs value should be in output",
-                   output.contains("\"input1\""));
+                   output.contains("input1"));
     }
 
     @Test public void testPropertiesToStringNone() {
