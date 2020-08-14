@@ -53,17 +53,17 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
-      <scope>provided</scope>
+      <version>${version.com.fasterxml.jackson-annotations}</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
-      <scope>provided</scope>
+      <version>${version.com.fasterxml.jackson-core}</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <scope>provided</scope>
+      <version>${version.com.fasterxml.jackson-databind}</version>
     </dependency>
     <dependency>
       <groupId>net.sf.json-lib</groupId>
