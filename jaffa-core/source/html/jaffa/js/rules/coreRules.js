@@ -96,6 +96,9 @@ function checkNumericValidation(field, maxSize , minSize, digits , minValue , ma
   }
   // Is this a number
   var patten = /^[+-]?([0-9]*)(\.([0-9]*))?$/;
+  if(jaffaMessageRoot && jaffaMessageRoot.coreRules && jaffaMessageRoot.coreRules.userLocale && (jaffaMessageRoot.coreRules.userLocale == 'nb_NO' || jaffaMessageRoot.coreRules.userLocale == 'nn_NO')){
+    patten = /^[+-]?([0-9\s]*)(\.([0-9]*))?$/;
+  }
   var matchArray = source.match(patten);
   if (matchArray == null) {
     return jaffaMessageRoot.coreRules.NumberNotValid;
