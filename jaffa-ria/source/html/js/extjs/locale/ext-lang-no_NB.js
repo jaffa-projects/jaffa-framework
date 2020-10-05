@@ -635,7 +635,7 @@ if (Ext.util.Format) {
     v = Math.abs(v);
     var re = new RegExp('/[^\d\${comma}]', 'g');
     var hasComma = format.indexOf(comma) != -1,
-      psplit = format.replace(re, ''): format.replace(re, '').split(dec);
+      psplit = format.replace(re, '').split(dec);
     if (1 < psplit.length) {
       v = v.toFixed(psplit[1].length);
     } else if (2 < psplit.length) {
