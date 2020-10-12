@@ -212,7 +212,7 @@
         <jackson-jaxrs-version>2.9.0</jackson-jaxrs-version>
         <jaffa-version>6.0.6-SNAPSHOT</jaffa-version>
         <java-version>1.8</java-version>
-        <junit-version>4.12</junit-version>
+        <junit-version>4.13.1</junit-version>
         <logback-version>1.1.7</logback-version>
         <maven-build-helper-version>1.9.1</maven-build-helper-version>
         <maven-compiler-source>${java-version}</maven-compiler-source>
