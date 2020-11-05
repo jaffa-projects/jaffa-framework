@@ -1681,3 +1681,35 @@ Ext.grid.ColumnModel.override({
         defaultRenderer: Ext.util.Format.htmlEncode
     }
 });
+Ext.grid.HeaderDropZone.override({
+  onNodeDrop: function(n, dd, e, data) {
+    if (this.grid &&  this.grid.editor && this.grid.editor.ptype && this.grid.editor.ptype === 'maintenanceinlineroweditor') {
+      Ext.MessageBox.show({
+        title: "Error", //FIXME
+        msg: "Columns cannot be moved in this screen",
+        // width : 400,
+        buttons: Ext.MessageBox.OK,
+        icon: Ext.MessageBox.ERROR
+      });
+      return;
+    }
+    var h = data.header;
+    if (h != n) {
+      var cm = this.grid.colModel,
+        x = Ext.lib.Event.getPageX(e),
+        r = Ext.lib.Dom.getRegion(n.firstChild),
+        pt = (r.right - x) <= ((r.right - r.left) / 2) ? "after" : "before",
+        oldIndex = this.view.getCellIndex(h),
+        newIndex = this.view.getCellIndex(n);
+      if (pt == "after") {
+        newIndex++;
+      }
+      if (oldIndex < newIndex) {
+        newIndex--;
+      }
+      cm.moveColumn(oldIndex, newIndex);
+      return true;
+    }
+    return false;
+  }
+});
