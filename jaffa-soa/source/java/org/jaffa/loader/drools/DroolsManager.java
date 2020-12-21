@@ -159,7 +159,9 @@ public class DroolsManager {
         StringBuilder droolPath = droolsFiles.get(ruleAgentKey);
         if (droolPath != null) {
             int index = droolPath.indexOf(newPath.toString());
-            droolPath = droolPath.replace(index, newPath.toString().length() + 1, "");
+            if(index > -1) {
+                droolPath = droolPath.replace(index, index + newPath.toString().length() + 1, "");
+            }
         }
 
         droolsFiles.put(ruleAgentKey, droolPath);
@@ -349,7 +351,7 @@ public class DroolsManager {
         try {
             if (path != null && !"".equals(path)) {
                 String temp = new File(path).getParent();
-                if (temp != null) {
+                if (temp != null && temp.indexOf("!" + File.separator + "META-INF" + File.separator + "rules") > -1) {
                     temp = temp.substring(0, temp.indexOf("!" + File.separator + "META-INF" + File.separator + "rules"));
                     return temp.substring(temp.lastIndexOf(File.separator) + 1, temp.length() - 4);
                 }

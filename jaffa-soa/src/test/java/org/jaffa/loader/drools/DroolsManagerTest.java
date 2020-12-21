@@ -76,6 +76,32 @@ public class DroolsManagerTest {
     }
 
     /**
+     * tests the unregistered method of DroolsManager throws Exception or not
+     * @throws Exception
+     */
+    @Test
+    public void testUnRegisterDroolIndexOutOfBoundException() throws Exception{
+        Resource resource = pathMatchingResourcePatternResolver.getResource(CORE_DRL_PATH);
+        droolsManager.registerDrool(resource, VariationContext.DEFAULT_VARIATION);
+
+        droolsManager.registerDrool(resource, VariationContext.DEFAULT_VARIATION);
+        //verify
+        assertNotNull(droolsManager.getDroolsFiles().get(new RuleAgentKey(SERVICE_NAME, VariationContext.DEFAULT_VARIATION)));
+        //Test with non existant variant
+        droolsManager.unRegisterDrool(resource, "Customer");
+        //register with customer variant
+        droolsManager.registerDrool(resource, "Customer");
+        //verify
+        assertNotNull(droolsManager.getDroolsFiles().get(new RuleAgentKey(SERVICE_NAME, VariationContext.DEFAULT_VARIATION)));
+        droolsManager.unRegisterDrool(resource, VariationContext.DEFAULT_VARIATION);
+        //call one more time, to see it should not throw ny exception
+        droolsManager.unRegisterDrool(resource, VariationContext.DEFAULT_VARIATION);
+        droolsManager.unRegisterDrool(resource, VariationContext.DEFAULT_VARIATION);
+        //verify
+        assertEquals("", droolsManager.getDroolsFiles().get(new RuleAgentKey(SERVICE_NAME, VariationContext.DEFAULT_VARIATION)).toString().trim());
+    }
+
+    /**
      * tests the refreshAgent method of DroolsManager
      * @throws Exception
      */
