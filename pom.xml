@@ -167,7 +167,7 @@
         <version.com.pdflib>8.0.3</version.com.pdflib>
         <version.com.predic8.soa-model-core>1.2.2</version.com.predic8.soa-model-core>
         <version.com.thoughtworks.qdox>1.12.1</version.com.thoughtworks.qdox>
-        <version.com.thoughtworks.xstream>1.4.4</version.com.thoughtworks.xstream>
+        <version.com.thoughtworks.xstream>1.4.15</version.com.thoughtworks.xstream>
         <version.de.lohndirekt.jipsi>1.0</version.de.lohndirekt.jipsi>
         <version.io.hawt.hawtio-web>1.2.1</version.io.hawt.hawtio-web>
         <version.jfree.jcommon>1.0.16</version.jfree.jcommon>
