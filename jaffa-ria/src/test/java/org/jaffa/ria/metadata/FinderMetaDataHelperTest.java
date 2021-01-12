@@ -1,15 +1,78 @@
 package org.jaffa.ria.metadata;
 
+import org.directwebremoting.Container;
+import org.directwebremoting.extend.Creator;
+import org.directwebremoting.extend.CreatorManager;
+import org.directwebremoting.impl.ContainerUtil;
+import org.directwebremoting.impl.DefaultContainer;
+import org.jaffa.modules.setup.apis.ValidFieldValueService;
+import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
-public class FinderMetaDataHelperTest {
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.JspWriter;
+
+public class FinderMetaDataHelperTest {
+    @Mock
+    private HttpServletRequest mockedRequest;
+    @Mock
+    private JspWriter mockedJspWriter;
+    @Mock
+    private ServletContext mockedServletContext;
+    @Mock
+    private Container mockedContainer;
+    @Mock
+    private CreatorManager mockedCreatorManager;
+    @Mock
+    private Creator mockedCreator;
+
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void testPerform() throws Exception {
+        List<Container> containers = new ArrayList<Container>() {{ add(mockedContainer); }};
+
+        when(mockedRequest.getParameter("component")).thenReturn("Jaffa.Setup.ValidFieldValueService");
+        when(mockedServletContext.getContext(anyString())).thenReturn(mockedServletContext);
+        when(mockedServletContext.getAttribute(ContainerUtil.ATTRIBUTE_CONTAINER_LIST)).thenReturn(containers);
+        when(mockedContainer.getBean(CreatorManager.class.getName())).thenReturn(mockedCreatorManager);
+        when(mockedCreatorManager.getCreator(anyString())).thenReturn(mockedCreator);
+        when(mockedCreator.getType()).thenReturn(ValidFieldValueService.class);
+
+        FinderMetaDataHelper.perform(mockedRequest, mockedJspWriter, mockedServletContext);
+        verify(mockedJspWriter).print(anyString());
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void testPerformNullParameters() throws Exception {
+        FinderMetaDataHelper.perform(mockedRequest, mockedJspWriter, mockedServletContext);
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void testPerformUnsafeParameters() throws Exception {
+        when(mockedRequest.getParameter("component")).thenReturn("org.jaffa.ValidClass <script src=\"maliciousSrc\"/>");
+        FinderMetaDataHelper.perform(mockedRequest, mockedJspWriter, mockedServletContext);
+    }
 
     /**
      * This method checks whether field-value syntax is parsable JSON.
