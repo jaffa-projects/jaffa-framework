@@ -141,10 +141,10 @@ public class FinderMetaDataHelper {
               log.debug("Input: " + parameters);
 
           // Error out if parameters are not passed or if unsafe parameter is passed
-          if (parameters == null || !parameters.get("component").matches("^[a-zA-Z0-9.]*$")) {
+          if (parameters == null || !parameters.get("component").matches("^[a-zA-Z0-9._$]*$")) {
               StringBuilder strBuilder = new StringBuilder("MetaData cannot be generated since ");
               strBuilder.append(parameters == null ? "parameters have not been passed"
-                  : "unsafe input detected in component field.");
+                  : "unsafe input detected in component field: " + parameters.get("component"));
               log.error(strBuilder.toString());
               throw new IllegalArgumentException(strBuilder.toString());
           }
