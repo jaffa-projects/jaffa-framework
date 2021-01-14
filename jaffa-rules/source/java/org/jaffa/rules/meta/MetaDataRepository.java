@@ -517,7 +517,7 @@ public class MetaDataRepository extends AbstractLoader
         // by something dynamic, i.e., the acceptable class names should be
         // retrieved from a database or some other source.
         boolean isSafe = className != null
-                         && className.matches("^[a-zA-Z0-9._$]*$")
+                         && className.matches("^[a-zA-Z0-9._\\-$]*$")
                          && (className.startsWith(GOLDESP)
                              || className.startsWith(JAFFA)
                              || className.startsWith(MIROTECHNOLOGIES)
