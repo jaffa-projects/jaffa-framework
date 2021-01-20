@@ -161,7 +161,7 @@
         <version.bsf>2.4.0</version.bsf>
         <version.com.fasterxml.jackson-annotations>2.7.4</version.com.fasterxml.jackson-annotations>
         <version.com.fasterxml.jackson-core>2.7.4</version.com.fasterxml.jackson-core>
-        <version.com.fasterxml.jackson-databind>2.7.4</version.com.fasterxml.jackson-databind>
+        <version.com.fasterxml.jackson-databind>2.9.10.7</version.com.fasterxml.jackson-databind>
         <version.com.google.protobuf.protobuf-java>2.5.0</version.com.google.protobuf.protobuf-java>
         <version.com.lowagie.itext>2.0.6</version.com.lowagie.itext>
         <version.com.pdflib>8.0.3</version.com.pdflib>
