@@ -194,14 +194,21 @@ public class Parser {
                 if (layout == null)
                     layout = DecimalFieldMetaData.getDecimalFormat();
                 layout = LocaleHelper.determineLayout(layout);
-                
+
                 NumberFormat fmt;
                 if (LocaleContext.getLocale() != null)
                     fmt = NumberFormat.getNumberInstance(LocaleContext.getLocale());
                 else
                     fmt = NumberFormat.getNumberInstance();
-                if (layout != null && fmt instanceof DecimalFormat)
+                if (layout != null && layout.trim().length() > 0 && fmt instanceof DecimalFormat)
                     ((DecimalFormat) fmt).applyPattern(layout);
+
+                //If the input string is having decimal point as ".", then it will format the string based on the user locale,
+                //This is required when the locale is Norwegian and European language which use the comma as decimal separator.
+                //If we don't use the correct format before parsing, then the input will get parsed wrongly.
+                if(input.contains(".")){
+                    input = Formatter.format(Double.parseDouble(input));
+                }
                 out = new Double(fmt.parse(input).doubleValue());
             }
             return out;
