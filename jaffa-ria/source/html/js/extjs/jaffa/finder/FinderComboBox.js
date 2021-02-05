@@ -622,8 +622,9 @@ Jaffa.form.FinderComboBox = Ext.extend(Ext.form.ComboBox, {
     }
     if(this.store.getCount() > 0 || this.listEmptyText){
       this.expand();
-      if(this.lastQuery || (this.triggerClick && this.value)){
-        this.store.filter(this.displayField, this.lastQuery || (this.triggerClick && this.value));
+      var triggerClickValue = this.displayField === this.valueField ? this.value : this.getRawValue();//Filter by whats typed when value and display field differ
+      if(this.lastQuery || (this.triggerClick && triggerClickValue)){
+        this.store.filter(this.displayField, this.lastQuery || (this.triggerClick && triggerClickValue));
       } else {
         this.store.clearFilter();
       }
