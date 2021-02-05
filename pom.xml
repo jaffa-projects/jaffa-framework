@@ -182,7 +182,7 @@
         <version.org.antlr>3.5</version.org.antlr>
         <version.org.antlr.antlr-runtime>3.0</version.org.antlr.antlr-runtime>
         <version.org.antlr.stringtemplate>4.0.2</version.org.antlr.stringtemplate>
-        <version.org.apache.activemq-client>5.13.4</version.org.apache.activemq-client>
+        <version.org.apache.activemq-client>5.15.9</version.org.apache.activemq-client>
         <version.org.apache.activemq-broker>5.13.4</version.org.apache.activemq-broker>
         <version.org.apache.activemq-openwire-legacy>5.13.4</version.org.apache.activemq-openwire-legacy>
         <version.org.apache.activemq-rar>5.13.4</version.org.apache.activemq-rar>
