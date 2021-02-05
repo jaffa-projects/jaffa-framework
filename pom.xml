@@ -222,7 +222,7 @@
         <version.oro>2.0.8</version.oro>
         <version.struts>1.2.7</version.struts>
         <version.trove>1.0.2</version.trove>
-        <version.springframework>4.2.6.RELEASE</version.springframework>
+        <version.springframework>5.3.1</version.springframework>
         <version.groovy-all>2.1.7</version.groovy-all>
 
         <version.org.osgi.core>5.0.0</version.org.osgi.core>
