@@ -178,7 +178,7 @@
         <version.net.sf.dozer>5.4.0</version.net.sf.dozer>
         <version.net.sf.ezmorph>1.0.6</version.net.sf.ezmorph>
         <version.net.sf.json-lib>2.4</version.net.sf.json-lib>
-        <version.log4j>2.11.2</version.log4j>
+        <version.log4j>2.15.0</version.log4j>
         <version.org.antlr>3.5</version.org.antlr>
         <version.org.antlr.antlr-runtime>3.0</version.org.antlr.antlr-runtime>
         <version.org.antlr.stringtemplate>4.0.2</version.org.antlr.stringtemplate>
